@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
@@ -27,17 +26,19 @@ import {
   AppointmentData,
   AppointmentLocation,
   AppointmentStatusConstants,
+  AppointmentStatusDetailTypeConsts,
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
+import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { clearAppointmentCancellation, getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
@@ -57,15 +58,26 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
+  const launchExternalLink = useExternalLink()
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail } =
+    attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+
+  const whoCanceled =
+    statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+      ? t('appointments.canceled.whoCanceled.facility')
+      : t('appointments.canceled.whoCanceled.you')
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
   }, [dispatch, appointmentID])
 
   useEffect(() => {
@@ -149,7 +161,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       const joinSessionOnPress = (): void => {
         dispatch(clearAppointmentCancellation())
-        Linking.openURL(url || '')
+        launchExternalLink(url || '')
       }
 
       const joinSessionButtonProps: VAButtonProps = {
@@ -272,8 +284,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  if (loadingAppointmentCancellation) {
-    return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+  if (loadingAppointmentCancellation || !isTransitionComplete) {
+    return <LoadingComponent text={t(!isTransitionComplete ? 'appointmentDetails.loading' : 'upcomingAppointmentDetails.loadingAppointmentCancellation')} />
   }
 
   return (
@@ -281,7 +293,13 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {renderCancellationAlert()}
         <TextArea>
-          <AppointmentTypeAndDate timeZone={timeZone} startDateUtc={startDateUtc} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
+          <AppointmentTypeAndDate
+            timeZone={timeZone}
+            startDateUtc={startDateUtc}
+            appointmentType={appointmentType}
+            isAppointmentCanceled={isAppointmentCanceled}
+            whoCanceled={whoCanceled}
+          />
 
           <AddToCalendar />
 

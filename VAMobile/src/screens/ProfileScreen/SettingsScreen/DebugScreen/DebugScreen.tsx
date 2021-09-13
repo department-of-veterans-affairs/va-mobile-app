@@ -65,13 +65,11 @@ const DebugScreen: FC = ({}) => {
             <VAButton onPress={onResetFirstTimeLogin} label={'Reset First Time Login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
-        {demoMode && (
-          <Box mt={theme.dimensions.contentMarginTop}>
-            <TextArea>
-              <VAButton onPress={testInAppReview} label={'Test In-App Review Flow'} buttonType={ButtonTypesConstants.buttonPrimary} />
-            </TextArea>
-          </Box>
-        )}
+        <Box mt={theme.dimensions.contentMarginTop}>
+          <TextArea>
+            <VAButton onPress={testInAppReview} label={'Test In-App Review Flow'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>

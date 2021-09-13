@@ -14,9 +14,10 @@ export type GenericOnboardingProps = {
   listOfText?: Array<string | VABulletListText>
   testID: string
   displayLogo?: boolean
+  centerHeader?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel, textA11yLabel, listOfText }) => {
+const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
   const theme = useTheme()
 
   const headerProps: TextViewProps = {
@@ -36,13 +37,15 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
     <VAScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle} alwaysBounceVertical={false}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {displayLogo && (
-          <Box my={theme.dimensions.standardMarginBetween}>
+          <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
             <VAIcon name="Logo" />
           </Box>
         )}
-        <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
-          {header}
-        </TextView>
+        <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
+          <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
+            {header}
+          </TextView>
+        </Box>
         {text && (
           <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
             {text}

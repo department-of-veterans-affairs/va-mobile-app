@@ -11,8 +11,12 @@ NativeModules.RNAuthSession = {
 }
 
 NativeModules.DeviceData = {
-	deviceName: 'jestDeviceName',
-	getDeviceName: jest.fn(() => Promise.resolve('jestDeviceName'))
+	deviceName: 'Device Name',
+	getDeviceName: jest.fn().mockReturnValue('Device Name'),
+	versionName: 'v0.0.0',
+	getVersionName: jest.fn().mockReturnValue('v0.0.0'),
+	buildNumber: 0,
+	getBuildNumber: jest.fn().mockReturnValue(0),
 }
 
 jest.mock('react-native-safe-area-context', () => {
