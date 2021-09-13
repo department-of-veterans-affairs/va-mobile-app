@@ -8,7 +8,7 @@ assignees: lexicalninja, ayushchak, DJUltraTom, travis-newby, leanna-usds, drjec
 # Release for {{ env.releaseDate }}
 This ticket is to control for all the requirements for the upcoming release before the Pull Request is opened. This should hold any tasks or bug fixes unique to the release branch. It should also collect any text for What's New and any content changes for the app stores.
 
-This ticket should be complete by {{ env.dueDate }}
+This ticket should be complete by {{ env.vaDueDate }}
 ## Release Checklist
 
 - [ ] Define version number
@@ -19,17 +19,21 @@ This ticket should be complete by {{ env.dueDate }}
 
 ## Sign-offs: 
 <!-- All groups should check the box when they approve --> 
-- [ ] QA 
-- [ ] Product
-- [ ] VA 
+- [ ] QA **Due {{ env.qaDueDate }}**
+- [ ] Product **Due {{ env.prodDueDate }}**
+- [ ] VA **Due {{ env.vaDueDate }}**
 
 ## Release version
+<!-- Automated value, do not change -->
 {{ env.versionNumber }}
 
 ## What's New content
 <!-- Define the content for the What's New sections of the app stores here -->
 
-## App Store content changes
+## App Store content changes?
+All changes should be made to the files in the repo and not directly to the stores. 
+Indicate NA if no changes.
+
 - [ ] Images: 
 - [ ] Content:
 - [ ] Other (Privacy Policy, etc.):
