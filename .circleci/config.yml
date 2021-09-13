@@ -233,6 +233,13 @@ jobs:
       - bundle_app:
           os: "android"
       - android_fastlane
+  cut_release_branch:
+    executor: default
+    steps:
+      - run_script:
+          script_name: "release_branch.sh"
+          script_options: "-v $CIRCLE_TAG"
+          workingDir: "~/project/VAMobile"
   build_ios_release:
     executor: ios
     steps:
@@ -267,13 +274,6 @@ jobs:
       - ios_fastlane:
           lane: "release"
 
-  cut_release_branch:
-    executor: default
-    steps:
-      - run_script:
-          script_name: "release_branch.sh"
-          script_options: "-v $CIRCLE_TAG"
-          workingDir: "~/project/VAMobile"
 workflows:
   pr:
     jobs:
