@@ -112,7 +112,7 @@ export type SecureMessagingStartGetRecipients = Record<string, unknown>
  * Redux payload for the SECURE_MESSAGING_FINISH_GET_RECIPIENTS action
  */
 export type SecureMessagingFinishGetRecipients = {
-  recipients?: api.SecureMessagingRecipientDataList
+  recipients: api.SecureMessagingRecipientDataList
   error?: api.APIError
 }
 
