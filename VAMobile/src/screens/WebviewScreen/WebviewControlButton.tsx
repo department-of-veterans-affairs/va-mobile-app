@@ -48,7 +48,7 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
   }
 
   const controlBoxProps: BoxProps = {
-    p: theme.dimensions.buttonPadding,
+    p: (theme.dimensions.webviewButtona11ySize - width) / 2,
   }
 
   return (
