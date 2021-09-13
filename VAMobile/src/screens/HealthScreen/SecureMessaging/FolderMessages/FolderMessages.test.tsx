@@ -49,7 +49,6 @@ context('FolderMessages', () => {
   let props: any
   let store: any
 
-  const _ = undefined
   const initializeTestInstance = (loading = false, noMessages = false, folderID = SecureMessagingSystemFolderIdConstants.SENT, draftSaved = false) => {
     let folderName
     if (folderID > 0) folderName = 'Custom'
@@ -152,7 +151,7 @@ context('FolderMessages', () => {
 
   describe('when a draft is saved and redirected here', () => {
     it('should show a success message', async () => {
-      initializeTestInstance(_, _, _, true)
+      initializeTestInstance(undefined, undefined, undefined, true)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(findByTypeWithText(testInstance, TextView, 'Draft successfully saved')).toBeTruthy()
     })
