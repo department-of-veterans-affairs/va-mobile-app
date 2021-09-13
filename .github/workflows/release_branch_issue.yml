@@ -1,0 +1,26 @@
+name: "Create Release Branch Ticket"
+
+on:
+  push:
+    branches:
+      - feature/feature_**
+jobs:
+  release_ticket:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "PROD_DUE_DATE=$(date -d "+5 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - uses: actions/checkout@v2
+      - uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/release_ticket.md
+        env:
+          versionNumber: ${{ env.VERSION }}
+          qaDueDate: ${{env.QA_DUE_DATE}}
+          prodDueDate: ${{env.PROD_DUE_DATE}}
+          vaDueDate: ${{env.VA_DUE_DATE}}
+          releaseDate: ${{ env.RELEASE_DATE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
