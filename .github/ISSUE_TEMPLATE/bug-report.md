@@ -3,8 +3,10 @@ name: New Bug Report Template
 about: Template for reporting a bug in the VA mobile app
 title: BUG - [SEVERITY] - [iOS/Android/All] - [Short description]
 labels: bug
-assignees:
+assignees: ''
+
 ---
+
 ## What happened?
 <!-- General overview of what happened and where it happened -->
 

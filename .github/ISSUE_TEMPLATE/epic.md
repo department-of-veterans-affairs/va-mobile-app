@@ -1,10 +1,12 @@
 ---
 name: Epic Ticket
 about: Template for new Epics
-title: [Epic Name]
-labels: 
-assignees: 
+title: '["Epic Name"]'
+labels: ''
+assignees: ''
+
 ---
+
 # Epic
 <!-- Goal of these tickets: Define whole features we're adding to the app as an epic. -->  
 
