@@ -1,4 +1,3 @@
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -24,7 +23,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
           {t('manageAccount.titlePage')}
         </HiddenTitle>
       ),
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+      headerLeft: (props): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={t('settings.backButton.a11yHint')} />
       ),
     })

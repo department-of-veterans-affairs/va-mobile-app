@@ -3,8 +3,7 @@ import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
-import { NavigationContainer } from '@react-navigation/native'
-import { NavigationContainerRef } from '@react-navigation/native'
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
@@ -21,6 +20,7 @@ import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import { enableScreens } from 'react-native-screens'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
@@ -42,7 +42,7 @@ import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import theme from 'styles/themes/standardTheme'
-
+enableScreens(true)
 const store = configureStore()
 const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
@@ -65,17 +65,17 @@ export type RootNavStackParamList = WebviewStackParams & {
 }
 
 type RootTabNavParamList = {
-  Home: undefined
-  Health: undefined
-  Claims: undefined
-  Profile: undefined
+  HomeTab: undefined
+  HealthTab: undefined
+  ClaimsTab: undefined
+  ProfileTab: undefined
 }
 ;`
   background-color: ${theme.colors.icon.active};
 `
 
 const MainApp: FC = () => {
-  const navigationRef = useRef<NavigationContainerRef>(null)
+  const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
 
   /**
@@ -211,11 +211,11 @@ export const AppTabs: FC = () => {
 
   return (
     <>
-      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home">
-        <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
-        <TabNav.Screen name="Health" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
+      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
+        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
+        <TabNav.Screen name="ClaimsTab" component={ClaimsScreen} options={{ title: t('claims:title') }} />
+        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
+        <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} />
       </TabNav.Navigator>
     </>
   )
@@ -232,7 +232,7 @@ export const AuthedApp: FC = () => {
 
   return (
     <>
-      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Tabs">
+      <RootNavStack.Navigator screenOptions={{ ...headerStyles, detachPreviousScreen: false }} initialRouteName="Tabs">
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />

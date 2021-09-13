@@ -1,10 +1,9 @@
-import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AlertBox, BackButton, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, SaveButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneTypeConstants } from 'store/api/types'
@@ -15,6 +14,7 @@ import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
+import HeaderTitle from 'components/HeaderTitle'
 import RemoveData from '../../RemoveData'
 
 const MAX_DIGITS = 10
@@ -95,14 +95,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (header: HeaderTitleType) => (
-        <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
-          <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
-        </Box>
-      ),
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerTitle: () => <HeaderTitle {...testIdProps(displayTitle)} headerTitle={displayTitle} />,
+      headerLeft: (props): ReactNode => <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
   })

@@ -1,4 +1,3 @@
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
@@ -59,9 +58,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           {title}
         </HiddenTitle>
       ),
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={backA11yHint} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={backA11yHint} />,
     })
   }, [displaySubmittedDecisionScreen, navigation, claimID, claimType, t])
 
