@@ -2900,8 +2900,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = E63939AA6EFD3D6A8C09E45929F11DBD;
-			remoteInfo = Flipper;
+			remoteGlobalIDString = D2B5E7DCCBBFB32341D857D01211A1A3;
+			remoteInfo = nanopb;
 		};
 		17CE7AF579B70EBEC356115D1282CD26 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2949,8 +2949,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D0EFEFB685D97280256C559792236873;
-			remoteInfo = glog;
+			remoteGlobalIDString = 7ACAA9BE580DD31A5CB9D97C45D9492D;
+			remoteInfo = "React-Core";
 		};
 		1E33BE465659907FDDFD34C74C2CD0EA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3089,8 +3089,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 2AB2EF542954AB1C999E03BFEF8DE806;
-			remoteInfo = DoubleConversion;
+			remoteGlobalIDString = 7ACAA9BE580DD31A5CB9D97C45D9492D;
+			remoteInfo = "React-Core";
 		};
 		2CB9923C452BE0D9A8EFB42D40C8CDA0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3201,8 +3201,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D760AF58E12ABBB51F84160FB02B5F39;
-			remoteInfo = RNDateTimePicker;
+			remoteGlobalIDString = 7ACAA9BE580DD31A5CB9D97C45D9492D;
+			remoteInfo = "React-Core";
 		};
 		393CF7F6091ED01DADB134226570DFBD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3348,8 +3348,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D20469A9A1E5CFB26045EAEBE3F88E5E;
-			remoteInfo = RCTTypeSafety;
+			remoteGlobalIDString = 7ACAA9BE580DD31A5CB9D97C45D9492D;
+			remoteInfo = "React-Core";
 		};
 		505218ABF3C904C860A7E5164A11AB04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3369,8 +3369,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D9245543B79C09FAC40FC8B9F291536A;
-			remoteInfo = "Flipper-DoubleConversion";
+			remoteGlobalIDString = 8D7F5D5DD528D21A72DC87ADA5B12E2D;
+			remoteInfo = GoogleUtilities;
 		};
 		515010F59A62801165C88FB0BC8A2946 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3593,8 +3593,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A4F685BE3CAC127BDCE4E0DBBD88D191;
-			remoteInfo = Folly;
+			remoteGlobalIDString = 11989A5E568B3B69655EE0C13DCDA3F9;
+			remoteInfo = "React-RCTActionSheet";
 		};
 		6AD7528288DF52AD8BDDECB036CBAF9E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3740,8 +3740,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = C65C717270D55D7179A8CB6B01846C1E;
-			remoteInfo = RNKeychain;
+			remoteGlobalIDString = D20469A9A1E5CFB26045EAEBE3F88E5E;
+			remoteInfo = RCTTypeSafety;
 		};
 		7703A51EE7955ADC20C7A39D61078AE1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3782,8 +3782,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 32CA4CBD6B28983076BD93DA221AD027;
-			remoteInfo = YogaKit;
+			remoteGlobalIDString = 463F41A7E8B252F8AC5024DA1F4AF6DA;
+			remoteInfo = "React-cxxreact";
 		};
 		7D3F38A5111F6663011BF8C71D40E191 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3838,8 +3838,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 938CCE22F6C4094B3FB6CF1478579E4B;
-			remoteInfo = "React-RCTAnimation";
+			remoteGlobalIDString = FA877ADC442CB19CF61793D234C8B131;
+			remoteInfo = "React-jsi";
 		};
 		828A03AF341A08769C48A58B97C3B04D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3908,8 +3908,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 4402AFF83DBDC4DD07E198685FDC2DF2;
-			remoteInfo = FirebaseCore;
+			remoteGlobalIDString = FA877ADC442CB19CF61793D234C8B131;
+			remoteInfo = "React-jsi";
 		};
 		89638F3645DC83786C8284FF529AA047 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3964,8 +3964,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D20469A9A1E5CFB26045EAEBE3F88E5E;
-			remoteInfo = RCTTypeSafety;
+			remoteGlobalIDString = 7ACAA9BE580DD31A5CB9D97C45D9492D;
+			remoteInfo = "React-Core";
 		};
 		8EEE05F1C3AA2B69B803351F8661467B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4034,8 +4034,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = B51433D546A38C51AA781F192E8836F8;
-			remoteInfo = RNLocalize;
+			remoteGlobalIDString = D20469A9A1E5CFB26045EAEBE3F88E5E;
+			remoteInfo = RCTTypeSafety;
 		};
 		9A766560427921FBB5C8AC40775708D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4286,8 +4286,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 2BBF7206D7FAC92C82A042A99C4A98F8;
-			remoteInfo = PromisesObjC;
+			remoteGlobalIDString = ED2506AE7DE35D654F61254441EA7155;
+			remoteInfo = "boost-for-react-native";
 		};
 		B8938139766A349DEBE9564EFA260B74 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4314,8 +4314,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 526C4398D095B3704EB933DADBC30093;
-			remoteInfo = FirebaseCrashlytics;
+			remoteGlobalIDString = A4F685BE3CAC127BDCE4E0DBBD88D191;
+			remoteInfo = Folly;
 		};
 		BC40673C8F0C881931F6A09DEC5262E3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4545,8 +4545,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 2BBF7206D7FAC92C82A042A99C4A98F8;
-			remoteInfo = PromisesObjC;
+			remoteGlobalIDString = D9245543B79C09FAC40FC8B9F291536A;
+			remoteInfo = "Flipper-DoubleConversion";
 		};
 		DC5B355115E2C8C00F00A29A5DB748AF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4643,8 +4643,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 16F2C73263FF257BA65693EF22D8119C;
-			remoteInfo = RNFileViewer;
+			remoteGlobalIDString = 81C5C2512295143722B55D1C7F58FEAE;
+			remoteInfo = "react-native-image-picker";
 		};
 		E70D27ABD15F3D40A957C774454B0BFE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -14637,11 +14637,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D76D2959505FE32753419581105D5813 /* log_severity.h in Headers */,
-				384C40CC44ADEB2F4F33E5B7D7606F50 /* logging.h in Headers */,
-				B04442E71F45421A61051EC48C735703 /* raw_logging.h in Headers */,
-				667907630BB4121505D28CF47F51DBFB /* stl_logging.h in Headers */,
-				49F753F4A722C483AF734018A1496D04 /* vlog_is_on.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -17212,8 +17207,8 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/FirebaseAnalytics/FirebaseAnalytics-xcframeworks.sh",
-				"${PODS_ROOT}/FirebaseAnalytics/Frameworks/FirebaseAnalytics.xcframework",
+				"${PODS_ROOT}/Target Support Files/OpenSSL-Universal/OpenSSL-Universal-xcframeworks.sh",
+				"${PODS_ROOT}/OpenSSL-Universal/Frameworks/OpenSSL.xcframework",
 			);
 			name = "[CP] Copy XCFrameworks";
 			outputPaths = (
@@ -17221,7 +17216,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/FirebaseAnalytics/FirebaseAnalytics-xcframeworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/OpenSSL-Universal/OpenSSL-Universal-xcframeworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AF30935D88A539808A41451F114AB765 /* [CP] Copy XCFrameworks */ = {
@@ -17229,22 +17224,18 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h",
-				"${PODS_ROOT}/Headers/Public/YogaKit/YogaKit.modulemap",
-				"${PODS_ROOT}/Headers/Public/YogaKit/YogaKit-umbrella.h",
+				"${PODS_ROOT}/Target Support Files/GoogleAppMeasurement/GoogleAppMeasurement-xcframeworks.sh",
+				"${PODS_ROOT}/GoogleAppMeasurement/Frameworks/GoogleAppMeasurementWithoutAdIdSupport.xcframework",
 			);
-			name = "Copy generated compatibility header";
-			outputFileListPaths = (
-			);
+			name = "[CP] Copy XCFrameworks";
 			outputPaths = (
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/GoogleAppMeasurement/WithoutAdIdSupport/GoogleAppMeasurementWithoutAdIdSupport.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "COMPATIBILITY_HEADER_PATH=\"${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h\"\nMODULE_MAP_PATH=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap\"\n\nditto \"${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h\" \"${COMPATIBILITY_HEADER_PATH}\"\nditto \"${PODS_ROOT}/Headers/Public/YogaKit/YogaKit.modulemap\" \"${MODULE_MAP_PATH}\"\nditto \"${PODS_ROOT}/Headers/Public/YogaKit/YogaKit-umbrella.h\" \"${BUILT_PRODUCTS_DIR}\"\nprintf \"\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\\"${COMPATIBILITY_HEADER_PATH}\\\"\\n  requires objc\\n}\\n\" >> \"${MODULE_MAP_PATH}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/GoogleAppMeasurement/GoogleAppMeasurement-xcframeworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		CF21E0C63E81C2758CE81EC88750DC2E /* Copy generated compatibility header */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -20740,7 +20731,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2517AD705EFBFF9F393AC9EF669546A9 /* RNCMaskedView.release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -20782,8 +20772,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		0594368C284BE293D662AEA4550513C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -20804,9 +20795,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		06CA20166F63A7A8446F6BA03A701797 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -20975,6 +20965,8 @@
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -21080,6 +21072,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 454B101E1F6490908EA17EDD20AB9C0E /* Yoga.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -21127,7 +21120,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 84C31B8CC29EB59DD5B40ECE62FEAC97 /* GoogleUtilities.release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -21143,8 +21135,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		1536CC255C36552B1343FEB3764D470D /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -21206,9 +21199,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		162B334FE984C9094BD7880F312ED5B5 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -21328,6 +21320,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7FF72DC1ABCC1618B7ECFE9584FC5ECD /* React-CoreModules.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -21354,7 +21347,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -21366,6 +21360,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5599B95AA020475C2B2AA3EA398EF981 /* React-RCTNetwork.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -21427,17 +21422,16 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 46F105477E8ABC64C26C6D3FDC3647E7 /* react-native-safe-area-context.release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/React-jsiexecutor/React-jsiexecutor-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-safe-area-context/react-native-safe-area-context-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = jsireact;
-				PRODUCT_NAME = "React-jsiexecutor";
+				PRODUCT_MODULE_NAME = react_native_safe_area_context;
+				PRODUCT_NAME = "react-native-safe-area-context";
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -21584,10 +21578,12 @@
 				PRODUCT_NAME = ReactCommon;
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		329807D84660D3E7B3898F564F4AA0D4 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -21608,8 +21604,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		334A8EB0EA1F3F4A666556918B76B5DF /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -21657,8 +21654,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		354DF80589FE1B0B3B5F638CB06D9D44 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -21718,7 +21716,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		3BBCB171145C3687DF0D7F7BFCED8D72 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -21748,13 +21746,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C289C3133B6DD959AC93E425BEFF6A72 /* Firebase.release.xcconfig */;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core";
-				IBSC_MODULE = React;
-				INFOPLIST_FILE = "Target Support Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				PRODUCT_NAME = AccessibilityResources;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -21771,7 +21767,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Release;
+			name = Debug;
 		};
 		3D2DBF5AF3FAA267288C519CDCF07B6B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -21800,7 +21796,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 20DA4C3A747B7ACA17C26F4ECD5220D0 /* RNSVG.debug.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -21817,9 +21812,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		3F9A34144D7A4B6B532C125584DCEFD7 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -21843,8 +21837,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		3FF20904651D8FF4CD6C28E962334FF3 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -21891,8 +21886,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		4590184526C97881CE6A169290F6E1D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -21985,14 +21981,14 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		4C9CF1D3355ECF74B45A209A66913D65 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 885704999A95DA720E9EF3C949807ED9 /* RNReanimated.debug.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -22009,9 +22005,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		4D958ACF8E14F0C36B01DFCFA3FB6F2F /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -22032,9 +22027,8 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		4DE90A5FA11DA9292B1EB7ECF3607567 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -22099,13 +22093,12 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		546577D255E3D49AB65E12CE854F2607 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C7B5850AD98EEB72381784411B70FDE3 /* Flipper-Glog.release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -22245,6 +22238,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AEF3BB538EB8114E78B594B2BFDC79B4 /* React-RCTText.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -22268,6 +22262,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CFA919243C3E82863DFF4D8C48F7D18A /* React-RCTImage.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -22316,16 +22311,17 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 767CED19ECB2DB5E9E8EB46F2D48A9EB /* React-RCTSettings.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/RNGestureHandler/RNGestureHandler-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				GCC_PREFIX_HEADER = "Target Support Files/React-RCTSettings/React-RCTSettings-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = RNGestureHandler;
-				PRODUCT_NAME = RNGestureHandler;
+				PRODUCT_MODULE_NAME = RCTSettings;
+				PRODUCT_NAME = "React-RCTSettings";
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -22381,8 +22377,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		79B574CBA6F99BD539203D078A01E9F0 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -22589,9 +22586,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		80FCC3D46FFBF3C669B9743235E3EA1E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -22669,7 +22665,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75E754E8500D024B1042A384030A3145 /* rn-fetch-blob.debug.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -22693,6 +22688,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BF412559B73CC2A0D56CA61C6FAEDA42 /* glog.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -22859,6 +22855,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 28E8359AA223CB10C2492883B5292BD5 /* React-callinvoker.release.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -22951,23 +22949,25 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		908FC4AA4DE50E50DFFC2B3236092D6F /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9E4FD74453DA8726C2134B9946B275A3 /* React-RCTNetwork.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/RNCPicker/RNCPicker-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				GCC_PREFIX_HEADER = "Target Support Files/React-RCTNetwork/React-RCTNetwork-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = RNCPicker;
-				PRODUCT_NAME = RNCPicker;
+				PRODUCT_MODULE_NAME = RCTNetwork;
+				PRODUCT_NAME = "React-RCTNetwork";
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -23051,7 +23051,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = bundle;
 			};
-			name = Debug;
+			name = Release;
 		};
 		9C1FD8A372DFA8C019D731E3EA1A3C39 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -23127,7 +23127,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CFA0FCC991A6D53991F7221392507042 /* RNLocalize.release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -23248,9 +23247,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		A799BD70DF032A736482D3435B1A23CF /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -23280,6 +23278,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6EEFE1B0CB7B40AC1D4301E5ADAA3127 /* RNFBCrashlytics.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -23405,8 +23404,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		BA80305344B3BD4FE4DC53A47C6AA15A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -23429,29 +23429,14 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		BF000F1921C9AF6A23CBFA049825D57D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 41817230F2D0E1F41B0D634C5CB30530 /* Folly.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		CDCEDBF1C36E79E8009065F2121CCBF1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 947388218EC6C7876463A38E5309EAC3 /* RNGestureHandler.debug.xcconfig */;
-			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -23582,8 +23567,9 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		CDCEDBF1C36E79E8009065F2121CCBF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -23603,7 +23589,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.1;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -23612,7 +23598,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5473F9F63A844FC4803B4C22CEE197EF /* RNReanimated.release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -23797,7 +23782,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 189B6EF3AA33E20B0E1AD71C720BF11F /* RNCAsyncStorage.release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -23845,6 +23829,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C38E91744EB11BCD06BA42DB087512A8 /* React-jsiexecutor.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -23859,7 +23844,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.1;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -23911,9 +23896,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		EAB9E7F8F24241087010AB02CCF41A4D /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -23952,14 +23936,14 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		EF5E72A468F28F73005EBD89657AE11B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D02ABCDFABFF1D4E1534A74E8CFA257B /* React-RCTAnimation.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
@@ -24033,8 +24017,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 798C141A802177803AAEB98AD245BBAF /* RNFBAnalytics.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -24048,6 +24030,9 @@
 				PRODUCT_NAME = RNFBAnalytics;
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -24207,9 +24192,13 @@
 				PRODUCT_NAME = "React-jsinspector";
 				PUBLIC_HEADERS_FOLDER_PATH = "";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 

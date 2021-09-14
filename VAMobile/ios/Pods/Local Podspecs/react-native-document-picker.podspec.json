@@ -1,18 +1,18 @@
 {
   "name": "react-native-document-picker",
-  "version": "6.0.4",
-  "summary": "A react native interface to access documents from dropbox, google drive, iCloud...",
-  "homepage": "https://github.com/rnmods/react-native-document-picker#readme",
+  "version": "5.0.2",
+  "summary": "A react native interface to access Documents from dropbox google drive, iCloud",
   "license": "MIT",
-  "authors": "Elyx0 <elyx00@gmail.com> (https://github.com/rnmods), Vojtech Novak (hello@react-native-training.eu)",
-  "platforms": {
-    "ios": "11.0"
-  },
+  "homepage": "https://github.com/Elyx0/react-native-document-picker#readme",
+  "authors": "Elyx0 <elyx00@gmail.com> (@Elyx0)",
   "source": {
-    "git": "https://github.com/rnmods/react-native-document-picker.git",
-    "tag": "6.0.4"
+    "git": "https://github.com/Elyx0/react-native-document-picker",
+    "tag": "v5.0.2"
   },
-  "source_files": "ios/**/*.{h,m,mm}",
+  "source_files": "ios/RNDocumentPicker/*.{h,m}",
+  "platforms": {
+    "ios": "10.0"
+  },
   "dependencies": {
     "React-Core": [
 
