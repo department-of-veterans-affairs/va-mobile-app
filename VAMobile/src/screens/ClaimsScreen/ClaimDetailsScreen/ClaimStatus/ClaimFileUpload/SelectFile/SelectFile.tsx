@@ -32,9 +32,14 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   })
 
   const onFileFolder = async (): Promise<void> => {
+    const {
+      pickSingle,
+      types: { images, plainText, pdf },
+    } = DocumentPicker
+
     try {
-      const document = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images, DocumentPicker.types.plainText, DocumentPicker.types.pdf],
+      const document = await pickSingle({
+        type: [images, plainText, pdf],
       })
 
       if (document.size > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
