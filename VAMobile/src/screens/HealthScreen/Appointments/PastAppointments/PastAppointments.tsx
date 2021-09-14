@@ -73,7 +73,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         label: t('pastAppointments.pastThreeMonths'),
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
-        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ day: 1 }).endOf('day') },
+        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ days: 1 }).endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
       {
@@ -101,7 +101,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
         a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
-        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ day: 1 }).endOf('day') },
+        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ days: 1 }).endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       },
       {
