@@ -428,8 +428,8 @@ PODS:
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNKeychain (6.2.0):
-    - React
+  - RNKeychain (7.0.0):
+    - React-Core
   - RNLocalize (2.0.2):
     - React-Core
   - RNReanimated (1.13.2):
@@ -705,7 +705,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: e99a7bedc194c6ab325197f6d5b06e42ca583efc
   RNFileViewer: 83cc066ad795b1f986791d03b56fe0ee14b6a69f
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
+  RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
   RNLocalize: 43f6c30d8e19ad92282ae434d310fb463b31f419
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
@@ -715,4 +715,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 26964abc6f654a4dd0516aa23ab657fda2678d65
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.0
