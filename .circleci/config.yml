@@ -316,5 +316,8 @@ workflows:
     triggers:
       - schedule:
           cron: "0 14 * * 2"
+          filters:
+            branches:
+              only: master
     jobs:
       - run_release_lanes

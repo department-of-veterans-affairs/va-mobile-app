@@ -90,7 +90,7 @@ platform :ios do
     version = app.get_pending_release_app_store_version
     unless version.nil?
       Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
-      slack_release_success(app.version_string, "iOS")
+      slack_release_success(app.version_string.to_s, "iOS")
     end
   end
 
