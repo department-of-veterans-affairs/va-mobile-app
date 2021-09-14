@@ -58,7 +58,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     const upcomingRange: AppointmentsDateRange = getUpcomingAppointmentDateRange()
     const pastRange: AppointmentsDateRange = {
       startDate: threeMonthsEarlier.startOf('day').toISO(),
-      endDate: todaysDate.minus({ day: 1 }).endOf('day').toISO(),
+      endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
     }
 
     // fetch upcoming and default past appointments ranges
