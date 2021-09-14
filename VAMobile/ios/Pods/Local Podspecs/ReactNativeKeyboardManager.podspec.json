@@ -1,6 +1,6 @@
 {
   "name": "ReactNativeKeyboardManager",
-  "version": "6.5.4-2",
+  "version": "4.0.13-17",
   "description": "Library that allows to prevent issues of keyboard sliding up and cover on React-Native iOS projects. ⚛",
   "homepage": "https://github.com/douglasjunior/react-native-keyboard-manager",
   "summary": "Library that allows to prevent issues of keyboard sliding up and cover on React-Native iOS projects. ⚛",
@@ -8,11 +8,11 @@
   "authors": {
     "name": "Douglas Nassif Roma Junior",
     "email": "nassifrroma@gmail.com",
-    "url": "https://github.com/douglasjunior"
+    "url": "http://douglasjunior.me"
   },
   "source": {
     "git": "https://github.com/douglasjunior/react-native-keyboard-manager.git",
-    "tag": "6.5.4-2"
+    "tag": "4.0.13-17"
   },
   "platforms": {
     "ios": "9.0"
@@ -24,14 +24,14 @@
   ],
   "source_files": "ios/ReactNativeKeyboardManager/**/*.{h,m}",
   "dependencies": {
-    "React-Core": [
+    "React": [
 
     ],
     "React-RCTText": [
 
     ],
-    "IQKeyboardManagerSwift": [
-      "6.5.4"
+    "IQKeyboardManager": [
+      "4.0.13"
     ]
   }
 }
