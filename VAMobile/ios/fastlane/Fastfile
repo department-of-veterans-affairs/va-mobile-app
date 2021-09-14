@@ -114,7 +114,7 @@ platform :ios do
   # updates the build and version number
   def update_version (version)
     puts('version: ' + version.to_s)
-    # will need to add app_store_build_number and a max check once there is a live version of the app.
+    # get the latest version of the app in test flight.
     latest_testflight_build_number
     # set the version to the what is in app store, just in case there was drift
     increment_version_number(version_number: lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION])
