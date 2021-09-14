@@ -52,7 +52,7 @@ end
 def slack_release_success(version, os)
   puts "Send slack message to indicate release is live"
   slack(
-     message: "Version #{version} in now live for #{os}",
+     message: "Version #{version} is now live for #{os}",
      success: true,
      default_payloads: [],
   )
