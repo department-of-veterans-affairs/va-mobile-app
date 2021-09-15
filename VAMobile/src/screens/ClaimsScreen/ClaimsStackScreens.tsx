@@ -59,7 +59,7 @@ export type ClaimsStackParamList = {
   UploadFile: {
     request: ClaimEventData
     fileUploaded: DocumentPickerResponse
-    imageUploaded: Asset
+    imageUploaded: ImagePickerResponse
   }
   UploadConfirmation: {
     request: ClaimEventData

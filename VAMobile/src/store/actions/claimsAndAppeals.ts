@@ -5,6 +5,7 @@ import * as api from '../api'
 import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import {
   AppealData,
+  AppealStatusTypesConstants,
   ClaimData,
   ClaimDecisionResponseData,
   ClaimDocUploadData,
@@ -473,13 +474,21 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
 
     try {
       if (files.length > 1) {
-        const fileStrings = _.compact(_.pluck(files, 'base64'))
+        const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse, index: number) => {
+          if ('assets' in file) {
+            return file.assets ? file.assets[0].base64 : undefined
+          } else if ('size' in file) {
+            return file.base64
+          }
+        })
 
-        const payload = {
-          files: fileStrings,
-          tracked_item_id: request.trackedItemId,
-          document_type: request.documentType,
-        }
+        const payload = JSON.parse(
+          JSON.stringify({
+            files: fileStrings,
+            tracked_item_id: request.trackedItemId,
+            document_type: request.documentType,
+          }),
+        )
 
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
       } else {
@@ -514,8 +523,8 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
           ),
         )
 
-        formData.append('trackedItemId', request.trackedItemId)
-        formData.append('documentType', request.documentType)
+        formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
+        formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
 
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
       }

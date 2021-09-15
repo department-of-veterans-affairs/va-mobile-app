@@ -39,15 +39,10 @@ context('claimsAndAppeals', () => {
 
   const multiFiles: Array<ImagePickerResponse> = [
     {
-      assets: [
-        { base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile' },
-        {
-          base64: 'imgstring',
-          uri: 'path/to/file',
-          fileSize: 100,
-          fileName: 'myfile',
-        },
-      ],
+      assets: [{ base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile' }],
+    },
+    {
+      assets: [{ base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile' }],
     },
   ]
 
