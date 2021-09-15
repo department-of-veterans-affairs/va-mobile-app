@@ -523,18 +523,21 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
             typeOfFile = type
             uriOfFile = uri
           }
-        } else if ('name' in attachment) {
+        } else if ('size' in attachment) {
           const { name, uri, type } = attachment
           nameOfFile = name
           typeOfFile = type
           uriOfFile = uri
         }
         // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
-        formData.append('uploads[]', {
-          name: nameOfFile || '',
-          uri: uriOfFile || '',
-          type: typeOfFile || '',
-        })
+        formData.append(
+          'uploads[]',
+          JSON.stringify({
+            name: nameOfFile || '',
+            uri: uriOfFile || '',
+            type: typeOfFile || '',
+          }),
+        )
       })
       postData = formData
     } else {

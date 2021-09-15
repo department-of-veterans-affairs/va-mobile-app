@@ -38,7 +38,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
         const { fileName: name, fileSize: size } = attachment.assets ? attachment.assets[0] : ({} as Asset)
         fileName = name || ''
         fileSize = size
-      } else if ('name' in attachment) {
+      } else if ('size' in attachment) {
         const { name, size } = attachment
         fileName = name || ''
         fileSize = size

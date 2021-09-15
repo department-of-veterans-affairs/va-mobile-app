@@ -496,18 +496,21 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
             typeOfFile = type
             uriOfFile = uri
           }
-        } else if ('name' in fileToUpload) {
+        } else if ('size' in fileToUpload) {
           const { name, uri, type } = fileToUpload
           nameOfFile = name
           typeOfFile = type
           uriOfFile = uri
         }
         // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
-        formData.append('uploads[]', {
-          name: nameOfFile || '',
-          uri: uriOfFile || '',
-          type: typeOfFile || '',
-        })
+        formData.append(
+          'uploads[]',
+          JSON.stringify({
+            name: nameOfFile || '',
+            uri: uriOfFile || '',
+            type: typeOfFile || '',
+          }),
+        )
 
         formData.append('trackedItemId', request.trackedItemId)
         formData.append('documentType', request.documentType)

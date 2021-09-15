@@ -63,7 +63,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       let fileSize = 0
       if ('assets' in attachment) {
         fileSize = attachment.assets ? attachment.assets[0].fileSize || 0 : 0
-      } else if ('name' in attachment) {
+      } else if ('size' in attachment) {
         fileSize = attachment.size
       }
       return fileSize
