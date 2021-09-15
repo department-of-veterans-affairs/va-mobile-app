@@ -254,6 +254,9 @@ const theme: VATheme = {
     collapsibleIconMargin: 7,
     loginContentMarginBottom: 80,
     webviewReloadButtonHeight: isIOS() ? 64 : 45,
+    webviewReloadButtonSize: 17,
+    webviewButtonSize: 16,
+    webviewButtona11ySize: 44,
   },
 
   fontFace: {
