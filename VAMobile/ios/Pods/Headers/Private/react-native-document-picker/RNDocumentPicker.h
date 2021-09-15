@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-document-picker/ios/RNDocumentPicker/RNDocumentPicker.h
+../../../../../node_modules/react-native-document-picker/ios/RNDocumentPicker.h
