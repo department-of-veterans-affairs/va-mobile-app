@@ -6,13 +6,13 @@ import _ from 'underscore'
 import styled from 'styled-components'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, getMaxWidthAndHeightOfImage } from 'utils/common'
-import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
@@ -60,7 +60,13 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const getTotalBytesUsedByFiles = (): number => {
     const listOfFileSizes = _.map(attachmentsList, (attachment) => {
-      return (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || 0
+      let fileSize = 0
+      if ('assets' in attachment) {
+        fileSize = attachment.assets ? attachment.assets[0].fileSize || 0 : 0
+      } else if ('name' in attachment) {
+        fileSize = attachment.size
+      }
+      return fileSize
     })
 
     return listOfFileSizes.reduce((a, b) => a + b, 0)
@@ -70,7 +76,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     return _.map(attachmentsList, (attachment) => {
       // if the attachment is a file from DocumentPicker, get its uri
       if (_.has(attachment, 'name')) {
-        return attachment.uri || ''
+        return (attachment as DocumentPickerResponse).uri || ''
       }
 
       return ''
@@ -80,8 +86,9 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const getImageBase64s = (): Array<string> => {
     return _.map(attachmentsList, (attachment) => {
       // if the attachment is a file from ImagePicker, get its base64 value
-      if (_.has(attachment, 'base64')) {
-        return (attachment as ImagePickerResponse).base64 || ''
+      if ('assets' in attachment) {
+        const { base64 } = attachment.assets ? attachment.assets[0] : ({} as Asset)
+        return base64 || ''
       }
 
       return ''
@@ -91,7 +98,9 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const onSelectAFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
-      return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
+      const img = { fileName: 'file.txt' } as Asset
+      const assets = [img]
+      return callbackOnSuccessfulFileSelection({ assets }, true)
     }
 
     onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
@@ -120,6 +129,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
   const imageMaxWidthAndHeight = getMaxWidthAndHeightOfImage(image, messagePhotoAttachmentMaxHeight)
+  const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   return (
     <VAScrollView {...testIdProps('Attachments-page')}>
@@ -141,9 +151,9 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.attachments.attachmentsAreNotDrafts')}
         </TextView>
-        {image && image.uri && (
+        {image && uri && (
           <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image">
-            <StyledImage source={{ uri: image.uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
+            <StyledImage source={{ uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
           </Box>
         )}
         {file?.name && file?.size && renderFileDisplay(file.name, file.size)}

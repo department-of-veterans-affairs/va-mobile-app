@@ -1,8 +1,8 @@
 import { TFunction } from 'i18next'
 
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
+import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
@@ -230,7 +230,8 @@ export const postCameraOrImageLaunchOnFileAttachments = (
   imageBase64s: Array<string>,
   t: TFunction,
 ): void => {
-  const { fileSize, errorMessage, uri, didCancel, type, base64 } = response
+  const { assets, errorMessage, didCancel } = response
+  const { fileSize, type, uri, base64 } = assets ? assets[0] : ({} as Asset)
 
   if (didCancel) {
     return
