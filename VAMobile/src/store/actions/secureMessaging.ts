@@ -532,11 +532,13 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
         // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
         formData.append(
           'uploads[]',
-          JSON.stringify({
-            name: nameOfFile || '',
-            uri: uriOfFile || '',
-            type: typeOfFile || '',
-          }),
+          JSON.parse(
+            JSON.stringify({
+              name: nameOfFile || '',
+              uri: uriOfFile || '',
+              type: typeOfFile || '',
+            }),
+          ),
         )
       })
       postData = formData
