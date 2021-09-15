@@ -880,6 +880,7 @@
 		4B99A4699697264CE5A7F3E20085A5E5 /* RCTImageLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1FB8EBF3568841FC5D24B33AFE49C6A /* RCTImageLoader.mm */; settings = {COMPILER_FLAGS = "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-nullability-completeness"; }; };
 		4B9B23E2C22C37B7C4ED4A044ADF3E2E /* ExecutorWithPriority.h in Headers */ = {isa = PBXBuildFile; fileRef = AA2437ED3D8E368FC8240595EE5EAFD6 /* ExecutorWithPriority.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		4C0556899BBA82E0CC5B7B2792F0071B /* RCTBorderStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = E1DF4685FAA99E34FFCD2044DDA3EA4F /* RCTBorderStyle.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		4C72AFD294506B403D2D9275BCE063A8 /* RNDocumentPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = BDD9845DD00048DAD6E86B467163C9B4 /* RNDocumentPicker.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		4CA3DEE089BA9F89DEEF5E3799BF21E3 /* REAUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 98FF992CDE27AC312DEDA150FFA0EFCD /* REAUtils.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		4CB3060856F69902C3655AA081037295 /* FramedReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71C8516016FE37DF8450E15876AB6F21 /* FramedReader.cpp */; settings = {COMPILER_FLAGS = "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_HAVE_LIBGFLAGS=0 -DFOLLY_HAVE_LIBJEMALLOC=0 -DFOLLY_HAVE_PREADV=0 -DFOLLY_HAVE_PWRITEV=0 -DFOLLY_HAVE_TFO=0 -DFOLLY_USE_SYMBOLIZER=0  -frtti\n    -fexceptions\n    -std=c++14\n    -Wno-error\n    -Wno-unused-local-typedefs\n    -Wno-unused-variable\n    -Wno-sign-compare\n    -Wno-comment\n    -Wno-return-type\n    -Wno-global-constructors"; }; };
 		4CB37D2B4553F45804F25E6139826689 /* RCTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = BE92CE7C68D8F121B8044D5F93BCB2EE /* RCTLog.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -1425,7 +1426,7 @@
 		83A2FCF019FDBDE477CC1ECBE233A52A /* RCTDivisionAnimatedNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 90A8D6A6EB98BAB10A08D58E27E78EDD /* RCTDivisionAnimatedNode.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		83AEC43AE3A2353F71EFD27FBBE3ACF0 /* UncaughtExceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5D215CDA08EAE96FD808C3EB6ACEFD /* UncaughtExceptions.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		83E59A93BEBE5CEA7368D43D57165BAB /* RNSVGRenderable.h in Headers */ = {isa = PBXBuildFile; fileRef = 8136F89955CA5A54BE7CFBBDB14054D2 /* RNSVGRenderable.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		8406E2586AB9CA1AC5372B0C96EE6A10 /* react-native-document-picker-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E42DEE6BB07EB23DC4E18597705600D /* react-native-document-picker-dummy.m */; };
+		8406E2586AB9CA1AC5372B0C96EE6A10 /* react-native-document-picker-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A31955D902514D6B1006392C3FD4B5A4 /* react-native-document-picker-dummy.m */; };
 		8443E5D4E9F5F82A3DBD119EB72D74C1 /* FiberIOExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = ED034035E0747E3E256A945D3A6D0FFE /* FiberIOExecutor.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		844C1A58601515253299BD871A676C9A /* Assume.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C252C9E469471698DE37B1C7D2067BF /* Assume.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		848A130C0E12284CEF7D1F73485DAD46 /* RequestResponseThroughputTcp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DFFEA14A0DEB09738510CD1B94A6B6 /* RequestResponseThroughputTcp.cpp */; settings = {COMPILER_FLAGS = "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_HAVE_LIBGFLAGS=0 -DFOLLY_HAVE_LIBJEMALLOC=0 -DFOLLY_HAVE_PREADV=0 -DFOLLY_HAVE_PWRITEV=0 -DFOLLY_HAVE_TFO=0 -DFOLLY_USE_SYMBOLIZER=0  -frtti\n    -fexceptions\n    -std=c++14\n    -Wno-error\n    -Wno-unused-local-typedefs\n    -Wno-unused-variable\n    -Wno-sign-compare\n    -Wno-comment\n    -Wno-return-type\n    -Wno-global-constructors"; }; };
@@ -1922,7 +1923,6 @@
 		B8D91CE74E9C349243928000693A8817 /* FIRComponentType.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C89980937A2ABCA5BF3AE07285B7243 /* FIRComponentType.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		B8E7EF88EBF9422F1A5CC2BEA6AE0373 /* FIRStackFrame_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3B0FBABB30FD4F8773131C33149B39 /* FIRStackFrame_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		B90D8B10F7E0EE26C479A96364658B7D /* RCTBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF9DA39B048BF3E789FC0C32BEC612A /* RCTBridge.m */; settings = {COMPILER_FLAGS = "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-documentation"; }; };
-		B90DED7313C3FBFA26BE81087DC8E98F /* RNDocumentPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F655D4497C02B9026F63A65BDB4410A /* RNDocumentPicker.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		B9216FEB64ACA233726D5801A4419869 /* FBLPromise+Do.m in Sources */ = {isa = PBXBuildFile; fileRef = 634633B3C39162D3D7F3DFF128859CCD /* FBLPromise+Do.m */; };
 		B94107023C8C776B0D9D4CF807C3AC65 /* RCTImageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 348D1F8A38725A42AC592D52798832FA /* RCTImageView.mm */; settings = {COMPILER_FLAGS = "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-nullability-completeness"; }; };
 		B95240B84D447593105C5F75D747EAAF /* FIRCLSConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3580A67DFADBF2755F4CC355F1EC90 /* FIRCLSConstants.m */; };
@@ -2561,7 +2561,6 @@
 		F3EE0E7B038ED96F3320CABDECFA7B09 /* RCTConvert+CoreLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 22FC5D39E9834647D7514320F7685F48 /* RCTConvert+CoreLocation.m */; settings = {COMPILER_FLAGS = "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-documentation"; }; };
 		F3FF201E4F9F503693B61D61D0A38687 /* RCTRedBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32488872222BB03B3D6E845C6B39E2AC /* RCTRedBox.mm */; settings = {COMPILER_FLAGS = "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-nullability-completeness"; }; };
 		F409D733AAE3AC1FAAFB8145DEEAA7CF /* AsyncPipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCE2F7CD537A75502F3D4F3F9B077368 /* AsyncPipe.cpp */; settings = {COMPILER_FLAGS = "-DFOLLY_HAVE_PTHREAD=1 -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_HAVE_LIBGFLAGS=0 -DFOLLY_HAVE_LIBJEMALLOC=0 -DFOLLY_HAVE_PREADV=0 -DFOLLY_HAVE_PWRITEV=0 -DFOLLY_HAVE_TFO=0 -DFOLLY_USE_SYMBOLIZER=0\n    -frtti\n    -fexceptions\n    -std=c++14\n    -Wno-error\n    -Wno-unused-local-typedefs\n    -Wno-unused-variable\n    -Wno-sign-compare\n    -Wno-comment\n    -Wno-return-type\n    -Wno-global-constructors"; }; };
-		F41B54E2F0CB1342FC65BFE73640B87D /* RNDocumentPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 97AFF1E852869B95B6B0A42AA1075626 /* RNDocumentPicker.m */; };
 		F47EBCEAA1B606D35045770A0DDCDBAC /* FLEXNetworkRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 227F8AD9AE6DF1220B6439186DCD798D /* FLEXNetworkRecorder.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		F49B4E28CE61D5F28CFD3E9867FF8745 /* pb_decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 087BFFFC2E3C1AB97D08C92341FA3F59 /* pb_decode.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		F4A270295B643FED3E043984A7221CE1 /* FlipperKit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A82922A246C718C13E6E3F3C7E188A6F /* FlipperKit-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -2661,6 +2660,7 @@
 		FF335E12E853178A095CCFBB1965F1A1 /* FIRCLSReportManager.h in Headers */ = {isa = PBXBuildFile; fileRef = AD488AC364BACE552ECBFCD055FD23E9 /* FIRCLSReportManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		FF679A4B249E24899047DFA6C525F7BF /* Iterator.h in Headers */ = {isa = PBXBuildFile; fileRef = 32CA1D0643BC7EB1CC9CFAB410C88E22 /* Iterator.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		FF8FD7CB4B0518EB5124040E7ACD3E38 /* RNCSafeAreaView.h in Headers */ = {isa = PBXBuildFile; fileRef = E35FF3EE7F05A67C3CFB0C86074F3FFD /* RNCSafeAreaView.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		FFA76086FAA202A6900BBA43267093E5 /* RNDocumentPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 80D61819C6C2FAC63990B682C85E4C82 /* RNDocumentPicker.m */; };
 		FFC14A4797B0A37B7AC3A67039C66B12 /* RCTBaseTextInputView+Hack.h in Headers */ = {isa = PBXBuildFile; fileRef = EFBD190457194A0ED1FCF563A52F6275 /* RCTBaseTextInputView+Hack.h */; settings = {ATTRIBUTES = (Project, ); }; };
 /* End PBXBuildFile section */
 
@@ -4968,7 +4968,6 @@
 		06D1F868E86535810EBF529EBD1D1D60 /* RNGestureHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandler.h; path = ios/RNGestureHandler.h; sourceTree = "<group>"; };
 		06DA66441A08B240C6AE2D5382C4D108 /* HardwareConcurrency.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = HardwareConcurrency.cpp; path = folly/system/HardwareConcurrency.cpp; sourceTree = "<group>"; };
 		06FC5C9CF96D60C50FCD47D339C91951 /* nanopb */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = nanopb; path = libnanopb.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		070F6FFECFCB114D4F6756F65A316EDB /* react-native-document-picker-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "react-native-document-picker-prefix.pch"; sourceTree = "<group>"; };
 		074C2AA6E735735ACB51D3DB48D5D45C /* Flipper-Glog-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Flipper-Glog-prefix.pch"; sourceTree = "<group>"; };
 		075705BB7D2EC6442CA3579078DED2ED /* rn-fetch-blob.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "rn-fetch-blob.release.xcconfig"; sourceTree = "<group>"; };
 		076DBF5DB132C8DE24E1C596A8AD41A9 /* http-internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "http-internal.h"; sourceTree = "<group>"; };
@@ -5626,6 +5625,7 @@
 		4326112544684F004A9590A673EBBC05 /* ConcurrentSkipList.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ConcurrentSkipList.h; path = folly/ConcurrentSkipList.h; sourceTree = "<group>"; };
 		434659487B0F04B2EA3A3FC7270F3CE2 /* Subscription.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = Subscription.cpp; path = yarpl/observable/Subscription.cpp; sourceTree = "<group>"; };
 		4357495D458DD4DEC959D3D3ABB9406B /* React-RCTLinking-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "React-RCTLinking-prefix.pch"; sourceTree = "<group>"; };
+		43A25FB24AC4E87108EFA53304278C5C /* react-native-document-picker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "react-native-document-picker.release.xcconfig"; sourceTree = "<group>"; };
 		43BBC6A8804E86862F62545D8430B307 /* React-Core-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "React-Core-umbrella.h"; sourceTree = "<group>"; };
 		43E090691A1A0F4F1A060C9163640876 /* FIRCLSFileManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRCLSFileManager.m; path = Crashlytics/Crashlytics/Models/FIRCLSFileManager.m; sourceTree = "<group>"; };
 		43E1671E10C5B1F6BEB363197B7B5ADE /* RCTEventAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTEventAnimation.h; sourceTree = "<group>"; };
@@ -5788,7 +5788,6 @@
 		50BF13A8707FD88F969C65E60B33E26C /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GCDAsyncUdpSocket.h; path = Source/GCD/GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
 		50DE693CEC6BBA2063F97F44FE73C518 /* Latch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Latch.h; path = rsocket/benchmarks/Latch.h; sourceTree = "<group>"; };
 		510391E6ADB6BE82E5147C0AA95A7750 /* ShutdownSocketSet.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = ShutdownSocketSet.cpp; path = folly/io/ShutdownSocketSet.cpp; sourceTree = "<group>"; };
-		510E097C4FF340173A6774654E5608EA /* react-native-document-picker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "react-native-document-picker.release.xcconfig"; sourceTree = "<group>"; };
 		5120129AAA7CF9045AF11BF896A1A83C /* RCTWebSocketExecutor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RCTWebSocketExecutor.h; path = React/CoreModules/RCTWebSocketExecutor.h; sourceTree = "<group>"; };
 		512A9D1A64A5667B2CC2D8AA05236A45 /* StringKeyedUnorderedMap.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = StringKeyedUnorderedMap.h; path = folly/experimental/StringKeyedUnorderedMap.h; sourceTree = "<group>"; };
 		513648697C80A08D8235CF9E25C97CA2 /* RCTSurfaceRootShadowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTSurfaceRootShadowView.m; sourceTree = "<group>"; };
@@ -6157,7 +6156,6 @@
 		6F3FD8D09051C0C79FDFBDACAD3D4736 /* GULLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GULLogger.h; path = GoogleUtilities/Logger/Public/GoogleUtilities/GULLogger.h; sourceTree = "<group>"; };
 		6F42001EAB572FB38DA6EED687F76066 /* experiments-inl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "experiments-inl.h"; sourceTree = "<group>"; };
 		6F4F2E2DABB549DF8C0AA62BC1F0609E /* RNSVGRadialGradient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RNSVGRadialGradient.m; sourceTree = "<group>"; };
-		6F655D4497C02B9026F63A65BDB4410A /* RNDocumentPicker.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNDocumentPicker.h; path = ios/RNDocumentPicker/RNDocumentPicker.h; sourceTree = "<group>"; };
 		6F682CE6F69FAEE69EABCCE419A75E13 /* Flipper-RSocket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Flipper-RSocket.release.xcconfig"; sourceTree = "<group>"; };
 		6F683EEEE40FCCAA96A1EC277959565C /* RCTConstants.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTConstants.m; sourceTree = "<group>"; };
 		6F70805CCFA917357F405AD661E8D451 /* RCTBundleURLProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTBundleURLProvider.h; sourceTree = "<group>"; };
@@ -6343,6 +6341,7 @@
 		806E9F3A7EEDBD2915E36C19A9764F87 /* ThreadCachedLists.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ThreadCachedLists.h; path = folly/synchronization/detail/ThreadCachedLists.h; sourceTree = "<group>"; };
 		80B411CFB078F9D1AC0E63E5C5BA4E7C /* FlipperCppWrapperPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperCppWrapperPlugin.h; path = iOS/FlipperKit/CppBridge/FlipperCppWrapperPlugin.h; sourceTree = "<group>"; };
 		80BB2A0BF6A587CDFB761B61D2F2FDA0 /* MallctlHelper.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = MallctlHelper.cpp; path = folly/memory/MallctlHelper.cpp; sourceTree = "<group>"; };
+		80D61819C6C2FAC63990B682C85E4C82 /* RNDocumentPicker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNDocumentPicker.m; path = ios/RNDocumentPicker.m; sourceTree = "<group>"; };
 		80E044F8062FD12E1016E9C0DA69D9A6 /* RNSVGNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNSVGNode.m; path = ios/RNSVGNode.m; sourceTree = "<group>"; };
 		80E2FA73ACFB750E6A00A6045FAD71FB /* EventBaseBackendBase.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = EventBaseBackendBase.cpp; path = folly/io/async/EventBaseBackendBase.cpp; sourceTree = "<group>"; };
 		80E705CF0D0B47D27EE34FE0E2DD6959 /* RNFetchBlobConst.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNFetchBlobConst.h; path = ios/RNFetchBlobConst.h; sourceTree = "<group>"; };
@@ -6595,7 +6594,6 @@
 		9717977F4D708C12CB7636405E94785D /* RSocketRequester.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = RSocketRequester.cpp; path = rsocket/RSocketRequester.cpp; sourceTree = "<group>"; };
 		9745FDB16075F6BCC86F9819D5EF16BF /* FIRApp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRApp.h; path = FirebaseCore/Sources/Public/FirebaseCore/FIRApp.h; sourceTree = "<group>"; };
 		9794E29CA00FA2273D6FBFD6CFDB5A11 /* RNSVGLine.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RNSVGLine.m; sourceTree = "<group>"; };
-		97AFF1E852869B95B6B0A42AA1075626 /* RNDocumentPicker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNDocumentPicker.m; path = ios/RNDocumentPicker/RNDocumentPicker.m; sourceTree = "<group>"; };
 		9818DB2E8DFEDA86D19D8E48D884FF03 /* StreamsWriter.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = StreamsWriter.cpp; path = rsocket/statemachine/StreamsWriter.cpp; sourceTree = "<group>"; };
 		982F8E985AD029D350FC98EF5ACB2B55 /* RCTImageURLLoaderWithAttribution.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImageURLLoaderWithAttribution.mm; sourceTree = "<group>"; };
 		9843CFF6AE91F62C85E4A214BF2679CB /* Access.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Access.h; path = folly/container/Access.h; sourceTree = "<group>"; };
@@ -6660,6 +6658,7 @@
 		9BC55218CF9F9B05BDF17E28E6611A90 /* RCTShadowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTShadowView.m; sourceTree = "<group>"; };
 		9BC9E4827D9D6F8B2A040D7C0B2CF85D /* Likely.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Likely.h; path = folly/Likely.h; sourceTree = "<group>"; };
 		9C2662595B1AB3C4F1EE0CB18CAC0FEA /* FIRCLSNetworkResponseHandler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRCLSNetworkResponseHandler.m; path = Crashlytics/Shared/FIRCLSNetworking/FIRCLSNetworkResponseHandler.m; sourceTree = "<group>"; };
+		9C2E068BBC6566B33EA92CE2FEE704E6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		9C3122CC0285A335D9F966FB622B0644 /* Sse.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = Sse.cpp; path = folly/detail/Sse.cpp; sourceTree = "<group>"; };
 		9C450F622ABE26D57E14C5D585E5EC7E /* FlipperKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FlipperKit.debug.xcconfig; sourceTree = "<group>"; };
 		9C45829F9CDA1C94E3B9F23967AEA68B /* TimekeeperScheduledExecutor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TimekeeperScheduledExecutor.h; path = folly/executors/TimekeeperScheduledExecutor.h; sourceTree = "<group>"; };
@@ -6682,7 +6681,6 @@
 		9DC52C6FA370D1B9C62FCEAFBB5D0B6F /* Folly-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Folly-dummy.m"; sourceTree = "<group>"; };
 		9DD0A311A02ABF4002D70F49F34E2A6E /* RSocketResponder.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = RSocketResponder.cpp; path = rsocket/RSocketResponder.cpp; sourceTree = "<group>"; };
 		9E2D6907EF6A7EA89AD83A6D50DEC94A /* React-cxxreact-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "React-cxxreact-prefix.pch"; sourceTree = "<group>"; };
-		9E42DEE6BB07EB23DC4E18597705600D /* react-native-document-picker-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "react-native-document-picker-dummy.m"; sourceTree = "<group>"; };
 		9E4FD74453DA8726C2134B9946B275A3 /* React-RCTNetwork.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "React-RCTNetwork.release.xcconfig"; sourceTree = "<group>"; };
 		9E5B4C5A910347BBF1211E43906565FE /* Payload.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = Payload.cpp; path = rsocket/Payload.cpp; sourceTree = "<group>"; };
 		9E80BC6341D5A52F1B6C9468D33A49AE /* BasicTransportCertificate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BasicTransportCertificate.h; path = folly/io/async/ssl/BasicTransportCertificate.h; sourceTree = "<group>"; };
@@ -6734,6 +6732,7 @@
 		A2E05F10E2F921E50CBA7DBEFF713AFE /* libevent-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "libevent-dummy.m"; sourceTree = "<group>"; };
 		A2E6F27D547CC27A4F58F1119EEC33FB /* ScheduledSubscription.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = ScheduledSubscription.cpp; path = rsocket/internal/ScheduledSubscription.cpp; sourceTree = "<group>"; };
 		A2FA5D63BE26A28C5725DC8C1E885A00 /* RNPinchHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNPinchHandler.h; sourceTree = "<group>"; };
+		A31955D902514D6B1006392C3FD4B5A4 /* react-native-document-picker-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "react-native-document-picker-dummy.m"; sourceTree = "<group>"; };
 		A31EDA6FAC1038A527509039F11D7D61 /* Retrying.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Retrying.h; path = folly/futures/Retrying.h; sourceTree = "<group>"; };
 		A32BCE02D01E4AF45C2398F3849F3502 /* Pods-VAMobile-VAMobileTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-VAMobile-VAMobileTests-dummy.m"; sourceTree = "<group>"; };
 		A33D90D215593DE400C6347E3B59C0C9 /* RCTViewManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTViewManager.m; sourceTree = "<group>"; };
@@ -7060,6 +7059,7 @@
 		BD71E2539823621820F84384064C253A /* React-Core */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "React-Core"; path = "libReact-Core.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD9602DFCB5A52B7713BFD18569D1B8A /* FrameType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FrameType.h; path = rsocket/framing/FrameType.h; sourceTree = "<group>"; };
 		BDC971D9453FF5C0CCE189F00DAB5CCC /* React-RCTNetwork-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "React-RCTNetwork-dummy.m"; sourceTree = "<group>"; };
+		BDD9845DD00048DAD6E86B467163C9B4 /* RNDocumentPicker.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNDocumentPicker.h; path = ios/RNDocumentPicker.h; sourceTree = "<group>"; };
 		BDE0A0914EBC8B543F78B88A1E03BA63 /* RCTBridgeDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTBridgeDelegate.h; sourceTree = "<group>"; };
 		BDFFDFD552BF803C0858A47BCCAD4397 /* event-internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "event-internal.h"; sourceTree = "<group>"; };
 		BE01DDDF371DB8E1F4EB031D3D61D2FD /* GULHeartbeatDateStorageUserDefaults.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GULHeartbeatDateStorageUserDefaults.m; path = GoogleUtilities/Environment/GULHeartbeatDateStorageUserDefaults.m; sourceTree = "<group>"; };
@@ -7247,7 +7247,6 @@
 		CD8AB69290AC911C032B6C8EAB42652A /* RCTMultipartDataTask.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTMultipartDataTask.h; sourceTree = "<group>"; };
 		CDA27EA63A5BECE1D7B93F11D19EC1AF /* ImagePickerUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ImagePickerUtils.m; path = ios/ImagePickerUtils.m; sourceTree = "<group>"; };
 		CDAFA02C067977DADADD8D49044E5541 /* FIROptions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIROptions.h; path = FirebaseCore/Sources/Public/FirebaseCore/FIROptions.h; sourceTree = "<group>"; };
-		CDB0EF8DEA655B5293549903B54B493D /* LICENSE.md */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE.md; sourceTree = "<group>"; };
 		CDED497C14D14E26C867906F63A20A68 /* RNFBCrashlyticsInitProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNFBCrashlyticsInitProvider.m; path = ios/RNFBCrashlytics/RNFBCrashlyticsInitProvider.m; sourceTree = "<group>"; };
 		CE0ED1C0E7A67EB4DA21256554A77501 /* RNLocalize.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNLocalize.m; path = ios/RNLocalize.m; sourceTree = "<group>"; };
 		CE140E9D5AB02D43FD846EABD571FEDA /* RCTRedBoxSetEnabled.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTRedBoxSetEnabled.h; sourceTree = "<group>"; };
@@ -7363,6 +7362,7 @@
 		D81910332EFF75EF0E5FA243A4C22EF3 /* RNSVGClipPathManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RNSVGClipPathManager.m; sourceTree = "<group>"; };
 		D81C5C1946E027D97306FFCC6334C742 /* Benchmark.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = Benchmark.cpp; path = folly/Benchmark.cpp; sourceTree = "<group>"; };
 		D8540AD1A88121BADB2642B763B450EA /* RangeSse42.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RangeSse42.h; path = folly/detail/RangeSse42.h; sourceTree = "<group>"; };
+		D86A736D42539B23925BDCA30EE84F2C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		D86F3981B15948D1B6F688F631EDD5CF /* REAParamNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REAParamNode.h; sourceTree = "<group>"; };
 		D87A048D1305B0974C91C60DF3982D07 /* RCTSettingsManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSettingsManager.mm; sourceTree = "<group>"; };
 		D8876F683856EBC377245922365C81D7 /* RCTShadowView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTShadowView.h; sourceTree = "<group>"; };
@@ -7407,7 +7407,6 @@
 		DC641D767B2849BB682040AB1D299C5C /* FIRInstallationsHTTPError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRInstallationsHTTPError.m; path = FirebaseInstallations/Source/Library/Errors/FIRInstallationsHTTPError.m; sourceTree = "<group>"; };
 		DC7A84E3C77C343B52DFB67AB4EF7EE9 /* SKHiddenWindow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKHiddenWindow.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKHiddenWindow.h; sourceTree = "<group>"; };
 		DC899A1143867622BC1299724D106B57 /* libevent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = libevent.debug.xcconfig; sourceTree = "<group>"; };
-		DCA14416DDC5DE9C743CB84C84BA6028 /* react-native-document-picker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "react-native-document-picker.debug.xcconfig"; sourceTree = "<group>"; };
 		DCB655ECC89AC4EC52036C30E1BDA410 /* AsyncTimeout.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = AsyncTimeout.cpp; path = folly/io/async/AsyncTimeout.cpp; sourceTree = "<group>"; };
 		DCE20BE989922BE031921649D2DEEE3B /* GDTCOREvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCOREvent.h; path = GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCOREvent.h; sourceTree = "<group>"; };
 		DCF44CB08D1341FCC66E9A00BBCEBD07 /* GULApplication.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GULApplication.h; path = GoogleUtilities/AppDelegateSwizzler/Public/GoogleUtilities/GULApplication.h; sourceTree = "<group>"; };
@@ -7449,11 +7448,13 @@
 		E03620A7F2B5A01B8BE12DAFA9B58383 /* RNSVGSvgViewManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNSVGSvgViewManager.h; sourceTree = "<group>"; };
 		E0433710F8D7D0064E50DD777801CC4E /* RNCMaskedViewManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNCMaskedViewManager.h; path = ios/RNCMaskedViewManager.h; sourceTree = "<group>"; };
 		E04DA96AAAABC4A3648AA321297C21E2 /* IQUIView+IQKeyboardToolbar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "IQUIView+IQKeyboardToolbar.swift"; path = "IQKeyboardManagerSwift/IQToolbar/IQUIView+IQKeyboardToolbar.swift"; sourceTree = "<group>"; };
+		E0569F4B97C4EA9250935D0C461B1ACA /* react-native-document-picker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "react-native-document-picker.debug.xcconfig"; sourceTree = "<group>"; };
 		E061059A1AFBAC72C130CAE3B74ED945 /* MacAddress.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MacAddress.h; path = folly/MacAddress.h; sourceTree = "<group>"; };
 		E087139FFE18A59893C55DC5EA0F0CC3 /* CocoaAsyncSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CocoaAsyncSocket-prefix.pch"; sourceTree = "<group>"; };
 		E08B6A9C91F51CF3D472F0C437A1B80F /* FIRExceptionModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRExceptionModel.h; path = Crashlytics/Crashlytics/Public/FirebaseCrashlytics/FIRExceptionModel.h; sourceTree = "<group>"; };
 		E08EE840BAF9791A34BD867415B9885B /* RCTPropsAnimatedNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTPropsAnimatedNode.h; sourceTree = "<group>"; };
 		E09F25BA1F43EAA49E0E12B0D324EBEA /* ResumeManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ResumeManager.h; path = rsocket/ResumeManager.h; sourceTree = "<group>"; };
+		E0AAE5546427BEDE7475AFE34A206F72 /* react-native-document-picker.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "react-native-document-picker.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E0DFC5470580667FE684BD777B624994 /* pb_decode.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_decode.c; sourceTree = "<group>"; };
 		E0E534177F72ED10DF267EECD0480840 /* RCTImageEditingManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RCTImageEditingManager.h; path = Libraries/Image/RCTImageEditingManager.h; sourceTree = "<group>"; };
 		E1637D14F734D07C707E43C5E837D322 /* FrameSerializer_v1_0.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = FrameSerializer_v1_0.cpp; path = rsocket/framing/FrameSerializer_v1_0.cpp; sourceTree = "<group>"; };
@@ -7464,7 +7465,6 @@
 		E1FB8EBF3568841FC5D24B33AFE49C6A /* RCTImageLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImageLoader.mm; sourceTree = "<group>"; };
 		E22C8CF36BAECC5E7BBB30B6180A244D /* FIRLibrary.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRLibrary.h; path = FirebaseCore/Sources/Private/FIRLibrary.h; sourceTree = "<group>"; };
 		E2312A4B0F048430E34C70714987FD69 /* SKViewDescriptor.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKViewDescriptor.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKViewDescriptor.mm; sourceTree = "<group>"; };
-		E238EDAEAC3576F783C72169515756A5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		E2398FE5D154CB8B06CC8D41FF665BC4 /* AtomicNotification.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = AtomicNotification.cpp; path = folly/synchronization/AtomicNotification.cpp; sourceTree = "<group>"; };
 		E254488DD48387657865F6F076DE8462 /* ConnectionSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ConnectionSet.h; path = rsocket/internal/ConnectionSet.h; sourceTree = "<group>"; };
 		E25547463673713E0788252D88372F8D /* RCTJavaScriptLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTJavaScriptLoader.mm; sourceTree = "<group>"; };
@@ -7741,7 +7741,6 @@
 		FB4FA03B55C75E11C753BF39B867FE3E /* RCTEventDispatcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTEventDispatcher.m; sourceTree = "<group>"; };
 		FB545842ADE386ACC022A42EE2CC67BC /* RNSVGTSpanManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RNSVGTSpanManager.m; sourceTree = "<group>"; };
 		FB6FAD8F0183E86ACBFBD8A81BA7BF3A /* libevent */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libevent; path = liblibevent.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FB7559D13C4A6909A12AAE294FE3D505 /* react-native-document-picker.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "react-native-document-picker.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		FB77B12EC769B5815D8A80201474D1CA /* RCTDiffClampAnimatedNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTDiffClampAnimatedNode.h; sourceTree = "<group>"; };
 		FB899F21BBC30DA7F540058347BC2D84 /* RNCWebViewManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNCWebViewManager.h; path = apple/RNCWebViewManager.h; sourceTree = "<group>"; };
 		FB8EA9F7C18BD2C3867F30E97D4F5090 /* React-Core.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "React-Core.modulemap"; sourceTree = "<group>"; };
@@ -7749,6 +7748,7 @@
 		FB94DE0AACB3CD11482CD6D8F221005C /* RCTSurfaceRootShadowViewDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceRootShadowViewDelegate.h; sourceTree = "<group>"; };
 		FBBB127394966303BC684FA050B1E3CB /* FlipperKitNetworkPlugin.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FlipperKitNetworkPlugin.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.mm; sourceTree = "<group>"; };
 		FC2C0BA173D54C3F65DBCCCD140E5526 /* DelayedDestructionBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DelayedDestructionBase.h; path = folly/io/async/DelayedDestructionBase.h; sourceTree = "<group>"; };
+		FCA7774E9A5A690A6485669F6BAAAE8F /* react-native-document-picker-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "react-native-document-picker-prefix.pch"; sourceTree = "<group>"; };
 		FCAF49B898FE25F7D69DA0A317FF62C5 /* RCTImageDataDecoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RCTImageDataDecoder.h; path = Libraries/Image/RCTImageDataDecoder.h; sourceTree = "<group>"; };
 		FCD26F98F060AB2EDB88FE17A56CCCE0 /* FrameTransportImpl.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTransportImpl.cpp; path = rsocket/framing/FrameTransportImpl.cpp; sourceTree = "<group>"; };
 		FD4FD170D12ADF9B1F4E5F08285EB88D /* FlipperKitLayoutDescriptorMapperProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperKitLayoutDescriptorMapperProtocol.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/FlipperKitLayoutDescriptorMapperProtocol.h; sourceTree = "<group>"; };
@@ -8637,18 +8637,6 @@
 			path = "../../node_modules/react-native/Libraries/RCTRequired";
 			sourceTree = "<group>";
 		};
-		1860F600C3F0A111B02B172B0E75B7A1 /* react-native-document-picker */ = {
-			isa = PBXGroup;
-			children = (
-				6F655D4497C02B9026F63A65BDB4410A /* RNDocumentPicker.h */,
-				97AFF1E852869B95B6B0A42AA1075626 /* RNDocumentPicker.m */,
-				EFA31C27E5E02EF27BBA4C4478021B43 /* Pod */,
-				AAEAE6F31649FB3D45C68218516D2227 /* Support Files */,
-			);
-			name = "react-native-document-picker";
-			path = "../../node_modules/react-native-document-picker";
-			sourceTree = "<group>";
-		};
 		18698F289651EC04D383EFE7BCAD0EB6 /* RNFBAnalytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -9266,7 +9254,7 @@
 				647016F2DE9559C4BBF6D9C36A135DCE /* React-jsiexecutor */,
 				DEB75D2B7B253D99423A09BE4828F822 /* React-jsinspector */,
 				5B54FDAACF6485224863DB625C592098 /* react-native-cookies */,
-				1860F600C3F0A111B02B172B0E75B7A1 /* react-native-document-picker */,
+				3F4AC7A42804BA092EDBEE1591EA72CB /* react-native-document-picker */,
 				C4CA232242883EC01E64EC9ECDCC15B7 /* react-native-image-picker */,
 				20F6AD6DBACF7F1A929D889ABB379B1B /* react-native-safe-area-context */,
 				6743DB3003A61E9D1766D48651291CD0 /* react-native-webview */,
@@ -9641,6 +9629,18 @@
 			);
 			name = "Support Files";
 			path = "../../../ios/Pods/Target Support Files/RNCAsyncStorage";
+			sourceTree = "<group>";
+		};
+		3F4AC7A42804BA092EDBEE1591EA72CB /* react-native-document-picker */ = {
+			isa = PBXGroup;
+			children = (
+				BDD9845DD00048DAD6E86B467163C9B4 /* RNDocumentPicker.h */,
+				80D61819C6C2FAC63990B682C85E4C82 /* RNDocumentPicker.m */,
+				9B59D5AE0E63E036767818A6186C741D /* Pod */,
+				ABDA936A64EDDCD93BAD62B53FBDE31F /* Support Files */,
+			);
+			name = "react-native-document-picker";
+			path = "../../node_modules/react-native-document-picker";
 			sourceTree = "<group>";
 		};
 		3F96A5AA2FBE5E0B41AF3CB44C62447A /* Surface */ = {
@@ -11104,6 +11104,16 @@
 			name = Pod;
 			sourceTree = "<group>";
 		};
+		9B59D5AE0E63E036767818A6186C741D /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				D86A736D42539B23925BDCA30EE84F2C /* LICENSE */,
+				E0AAE5546427BEDE7475AFE34A206F72 /* react-native-document-picker.podspec */,
+				9C2E068BBC6566B33EA92CE2FEE704E6 /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
 		9C58FB6DB8537CF9A20D688F326B9A69 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -11501,18 +11511,6 @@
 			path = "Flipper-DoubleConversion";
 			sourceTree = "<group>";
 		};
-		AAEAE6F31649FB3D45C68218516D2227 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				9E42DEE6BB07EB23DC4E18597705600D /* react-native-document-picker-dummy.m */,
-				070F6FFECFCB114D4F6756F65A316EDB /* react-native-document-picker-prefix.pch */,
-				DCA14416DDC5DE9C743CB84C84BA6028 /* react-native-document-picker.debug.xcconfig */,
-				510E097C4FF340173A6774654E5608EA /* react-native-document-picker.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../../ios/Pods/Target Support Files/react-native-document-picker";
-			sourceTree = "<group>";
-		};
 		AAF00C998E11E92161193F1741D995E9 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -11522,6 +11520,18 @@
 			);
 			name = "Support Files";
 			path = "../Target Support Files/GoogleDataTransport";
+			sourceTree = "<group>";
+		};
+		ABDA936A64EDDCD93BAD62B53FBDE31F /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				A31955D902514D6B1006392C3FD4B5A4 /* react-native-document-picker-dummy.m */,
+				FCA7774E9A5A690A6485669F6BAAAE8F /* react-native-document-picker-prefix.pch */,
+				E0569F4B97C4EA9250935D0C461B1ACA /* react-native-document-picker.debug.xcconfig */,
+				43A25FB24AC4E87108EFA53304278C5C /* react-native-document-picker.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../../ios/Pods/Target Support Files/react-native-document-picker";
 			sourceTree = "<group>";
 		};
 		ADB72FEE87E2F0039F015AB2F42A26FE /* Pod */ = {
@@ -13339,16 +13349,6 @@
 			path = TextInput;
 			sourceTree = "<group>";
 		};
-		EFA31C27E5E02EF27BBA4C4478021B43 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				CDB0EF8DEA655B5293549903B54B493D /* LICENSE.md */,
-				FB7559D13C4A6909A12AAE294FE3D505 /* react-native-document-picker.podspec */,
-				E238EDAEAC3576F783C72169515756A5 /* README.md */,
-			);
-			name = Pod;
-			sourceTree = "<group>";
-		};
 		F024BAE1975357AAB98152759B922CAC /* Inspector */ = {
 			isa = PBXGroup;
 			children = (
@@ -14349,7 +14349,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B90DED7313C3FBFA26BE81087DC8E98F /* RNDocumentPicker.h in Headers */,
+				4C72AFD294506B403D2D9275BCE063A8 /* RNDocumentPicker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -17617,7 +17617,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8406E2586AB9CA1AC5372B0C96EE6A10 /* react-native-document-picker-dummy.m in Sources */,
-				F41B54E2F0CB1342FC65BFE73640B87D /* RNDocumentPicker.m in Sources */,
+				FFA76086FAA202A6900BBA43267093E5 /* RNDocumentPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -20822,30 +20822,6 @@
 			};
 			name = Release;
 		};
-		0753359FEDC1908BB7A014905DF31587 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = DCA14416DDC5DE9C743CB84C84BA6028 /* react-native-document-picker.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-document-picker/react-native-document-picker-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_document_picker;
-				PRODUCT_NAME = "react-native-document-picker";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		07FF6A0FCE124F78E65BD70D9C6D4F92 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 28749A749C0D9FC8BBCD46515B550DB3 /* React-callinvoker.debug.xcconfig */;
@@ -21202,31 +21178,6 @@
 			};
 			name = Debug;
 		};
-		162B334FE984C9094BD7880F312ED5B5 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 510E097C4FF340173A6774654E5608EA /* react-native-document-picker.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-document-picker/react-native-document-picker-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_document_picker;
-				PRODUCT_NAME = "react-native-document-picker";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		176B203B10FBC7C60690B67A45BFBEEE /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A442CD32CBE2584A3FCD9BCEEB03438B /* IQKeyboardManagerSwift.release.xcconfig */;
@@ -21315,6 +21266,30 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
+		};
+		1DB50A2858213CF275A33E8023EB85CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E0569F4B97C4EA9250935D0C461B1ACA /* react-native-document-picker.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-document-picker/react-native-document-picker-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = react_native_document_picker;
+				PRODUCT_NAME = "react-native-document-picker";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		1E4CB71CEC482BF924FE57A0A2734688 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -23360,6 +23335,31 @@
 			};
 			name = Debug;
 		};
+		B724B38C539F64BCE7CF9E227BCB2963 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43A25FB24AC4E87108EFA53304278C5C /* react-native-document-picker.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-document-picker/react-native-document-picker-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = react_native_document_picker;
+				PRODUCT_NAME = "react-native-document-picker";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		B950FDAE20643F3C436E0E628E6E1A64 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B893F7B41309530BC3FE3BB26C5441C5 /* CocoaAsyncSocket.release.xcconfig */;
@@ -24296,8 +24296,8 @@
 		2C668FD2CD0821A02CE8DB077B155365 /* Build configuration list for PBXNativeTarget "react-native-document-picker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0753359FEDC1908BB7A014905DF31587 /* Debug */,
-				162B334FE984C9094BD7880F312ED5B5 /* Release */,
+				1DB50A2858213CF275A33E8023EB85CF /* Debug */,
+				B724B38C539F64BCE7CF9E227BCB2963 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
