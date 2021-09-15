@@ -17,11 +17,10 @@ type ControlButtonProps = {
   disabled?: boolean | true
   /** Name of VAIcon to use */
   icon: keyof typeof VA_ICON_MAP
-  /** optional width, defaults to 25 */
+  /** optional width */
   width?: number
-  /** optional height, defaults to 25 */
+  /** optional height */
   height?: number
-  /** color for the icon, defaults to active */
   fill?: keyof VAIconColors | string
   /** optional test ID for the button */
   testID?: string
@@ -32,10 +31,12 @@ type ControlButtonProps = {
 /**
  * Button used on the Webview screen to interact with webview controls such as forward, back, open or refresh
  */
-const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width = 25, height = 25, fill, testID, a11yHint }) => {
+const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width, height, fill, testID, a11yHint }) => {
   const theme = useTheme()
 
   fill = fill || theme.colors.icon.active
+  width = width || theme.dimensions.webviewReloadButtonSize
+  height = height || theme.dimensions.webviewReloadButtonSize
 
   const touchableOpacityProps: TouchableOpacityProps = {
     disabled,
@@ -49,7 +50,7 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
   }
 
   const controlBoxProps: BoxProps = {
-    p: theme.dimensions.buttonPadding,
+    p: (theme.dimensions.webviewButtona11ySize - width) / 2,
   }
 
   return (
