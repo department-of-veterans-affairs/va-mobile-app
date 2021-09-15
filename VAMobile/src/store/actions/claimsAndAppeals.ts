@@ -1,11 +1,9 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
-import _ from 'underscore'
 
 import * as api from '../api'
 import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import {
   AppealData,
-  AppealStatusTypesConstants,
   ClaimData,
   ClaimDecisionResponseData,
   ClaimDocUploadData,
@@ -474,7 +472,7 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
 
     try {
       if (files.length > 1) {
-        const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse, index: number) => {
+        const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse) => {
           if ('assets' in file) {
             return file.assets ? file.assets[0].base64 : undefined
           } else if ('size' in file) {

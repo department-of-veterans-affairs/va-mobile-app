@@ -1,4 +1,4 @@
-import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
