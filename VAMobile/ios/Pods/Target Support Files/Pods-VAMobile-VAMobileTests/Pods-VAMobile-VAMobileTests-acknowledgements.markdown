@@ -2347,21 +2347,18 @@ More information at <a href="http://landonf.org/2009/02/index.html">Landon
 Fuller's blog</a>
 
 
-## IQKeyboardManager
+## IQKeyboardManagerSwift
 
-IQKeyboardManager license
-=========================
+MIT License
 
-The MIT License (MIT)
+Copyright (c) 2013-2017 Iftekhar Qurashi
 
-Copyright (c) 2013-16 Iftekhar Qurashi
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -3446,7 +3443,7 @@ SOFTWARE.
 
 MIT License
 
-Copyright (c) 2016 Elyx0
+Copyright (c) 2020 Elyx0 <elyx00@gmail.com> (@Elyx0)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -177,9 +177,15 @@ export const onFileFolderSelect = async (
   fileUris: Array<string>,
   t: TFunction,
 ): Promise<void> => {
+  const {
+    pickSingle,
+    isCancel,
+    types: { allFiles },
+  } = DocumentPicker
+
   try {
-    const document = await DocumentPicker.pick({
-      type: [DocumentPicker.types.allFiles],
+    const document = await pickSingle({
+      type: [allFiles],
     })
 
     const { size, type, uri } = document
@@ -197,7 +203,7 @@ export const onFileFolderSelect = async (
       callbackIfUri(document, false)
     }
   } catch (docError) {
-    if (DocumentPicker.isCancel(docError)) {
+    if (isCancel(docError)) {
       return
     }
 
