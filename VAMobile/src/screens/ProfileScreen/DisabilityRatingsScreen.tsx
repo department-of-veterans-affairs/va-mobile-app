@@ -51,7 +51,7 @@ const DisabilityRatingsScreen: FC = () => {
     }
   }, [dispatch, needsDataLoad])
 
-  const onClaimsAndAppeals = navigateTo('Claims')
+  const onClaimsAndAppeals = navigateTo('ClaimsTab')
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating

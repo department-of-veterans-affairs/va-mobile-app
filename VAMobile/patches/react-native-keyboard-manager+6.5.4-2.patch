@@ -1,0 +1,42 @@
+diff --git a/node_modules/react-native-keyboard-manager/index.d.ts b/node_modules/react-native-keyboard-manager/index.d.ts
+index 955c65f..1ae0d8a 100644
+--- a/node_modules/react-native-keyboard-manager/index.d.ts
++++ b/node_modules/react-native-keyboard-manager/index.d.ts
+@@ -2,21 +2,21 @@ declare module 'react-native-keyboard-manager' {
+   export type ToolbarBehaviour = 'subviews' | 'tag' | 'position';
+   export type KeyboardAppearance = 'default' | 'light' | 'dark';
+ 
+-  export function setEnable(enable: boolean);
+-  export function setEnableDebugging(enable: boolean);
+-  export function setKeyboardDistanceFromTextField(distance: number);
+-  export function setEnableAutoToolbar(enable: boolean);
+-  export function setToolbarDoneBarButtonItemText(text: string);
+-  export function setToolbarManageBehaviourBy(behaviour: ToolbarBehaviour);
+-  export function setToolbarPreviousNextButtonEnable(enable: boolean);
+-  export function setToolbarTintColor(hexColor: string);
+-  export function setToolbarBarTintColor(hexColor: string);
+-  export function setShouldShowToolbarPlaceholder(enable: boolean);
+-  export function setOverrideKeyboardAppearance(enable: boolean);
+-  export function setKeyboardAppearance(appearance: KeyboardAppearance);
+-  export function setShouldResignOnTouchOutside(enable: boolean);
+-  export function setShouldPlayInputClicks(enable: boolean);
+-  export function setShouldToolbarUsesTextFieldTintColor(enable: boolean);
+-  export function resignFirstResponder();
++  export function setEnable(enable: boolean) : void;
++  export function setEnableDebugging(enable: boolean) : void;
++  export function setKeyboardDistanceFromTextField(distance: number) : void;
++  export function setEnableAutoToolbar(enable: boolean) : void;
++  export function setToolbarDoneBarButtonItemText(text: string) : void;
++  export function setToolbarManageBehaviourBy(behaviour: ToolbarBehaviour) : void;
++  export function setToolbarPreviousNextButtonEnable(enable: boolean) : void;
++  export function setToolbarTintColor(hexColor: string) : void;
++  export function setToolbarBarTintColor(hexColor: string) : void;
++  export function setShouldShowToolbarPlaceholder(enable: boolean) : void;
++  export function setOverrideKeyboardAppearance(enable: boolean) : void;
++  export function setKeyboardAppearance(appearance: KeyboardAppearance) : void;
++  export function setShouldResignOnTouchOutside(enable: boolean) : void;
++  export function setShouldPlayInputClicks(enable: boolean) : void;
++  export function setShouldToolbarUsesTextFieldTintColor(enable: boolean) : void;
++  export function resignFirstResponder() : void;
+   export function isKeyboardShowing(): Promise<boolean>;
+ }
