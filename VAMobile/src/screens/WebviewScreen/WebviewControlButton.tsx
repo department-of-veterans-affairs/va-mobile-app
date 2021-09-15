@@ -17,9 +17,9 @@ type ControlButtonProps = {
   disabled?: boolean | true
   /** Name of VAIcon to use */
   icon: keyof typeof VA_ICON_MAP
-  /** optional width, defaults to 16 */
+  /** optional width */
   width?: number
-  /** optional height, defaults to 16 */
+  /** optional height */
   height?: number
   fill?: keyof VAIconColors | string
   /** optional test ID for the button */
