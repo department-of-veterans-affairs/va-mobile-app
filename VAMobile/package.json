@@ -108,7 +108,7 @@
     "appium-doctor": "^1.16.0",
     "babel-jest": "^26.6.3",
     "babel-plugin-module-resolver": "^4.1.0",
-    "chromedriver": "^88.0.0",
+    "chromedriver": "^93.0.1",
     "concurrently": "^6.0.0",
     "eslint": "^7.22.0",
     "eslint-plugin-react": "^7.22.0",
