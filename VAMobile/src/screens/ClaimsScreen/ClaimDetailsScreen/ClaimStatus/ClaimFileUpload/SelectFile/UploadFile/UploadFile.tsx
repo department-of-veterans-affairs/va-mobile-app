@@ -55,7 +55,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
           {request.displayName}
         </TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {fileUploaded?.name || imageUploaded?.fileName}
+          {fileUploaded?.name || (imageUploaded?.assets ? imageUploaded.assets[0].fileName : undefined)}
         </TextView>
         <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>

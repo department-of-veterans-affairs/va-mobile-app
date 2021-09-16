@@ -323,7 +323,7 @@ PODS:
     - React-Core
   - react-native-document-picker (6.0.4):
     - React-Core
-  - react-native-image-picker (3.3.2):
+  - react-native-image-picker (4.0.6):
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
@@ -667,7 +667,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-cookies: ce50e42ace7cf0dd47769260ca5bbe8eee607e4e
   react-native-document-picker: a7950caaee8587002c9acbc7fe497a342094d93a
-  react-native-image-picker: b42940647478bf106ad3c491d6f5d9d40916d865
+  react-native-image-picker: a6e56460d34905c849ada551db30897dc7f3d535
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-webview: e994346d13f4d8b240347bc5be043a860452e4b6
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336

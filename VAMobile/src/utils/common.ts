@@ -2,9 +2,10 @@ import { Dimensions, TextInput } from 'react-native'
 import { RefObject } from 'react'
 import { contains, isEmpty } from 'underscore'
 
+import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
-import { ImagePickerResponse } from 'react-native-image-picker'
 
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
@@ -175,13 +176,14 @@ export type ImageMaxWidthAndHeight = {
  */
 export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
   const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
+  const { width, height } = image.assets ? image.assets[0] : ({} as Asset)
   if (image && !isEmpty(image)) {
-    if (image.width && image.width < Dimensions.get('window').width) {
-      result.maxWidth = `${image.width}px`
+    if (width && width < Dimensions.get('window').width) {
+      result.maxWidth = `${width}px`
     }
 
-    if (image.height && image.height < messagePhotoAttachmentMaxHeight) {
-      result.height = image.height
+    if (height && height < messagePhotoAttachmentMaxHeight) {
+      result.height = height
     }
   }
 
