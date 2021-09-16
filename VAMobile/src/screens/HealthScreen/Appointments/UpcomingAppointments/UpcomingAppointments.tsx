@@ -147,7 +147,7 @@ export const getGroupedAppointments = (
   })
 }
 
-export const getAppointmentTypeIcon = (appointmenttype: string, phoneOnly: boolean | undefined, theme: VATheme): VAIconProps | undefined => {
+export const getAppointmentTypeIcon = (appointmenttype: string, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
   const iconProp = { fill: theme.colors.icon.dark, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
 
   if (appointmenttype.includes('VIDEO')) {
