@@ -305,17 +305,14 @@ workflows:
             branches:
               ignore: /.*/
   new_release_branch:
-    # triggers:
-    #   - schedule:
-    #       cron: "30 6 * * 3"
-    #       filters:
-    #         branches:
-    #           only: develop
-    jobs:
-      - cut_release_branch:
+    triggers:
+      - schedule:
+          cron: "30 6 * * 3"
           filters:
             branches:
-              only: feature/1579-fix-cut-release-branch
+              only: develop
+    jobs:
+      - cut_release_branch
   go_live:
     triggers:
       - schedule:
