@@ -48,7 +48,7 @@ while getopts h option
 done
 
 # First release branch was 08-04-2021. check and see that we are at TWO WEEK interval (14 days)
-if [[ $[$((($(date +%s)-$(date +%s --date "2021-09-17"))/(3600*24)))%14] == 0 ]]
+if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
 then
 
   echo "Checking out and pulling latest from master branch"
@@ -56,7 +56,7 @@ then
   git pull origin master &&
 
   echo "Fetching latest tag"
-  checks for latest tag on master that matches vX.Y.Z
+  # checks for latest tag on master that matches vX.Y.Z
   latest=$(git describe --match "v[0-9]*.[0-9]*.[0-9]*" --abbrev=0) &&
 
   echo "Incrementing latest tag $latest by minor version"
