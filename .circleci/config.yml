@@ -236,6 +236,7 @@ jobs:
   cut_release_branch:
     executor: default
     steps:
+      - checkout
       - run_script:
           script_name: "release_branch.sh"
           script_options: "-v $CIRCLE_TAG"
