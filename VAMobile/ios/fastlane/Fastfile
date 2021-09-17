@@ -78,7 +78,9 @@ platform :ios do
         force: true,
         overwrite_screenshots: true,
         run_precheck_before_submit: false,
-        add_id_info_uses_idfa: false,
+        submission_information: {
+          add_id_info_uses_idfa: false
+        },
       )
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     message = "New Production build successfully uploaded to App Store for review"
