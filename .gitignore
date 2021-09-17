@@ -169,3 +169,5 @@ buck-out/
 /VAMobile/android/keystore
 /VAMobile/ios/fastlane/Preview.html
 **/fastlane/report.xml
+/VAMobile/ios/fastlane/README.md
+/VAMobile/android/fastlane/README.md
