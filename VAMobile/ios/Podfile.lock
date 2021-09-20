@@ -389,7 +389,7 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
-  - ReactNativeKeyboardManager (6.5.4-2):
+  - ReactNativeKeyboardManager (6.5.4-3):
     - IQKeyboardManagerSwift (= 6.5.4)
     - React-Core
     - React-RCTText
@@ -707,7 +707,7 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  ReactNativeKeyboardManager: 3775dc9871eb5e6173134d46fb6e7d45d6e2d566
+  ReactNativeKeyboardManager: 4fb4d82d670ec6c00e9a2d2cc576f7cbb14975d6
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: e8b8d6320a0dd90eb610fb0d0b1ef90596697c69
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
