@@ -12399,10 +12399,10 @@ react-native-image-picker@^4.0.6:
   resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.0.6.tgz#0dfa5bb83bcf6ff58635ebb9201a185c2271e8cc"
   integrity sha512-Pp3UWKUADuMG1mz12m6dSO/R2KnvXVEd77bldrfTMFpz4PFc4iVKo+bHeS79It0mUBezfzDMgfesg/OPLSugvQ==
 
-react-native-keyboard-manager@^6.5.4-2:
-  version "6.5.4-2"
-  resolved "https://registry.yarnpkg.com/react-native-keyboard-manager/-/react-native-keyboard-manager-6.5.4-2.tgz#46b77a95b469ff9bdfd5c94074f8c494388d5b83"
-  integrity sha512-x76IjgI+i6Jf4pQsP6guaSl9ejHziqfOXaHhHilqIqNpwgIxcB0i1LSMiafgp2fzVyIs2/b6Ot/gv5dgN63CGg==
+react-native-keyboard-manager@^6.5.4-3:
+  version "6.5.4-3"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-manager/-/react-native-keyboard-manager-6.5.4-3.tgz#0e6e1da9fa52f982c715456cd9473e798fe1b31a"
+  integrity sha512-EcwGcAVzvPe6HIIzcVOFX7JksvuiemxW44EwbI71CAZhnsjRpkRsK0rDg8HJOljCiLu4UjC5YYX2EeLMTDQ0kA==
 
 react-native-keychain@^7.0.0:
   version "7.0.0"
