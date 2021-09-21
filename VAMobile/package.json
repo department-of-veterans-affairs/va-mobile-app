@@ -35,7 +35,6 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@babel/runtime": "^7.15.4",
     "@expo/react-native-action-sheet": "^3.9.0",
     "@react-native-async-storage/async-storage": "^1.14.1",
     "@react-native-community/clipboard": "^1.5.1",
@@ -87,6 +86,7 @@
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
+    "@babel/runtime": "^7.15.4",
     "@react-native-community/eslint-config": "^3.0.1",
     "@types/jest": "^27.0.2",
     "@types/jest-when": "^2.7.3",
