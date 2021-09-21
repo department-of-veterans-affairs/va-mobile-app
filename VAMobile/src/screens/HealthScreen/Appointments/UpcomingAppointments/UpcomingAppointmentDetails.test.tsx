@@ -48,7 +48,7 @@ context('UpcomingAppointmentDetails', () => {
   const initializeTestInstance = (
     appointmentType: AppointmentType = AppointmentTypeConstants.VA,
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
-    phoneData: AppointmentPhone = apptPhoneData,
+    phoneData: AppointmentPhone | null = apptPhoneData,
     appointmentCancellationStatus?: AppointmentCancellationStatusTypes,
     statusDetail: AppointmentStatusDetailType | null = null,
   ): void => {
@@ -204,7 +204,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when there is no phone data', () => {
     it('should not display any click to call link', async () => {
-      initializeTestInstance(undefined, undefined, undefined) // force value of phone to null (undefined will use default arg value)
+      initializeTestInstance(undefined, undefined, null) // force value of phone to null (undefined will use default arg value)
       runAfterTransition(() => {
         const allClickForActionLinks = testInstance.findAllByType(ClickForActionLink)
 
@@ -235,6 +235,8 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment cancellation is successful', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
+    })
+    it('Unsuccesful alert should show', async () => {
       runAfterTransition(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })
@@ -244,6 +246,8 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment cancellation is unsuccessful', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
+    })
+    it('Successful alert should show', async () => {
       runAfterTransition(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })
