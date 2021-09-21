@@ -10,7 +10,7 @@ import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent,
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { getAppointmentLocation, getAppointmentTypeIcon, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
+import { getAppointmentLocation, getAppointmentTypeIcon, getGroupedAppointments, getYearsToSortedMonths } from 'utils/appointments'
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
