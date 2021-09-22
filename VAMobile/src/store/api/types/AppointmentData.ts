@@ -123,6 +123,7 @@ export type AppointmentAttributes = {
   facilityId?: string
   startDateLocal: string
   startDateUtc: string
+  phoneOnly: boolean
 }
 
 export type AppointmentData = {
