@@ -185,22 +185,6 @@ commands:
       - run:
           working_directory: ~/project/VAMobile/android
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
-  run_script:
-    description: "Runs a bash script. Takes the working directory, script name and script options as params"
-    parameters:
-      workingDir:
-        type: string
-        default: ~/project/VAMobile
-      script_name:
-        type: string
-      script_options:
-        type: string
-    steps:
-      - run:
-          working_directory: <<parameters.workingDir>>
-          command: |
-            chmod +x <<parameters.script_name>>
-            bash <<parameters.script_name>> <<parameters.script_options>>
 jobs:
   test:
     executor: default
@@ -244,7 +228,7 @@ jobs:
       - bundle_app:
           os: "ios"
       - ios_fastlane:
-          version: ${CIRCLE_TAG}
+          version: "minor"
           lane: "release"
   build_android_release:
     executor: android
@@ -257,15 +241,9 @@ jobs:
       - bundle_app:
           os: "android"
       - android_fastlane:
-          version: ${CIRCLE_TAG}
+          version: "minor"
           lane: "release"
 
-  cut_release_branch:
-    executor: default
-    steps:
-      - run_script:
-          script_name: "release_branch.sh"
-          script_options: "-v $CIRCLE_TAG"
 workflows:
   pr:
     jobs:
@@ -295,12 +273,3 @@ workflows:
               only: /^v\d+\.\d+\.\d+/
             branches:
               ignore: /.*/
-  new_release_branch:
-    triggers:
-      - schedule:
-          cron: "30 6 * * 3"
-          filters:
-            branches:
-              only: develop
-    jobs:
-      - cut_release_branch
