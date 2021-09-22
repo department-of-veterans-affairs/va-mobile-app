@@ -73,6 +73,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       ? t('appointments.canceled.whoCanceled.facility')
       : t('appointments.canceled.whoCanceled.you')
 
+  const whoCanceled =
+    statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+      ? t('appointments.canceled.whoCanceled.facility')
+      : t('appointments.canceled.whoCanceled.you')
+
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
     InteractionManager.runAfterInteractions(() => {

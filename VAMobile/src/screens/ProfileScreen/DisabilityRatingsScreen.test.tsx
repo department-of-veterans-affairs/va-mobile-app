@@ -34,7 +34,6 @@ context('DisabilityRatingsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const _ = undefined
   const ratingData = {
     combinedDisabilityRating: 70,
     combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
@@ -134,7 +133,7 @@ context('DisabilityRatingsScreen', () => {
         tryAgain: () => Promise.resolve(),
       }
 
-      initializeTestInstance(_, errorState)
+      initializeTestInstance(undefined, errorState)
       expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
     })
   })
