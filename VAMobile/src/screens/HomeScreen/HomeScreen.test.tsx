@@ -1,4 +1,5 @@
 import 'react-native'
+import { Linking } from 'react-native'
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
@@ -8,21 +9,6 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import { TestProviders, context, findByTestID, findByTypeWithSubstring } from 'testUtils'
 import HomeScreen from './index'
 import {LargeNavButton, TextView} from 'components'
-
-const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('HomeScreen', () => {
   let component: any
@@ -49,9 +35,9 @@ context('HomeScreen', () => {
   })
 
   describe('when the covid 19 screening tool button is clicked', () => {
-    it('should launch external link with the parameter https://www.va.gov/covid19screen/', async () => {
+    it('should call Linking openUrl with the parameter https://www.va.gov/covid19screen/', async () => {
       expect(findByTestID(testInstance, 'covid-19-screening-tool').props.onPress())
-      expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://www.va.gov/covid19screen/')
+      expect(Linking.openURL).toHaveBeenCalledWith('https://www.va.gov/covid19screen/')
     })
   })
 
