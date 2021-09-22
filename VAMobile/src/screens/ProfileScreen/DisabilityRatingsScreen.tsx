@@ -55,13 +55,10 @@ const DisabilityRatingsScreen: FC = () => {
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
-
+    const percentageText = ratingPercentage !== undefined ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : undefined
+    const formattedDate = DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy')
+    const formattedEffectiveDateText = t('disabilityRatingDetails.effectiveDate', { dateEffective: formattedDate })
     const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
-    const percentageText = ratingPercentage !== undefined && ratingPercentage !== null ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : ''
-    const formattedEffectiveDateText =
-      effectiveDate !== undefined && effectiveDate !== null
-        ? t('disabilityRatingDetails.effectiveDate', { dateEffective: DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy') })
-        : ''
 
     let textLines: Array<TextLine> = []
 
@@ -80,13 +77,10 @@ const DisabilityRatingsScreen: FC = () => {
       {
         text: decisionText,
       },
-    ]
-
-    if (formattedEffectiveDateText) {
-      textLines.push({
+      {
         text: formattedEffectiveDateText,
-      })
-    }
+      },
+    ]
 
     return {
       textLines,
@@ -100,7 +94,7 @@ const DisabilityRatingsScreen: FC = () => {
 
     return (
       <Box>
-        <Box accessible={true} accessibilityRole={'header'}>
+        <Box accessible={true}>
           <TextView {...titleProps} selectable={false}>
             {t('disabilityRatingDetails.combinedTotalTitle')}
           </TextView>
@@ -133,12 +127,10 @@ const DisabilityRatingsScreen: FC = () => {
   const getLearnAboutVaRatingSection = () => {
     return (
       <TextArea>
-        <Box accessible={true} accessibilityRole={'header'}>
+        <Box accessible={true}>
           <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
             {t('disabilityRating.learnAbout')}
           </TextView>
-        </Box>
-        <Box accessible={true}>
           <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')}>
             {t('disabilityRating.learnAboutSummary')}
           </TextView>
@@ -151,17 +143,14 @@ const DisabilityRatingsScreen: FC = () => {
   const getNeedHelpSection = () => {
     return (
       <TextArea>
-        <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('disabilityRatingDetails.needHelp')}
-          </TextView>
-        </Box>
         <Box accessible={true}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('claims:claimDetails.needHelp')}
+          </TextView>
           <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claims:claimDetails.callVA.a11yLabel')}>
             {t('claims:claimDetails.callVA')}
           </TextView>
         </Box>
-
         <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />
       </TextArea>
     )

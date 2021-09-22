@@ -34,6 +34,7 @@ context('DisabilityRatingsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
+  const _ = undefined
   const ratingData = {
     combinedDisabilityRating: 70,
     combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
@@ -88,15 +89,15 @@ context('DisabilityRatingsScreen', () => {
     expect(profileBanner).toBeTruthy()
 
     const headers = testInstance.findAllByProps({ accessibilityRole: 'header' })
-    expect(headers[5].props.children).toBe('Combined disability rating')
-    expect(headers[15].props.children).toBe('Individual ratings')
-    expect(headers[20].props.children).toBe('Learn about VA disability ratings')
-    expect(headers[30].props.children).toBe('Need Help?')
+    expect(headers[0].props.children).toBe('Combined Disability Rating')
+    expect(headers[4].props.children).toBe('Individual Ratings')
+    expect(headers[8].props.children).toBe('Learn about VA disability ratings')
+    expect(headers[12].props.children).toBe('Need help?')
 
     const texts = testInstance.findAllByType(TextView)
     expect(texts[2].props.children).toBe('70%')
     expect(texts[3].props.children).toBe(
-      "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
+      "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims and appeals with the Claim Status tool.",
     )
     expect(texts[4].props.children).toBe('Check Claims and Appeals')
 
@@ -133,7 +134,7 @@ context('DisabilityRatingsScreen', () => {
         tryAgain: () => Promise.resolve(),
       }
 
-      initializeTestInstance(undefined, errorState)
+      initializeTestInstance(_, errorState)
       expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
     })
   })
