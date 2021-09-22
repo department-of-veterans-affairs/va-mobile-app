@@ -18,6 +18,16 @@ import _ from 'underscore'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
+/**
+ * Returns returns the appointment location
+ *
+ * @param appointmentType - type AppointmentType, to describe the type of appointment
+ * @param locationName - string name of the location of the appointment
+ * @param translate - function the translate function
+ * @param phoneOnly - boolean or undefined tells if the appointment is a phone call
+ *
+ * @returns string of the location name
+ */
 export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean | undefined): string => {
   if (phoneOnly) {
     return translate('upcomingAppointments.phoneOnly')
@@ -28,6 +38,15 @@ export const getAppointmentLocation = (appointmentType: AppointmentType, locatio
   return translate(AppointmentTypeToID[appointmentType])
 }
 
+/**
+ * Returns the icon props to use for the appointment. ex video camera , phone or nothing
+ *
+ * @param appointmentType - type AppointmentType, to describe the type of appointment
+ * @param phoneOnly - boolean tells if the appointment is a phone call
+ * @param theme - type VATheme, the theme object to set some properties
+ *
+ * @returns VAIconProps or undefoned
+ */
 export const getAppointmentTypeIcon = (appointmentType: string, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
   const iconProp = { fill: theme.colors.icon.dark, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
 
@@ -40,6 +59,18 @@ export const getAppointmentTypeIcon = (appointmentType: string, phoneOnly: boole
   return undefined
 }
 
+/**
+ * Returns list of appointments
+ *
+ * @param appointmentsByYear - type AppointmentsGroupedByYear, set appointment by year
+ * @param theme - type VATheme, the theme object to set some properties
+ * @param translate - function, the translate function
+ * @param onAppointmentPress - function, the function that will be triggered on appointment press
+ * @param isReverseSort - boolean, set if it is a reverse sort
+ * @param upcomingPageMetaData - type AppointmentsMetaPagination, set the pagination info
+ *
+ * @returns list of appointments
+ */
 export const getGroupedAppointments = (
   appointmentsByYear: AppointmentsGroupedByYear,
   theme: VATheme,
@@ -77,6 +108,18 @@ export const getGroupedAppointments = (
   })
 }
 
+/**
+ * Returns item list of appointments
+ *
+ * @param listOfAppointments - type AppointmentsList, set appointment by year
+ * @param translations - function, the translate function
+ * @param onAppointmentPress - function, the function that will be triggered on appointment press
+ * @param upcomingPageMetaData - type AppointmentsMetaPagination, set the pagination info
+ * @param groupIdx - number, id of the appointment group
+ * @param theme - type VATheme, the theme object to set some properties
+ *
+ * @returns Array list of appointments items
+ */
 const getListItemsForAppointments = (
   listOfAppointments: AppointmentsList,
   translations: { t: TFunction; tc: TFunction },
@@ -121,6 +164,14 @@ const getListItemsForAppointments = (
   return listItems
 }
 
+/**
+ * Returns sorted appointment
+ *
+ * @param appointmentsByYear - type AppointmentsGroupedByYear, set appointment by year
+ * @param isReverseSort - boolean, set if it is a reverse sort
+ *
+ * @returns type YearsToSortedMonths sorted appointments
+ */
 export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedByYear, isReverseSort: boolean): YearsToSortedMonths => {
   const yearToSortedMonths: YearsToSortedMonths = {}
 
