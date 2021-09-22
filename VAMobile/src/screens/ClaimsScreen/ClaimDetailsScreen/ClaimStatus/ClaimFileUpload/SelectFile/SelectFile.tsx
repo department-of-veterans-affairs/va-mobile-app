@@ -54,8 +54,9 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
       setError('')
       navigateTo('UploadFile', { request, fileUploaded: document })()
-    } catch (docError) {
-      if (DocumentPicker.isCancel(docError)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (docError: any) {
+      if (DocumentPicker.isCancel(docError as Error)) {
         return
       }
 

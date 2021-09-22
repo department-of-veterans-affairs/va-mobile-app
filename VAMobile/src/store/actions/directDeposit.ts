@@ -41,7 +41,8 @@ export const getBankData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       dispatch(dispatchStartGetBankInfo())
       const bankInfo = await api.get<api.DirectDepositData>('/v0/payment-information/benefits')
       dispatch(dispatchFinishGetBankInfo(bankInfo?.data.attributes.paymentAccount))
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       dispatch(dispatchFinishGetBankInfo(undefined, err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
@@ -97,7 +98,8 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       const errorKeys = getErrorKeys(err)
       const invalidRoutingNumberError = includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER)
 

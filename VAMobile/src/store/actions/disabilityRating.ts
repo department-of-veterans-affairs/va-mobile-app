@@ -58,7 +58,8 @@ export const getDisabilityRating = (screenID?: ScreenIDTypes): AsyncReduxAction 
       const ratingData = await api.get<api.DisabilityRatingData>('/v0/disability-rating')
 
       dispatch(dispatchFinishGetRating(ratingData?.data.attributes))
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       dispatch(dispatchFinishGetRating(undefined, err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }

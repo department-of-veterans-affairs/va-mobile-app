@@ -44,7 +44,8 @@ export const getLetters = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       const letters = await api.get<api.LettersData>('/v0/letters')
 
       dispatch(dispatchFinishGetLetters(letters?.data.attributes.letters))
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishGetLetters(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
@@ -80,7 +81,8 @@ export const getLetterBeneficiaryData = (screenID?: ScreenIDTypes): AsyncReduxAc
     try {
       const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
       dispatch(dispatchFinishGetLetterBeneficiaryData(letterBeneficiaryData?.data.attributes))
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
@@ -138,7 +140,8 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
 
       await logAnalyticsEvent(Events.vama_letter_download(letterType))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       /**
        * For letters we show a special screen regardless of the error. All download errors will be caught
        * here so there is no special path for network connection errors

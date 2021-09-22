@@ -52,7 +52,8 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
       try {
         const callbackUrl = await startIosAuthSession(codeChallenge || '', authorizeStateParam || '')
         dispatch(handleTokenCallbackUrl(callbackUrl))
-      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
         if (e.code === '000') {
           dispatch(cancelWebLogin())

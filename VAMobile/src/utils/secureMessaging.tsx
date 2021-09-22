@@ -202,7 +202,8 @@ export const onFileFolderSelect = async (
       setError('')
       callbackIfUri(document, false)
     }
-  } catch (docError) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (docError: any) {
     if (isCancel(docError)) {
       return
     }

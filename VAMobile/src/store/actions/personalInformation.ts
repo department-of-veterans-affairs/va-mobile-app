@@ -86,7 +86,8 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
       dispatch(dispatchUpdateAuthorizedServices(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
@@ -179,7 +180,8 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSavePhoneNumber())
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       console.error(err)
       dispatch(dispatchFinishSavePhoneNumber(err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
@@ -231,7 +233,8 @@ export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       console.error(err)
       dispatch(dispatchFinishSavePhoneNumber(err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
@@ -299,7 +302,8 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveEmail())
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       dispatch(dispatchFinishSaveEmail(err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
@@ -327,7 +331,8 @@ export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDT
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       dispatch(dispatchFinishSaveEmail(err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
@@ -403,7 +408,8 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveAddress())
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       dispatch(dispatchFinishSaveAddress(err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
@@ -427,7 +433,8 @@ export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       dispatch(dispatchFinishSaveAddress(err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
@@ -487,7 +494,8 @@ export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTyp
           await dispatch(updateAddress(address, screenID))
         }
       }
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       dispatch(dispatchFinishValidateAddress())
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }

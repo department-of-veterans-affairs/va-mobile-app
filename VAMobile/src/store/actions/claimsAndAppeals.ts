@@ -250,7 +250,8 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
       }
 
       dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(activeClaimsAndAppeals, closedClaimsAndAppeals))
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
@@ -300,7 +301,8 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
       }
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimType, claimsAndAppeals))
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishAllClaimsAndAppeals(claimType, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
@@ -353,7 +355,8 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishGetClaim(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
@@ -403,7 +406,8 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
       await registerReviewEvent()
       dispatch(dispatchFinishGetAppeal(appeal?.data))
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishGetAppeal(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
@@ -439,7 +443,8 @@ export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): 
       await api.post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 
       dispatch(dispatchFinishSubmitClaimDecision())
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishSubmitClaimDecision(error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
@@ -528,7 +533,8 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
       }
 
       dispatch(dispatchFinishFileUpload(undefined, request.description))
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       dispatch(dispatchFinishFileUpload(error))
     }
   }
