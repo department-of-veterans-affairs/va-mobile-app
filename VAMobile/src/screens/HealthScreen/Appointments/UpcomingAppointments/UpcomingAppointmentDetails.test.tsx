@@ -235,6 +235,8 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment cancellation is successful', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
+    })
+    it('Unsuccesful alert should show', async () => {
       runAfterTransition(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })
@@ -244,6 +246,8 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment cancellation is unsuccessful', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
+    })
+    it('Successful alert should show', async () => {
       runAfterTransition(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })
