@@ -1,11 +1,10 @@
 name: "Create Release Branch Ticket"
 
 on:
-  push:
-    branches:
-      - feature/feature_**
+  create:
 jobs:
   release_ticket:
+    if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
