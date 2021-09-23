@@ -1,1 +1,1 @@
-You can now check if you or the facility canceled an appointment. We've also made the app more accessible and fixed a few secure messaging bugs.
+You can now check if you or the facility canceled an appointment. We've also made the app more accessible and fixed a few bugs.
