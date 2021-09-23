@@ -18,6 +18,7 @@ import { dispatchDisabilityRatingLogout } from './disabilityRating'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { dispatchSetAnalyticsLogin } from './analytics'
 import { isAndroid } from 'utils/platform'
+import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { utils } from '@react-native-firebase/app'
@@ -530,7 +531,8 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
     try {
       const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
       refreshToken = result ? result.password : undefined
-    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       if (isAndroid()) {
         if (err?.message?.indexOf('Cancel') > -1) {
           // cancel
@@ -634,8 +636,10 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
-      await logAnalyticsEvent(Events.vama_exchange_failed())
-      dispatch(dispatchFinishAuthLogin(undefined, err))
+      if (isErrorObject(err)) {
+        await logAnalyticsEvent(Events.vama_exchange_failed())
+        dispatch(dispatchFinishAuthLogin(undefined, err))
+      }
     }
   }
 }

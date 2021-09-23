@@ -28,6 +28,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
@@ -80,8 +81,10 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
       dispatch(getInbox())
     } catch (error) {
-      dispatch(dispatchFinishFetchInboxMessages(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishFetchInboxMessages(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
+      }
     }
   }
 }
@@ -120,8 +123,10 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       }
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
-      dispatch(dispatchFinishListFolders(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishListFolders(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
+      }
     }
   }
 }
@@ -156,8 +161,10 @@ export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
       dispatch(dispatchFinishGetInbox(inbox, undefined))
     } catch (error) {
-      dispatch(dispatchFinishGetInbox(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetInbox(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -192,8 +199,10 @@ export const listFolderMessages = (folderID: number, page: number, screenID?: Sc
       } as Params)
       dispatch(dispatchFinishListFolderMessages(folderID, messages, undefined))
     } catch (error) {
-      dispatch(dispatchFinishListFolderMessages(folderID, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishListFolderMessages(folderID, undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -227,8 +236,10 @@ export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncRed
       dispatch(dispatchFinishGetThread(response, messageID))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
     } catch (error) {
-      dispatch(dispatchFinishGetThread(undefined, messageID, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetThread(undefined, messageID, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -292,7 +303,9 @@ export const getMessage = (
       await registerReviewEvent()
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
-      dispatch(dispatchFinishGetMessage(undefined, error, messageID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetMessage(undefined, error, messageID))
+      }
     }
   }
 }
@@ -352,10 +365,12 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
         })
       }
     } catch (error) {
-      /** All download errors will be caught here so there is no special path
-       *  for network connection errors
-       */
-      dispatch(dispatchFinishDownloadFileAttachment(error))
+      if (isErrorObject(error)) {
+        /** All download errors will be caught here so there is no special path
+         *  for network connection errors
+         */
+        dispatch(dispatchFinishDownloadFileAttachment(error))
+      }
     }
   }
 }
@@ -390,8 +405,10 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
       const recipientsData = await api.get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
       dispatch(dispatchFinishGetMessageRecipients(recipientsData?.data))
     } catch (error) {
-      dispatch(dispatchFinishGetMessageRecipients(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetMessageRecipients(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -460,7 +477,9 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
       }
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
     } catch (error) {
-      dispatch(dispatchFinishSaveDraft(undefined, error))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishSaveDraft(undefined, error))
+      }
     }
   }
 }
@@ -563,7 +582,9 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
-      dispatch(dispatchFinishSendMessage(error))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishSendMessage(error))
+      }
     }
   }
 }

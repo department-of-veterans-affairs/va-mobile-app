@@ -23,3 +23,8 @@ export type ErrorMessage = {
   severity: string
   text: string
 }
+
+export type ErrorObject = {
+  code?: string
+} & Error &
+  APIError
