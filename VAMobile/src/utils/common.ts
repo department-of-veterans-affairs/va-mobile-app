@@ -216,5 +216,5 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export const isErrorObject = (error: any): error is ErrorObject => {
-  return ['json', 'stack'].some((item) => item in error)
+  return ['json', 'stack', 'networkError'].some((item) => item in error)
 }
