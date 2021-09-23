@@ -3,6 +3,7 @@ import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { RatingData, ScreenIDTypes } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
 
 /**
  * Redux action to start disability ratings fetch
@@ -58,10 +59,11 @@ export const getDisabilityRating = (screenID?: ScreenIDTypes): AsyncReduxAction 
       const ratingData = await api.get<api.DisabilityRatingData>('/v0/disability-rating')
 
       dispatch(dispatchFinishGetRating(ratingData?.data.attributes))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      dispatch(dispatchFinishGetRating(undefined, err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    } catch (err) {
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishGetRating(undefined, err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }

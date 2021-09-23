@@ -4,6 +4,7 @@ import * as api from 'store/api'
 import { ScreenIDTypes } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
 
 const dispatchStartGetHistory = (): ReduxAction => {
   return {
@@ -44,10 +45,11 @@ export const getServiceHistory = (screenID?: ScreenIDTypes): AsyncReduxAction =>
       const mshData = await api.get<api.MilitaryServiceHistoryData>('/v0/military-service-history')
 
       dispatch(dispatchFinishGetHistory(mshData?.data.attributes.serviceHistory))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      dispatch(dispatchFinishGetHistory(undefined, err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    } catch (err) {
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishGetHistory(undefined, err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }

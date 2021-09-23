@@ -18,6 +18,7 @@ import { dispatchDisabilityRatingLogout } from './disabilityRating'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { dispatchSetAnalyticsLogin } from './analytics'
 import { isAndroid } from 'utils/platform'
+import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { utils } from '@react-native-firebase/app'
@@ -634,10 +635,11 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       await logAnalyticsEvent(Events.vama_login_success())
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      await logAnalyticsEvent(Events.vama_exchange_failed())
-      dispatch(dispatchFinishAuthLogin(undefined, err))
+    } catch (err) {
+      if (isErrorObject(err)) {
+        await logAnalyticsEvent(Events.vama_exchange_failed())
+        dispatch(dispatchFinishAuthLogin(undefined, err))
+      }
     }
   }
 }

@@ -8,6 +8,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 const dispatchStartGetBankInfo = (): ReduxAction => {
@@ -41,10 +42,11 @@ export const getBankData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       dispatch(dispatchStartGetBankInfo())
       const bankInfo = await api.get<api.DirectDepositData>('/v0/payment-information/benefits')
       dispatch(dispatchFinishGetBankInfo(bankInfo?.data.attributes.paymentAccount))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      dispatch(dispatchFinishGetBankInfo(undefined, err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    } catch (err) {
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishGetBankInfo(undefined, err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
@@ -98,17 +100,18 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const errorKeys = getErrorKeys(err)
-      const invalidRoutingNumberError = includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER)
+    } catch (err) {
+      if (isErrorObject(err)) {
+        const errorKeys = getErrorKeys(err)
+        const invalidRoutingNumberError = includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER)
 
-      dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
+        dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
 
-      // both invalidRoutingNumber error and common app level errors share the same status codes
-      // invalidRoutingNumber error is more specific and takes priority over common error
-      if (!invalidRoutingNumberError) {
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+        // both invalidRoutingNumber error and common app level errors share the same status codes
+        // invalidRoutingNumber error is more specific and takes priority over common error
+        if (!invalidRoutingNumberError) {
+          dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+        }
       }
     }
   }

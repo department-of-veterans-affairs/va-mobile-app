@@ -11,7 +11,7 @@ import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { getItemsInRange } from 'utils/common'
+import { getItemsInRange, isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
@@ -181,10 +181,11 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
         }
       }
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
-      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
+        dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
+      }
     }
   }
 }
@@ -219,10 +220,11 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
         sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
       } as Params)
       dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, appointmentsList))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -281,10 +283,11 @@ export const cancelAppointment = (cancelID?: string, appointmentID?: string, scr
       await api.put('/v0/appointments/cancel/' + cancelID)
       await registerReviewEvent()
       dispatch(dispatchFinishCancelAppointment(appointmentID))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishCancelAppointment(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishCancelAppointment(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }

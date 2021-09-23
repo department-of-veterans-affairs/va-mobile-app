@@ -28,6 +28,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
@@ -79,10 +80,11 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
       } as Params)
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
       dispatch(getInbox())
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishFetchInboxMessages(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishFetchInboxMessages(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
+      }
     }
   }
 }
@@ -120,10 +122,11 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
         folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders', { useCache: `${!forceRefresh}` })
       }
       dispatch(dispatchFinishListFolders(folders, undefined))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishListFolders(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishListFolders(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
+      }
     }
   }
 }
@@ -157,10 +160,11 @@ export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       const inbox = await api.get<SecureMessagingFolderGetData>(`/v0/messaging/health/folders/${folderID}`)
 
       dispatch(dispatchFinishGetInbox(inbox, undefined))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishGetInbox(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetInbox(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -194,10 +198,11 @@ export const listFolderMessages = (folderID: number, page: number, screenID?: Sc
         page: page.toString(),
       } as Params)
       dispatch(dispatchFinishListFolderMessages(folderID, messages, undefined))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishListFolderMessages(folderID, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishListFolderMessages(folderID, undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -230,10 +235,11 @@ export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncRed
       const response = await api.get<SecureMessagingThreadGetData>(`/v0/messaging/health/messages/${messageID}/thread`)
       dispatch(dispatchFinishGetThread(response, messageID))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishGetThread(undefined, messageID, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetThread(undefined, messageID, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -296,9 +302,10 @@ export const getMessage = (
       }
       await registerReviewEvent()
       dispatch(dispatchFinishGetMessage(response))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishGetMessage(undefined, error, messageID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetMessage(undefined, error, messageID))
+      }
     }
   }
 }
@@ -357,12 +364,13 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
           },
         })
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      /** All download errors will be caught here so there is no special path
-       *  for network connection errors
-       */
-      dispatch(dispatchFinishDownloadFileAttachment(error))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        /** All download errors will be caught here so there is no special path
+         *  for network connection errors
+         */
+        dispatch(dispatchFinishDownloadFileAttachment(error))
+      }
     }
   }
 }
@@ -396,10 +404,11 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
     try {
       const recipientsData = await api.get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
       dispatch(dispatchFinishGetMessageRecipients(recipientsData?.data))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishGetMessageRecipients(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetMessageRecipients(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -467,9 +476,10 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
         dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       }
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishSaveDraft(undefined, error))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishSaveDraft(undefined, error))
+      }
     }
   }
 }
@@ -571,9 +581,10 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
       await registerReviewEvent()
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage())
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishSendMessage(error))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishSendMessage(error))
+      }
     }
   }
 }

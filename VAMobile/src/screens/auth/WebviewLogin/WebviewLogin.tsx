@@ -7,6 +7,7 @@ import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
+import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
@@ -52,15 +53,16 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
       try {
         const callbackUrl = await startIosAuthSession(codeChallenge || '', authorizeStateParam || '')
         dispatch(handleTokenCallbackUrl(callbackUrl))
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (e: any) {
+      } catch (e) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
-        if (e.code === '000') {
-          dispatch(cancelWebLogin())
-          navigation.goBack()
-        } else {
-          crashlytics().recordError(e, 'iOS Login Error')
-          dispatch(sendLoginFailedAnalytics(e))
+        if (isErrorObject(e)) {
+          if (e.code === '000') {
+            dispatch(cancelWebLogin())
+            navigation.goBack()
+          } else {
+            crashlytics().recordError(e, 'iOS Login Error')
+            dispatch(sendLoginFailedAnalytics(e))
+          }
         }
       }
     }

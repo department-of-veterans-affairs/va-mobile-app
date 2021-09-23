@@ -15,7 +15,7 @@ import {
   READ,
 } from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
-import { generateTestIDForTextIconList } from './common'
+import { generateTestIDForTextIconList, isErrorObject } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 
 export const getMessagesListItems = (
@@ -202,13 +202,16 @@ export const onFileFolderSelect = async (
       setError('')
       callbackIfUri(document, false)
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (docError: any) {
-    if (isCancel(docError)) {
-      return
-    }
+  } catch (docError) {
+    if (isErrorObject(docError)) {
+      if (isCancel(docError)) {
+        return
+      }
 
-    setError(docError.code)
+      if (docError.code) {
+        setError(docError.code)
+      }
+    }
   }
 }
 

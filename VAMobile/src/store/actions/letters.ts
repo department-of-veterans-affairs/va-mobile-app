@@ -5,6 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import FileViewer from 'react-native-file-viewer'
@@ -44,10 +45,11 @@ export const getLetters = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       const letters = await api.get<api.LettersData>('/v0/letters')
 
       dispatch(dispatchFinishGetLetters(letters?.data.attributes.letters))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishGetLetters(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetLetters(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -81,10 +83,11 @@ export const getLetterBeneficiaryData = (screenID?: ScreenIDTypes): AsyncReduxAc
     try {
       const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
       dispatch(dispatchFinishGetLetterBeneficiaryData(letterBeneficiaryData?.data.attributes))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -140,13 +143,14 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
 
       await logAnalyticsEvent(Events.vama_letter_download(letterType))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      /**
-       * For letters we show a special screen regardless of the error. All download errors will be caught
-       * here so there is no special path for network connection errors
-       */
-      dispatch(dispatchFinishDownloadLetter(error))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        /**
+         * For letters we show a special screen regardless of the error. All download errors will be caught
+         * here so there is no special path for network connection errors
+         */
+        dispatch(dispatchFinishDownloadLetter(error))
+      }
     }
   }
 }

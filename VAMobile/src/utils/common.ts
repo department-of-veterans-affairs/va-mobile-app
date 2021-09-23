@@ -5,6 +5,7 @@ import { contains, isEmpty } from 'underscore'
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
 
+import { ErrorObject } from 'store/api'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { TFunction } from 'i18next'
@@ -206,4 +207,14 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
   if (beginIdx < items.length) {
     return items.slice(beginIdx, endIdx)
   }
+}
+
+/**
+ * Returns type Predicate for the type guard
+ *
+ * @param error - error object coming from exception in catch
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+export const isErrorObject = (error: any): error is ErrorObject => {
+  return ['json', 'stack'].some((item) => item in error)
 }
