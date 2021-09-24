@@ -1,3 +1,8 @@
+import { DateTime } from 'luxon'
+import { TFunction } from 'i18next'
+import React, { ReactNode } from 'react'
+import _ from 'underscore'
+
 import {
   AppointmentStatusConstants,
   AppointmentType,
@@ -8,13 +13,9 @@ import {
   AppointmentsMetaPagination,
 } from 'store/api'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
-import { DateTime } from 'luxon'
-import { TFunction } from 'i18next'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
 import { getTestIDFromTextLines } from './accessibility'
-import React, { ReactNode } from 'react'
-import _ from 'underscore'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -47,7 +48,7 @@ export const getAppointmentLocation = (appointmentType: AppointmentType, locatio
  *
  * @returns VAIconProps or undefoned
  */
-export const getAppointmentTypeIcon = (appointmentType: string, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
+export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
   const iconProp = { fill: theme.colors.icon.dark, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
 
   if (appointmentType.includes('VIDEO')) {

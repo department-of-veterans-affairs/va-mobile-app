@@ -164,7 +164,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               id: '2',
               type: 'appointment',
               attributes: {
-                appointmentType: AppointmentTypeConstants.VA,
+                appointmentType: AppointmentTypeConstants.VA_COVID_VACCINE,
                 healthcareService: 'CHY PC VAR2',
                 location: {
                   name: 'Cheyenne VA Medical Center',
