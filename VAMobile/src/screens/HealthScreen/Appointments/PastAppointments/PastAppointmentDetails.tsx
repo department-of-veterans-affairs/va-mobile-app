@@ -76,7 +76,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
 
           <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} location={location} phone={phone} />
 
-          <AppointmentReason reason={reason} />
+          {reason && <AppointmentReason reason={reason} />}
         </TextArea>
 
         <Box mt={theme.dimensions.condensedMarginBetween}>

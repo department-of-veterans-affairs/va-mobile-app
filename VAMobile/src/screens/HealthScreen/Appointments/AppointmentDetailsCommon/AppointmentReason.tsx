@@ -5,25 +5,20 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type AppointmentReasonProps = {
-  reason: string | null
+  reason: string
 }
 
 const AppointmentReason: FC<AppointmentReasonProps> = ({ reason }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-
-  if (reason) {
-    return (
-      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('upcomingAppointmentDetails.reason')}
-        </TextView>
-        <TextView variant="MobileBody">{reason}</TextView>
-      </Box>
-    )
-  }
-
-  return <></>
+  return (
+    <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBodyBold" accessibilityRole="header">
+        {t('upcomingAppointmentDetails.reason')}
+      </TextView>
+      <TextView variant="MobileBody">{reason}</TextView>
+    </Box>
+  )
 }
 
 export default AppointmentReason

@@ -315,7 +315,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <CommunityCare_AppointmentData />
 
-          <AppointmentReason reason={reason} />
+          {reason && <AppointmentReason reason={reason} />}
         </TextArea>
 
         <Box mt={theme.dimensions.condensedMarginBetween}>

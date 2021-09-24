@@ -46,11 +46,4 @@ context('AppointmentTypeAndDate', () => {
       expect(texts[1].props.children).toBe(reasonText)
     })
   })
-
-  describe('when reason does not exists', () => {
-    it('should not render text', async () => {
-      initializeTestInstance(null)
-      expect(testInstance.findAllByType(TextView).length).toEqual(0)
-    })
-  })
 })
