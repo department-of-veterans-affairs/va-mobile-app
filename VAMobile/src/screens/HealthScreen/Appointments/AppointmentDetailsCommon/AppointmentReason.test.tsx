@@ -48,7 +48,7 @@ context('AppointmentTypeAndDate', () => {
   })
 
   describe('when reason does not exists', () => {
-    it('should not render component', async () => {
+    it('should not render text', async () => {
       initializeTestInstance(null)
       expect(testInstance.findAllByType(TextView).length).toEqual(0)
     })
