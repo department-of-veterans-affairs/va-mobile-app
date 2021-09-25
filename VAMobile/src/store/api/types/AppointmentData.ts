@@ -96,7 +96,7 @@ export type AppointmentLocation = {
   address?: AppointmentAddress
   lat?: number
   long?: number
-  phone?: AppointmentPhone
+  phone?: AppointmentPhone | null
   url?: string
   code?: string
 }

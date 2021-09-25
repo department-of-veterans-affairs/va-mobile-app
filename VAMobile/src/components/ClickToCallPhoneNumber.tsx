@@ -8,7 +8,7 @@ import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'uti
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type ClickToCallPhoneNumberProps = {
-  phone?: AppointmentPhone | string
+  phone?: AppointmentPhone | string | null
   displayedText?: string
   center?: boolean
 }

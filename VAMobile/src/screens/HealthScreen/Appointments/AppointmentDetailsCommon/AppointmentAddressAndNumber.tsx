@@ -20,7 +20,7 @@ type AppointmentAddressAndNumberProps = {
   healthcareService: string
   location: AppointmentLocation
   address: AppointmentAddress | undefined
-  phone: AppointmentPhone | undefined
+  phone: AppointmentPhone | undefined | null
 }
 
 const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone }) => {
