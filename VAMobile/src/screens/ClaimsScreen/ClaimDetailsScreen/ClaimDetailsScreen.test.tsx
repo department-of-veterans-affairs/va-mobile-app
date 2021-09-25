@@ -24,6 +24,7 @@ context('ClaimDetailsScreen', () => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()
     })
+    jest.runAllTimers()
   }
 
   const initializeTestInstance = (loadingClaim = false, errorsState: ErrorsState = initialErrorsState) => {
@@ -72,8 +73,9 @@ context('ClaimDetailsScreen', () => {
     })
   })
 
-  describe('when the selected tab is issues', () => {
-    it('should display the ClaimDetails component', async () => {
+  describe('when the selected tab is status', () => {
+    it('should display the ClaimStatus component', async () => {
+      initializeTestInstance(false)
       runAfterTransition(() => {
         testInstance.findByType(SegmentedControl).props.onChange('Details')
         expect(testInstance.findAllByType(ClaimDetails).length).toEqual(1)
