@@ -1,1 +1,1 @@
-We've updated the app with some new features. You can now view your disability rating and details. We've also fixed a few bugs.
+You can now check if you or the facility canceled an appointment. We've also made the app more accessible and fixed a few bugs.
