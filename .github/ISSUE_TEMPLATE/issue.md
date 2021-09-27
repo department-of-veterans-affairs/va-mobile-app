@@ -26,8 +26,8 @@ assignees:
 <!--As a [type of user], I would like to [xyz] so that [abc] -->
 
 **UX Acceptance Criteria**
-- item 1
-- item 2
+- [ ] item 1
+- [ ] item 2
 
 **Open questions**
 <!--What is still missing or blocking? Do we need to do something to fully implement this story that isn't already done? What is that? -->
@@ -43,8 +43,8 @@ assignees:
 ***NOTE: Mark any New Common Component ticket as a dependency of this ticket in ZenHub.***
 
 **Accessibility requirements**
-- item 1
-- item 2
+- [ ] item 1
+- [ ] item 2
 
 **Content**
 <!--List out all the content that needs to be in this ticket EXACTLY as it should appear in the app -->
