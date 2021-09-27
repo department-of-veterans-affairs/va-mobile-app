@@ -98,17 +98,16 @@ context('DisabilityRatingsScreen', () => {
     expect(texts[3].props.children).toBe(
       "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
     )
-    expect(texts[4].props.children).toBe('Check Claims and Appeals')
 
-    expect(texts[6].props.children).toBe('50%')
-    expect(texts[7].props.children).toBe('PTSD')
-    expect(texts[8].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[9].props.children).toBe('Effective date:  12/01/2012')
+    expect(texts[5].props.children).toBe('50%')
+    expect(texts[6].props.children).toBe('PTSD')
+    expect(texts[7].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[8].props.children).toBe('Effective date:  12/01/2012')
 
-    expect(texts[10].props.children).toBe('30%')
-    expect(texts[11].props.children).toBe('Headaches, migraine')
-    expect(texts[12].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[13].props.children).toBe('Effective date:  08/09/2013')
+    expect(texts[9].props.children).toBe('30%')
+    expect(texts[10].props.children).toBe('Headaches, migraine')
+    expect(texts[11].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[12].props.children).toBe('Effective date:  08/09/2013')
 
     const links = testInstance.findAllByProps({ accessibilityRole: 'link' })
     expect(links[0].findByType(TextView).props.children).toBe('About VA disability ratings')
@@ -135,13 +134,6 @@ context('DisabilityRatingsScreen', () => {
 
       initializeTestInstance(undefined, errorState)
       expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
-    })
-  })
-
-  describe('when clicking on Check Claims And Appeals', () => {
-    it('should call navigations navigate for Claims', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })
