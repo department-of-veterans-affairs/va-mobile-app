@@ -2,9 +2,10 @@
 name: Issue Ticket
 about: User story for a feature for the VA mobile app that is ready to hand off to UX for design then engineering for implementation
 title: Issue Ticket
-labels:
+labels: 
 assignees:
 ---
+
 # Issue Ticket
 <!-- Goal of these tickets: Write a user story for a feature for the VA mobile app that is ready to hand off to UX for design then engineering for implementation. This is talking about a screen or specific piece of functionality. -->
 
