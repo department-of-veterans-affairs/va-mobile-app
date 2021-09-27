@@ -29,6 +29,7 @@ context('PastAppointmentDetails', () => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()
     })
+    jest.runAllTimers()
   }
 
   const initializeTestInstance = (
@@ -76,14 +77,14 @@ context('PastAppointmentDetails', () => {
       runAfterTransition(() => {
         allTextViews = testInstance.findAllByType(TextView)
         expect(allTextViews.length).toEqual(4)
-        expect(allTextViews[0].props.children).toEqual('VA Video Connect using a VA device')
+        expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nusing a VA device')
       })
 
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       runAfterTransition(() => {
         allTextViews = testInstance.findAllByType(TextView)
         expect(allTextViews.length).toEqual(4)
-        expect(allTextViews[0].props.children).toEqual('VA Video Connect at home')
+        expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nhome')
       })
     })
   })
