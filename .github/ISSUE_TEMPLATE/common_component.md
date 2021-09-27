@@ -3,8 +3,7 @@ name: Common Component
 about: Template for new common component for VA mobile app
 title: Common Component Ticket:[Insert name of component here]
 labels: common-component, ux
-assignees: ''
-
+assignees:
 ---
 
 # Common Component Ticket

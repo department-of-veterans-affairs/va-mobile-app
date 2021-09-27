@@ -1,11 +1,9 @@
 ---
 name: Issue Ticket
-about: User story for a feature for the VA mobile app that is ready to hand off to
-  UX for design then engineering for implementation
+about: User story for a feature for the VA mobile app that is ready to hand off to UX for design then engineering for implementation
 title: Issue Ticket
-labels: ''
-assignees: ''
-
+labels: 
+assignees:
 ---
 
 # Issue Ticket

@@ -1,10 +1,9 @@
 ---
 name: Epic Ticket
 about: Template for new Epics
-title: '["Epic Name"]'
-labels: ''
-assignees: ''
-
+title: [Epic Name]
+labels: 
+assignees:
 ---
 
 # Epic
