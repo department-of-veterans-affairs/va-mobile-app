@@ -42,7 +42,7 @@ const DisabilityRatingsScreen: FC = () => {
   const totalCombinedRating = ratingData?.combinedDisabilityRating
 
   useEffect(() => {
-    // Fecth the disability rating data if not loaded already
+    // Get the disability rating data if not loaded already
     if (needsDataLoad) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
