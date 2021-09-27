@@ -291,5 +291,6 @@
   "upcomingAppointments.vaAppointment": "VA appointment",
   "upcomingAppointments.vaAppointment.a11yLabel": "V-A appointment",
   "upcomingAppointments.phoneOnly": "Phone Call",
-  "upcomingAppointments.phoneOnly.a11yLabel": "Phone Call"
+  "upcomingAppointments.phoneOnly.a11yLabel": "Phone Call",
+  "upcomingAppointmentDetails.reason": "You shared these details about your concern"
 }

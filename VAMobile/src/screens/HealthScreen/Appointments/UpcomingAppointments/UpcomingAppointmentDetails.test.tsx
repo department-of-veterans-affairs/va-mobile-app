@@ -37,6 +37,7 @@ context('UpcomingAppointmentDetails', () => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()
     })
+    jest.runAllTimers()
   }
 
   let apptPhoneData = {
@@ -48,7 +49,7 @@ context('UpcomingAppointmentDetails', () => {
   const initializeTestInstance = (
     appointmentType: AppointmentType = AppointmentTypeConstants.VA,
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
-    phoneData: AppointmentPhone = apptPhoneData,
+    phoneData: AppointmentPhone | null = apptPhoneData,
     appointmentCancellationStatus?: AppointmentCancellationStatusTypes,
     statusDetail: AppointmentStatusDetailType | null = null,
   ): void => {
@@ -65,7 +66,7 @@ context('UpcomingAppointmentDetails', () => {
             statusDetail,
             location: {
               ...defaultAppointmentLocation,
-              phone: phoneData,
+              phone: phoneData === null ? undefined : phoneData,
             },
           },
         },
@@ -94,7 +95,7 @@ context('UpcomingAppointmentDetails', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
       runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at an ATLAS location')
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nATLAS location')
       })
     })
     it('should display the appointment code', async () => {
@@ -108,7 +109,7 @@ context('UpcomingAppointmentDetails', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at home')
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nhome')
       })
     })
     it('should display the how to join your virtual session text', async () => {
@@ -141,7 +142,7 @@ context('UpcomingAppointmentDetails', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
       runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at a VA location')
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nVA location')
       })
     })
 
@@ -162,7 +163,7 @@ context('UpcomingAppointmentDetails', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
       runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect using a VA device')
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nusing a VA device')
       })
     })
 
@@ -204,7 +205,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when there is no phone data', () => {
     it('should not display any click to call link', async () => {
-      initializeTestInstance(undefined, undefined, undefined) // force value of phone to null (undefined will use default arg value)
+      initializeTestInstance(undefined, undefined, null) // force value of phone to null (undefined will use default arg value)
       runAfterTransition(() => {
         const allClickForActionLinks = testInstance.findAllByType(ClickForActionLink)
 
