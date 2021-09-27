@@ -66,7 +66,7 @@ context('UpcomingAppointmentDetails', () => {
             statusDetail,
             location: {
               ...defaultAppointmentLocation,
-              phone: phoneData,
+              phone: phoneData === null ? undefined : phoneData,
             },
           },
         },
