@@ -19,6 +19,7 @@ import { getAppointment } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
+import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
 import ProviderName from '../AppointmentDetailsCommon/ProviderName'
 
@@ -33,7 +34,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail, reason } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
@@ -74,6 +75,8 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
           <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
 
           <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} location={location} phone={phone} />
+
+          {reason && <AppointmentReason reason={reason} />}
         </TextArea>
 
         <Box mt={theme.dimensions.condensedMarginBetween}>
