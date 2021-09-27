@@ -41,6 +41,7 @@ import { getEpochSecondsOfDate } from 'utils/formattingUtils'
 import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
+import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
 import ProviderName from '../AppointmentDetailsCommon/ProviderName'
 import getEnv from 'utils/env'
@@ -62,7 +63,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail } =
+  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail, reason } =
     attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
@@ -300,7 +301,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             isAppointmentCanceled={isAppointmentCanceled}
             whoCanceled={whoCanceled}
           />
-
           <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
@@ -314,6 +314,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <Atlas_AppointmentData />
 
           <CommunityCare_AppointmentData />
+
+          {reason && <AppointmentReason reason={reason} />}
         </TextArea>
 
         <Box mt={theme.dimensions.condensedMarginBetween}>
