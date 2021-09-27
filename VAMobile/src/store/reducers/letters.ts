@@ -7,7 +7,7 @@ import createReducer from './createReducer'
 export type LettersState = {
   loading: boolean
   error?: Error
-  letters?: LettersList
+  letters: LettersList
   letterBeneficiaryData?: LetterBeneficiaryData
   mostRecentServices: Array<LetterMilitaryService> // most recent 3
   downloading: boolean
