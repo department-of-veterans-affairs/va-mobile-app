@@ -137,6 +137,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 comment: 'Please arrive 20 minutes before the start of your appointment',
                 timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
                 healthcareService: 'Blind Rehabilitation Center',
+                reason: null,
                 location: {
                   name: 'VA Long Beach Healthcare System',
                   address: {
@@ -192,6 +193,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 statusDetail: null,
                 timeZone: 'America/Denver' as AppointmentTimeZone,
                 comment: '',
+                reason: null,
               },
             },
             {
@@ -227,6 +229,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 status: AppointmentStatusConstants.BOOKED,
                 statusDetail: null,
                 timeZone: 'America/Denver' as AppointmentTimeZone,
+                reason: null,
               },
             },
           ],

@@ -292,5 +292,6 @@
   "upcomingAppointments.vaAppointment.a11yLabel": "V-A appointment",
   "upcomingAppointments.vaCovidVaccine": "COVID-19 vaccine",
   "upcomingAppointments.phoneOnly": "Phone Call",
-  "upcomingAppointments.phoneOnly.a11yLabel": "Phone Call"
+  "upcomingAppointments.phoneOnly.a11yLabel": "Phone Call",
+  "upcomingAppointmentDetails.reason": "You shared these details about your concern"
 }

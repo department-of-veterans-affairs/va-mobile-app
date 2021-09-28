@@ -1,6 +1,5 @@
 import {
   Box,
-  ButtonTypesConstants,
   CallHelpCenter,
   ClickForActionLink,
   ClickToCallPhoneNumber,
@@ -14,7 +13,6 @@ import {
   TextLine,
   TextView,
   TextViewProps,
-  VAButton,
   VAScrollView,
 } from 'components'
 import { DateTime } from 'luxon'
@@ -26,7 +24,7 @@ import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { map } from 'underscore'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
@@ -35,7 +33,6 @@ const DisabilityRatingsScreen: FC = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
-  const navigateTo = useRouteNavigation()
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
@@ -45,18 +42,17 @@ const DisabilityRatingsScreen: FC = () => {
   const totalCombinedRating = ratingData?.combinedDisabilityRating
 
   useEffect(() => {
-    // Get the service history to populate the profile banner
+    // Get the disability rating data if not loaded already
     if (needsDataLoad) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
   }, [dispatch, needsDataLoad])
 
-  const onClaimsAndAppeals = navigateTo('Claims')
-
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
 
     const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
+    // must check only for null or undefined. 0 is a valid rating
     const percentageText = ratingPercentage !== undefined && ratingPercentage !== null ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : ''
     const formattedEffectiveDateText =
       effectiveDate !== undefined && effectiveDate !== null
@@ -95,7 +91,9 @@ const DisabilityRatingsScreen: FC = () => {
   })
 
   const getCombinedTotalSection = () => {
-    const combinedPercentText = totalCombinedRating !== undefined ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
+    // must check only for null or undefined. 0 is a valid rating
+    const combinedPercentText =
+      totalCombinedRating !== undefined && totalCombinedRating !== null ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
     const combinedTotalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
     return (
@@ -116,14 +114,6 @@ const DisabilityRatingsScreen: FC = () => {
             <TextView variant="MobileBody" selectable={false}>
               {combinedTotalSummaryText}
             </TextView>
-          </Box>
-          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={condensedMarginBetween}>
-            <VAButton
-              onPress={onClaimsAndAppeals}
-              label={t('disabilityRatingDetails.checkClaimsAndAppeal')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-              a11yHint={t('disabilityRatingDetails.checkClaimsAndAppealA11yHint')}
-            />
           </Box>
         </TextArea>
       </Box>
