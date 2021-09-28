@@ -1,8 +1,6 @@
 import React, { FC } from 'react'
 
-import { NAMESPACE } from 'constants/namespaces'
 import { TextLine } from './types'
-import { useTranslation } from 'utils/hooks'
 import Box from './Box'
 import MessagesSentReadTag from './MessagesSentReadTag'
 import TextLineWithIcon, { TextLineWithIconProps } from './TextLineWithIcon'
