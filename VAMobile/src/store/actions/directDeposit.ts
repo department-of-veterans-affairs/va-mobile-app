@@ -102,9 +102,7 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
       if (isErrorObject(err)) {
-        const errorKeys = getErrorKeys(err)
-        const invalidRoutingNumberError = includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER)
-
+        const invalidRoutingNumberError = checkIfRoutingNumberIsInvalid(err)
         dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
 
         // both invalidRoutingNumber error and common app level errors share the same status codes
@@ -132,4 +130,13 @@ export const finishEditBankInfo = (screenID?: ScreenIDTypes): AsyncReduxAction =
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchFinishEditBankInfo())
   }
+}
+
+const checkIfRoutingNumberIsInvalid = (error: APIError): boolean => {
+  if (!error) {
+    return false
+  }
+
+  const errorKeys = getErrorKeys(error)
+  return includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER) || includes(error?.text, DirectDepositErrors.INVALID_ROUTING_NUMBER_TEXT)
 }

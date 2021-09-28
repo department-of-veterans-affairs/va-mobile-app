@@ -6,11 +6,11 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAModalPicker } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLineWithIconProps, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
+import { getAppointmentLocation, getAppointmentTypeIcon, getGroupedAppointments, getYearsToSortedMonths } from 'utils/appointments'
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
@@ -128,15 +128,20 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment, index) => {
-      const { attributes } = appointment
+      const {
+        attributes: { appointmentType, startDateUtc, timeZone, phoneOnly, location, status },
+      } = appointment
 
-      const textLines: Array<TextLine> = [
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(attributes.startDateUtc, attributes.timeZone) }), variant: 'MobileBodyBold' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startDateUtc, attributes.timeZone) }), variant: 'MobileBodyBold' },
-        { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
+      const textLines: Array<TextLineWithIconProps> = [
+        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+        {
+          text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
+          iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+        },
       ]
 
-      if (attributes.status === AppointmentStatusConstants.CANCELLED) {
+      if (status === AppointmentStatusConstants.CANCELLED) {
         textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
       }
 

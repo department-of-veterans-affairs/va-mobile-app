@@ -35,14 +35,14 @@ export type SecureMessagingState = {
   fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
   error?: APIError
-  inbox?: SecureMessagingFolderData
-  inboxMessages?: SecureMessagingMessageList
-  folders?: SecureMessagingFolderList
-  folderById?: SecureMessagingFolderMap
-  messagesByFolderId?: SecureMessagingFolderMessagesMap
-  messagesById?: SecureMessagingMessageMap
-  threads?: SecureMessagingThreads
-  recipients?: SecureMessagingRecipientDataList
+  inbox: SecureMessagingFolderData
+  inboxMessages: SecureMessagingMessageList
+  folders: SecureMessagingFolderList
+  folderById: SecureMessagingFolderMap
+  messagesByFolderId: SecureMessagingFolderMessagesMap
+  messagesById: SecureMessagingMessageMap
+  threads: SecureMessagingThreads
+  recipients: SecureMessagingRecipientDataList
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
@@ -100,7 +100,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     }
   },
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
-    const messages = inboxMessages?.data
+    const messages = inboxMessages ? inboxMessages.data : []
     const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
     const messagesById = messages?.reduce(
       (obj, m) => {
@@ -164,13 +164,15 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       }
     }
 
-    const messagesById = messageData?.data.reduce(
-      (obj, m) => {
-        obj[m.attributes.messageId] = m.attributes
-        return obj
-      },
-      { ...state.messagesById },
-    )
+    const messagesById = messageData
+      ? messageData.data.reduce(
+          (obj, m) => {
+            obj[m.attributes.messageId] = m.attributes
+            return obj
+          },
+          { ...state.messagesById },
+        )
+      : ({} as SecureMessagingMessageMap)
 
     return {
       ...state,
@@ -191,7 +193,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_GET_INBOX: (state, { inboxData, error }) => {
     return {
       ...state,
-      inbox: inboxData?.data,
+      inbox: inboxData ? inboxData.data : ({} as SecureMessagingFolderData),
       hasLoadedInbox: true,
       error,
     }
@@ -326,7 +328,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: (state, { recipients, error }) => {
     return {
       ...state,
-      recipients,
+      recipients: recipients || [],
       error,
       hasLoadedRecipients: true,
     }

@@ -60,7 +60,7 @@ const mockMessages: SecureMessagingMessageMap = {
     body: 'message 1 body text',
     attachment: false,
     sentDate: '1',
-    senderId: 2,
+    senderId: 3,
     senderName: 'mock sender 1',
     recipientId: 3,
     recipientName: 'mock recipient name 1',
@@ -73,7 +73,7 @@ const mockMessages: SecureMessagingMessageMap = {
     body: 'test 2',
     attachment: false,
     sentDate: '2',
-    senderId: 2,
+    senderId: 4,
     senderName: 'mock sender 2',
     recipientId: 3,
     recipientName: 'mock recipient name 2',
@@ -86,7 +86,7 @@ const mockMessages: SecureMessagingMessageMap = {
     body: 'Last accordion collapsible should be open, so the body text of this message should display',
     attachment: false,
     sentDate: '3',
-    senderId: 2,
+    senderId: 5,
     senderName: 'mock sender 3',
     recipientId: 3,
     recipientName: 'mock recipient name 3',
@@ -268,7 +268,7 @@ context('EditDraft', () => {
       it('should call saveDraft', async () => {
         navHeaderSpy.save.props.onSave()
         testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(saveDraft).toHaveBeenCalledWith(expect.objectContaining({ draft_id: expect.any(Number) }), expect.anything(), expect.anything())
+        expect(saveDraft).toHaveBeenCalledWith(expect.objectContaining({ draft_id: 2, body: 'test 2' }), 2, true, 1)
       })
     })
   })

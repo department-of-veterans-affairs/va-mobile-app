@@ -5,6 +5,7 @@ title: BUG - [SEVERITY] - [iOS/Android/All] - [Short description]
 labels: bug
 assignees:
 ---
+
 ## What happened?
 <!-- General overview of what happened and where it happened -->
 

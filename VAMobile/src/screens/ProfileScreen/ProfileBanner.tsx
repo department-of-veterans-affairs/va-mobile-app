@@ -76,12 +76,12 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
               {branch}
             </TextView>
           )}
-          {combinedPercentText !== undefined && showRating && (
+          {ratingPercent !== undefined && ratingPercent !== null && showRating && (
             <Box mt={theme.dimensions.condensedMarginBetween}>
               <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(yourDisabilityRatingText)} accessibilityRole="text">
                 {yourDisabilityRatingText}
               </TextView>
-              <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(combinedPercentText)} accessibilityRole="text">
+              <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(combinedPercentText || '')} accessibilityRole="text">
                 {combinedPercentText}
               </TextView>
             </Box>

@@ -1,5 +1,6 @@
 export const DirectDepositErrors = {
   INVALID_ROUTING_NUMBER: 'payment.accountRoutingNumber.invalidCheckSum',
+  INVALID_ROUTING_NUMBER_TEXT: 'Financial institution routing number is invalid',
 }
 
 export type CommonErrorTypes = 'networkConnectionError' | 'appLevelError' | 'appLevelErrorWithRefresh' | 'appLevelErrorHealthLoad'
