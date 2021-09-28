@@ -26,12 +26,15 @@ export type YearsToSortedMonths = { [key: string]: Array<string> }
  * @param locationName - string name of the location of the appointment
  * @param translate - function the translate function
  * @param phoneOnly - boolean or undefined tells if the appointment is a phone call
+ * @param isCovidVaccine - boolean or undefined tells if the appointment is a covid
  *
  * @returns string of the location name
  */
-export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean | undefined): string => {
+export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly?: boolean, isCovidVaccine?: boolean): string => {
   if (phoneOnly) {
     return translate('upcomingAppointments.phoneOnly')
+  } else if (isCovidVaccine) {
+    return translate('upcomingAppointments.vaCovidVaccine')
   } else if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE || appointmentType === AppointmentTypeConstants.VA) {
     return locationName
   }
@@ -135,13 +138,13 @@ const getListItemsForAppointments = (
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
-    const { startDateUtc, timeZone, appointmentType, location, phoneOnly } = attributes
+    const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine } = attributes
 
     const textLines: Array<TextLineWithIconProps> = [
       { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       {
-        text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
+        text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
       },
     ]

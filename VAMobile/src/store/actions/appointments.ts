@@ -129,6 +129,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 appointmentType: AppointmentTypeConstants.VA,
                 status: AppointmentStatusConstants.BOOKED,
                 phoneOnly: true,
+                isCovidVaccine: false,
                 statusDetail: null,
                 startDateLocal: '2021-09-06T19:53:14.000+00:00',
                 startDateUtc: '2021-09-06T19:53:14.000+00:00',
@@ -164,7 +165,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               id: '2',
               type: 'appointment',
               attributes: {
-                appointmentType: AppointmentTypeConstants.VA_COVID_VACCINE,
+                appointmentType: AppointmentTypeConstants.VA,
                 healthcareService: 'CHY PC VAR2',
                 location: {
                   name: 'Cheyenne VA Medical Center',
@@ -184,6 +185,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 },
                 minutesDuration: 60,
                 phoneOnly: false,
+                isCovidVaccine: true,
                 startDateLocal: '2021-09-17T13:10:00.000-06:00',
                 startDateUtc: '2021-09-17T19:10:00.000+00:00',
                 status: AppointmentStatusConstants.CANCELLED,
@@ -219,6 +221,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 },
                 minutesDuration: 20,
                 phoneOnly: false,
+                isCovidVaccine: false,
                 startDateLocal: '2021-09-01T11:15:00.000-06:00',
                 startDateUtc: '2021-09-01T17:15:00.000+00:00',
                 status: AppointmentStatusConstants.BOOKED,

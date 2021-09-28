@@ -43,7 +43,6 @@ export const AppointmentTypeConstants: {
   VA_VIDEO_CONNECT_HOME: AppointmentType
   VA_VIDEO_CONNECT_ONSITE: AppointmentType
   VA_VIDEO_CONNECT_GFE: AppointmentType
-  VA_COVID_VACCINE: AppointmentType
 } = {
   COMMUNITY_CARE: 'COMMUNITY_CARE',
   VA: 'VA',
@@ -51,7 +50,6 @@ export const AppointmentTypeConstants: {
   VA_VIDEO_CONNECT_HOME: 'VA_VIDEO_CONNECT_HOME',
   VA_VIDEO_CONNECT_ONSITE: 'VA_VIDEO_CONNECT_ONSITE',
   VA_VIDEO_CONNECT_GFE: 'VA_VIDEO_CONNECT_GFE',
-  VA_COVID_VACCINE: 'VA_COVID_VACCINE',
 }
 
 export const AppointmentTypeToID = {
@@ -61,7 +59,6 @@ export const AppointmentTypeToID = {
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'upcomingAppointments.connectOnsite',
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE',
-  [AppointmentTypeConstants.VA_COVID_VACCINE]: 'upcomingAppointments.vaCovidVaccine',
 }
 
 /* Mirrors AppointmentTypeToID but is the a11y friendly version where any VA is converted to V-A */
@@ -127,6 +124,7 @@ export type AppointmentAttributes = {
   startDateLocal: string
   startDateUtc: string
   phoneOnly: boolean
+  isCovidVaccine: boolean
 }
 
 export type AppointmentData = {

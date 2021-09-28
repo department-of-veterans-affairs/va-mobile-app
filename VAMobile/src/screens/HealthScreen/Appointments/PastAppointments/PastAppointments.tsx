@@ -129,14 +129,14 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment, index) => {
       const {
-        attributes: { appointmentType, startDateUtc, timeZone, phoneOnly, location, status },
+        attributes: { appointmentType, startDateUtc, timeZone, phoneOnly, location, status, isCovidVaccine },
       } = appointment
 
       const textLines: Array<TextLineWithIconProps> = [
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         {
-          text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
+          text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
           iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
         },
       ]
