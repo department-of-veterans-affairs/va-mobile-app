@@ -127,9 +127,10 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               id: '1',
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
-                status: AppointmentStatusConstants.BOOKED,
-                phoneOnly: true,
+                status: AppointmentStatusConstants.CANCELLED,
+                phoneOnly: false,
                 statusDetail: null,
+                covidVaccination: true,
                 startDateLocal: '2021-09-06T19:53:14.000+00:00',
                 startDateUtc: '2021-09-06T19:53:14.000+00:00',
                 minutesDuration: 60,
