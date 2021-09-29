@@ -107,7 +107,7 @@ export type AppointmentStatus = 'BOOKED' | 'CANCELLED'
 
 export type AppointmentStatusDetailType = 'CANCELLED BY CLINIC & AUTO RE-BOOK' | 'CANCELLED BY CLINIC' | 'CANCELLED BY PATIENT & AUTO-REBOOK' | 'CANCELLED BY PATIENT'
 
-export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE' | 'VA_VIDEO_CONNECT_GFE' | 'VA_COVID_VACCINE'
+export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE' | 'VA_VIDEO_CONNECT_GFE'
 
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
