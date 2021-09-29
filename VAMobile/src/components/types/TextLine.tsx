@@ -16,5 +16,6 @@ export type TextLine = {
   /** alignment of the text */
   textAlign?: 'center' | 'left' | 'right'
 
+  /** sets the text to be a tag */
   isTextTag?: boolean
 }
