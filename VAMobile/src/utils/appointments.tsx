@@ -25,16 +25,16 @@ export type YearsToSortedMonths = { [key: string]: Array<string> }
  * @param appointmentType - type AppointmentType, to describe the type of appointment
  * @param locationName - string name of the location of the appointment
  * @param translate - function the translate function
- * @param phoneOnly - boolean or undefined tells if the appointment is a phone call
+ * @param phoneOnly - boolean tells if the appointment is a phone call
  * @param covidVaccination - boolean or undefined tells if the appointment is a covid
  *
  * @returns string of the location name
  */
-export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly?: boolean, covidVaccination?: boolean): string => {
+export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean, covidVaccination?: boolean): string => {
   if (phoneOnly) {
     return translate('upcomingAppointments.phoneOnly')
   } else if (covidVaccination) {
-    return translate('upcomingAppointments.vaCovidVaccine')
+    return translate('upcomingAppointments.covidVaccine')
   } else if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE || appointmentType === AppointmentTypeConstants.VA) {
     return locationName
   }
