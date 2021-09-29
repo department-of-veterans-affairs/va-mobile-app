@@ -135,19 +135,20 @@ const getListItemsForAppointments = (
   _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
     const { startDateUtc, timeZone, appointmentType, location, phoneOnly } = attributes
+    const textLines: Array<TextLineWithIconProps> = []
 
-    const textLines: Array<TextLineWithIconProps> = [
+    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
+      textLines.push({ text: t('appointments.canceled'), isTextTag: true })
+    }
+
+    textLines.push(
       { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       {
         text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
       },
-    ]
-
-    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
-    }
+    )
 
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = tc('common:listPosition', { position, total: totalEntries })
