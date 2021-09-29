@@ -98,7 +98,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
     metaData: {
-      title: t(AppointmentTypeToID[appointmentType]),
+      title: t(covidVaccination ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType]),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
