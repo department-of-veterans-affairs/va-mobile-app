@@ -188,7 +188,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 covidVaccination: true,
                 startDateLocal: '2021-09-17T13:10:00.000-06:00',
                 startDateUtc: '2021-09-17T19:10:00.000+00:00',
-                status: AppointmentStatusConstants.CANCELLED,
+                status: AppointmentStatusConstants.BOOKED,
                 statusDetail: null,
                 timeZone: 'America/Denver' as AppointmentTimeZone,
                 comment: '',
