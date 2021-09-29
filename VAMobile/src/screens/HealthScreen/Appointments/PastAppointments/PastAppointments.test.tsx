@@ -159,9 +159,9 @@ context('PastAppointments', () => {
   })
 
   describe('when the status is CANCELLED', () => {
-    it('should render the last line of the appointment item as the text "Canceled"', async () => {
+    it('should render the first line of the appointment item as the text "Canceled"', async () => {
       initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED))
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Canceled')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('CANCELED')
     })
   })
 
