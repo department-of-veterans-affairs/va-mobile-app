@@ -132,18 +132,20 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         attributes: { appointmentType, startDateUtc, timeZone, phoneOnly, location, status },
       } = appointment
 
-      const textLines: Array<TextLineWithIconProps> = [
+      const textLines: Array<TextLineWithIconProps> = []
+
+      if (status === AppointmentStatusConstants.CANCELLED) {
+        textLines.push({ text: t('appointments.canceled'), isTextTag: true })
+      }
+
+      textLines.push(
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         {
           text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
           iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
         },
-      ]
-
-      if (status === AppointmentStatusConstants.CANCELLED) {
-        textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
-      }
+      )
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = tc('common:listPosition', { position, total: totalEntries })
