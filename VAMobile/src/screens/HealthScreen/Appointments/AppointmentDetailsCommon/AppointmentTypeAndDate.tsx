@@ -28,22 +28,24 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
 
   return (
     <Box>
-      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} {...testIdProps(appointmentTypeLabel)}>
+      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(appointmentTypeLabel)}>
         {t(AppointmentTypeToID[appointmentType])}
       </TextView>
-      <Box {...testIdProps(`${date} ${time}`)} accessibilityRole="header" accessible={true}>
-        <TextView variant="BitterBoldHeading">{date}</TextView>
-        <TextView variant="BitterBoldHeading">{time}</TextView>
-      </Box>
+      {isAppointmentCanceled ? (
+        <>
+          <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+            {t('appointments.canceled.whoCanceled', { whoCanceled })}
+          </TextView>
 
-      {isAppointmentCanceled && (
-        <TextView
-          variant="MobileBodyBold"
-          color="error"
-          mt={theme.dimensions.standardMarginBetween}
-          mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-          {t('appointments.canceled.whoCanceled', { whoCanceled })}
-        </TextView>
+          <TextView variant={'MobileBody'} mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
+            {t('appointments.canceled.message', { dateTime: `${date} ${time}` })}
+          </TextView>
+        </>
+      ) : (
+        <Box {...testIdProps(`${date} ${time}`)} accessibilityRole={'header'} accessible={true}>
+          <TextView variant={'BitterBoldHeading'}>{date}</TextView>
+          <TextView variant={'BitterBoldHeading'}>{time}</TextView>
+        </Box>
       )}
     </Box>
   )
