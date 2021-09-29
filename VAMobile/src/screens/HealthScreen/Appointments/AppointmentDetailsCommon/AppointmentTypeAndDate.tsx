@@ -26,11 +26,12 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
 
   const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
   const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
+  const covid19Text = t('upcomingAppointments.covidVaccine')
 
   return (
     <Box>
-      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(appointmentTypeLabel)}>
-        {t(covidVaccination ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType])}
+      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(covidVaccination ? covid19Text : appointmentTypeLabel)}>
+        {t(covidVaccination ? covid19Text : AppointmentTypeToID[appointmentType])}
       </TextView>
       {isAppointmentCanceled ? (
         <>
