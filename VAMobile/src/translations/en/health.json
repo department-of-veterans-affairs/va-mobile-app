@@ -291,6 +291,7 @@
   "upcomingAppointments.connectOnsite.a11yLabel": "V\ufeffA Video Connect at a VA location",
   "upcomingAppointments.vaAppointment": "VA appointment",
   "upcomingAppointments.vaAppointment.a11yLabel": "V-A appointment",
+  "upcomingAppointments.covidVaccine": "COVID-19 vaccine",
   "upcomingAppointments.phoneOnly": "Phone Call",
   "upcomingAppointments.phoneOnly.a11yLabel": "Phone Call",
   "upcomingAppointmentDetails.reason": "You shared these details about your concern"
