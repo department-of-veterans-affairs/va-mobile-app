@@ -1,10 +1,9 @@
 import { Dimensions, Image } from 'react-native'
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import _ from 'underscore'
 
@@ -37,13 +36,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const { request, firstImageResponse } = route.params
   const [imagesList, setImagesList] = useState([firstImageResponse])
   const [errorMessage, setErrorMessage] = useState('')
-  const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.fileSize || 0)
+  const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets ? firstImageResponse.assets[0].fileSize : 0)
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
@@ -53,11 +50,12 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
 
     return _.map(imagesList, (image, index) => {
+      const { uri } = image.assets ? image.assets[index] : ({} as Asset)
       return (
         /** Rightmost photo doesn't need right margin b/c of gutter margins
          * Every 3rd photo, right margin is changed to zero*/
         <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
-          <StyledImage source={{ uri: image.uri }} width={calculatedWidth} />
+          <StyledImage source={{ uri }} width={calculatedWidth} />
         </Box>
       )
     })
@@ -66,8 +64,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const callbackIfUri = (response: ImagePickerResponse): void => {
     setImagesList([...imagesList, response])
 
-    if (response.fileSize) {
-      setTotalBytesUsed(totalBytesUsed + response.fileSize)
+    const { fileSize } = response.assets ? response.assets[0] : ({} as Asset)
+
+    if (fileSize) {
+      setTotalBytesUsed(totalBytesUsed || 0 + fileSize)
     }
   }
 
@@ -124,7 +124,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           {imagesList.length < 10 && (
             <Box mt={theme.dimensions.condensedMarginBetween}>
               <VAButton
-                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed)}
+                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed || 0)}
                 label={t('fileUpload.addAnotherPhoto')}
                 testID={t('fileUpload.addAnotherPhoto')}
                 buttonType={ButtonTypesConstants.buttonSecondary}
