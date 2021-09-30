@@ -193,13 +193,9 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is va', () => {
-    beforeEach(() => {
-      runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA appointment')
-      })
-    })
     it('should display the name of the facility location', async () => {
       runAfterTransition(() => {
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA appointment')
         expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Blind Rehabilitation Center')
       })
     })
@@ -252,6 +248,8 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment cancellation is successful', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
+    })
+    it('should display alert', async () => {
       runAfterTransition(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })
@@ -261,6 +259,9 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment cancellation is unsuccessful', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
+    })
+
+    it('should display alert', async () => {
       runAfterTransition(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })

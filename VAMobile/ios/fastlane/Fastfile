@@ -57,6 +57,33 @@ platform :ios do
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
   end
 
+  desc "Push a new on demand build to TestFlight"
+  lane :on_demand_qa do |options|
+    puts('Begin On Demand lane' )
+    update_version(options[:version])
+    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: options[:app_name]) # TODO: add default display_name
+    match(type: "appstore", readonly: true)
+    gym(
+      workspace: "VAMobile.xcworkspace",
+      scheme: ENV['IOS_SCHEME'],
+      silent: true,
+      export_method: "app-store",
+    )
+    upload_to_testflight(
+      api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+      beta_app_review_info: {
+          notes: "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y") # make customizable
+        },
+      distribute_external: true,
+      notify_external_testers: true,
+      groups: ["Development Team"], # make customizable
+      changelog: "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y") # make customizable
+    )
+    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+    message = "New On Demand QA build successfully uploaded to TestFlight"
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand QA", message, "iOS")
+  end
+
   desc "Push new demo version to TestFlight"
   lane :demo do
     puts('Begin Demo lane')

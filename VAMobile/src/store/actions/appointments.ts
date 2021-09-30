@@ -11,7 +11,7 @@ import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { getItemsInRange } from 'utils/common'
+import { getItemsInRange, isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
@@ -106,19 +106,102 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 
       // use loaded data if we have it
       const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
-      if (loadedPastAppointments) {
-        pastAppointments = loadedPastAppointments
-      } else {
-        pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
-          startDate: past.startDate,
-          endDate: past.endDate,
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          'page[number]': '1', // prefetch assume always first page
-          sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
-        } as Params)
-      }
+      //All mock data should be removed after backend implementation
       // TODO: delete in story #19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+        pastAppointments = {
+          data: [
+            {
+              type: 'appointment',
+              id: '4',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA,
+                status: AppointmentStatusConstants.BOOKED,
+                phoneOnly: false,
+                statusDetail: null,
+                covidVaccination: true,
+                startDateLocal: '2021-09-06T19:53:14.000+00:00',
+                startDateUtc: '2021-09-06T19:53:14.000+00:00',
+                minutesDuration: 60,
+                comment: 'Please arrive 20 minutes before the start of your appointment',
+                timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
+                healthcareService: 'Blind Rehabilitation Center',
+                reason: null,
+                location: {
+                  name: 'VA Long Beach Healthcare System',
+                  address: {
+                    street: '5901 East 7th Street',
+                    city: 'Long Beach',
+                    state: 'CA',
+                    zipCode: '90822',
+                  },
+                  phone: {
+                    number: '456-7890',
+                    extension: '',
+                    areaCode: '123',
+                  },
+                  url: '',
+                  code: '',
+                },
+                practitioner: {
+                  prefix: 'Dr.',
+                  firstName: 'Larry',
+                  middleName: '',
+                  lastName: 'TestDoctor',
+                },
+              },
+            },
+            {
+              id: '2',
+              type: 'appointment',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA,
+                healthcareService: 'CHY PC VAR2',
+                location: {
+                  name: 'Cheyenne VA Medical Center',
+                  address: {
+                    street: '2360 East Pershing Boulevard',
+                    city: 'Cheyenne',
+                    state: 'WY',
+                    zipCode: '82001-5356',
+                  },
+                  phone: {
+                    areaCode: '307',
+                    number: '778-7550',
+                    extension: '',
+                  },
+                  url: '',
+                  code: '',
+                },
+                minutesDuration: 60,
+                phoneOnly: true,
+                covidVaccination: false,
+                startDateLocal: '2021-09-17T13:10:00.000-06:00',
+                startDateUtc: '2021-09-17T19:10:00.000+00:00',
+                status: AppointmentStatusConstants.BOOKED,
+                statusDetail: null,
+                timeZone: 'America/Denver' as AppointmentTimeZone,
+                comment: '',
+                reason: null,
+              },
+            },
+          ],
+        }
+      } else {
+        if (loadedPastAppointments) {
+          pastAppointments = loadedPastAppointments
+        } else {
+          pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+            startDate: past.startDate,
+            endDate: past.endDate,
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1', // prefetch assume always first page
+            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
+          } as Params)
+        }
+      }
+
       if (signInEmail === 'vets.gov.user+1414@gmail.com') {
         upcomingAppointments = {
           data: [
@@ -254,8 +337,10 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       }
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
-      dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
-      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
+        dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
+      }
     }
   }
 }
@@ -291,8 +376,10 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
       } as Params)
       dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, appointmentsList))
     } catch (error) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -352,8 +439,10 @@ export const cancelAppointment = (cancelID?: string, appointmentID?: string, scr
       await registerReviewEvent()
       dispatch(dispatchFinishCancelAppointment(appointmentID))
     } catch (error) {
-      dispatch(dispatchFinishCancelAppointment(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishCancelAppointment(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }

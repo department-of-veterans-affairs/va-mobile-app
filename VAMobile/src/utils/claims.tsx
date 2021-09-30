@@ -1,5 +1,5 @@
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
 import { bytesToMegabytes } from './common'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
@@ -131,7 +131,8 @@ export const postCameraLaunchCallback = (
   t: TFunction,
   displayBytesUsed: boolean,
 ): void => {
-  const { fileSize, errorMessage, uri, didCancel } = response
+  const { assets, errorMessage, didCancel } = response
+  const { fileSize, type, uri } = assets ? assets[0] : ({} as Asset)
 
   if (didCancel) {
     return
@@ -140,7 +141,7 @@ export const postCameraLaunchCallback = (
   if (!!fileSize && fileSize + totalBytesUsed > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
     const fileSizeError = displayBytesUsed ? t('fileUpload.fileSizeErrorWithMBUsed', { mbUsed: bytesToMegabytes(totalBytesUsed) }) : t('fileUpload.fileSizeError')
     setError(fileSizeError)
-  } else if (!!response.type && !isValidFileType(response.type)) {
+  } else if (!!type && !isValidFileType(type)) {
     setError(t('fileUpload.fileTypeError'))
   } else if (errorMessage) {
     setError(errorMessage)

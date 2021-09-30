@@ -16,6 +16,7 @@ import {
 } from 'utils/personalInformation'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -87,9 +88,11 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
-      dispatch(dispatchFinishGetProfileInfo(undefined, error))
-      dispatch(dispatchUpdateAuthorizedServices(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetProfileInfo(undefined, error))
+        dispatch(dispatchUpdateAuthorizedServices(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -180,9 +183,11 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       await registerReviewEvent()
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
-      console.error(err)
-      dispatch(dispatchFinishSavePhoneNumber(err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        console.error(err)
+        dispatch(dispatchFinishSavePhoneNumber(err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
@@ -232,9 +237,11 @@ export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
-      console.error(err)
-      dispatch(dispatchFinishSavePhoneNumber(err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        console.error(err)
+        dispatch(dispatchFinishSavePhoneNumber(err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
@@ -300,8 +307,10 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
       await registerReviewEvent()
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
-      dispatch(dispatchFinishSaveEmail(err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishSaveEmail(err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
@@ -328,8 +337,10 @@ export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDT
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
-      dispatch(dispatchFinishSaveEmail(err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishSaveEmail(err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
@@ -404,8 +415,10 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       await registerReviewEvent()
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
-      dispatch(dispatchFinishSaveAddress(err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishSaveAddress(err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
@@ -428,8 +441,10 @@ export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
-      dispatch(dispatchFinishSaveAddress(err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishSaveAddress(err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
@@ -488,8 +503,10 @@ export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTyp
         }
       }
     } catch (err) {
-      dispatch(dispatchFinishValidateAddress())
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishValidateAddress())
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }

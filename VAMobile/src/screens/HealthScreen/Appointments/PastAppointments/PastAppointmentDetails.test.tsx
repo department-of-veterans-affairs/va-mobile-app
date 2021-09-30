@@ -36,6 +36,7 @@ context('PastAppointmentDetails', () => {
     appointmentType: AppointmentType = AppointmentTypeConstants.VA,
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     statusDetail: AppointmentStatusDetailType | null = null,
+    covidVaccination?: boolean,
   ): void => {
     store = mockStore({
       ...InitialState,
@@ -48,6 +49,7 @@ context('PastAppointmentDetails', () => {
             status,
             statusDetail,
             appointmentType,
+            covidVaccination,
           },
         },
       },
@@ -133,6 +135,20 @@ context('PastAppointmentDetails', () => {
   describe('when navigating to past appointment details page', () => {
     it('should show loading component', async () => {
       expect(testInstance.findByType(TextView).props.children).toEqual("We're loading your appointment details")
+    })
+  })
+
+  describe('when the appointment type is covid vaccine', () => {
+    beforeEach(() => {
+      initializeTestInstance(undefined, undefined, undefined, true)
+      runAfterTransition(() => {
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('COVID-19 vaccine')
+      })
+    })
+    it('should display the name of the facility location', async () => {
+      runAfterTransition(() => {
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('COVID-19 vaccine')
+      })
     })
   })
 })

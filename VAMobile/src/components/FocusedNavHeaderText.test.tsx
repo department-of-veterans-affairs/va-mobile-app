@@ -19,7 +19,7 @@ context('FocusedNavHeaderText', () => {
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <FocusedNavHeaderText headerTitleType={{}}  />
+          <FocusedNavHeaderText headerTitle={''} />
         </TestProviders>,
       )
     })
