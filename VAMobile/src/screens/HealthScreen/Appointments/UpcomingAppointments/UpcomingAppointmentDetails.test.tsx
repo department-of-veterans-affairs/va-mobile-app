@@ -37,6 +37,7 @@ context('UpcomingAppointmentDetails', () => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()
     })
+    jest.runAllTimers()
   }
 
   let apptPhoneData = {
@@ -48,7 +49,8 @@ context('UpcomingAppointmentDetails', () => {
   const initializeTestInstance = (
     appointmentType: AppointmentType = AppointmentTypeConstants.VA,
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
-    phoneData: AppointmentPhone = apptPhoneData,
+    phoneData: AppointmentPhone | null = apptPhoneData,
+    covidVaccination?: boolean,
     appointmentCancellationStatus?: AppointmentCancellationStatusTypes,
     statusDetail: AppointmentStatusDetailType | null = null,
   ): void => {
@@ -63,9 +65,10 @@ context('UpcomingAppointmentDetails', () => {
             appointmentType,
             status,
             statusDetail,
+            covidVaccination,
             location: {
               ...defaultAppointmentLocation,
-              phone: phoneData,
+              phone: phoneData === null ? undefined : phoneData,
             },
           },
         },
@@ -94,7 +97,7 @@ context('UpcomingAppointmentDetails', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
       runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at an ATLAS location')
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nATLAS location')
       })
     })
     it('should display the appointment code', async () => {
@@ -108,7 +111,7 @@ context('UpcomingAppointmentDetails', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at home')
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nhome')
       })
     })
     it('should display the how to join your virtual session text', async () => {
@@ -141,7 +144,7 @@ context('UpcomingAppointmentDetails', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
       runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at a VA location')
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nVA location')
       })
     })
 
@@ -162,7 +165,7 @@ context('UpcomingAppointmentDetails', () => {
     beforeEach(() => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
       runAfterTransition(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect using a VA device')
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nusing a VA device')
       })
     })
 
@@ -202,9 +205,23 @@ context('UpcomingAppointmentDetails', () => {
     })
   })
 
+  describe('when the appointment type is covid vaccine', () => {
+    beforeEach(() => {
+      initializeTestInstance(undefined, undefined, undefined, true)
+      runAfterTransition(() => {
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('COVID-19 vaccine')
+      })
+    })
+    it('should display the name of the facility location', async () => {
+      runAfterTransition(() => {
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('COVID-19 vaccine')
+      })
+    })
+  })
+
   describe('when there is no phone data', () => {
     it('should not display any click to call link', async () => {
-      initializeTestInstance(undefined, undefined, undefined) // force value of phone to null (undefined will use default arg value)
+      initializeTestInstance(undefined, undefined, null) // force value of phone to null (undefined will use default arg value)
       runAfterTransition(() => {
         const allClickForActionLinks = testInstance.findAllByType(ClickForActionLink)
 
@@ -234,7 +251,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment cancellation is successful', () => {
     beforeEach(() => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
       runAfterTransition(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })
@@ -243,7 +260,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment cancellation is unsuccessful', () => {
     beforeEach(() => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
       runAfterTransition(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })
@@ -252,28 +269,28 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment is canceled', () => {
     it('should show if you cancelled', async () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
       runAfterTransition(() => {
         expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
       })
     })
 
     it('should show if you cancelled (rebook)', async () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
       runAfterTransition(() => {
         expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
       })
     })
 
     it('should show if facility cancelled', async () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
       runAfterTransition(() => {
         expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
       })
     })
 
     it('should show if facility cancelled (rebook)', async () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       runAfterTransition(() => {
         expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
       })
