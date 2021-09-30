@@ -7,7 +7,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, findByTestID, renderWithProviders} from 'testUtils'
 import AccordionCollapsible from './AccordionCollapsible'
 import TextView from './TextView'
-import {VABorderColors} from "../styles/theme";
+import { VABorderColors } from 'styles/theme'
 
 context('AccordionCollapsible', () => {
   let component: any
