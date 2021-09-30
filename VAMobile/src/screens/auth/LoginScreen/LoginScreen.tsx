@@ -5,9 +5,11 @@ import React, { FC } from 'react'
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
 import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
+
 import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
@@ -96,6 +98,7 @@ const LoginScreen: FC = () => {
             </Box>
           </Pressable>
         </Box>
+        <AppVersionAndBuild textColor={'primaryContrast'} />
       </Box>
     </VAScrollView>
   )
