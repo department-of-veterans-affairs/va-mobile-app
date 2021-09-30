@@ -3,7 +3,6 @@ import React, { FC, useEffect } from 'react'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
-import { HeaderTitleType } from 'styles/common'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -36,7 +35,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   }, [navigation])
 

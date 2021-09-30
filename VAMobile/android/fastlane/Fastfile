@@ -35,6 +35,18 @@ platform :android do
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
   end
 
+  desc "Deploy a On Demand QA new version to the Google Play"
+  lane :on_demand_qa do |options|
+    update_version_and_build(options[:version ])
+    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
+    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "Release")
+    supply(track: "Development Team") # can customize here
+    message = "New On Demand QA build successfully uploaded to Google Play"
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
+  end
+
   # review lane uploads to beta track for promotion to the store on release date
   desc "Build new Production version for Google Play and stash in Pre-Prod Stash track"
   lane :review do |options|
