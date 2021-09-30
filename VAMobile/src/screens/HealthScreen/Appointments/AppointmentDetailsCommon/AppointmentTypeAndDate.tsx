@@ -14,9 +14,10 @@ type AppointmentTypeAndDateProps = {
   timeZone: AppointmentTimeZone
   isAppointmentCanceled: boolean
   whoCanceled?: string
+  covidVaccination?: boolean
 }
 
-const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startDateUtc, timeZone, isAppointmentCanceled, whoCanceled }) => {
+const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startDateUtc, timeZone, isAppointmentCanceled, whoCanceled, covidVaccination }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
@@ -25,11 +26,12 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
 
   const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
   const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
+  const covid19Text = t('upcomingAppointments.covidVaccine')
 
   return (
     <Box>
-      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(appointmentTypeLabel)}>
-        {t(AppointmentTypeToID[appointmentType])}
+      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(covidVaccination ? covid19Text : appointmentTypeLabel)}>
+        {t(covidVaccination ? covid19Text : AppointmentTypeToID[appointmentType])}
       </TextView>
       {isAppointmentCanceled ? (
         <>
