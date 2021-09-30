@@ -231,7 +231,7 @@ export function useExternalLink(): (url: string) => void {
   }
 }
 
-export type UseDestructiveAlertButtonsProps = {
+export type UseDestructiveAlertButtonProps = {
   /** text of button */
   text: string
   /** handler for onClick */
@@ -248,7 +248,7 @@ export type UseDestructiveAlertProps = {
   /** ios cancel index */
   cancelButtonIndex: number
   /** options to show in alert */
-  buttons: Array<UseDestructiveAlertButtonsProps>
+  buttons: Array<UseDestructiveAlertButtonProps>
 }
 /**
  * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
