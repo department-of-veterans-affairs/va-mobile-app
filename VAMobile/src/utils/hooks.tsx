@@ -1,4 +1,4 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, Linking, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
@@ -231,31 +231,46 @@ export function useExternalLink(): (url: string) => void {
   }
 }
 
+export type UseDestructiveAlertButtonProps = {
+  /** text of button */
+  text: string
+  /** handler for onClick */
+  onPress?: () => void
+}
+
+export type UseDestructiveAlertProps = {
+  /** title of alert */
+  title: string
+  /** message of alert */
+  message?: string // message for the alert
+  /** ios destructive index */
+  destructiveButtonIndex: number
+  /** ios cancel index */
+  cancelButtonIndex: number
+  /** options to show in alert */
+  buttons: Array<UseDestructiveAlertButtonProps>
+}
 /**
  * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
  */
-export function useDestructiveAlert(): (alertTitleKey: string, alertMsgKey: string, confirmButtonKey: string, onConfirm: () => void, t: TFunction) => void {
-  return (alertTitleKey: string, alertMsgKey: string, confirmButtonKey: string, onConfirm: () => void, t: TFunction) => {
+export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
+  return (props: UseDestructiveAlertProps) => {
     if (isIOS()) {
+      const { buttons, ...remainingProps } = props
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          title: t(alertTitleKey),
-          message: t(alertMsgKey),
-          options: [t('common:cancel'), t(confirmButtonKey)],
-          destructiveButtonIndex: 1,
-          cancelButtonIndex: 0,
+          ...remainingProps,
+          options: buttons.map((button) => button.text),
         },
         (buttonIndex) => {
-          if (buttonIndex === 1) {
-            onConfirm()
+          const onPress = buttons[buttonIndex]?.onPress
+          if (onPress) {
+            onPress()
           }
         },
       )
     } else {
-      Alert.alert(t(alertTitleKey), t(alertMsgKey), [
-        { text: t('common:cancel'), style: 'cancel' },
-        { text: t(confirmButtonKey), onPress: onConfirm },
-      ])
+      Alert.alert(props.title, props.message, props.buttons as AlertButton[])
     }
   }
 }
