@@ -152,6 +152,40 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 },
               },
             },
+            {
+              id: '2',
+              type: 'appointment',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA,
+                healthcareService: 'CHY PC VAR2',
+                location: {
+                  name: 'Cheyenne VA Medical Center',
+                  address: {
+                    street: '2360 East Pershing Boulevard',
+                    city: 'Cheyenne',
+                    state: 'WY',
+                    zipCode: '82001-5356',
+                  },
+                  phone: {
+                    areaCode: '307',
+                    number: '778-7550',
+                    extension: '',
+                  },
+                  url: '',
+                  code: '',
+                },
+                minutesDuration: 60,
+                phoneOnly: true,
+                covidVaccination: false,
+                startDateLocal: '2021-09-17T13:10:00.000-06:00',
+                startDateUtc: '2021-09-17T19:10:00.000+00:00',
+                status: AppointmentStatusConstants.BOOKED,
+                statusDetail: null,
+                timeZone: 'America/Denver' as AppointmentTimeZone,
+                comment: '',
+                reason: null,
+              },
+            },
           ],
         }
       } else {
