@@ -5,7 +5,7 @@ import React, { FC, Ref } from 'react'
 
 export type HeaderTitleProps = {
   focusRef?: Ref<View>
-  headerTitle: string
+  headerTitle?: string
   accessible?: boolean
   testID?: string
   accessabilityLabel?: string

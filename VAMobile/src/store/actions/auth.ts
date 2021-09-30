@@ -431,7 +431,6 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, r
       }),
     })
     const authCredentials = await processAuthResponse(response)
-    await logAnalyticsEvent(Events.vama_auth_completed())
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
   } catch (err) {
