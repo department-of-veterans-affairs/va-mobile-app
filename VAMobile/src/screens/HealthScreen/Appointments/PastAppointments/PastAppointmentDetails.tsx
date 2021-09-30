@@ -34,7 +34,8 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail, reason } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail, reason, covidVaccination } =
+    attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
@@ -69,12 +70,20 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
               appointmentType={appointmentType}
               isAppointmentCanceled={appointmentIsCanceled}
               whoCanceled={whoCanceled}
+              covidVaccination={covidVaccination}
             />
           </Box>
 
           <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
 
-          <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} location={location} phone={phone} />
+          <AppointmentAddressAndNumber
+            appointmentType={appointmentType}
+            healthcareService={healthcareService}
+            address={address}
+            location={location}
+            phone={phone}
+            covidVaccination={covidVaccination}
+          />
 
           {reason && <AppointmentReason reason={reason} />}
         </TextArea>
