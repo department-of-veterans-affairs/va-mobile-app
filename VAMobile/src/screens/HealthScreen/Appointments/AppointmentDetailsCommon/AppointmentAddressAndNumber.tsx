@@ -19,11 +19,12 @@ type AppointmentAddressAndNumberProps = {
   appointmentType: AppointmentType
   healthcareService: string
   location: AppointmentLocation
-  address: AppointmentAddress | undefined
-  phone: AppointmentPhone | undefined
+  address?: AppointmentAddress
+  phone?: AppointmentPhone
+  covidVaccination?: boolean
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone }) => {
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone, covidVaccination }) => {
   const t = useTranslation()
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
@@ -32,16 +33,23 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
     return <></>
   }
 
-  const VA_VALocation_AppointmentData = (): ReactElement => {
-    const isVAOrOnsite = appointmentType === AppointmentTypeConstants.VA || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
-    if (!isVAOrOnsite) {
-      return <></>
+  const getHealthServiceHeaderSection = (): ReactElement => {
+    let headerText: string | undefined
+
+    if (covidVaccination) {
+      headerText = t('health:upcomingAppointments.covidVaccine')
+    } else if (appointmentType === AppointmentTypeConstants.VA || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE) {
+      headerText = healthcareService
     }
 
     return (
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
-        {healthcareService}
-      </TextView>
+      <>
+        {headerText && (
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {headerText}
+          </TextView>
+        )}
+      </>
     )
   }
 
@@ -51,13 +59,12 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
   return (
     <Box>
-      <VA_VALocation_AppointmentData />
+      {getHealthServiceHeaderSection()}
       <Box {...testIdProps(testId)} accessible={true}>
         {!appointmentIsAtlas && <TextView variant="MobileBody">{location.name}</TextView>}
         {!!address && <TextView variant="MobileBody">{address.street}</TextView>}
         {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
       </Box>
-
       <Box>
         <ClickForActionLink
           displayedText={`${t('common:directions')}`}

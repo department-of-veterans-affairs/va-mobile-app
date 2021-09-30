@@ -305,7 +305,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, messageID, isReplyDraft))
+      dispatch(saveDraft(messageData, messageID, isReplyDraft, replyToID))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       navigation.navigate('SendConfirmation', {

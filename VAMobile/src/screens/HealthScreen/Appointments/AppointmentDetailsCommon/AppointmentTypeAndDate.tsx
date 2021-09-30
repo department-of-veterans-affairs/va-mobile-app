@@ -14,9 +14,10 @@ type AppointmentTypeAndDateProps = {
   timeZone: AppointmentTimeZone
   isAppointmentCanceled: boolean
   whoCanceled?: string
+  covidVaccination?: boolean
 }
 
-const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startDateUtc, timeZone, isAppointmentCanceled, whoCanceled }) => {
+const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startDateUtc, timeZone, isAppointmentCanceled, whoCanceled, covidVaccination }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
@@ -25,25 +26,28 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
 
   const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
   const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
+  const covid19Text = t('upcomingAppointments.covidVaccine')
 
   return (
     <Box>
-      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} {...testIdProps(appointmentTypeLabel)}>
-        {t(AppointmentTypeToID[appointmentType])}
+      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(covidVaccination ? covid19Text : appointmentTypeLabel)}>
+        {t(covidVaccination ? covid19Text : AppointmentTypeToID[appointmentType])}
       </TextView>
-      <Box {...testIdProps(`${date} ${time}`)} accessibilityRole="header" accessible={true}>
-        <TextView variant="BitterBoldHeading">{date}</TextView>
-        <TextView variant="BitterBoldHeading">{time}</TextView>
-      </Box>
+      {isAppointmentCanceled ? (
+        <>
+          <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+            {t('appointments.canceled.whoCanceled', { whoCanceled })}
+          </TextView>
 
-      {isAppointmentCanceled && (
-        <TextView
-          variant="MobileBodyBold"
-          color="error"
-          mt={theme.dimensions.standardMarginBetween}
-          mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-          {t('appointments.canceled.whoCanceled', { whoCanceled })}
-        </TextView>
+          <TextView variant={'MobileBody'} mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
+            {t('appointments.canceled.message', { dateTime: `${date} ${time}` })}
+          </TextView>
+        </>
+      ) : (
+        <Box {...testIdProps(`${date} ${time}`)} accessibilityRole={'header'} accessible={true}>
+          <TextView variant={'BitterBoldHeading'}>{date}</TextView>
+          <TextView variant={'BitterBoldHeading'}>{time}</TextView>
+        </Box>
       )}
     </Box>
   )

@@ -124,6 +124,8 @@ export type AppointmentAttributes = {
   startDateLocal: string
   startDateUtc: string
   phoneOnly: boolean
+  reason: string | null
+  covidVaccination?: boolean
 }
 
 export type AppointmentData = {
