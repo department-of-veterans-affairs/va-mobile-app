@@ -7,15 +7,11 @@ import { useTheme, useTranslation } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /** optional function called when the Try again button is pressed */
-  onTryAgain?: () => void
-  titleText?: string
-  titleA11yHint?: string
-  errorText?: string
-  errorA11y?: string
-  callPhone?: string
+  feature?: string
+  end?: string
 }
 
-const DowntimeError: FC<DowntimeErrorProps> = ({feature, start, end}) => {
+const DowntimeError: FC<DowntimeErrorProps> = ({ feature, end }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
