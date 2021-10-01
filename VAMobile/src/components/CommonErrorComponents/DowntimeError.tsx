@@ -26,8 +26,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ feature, end }) => {
     mb: theme.dimensions.contentMarginBottom,
   }
 
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
-
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>

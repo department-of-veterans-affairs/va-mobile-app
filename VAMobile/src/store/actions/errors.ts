@@ -1,7 +1,7 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
-import { DowntimeFeatureToScreenID, MaintenanceWindowsEntry, MaintenanceWindowsGetData, ScreenIDTypes } from '../api'
+import { DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes } from '../api'
 
 export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: ScreenIDTypes): ReduxAction => {
   return {
