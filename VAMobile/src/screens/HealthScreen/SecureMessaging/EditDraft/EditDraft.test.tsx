@@ -264,14 +264,6 @@ context('EditDraft', () => {
   })
 
   describe('on click of save (draft)', () => {
-    describe('when a required field is not filled', () => {
-      beforeEach(() => {
-        act(() => {
-          navHeaderSpy.save.props.onSave()
-        })
-      })
-    })
-
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
         navHeaderSpy.save.props.onSave()

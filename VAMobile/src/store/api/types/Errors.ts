@@ -100,3 +100,8 @@ export type MaintenanceWindowsEntry = {
   endTime: string
   description: string
 }
+
+export type ErrorObject = {
+  code?: string
+} & Error &
+  APIError

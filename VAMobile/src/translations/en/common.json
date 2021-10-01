@@ -83,5 +83,6 @@
   "note": "Note:",
   "MB": "MB",
   "KB": "KB",
-  "Bytes": "Bytes"
+  "Bytes": "Bytes",
+  "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})"
 }

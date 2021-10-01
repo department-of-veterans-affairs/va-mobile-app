@@ -7,7 +7,7 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
 import { TestProviders, context, findByTestID, findByTypeWithSubstring } from 'testUtils'
 import HomeScreen from './index'
-import {LargeNavButton, TextView} from 'components'
+import { LargeNavButton, TextView } from 'components'
 
 const mockExternalLinkSpy = jest.fn()
 
@@ -39,13 +39,11 @@ context('HomeScreen', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance()  
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
-    await act(async () => {
-      expect(component).toBeTruthy()
-    })
+    expect(component).toBeTruthy()
   })
 
   describe('when the covid 19 screening tool button is clicked', () => {

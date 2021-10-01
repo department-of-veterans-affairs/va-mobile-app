@@ -1,4 +1,3 @@
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
@@ -28,16 +27,19 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
   const onFileFolder = async (): Promise<void> => {
+    const {
+      pickSingle,
+      types: { images, plainText, pdf },
+    } = DocumentPicker
+
     try {
-      const document = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images, DocumentPicker.types.plainText, DocumentPicker.types.pdf],
+      const document = await pickSingle({
+        type: [images, plainText, pdf],
       })
 
       if (document.size > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
@@ -52,8 +54,9 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
       setError('')
       navigateTo('UploadFile', { request, fileUploaded: document })()
-    } catch (docError) {
-      if (DocumentPicker.isCancel(docError)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (docError: any) {
+      if (DocumentPicker.isCancel(docError as Error)) {
         return
       }
 

@@ -335,7 +335,7 @@ context('secureMessaging', () => {
     it('should call to update folder metadata', async () => {
       const store = realStore()
       await store.dispatch(saveDraft(messageData, 5678, true, 1234))
-     
+
       expect(api.get as jest.Mock).toBeCalledWith('/v0/messaging/health/folders', { useCache: `${false}` })
     })
   })
@@ -343,9 +343,13 @@ context('secureMessaging', () => {
   describe('sendMessage', () => {
     const messageData = { recipient_id: 123456, category: 'APPOINTMENTS', subject: 'Subject', body: 'Message text' } as SecureMessagingFormData
     const file1: ImagePickerResponse = {
-      uri: 'theFileUri',
-      fileName: 'Image file name',
-      type: 'image',
+      assets: [
+        {
+          uri: 'theFileUri',
+          fileName: 'Image file name',
+          type: 'image',
+        },
+      ],
     }
 
     const file2: DocumentPickerResponse = {
