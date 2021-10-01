@@ -98,7 +98,7 @@ export const showValidationScreen = (addressData: AddressData, suggestedAddresse
   if (
     suggestedAddresses.length === 1 &&
     (suggestedStateCode === addressDataStateCode || (!suggestedStateCode && !addressDataStateCode)) &&
-    metadata?.confidenceScore > 90 &&
+    metadata?.confidenceScore === 100 &&
     (metadata?.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED ||
       metadata?.addressType?.toLowerCase() === addressTypeFields.international.toLowerCase())
   ) {

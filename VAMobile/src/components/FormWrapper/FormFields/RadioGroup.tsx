@@ -1,13 +1,15 @@
 import { isEqual, map } from 'underscore'
 import React, { ReactElement } from 'react'
 
-import { Box, SelectorType, VASelector } from '../../index'
+import { Box, SelectorType, TextView, VASelector } from '../../index'
 import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
   labelKey: string
   labelArgs?: { [key: string]: string }
   value: T
+  addHeader?: boolean
+  headerText?: string
 }
 
 /**
@@ -33,17 +35,26 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
       const onVASelectorChange = (_selected: boolean): void => {
         onChange(option.value)
       }
-
+      const { addHeader, labelKey, labelArgs, headerText } = option
       return (
-        <Box mb={theme.dimensions.standardMarginBetween} key={index}>
-          <VASelector
-            selectorType={SelectorType.Radio}
-            selected={selected}
-            onSelectionChange={onVASelectorChange}
-            labelKey={option.labelKey}
-            labelArgs={option.labelArgs}
-            disabled={disabled}
-          />
+        <Box key={index}>
+          {addHeader && (
+            <Box>
+              <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
+                {headerText}
+              </TextView>
+            </Box>
+          )}
+          <Box mb={theme.dimensions.standardMarginBetween} key={index} mt={addHeader ? theme.dimensions.contentMarginTop : 0}>
+            <VASelector
+              selectorType={SelectorType.Radio}
+              selected={selected}
+              onSelectionChange={onVASelectorChange}
+              labelKey={labelKey}
+              labelArgs={labelArgs}
+              disabled={disabled}
+            />
+          </Box>
         </Box>
       )
     })
