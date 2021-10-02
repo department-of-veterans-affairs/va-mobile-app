@@ -10,7 +10,6 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ViewStyle } from 'react-native'
 import { finishValidateAddress, updateAddress } from 'store'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 /**
