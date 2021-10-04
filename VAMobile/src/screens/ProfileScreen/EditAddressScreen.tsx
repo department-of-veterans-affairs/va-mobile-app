@@ -8,6 +8,7 @@ import {
   AlertBox,
   BackButton,
   Box,
+  ButtonTypesConstants,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -15,6 +16,7 @@ import {
   LoadingComponent,
   PickerItem,
   SaveButton,
+  VAButton,
   VAScrollView,
   VATextInputTypes,
   ValidationFunctionItems,
@@ -29,11 +31,11 @@ import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
 import { deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/actions'
 import { profileAddressOptions } from './AddressSummary'
+import { stringToTitleCase } from '../../utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
 import HeaderTitle from 'components/HeaderTitle'
-import RemoveData from './RemoveData'
 
 const MAX_ADDRESS_LENGTH = 35
 const ZIP_CODE_LENGTH = 5
@@ -83,6 +85,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
+  const deleteAlert = useDestructiveAlert()
 
   const [deleting, setDeleting] = useState(false)
 
@@ -448,12 +451,37 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
   const noAddressData = !profile?.[addressType]
 
+  const lowerCaseTitle = displayTitle.toLowerCase()
+
+  const onDeletePressed = (): void => {
+    deleteAlert({
+      title: t('personalInformation.areYouSureYouWantToDelete', { alertText: lowerCaseTitle }),
+      message: t('personalInformation.deleteDataInfo', { alertText: lowerCaseTitle }),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('common:confirm'),
+          onPress: onDelete,
+        },
+      ],
+    })
+  }
+
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
+            <VAButton
+              onPress={onDeletePressed}
+              label={t('personalInformation.removeData', { pageName: stringToTitleCase(lowerCaseTitle) })}
+              buttonType={ButtonTypesConstants.buttonImportant}
+              a11yHint={t('personalInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
+            />
           </Box>
         )}
         {formContainsError && (
