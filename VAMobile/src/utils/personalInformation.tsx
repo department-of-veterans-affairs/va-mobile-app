@@ -78,7 +78,7 @@ export const getSuggestedAddresses = (addressValidationData?: AddressValidationD
  address validation modal will _not_ be shown to the user is if:
  - the validation API came back with a single address suggestion
  - AND that single suggestion is either CONFIRMED or an international address
- - AND that one suggestion has a confidence score above 90
+ - AND that one suggestion has a confidence score above 100
  - AND the state of the entered address matches the state of the suggestion
 
  This sounds like a high bar to pass, but in fact most of the time this
