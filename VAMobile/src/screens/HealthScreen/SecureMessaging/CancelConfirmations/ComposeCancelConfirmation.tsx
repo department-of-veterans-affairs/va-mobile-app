@@ -6,10 +6,15 @@ import { useDestructiveAlert, useRouteNavigation, useTranslation } from 'utils/h
 import { useDispatch } from 'react-redux'
 
 type ComposeCancelConfirmationProps = {
+  /** Contents of the message */
   messageData: SecureMessagingFormData
+  /** Whether or not the message is valid */
   isFormValid: boolean
+  /** FormHeaderType describes type of message the draft is */
   origin: FormHeaderType
+  /** id of the message the draft is replying to  */
   replyToID?: number
+  /** id of draft message */
   draftMessageID?: number
 }
 export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmationProps) => void {
