@@ -16,7 +16,6 @@ import { validateAddress, deleteAddress, finishValidateAddress } from 'store/act
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
-import RemoveData from './RemoveData'
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -48,6 +47,20 @@ jest.mock('../../store/actions', () => {
         type: '',
         payload: '',
       }
+    }),
+  }
+})
+
+const mockAlertSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
+  return {
+    ...original,
+    useDestructiveAlert: () => mockAlertSpy,
+    useTheme: jest.fn(()=> {
+      return {...theme}
     }),
   }
 })
@@ -865,7 +878,7 @@ context('EditAddressScreen', () => {
   })
 
   describe('delete address', () => {
-    it('should call the deleteAddress action', async () => {
+    it('should call the useDestructive hook', async () => {
       profileInfo.residentialAddress = {
         id: 25,
         addressLine1: '1707 Tiburon Blvd',
@@ -884,26 +897,10 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo, false, true)
 
       act(() => {
-        testInstance.findByType(RemoveData).props.confirmFn()
+        testInstance.findByType(VAButton).props.onPress()
       })
 
-      expect(deleteAddress).toBeCalledWith(
-        {
-          id: 25,
-          addressLine1: '1707 Tiburon Blvd',
-          addressLine2: 'Address line 2',
-          addressLine3: 'Address line 3',
-          addressPou: 'RESIDENCE/CHOICE',
-          addressType: 'DOMESTIC',
-          city: 'Tiburon',
-          countryCodeIso3: 'USA',
-          province: 'province',
-          stateCode: 'CA',
-          zipCode: '94920',
-          zipCodeSuffix: '1234',
-        },
-        ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
-      )
+      expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
 })
