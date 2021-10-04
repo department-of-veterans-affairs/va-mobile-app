@@ -52,6 +52,7 @@ platform :ios do
       changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
     )
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+    tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New QA build successfully uploaded to TestFlight"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
   end
@@ -110,6 +111,7 @@ platform :ios do
         },
       )
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+    tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New Production build successfully uploaded to App Store for review"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Production", message, "iOS")
   end
@@ -126,11 +128,6 @@ platform :ios do
 
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
-    # always reset the name in case it was changed
-    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA")
-    if lane == 'qa'
-      commit_version_bump('develop')
-    end
   end
 
   error do |lane, exception, options|
@@ -170,24 +167,15 @@ platform :ios do
     end
   end
 
-  def commit_version_bump(branch)
-    name = lane_context[SharedValues::VERSION_NUMBER]
-    build = lane_context[SharedValues::BUILD_NUMBER]
-    message = 'iOS version bump to ' + name + ' (' + build + ')'
-    puts message
-    desc "Committing iOS version changes to git"
+  desc "Tagging iOS build number"
+  def tag_build(build)
     begin
-      sh("git stash save CI-BUILD")
-      sh("git checkout " + branch)
-      git_pull
-      sh("git stash pop")
-      sh("git add -A")
-      sh("git commit -m '" + message + "'")
-      add_git_tag(tag: "ios-build-" + build)
-      push_to_git_remote
+      tag = "ios-build-" + build.to_s
+      puts "Tagging commit with " + tag
+      add_git_tag(tag: tag)
     rescue => e
-      slack_github_error(e, action)
+        puts e.to_s
+      slack_github_error(e, "Error tagging iOS build", "iOS")
     end
   end
-
 end
