@@ -91,7 +91,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.province, postCode: suggestedAddress.internationalPostalCode }
     }
 
-    return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.stateCode ?? '', postCode: suggestedAddress.zipCode }
+    return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.stateCode || '', postCode: suggestedAddress.zipCode }
   }
 
   const getAlertTitle = (): string => {
@@ -155,7 +155,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       value: addressEntered,
       labelKey: 'profile:editAddress.address',
       labelArgs: getSuggestedAddressLabelArgs(addressEntered),
-      addHeader: true,
       headerText: t('editAddress.validation.youEntered'),
     })
 

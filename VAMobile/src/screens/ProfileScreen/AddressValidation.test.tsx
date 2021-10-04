@@ -87,7 +87,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.BAD_UNIT_NUMBER_OVERRIDE)
 
       act(() => {
-        testInstance.findAllByType(AccordionCollapsible)[0].findByType(Pressable).props.onPress()
+        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -107,7 +107,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE)
 
       act(() => {
-        testInstance.findAllByType(AccordionCollapsible)[0].findByType(Pressable).props.onPress()
+        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -127,7 +127,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
 
       act(() => {
-        testInstance.findAllByType(AccordionCollapsible)[0].findByType(Pressable).props.onPress()
+        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -147,7 +147,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE)
 
       act(() => {
-        testInstance.findAllByType(AccordionCollapsible)[0].findByType(Pressable).props.onPress()
+        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -167,7 +167,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
 
       act(() => {
-        testInstance.findAllByType(AccordionCollapsible)[0].findByType(Pressable).props.onPress()
+        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
       })
 
       testInstance.findAllByType(VASelector)[0].findByType(TouchableWithoutFeedback).props.onPress()

@@ -5,10 +5,13 @@ import { Box, SelectorType, TextView, VASelector } from '../../index'
 import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
+  /** translated labelKey displayed next to the checkbox/radio */
   labelKey: string
+  /** optional arguments to pass in with the labelKey during translation */
   labelArgs?: { [key: string]: string }
+  /** value of the radio button */
   value: T
-  addHeader?: boolean
+  /** string for the header if one needed */
   headerText?: string
 }
 
@@ -35,17 +38,17 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
       const onVASelectorChange = (_selected: boolean): void => {
         onChange(option.value)
       }
-      const { addHeader, labelKey, labelArgs, headerText } = option
+      const { labelKey, labelArgs, headerText } = option
       return (
         <Box key={index}>
-          {addHeader && (
+          {headerText && (
             <Box>
               <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
                 {headerText}
               </TextView>
             </Box>
           )}
-          <Box mb={theme.dimensions.standardMarginBetween} key={index} mt={addHeader ? theme.dimensions.contentMarginTop : 0}>
+          <Box mb={theme.dimensions.standardMarginBetween} key={index} mt={headerText ? theme.dimensions.contentMarginTop : 0}>
             <VASelector
               selectorType={SelectorType.Radio}
               selected={selected}
