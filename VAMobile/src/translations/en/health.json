@@ -294,5 +294,9 @@
   "upcomingAppointments.vaAppointment.a11yLabel": "V-A appointment",
   "upcomingAppointments.phoneOnly": "Phone Call",
   "upcomingAppointments.phoneOnly.a11yLabel": "Phone Call",
-  "upcomingAppointmentDetails.reason": "You shared these details about your concern"
+  "upcomingAppointmentDetails.reason": "You shared these details about your concern",
+  "vaImmunizations.a11yHint": "Review your V\ufeffA immunization record",
+  "vaImmunizations.subText": "View all your V\ufeffA immunizations",
+  "vaImmunizations.title": "V\ufeffA Immunizations"
+  
 }
