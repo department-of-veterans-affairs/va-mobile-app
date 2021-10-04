@@ -160,7 +160,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
-  const onSave = (): void => {
+  const getAddressValues = (): AddressData => {
     const addressLocationType = getAddressLocationType()
 
     const addressId = profile?.[addressType]?.id || 0
@@ -193,8 +193,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       delete addressPost.stateCode
       addressPost.province = state
     }
+    return addressPost
+  }
 
-    dispatch(validateAddress(addressPost, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+  const onSave = (): void => {
+    dispatch(validateAddress(getAddressValues(), ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -216,7 +219,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     navigation.setOptions({
       headerTitle: () => <HeaderTitle {...testIdProps(displayTitle)} headerTitle={displayTitle} />,
       headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
+      headerRight: () => {
+        return !showValidation ? <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} /> : <></>
+      },
     })
   })
 
@@ -232,14 +237,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   if (showValidation) {
     const addressValidationProps = {
-      addressLine1: addressLine1.trim(),
-      addressLine2: addressLine2?.trim(),
-      addressLine3: addressLine3?.trim(),
-      city: checkboxSelected ? militaryPostOffice?.trim() : city?.trim(),
-      state,
-      zipCode: zipCode.trim(),
+      addressEntered: getAddressValues(),
       addressId: profile?.[addressType]?.id || 0,
-      country: country,
       onCancel,
     }
     return <AddressValidation {...addressValidationProps} />
