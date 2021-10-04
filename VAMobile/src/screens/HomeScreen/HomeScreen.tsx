@@ -28,6 +28,8 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.fullName || ''
+  const userEmail = profile?.signinEmail || ''
+  const healthCareBtnText = t(userEmail === t('common:mockUserEmail') ? 'healthCare.subText.new' : 'healthCare.subText.old')
 
   useEffect(() => {
     // Fetch the profile information
@@ -112,7 +114,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('healthCare.title')}
-            subText={t('healthCare.subText')}
+            subText={healthCareBtnText}
             a11yHint={t('healthCare.a11yHint')}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}

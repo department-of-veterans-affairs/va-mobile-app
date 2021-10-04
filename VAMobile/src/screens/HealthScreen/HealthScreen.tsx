@@ -5,8 +5,8 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, SecureMessagingState, StoreState } from 'store/reducers'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getInbox } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
@@ -23,6 +23,9 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const userEmail = profile?.signinEmail || ''
+  const mockUserEmail = t('common:mockUserEmail')
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
@@ -71,16 +74,18 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
 
-        <LargeNavButton
-          title={t('vaImmunizations.title')}
-          subText={t('vaImmunizations.subText')}
-          a11yHint={t('vaImmunizations.a11yHint')}
-          onPress={onVaImmunizations}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        {userEmail === mockUserEmail && (
+          <LargeNavButton
+            title={t('vaImmunizations.title')}
+            subText={t('vaImmunizations.subText')}
+            a11yHint={t('vaImmunizations.a11yHint')}
+            onPress={onVaImmunizations}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
+        )}
       </Box>
     </VAScrollView>
   )
