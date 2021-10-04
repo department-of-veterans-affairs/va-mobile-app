@@ -31,6 +31,7 @@ platform :android do
     gradle(task: "clean")
     gradle(task: "bundle", build_type: "Release")
     supply(track: "Development Team")
+    tag_build()
     message = "New QA build successfully uploaded to Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
   end
@@ -57,7 +58,7 @@ platform :android do
     gradle(task: "clean")
     gradle(task: "bundle", build_type: "Release")
     supply(track: "Pre-Prod Stash")
-    add_git_tag(tag: "android-build-" + ENV['BUILD_NUM'])
+    tag_build()
     message = "New Production build successfully uploaded to Beta Track on Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
@@ -76,11 +77,6 @@ platform :android do
 
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
-    # always reset the name to VA
-    sh("git checkout ../appName.properties")
-    if lane == 'qa'
-      commit_version_bump('develop')
-    end
   end
 
   error do |lane, exception, options|
@@ -134,25 +130,14 @@ platform :android do
       highest
   end
 
-  def commit_version_bump(branch)
-    name = ENV['VERSION_NAME']
-    build = ENV['BUILD_NUM']
-    message = 'Android version bump to ' + name + ' (' + build + ')'
-    puts message
-    desc "Committing Android version changes to git"
+  desc "Tagging Android build number"
+  def tag_build()
     begin
-      if options[:version] == 'qa'
-        sh("git stash save CI-BUILD")
-        sh("git checkout " + branch)
-        git_pull
-        sh("git stash pop")
-        sh("git add -A")
-        sh("git commit -m '" + message + "'")
-        add_git_tag(tag: "android-build-" + build)
-        push_to_git_remote
-      end
+      tag = "android-build-" + ENV['BUILD_NUM'].to_s
+      puts "Tagging commit with " + tag
+      add_git_tag(tag: tag)
     rescue => e
-      slack_github_error(e, action)
+      slack_github_error(e, "Error tagging Android build", "Android")
     end
   end
 
