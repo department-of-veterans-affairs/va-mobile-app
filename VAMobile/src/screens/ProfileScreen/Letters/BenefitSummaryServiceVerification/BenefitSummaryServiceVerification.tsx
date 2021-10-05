@@ -260,7 +260,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           <VAButton
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}
-            testID="view-letter"
+            testID={t('letters.benefitService.viewLetter')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('letters.benefitService.viewLetterA11yHint')}
           />
