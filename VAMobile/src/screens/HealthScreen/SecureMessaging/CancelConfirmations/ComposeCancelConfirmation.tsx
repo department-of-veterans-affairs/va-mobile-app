@@ -62,7 +62,7 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       }
     }
 
-    const onCancel = (): void => {
+    const onDiscard = (): void => {
       resetAlerts()
       if (isReply && replyToID) {
         navigateTo('ViewMessageScreen', { messageID: replyToID })()
@@ -77,10 +77,14 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       title: t('secureMessaging.composeMessage.cancel.saveDraftQuestion'),
       message: t('secureMessaging.composeMessage.cancel.saveDraftDescription'),
       cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
       buttons: [
         {
+          text: t('common:cancel'),
+        },
+        {
           text: t('secureMessaging.composeMessage.cancel.discard'),
-          onPress: onCancel,
+          onPress: onDiscard,
         },
         {
           text: t('secureMessaging.composeMessage.cancel.saveDraft'),
