@@ -24,8 +24,8 @@ jest.mock('utils/hooks', () => {
     useDestructiveAlert: () => {
       // grab a reference to the parameters passed in to test cancel and discard functionality
       return (props: UseDestructiveAlertProps) => {
-        discardButtonSpy = props.buttons[0].onPress
-        saveDraftButtonSpy = props.buttons[1].onPress
+        discardButtonSpy = props.buttons[1].onPress
+        saveDraftButtonSpy = props.buttons[2].onPress
       }
     },
     useRouteNavigation: () => mockNavigationSpy,
