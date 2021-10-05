@@ -97,6 +97,19 @@ export default createReducer<ErrorsState>(initialErrorsState, {
       errorMetadataByScreenID,
     }
   },
+  ERRORS_CLEAR_ALL_METADATA: (state) => {
+    let errorMetadataByScreenID = state.errorMetadataByScreenID
+    for (const screenID in ScreenIDTypesConstants) {
+      errorMetadataByScreenID = {
+        ...state.errorMetadataByScreenID,
+        [screenID as ScreenIDTypes]: undefined,
+      }
+    }
+    return {
+      ...state,
+      errorMetadataByScreenID,
+    }
+  },
   ERRORS_SET_TRY_AGAIN_FUNCTION: (state, { tryAgain }) => {
     return {
       ...state,
