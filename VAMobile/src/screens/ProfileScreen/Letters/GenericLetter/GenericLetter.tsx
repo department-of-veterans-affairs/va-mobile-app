@@ -57,7 +57,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
           <VAButton
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}
-            testID="view-letter"
+            testID={t('letters.benefitService.viewLetter')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('letters.serviceVerificationLetter.viewLetterA11yHint')}
           />
