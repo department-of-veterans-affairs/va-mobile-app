@@ -104,7 +104,6 @@ context('ClaimsScreen', () => {
       const errorState: ErrorsState = {
         ...initialErrorsState,
         errorsByScreenID,
-        feature/1070-downtime-message
       }
 
       initializeTestInstance(true, false, false, errorState)
@@ -118,7 +117,6 @@ context('ClaimsScreen', () => {
       const errorState: ErrorsState = {
         ...initialErrorsState,
         errorsByScreenID,
-        feature/1070-downtime-message
       }
 
       initializeTestInstance(true, false, false, errorState)
