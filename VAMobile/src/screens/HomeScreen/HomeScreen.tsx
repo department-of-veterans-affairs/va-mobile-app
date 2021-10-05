@@ -87,7 +87,9 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
-          <TextView variant="MobileBodyBold">{heading}</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole={'header'}>
+            {heading}
+          </TextView>
         </Box>
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
