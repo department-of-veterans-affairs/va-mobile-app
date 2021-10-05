@@ -11,7 +11,7 @@ import { getInbox } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation, useShowVaccineRecords, useTheme, useTranslation } from 'utils/hooks'
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -23,9 +23,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const userEmail = profile?.signinEmail || ''
-  const mockUserEmail = t('common:mockUserEmail')
+  const showVaccinationFeature = useShowVaccineRecords()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
@@ -74,7 +72,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
 
-        {userEmail === mockUserEmail && (
+        {showVaccinationFeature && (
           <LargeNavButton
             title={t('vaImmunizations.title')}
             subText={t('vaImmunizations.subText')}

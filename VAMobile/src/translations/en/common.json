@@ -80,6 +80,5 @@
   "MB": "MB",
   "KB": "KB",
   "Bytes": "Bytes",
-  "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})",
-  "mockUserEmail": "vets.gov.user+1414@gmail.com"
+  "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})"
 }

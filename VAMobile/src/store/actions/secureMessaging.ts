@@ -32,6 +32,7 @@ import { isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
+import { MockUsersEmail } from 'constants/common'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
   return {
@@ -62,7 +63,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
     try {
       // TODO story #25035, remove once ready
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         throw {
           json: {
             errors: [

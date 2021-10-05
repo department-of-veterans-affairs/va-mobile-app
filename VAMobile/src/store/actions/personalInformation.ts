@@ -22,6 +22,7 @@ import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import getEnv from 'utils/env'
+import { MockUsersEmail } from 'constants/common'
 
 const { ENVIRONMENT } = getEnv()
 
@@ -77,9 +78,9 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
       // TODO: delete in story #19175
       const userEmail = user?.data.attributes.profile.signinEmail
-      if (userEmail === 'vets.gov.user+1401@gmail.com') {
+      if (userEmail === MockUsersEmail.user_1401) {
         throw { status: 408 }
-      } else if (userEmail === 'vets.gov.user+1414@gmail.com') {
+      } else if (userEmail === MockUsersEmail.user_1414) {
         // TODO mock user to have SM for story #25035
         user?.data.attributes.authorizedServices.push(VAServicesConstants.SecureMessaging)
       }

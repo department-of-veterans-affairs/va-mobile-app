@@ -12,7 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo } from 'store/actions'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useExternalLink, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useHeaderStyles, useRouteNavigation, useShowVaccineRecords, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
 
@@ -28,8 +28,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.fullName || ''
-  const userEmail = profile?.signinEmail || ''
-  const healthCareBtnText = t(userEmail === t('common:mockUserEmail') ? 'healthCare.subText.new' : 'healthCare.subText.old')
+  const showVaccinationFeature = useShowVaccineRecords()
 
   useEffect(() => {
     // Fetch the profile information
@@ -114,7 +113,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('healthCare.title')}
-            subText={healthCareBtnText}
+            subText={t(showVaccinationFeature ? 'healthCare.subText.new' : 'healthCare.subText.old')}
             a11yHint={t('healthCare.a11yHint')}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}

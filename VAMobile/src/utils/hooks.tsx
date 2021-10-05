@@ -9,14 +9,14 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, ErrorsState, StoreState } from 'store'
+import { AccessibilityState, ErrorsState, PersonalInformationState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
-import { WebProtocolTypesConstants } from 'constants/common'
+import { MockUsersEmail, WebProtocolTypesConstants } from 'constants/common'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
@@ -255,4 +255,10 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
       Alert.alert(props.title, props.message, props.buttons as AlertButton[])
     }
   }
+}
+
+export const useShowVaccineRecords = () => {
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const userEmail = profile?.signinEmail || ''
+  return userEmail === MockUsersEmail.user_1414
 }
