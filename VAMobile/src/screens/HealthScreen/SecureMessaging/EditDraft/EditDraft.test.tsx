@@ -48,6 +48,17 @@ jest.mock('store/actions', () => {
   }
 })
 
+
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy
+  }
+})
+
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
 
@@ -259,7 +270,7 @@ context('EditDraft', () => {
       })
       navHeaderSpy.back.props.onPress()
       expect(goBack).not.toHaveBeenCalled()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
   })
 
