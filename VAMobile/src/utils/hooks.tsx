@@ -12,11 +12,11 @@ import { useNavigation } from '@react-navigation/native'
 import { AccessibilityState, ErrorsState, PersonalInformationState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { MockUsersEmail, WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
-import { MockUsersEmail, WebProtocolTypesConstants } from 'constants/common'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
@@ -257,7 +257,7 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
   }
 }
 
-export const useShowVaccineRecords = () => {
+export const useShowVaccineRecords = (): boolean => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const userEmail = profile?.signinEmail || ''
   return userEmail === MockUsersEmail.user_1414

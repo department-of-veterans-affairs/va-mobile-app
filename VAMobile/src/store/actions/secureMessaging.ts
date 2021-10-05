@@ -6,6 +6,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants, SecureMessagingFormData } from 'store/api/types'
 
+import { MockUsersEmail } from 'constants/common'
 import {
   Params,
   ScreenIDTypes,
@@ -32,7 +33,6 @@ import { isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
-import { MockUsersEmail } from 'constants/common'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
   return {

@@ -2,6 +2,8 @@ import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { Events, UserAnalytics } from 'constants/analytics'
+
+import { MockUsersEmail } from 'constants/common'
 import { SuggestedAddress, VAServices } from 'store/api'
 import { VAServicesConstants } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -22,7 +24,6 @@ import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import getEnv from 'utils/env'
-import { MockUsersEmail } from 'constants/common'
 
 const { ENVIRONMENT } = getEnv()
 
