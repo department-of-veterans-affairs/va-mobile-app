@@ -1,8 +1,8 @@
 import * as api from '../api'
-import { DateTime } from 'luxon'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
-import { DowntimeFeatureToScreenID, DowntimeFeatureNameConstants, MaintenanceWindowsGetData, ScreenIDTypes } from '../api'
+import { DateTime } from 'luxon'
+import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes } from '../api'
 
 export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: ScreenIDTypes): ReduxAction => {
   return {
