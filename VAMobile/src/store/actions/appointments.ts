@@ -12,7 +12,6 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
@@ -128,7 +127,6 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
                 status: AppointmentStatusConstants.BOOKED,
-                statusDetail: null,
                 startDateLocal: '2021-02-06T19:53:14.000+00:00',
                 startDateUtc: '2021-02-06T19:53:14.000+00:00',
                 minutesDuration: 60,
@@ -242,7 +240,6 @@ export const getAppointment = (appointmentID: string): AsyncReduxAction => {
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
     const [totalTime] = getAnalyticsTimers(_getState())
     await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
-    await registerReviewEvent()
     await dispatch(resetAnalyticsActionStart())
     await dispatch(setAnalyticsTotalTimeStart())
     dispatch(dispatchGetAppointment(appointmentID))
@@ -277,7 +274,6 @@ export const cancelAppointment = (cancelID?: string, appointmentID?: string, scr
 
     try {
       await api.put('/v0/appointments/cancel/' + cancelID)
-      await registerReviewEvent()
       dispatch(dispatchFinishCancelAppointment(appointmentID))
     } catch (error) {
       dispatch(dispatchFinishCancelAppointment(undefined, error))
