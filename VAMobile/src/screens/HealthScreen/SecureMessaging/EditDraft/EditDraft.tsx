@@ -44,6 +44,7 @@ import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessage, getMessageRecipients, getThread, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
+import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -79,6 +80,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+
+  const editCancelConfirmation = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
@@ -126,7 +129,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const goToCancel = (): void => {
     const isFormValid = isReplyDraft ? !!message : !!(to && category && message && (category !== CategoryTypeFields.other || subject))
 
-    navigation.navigate('ComposeCancelConfirmation', {
+    editCancelConfirmation({
       draftMessageID: messageID,
       isFormValid,
       messageData: getMessageData(),
