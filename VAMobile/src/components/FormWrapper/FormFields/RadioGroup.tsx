@@ -1,13 +1,18 @@
 import { isEqual, map } from 'underscore'
 import React, { ReactElement } from 'react'
 
-import { Box, SelectorType, VASelector } from '../../index'
+import { Box, SelectorType, TextView, VASelector } from '../../index'
 import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
+  /** translated labelKey displayed next to the checkbox/radio */
   labelKey: string
+  /** optional arguments to pass in with the labelKey during translation */
   labelArgs?: { [key: string]: string }
+  /** value of the radio button */
   value: T
+  /** string for the header if one needed */
+  headerText?: string
 }
 
 /**
@@ -33,17 +38,26 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
       const onVASelectorChange = (_selected: boolean): void => {
         onChange(option.value)
       }
-
+      const { labelKey, labelArgs, headerText } = option
       return (
-        <Box mb={theme.dimensions.standardMarginBetween} key={index}>
-          <VASelector
-            selectorType={SelectorType.Radio}
-            selected={selected}
-            onSelectionChange={onVASelectorChange}
-            labelKey={option.labelKey}
-            labelArgs={option.labelArgs}
-            disabled={disabled}
-          />
+        <Box key={index}>
+          {headerText && (
+            <Box>
+              <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
+                {headerText}
+              </TextView>
+            </Box>
+          )}
+          <Box mb={theme.dimensions.standardMarginBetween} key={index} mt={headerText ? theme.dimensions.contentMarginTop : 0}>
+            <VASelector
+              selectorType={SelectorType.Radio}
+              selected={selected}
+              onSelectionChange={onVASelectorChange}
+              labelKey={labelKey}
+              labelArgs={labelArgs}
+              disabled={disabled}
+            />
+          </Box>
         </Box>
       )
     })

@@ -128,9 +128,7 @@
   "secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel": "We're sorry. To send a Secure Message, both you and your V-A primary care provider must be enrolled in the Secure Messaging program. Please contact your primary care provider to see if they are enrolled and can enroll you in the program.",
   "secureMessaging.composeMessage.compose": "Compose",
   "secureMessaging.composeMessage.cancel.discard": "Discard",
-  "secureMessaging.composeMessage.cancel.discardA11y": "Cancels your message",
   "secureMessaging.composeMessage.cancel.saveDraft": "Save Draft",
-  "secureMessaging.composeMessage.cancel.saveDraftA11y": "Saves message to your Drafts folder",
   "secureMessaging.composeMessage.cancel.saveDraftDescription": "You may save the draft you started and find it in the \"Drafts\" folder in the \"Folders\" tab.",
   "secureMessaging.composeMessage.cancel.saveDraftQuestion": "Save Draft?",
   "secureMessaging.composeMessage.covid": "COVID",
@@ -255,7 +253,7 @@
   "upcomingAppointmentDetails.cancellationConfirmation.yesCancelThisAppointment.a11yHint": "Cancel this appointment",
   "upcomingAppointmentDetails.cancelCommunityCareAppointment.body": "Call your community care provider. You can't cancel community care appointments online.",
   "upcomingAppointmentDetails.cancelCovidVaccineAppointment.title": "To cancel this appointment, call your V\ufeffA  medical center",
-  "upcomingAppointmentDetails.cancelCovidVaccineAppointment.body": "COVID-19 appointments can't be canceled online. Please call the V\ufeffA facility to cancel your appointment",
+  "upcomingAppointmentDetails.cancelCovidVaccineAppointment.body": "COVID-19 appointments can't be canceled online. Please call the V\ufeffA facility to cancel your appointment.",
   "upcomingAppointmentDetails.cancelUncancellableAppointment.body": "Call your VA health facility. You can't cancel {{appointmentType}} appointments online.",
   "upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel": "Call your V-A health facility. You can't cancel {{appointmentType}} appointments online.",
   "upcomingAppointmentDetails.cancelVAAppointment.title": "Cancel this appointment",
@@ -296,5 +294,9 @@
   "upcomingAppointments.vaAppointment.a11yLabel": "V-A appointment",
   "upcomingAppointments.phoneOnly": "Phone Call",
   "upcomingAppointments.phoneOnly.a11yLabel": "Phone Call",
-  "upcomingAppointmentDetails.reason": "You shared these details about your concern"
+  "upcomingAppointmentDetails.reason": "You shared these details about your concern",
+  "vaImmunizations.a11yHint": "Review your V\ufeffA immunization record",
+  "vaImmunizations.subText": "View all your V\ufeffA immunizations",
+  "vaImmunizations.title": "V\ufeffA Immunizations"
+  
 }
