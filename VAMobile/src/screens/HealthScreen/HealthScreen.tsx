@@ -11,7 +11,7 @@ import { getInbox } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHeaderStyles, useRouteNavigation, useShowVaccineRecords, useTheme, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -23,7 +23,6 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
-  const showVaccinationFeature = useShowVaccineRecords()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
@@ -72,18 +71,16 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
 
-        {showVaccinationFeature && (
-          <LargeNavButton
-            title={t('vaImmunizations.title')}
-            subText={t('vaImmunizations.subText')}
-            a11yHint={t('vaImmunizations.a11yHint')}
-            onPress={onVaImmunizations}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-        )}
+        <LargeNavButton
+          title={t('vaImmunizations.title')}
+          subText={t('vaImmunizations.subText')}
+          a11yHint={t('vaImmunizations.a11yHint')}
+          onPress={onVaImmunizations}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+        />
       </Box>
     </VAScrollView>
   )

@@ -256,9 +256,3 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
     }
   }
 }
-
-export const useShowVaccineRecords = (): boolean => {
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const userEmail = profile?.signinEmail || ''
-  return userEmail === MockUsersEmail.user_1414
-}
