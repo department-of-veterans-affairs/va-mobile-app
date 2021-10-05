@@ -31,7 +31,7 @@
   "notEnrolledSM.bothYouAndYour": "Both you and your VA provider must be enrolled in the Secure Messaging program",
   "notEnrolledSM.bothYouAndYour.a11yLabel": "Both you and your V-A provider must be enrolled in the Secure Messaging program",
   "notEnrolledSM.learnHowTo": "Learn how to upgrade to a My HealtheVet Premium account",
-  "notEnrolledSM.learnHowTo.a11yLabel": "Learn how to upgrade.",
+  "notEnrolledSM.learnHowTo.a11yLabel": "Learn how to upgrade to a My HealtheVet Premium account.",
   "notEnrolledSM.learnHowTo.a11yHint": "Learn how to upgrade. This page will open in your device's browser",
   "notEnrolledSM.note": "Note:",
   "notEnrolledSM.toUpgrade": "To upgrade to a Premium level account, you must meet these requirements:",
