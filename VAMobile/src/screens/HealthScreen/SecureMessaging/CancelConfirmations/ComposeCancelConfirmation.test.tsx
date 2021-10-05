@@ -4,25 +4,30 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, renderWithProviders, findByTypeWithName } from 'testUtils'
-import ComposeCancelConfirmation from './ComposeCancelConfirmation'
-import { TouchableWithoutFeedback } from 'react-native'
+import { context, mockNavProps, renderWithProviders } from 'testUtils'
+import { useComposeCancelConfirmation} from './ComposeCancelConfirmation'
 import { SecureMessagingFormData } from 'store/api'
-import { VAButton } from 'components'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { UseDestructiveAlertProps } from 'utils/hooks'
 
 let mockNavigationSpy = jest.fn(() => {
   return jest.fn()
 })
 
+let discardButtonSpy: any
+let saveDraftButtonSpy : any
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
+    useDestructiveAlert: () => {
+      // grab a reference to the parameters passed in to test cancel and discard functionality
+      return (props: UseDestructiveAlertProps) => {
+        discardButtonSpy = props.buttons[0].onPress
+        saveDraftButtonSpy = props.buttons[1].onPress
+      }
+    },
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
@@ -64,11 +69,9 @@ jest.mock('store/actions', () => {
   }
 })
 
-context('ComposeCancelConfirmation', () => {
+context('useComposeCancelConfirmation', () => {
   let component: any
   let testInstance: ReactTestInstance
-  let props: any
-  let goBack: jest.Mock
 
   const initializeTestInstance = (
     messageData: SecureMessagingFormData = {} as SecureMessagingFormData,
@@ -77,28 +80,19 @@ context('ComposeCancelConfirmation', () => {
     origin: FormHeaderType = FormHeaderTypeConstants.compose,
     replyToID?: number,
   ) => {
-    goBack = jest.fn()
-
-    props = mockNavProps(
-      undefined,
-      {
-        setOptions: jest.fn(),
-        navigate: mockNavigationSpy,
-        goBack,
-      },
-      {
-        params: {
-          messageData,
-          draftMessageID,
-          isFormValid,
-          origin,
-          replyToID,
-        },
-      },
-    )
-
+    const TestComponent: React.FC = () => {
+      const alert = useComposeCancelConfirmation()
+      alert({
+        messageData,
+        draftMessageID,
+        isFormValid,
+        origin,
+        replyToID
+      })
+      return <></>
+    }
     act(() => {
-      component = renderWithProviders(<ComposeCancelConfirmation {...props} />)
+      component = renderWithProviders(<TestComponent />)
     })
 
     testInstance = component.root
@@ -111,18 +105,11 @@ context('ComposeCancelConfirmation', () => {
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
   })
-  describe('on click of the crisis line banner', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
-  })
-
   describe('New Message', () => {
     describe('on clicking discard', () => {
       it('should go back to the previous page', async () => {
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
+          discardButtonSpy()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
       })
@@ -132,14 +119,14 @@ context('ComposeCancelConfirmation', () => {
       it('should go back to compose if form not valid', async () => {
         initializeTestInstance(undefined, undefined, false)
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
+          saveDraftButtonSpy()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
       })
 
       it('should save and go to drafts folder', async () => {
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
+          saveDraftButtonSpy()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
@@ -152,7 +139,7 @@ context('ComposeCancelConfirmation', () => {
       it('should go back to the message the user was viewing', async () => {
         initializeTestInstance({ body: 'test reply' }, undefined, true, FormHeaderTypeConstants.reply, 2)
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
+          discardButtonSpy()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessageScreen', { messageID: 2 })
       })
@@ -162,7 +149,7 @@ context('ComposeCancelConfirmation', () => {
       it('should save and go to drafts folder', async () => {
         initializeTestInstance({ body: 'test reply' }, undefined, true, FormHeaderTypeConstants.reply, 2)
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
+          saveDraftButtonSpy()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
@@ -175,7 +162,7 @@ context('ComposeCancelConfirmation', () => {
       it('should go back to drafts folder', async () => {
         initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, undefined)
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
+          discardButtonSpy()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { draftSaved: false, folderID: -2, folderName: 'Drafts' })
       })
@@ -185,7 +172,7 @@ context('ComposeCancelConfirmation', () => {
       it('should save and go to drafts folder', async () => {
         initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, undefined)
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
+          saveDraftButtonSpy()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { draftSaved: true, folderID: -2, folderName: 'Drafts' })
       })

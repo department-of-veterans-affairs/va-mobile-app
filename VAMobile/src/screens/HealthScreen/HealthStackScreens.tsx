@@ -11,7 +11,6 @@ import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointm
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
-import ComposeCancelConfirmation from './SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
@@ -90,13 +89,6 @@ export type HealthStackParamList = {
     uploads?: (ImagePickerResponse | DocumentPickerResponse)[]
     replyToID?: number
   }
-  ComposeCancelConfirmation: {
-    draftMessageID: number | undefined
-    isFormValid: boolean
-    messageData: SecureMessagingFormData
-    origin: FormHeaderType
-    replyToID?: number
-  }
   SuccessfulSendScreen: undefined
   ReplyTriageErrorScreen: undefined
 }
@@ -137,12 +129,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'RemoveAttachment'} name="RemoveAttachment" component={RemoveAttachment} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'SendConfirmation'} name="SendConfirmation" component={SendConfirmation} />,
     <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} />,
-    <HealthStack.Screen
-      key={'ComposeCancelConfirmation'}
-      name="ComposeCancelConfirmation"
-      component={ComposeCancelConfirmation}
-      options={{ title: t('secureMessaging.composeMessage.compose') }}
-    />,
     <HealthStack.Screen key={'SuccessfulSendScreen'} name="SuccessfulSendScreen" component={SuccessfulSendScreen} options={{ title: t('secureMessaging.sent') }} />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
   ]

@@ -225,8 +225,8 @@ export type UseDestructiveAlertProps = {
   title: string
   /** message of alert */
   message?: string // message for the alert
-  /** ios destructive index */
-  destructiveButtonIndex: number
+  /** ios destructive index, will make option red if defined */
+  destructiveButtonIndex?: number
   /** ios cancel index */
   cancelButtonIndex: number
   /** options to show in alert */
