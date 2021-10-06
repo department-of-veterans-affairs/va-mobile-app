@@ -6,7 +6,7 @@ labels: back-end, eng
 assignees: ''
 
 ---
-
+<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 ## User Story
 <!-- If this is ticket is a dependency please paste the user story from the original issue below. Otherwise create a user story here; As a (who wants to accomplish something), I want to (what they want to accomplish), So that (why they want to accomplish that thing) e.g. As a mobile app product owner, I want a login metrics dashboard, so that I can track the rate of successful logins. -->
 
