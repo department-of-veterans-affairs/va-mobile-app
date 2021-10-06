@@ -5,7 +5,7 @@ title: Issue Ticket
 labels: 
 assignees:
 ---
-
+<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 # Issue Ticket
 <!-- Goal of these tickets: Write a user story for a feature for the VA mobile app that is ready to hand off to UX for design then engineering for implementation. This is talking about a screen or specific piece of functionality. -->
 
