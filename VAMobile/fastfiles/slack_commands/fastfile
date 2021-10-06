@@ -4,7 +4,7 @@ def slack_build_success (buildNum, version, buildType, message, os)
  slack(
    message: message,
    success: true,
-   default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+   default_payloads: [],
    attachment_properties: {
      fields: [
        {title: "OS", value: os},
@@ -49,3 +49,11 @@ def slack_github_error(e, action, message, os)
   )
 end
 
+def slack_release_success(version, os)
+  puts "Send slack message to indicate release is live"
+  slack(
+     message: "Version #{version} is now live for #{os}",
+     success: true,
+     default_payloads: [],
+  )
+end
