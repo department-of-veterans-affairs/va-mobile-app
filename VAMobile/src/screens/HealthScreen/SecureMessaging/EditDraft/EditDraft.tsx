@@ -143,13 +143,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
         <BackButton
-          onPress={
-            noProviderError || isFormBlank || !draftChanged()
-              ? () => {
-                  goToDrafts(false)
-                }
-              : goToCancel
-          }
+          onPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.cancel}
           showCarat={false}
