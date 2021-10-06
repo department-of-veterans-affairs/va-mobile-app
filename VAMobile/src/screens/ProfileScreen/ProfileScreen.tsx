@@ -7,7 +7,7 @@ import { AuthorizedServicesState, DisabilityRatingState, MilitaryServiceState, P
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from './ProfileStackScreens'
-import { ScreenIDTypesConstants } from 'store/api/types'
+import { ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
 import { getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
@@ -23,6 +23,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   useEffect(() => {
     navigation.setOptions({
@@ -75,7 +76,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const onMilitaryInformation = navigateTo('MilitaryInformation')
 
-  const onDirectDeposit = navigateTo('DirectDeposit')
+  const onDirectDeposit = profile?.signinService === SigninServiceTypesConstants.IDME ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
 
   const onLettersAndDocs = navigateTo('LettersOverview')
 
