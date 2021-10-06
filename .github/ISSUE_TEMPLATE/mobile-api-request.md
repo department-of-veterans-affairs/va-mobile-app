@@ -6,7 +6,7 @@ labels: back-end
 assignees: ''
 
 ---
-
+<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 ## Description of end point
 <!-- Please include a description of the endpoint and context. Why is this endpoint needed? What service is it pulling from and where does it fit in the mobile app? The description should be more
 than a link to an issue.  -->
