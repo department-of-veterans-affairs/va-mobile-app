@@ -50,7 +50,7 @@ context('VeteransCrisisLineScreen', () => {
   describe('when the text 838255 link is clicked', () => {
     it('should launch external link with the parameter sms:838255', async () => {
       act(() => {
-        findByTestID(testInstance, 'text-838255').props.onPress()
+        findByTestID(testInstance, 'text-8-3-8-2-5-5').props.onPress()
       })
       expect(mockExternalLinkSpy).toBeCalledWith('sms:838255')
     })
