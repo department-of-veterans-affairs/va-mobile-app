@@ -31,9 +31,6 @@ export type BaseListItemProps = {
   /** The a11y hint text */
   a11yHint: string
 
-  /** optional a11y label value */
-  a11yLabel?: string
-
   /** optional a11y text value */
   a11yValue?: string
 
@@ -88,7 +85,7 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  * @returns BaseListItem component
  */
 const BaseListItem: FC<BaseListItemProps> = (props) => {
-  const { onPress, a11yHint, a11yRole, a11yState, decorator, decoratorProps, testId, a11yValue, children, backgroundColor, activeBackgroundColor, a11yLabel } = props
+  const { onPress, a11yHint, a11yRole, a11yState, decorator, decoratorProps, testId, a11yValue, children, backgroundColor, activeBackgroundColor } = props
   const theme = useTheme()
 
   const [isPressed, setIsPressed] = useState(false)
@@ -172,12 +169,6 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
         )}
       </Box>
     )
-  }
-
-  /* must be set like this due to doing accessibilityLabel = a11yLabel in the allyProps object will set it to undefined which
-   replaces the value the testIdProps set and android will not read the actual text */
-  if (a11yLabel) {
-    a11yProps.accessibilityLabel = a11yLabel
   }
 
   // onPress exist, wrap in Pressable and apply a11yProps

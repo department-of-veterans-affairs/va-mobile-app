@@ -84,10 +84,10 @@ const getPhoneNumberData = (
   faxText = faxText.concat(getTextForPhoneData(profile, 'formattedFaxPhone', 'faxNumber', t))
 
   return [
-    { textLines: homeText, a11yHintText: t('personalInformation.editOrAddHomeNumber'), onPress: onHomePhone, a11yLabel: getA11yLabelText(homeText) },
-    { textLines: workText, a11yHintText: t('personalInformation.editOrAddWorkNumber'), onPress: onWorkPhone, a11yLabel: getA11yLabelText(workText) },
-    { textLines: cellText, a11yHintText: t('personalInformation.editOrAddCellNumber'), onPress: onCellPhone, a11yLabel: getA11yLabelText(cellText) },
-    { textLines: faxText, a11yHintText: t('personalInformation.editOrAddFaxNumber'), onPress: onFax, a11yLabel: getA11yLabelText(faxText) },
+    { textLines: homeText, a11yHintText: t('personalInformation.editOrAddHomeNumber'), onPress: onHomePhone, testId: getA11yLabelText(homeText) },
+    { textLines: workText, a11yHintText: t('personalInformation.editOrAddWorkNumber'), onPress: onWorkPhone, testId: getA11yLabelText(workText) },
+    { textLines: cellText, a11yHintText: t('personalInformation.editOrAddCellNumber'), onPress: onCellPhone, testId: getA11yLabelText(cellText) },
+    { textLines: faxText, a11yHintText: t('personalInformation.editOrAddFaxNumber'), onPress: onFax, testId: getA11yLabelText(faxText) },
   ]
 }
 
@@ -104,7 +104,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
     textLines.push({ text: t('personalInformation.addYour', { field: t('personalInformation.emailAddress').toLowerCase() }) })
   }
 
-  return [{ textLines: textLines, a11yHintText: t('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress, a11yLabel: getA11yLabelText(textLines) }]
+  return [{ textLines: textLines, a11yHintText: t('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress, testId: getA11yLabelText(textLines) }]
 }
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
