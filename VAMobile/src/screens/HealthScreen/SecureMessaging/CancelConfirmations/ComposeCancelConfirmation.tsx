@@ -22,6 +22,7 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveAlert()
+  const goToDrafts = useGoToDrafts()
 
   return (props: ComposeCancelConfirmationProps) => {
     const { replyToID, messageData, draftMessageID, isFormValid, origin } = props
@@ -33,14 +34,6 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       dispatch(resetSaveDraftComplete())
       dispatch(resetSaveDraftFailed())
       dispatch(resetHasLoadedRecipients())
-    }
-
-    const goToDrafts = (draftSaved: boolean): void => {
-      navigateTo('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved,
-      })()
     }
 
     const onSaveDraft = (): void => {
@@ -92,5 +85,16 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
         },
       ],
     })
+  }
+}
+
+export function useGoToDrafts(): (draftSaved: boolean) => void {
+  const navigateTo = useRouteNavigation()
+  return (draftSaved: boolean): void => {
+    navigateTo('FolderMessages', {
+      folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+      folderName: FolderNameTypeConstants.drafts,
+      draftSaved,
+    })()
   }
 }
