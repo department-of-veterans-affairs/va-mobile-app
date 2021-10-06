@@ -6,6 +6,7 @@ import { ErrorsState, StoreState } from 'store'
 import { ScreenIDTypes } from 'store/api/types'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'utils/hooks'
+import DowntimeError from './DowntimeError'
 
 export type ErrorComponentProps = {
   screenID: ScreenIDTypes
@@ -37,6 +38,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             callPhone={t('health:secureMessaging.attachments.FAQ.ifYourProblem.phone')}
           />
         )
+      case CommonErrorTypesConstants.DOWNTIME_ERROR:
+        return <DowntimeError screenID={screenID} />
       default:
         return <CallHelpCenter onTryAgain={tryAgain} />
     }

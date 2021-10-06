@@ -1,17 +1,19 @@
 import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
+import { useSelector } from 'react-redux'
+import { StoreState, ErrorsState } from 'store'
 
 import { AlertBox, Box, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
+import { ScreenIDTypes } from 'store/api/types'
 
 export type DowntimeErrorProps = {
   /** optional function called when the Try again button is pressed */
-  feature?: string
-  end?: string
+  screenID: ScreenIDTypes
 }
 
-const DowntimeError: FC<DowntimeErrorProps> = ({ feature, end }) => {
+const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -25,6 +27,9 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ feature, end }) => {
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
+  const { errorMetadataByScreenID } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const feature = errorMetadataByScreenID[screenID]?.featureName
+  const end = errorMetadataByScreenID[screenID]?.endTime
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
