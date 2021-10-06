@@ -5,7 +5,7 @@ title: BUG - [SEVERITY] - [iOS/Android/All] - [Short description]
 labels: bug
 assignees:
 ---
-
+<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 ## What happened?
 <!-- General overview of what happened and where it happened -->
 
