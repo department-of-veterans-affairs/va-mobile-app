@@ -1,0 +1,44 @@
+{
+  "data": [
+    {
+      "id": "abc",
+      "vaccineCode":"COVID-19 vaccine",
+      "recorded": "2021-09-25",
+      "primarySource": true,
+      "lotNumber": "205A21A",
+      "expirationDate": "2030-09-25",
+      "manufacturer": {
+        "active": true,
+        "name": "Pfizer"
+      },
+      "location": {
+        "id": "1",
+        "name": "Cheyenne VA Medical Center",
+        "address": {
+          "type": "both",
+          "city": "Cheyenne",
+          "state": "WY",
+          "postalCode": "82001-5356",
+          "country": "US"
+        }
+      },
+      "reaction": [{
+        "date": "2021-09-25",
+        "reported": true,
+        "detail": {
+          "display": "Lethargy"
+        }
+      }],
+      "doseQuantity": {
+        "text": "0.3ML"
+      },
+      "notes": [],
+      "protocolApplied": {
+        "series": "series x",
+        "targetDisease": "COVID-19",
+        "doseNumber": "2",
+        "seriesDoses": "2"
+      }
+    }
+  ]
+}
