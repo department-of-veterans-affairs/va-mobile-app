@@ -4,6 +4,7 @@ import React from 'react'
 
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 import { context, renderWithProviders, mockStore } from 'testUtils'
 import DowntimeError from "./DowntimeError";
@@ -20,7 +21,7 @@ context('DowntimeError', () => {
 
     act(() => {
       component = renderWithProviders(
-        <DowntimeError feature={'feature name'} end={'2021-06-02T01:00:00.000Z'} />,
+        <DowntimeError screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />,
         store
       )
     })

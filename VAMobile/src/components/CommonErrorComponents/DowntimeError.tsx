@@ -1,12 +1,12 @@
+import { ErrorsState, StoreState } from 'store'
 import { ViewStyle } from 'react-native'
-import React, { FC } from 'react'
 import { useSelector } from 'react-redux'
-import { StoreState, ErrorsState } from 'store'
+import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme, useTranslation } from 'utils/hooks'
 import { ScreenIDTypes } from 'store/api/types'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /** optional function called when the Try again button is pressed */
