@@ -72,11 +72,13 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, disabilityRatingNeedsUpdate])
 
+  const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
+
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
   const onMilitaryInformation = navigateTo('MilitaryInformation')
 
-  const onDirectDeposit = profile?.signinService === SigninServiceTypesConstants.IDME ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+  const onDirectDeposit = isIDMESignin ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
 
   const onLettersAndDocs = navigateTo('LettersOverview')
 
@@ -94,8 +96,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   buttonDataList.push({ text: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
 
-  // hide button if user does not have permission
-  if (directDepositBenefits) {
+  // Show if user has permission or if user did not signed in through IDME
+  if (directDepositBenefits || !isIDMESignin) {
     buttonDataList.push({ text: t('directDeposit.information'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
   }
 

@@ -93,7 +93,7 @@ context('ProfileScreen', () => {
       })
     })
 
-    describe('when user signs in using IDME', () => {
+    describe('when user signs in through IDME', () => {
       it('should navigate to DirectDeposit', async() => {
         initializeTestInstance(true)
         findByTestID(testInstance, 'direct-deposit-information').props.onPress()
@@ -101,9 +101,9 @@ context('ProfileScreen', () => {
       })
     })
 
-    describe('when user signs in that is not-IDME', () => {
-      it('should navigate to DirectDeposit', async() => {
-        initializeTestInstance(true, false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
+    describe('when user did not signs in through IDME and does not have direcDepositBenefits', () => {
+      it('should navigate to HowToUpdateDirectDeposit', async() => {
+        initializeTestInstance(false, false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
         findByTestID(testInstance, 'direct-deposit-information').props.onPress()
         expect(mockNavigationSpy).toHaveBeenNthCalledWith(3, 'HowToUpdateDirectDeposit')
       })
