@@ -312,6 +312,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 statusDetail: null,
                 timeZone: 'America/Denver' as AppointmentTimeZone,
                 reason: null,
+                isCovidVaccine: false,
               },
             },
           ],
