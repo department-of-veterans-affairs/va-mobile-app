@@ -39,7 +39,7 @@ context('AppealStatus', () => {
     props = mockNavProps({
       status,
       aoj,
-      appealType, 
+      appealType,
       docketName,
       programArea
     })
@@ -61,7 +61,8 @@ context('AppealStatus', () => {
           mobilePhoneNumber: {} as PhoneData,
           workPhoneNumber: {} as PhoneData,
           faxNumber: {} as PhoneData,
-          fullName: 'Larry Brown'
+          fullName: 'Larry Brown',
+          signinService: 'IDME',
         }
       }
     })
