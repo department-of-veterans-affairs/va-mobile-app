@@ -36,9 +36,9 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox
           title={t('downtime.title')}
-          titleA11yLabel={t('downtime.title.a11yHint')}
+          titleA11yLabel={t('downtime.title')}
           text={t('downtime.message', { feature, end })}
-          textA11yLabel={t('downtime.message.a11yLabel', { feature, end })}
+          textA11yLabel={t('downtime.message', { feature, end })}
           border="warning"
           background="noCardBackground"
         />
