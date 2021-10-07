@@ -32,6 +32,11 @@ export const dispatchSetTryAgainFunction = (tryAgain: () => Promise<void>): Redu
   }
 }
 
+/**
+ * Sets the error metadata for a given screen ID. Currently only utilized for downtime messages
+ * @param {Object} metadata - Any key value pair of data
+ * @param {ScreenIDTypes} screenID - ID of the screen with the error
+ */
 export const dispatchSetMetadata = (metadata?: { [key: string]: string }, screenID?: ScreenIDTypes): ReduxAction => {
   return {
     type: 'ERRORS_SET_METADATA',
@@ -42,6 +47,10 @@ export const dispatchSetMetadata = (metadata?: { [key: string]: string }, screen
   }
 }
 
+/**
+ * Clears the error metadata for a given screen ID
+ * @param {ScreenIDTypes} screenID - ID of the screen to clear
+ */
 export const dispatchClearMetadata = (screenID?: ScreenIDTypes): ReduxAction => {
   return {
     type: 'ERRORS_CLEAR_METADATA',
@@ -51,6 +60,9 @@ export const dispatchClearMetadata = (screenID?: ScreenIDTypes): ReduxAction => 
   }
 }
 
+/**
+ * Clears the error metadata for all screen IDs
+ */
 export const dispatchClearAllMetadata = (): ReduxAction => {
   return {
     type: 'ERRORS_CLEAR_ALL_METADATA',
@@ -58,6 +70,10 @@ export const dispatchClearAllMetadata = (): ReduxAction => {
   }
 }
 
+/**
+ * checks for downtime by getting a list from the backend API
+ * clears all metadata first and sets errors based on which downtime is active
+ */
 export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     const response = await api.get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
