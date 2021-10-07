@@ -44,7 +44,7 @@ import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessage, getMessageRecipients, getThread, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -54,6 +54,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
+  const goToDrafts = useGoToDrafts()
 
   const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
     StoreState,
@@ -142,7 +143,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
         <BackButton
-          onPress={noProviderError || isFormBlank || !draftChanged() ? navigation.goBack : goToCancel}
+          onPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.cancel}
           showCarat={false}
