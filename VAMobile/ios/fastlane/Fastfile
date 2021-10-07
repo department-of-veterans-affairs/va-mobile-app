@@ -173,6 +173,7 @@ platform :ios do
       tag = "ios-build-" + build.to_s
       puts "Tagging commit with " + tag
       add_git_tag(tag: tag)
+      push_git_tags
     rescue => e
         puts e.to_s
       slack_github_error(e, "Error tagging iOS build", "iOS")
