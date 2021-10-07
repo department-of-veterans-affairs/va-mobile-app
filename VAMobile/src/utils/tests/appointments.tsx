@@ -51,7 +51,7 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   practitioner: defaultAppointmentPractitioner,
   phoneOnly: false,
   reason: null,
-  covidVaccination: false,
+  isCovidVaccine: false,
 }
 
 export const defaultAppoinment: AppointmentData = {

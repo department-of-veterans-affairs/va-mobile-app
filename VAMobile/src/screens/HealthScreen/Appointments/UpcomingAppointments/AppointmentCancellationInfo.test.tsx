@@ -22,14 +22,14 @@ context('AppointmentCancellationInfo', () => {
 
   let appointmentLocationName = 'VA Long Beach Healthcare System'
 
-  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone, covidVaccination?: boolean): void => {
+  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone, isCovidVaccine?: boolean): void => {
     const mockAppointment: AppointmentData = {
       ...defaultAppoinment,
       attributes: {
         ...defaultAppointmentAttributes,
         appointmentType,
         status,
-        covidVaccination,
+        isCovidVaccine,
         location: {
           ...defaultAppointmentLocation,
           name: appointmentLocationName,

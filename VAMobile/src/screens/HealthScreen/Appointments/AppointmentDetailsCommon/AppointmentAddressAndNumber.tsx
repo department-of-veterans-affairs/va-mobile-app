@@ -21,10 +21,10 @@ type AppointmentAddressAndNumberProps = {
   location: AppointmentLocation
   address?: AppointmentAddress
   phone?: AppointmentPhone
-  covidVaccination?: boolean
+  isCovidVaccine?: boolean
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone, covidVaccination }) => {
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone, isCovidVaccine }) => {
   const t = useTranslation()
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
@@ -36,7 +36,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
   const getHealthServiceHeaderSection = (): ReactElement => {
     let headerText: string | undefined
 
-    if (covidVaccination) {
+    if (isCovidVaccine) {
       headerText = t('health:upcomingAppointments.covidVaccine')
     } else if (appointmentType === AppointmentTypeConstants.VA || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE) {
       headerText = healthcareService
