@@ -35,6 +35,7 @@ export type DowntimeFeatureType =
   | 'military_service_history'
   | 'claims'
   | 'direct_deposit_benefits'
+  | 'disability_rating'
   | 'letters_and_documents'
   | 'secure_messaging'
   | 'appointments'
@@ -49,6 +50,7 @@ export const DowntimeFeatureTypeConstants: {
   militaryServiceHistory: DowntimeFeatureType
   claims: DowntimeFeatureType
   directDepositBenefits: DowntimeFeatureType
+  disabilityRating: DowntimeFeatureType
   letters: DowntimeFeatureType
   secureMessaging: DowntimeFeatureType
   appointments: DowntimeFeatureType
@@ -62,6 +64,7 @@ export const DowntimeFeatureTypeConstants: {
   militaryServiceHistory: 'military_service_history',
   claims: 'claims',
   directDepositBenefits: 'direct_deposit_benefits',
+  disabilityRating: 'disability_rating',
   letters: 'letters_and_documents',
   secureMessaging: 'secure_messaging',
   appointments: 'appointments',
@@ -75,6 +78,7 @@ export const DowntimeFeatureNameConstants = {
   [DowntimeFeatureTypeConstants.secureMessaging]: 'Secure Messaging',
   [DowntimeFeatureTypeConstants.letters]: 'Letters',
   [DowntimeFeatureTypeConstants.directDepositBenefits]: 'Direct Deposit',
+  [DowntimeFeatureTypeConstants.disabilityRating]: 'Disability Rating',
   [DowntimeFeatureTypeConstants.militaryServiceHistory]: 'Military Service History',
   [DowntimeFeatureTypeConstants.appeals]: 'Appeals',
   [DowntimeFeatureTypeConstants.userProfileUpdate]: 'User Profile',
@@ -87,6 +91,7 @@ export const DowntimeFeatureToScreenID = {
   [DowntimeFeatureTypeConstants.secureMessaging]: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
   [DowntimeFeatureTypeConstants.letters]: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
   [DowntimeFeatureTypeConstants.directDepositBenefits]: ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID,
+  [DowntimeFeatureTypeConstants.disabilityRating]: ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID,
   [DowntimeFeatureTypeConstants.militaryServiceHistory]: ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
   [DowntimeFeatureTypeConstants.appeals]: ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.userProfileUpdate]: ScreenIDTypesConstants.PROFILE_SCREEN_ID,
