@@ -132,6 +132,7 @@ context('PersonalInformationScreen', () => {
         extension: '11111'
       },
       formattedFaxPhone: '(858)-690-1286',
+      signinService: 'IDME',
     }
 
     store = mockStore({
