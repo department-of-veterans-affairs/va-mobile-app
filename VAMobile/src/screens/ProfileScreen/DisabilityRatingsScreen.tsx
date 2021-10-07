@@ -152,7 +152,7 @@ const DisabilityRatingsScreen: FC = () => {
           </TextView>
         </Box>
 
-        <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />
+        <ClickToCallPhoneNumber phone={t('common:8008271000.displayText')} />
       </TextArea>
     )
   }

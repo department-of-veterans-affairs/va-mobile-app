@@ -1,6 +1,18 @@
 import { AddressData } from './AddressData'
 import { PhoneData } from './PhoneData'
 
+export type SigninServiceTypes = 'IDME' | 'DSL' | 'MHV'
+
+export const SigninServiceTypesConstants: {
+  IDME: SigninServiceTypes
+  DSL: SigninServiceTypes
+  MHV: SigninServiceTypes
+} = {
+  IDME: 'IDME',
+  DSL: 'DSL',
+  MHV: 'MHV',
+}
+
 export type UserDataProfile = {
   firstName: string
   middleName: string
@@ -21,6 +33,7 @@ export type UserDataProfile = {
   formattedWorkPhone?: string
   faxNumber: PhoneData
   formattedFaxPhone?: string
+  signinService: SigninServiceTypes
 }
 
 export type EmailData = {
