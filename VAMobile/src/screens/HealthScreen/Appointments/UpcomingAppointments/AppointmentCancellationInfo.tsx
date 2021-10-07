@@ -31,7 +31,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const navigateTo = useRouteNavigation()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, covidVaccination } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -48,7 +48,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   let body
   let bodyA11yLabel
 
-  if (covidVaccination) {
+  if (isCovidVaccine) {
     title = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title')
     body = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.body')
   } else {
@@ -94,7 +94,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween}>
         {body}
       </TextView>
-      {appointmentType === AppointmentTypeConstants.VA && !covidVaccination ? (
+      {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
         <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
             onPress={cancelAppointment}
