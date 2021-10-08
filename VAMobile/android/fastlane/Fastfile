@@ -142,4 +142,12 @@ platform :android do
     end
   end
 
+  def bundle
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "Release")
+  end
+
+  def upload(track)
+    supply(track: track)
+  end
 end
