@@ -18,7 +18,6 @@ arrayPrint() {
 
 
 #### Help function
-#### Help function
 Help() {
     #Display help
     echo "Build an on-demand version of Android, iOS, or both OSes. This will deploy to the named tracks/groups"
@@ -88,20 +87,22 @@ isInArray() {
 }
 
 
-## MAIN
+## -------------- MAIN SCRIPT -------------------
+
+# get options and set values
 while [ $# -gt 0 ]; do
   case "$1" in
     -e|--environment)
-	  isInArray env_opts $2 ENV $1
+	  isInArray env_opts "$2" ENV $1
       ;;
     -o|--os)
-      isInArray os_opts $2 OS $1
+      isInArray os_opts "$2" OS $1
       ;;
     -b|--branch)
 	  BRANCH=$2
 	  ;;
 	-t|--type)
-	  isInArray type_opts $2 TYPE $1
+	  isInArray type_opts "$2" TYPE $1
 	  ;;
 	-f|--flight_group)
 	  isInArray tf_opts "$2" TF_GROUP $1
@@ -121,10 +122,48 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+# sanity check prints for debugging
 arrayPrint env_opts
-echo BRANCH: $BRANCH
+echo BRANCH: "$BRANCH"
 echo OS: $OS
 echo ENV: $ENV
 echo TYPE: $TYPE
-echo TF_GROUP: $TF_GROUP
-echo PS_TRACK: $PS_TRACK
+echo TF_GROUP: "$TF_GROUP"
+echo PS_TRACK: "$PS_TRACK"
+
+# save the base directory to move about the project
+BASE_DIR="$PWD"
+
+## checkout branch and pull branch
+git checkout "$BRANCH"
+git pull
+
+## install dependencies
+yarn install &&
+## set ENV VARS
+yarn env:$ENV &&
+
+# build iOS if the os flag is all or ios
+if [[ $OS == "all" || $OS == "ios" ]]
+then
+  # install pods
+  cd "$BASE_DIR"/ios &&
+  pod install &&
+  cd "$BASE_DIR" &&
+  # bundle for ios
+  yarn bundle:ios &&
+  cd "$BASE_DIR"/ios &&
+  # run fastlane
+  fastlane on_demand version:"qa" tfGroup:"$TF_GROUP" ;
+fi
+cd "$BASE_DIR" || exit
+
+# build for android if os flag is all or android
+if [[ $OS == "all" || $OS == "android" ]]
+then
+  # bundle for android
+  yarn bundle:android &&
+  cd "$BASE_DIR"/android &&
+  # run fastlane
+  fastlane release version:"qa" psTrack:"$PS_TRACK";
+fi
