@@ -14,6 +14,7 @@ import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/Atta
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import ImmunizationListScreen from './Immunizations/ImmunizationList/ImmunizationListScreen'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
@@ -91,6 +92,7 @@ export type HealthStackParamList = {
   }
   SuccessfulSendScreen: undefined
   ReplyTriageErrorScreen: undefined
+  ImmunizationList: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -131,5 +133,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} />,
     <HealthStack.Screen key={'SuccessfulSendScreen'} name="SuccessfulSendScreen" component={SuccessfulSendScreen} options={{ title: t('secureMessaging.sent') }} />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
+    <HealthStack.Screen key={'ImmunizationList'} name="ImmunizationList" component={ImmunizationListScreen} options={{ title: t('vaImmunizations.title') }} />,
   ]
 }
