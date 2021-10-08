@@ -92,6 +92,13 @@ context('HealthScreen', () => {
     })
   })
 
+  describe('on click of the immunizations button', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[2].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(undefined, false)

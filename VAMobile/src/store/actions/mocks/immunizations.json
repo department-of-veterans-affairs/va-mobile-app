@@ -115,7 +115,7 @@
       "notes": [],
       "protocolApplied": {
         "series": "series x",
-        "targetDisease": "COVID-19",
+        "targetDisease": "Influenza",
         "doseNumber": "1",
         "seriesDoses": "2"
       }

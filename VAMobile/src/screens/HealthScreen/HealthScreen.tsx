@@ -27,7 +27,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
-  const onVaImmunizations = () => {} // replace with navigateTo
+  const onVaImmunizations = navigateTo('ImmunizationList')
 
   useEffect(() => {
     // fetch inbox metadata to display unread messages count tag
@@ -70,7 +70,6 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           tagCount={unreadCount}
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
-
         <LargeNavButton
           title={t('vaImmunizations.title')}
           subText={t('vaImmunizations.subText')}
