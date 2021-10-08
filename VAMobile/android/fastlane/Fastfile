@@ -69,6 +69,18 @@ platform :android do
     end
   end
 
+  desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
+  lane :on_demand do |options|
+    puts "on demand run"
+    update_version_and_build(options[:version ])
+    bundle
+    puts options[:psTrack]
+    upload(options[:psTrack])
+    tag_build
+    message = "New On Demand build successfully uploaded to Google Play"
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On-Demand", message, "Android")
+  end
+
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
   end
