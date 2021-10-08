@@ -179,4 +179,36 @@ platform :ios do
       slack_github_error(e, "Error tagging iOS build", "iOS")
     end
   end
+
+  desc "Sign the build"
+  def sign
+    match(type: "appstore", readonly: true)
+  end
+
+  desc "Build the app for upload"
+  def build
+    gym(
+      workspace: "VAMobile.xcworkspace",
+      scheme: ENV['IOS_SCHEME'],
+      silent: true,
+      export_method: "app-store",
+    )
+  end
+
+  def upload_tf(test_notes, group)
+    upload_to_testflight(
+      api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+      beta_app_review_info: {
+          notes: test_notes
+        },
+      distribute_external: true,
+      notify_external_testers: true,
+      groups: [group], # make customizable
+      changelog: test_notes
+    )
+  end
+
+  def upload_deobfuscation_file
+    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+  end
 end
