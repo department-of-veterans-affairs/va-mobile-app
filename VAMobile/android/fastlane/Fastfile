@@ -74,8 +74,8 @@ platform :android do
   end
 
   error do |lane, exception, options|
-      puts("ERROR REPORT")
-      slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+    puts("ERROR REPORT")
+    slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
 # method to update the version and build in the repo
