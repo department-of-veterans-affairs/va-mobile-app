@@ -127,7 +127,7 @@ platform :ios do
   end
 
   desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
-  lane :new_lane do |options|
+  lane :on_demand do |options|
     puts "on demand run"
     update_version(options[:version])
     sign
