@@ -5,6 +5,9 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from '../../utils/common'
 
+/**
+ * Action to signify the beginning of the immunization list loading.
+ */
 const dispatchStartGetImmunizations = (): ReduxAction => {
   return {
     type: 'IMMUNIZATION_START_GET_IMMUNIZATIONS',
@@ -12,6 +15,11 @@ const dispatchStartGetImmunizations = (): ReduxAction => {
   }
 }
 
+/**
+ * Action to signal the immunizations have finished loading
+ * @param immunizations - list of immunizations if the api call was successful
+ * @param error - error to parse if api call failed
+ */
 const dispatchFinishGetImmunizations = (immunizations?: ImmunizationList, error?: APIError): ReduxAction => {
   return {
     type: 'IMMUNIZATION_FINISH_GET_IMMUNIZATIONS',
