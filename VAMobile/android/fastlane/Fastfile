@@ -26,21 +26,10 @@ platform :android do
   desc "Deploy a QA new version to the Google Play"
   lane :qa do |options|
     update_version_and_build(options[:version ])
-    gradle(task: "clean")
-    gradle(task: "bundle", build_type: "Release")
-    supply(track: "Development Team")
-    tag_build()
+    bundle
+    upload("Development Team")
+    tag_build
     message = "New QA build successfully uploaded to Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
-  end
-
-  desc "Deploy a On Demand QA new version to the Google Play"
-  lane :on_demand_qa do |options|
-    update_version_and_build(options[:version ])
-    gradle(task: "clean")
-    gradle(task: "bundle", build_type: "Release")
-    supply(track: "Development Team") # can customize here
-    message = "New On Demand QA build successfully uploaded to Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
   end
 
@@ -49,24 +38,16 @@ platform :android do
   lane :review do |options|
     puts 'Run the review lane'
     update_version_and_build(options[:version ])
-    gradle(task: "clean")
-    gradle(task: "bundle", build_type: "Release")
-    supply(track: "Pre-Prod Stash")
-    tag_build()
+    bundle
+    upload("Pre-Prod Stash")
+    tag_build
     message = "New Production build successfully uploaded to Beta Track on Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
 
   desc "Promote the release in Pre-Prod stash to Production"
   lane :release do
-    prod = google_play_track_version_codes(track:"production")
-    stash =  google_play_track_version_codes(track:"Pre-Prod Stash")
-    # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
-    if stash.max > prod.max
-      supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
-      version = google_play_track_release_names(track:"production")
-      slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
-    end
+    promote_pre_prod
   end
 
   desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
