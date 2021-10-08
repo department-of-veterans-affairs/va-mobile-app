@@ -26,8 +26,6 @@ platform :android do
   desc "Deploy a QA new version to the Google Play"
   lane :qa do |options|
     update_version_and_build(options[:version ])
-    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
-    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
     gradle(task: "clean")
     gradle(task: "bundle", build_type: "Release")
     supply(track: "Development Team")
@@ -39,8 +37,6 @@ platform :android do
   desc "Deploy a On Demand QA new version to the Google Play"
   lane :on_demand_qa do |options|
     update_version_and_build(options[:version ])
-    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
-    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
     gradle(task: "clean")
     gradle(task: "bundle", build_type: "Release")
     supply(track: "Development Team") # can customize here
@@ -53,8 +49,6 @@ platform :android do
   lane :review do |options|
     puts 'Run the review lane'
     update_version_and_build(options[:version ])
-    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
-    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
     gradle(task: "clean")
     gradle(task: "bundle", build_type: "Release")
     supply(track: "Pre-Prod Stash")
