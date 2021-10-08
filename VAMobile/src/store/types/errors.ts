@@ -1,3 +1,4 @@
+import { Action } from 'redux'
 import { ActionDef } from './index'
 import { CommonErrorTypes } from 'constants/errors'
 import { ScreenIDTypes } from '../api'
@@ -40,6 +41,7 @@ export interface ErrorsActions {
   ERRORS_CLEAR_METADATA: ActionDef<'ERRORS_CLEAR_METADATA', ErrorsClearMetadataPayload>
   /** Redux action to signify that clear all error metadata request has started */
   ERRORS_CLEAR_ALL_METADATA: ActionDef<'ERRORS_CLEAR_ALL_METADATA', null>
+  ERRORS_CLEAR_ERROR_TYPE: ActionDef<'ERRORS_CLEAR_ERROR_TYPE', ErrorClearErrorTypePayload>
   /** Redux action to signify that errors set try again request has started */
   ERRORS_SET_TRY_AGAIN_FUNCTION: ActionDef<'ERRORS_SET_TRY_AGAIN_FUNCTION', ErrorsSetTryAgainFunctionPayload>
 }
