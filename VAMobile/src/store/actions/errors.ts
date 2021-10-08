@@ -34,8 +34,8 @@ export const dispatchSetTryAgainFunction = (tryAgain: () => Promise<void>): Redu
 
 /**
  * Sets the error metadata for a given screen ID. Currently only utilized for downtime messages
- * @param {Object} metadata - Any key value pair of data
- * @param {ScreenIDTypes} screenID - ID of the screen with the error
+ * @param metadata - Any key value pair of data
+ * @param screenID - ID of the screen with the error
  */
 export const dispatchSetMetadata = (metadata?: { [key: string]: string }, screenID?: ScreenIDTypes): ReduxAction => {
   return {
@@ -49,7 +49,7 @@ export const dispatchSetMetadata = (metadata?: { [key: string]: string }, screen
 
 /**
  * Clears the error metadata for a given screen ID
- * @param {ScreenIDTypes} screenID - ID of the screen to clear
+ * @param screenID - ID of the screen to clear
  */
 export const dispatchClearMetadata = (screenID?: ScreenIDTypes): ReduxAction => {
   return {

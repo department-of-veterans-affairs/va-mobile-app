@@ -9,7 +9,6 @@ import { ScreenIDTypes } from 'store/api/types'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
-  /** optional function called when the Try again button is pressed */
   screenID: ScreenIDTypes
 }
 
