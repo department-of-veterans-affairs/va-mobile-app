@@ -85,7 +85,7 @@ export const DowntimeFeatureNameConstants = {
 }
 
 export const DowntimeFeatureToScreenID = {
-  // [DowntimeFeatureTypeConstants.facilityLocator]: ,
+  // TODO: Find a proper page conversion for facility locator to display downtime
   [DowntimeFeatureTypeConstants.claims]: ScreenIDTypesConstants.CLAIMS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.appointments]: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.secureMessaging]: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
