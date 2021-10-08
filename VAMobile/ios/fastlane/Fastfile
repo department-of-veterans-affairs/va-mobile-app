@@ -222,6 +222,19 @@ platform :ios do
     )
   end
 
+  def upload_app_store
+    deliver(
+        submit_for_review: true,
+        automatic_release: false,
+        force: true,
+        overwrite_screenshots: true,
+        run_precheck_before_submit: false,
+        submission_information: {
+          add_id_info_uses_idfa: false
+        },
+      )
+  end
+
   def upload_deobfuscation_file
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
   end
