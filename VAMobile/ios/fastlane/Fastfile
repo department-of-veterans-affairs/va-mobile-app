@@ -126,6 +126,20 @@ platform :ios do
     end
   end
 
+  desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
+  lane :new_lane do |options|
+    puts "on demand run"
+    update_version(options[:version])
+    sign
+    build
+    notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
+    upload_tf(notes, options[:tfGroup])
+    upload_deobfuscation_file
+    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+    message = "New On Demand build successfully uploaded to TestFlight Group " + options[:tfGroup]
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS")
+  end
+
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
   end
