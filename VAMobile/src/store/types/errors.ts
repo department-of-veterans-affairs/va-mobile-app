@@ -1,4 +1,3 @@
-import { Action } from 'redux'
 import { ActionDef } from './index'
 import { CommonErrorTypes } from 'constants/errors'
 import { ScreenIDTypes } from '../api'
@@ -20,7 +19,11 @@ export type ErrorsSetMetadataPayload = {
 }
 
 export type ErrorsClearMetadataPayload = {
-  screenID?: ScreenIDTypes
+  screenID: ScreenIDTypes
+}
+
+export type ErrorClearErrorTypePayload = {
+  errorType: CommonErrorTypes
 }
 
 export type ErrorsSetTryAgainFunctionPayload = {
