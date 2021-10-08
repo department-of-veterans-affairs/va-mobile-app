@@ -100,6 +100,8 @@ platform :android do
       props = { latestBuild: latestBuild, version: versionNumber }
       gradle(task: 'updateVersionNumber', properties: props)
     end
+    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
+    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
   end
 
 
