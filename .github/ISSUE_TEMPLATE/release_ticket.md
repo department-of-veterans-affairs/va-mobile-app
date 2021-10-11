@@ -31,6 +31,7 @@ This ticket should be complete by {{ env.vaDueDate }}
 
 ## What's New content
 <!-- Define the content for the What's New sections of the app stores here -->
+You can now [describe xyz new feature(s)]. We’ve also [enhanced or improved abc] and fixed a few bugs.
 
 ## App Store content changes?
 All changes should be made to the files in the repo and not directly to the stores. 
