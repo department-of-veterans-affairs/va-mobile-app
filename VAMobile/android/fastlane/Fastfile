@@ -75,6 +75,24 @@ platform :android do
     end
   end
 
+  desc "add a tester to Firebase Distribution. options.emails is a comma-separated string of emails to add to testers. Once added, they will need to be added to the QA team in Firebase Distribution console."
+  lane :firebase_app_dist_add_testers do |options|
+    firebase_app_distribution_add_testers(
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        project_number: ENV["FIREBASE_PROJECT_NUMBER"],
+        emails: options[:emails]
+    )
+  end
+
+  desc "remove a tester from Firebase Distribution. options.emails is a comma-separated string of emails to remove to testers."
+  lane :firebase_app_dist_remove_testers do |options|
+    firebase_app_distribution_remove_testers(
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        project_number: ENV["FIREBASE_PROJECT_NUMBER"],
+        emails: options[:emails]
+    )
+  end
+
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
   end
@@ -142,4 +160,13 @@ platform :android do
     end
   end
 
+  def distribute_to_firebase(notes, group)
+    firebase_app_distribution(
+        app: ENV["FIREBASE_ANDROID_APP_ID"],
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        release_notes: notes,
+        group: group,
+        android_artifact_type: "AAB"
+    )
+  end
 end
