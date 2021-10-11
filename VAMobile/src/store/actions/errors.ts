@@ -49,7 +49,7 @@ export const dispatchSetMetadata = (metadata?: { [key: string]: string }, screen
 
 /**
  * Clears the error metadata for a given screen ID
- * @param screenID - ID of the screen to clear
+ * @param screenID - screen ID of the screen to clear
  */
 export const dispatchClearMetadata = (screenID?: ScreenIDTypes): ReduxAction => {
   return {
