@@ -19,7 +19,7 @@ export type ErrorsSetMetadataPayload = {
 }
 
 export type ErrorsClearMetadataPayload = {
-  screenID: ScreenIDTypes
+  screenID?: ScreenIDTypes
 }
 
 export type ErrorClearErrorTypePayload = {
@@ -44,6 +44,7 @@ export interface ErrorsActions {
   ERRORS_CLEAR_METADATA: ActionDef<'ERRORS_CLEAR_METADATA', ErrorsClearMetadataPayload>
   /** Redux action to signify that clear all error metadata request has started */
   ERRORS_CLEAR_ALL_METADATA: ActionDef<'ERRORS_CLEAR_ALL_METADATA', null>
+  /** Redux action to signify that clear error type request has started */
   ERRORS_CLEAR_ERROR_TYPE: ActionDef<'ERRORS_CLEAR_ERROR_TYPE', ErrorClearErrorTypePayload>
   /** Redux action to signify that errors set try again request has started */
   ERRORS_SET_TRY_AGAIN_FUNCTION: ActionDef<'ERRORS_SET_TRY_AGAIN_FUNCTION', ErrorsSetTryAgainFunctionPayload>

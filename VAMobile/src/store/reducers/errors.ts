@@ -112,15 +112,14 @@ export default createReducer<ErrorsState>(initialErrorsState, {
   },
   ERRORS_CLEAR_ERROR_TYPE: (state, { errorType }) => {
     let errorsByScreenID = state.errorsByScreenID
-    for (const screenID in ScreenIDTypesConstants) {
-      errorsByScreenID =
-        errorsByScreenID[screenID] !== CommonErrorTypesConstants.DOWNTIME_ERROR
-          ? state.errorMetadataByScreenID
-          : {
-              ...state.errorMetadataByScreenID,
-              [screenID as ScreenIDTypes]: undefined,
-            }
-    }
+    errorsByScreenID = reduce(
+      ScreenIDTypesConstants,
+      (memo: ErrorsByScreenIDType, value: ScreenIDTypes): ErrorsByScreenIDType => {
+        memo[value] = errorsByScreenID[value] === CommonErrorTypesConstants.DOWNTIME_ERROR ? undefined : errorsByScreenID[value]
+        return memo
+      },
+      {} as ErrorsByScreenIDType,
+    )
     return {
       ...state,
       errorsByScreenID,

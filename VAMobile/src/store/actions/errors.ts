@@ -71,6 +71,18 @@ export const dispatchClearAllMetadata = (): ReduxAction => {
 }
 
 /**
+ * Clears the error type for all screen IDs
+ */
+export const dispatchClearErrorType = (errorType: CommonErrorTypes): ReduxAction => {
+  return {
+    type: 'ERRORS_CLEAR_ERROR_TYPE',
+    payload: {
+      errorType,
+    },
+  }
+}
+
+/**
  * checks for downtime by getting a list from the backend API
  * clears all metadata first and sets errors based on which downtime is active
  */
@@ -81,6 +93,7 @@ export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
       return
     }
     dispatch(dispatchClearAllMetadata())
+    dispatch(dispatchClearErrorType(CommonErrorTypesConstants.DOWNTIME_ERROR))
     for (const maint_window of response) {
       const screenID = DowntimeFeatureToScreenID[maint_window.service]
       const metadata = {
