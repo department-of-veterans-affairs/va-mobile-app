@@ -19,6 +19,8 @@
   "disabilityRating.learnAboutLinkTitle.a11yHint": "Learn more about V-A disability ratings",
   "disabilityRating.learnAboutSummary": "To learn how we determined your VA combined disability rating, use our disability rating calculator and ratings table.",
   "disabilityRating.learnAboutSummary.a11yLabel": "To learn how we determined your V-A combined disability rating, use our disability rating calculator and ratings table.",
+  "disabilityRating.noDisabilityRatings.title": "You do not have a V\ufeffA combined disability rating on record.",
+  "disabilityRating.noDisabilityRatings.body": "This tool doesn't include ratings for any disability claims that are still in process. You can check the status of pending claims with the claims status tool.",
   "disabilityRatingDetails.percentage": "{{rate}}%",
   "disabilityRatingDetails.serviceConnected": "Service-connected disability?  {{yesOrNo}}",
   "disabilityRatingDetails.title": "Disability Ratings",
