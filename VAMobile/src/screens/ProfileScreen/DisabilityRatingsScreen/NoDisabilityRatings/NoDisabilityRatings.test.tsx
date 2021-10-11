@@ -8,7 +8,7 @@ import { context, renderWithProviders } from 'testUtils'
 import NoDisabilityRatings from './NoDisabilityRatings'
 import { TextView } from 'components'
 
-context('NoInboxMessages', () => {
+context('NoDisabilityRatings', () => {
   let component: any
   let store: any
   let testInstance: ReactTestInstance
