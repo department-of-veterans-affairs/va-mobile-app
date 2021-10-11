@@ -36,14 +36,15 @@ platform :ios do
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
     sign
     build
-    notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
+    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
     upload_tf(notes, options[:tfGroup])
     upload_deobfuscation_file
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
-    message = "New On Demand build successfully uploaded to TestFlight Group " + options[:tfGroup]
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS")
+    message = "New QA build successfully uploaded to TestFlight Group " + options[:tfGroup]
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
   end
+  
   desc "Push new demo version to TestFlight"
   lane :demo do
     puts('Begin Demo lane')
