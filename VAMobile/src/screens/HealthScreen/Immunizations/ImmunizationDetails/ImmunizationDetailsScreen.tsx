@@ -25,12 +25,20 @@ const ImmunizationDetailsScreen: FC<ImmunizationDetailsScreenProps> = ({ route }
 
   const immunization = immunizationsById[immunizationId]
 
-  const addressLines = map(immunization.location.address.line || [], (line) => {
-    return <TextView variant={'MobileBody'}>{line}</TextView>
+  const addressLines = map(immunization.location.address.line || [], (line, idx) => {
+    return (
+      <TextView variant={'MobileBody'} key={idx}>
+        {line}
+      </TextView>
+    )
   })
 
-  const notes = map(immunization.notes || [], (note) => {
-    return <TextView variant={'MobileBody'}>{note.text}</TextView>
+  const notes = map(immunization.notes || [], (note, idx) => {
+    return (
+      <TextView variant={'MobileBody'} key={idx}>
+        {note.text}
+      </TextView>
+    )
   })
 
   let reactionListStr = ''

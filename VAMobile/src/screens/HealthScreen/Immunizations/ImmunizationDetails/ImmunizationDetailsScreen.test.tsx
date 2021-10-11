@@ -89,7 +89,6 @@ context('ImmunizationDetailsScreen', () => {
       initializeTestInstance()
       expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Cheyenne VA Medical Center')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Pfizer 0.3ML')).toBeTruthy()
     })
   })
 })
