@@ -44,7 +44,7 @@
     },
     {
       "id": "abcd",
-      "status": "completed",
+      "status": "Completed",
       "vaccineCode":"COVID-19 vaccine",
       "recorded": "2021-05-25",
       "primarySource": true,
@@ -86,7 +86,7 @@
     },
     {
       "id": "abcde",
-      "status": "completed",
+      "status": "Completed",
       "vaccineCode":"Influenza vaccine",
       "recorded": "2020-09-18",
       "primarySource": true,
