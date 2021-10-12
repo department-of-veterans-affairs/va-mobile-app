@@ -2,6 +2,10 @@ export type ImmunizationListData = {
   data: ImmunizationList
 }
 
+export type ImmunizationsMap = {
+  [key: string]: Immunization
+}
+
 export type ImmunizationList = Array<Immunization>
 
 export type Immunization = {
@@ -9,6 +13,7 @@ export type Immunization = {
   vaccineCode: string
   recorded: string
   primarySource: boolean
+  status: string
   location: Location
   manufacturer: VaccineManufacturer
   lotNumber: string

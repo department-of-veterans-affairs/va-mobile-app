@@ -1,14 +1,18 @@
+import _ from 'underscore'
+
 import * as api from '../api'
 import createReducer from './createReducer'
 
 export type ImmunizationState = {
   loading: boolean
   immunizations: api.ImmunizationList
+  immunizationsById: api.ImmunizationsMap
 }
 
 export const initialImmunizationState = {
   loading: false,
   immunizations: [],
+  immunizationsById: {},
 }
 
 export default createReducer<ImmunizationState>(initialImmunizationState, {
@@ -20,10 +24,13 @@ export default createReducer<ImmunizationState>(initialImmunizationState, {
     }
   },
   IMMUNIZATION_FINISH_GET_IMMUNIZATIONS: (state, { immunizations, error }) => {
+    const immunizationsById = _.indexBy(immunizations || [], 'id')
+
     return {
       ...state,
       loading: false,
-      immunizations: immunizations || state.immunizations,
+      immunizations: immunizations || [],
+      immunizationsById,
       error,
     }
   },

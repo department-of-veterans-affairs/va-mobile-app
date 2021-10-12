@@ -12,7 +12,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getImmunizations } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ImmunizationListScreenProps = StackScreenProps<HealthStackParamList, 'ImmunizationList'>
 
@@ -24,9 +24,10 @@ const ImmunizationListScreen: FC<ImmunizationListScreenProps> = () => {
   const { immunizations, loading } = useSelector<StoreState, ImmunizationState>((state) => state.immunization)
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
-    dispatch(getImmunizations())
+    dispatch(getImmunizations(ScreenIDTypesConstants.IMMUNIZATION_LIST_SCREEN_ID))
   }, [dispatch])
 
   const vaccineButtons: Array<DefaultListItemObj> = map(immunizations || [], (immunization: Immunization) => {
@@ -37,15 +38,15 @@ const ImmunizationListScreen: FC<ImmunizationListScreenProps> = () => {
 
     const vaccineButton: DefaultListItemObj = {
       textLines,
-      onPress: () => {}, //TODO: add details screens
+      onPress: navigateTo('ImmunizationDetails', { immunizationId: immunization.id }),
       a11yHintText: t('immunizations.list.a11y'),
     }
 
     return vaccineButton
   })
 
-  if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
+  if (useError(ScreenIDTypesConstants.IMMUNIZATION_LIST_SCREEN_ID)) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.IMMUNIZATION_LIST_SCREEN_ID} />
   }
 
   if (loading) {
