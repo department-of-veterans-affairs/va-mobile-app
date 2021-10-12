@@ -8,7 +8,7 @@ set -o errexit
 # Use the error status of the first failure, rather than that of the last item in a pipeline.
 set -o pipefail
 
-#### function to pretty print array values
+#### function to pretty print array values as comma separated string
 ### $1: array to print
 arrayPrint() {
     local -n arr=$1
@@ -24,10 +24,10 @@ Help() {
 
     echo "Syntax: ./on-demand.sh [(-e|--environment)|(-o|--os)|(-b|--branch)|(-t|--type)|(-f|--flight_group)|(-p|--play_track)]"
     echo "options:"
-    echo "e | environment       Vets API environment to build for. default is staging. Choose from [ $(arrayPrint env_opts) ]"
-    echo "b | branch            Branch to checkout. Default is develop"
-    echo "o | os                Operating system to build for. Default is all. Choose from [ $(arrayPrint os_opts) ]"
-    echo "t | type              Type of build. Default is qa. Choose from [ $(arrayPrint type_opts) ]"
+    echo "e | environment       Vets API environment to build for. default is 'staging'. Choose from [ $(arrayPrint env_opts) ]"
+    echo "b | branch            Branch to checkout. Default is 'develop'"
+    echo "o | os                Operating system to build for. Default is 'all'. Choose from [ $(arrayPrint os_opts) ]"
+    echo "t | type              Type of build. Default is 'qa'. Choose from [ $(arrayPrint type_opts) ]"
     echo "f | flight_group      Test Flight group to build for (iOS). Default is 'Development Team'. Choose from [ $(arrayPrint tf_opts) ]"
     echo "p | play_track        Google Play Track to build for (Android). Default is 'Development Team'. Choose from [ $(arrayPrint ps_opts) ]"
     echo "h | help              Displays this help menu."
@@ -114,7 +114,7 @@ while [ $# -gt 0 ]; do
 	  Help;;
     *)
       printf "***************************\n"
-      printf "* Error: Invalid argument. try -h for help*\n"
+      printf "* Error: Invalid argument. Try -h for help*\n"
       printf "***************************\n"
       exit 1
   esac
@@ -123,7 +123,6 @@ while [ $# -gt 0 ]; do
 done
 
 # sanity check prints for debugging
-arrayPrint env_opts
 echo BRANCH: "$BRANCH"
 echo OS: $OS
 echo ENV: $ENV
@@ -148,13 +147,8 @@ if [[ $OS == "all" || $OS == "ios" ]]
 then
   # install pods
   cd "$BASE_DIR"/ios &&
-  pod install &&
-  cd "$BASE_DIR" &&
-  # bundle for ios
-  yarn bundle:ios &&
-  cd "$BASE_DIR"/ios &&
   # run fastlane
-  fastlane on_demand version:"qa" tfGroup:"$TF_GROUP" ;
+  fastlane on_demand version:"qa" tfGroup:"$TF_GROUP"
 fi
 cd "$BASE_DIR" || exit
 
@@ -165,5 +159,5 @@ then
   yarn bundle:android &&
   cd "$BASE_DIR"/android &&
   # run fastlane
-  fastlane release version:"qa" psTrack:"$PS_TRACK";
+  fastlane on_demand version:"qa" psTrack:"$PS_TRACK";
 fi

@@ -68,7 +68,7 @@ platform :android do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-    slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+#     slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
 # method to update the version and build in the repo
@@ -137,7 +137,7 @@ platform :android do
   end
 
   def upload(track)
-    supply(track: track)
+    supply(track: track, package_name: "gov.va.mobileapp")
   end
 
   def promote_pre_prod
