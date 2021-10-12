@@ -10,7 +10,7 @@ import { EnvironmentTypesConstants } from '../../constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
-import { dispatchClearAuthorizedServices, dispatchProfileLogout } from './personalInformation'
+import { dispatchClearAuthorizedServices, dispatchClearHealth, dispatchProfileLogout } from './personalInformation'
 import { dispatchClearLoadedAppointments } from './appointments'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
 import { dispatchClearLoadedMessages } from './secureMessaging'
@@ -498,6 +498,7 @@ export const logout = (): AsyncReduxAction => {
       dispatch(dispatchClearLoadedMessages())
       dispatch(dispatchClearLoadedClaimsAndAppeals())
       dispatch(dispatchClearAuthorizedServices())
+      dispatch(dispatchClearHealth())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
       dispatch(dispatchDisabilityRatingLogout())

@@ -2,7 +2,7 @@ import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { SuggestedAddress, VAServices } from 'store/api'
+import { HealthData, SuggestedAddress, VAServices } from 'store/api'
 import { VAServicesConstants } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import {
@@ -52,6 +52,19 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
   }
 }
 
+/**
+ * Dispatch action set/update health information
+ */
+export const dispatchUpdateHealth = (health?: HealthData, error?: Error): ReduxAction => {
+  return {
+    type: 'HEALTH_UPDATE',
+    payload: {
+      health,
+      error,
+    },
+  }
+}
+
 export const dispatchClearAuthorizedServices = (): ReduxAction => {
   return {
     type: 'AUTHORIZED_SERVICES_CLEAR',
@@ -62,6 +75,16 @@ export const dispatchClearAuthorizedServices = (): ReduxAction => {
 export const dispatchProfileLogout = (): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_ON_LOGOUT',
+    payload: {},
+  }
+}
+
+/**
+ * Dispatch action to clear health data
+ */
+export const dispatchClearHealth = (): ReduxAction => {
+  return {
+    type: 'HEALTH_CLEAR',
     payload: {},
   }
 }
@@ -86,6 +109,7 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
+      dispatch(dispatchUpdateHealth(user?.data.attributes.health))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
