@@ -270,6 +270,7 @@ jobs:
   run_release_lanes:
     executor: default
     steps:
+      - checkout
       - android_fastlane:
           lane: "release"
       - ios_fastlane:
