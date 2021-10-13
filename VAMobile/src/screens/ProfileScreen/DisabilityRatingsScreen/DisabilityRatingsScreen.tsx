@@ -1,3 +1,8 @@
+import { DateTime } from 'luxon'
+import { map } from 'underscore'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect } from 'react'
+
 import {
   Box,
   ClickForActionLink,
@@ -15,18 +20,15 @@ import {
   TextViewProps,
   VAScrollView,
 } from 'components'
-import { DateTime } from 'luxon'
 import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
-import { map } from 'underscore'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
-import ProfileBanner from './ProfileBanner'
-import React, { FC, useEffect } from 'react'
+import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
+import ProfileBanner from '../ProfileBanner'
 import getEnv from 'utils/env'
 
 const DisabilityRatingsScreen: FC = () => {
@@ -168,6 +170,10 @@ const DisabilityRatingsScreen: FC = () => {
         <LoadingComponent />
       </React.Fragment>
     )
+  }
+
+  if (individualRatingsList.length === 0) {
+    return <NoDisabilityRatings />
   }
 
   const clickToCallProps: LinkButtonProps = {
