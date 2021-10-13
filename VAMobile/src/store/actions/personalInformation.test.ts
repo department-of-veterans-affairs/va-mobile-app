@@ -327,6 +327,50 @@ context('personalInformation', () => {
       expect(authorizedServices.error).toBeFalsy()
     })
 
+    it('should get health information', async () => {
+      const mockFacilities = [
+        {
+          "facilityId": "1",
+          "isCerner": true,
+          "facilityName": "Test Veterans Outpatient Clinic"
+        },
+        {
+          "facilityId": "2",
+          "isCerner": false,
+          "facilityName": ""
+        }
+      ]
+      const mockHealthPayload = {
+        data: {
+          attributes: {
+            profile: {},
+            authorizedServices: [],
+            health: {
+              facilities: mockFacilities,
+              isCernerPatient: true
+            }
+          }
+        }
+      }
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/user')
+          .mockResolvedValue(mockHealthPayload)
+
+      const store = realStore()
+      await store.dispatch(getProfileInfo())
+      const actions = store.getActions()
+
+      const updateAction = _.find(actions, { type: 'CERNER_UPDATE' })
+      expect(updateAction).toBeTruthy()
+
+      const { error, cernerFacilities, isCernerPatient, facilities } = store.getState().patient
+      expect(isCernerPatient).toBeTruthy()
+      expect(cernerFacilities).toEqual([mockFacilities[0]])
+      expect(facilities).toEqual(mockFacilities)
+      expect(error).toBeFalsy()
+    })
+
     it('should get errors if userProfileData is not received', async () => {
       const error = new Error('error from backend')
 
