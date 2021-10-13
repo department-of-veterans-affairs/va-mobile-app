@@ -1,11 +1,12 @@
+import React, { FC, ReactNode } from 'react'
+
 import { AccordionCollapsible, Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
-import { Facility } from '../../../store/api'
+import { Facility } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { PatientState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
 import { useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import React, { FC, ReactNode } from 'react'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
