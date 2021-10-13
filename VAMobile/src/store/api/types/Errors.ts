@@ -26,6 +26,7 @@ export type ErrorMessage = {
   text: string
 }
 
+// exact service names received from maintenance windows api
 export type DowntimeFeatureType =
   | 'facility_locator'
   | 'auth_dslogon'
@@ -71,6 +72,7 @@ export const DowntimeFeatureTypeConstants: {
   userProfileUpdate: 'user_profile_update',
 }
 
+// Friendly names shown in downtime messages
 export const DowntimeFeatureNameConstants = {
   [DowntimeFeatureTypeConstants.facilityLocator]: 'Facility Locator',
   [DowntimeFeatureTypeConstants.claims]: 'Claims',
@@ -81,20 +83,22 @@ export const DowntimeFeatureNameConstants = {
   [DowntimeFeatureTypeConstants.disabilityRating]: 'Disability Rating',
   [DowntimeFeatureTypeConstants.militaryServiceHistory]: 'Military Service History',
   [DowntimeFeatureTypeConstants.appeals]: 'Appeals',
-  [DowntimeFeatureTypeConstants.userProfileUpdate]: 'User Profile',
+  [DowntimeFeatureTypeConstants.userProfileUpdate]: 'Personal Information',
 }
 
+// which screen to show which downtime message on
 export const DowntimeFeatureToScreenID = {
   // TODO: Find a proper page conversion for facility locator to display downtime
-  [DowntimeFeatureTypeConstants.claims]: ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID,
+  [DowntimeFeatureTypeConstants.claims]: ScreenIDTypesConstants.CLAIMS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.appointments]: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.secureMessaging]: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
   [DowntimeFeatureTypeConstants.letters]: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
   [DowntimeFeatureTypeConstants.directDepositBenefits]: ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID,
   [DowntimeFeatureTypeConstants.disabilityRating]: ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID,
   [DowntimeFeatureTypeConstants.militaryServiceHistory]: ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.appeals]: ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.userProfileUpdate]: ScreenIDTypesConstants.PROFILE_SCREEN_ID,
+  // it was determined that claims and appeals would be interconnected and downtime for either would block both
+  [DowntimeFeatureTypeConstants.appeals]: ScreenIDTypesConstants.CLAIMS_SCREEN_ID,
+  [DowntimeFeatureTypeConstants.userProfileUpdate]: ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID,
 }
 
 export type MaintenanceWindowsGetData = {
