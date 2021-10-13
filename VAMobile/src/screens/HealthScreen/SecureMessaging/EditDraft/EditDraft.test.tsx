@@ -170,6 +170,7 @@ context('EditDraft', () => {
                   triageTeamId: 0,
                   name: 'Doctor 1',
                   relationType: 'PATIENT',
+                  preferredTeam: true,
                 },
               },
               {
@@ -179,6 +180,7 @@ context('EditDraft', () => {
                   triageTeamId: 1,
                   name: 'Doctor 2',
                   relationType: 'PATIENT',
+                  preferredTeam: true,
                 },
               },
             ],

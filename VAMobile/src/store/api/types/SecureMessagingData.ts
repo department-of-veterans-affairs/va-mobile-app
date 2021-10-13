@@ -214,6 +214,7 @@ export type SecureMessagingRecipientDataAttributes = {
   triageTeamId: number
   name: string
   relationType: SecureMessagingRecipientDataAttributesRelationType
+  preferredTeam: boolean
 }
 
 export type SecureMessagingRecipientData = {
