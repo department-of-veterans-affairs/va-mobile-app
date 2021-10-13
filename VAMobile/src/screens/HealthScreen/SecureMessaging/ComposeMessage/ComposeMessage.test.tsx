@@ -54,7 +54,7 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy
+    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
   }
 })
 
@@ -107,6 +107,7 @@ context('ComposeMessage', () => {
                   triageTeamId: 0,
                   name: 'Doctor 1',
                   relationType: 'PATIENT',
+                  preferredTeam: true,
                 },
               },
               {
@@ -116,6 +117,7 @@ context('ComposeMessage', () => {
                   triageTeamId: 1,
                   name: 'Doctor 2',
                   relationType: 'PATIENT',
+                  preferredTeam: true,
                 },
               },
             ],
