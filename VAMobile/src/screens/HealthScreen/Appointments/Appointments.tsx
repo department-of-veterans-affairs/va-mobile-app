@@ -12,7 +12,8 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
+import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
@@ -40,6 +41,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     (state) => state.appointments,
   )
   const { appointments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const hasCernerFacilities = useHasCernerFacilities()
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -105,6 +107,9 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
+        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
+          <CernerAlert />
+        </Box>
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}

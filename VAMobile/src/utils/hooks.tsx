@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, ErrorsState, StoreState } from 'store'
+import { AccessibilityState, ErrorsState, PatientState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
@@ -211,6 +211,14 @@ export function useExternalLink(): (url: string) => void {
       Linking.openURL(url)
     }
   }
+}
+
+/**
+ * Returns whether user has cerner facilities or not
+ */
+export const useHasCernerFacilities = (): boolean => {
+  const { cernerFacilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  return cernerFacilities.length > 0
 }
 
 export type UseDestructiveAlertButtonProps = {

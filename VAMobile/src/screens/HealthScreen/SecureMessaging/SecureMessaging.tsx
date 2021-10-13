@@ -13,6 +13,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
+import CernerAlert from '../CernerAlert'
 import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
@@ -98,6 +99,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
               accessibilityHints={a11yHints}
             />
           </Box>
+          <CernerAlert />
           {serviceErrorAlert()}
           <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
             {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
