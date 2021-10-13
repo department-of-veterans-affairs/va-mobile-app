@@ -20,13 +20,13 @@ arrayPrint() {
 #### Help function
 Help() {
     #Display help
-    echo "Build an on-demand version of Android, iOS, or both OSes. This will deploy to the named tracks/groups"
+    echo "Build an on-demand version of Android or iOS. This will deploy to the named tracks/groups"
 
-    echo "Syntax: ./on-demand.sh [(-e|--environment)|(-o|--os)|(-b|--branch)|(-t|--type)|(-f|--flight_group)|(-p|--play_track)]"
+    echo "Syntax: ./on-demand.sh [(-o|--os)&((-e|--environment)|(-b|--branch)|(-t|--type)|(-f|--flight_group)|(-p|--play_track))]"
     echo "options:"
+    echo "o | os                REQUIRED: Operating system to build for. Choose from [ $(arrayPrint os_opts) ]"
     echo "e | environment       Vets API environment to build for. default is 'staging'. Choose from [ $(arrayPrint env_opts) ]"
     echo "b | branch            Branch to checkout. Default is 'develop'"
-    echo "o | os                Operating system to build for. Default is 'all'. Choose from [ $(arrayPrint os_opts) ]"
     echo "t | type              Type of build. Default is 'qa'. Choose from [ $(arrayPrint type_opts) ]"
     echo "f | flight_group      Test Flight group to build for (iOS). Default is 'Development Team'. Choose from [ $(arrayPrint tf_opts) ]"
     echo "p | play_track        Google Play Track to build for (Android). Default is 'Development Team'. Choose from [ $(arrayPrint ps_opts) ]"
@@ -40,8 +40,7 @@ ENV="staging"
 declare -a env_opts=(staging production)
 
 # Operating system default and options
-OS="all"
-declare -a os_opts=(all ios android)
+declare -a os_opts=(ios android)
 
 # Git branch default
 BRANCH="develop"
@@ -143,17 +142,17 @@ yarn install &&
 yarn env:$ENV &&
 
 # build iOS if the os flag is all or ios
-if [[ $OS == "all" || $OS == "ios" ]]
+if [[ $OS == "ios" ]]
 then
   # install pods
   cd "$BASE_DIR"/ios &&
   # run fastlane
-  fastlane on_demand version:"qa" tfGroup:"$TF_GROUP"
+  fastlane on_demand version:"qa" tfGroup:"$TF_GROUP";
 fi
 cd "$BASE_DIR" || exit
 
 # build for android if os flag is all or android
-if [[ $OS == "all" || $OS == "android" ]]
+if [[ $OS == "android" ]]
 then
   # bundle for android
   yarn bundle:android &&
