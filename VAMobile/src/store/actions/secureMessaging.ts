@@ -404,7 +404,6 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
     try {
       const recipientsData = await api.get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
       const preferdList = recipientsData?.data.filter((recipient) => recipient.attributes.preferredTeam === true)
-
       dispatch(dispatchFinishGetMessageRecipients(preferdList))
     } catch (error) {
       if (isErrorObject(error)) {
