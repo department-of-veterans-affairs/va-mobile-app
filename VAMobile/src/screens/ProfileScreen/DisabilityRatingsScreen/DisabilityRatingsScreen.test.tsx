@@ -142,8 +142,8 @@ context('DisabilityRatingsScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(ratingDataMock, undefined, errorState)

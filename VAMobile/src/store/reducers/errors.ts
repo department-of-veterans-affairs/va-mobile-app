@@ -8,8 +8,15 @@ export type ErrorsByScreenIDType = {
   [key in ScreenIDTypes]?: CommonErrorTypes
 }
 
+export type ErrorMetadataByScreenIDType = {
+  [key in ScreenIDTypes]?: {
+    [key: string]: string
+  }
+}
+
 export type ErrorsState = {
   errorsByScreenID: ErrorsByScreenIDType
+  errorMetadataByScreenID: ErrorMetadataByScreenIDType
   tryAgain: () => Promise<void>
 }
 
@@ -24,9 +31,21 @@ export const initializeErrorsByScreenID = (): ErrorsByScreenIDType => {
   )
 }
 
+export const initializeErrorMetadataByScreenID = (): ErrorMetadataByScreenIDType => {
+  return reduce(
+    ScreenIDTypesConstants,
+    (memo: ErrorMetadataByScreenIDType, value: ScreenIDTypes): ErrorMetadataByScreenIDType => {
+      memo[value] = undefined
+      return memo
+    },
+    {} as ErrorMetadataByScreenIDType,
+  )
+}
+
 export const initialErrorsState: ErrorsState = {
   tryAgain: () => Promise.resolve(),
   errorsByScreenID: initializeErrorsByScreenID(),
+  errorMetadataByScreenID: initializeErrorMetadataByScreenID(),
 }
 
 export default createReducer<ErrorsState>(initialErrorsState, {
@@ -52,6 +71,43 @@ export default createReducer<ErrorsState>(initialErrorsState, {
     return {
       ...initialErrorsState,
       errorsByScreenID,
+    }
+  },
+  ERRORS_SET_METADATA: (state, { metadata, screenID }) => {
+    const errorMetadataByScreenID = !screenID
+      ? state.errorMetadataByScreenID
+      : {
+          ...state.errorMetadataByScreenID,
+          [screenID as ScreenIDTypes]: metadata,
+        }
+    return {
+      ...state,
+      errorMetadataByScreenID,
+    }
+  },
+  ERRORS_CLEAR_METADATA: (state, { screenID }) => {
+    const errorMetadataByScreenID = !screenID
+      ? state.errorMetadataByScreenID
+      : {
+          ...state.errorMetadataByScreenID,
+          [screenID as ScreenIDTypes]: undefined,
+        }
+    return {
+      ...state,
+      errorMetadataByScreenID,
+    }
+  },
+  ERRORS_CLEAR_ALL_METADATA: (state) => {
+    let errorMetadataByScreenID = state.errorMetadataByScreenID
+    for (const screenID in ScreenIDTypesConstants) {
+      errorMetadataByScreenID = {
+        ...state.errorMetadataByScreenID,
+        [screenID as ScreenIDTypes]: undefined,
+      }
+    }
+    return {
+      ...state,
+      errorMetadataByScreenID,
     }
   },
   ERRORS_SET_TRY_AGAIN_FUNCTION: (state, { tryAgain }) => {
