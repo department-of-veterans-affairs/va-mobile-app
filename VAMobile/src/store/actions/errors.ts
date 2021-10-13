@@ -108,21 +108,5 @@ export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
       dispatch(dispatchSetMetadata(metadata, screenID))
       dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
     }
-    // console.log('====== TEST DOWNTIME ERROR =======')
-    // const test_date = DateTime.fromISO('2021-06-01T15:00:00.000Z').toFormat('fff')
-    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
-    // dispatch(dispatchSetMetadata({ featureName: 'Appointments', endTime: test_date }, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
-    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
-    // dispatch(dispatchSetMetadata({ featureName: 'Claims', endTime: test_date }, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
-    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
-    // dispatch(dispatchSetMetadata({ featureName: 'Appeals', endTime: test_date }, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
-    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-    // dispatch(dispatchSetMetadata({ featureName: 'Secure Messaging', endTime: test_date }, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
-    // dispatch(dispatchSetMetadata({ featureName: 'Letters', endTime: test_date }, ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
-    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
-    // dispatch(dispatchSetMetadata({ featureName: 'Disability Rating', endTime: test_date }, ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
-    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
-    // dispatch(dispatchSetMetadata({ featureName: 'Direct Deposit', endTime: test_date }, ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
   }
 }

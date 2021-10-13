@@ -38,6 +38,14 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             callPhone={t('health:secureMessaging.attachments.FAQ.ifYourProblem.phone')}
           />
         )
+      case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
+        return (
+          <CallHelpCenter
+            titleText={t('profile:disabilityRating.errorTitle')}
+            titleA11yHint={t('profile:disabilityRating.errorTitleA11y')}
+            callPhone={t('profile:disabilityRating.errorPhoneNumber')}
+          />
+        )
       case CommonErrorTypesConstants.DOWNTIME_ERROR:
         return <DowntimeError screenID={screenID} />
       default:
