@@ -127,43 +127,6 @@ export default createReducer<ErrorsState>(initialErrorsState, {
       errorsByScreenID,
     }
   },
-  ERRORS_SET_METADATA: (state, { metadata, screenID }) => {
-    const errorMetadataByScreenID = !screenID
-      ? state.errorMetadataByScreenID
-      : {
-          ...state.errorMetadataByScreenID,
-          [screenID as ScreenIDTypes]: metadata,
-        }
-    return {
-      ...state,
-      errorMetadataByScreenID,
-    }
-  },
-  ERRORS_CLEAR_METADATA: (state, { screenID }) => {
-    const errorMetadataByScreenID = !screenID
-      ? state.errorMetadataByScreenID
-      : {
-          ...state.errorMetadataByScreenID,
-          [screenID as ScreenIDTypes]: undefined,
-        }
-    return {
-      ...state,
-      errorMetadataByScreenID,
-    }
-  },
-  ERRORS_CLEAR_ALL_METADATA: (state) => {
-    let errorMetadataByScreenID = state.errorMetadataByScreenID
-    for (const screenID in ScreenIDTypesConstants) {
-      errorMetadataByScreenID = {
-        ...state.errorMetadataByScreenID,
-        [screenID as ScreenIDTypes]: undefined,
-      }
-    }
-    return {
-      ...state,
-      errorMetadataByScreenID,
-    }
-  },
   ERRORS_SET_TRY_AGAIN_FUNCTION: (state, { tryAgain }) => {
     return {
       ...state,
