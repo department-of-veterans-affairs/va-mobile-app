@@ -2,7 +2,7 @@ import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { DateTime } from 'luxon'
-import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes } from '../api'
+import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes, ScreenIDTypesConstants } from '../api'
 
 export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: ScreenIDTypes): ReduxAction => {
   return {
@@ -84,7 +84,7 @@ export const dispatchClearErrorType = (errorType: CommonErrorTypes): ReduxAction
 
 /**
  * checks for downtime by getting a list from the backend API
- * clears all metadata first and sets errors based on which downtime is active
+ * clears all metadata and current downtimes first and sets errors based on which downtime is active from API call
  */
 export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
@@ -94,7 +94,10 @@ export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
     }
     dispatch(dispatchClearAllMetadata())
     dispatch(dispatchClearErrorType(CommonErrorTypesConstants.DOWNTIME_ERROR))
-    for (const maint_window of response) {
+    for (const maint_window of response.data) {
+      if (DateTime.fromISO(maint_window.startTime) < DateTime.now()) {
+        continue
+      }
       const screenID = DowntimeFeatureToScreenID[maint_window.service]
       const metadata = {
         featureName: '',
@@ -105,5 +108,21 @@ export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
       dispatch(dispatchSetMetadata(metadata, screenID))
       dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
     }
+    // console.log('====== TEST DOWNTIME ERROR =======')
+    // const test_date = DateTime.fromISO('2021-06-01T15:00:00.000Z').toFormat('fff')
+    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
+    // dispatch(dispatchSetMetadata({ featureName: 'Appointments', endTime: test_date }, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
+    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
+    // dispatch(dispatchSetMetadata({ featureName: 'Claims', endTime: test_date }, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
+    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
+    // dispatch(dispatchSetMetadata({ featureName: 'Appeals', endTime: test_date }, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
+    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
+    // dispatch(dispatchSetMetadata({ featureName: 'Secure Messaging', endTime: test_date }, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
+    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
+    // dispatch(dispatchSetMetadata({ featureName: 'Letters', endTime: test_date }, ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
+    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
+    // dispatch(dispatchSetMetadata({ featureName: 'Disability Rating', endTime: test_date }, ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
+    // dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
+    // dispatch(dispatchSetMetadata({ featureName: 'Direct Deposit', endTime: test_date }, ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
   }
 }

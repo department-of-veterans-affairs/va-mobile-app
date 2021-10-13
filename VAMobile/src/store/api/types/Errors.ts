@@ -86,7 +86,7 @@ export const DowntimeFeatureNameConstants = {
 
 export const DowntimeFeatureToScreenID = {
   // TODO: Find a proper page conversion for facility locator to display downtime
-  [DowntimeFeatureTypeConstants.claims]: ScreenIDTypesConstants.CLAIMS_SCREEN_ID,
+  [DowntimeFeatureTypeConstants.claims]: ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.appointments]: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.secureMessaging]: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
   [DowntimeFeatureTypeConstants.letters]: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
@@ -97,7 +97,9 @@ export const DowntimeFeatureToScreenID = {
   [DowntimeFeatureTypeConstants.userProfileUpdate]: ScreenIDTypesConstants.PROFILE_SCREEN_ID,
 }
 
-export type MaintenanceWindowsGetData = MaintenanceWindowsEntry[]
+export type MaintenanceWindowsGetData = {
+  data: MaintenanceWindowsEntry[]
+}
 
 export type MaintenanceWindowsEntry = {
   service: string

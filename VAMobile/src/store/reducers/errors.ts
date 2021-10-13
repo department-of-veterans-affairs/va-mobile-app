@@ -62,15 +62,17 @@ export default createReducer<ErrorsState>(initialErrorsState, {
     }
   },
   ERRORS_CLEAR_ERRORS: (state, { screenID }) => {
+    const errorMetadataByScreenID = state.errorMetadataByScreenID
     const errorsByScreenID = !screenID
       ? state.errorsByScreenID
       : {
           ...state.errorsByScreenID,
-          [screenID as ScreenIDTypes]: undefined,
+          [screenID as ScreenIDTypes]: state.errorsByScreenID[screenID] === CommonErrorTypesConstants.DOWNTIME_ERROR ? CommonErrorTypesConstants.DOWNTIME_ERROR : undefined,
         }
     return {
       ...initialErrorsState,
       errorsByScreenID,
+      errorMetadataByScreenID,
     }
   },
   ERRORS_SET_METADATA: (state, { metadata, screenID }) => {
@@ -115,7 +117,7 @@ export default createReducer<ErrorsState>(initialErrorsState, {
     errorsByScreenID = reduce(
       ScreenIDTypesConstants,
       (memo: ErrorsByScreenIDType, value: ScreenIDTypes): ErrorsByScreenIDType => {
-        memo[value] = errorsByScreenID[value] === CommonErrorTypesConstants.DOWNTIME_ERROR ? undefined : errorsByScreenID[value]
+        memo[value] = errorsByScreenID[value] === errorType ? undefined : errorsByScreenID[value]
         return memo
       },
       {} as ErrorsByScreenIDType,
