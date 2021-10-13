@@ -2,20 +2,21 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
+
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
 import { LoadingComponent, TextView, CallHelpCenter } from 'components'
-import ProfileBanner from './ProfileBanner'
+import ProfileBanner from '../ProfileBanner'
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types'
-import { Pressable } from 'react-native'
+import { RatingData, ScreenIDTypesConstants } from 'store/api/types'
+import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
 let mockNavigationSpy = jest.fn()
 
-jest.mock('../../utils/hooks', () => {
-  let original = jest.requireActual('../../utils/hooks')
-  let theme = jest.requireActual('../../styles/themes/standardTheme').default
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual('../../../utils/hooks')
+  let theme = jest.requireActual('../../../styles/themes/standardTheme').default
 
   return {
     ...original,
@@ -34,7 +35,7 @@ context('DisabilityRatingsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const ratingData = {
+  const ratingDataMock = {
     combinedDisabilityRating: 70,
     combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
     legalEffectiveDate: '2013-08-09T00:00:00.000+00:00',
@@ -56,11 +57,11 @@ context('DisabilityRatingsScreen', () => {
     ],
   }
 
-  const initializeTestInstance = (loading = false, errorState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (ratingInfo = ratingDataMock, loading = false, errorState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       auth: { ...initialAuthState },
       disabilityRating: {
-        ratingData,
+        ratingData: ratingInfo,
         loading,
         needsDataLoad: false,
         preloadComplete: true,
@@ -117,8 +118,21 @@ context('DisabilityRatingsScreen', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(true)
+      initializeTestInstance(ratingDataMock, true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
+  })
+
+  describe('when there is disability ratings', () => {
+    it('should render NoInboxMessages', async () => {
+      expect(testInstance.findAllByType(NoDisabilityRatings)).toHaveLength(0)
+    })
+  })
+
+  describe('when there is no disability ratings', () => {
+    it('should render NoInboxMessages', async () => {
+      initializeTestInstance({} as RatingData)
+      expect(testInstance.findAllByType(NoDisabilityRatings)).toBeTruthy()
     })
   })
 
@@ -132,7 +146,7 @@ context('DisabilityRatingsScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(undefined, errorState)
+      initializeTestInstance(ratingDataMock, undefined, errorState)
       expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
     })
   })
