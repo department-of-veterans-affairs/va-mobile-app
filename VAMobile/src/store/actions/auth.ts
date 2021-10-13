@@ -1,7 +1,7 @@
 import * as Keychain from 'react-native-keychain'
 import { Action } from 'redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import CookieManager from '@react-native-community/cookies'
+import CookieManager from '@react-native-cookies/cookies'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
