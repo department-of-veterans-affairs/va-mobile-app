@@ -5,7 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { SuggestedAddress, VAServices } from 'store/api'
 import { VAServicesConstants } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
-import { dispatchUpdateHealth } from './health'
+import { dispatchUpdateCerner } from './patient'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
@@ -87,7 +87,7 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
-      dispatch(dispatchUpdateHealth(user?.data.attributes.health))
+      dispatch(dispatchUpdateCerner(user?.data.attributes.health))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {

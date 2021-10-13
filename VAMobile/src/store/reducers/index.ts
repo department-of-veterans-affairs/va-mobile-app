@@ -11,9 +11,9 @@ import demo, { DemoState, initialDemoState } from './demo'
 import directDeposit, { DirectDepositState, initialDirectDepositState } from './directDeposit'
 import disabilityRating, { DisabilityRatingState, initialDisabilityRatingState } from './disabilityRating'
 import errors, { ErrorsState, initialErrorsState } from './errors'
-import health, { HealthState, initialHealthState } from './health'
 import letters, { LettersState, initialLettersState } from './letters'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
+import patient, { PatientState, initialPatientState } from './patient'
 import personalInformation, { PersonalInformationState, initialPersonalInformationState } from './personalInformation'
 import secureMessaging, { SecureMessagingState, initialSecureMessagingState } from './secureMessaging'
 
@@ -31,7 +31,7 @@ export * from './secureMessaging'
 export * from './demo'
 export * from './analytics'
 export * from './disabilityRating'
-export * from './health'
+export * from './patient'
 
 export interface StoreState {
   auth: AuthState
@@ -48,7 +48,7 @@ export interface StoreState {
   demo: DemoState
   analytics: AnalyticsState
   disabilityRating: DisabilityRatingState
-  health: HealthState
+  patient: PatientState
 }
 
 export const InitialState: StoreState = {
@@ -66,7 +66,7 @@ export const InitialState: StoreState = {
   demo: initialDemoState,
   analytics: initialAnalyticsState,
   disabilityRating: initialDisabilityRatingState,
-  health: initialHealthState,
+  patient: initialPatientState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -84,7 +84,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   demo,
   analytics,
   disabilityRating,
-  health,
+  patient,
 })
 
 export default allReducers

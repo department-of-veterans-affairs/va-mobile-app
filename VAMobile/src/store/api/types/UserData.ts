@@ -42,7 +42,7 @@ export type Facility = {
   facilityName: string
 }
 
-export type HealthData = {
+export type CernerData = {
   isCernerPatient: boolean
   facilities: Array<Facility>
 }
@@ -89,7 +89,7 @@ export type UserData = {
       type: string
       authorizedServices: Array<VAServices>
       profile: UserDataProfile
-      health: HealthData
+      health: CernerData
     }
   }
 }

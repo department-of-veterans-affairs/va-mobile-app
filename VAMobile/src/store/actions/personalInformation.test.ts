@@ -361,10 +361,10 @@ context('personalInformation', () => {
       await store.dispatch(getProfileInfo())
       const actions = store.getActions()
 
-      const updateAction = _.find(actions, { type: 'HEALTH_UPDATE' })
+      const updateAction = _.find(actions, { type: 'CERNER_UPDATE' })
       expect(updateAction).toBeTruthy()
 
-      const { error, cernerFacilities, isCernerPatient, facilities } = store.getState().health
+      const { error, cernerFacilities, isCernerPatient, facilities } = store.getState().patient
       expect(isCernerPatient).toBeTruthy()
       expect(cernerFacilities).toEqual([mockFacilities[0]])
       expect(facilities).toEqual(mockFacilities)
