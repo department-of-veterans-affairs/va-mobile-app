@@ -109,6 +109,7 @@
   "editPhoneNumber.homePhoneTitle": "Home phone",
   "editPhoneNumber.number": "Number",
   "editPhoneNumber.numberFieldError": "Enter a valid phone number",
+  "editPhoneNumber.remove.title": " Are you sure you want to delete {{numberType}} number?",
   "editPhoneNumber.weCanOnlySupportUSNumbers": "We can only support U.S. phone numbers right now. If you have an international number, please check back later.",
   "editPhoneNumber.workPhoneTitle": "Work phone",
   "howDoIUpdate.findYourNearestVALocation": "Find your nearest VA location",
