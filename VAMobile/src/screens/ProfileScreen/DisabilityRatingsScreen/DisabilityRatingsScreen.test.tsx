@@ -5,7 +5,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
-import { LoadingComponent, TextView, CallHelpCenter } from 'components'
+import { LoadingComponent, TextView, ErrorComponent } from 'components'
 import ProfileBanner from '../ProfileBanner'
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -147,7 +147,7 @@ context('DisabilityRatingsScreen', () => {
       }
 
       initializeTestInstance(ratingDataMock, undefined, errorState)
-      expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
   })
 })

@@ -1,4 +1,4 @@
-import { CommonErrorTypes } from 'constants/errors'
+import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypes } from '../api'
 import { ScreenIDTypesConstants } from '../api/types/Screens'
 import { reduce } from 'underscore'
@@ -62,15 +62,17 @@ export default createReducer<ErrorsState>(initialErrorsState, {
     }
   },
   ERRORS_CLEAR_ERRORS: (state, { screenID }) => {
+    const errorMetadataByScreenID = state.errorMetadataByScreenID
     const errorsByScreenID = !screenID
       ? state.errorsByScreenID
       : {
           ...state.errorsByScreenID,
-          [screenID as ScreenIDTypes]: undefined,
+          [screenID as ScreenIDTypes]: state.errorsByScreenID[screenID] === CommonErrorTypesConstants.DOWNTIME_ERROR ? CommonErrorTypesConstants.DOWNTIME_ERROR : undefined,
         }
     return {
       ...initialErrorsState,
       errorsByScreenID,
+      errorMetadataByScreenID,
     }
   },
   ERRORS_SET_METADATA: (state, { metadata, screenID }) => {
@@ -108,6 +110,21 @@ export default createReducer<ErrorsState>(initialErrorsState, {
     return {
       ...state,
       errorMetadataByScreenID,
+    }
+  },
+  ERRORS_CLEAR_ERROR_TYPE: (state, { errorType }) => {
+    let errorsByScreenID = state.errorsByScreenID
+    errorsByScreenID = reduce(
+      ScreenIDTypesConstants,
+      (memo: ErrorsByScreenIDType, value: ScreenIDTypes): ErrorsByScreenIDType => {
+        memo[value] = errorsByScreenID[value] === errorType ? undefined : errorsByScreenID[value]
+        return memo
+      },
+      {} as ErrorsByScreenIDType,
+    )
+    return {
+      ...state,
+      errorsByScreenID,
     }
   },
   ERRORS_SET_TRY_AGAIN_FUNCTION: (state, { tryAgain }) => {

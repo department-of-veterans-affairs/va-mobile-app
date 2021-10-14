@@ -27,8 +27,8 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mb: theme.dimensions.contentMarginBottom,
   }
   const { errorMetadataByScreenID } = useSelector<StoreState, ErrorsState>((s) => s.errors)
-  const feature = errorMetadataByScreenID[screenID]?.featureName
-  const end = errorMetadataByScreenID[screenID]?.endTime
+  const featureName = errorMetadataByScreenID[screenID]?.featureName
+  const endTime = errorMetadataByScreenID[screenID]?.endTime
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
@@ -36,8 +36,8 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
         <AlertBox
           title={t('downtime.title')}
           titleA11yLabel={t('downtime.title')}
-          text={t('downtime.message', { feature, end })}
-          textA11yLabel={t('downtime.message', { feature, end })}
+          text={t('downtime.message', { featureName, endTime })}
+          textA11yLabel={t('downtime.message', { featureName, endTime })}
           border="warning"
           background="noCardBackground"
         />
