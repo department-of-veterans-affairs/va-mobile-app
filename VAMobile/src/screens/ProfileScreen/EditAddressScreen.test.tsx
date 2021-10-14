@@ -666,8 +666,7 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
 
       navHeaderSpy.back.props.onPress()
-      expect(finishValidateAddress).toBeCalled()
-      expect(goBackSpy).toBeCalled()
+      expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
 
