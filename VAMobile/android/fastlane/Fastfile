@@ -137,7 +137,7 @@ platform :android do
   end
 
   def upload(track)
-    supply(track: track)
+    supply(track: track, package_name: "gov.va.mobileapp")
   end
 
   def promote_pre_prod
