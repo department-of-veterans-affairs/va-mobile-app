@@ -14,6 +14,8 @@ export type AccordionCollapsibleProps = {
   expandedContent: ReactNode
   /** testID for the header */
   testID?: string
+  /** a11yHint for the header */
+  a11yHint?: string
   /** component to display on when the accordion is collapsed */
   collapsedContent?: ReactNode
   /** if true hides the accordion arrow and only displays header & collapsed content */
@@ -39,6 +41,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   noBorder,
   children,
   alertBorder,
+  a11yHint,
 }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -55,7 +58,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
-    accessibilityHint: t('viewMoreDetails'),
+    accessibilityHint: a11yHint || t('viewMoreDetails'),
     accessibilityRole: 'spinbutton',
   }
 

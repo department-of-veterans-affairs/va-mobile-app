@@ -139,6 +139,7 @@ context('secureMessaging', () => {
             triageTeamId: 0,
             name: 'Doctor 1',
             relationType: 'PATIENT',
+            preferredTeam: true,
           },
         },
       ]
