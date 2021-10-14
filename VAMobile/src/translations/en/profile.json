@@ -61,6 +61,8 @@
   "editAddress.streetAddressLine3": "Street address line 3",
   "editAddress.validation.cancel": "Cancel",
   "editAddress.validation.cancel.a11yHint": "Cancels changes and navigates to the previous page.",
+  "editAddress.validation.cancelConfirm.title": "Mailing address will not be saved",
+  "editAddress.validation.cancelConfirm.confirm": "Discard Changes",
   "editAddress.validation.editAddress": "Edit Address",
   "editAddress.validation.editAddress.a11yLabel": "Edit this address.",
   "editAddress.validation.editAddress.a11yHint": "Navigates to the edit address page",
