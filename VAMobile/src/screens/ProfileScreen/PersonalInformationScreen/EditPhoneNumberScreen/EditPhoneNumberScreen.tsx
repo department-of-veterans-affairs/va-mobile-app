@@ -25,7 +25,6 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { deleteUsersNumber, dispatchClearErrors, editUsersNumber, finishEditPhoneNumber } from 'store/actions'
 import { formatPhoneNumber, getNumbersFromString, stringToTitleCase } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
 import HeaderTitle from 'components/HeaderTitle'
@@ -162,7 +161,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const onDeletePressed = (): void => {
     deletePhoneAlert({
       title: t('editPhoneNumber.remove.title', { numberType: buttonTitle }),
-      //message: isIOS() ? undefined : 'are you deleting',
+      message: t('editPhoneNumber.remove.message', { numberType: buttonTitle }),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
@@ -170,7 +169,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           text: t('common:cancel'),
         },
         {
-          text: t('common:delete'),
+          text: t('common:remove'),
           onPress: onDelete,
         },
       ],
