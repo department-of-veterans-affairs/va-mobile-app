@@ -1,7 +1,7 @@
 import * as Keychain from 'react-native-keychain'
 import { Action } from 'redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import CookieManager from '@react-native-community/cookies'
+import CookieManager from '@react-native-cookies/cookies'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
@@ -11,6 +11,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
 import { dispatchClearAuthorizedServices, dispatchProfileLogout } from './personalInformation'
+import { dispatchClearCerner } from './patient'
 import { dispatchClearLoadedAppointments } from './appointments'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
 import { dispatchClearLoadedMessages } from './secureMessaging'
@@ -498,6 +499,7 @@ export const logout = (): AsyncReduxAction => {
       dispatch(dispatchClearLoadedMessages())
       dispatch(dispatchClearLoadedClaimsAndAppeals())
       dispatch(dispatchClearAuthorizedServices())
+      dispatch(dispatchClearCerner())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
       dispatch(dispatchDisabilityRatingLogout())
