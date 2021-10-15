@@ -481,7 +481,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           text: t('common:cancel'),
         },
         {
-          text: t('common:confirm'),
+          text: t('common:remove'),
           onPress: onDelete,
         },
       ],
