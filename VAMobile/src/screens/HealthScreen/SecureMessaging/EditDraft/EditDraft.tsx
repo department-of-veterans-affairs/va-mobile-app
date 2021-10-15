@@ -369,7 +369,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             <>
               <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
               <TextView variant="MobileBodyBold" accessible={true}>
-                {message?.senderName}
+                {message?.recipientName}
               </TextView>
               <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
                 {t('secureMessaging.formMessage.subject')}
