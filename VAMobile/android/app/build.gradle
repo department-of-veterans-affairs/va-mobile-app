@@ -188,9 +188,27 @@ android {
 
         }
     }
+
+      packagingOptions {
+       pickFirst '**/armeabi-v7a/libc++_shared.so'
+       pickFirst '**/x86/libc++_shared.so'
+       pickFirst '**/x86_64/libc++_shared.so'
+       pickFirst '**/arm64-v8a/libc++_shared.so'
+       pickFirst '**/libjsc.so'
+    }
 }
 
 dependencies {
+
+        //Please make sure the jsc dependency is before the React Native dependency.    
+     if (enableHermes) {
+        def hermesPath = "../../node_modules/hermes-engine/android/";
+        debugImplementation files(hermesPath + "hermes-debug.aar")
+        releaseImplementation files(hermesPath + "hermes-release.aar")
+    } else {
+        implementation jscFlavor
+    }
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -212,14 +230,6 @@ dependencies {
 
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
-    }
-
-    if (enableHermes) {
-        def hermesPath = "../../node_modules/hermes-engine/android/";
-        debugImplementation files(hermesPath + "hermes-debug.aar")
-        releaseImplementation files(hermesPath + "hermes-release.aar")
-    } else {
-        implementation jscFlavor
     }
 
     // playstore core for in-app reviews
