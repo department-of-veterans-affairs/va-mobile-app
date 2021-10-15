@@ -94,7 +94,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
   }
 
-  buttonDataList.push({ text: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
+  buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
 
   // Show if user has permission or if user did not signed in through IDME
   if (directDepositBenefits || !isIDMESignin) {
