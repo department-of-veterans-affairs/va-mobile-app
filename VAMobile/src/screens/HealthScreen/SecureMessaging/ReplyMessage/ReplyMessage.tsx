@@ -135,7 +135,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.reply, attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.reply, attachmentFileToRemove: attachmentFile, messageID })()
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
