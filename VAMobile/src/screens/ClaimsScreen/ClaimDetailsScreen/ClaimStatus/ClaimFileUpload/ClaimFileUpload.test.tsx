@@ -173,8 +173,8 @@ context('ClaimFileUpload', () => {
       errorsByScreenID[ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(requests, undefined, errorState)
@@ -186,8 +186,8 @@ context('ClaimFileUpload', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(requests, undefined, errorState)

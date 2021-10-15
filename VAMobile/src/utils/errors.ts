@@ -35,6 +35,8 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
       error.status >= 500)
   ) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
+  } else if (screenID === ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID && error.status && error.status >= 500) {
+    return CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING
   } else if (includes(appLevelErrorStatusCodes, error.status)) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR
   } else if (includes(appLevelErrorWithRefreshStatusCodes, error.status)) {

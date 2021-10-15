@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { CallHelpCenter, NetworkConnectionError } from 'components'
+import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ErrorsState, StoreState } from 'store'
 import { ScreenIDTypes } from 'store/api/types'
@@ -37,6 +37,16 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             callPhone={t('health:secureMessaging.attachments.FAQ.ifYourProblem.phone')}
           />
         )
+      case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
+        return (
+          <CallHelpCenter
+            titleText={t('profile:disabilityRating.errorTitle')}
+            titleA11yHint={t('profile:disabilityRating.errorTitleA11y')}
+            callPhone={t('profile:disabilityRating.errorPhoneNumber')}
+          />
+        )
+      case CommonErrorTypesConstants.DOWNTIME_ERROR:
+        return <DowntimeError screenID={screenID} />
       default:
         return <CallHelpCenter onTryAgain={tryAgain} />
     }
