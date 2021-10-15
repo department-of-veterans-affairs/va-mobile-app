@@ -1,12 +1,11 @@
 import React, { FC } from 'react'
 
-import { CallHelpCenter, NetworkConnectionError } from 'components'
+import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ErrorsState, StoreState } from 'store'
 import { ScreenIDTypes } from 'store/api/types'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'utils/hooks'
-import DowntimeError from './DowntimeError'
 
 export type ErrorComponentProps = {
   screenID: ScreenIDTypes

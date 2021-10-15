@@ -2,7 +2,7 @@ import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { DateTime } from 'luxon'
-import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes } from '../api'
+import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes } from '../api/types'
 
 export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: ScreenIDTypes): ReduxAction => {
   return {
@@ -94,10 +94,8 @@ export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
     }
     dispatch(dispatchClearAllMetadata())
     dispatch(dispatchClearErrorType(CommonErrorTypesConstants.DOWNTIME_ERROR))
-    for (const maint_window of response.data) {
-      if (DateTime.fromISO(maint_window.startTime) < DateTime.now()) {
-        continue
-      }
+    const maint_windows = response.data.filter((w) => DateTime.fromISO(w.startTime) <= DateTime.now() && !!DowntimeFeatureToScreenID[w.service])
+    for (const maint_window of maint_windows) {
       const screenID = DowntimeFeatureToScreenID[maint_window.service]
       const metadata = {
         featureName: '',
