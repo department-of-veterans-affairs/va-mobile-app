@@ -28,6 +28,8 @@ platform :android do
     update_version_and_build(options[:version ])
     bundle
     upload("Development Team")
+    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
+    distribute_to_firebase(notes, "qa")
     tag_build
     message = "New QA build successfully uploaded to Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
@@ -57,9 +59,29 @@ platform :android do
     bundle
     puts options[:psTrack]
     upload(options[:psTrack])
+    notes = "New On Demand version for " + Time.new.strftime("%m.%d.%Y")
+    distribute_to_firebase(notes, "qa")
     tag_build
     message = "New On Demand build successfully uploaded to Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On-Demand", message, "Android")
+  end
+
+  desc "add a tester to Firebase Distribution. options.emails is a comma-separated string of emails to add to testers. Once added, they will need to be added to the QA team in Firebase Distribution console."
+  lane :firebase_app_dist_add_testers do |options|
+    firebase_app_distribution_add_testers(
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        project_number: ENV["FIREBASE_PROJECT_NUMBER"],
+        emails: options[:emails]
+    )
+  end
+
+  desc "remove a tester from Firebase Distribution. options.emails is a comma-separated string of emails to remove to testers."
+  lane :firebase_app_dist_remove_testers do |options|
+    firebase_app_distribution_remove_testers(
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        project_number: ENV["FIREBASE_PROJECT_NUMBER"],
+        emails: options[:emails]
+    )
   end
 
   after_all do |lane, options|
@@ -149,5 +171,15 @@ platform :android do
       version = google_play_track_release_names(track:"production")
       slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
     end
+  end
+
+  def distribute_to_firebase(notes, groups)
+    firebase_app_distribution(
+        app: ENV["FIREBASE_ANDROID_APP_ID"],
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        release_notes: notes,
+        groups: groups,
+        android_artifact_type: "AAB"
+    )
   end
 end
