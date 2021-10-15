@@ -111,6 +111,8 @@
   "editPhoneNumber.homePhoneTitle": "Home phone",
   "editPhoneNumber.number": "Number",
   "editPhoneNumber.numberFieldError": "Enter a valid phone number",
+  "editPhoneNumber.remove.title": "Are you sure you want to delete {{numberType}}?",
+  "editPhoneNumber.remove.message": "This will remove your {{numberType}} across many V\ufeffA records. You can always come back to your profile later if you want to add this information back in.",
   "editPhoneNumber.weCanOnlySupportUSNumbers": "We can only support U.S. phone numbers right now. If you have an international number, please check back later.",
   "editPhoneNumber.workPhoneTitle": "Work phone",
   "howDoIUpdate.findYourNearestVALocation": "Find your nearest VA location",
