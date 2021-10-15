@@ -26,9 +26,9 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
     if (origin === FormHeaderTypeConstants.compose) {
       navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove })()
     } else if (origin === FormHeaderTypeConstants.reply) {
-      navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
+      navigateTo('ReplyMessage', { messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
     } else {
-      navigateTo('EditDraft', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
+      navigateTo('EditDraft', { messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
     }
   }
 
