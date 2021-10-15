@@ -14,7 +14,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const CernerAlert: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const { cernerFacilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  const { cernerFacilities, facilities } = useSelector<StoreState, PatientState>((state) => state.patient)
   const hasCernerFacilities = useHasCernerFacilities()
 
   // if no cerner facilities then do not show the alert
@@ -23,10 +23,13 @@ const CernerAlert: FC = () => {
   }
 
   const accordionHeader = (): ReactNode => {
+    // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
+    const allCernerFacilities = facilities.length === cernerFacilities.length
+    const headerText = allCernerFacilities ? t('cernerAlert.header.all') : t('cernerAlert.header.some')
     return (
       <Box>
-        <TextView variant="MobileBodyBold" {...testIdProps(t('cernerAlert.header'))}>
-          {t('cernerAlert.header')}
+        <TextView variant="MobileBodyBold" {...testIdProps(headerText)}>
+          {headerText}
         </TextView>
       </Box>
     )
