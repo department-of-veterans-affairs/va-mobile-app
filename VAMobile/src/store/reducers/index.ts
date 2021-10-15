@@ -11,11 +11,11 @@ import demo, { DemoState, initialDemoState } from './demo'
 import directDeposit, { DirectDepositState, initialDirectDepositState } from './directDeposit'
 import disabilityRating, { DisabilityRatingState, initialDisabilityRatingState } from './disabilityRating'
 import errors, { ErrorsState, initialErrorsState } from './errors'
-import immunization, { ImmunizationState, initialImmunizationState } from './immunization'
 import letters, { LettersState, initialLettersState } from './letters'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
 import personalInformation, { PersonalInformationState, initialPersonalInformationState } from './personalInformation'
 import secureMessaging, { SecureMessagingState, initialSecureMessagingState } from './secureMessaging'
+import vaccine, { VaccineState, initialVaccineState } from './vaccine'
 
 export * from './auth'
 export * from './directDeposit'
@@ -31,7 +31,7 @@ export * from './secureMessaging'
 export * from './demo'
 export * from './analytics'
 export * from './disabilityRating'
-export * from './immunization'
+export * from './vaccine'
 
 export interface StoreState {
   auth: AuthState
@@ -48,7 +48,7 @@ export interface StoreState {
   demo: DemoState
   analytics: AnalyticsState
   disabilityRating: DisabilityRatingState
-  immunization: ImmunizationState
+  vaccine: VaccineState
 }
 
 export const InitialState: StoreState = {
@@ -66,7 +66,7 @@ export const InitialState: StoreState = {
   demo: initialDemoState,
   analytics: initialAnalyticsState,
   disabilityRating: initialDisabilityRatingState,
-  immunization: initialImmunizationState,
+  vaccine: initialVaccineState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -84,7 +84,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   demo,
   analytics,
   disabilityRating,
-  immunization,
+  vaccine,
 })
 
 export default allReducers

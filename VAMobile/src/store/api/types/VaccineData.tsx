@@ -1,14 +1,14 @@
-export type ImmunizationListData = {
-  data: ImmunizationList
+export type VaccineListData = {
+  data: VaccineList
 }
 
-export type ImmunizationsMap = {
-  [key: string]: Immunization
+export type VaccinesMap = {
+  [key: string]: Vaccine
 }
 
-export type ImmunizationList = Array<Immunization>
+export type VaccineList = Array<Vaccine>
 
-export type Immunization = {
+export type Vaccine = {
   id: string
   vaccineCode: string
   recorded: string
@@ -18,13 +18,13 @@ export type Immunization = {
   manufacturer: VaccineManufacturer
   lotNumber: string
   expirationDate?: string
-  reaction: Array<ImmunizationReaction>
+  reaction: Array<VaccineReaction>
   doseQuantity: DoseQuantity
-  notes: Array<ImmunizationNote>
-  protocolApplied: ImmunizationProtocolApplied
+  notes: Array<VaccineNote>
+  protocolApplied: VaccineProtocolApplied
 }
 
-export type ImmunizationProtocolApplied = {
+export type VaccineProtocolApplied = {
   series: string
   targetDisease: string
   doseNumber: string
@@ -57,7 +57,7 @@ export type VaccineManufacturer = {
   address?: LocationAddress
 }
 
-export type ImmunizationNote = {
+export type VaccineNote = {
   text: string
   time: string
 }
@@ -66,7 +66,7 @@ export type DoseQuantity = {
   text: string
 }
 
-export type ImmunizationReaction = {
+export type VaccineReaction = {
   date?: string
   reported?: boolean
   detail: ReactionDetail

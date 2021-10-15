@@ -92,7 +92,7 @@ context('HealthScreen', () => {
     })
   })
 
-  describe('on click of the immunizations button', () => {
+  describe('on click of the vaccines button', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[2].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
