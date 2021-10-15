@@ -204,7 +204,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         {t('personalInformation.editNote')}
       </TextView>
 
-      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.headerTitle')} />
+      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.buttonTitle')} />
 
       <Pressable
         onPress={navigateTo('HowDoIUpdate')}
