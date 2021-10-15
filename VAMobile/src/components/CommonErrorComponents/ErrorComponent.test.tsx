@@ -9,7 +9,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, renderWithProviders, mockStore } from 'testUtils'
 import ErrorComponent from './ErrorComponent'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { initializeErrorsByScreenID } from 'store/reducers'
+import { initializeErrorsByScreenID, initialErrorsState } from 'store/reducers'
 import { CommonErrorTypesConstants } from 'constants/errors'
 
 context('ErrorComponent', () => {
@@ -24,8 +24,8 @@ context('ErrorComponent', () => {
 
     store = mockStore({
       errors: {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
     })
 

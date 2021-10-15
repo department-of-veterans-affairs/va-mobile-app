@@ -169,8 +169,8 @@ context('EditEmailScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       prepTestInstanceWithStore(undefined, errorState)
@@ -182,8 +182,8 @@ context('EditEmailScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       prepTestInstanceWithStore(undefined, errorState)
