@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTestID, findByTypeWithSubstring, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
@@ -59,8 +59,8 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useDestructiveAlert: () => mockAlertSpy,
-    useTheme: jest.fn(()=> {
-      return {...theme}
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
   }
 })
@@ -666,8 +666,7 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
 
       navHeaderSpy.back.props.onPress()
-      expect(finishValidateAddress).toBeCalled()
-      expect(goBackSpy).toBeCalled()
+      expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
 
@@ -688,14 +687,13 @@ context('EditAddressScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
 
       // TODO: find a better way to pick the right textview
-      expect(textViews[238].props.children).toEqual('Country is required')
-      expect(textViews[243].props.children).toEqual('Street address is required')
-      expect(textViews[251].props.children).toEqual('City is required')
-      expect(textViews[324].props.children).toEqual('State is required')
-      expect(textViews[328].props.children).toEqual('Zip code is required')
+      expect(findByTypeWithText(testInstance, TextView, 'Country is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'State is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Zip code is required')).toBeTruthy()
     })
   })
 
@@ -713,8 +711,8 @@ context('EditAddressScreen', () => {
       const textViews = testInstance.findAllByType(TextView)
 
       expect(textViews[242].props.children).toEqual('Street address is required')
-      expect(textViews[258].props.children).toEqual('Please select a valid option')
-      expect(textViews[270].props.children).toEqual('Please select a valid option')
+      expect(textViews[257].props.children).toEqual('Please select a valid option')
+      expect(textViews[269].props.children).toEqual('Please select a valid option')
       expect(textViews[274].props.children).toEqual('Zip code is required')
     })
   })
@@ -731,10 +729,9 @@ context('EditAddressScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
-
-      expect(textViews[242].props.children).toEqual('Street address is required')
-      expect(textViews[250].props.children).toEqual('City is required')
-      expect(textViews[255].props.children).toEqual('Postal code is required')
+      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
     })
   })
 

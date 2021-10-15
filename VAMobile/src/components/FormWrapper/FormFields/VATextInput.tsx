@@ -139,8 +139,8 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     const content = (
       <Box>
         {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
-        {textInputBox}
         {!!error && renderInputError(theme, error)}
+        {textInputBox}
       </Box>
     )
 

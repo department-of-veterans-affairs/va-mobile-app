@@ -20,6 +20,13 @@
   "appointmentsTab.past.a11yHint": "review your past appointments",
   "appointmentsTab.upcoming": "Upcoming",
   "appointmentsTab.upcoming.a11yHint": "review your upcoming appointments",
+  "cernerAlert.footer": "To manage your health care with My V\uFEFFA  Health providers please go to the My V\uFEFFA  Health website:",
+  "cernerAlert.goToMyVAHealth": "Go to My V\uFEFFA Health",
+  "cernerAlert.header.some": "Some of your V\uFEFFA health care team may be using the My V\uFEFFA Health portal",
+  "cernerAlert.header.all": "Your V\uFEFFA health care team may be using the My V\uFEFFA Health portal",
+  "cernerAlert.header.a11yHint": "Review more about the My V\uFEFFA health portal",
+  "cernerAlert.nowUsing": "Now using My V\uFEFFA Health",
+  "cernerAlert.ourRecordsShow": "Our records show you’re registered at:",
   "healthScreen.loading": "We're loading your health care information",
   "noAppointments.visitVA": "Visit VA.gov",
   "noAppointments.visitVAA11yHint": "This page will open in your device's browser",
@@ -298,5 +305,5 @@
   "vaImmunizations.a11yHint": "Review your V\ufeffA immunization record",
   "vaImmunizations.subText": "View all your V\ufeffA immunizations",
   "vaImmunizations.title": "V\ufeffA Immunizations"
-  
+
 }
