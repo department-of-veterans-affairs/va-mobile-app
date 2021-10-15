@@ -10,12 +10,12 @@ import { DemoActions } from './demo'
 import { DirectDepositActions } from './directDeposit'
 import { DisabilityRatingActions } from './disabilityRating'
 import { ErrorsActions } from './errors'
-import { ImmunizationActions } from './immunization'
 import { LettersActions } from './letters'
 import { MilitaryServiceActions } from './militaryService'
 import { PersonalInformationActions } from './personalInformation'
 import { SecureMessagingActions } from './secureMessaging'
 import { StoreState } from 'store'
+import { VaccineActions } from './vaccine'
 
 export * from './auth'
 export * from './directDeposit'
@@ -31,7 +31,7 @@ export * from './secureMessaging'
 export * from './demo'
 export * from './analytics'
 export * from './disabilityRating'
-export * from './immunization'
+export * from './vaccine'
 
 type ActObjs<T extends keyof AllActionDefs> = AllActionDefs[T]
 type ActObjsPayload<T extends keyof AllActionDefs> = AllActionDefs[T]['payload']
@@ -59,7 +59,7 @@ export type AllActionDefs = AuthActions &
   DemoActions &
   AnalyticsActions &
   DisabilityRatingActions &
-  ImmunizationActions
+  VaccineActions
 
 type AllActionTypes = keyof AllActionDefs
 

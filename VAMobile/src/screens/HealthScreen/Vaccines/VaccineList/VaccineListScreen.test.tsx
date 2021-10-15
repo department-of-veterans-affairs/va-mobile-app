@@ -4,12 +4,12 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {initialAuthState, initialErrorsState, initialImmunizationState, initialSecureMessagingState} from 'store'
+import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { initialAuthState, initialErrorsState, initialVaccineState, initialSecureMessagingState } from 'store'
 import { LoadingComponent, TextView, MessagesCountTag } from 'components'
-import ImmunizationListScreen from './ImmunizationListScreen'
+import VaccineListScreen from './VaccineListScreen'
 
-context('ImmunizationListScreen', () => {
+context('VaccineListScreen', () => {
   let component: any
   let props: any
   let store: any
@@ -20,12 +20,12 @@ context('ImmunizationListScreen', () => {
 
     store = mockStore({
       auth: { ...initialAuthState },
-      immunization: {
-        ...initialImmunizationState,
-        immunizations: [
+      vaccine: {
+        ...initialVaccineState,
+        vaccines: [
           {
             id: 'abc',
-            vaccineCode:'COVID-19 vaccine',
+            vaccineCode: 'COVID-19 vaccine',
             recorded: '2021-09-25',
             primarySource: true,
             status: "Completed",
@@ -66,7 +66,7 @@ context('ImmunizationListScreen', () => {
           },
           {
             id: 'abc',
-            vaccineCode:'Influenza vaccine',
+            vaccineCode: 'Influenza vaccine',
             recorded: '2021-09-25',
             primarySource: true,
             status: "Completed",
@@ -112,7 +112,7 @@ context('ImmunizationListScreen', () => {
     })
 
     act(() => {
-      component = renderWithProviders(<ImmunizationListScreen {...props} />, store)
+      component = renderWithProviders(<VaccineListScreen {...props} />, store)
     })
 
     testInstance = component.root

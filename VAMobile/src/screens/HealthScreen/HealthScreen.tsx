@@ -27,7 +27,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
-  const onVaImmunizations = navigateTo('ImmunizationList')
+  const onVaVaccines = navigateTo('VaccineList')
 
   useEffect(() => {
     // fetch inbox metadata to display unread messages count tag
@@ -71,10 +71,10 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
         <LargeNavButton
-          title={t('vaImmunizations.title')}
-          subText={t('vaImmunizations.subText')}
-          a11yHint={t('vaImmunizations.a11yHint')}
-          onPress={onVaImmunizations}
+          title={t('vaVaccines.title')}
+          subText={t('vaVaccines.subText')}
+          a11yHint={t('vaVaccines.a11yHint')}
+          onPress={onVaVaccines}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
