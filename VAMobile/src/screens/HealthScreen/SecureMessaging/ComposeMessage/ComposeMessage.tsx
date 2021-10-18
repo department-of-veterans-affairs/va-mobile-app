@@ -37,6 +37,7 @@ import {
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
@@ -67,11 +68,15 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
   const composeCancelConfirmation = useComposeCancelConfirmation()
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
   }, [dispatch])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
@@ -151,8 +156,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!hasLoadedRecipients || savingDraft) {
-    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : undefined
+  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft) {
+    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.formMessage.composeMessage.loading')
     return <LoadingComponent text={text} />
   }
 
