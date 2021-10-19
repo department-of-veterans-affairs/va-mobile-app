@@ -118,6 +118,7 @@ export type AppointmentAttributes = {
   comment: string
   timeZone: AppointmentTimeZone
   healthcareService: string
+  healthcareProvider: string | null
   location: AppointmentLocation
   practitioner?: AppointmentPractitioner
   facilityId?: string
