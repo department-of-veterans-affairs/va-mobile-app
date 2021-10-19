@@ -127,6 +127,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 comment: 'Please arrive 20 minutes before the start of your appointment',
                 timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
                 healthcareService: 'Blind Rehabilitation Center',
+                healthcareProvider: null,
                 reason: null,
                 location: {
                   name: 'VA Long Beach Healthcare System',
@@ -158,6 +159,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
                 healthcareService: 'CHY PC VAR2',
+                healthcareProvider: null,
                 location: {
                   name: 'Cheyenne VA Medical Center',
                   address: {
@@ -220,6 +222,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 comment: 'Please arrive 20 minutes before the start of your appointment',
                 timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
                 healthcareService: 'Blind Rehabilitation Center',
+                healthcareProvider: null,
                 reason: null,
                 location: {
                   name: 'VA Long Beach Healthcare System',
@@ -251,6 +254,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
                 healthcareService: 'CHY PC VAR2',
+                healthcareProvider: null,
                 location: {
                   name: 'Cheyenne VA Medical Center',
                   address: {
@@ -287,6 +291,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 cancelId: '',
                 comment: '',
                 healthcareService: 'CHEYENNE VAMC',
+                healthcareProvider: null,
                 location: {
                   name: 'Cheyenne VA Medical Center',
                   address: {
