@@ -1,5 +1,5 @@
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, useState } from 'react'
 
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -54,6 +54,9 @@ export type BaseListItemProps = {
 
   /** Optional background color for an individual item **/
   backgroundColor?: BackgroundVariant
+
+  /** Optional active background color for an individual item **/
+  activeBackgroundColor?: BackgroundVariant
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
@@ -73,7 +76,7 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
         />
       )
     default:
-      return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
+      return <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={10} height={15} {...decoratorProps} />
   }
 }
 
@@ -82,13 +85,24 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  * @returns BaseListItem component
  */
 const BaseListItem: FC<BaseListItemProps> = (props) => {
-  const { onPress, a11yHint, a11yRole, a11yState, decorator, decoratorProps, testId, a11yValue, children, backgroundColor } = props
+  const { onPress, a11yHint, a11yRole, a11yState, decorator, decoratorProps, testId, a11yValue, children, backgroundColor, activeBackgroundColor } = props
   const theme = useTheme()
+
+  const [isPressed, setIsPressed] = useState(false)
+
+  const _onPressIn = (): void => {
+    setIsPressed(true)
+  }
+
+  const _onPressOut = (): void => {
+    setIsPressed(false)
+  }
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
   const showDecorator = onPress && decorator !== ButtonDecoratorType.None
 
   const background = backgroundColor ? backgroundColor : 'list'
+  const activeBackground = activeBackgroundColor ? activeBackgroundColor : 'listActive'
 
   const onOuterPress = (): void => {
     // nooop for switch types, need to press on the switch specifically
@@ -109,6 +123,8 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
 
   const pressableProps: PressableProps = {
     onPress: onOuterPress,
+    onPressIn: _onPressIn,
+    onPressOut: _onPressOut,
     accessible: true,
     accessibilityRole,
   }
@@ -124,7 +140,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: background,
+    backgroundColor: isPressed ? activeBackground : background,
   }
 
   const a11yProps: AccessibilityProps = {

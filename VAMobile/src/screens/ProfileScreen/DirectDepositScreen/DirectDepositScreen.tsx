@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
@@ -7,7 +7,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getBankData } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useCallback } from 'react'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useFocusEffect } from '@react-navigation/native'
 import ProfileBanner from '../ProfileBanner'
 
 /**
@@ -22,9 +24,11 @@ const DirectDepositScreen: FC = () => {
 
   const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
 
-  useEffect(() => {
-    dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
-  }, [dispatch])
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
+    }, [dispatch]),
+  )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
@@ -72,22 +76,28 @@ const DirectDepositScreen: FC = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Direct-deposit-page')}>
-      <ProfileBanner />
-      <Box mx={gutter} mt={contentMarginTop}>
-        <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
-          {t('directDeposit.viewAndEditText')}
-        </TextView>
+    <VAScrollView {...testIdProps('Direct-deposit-page')} importantForAccessibility={'no'}>
+      <Box accessible={true}>
+        <ProfileBanner />
+      </Box>
+      <Box accessible={true}>
+        <Box mx={gutter} mt={contentMarginTop}>
+          <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
+            {t('directDeposit.viewAndEditText')}
+          </TextView>
+        </Box>
       </Box>
       <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
-      <Box mx={gutter} mt={condensedMarginBetween}>
-        <TextView>
-          <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
-          <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
-        </TextView>
+      <Box accessible={true}>
+        <Box mx={gutter} mt={condensedMarginBetween}>
+          <TextView>
+            <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
+            <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
+          </TextView>
+        </Box>
       </Box>
-      <Box mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
-        <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />
+      <Box mx={gutter} mb={contentMarginBottom}>
+        <ClickToCallPhoneNumber phone={t('common:8008271000.displayText')} />
       </Box>
     </VAScrollView>
   )

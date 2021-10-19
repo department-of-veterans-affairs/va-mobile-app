@@ -7,18 +7,20 @@ import { context, renderWithProviders } from 'testUtils'
 
 import FormAttachments from './FormAttachments'
 import TextView from '../../TextView'
-import {Pressable} from 'react-native'
+import { Pressable } from 'react-native'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual("utils/hooks")
-  let theme = jest.requireActual("styles/themes/standardTheme").default
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(()=> {
-      return {...theme}
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
-    useRouteNavigation: () => { return () => mockNavigationSpy},
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
   }
 })
 
@@ -37,8 +39,12 @@ context('FormAttachments', () => {
       size: 10,
     },
     {
-      uri: '',
-      fileName: 'image.jpeg',
+      assets: [
+        {
+          uri: '',
+          fileName: 'image.jpeg',
+        },
+      ],
     },
   ]
 
@@ -47,7 +53,14 @@ context('FormAttachments', () => {
     largeButtonSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormAttachments originHeader='test header' removeOnPress={removeOnPressSpy} largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }} attachmentsList={attachments}/>)
+      component = renderWithProviders(
+        <FormAttachments
+          originHeader="test header"
+          removeOnPress={removeOnPressSpy}
+          largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }}
+          attachmentsList={attachments}
+        />,
+      )
     })
 
     testInstance = component.root

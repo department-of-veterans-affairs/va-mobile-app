@@ -1,6 +1,8 @@
 import { Appearance, Platform, useColorScheme } from 'react-native'
+
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
+import { isIOS } from 'utils/platform'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
@@ -102,7 +104,6 @@ let theme: VATheme = {
   colors: {
     ...colorScheme,
   },
-
   dimensions: {
     keyboardManagerDistanceFromTextField: 45,
     borderWidth: 1,
@@ -124,7 +125,7 @@ let theme: VATheme = {
     listItemDecoratorMarginLeft: 20,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
-    pickerLabelMargin: 5,
+    pickerLabelMargin: 9,
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
     navBarHeight: 56,
@@ -161,6 +162,13 @@ let theme: VATheme = {
     paginationTopPadding: 40,
     collapsibleIconMargin: 7,
     loginContentMarginBottom: 80,
+    webviewReloadButtonHeight: isIOS() ? 64 : 45,
+    webviewReloadButtonSize: 17,
+    webviewButtonSize: 16,
+    webviewButtona11ySize: 44,
+    errorLabelBottomMargin: 3,
+    selectorWidth: 22,
+    selectorHeight: 22,
   },
 
   fontFace: {

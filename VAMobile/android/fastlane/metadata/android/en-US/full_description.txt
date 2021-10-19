@@ -1,0 +1,37 @@
+The official VA mobile app helps you manage your VA health care and benefits on your mobile device. Use the app to manage common tasks like checking your claim status, communicating with your VA health care team, and accessing your VA benefit letters.
+
+Features include:
+
+Biometric Sign-in
+- Use your phone’s built-in security features — like fingerprint and face recognition — to securely access your information.
+
+Claims and Appeals
+- Check your claim or appeal status.
+- Submit additional evidence from your mobile device.
+
+Appointments
+- Check or cancel your VA health appointments.
+- Easily add existing appointments to your calendar.
+
+Secure Messaging
+- Communicate privately with your VA health care team.
+
+Letters
+Download common VA letters and documents like:
+- Benefit Summary and Service Verification Letter
+- Proof of Service Card
+- Commissary Letter
+
+Profile
+- Check your disability rating.
+- Update your contact information.
+- Update your direct deposit information for disability compensation and pension benefits.
+
+
+Facility Locator
+- Find VA facilities and services near you.
+
+Veterans Crisis Line
+- Quickly access the VA Crisis Line.
+
+Need help with this app? Call us at @800-698-2411 (TTY: 711). We’re here 24/7.

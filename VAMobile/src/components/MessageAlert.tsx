@@ -38,14 +38,13 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
     text = t(t('secureMessaging.formMessage.saveDraft.failed.text'))
   } else if (saveDraftComplete) {
     title = t('secureMessaging.formMessage.saveDraft.success.title')
-    text = t(t('secureMessaging.formMessage.saveDraft.success.text'))
   } else {
     return null
   }
 
   return (
     <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox border={saveDraftComplete ? 'success' : 'error'} background="noCardBackground" title={title} text={text} textA11yLabel={textA11yLabel}>
+      <AlertBox border={saveDraftComplete ? 'success' : 'error'} background="noCardBackground" title={title} text={text} textA11yLabel={textA11yLabel} titleRole={'header'}>
         {sendMessageFailed && <ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
       </AlertBox>
     </Box>

@@ -3,13 +3,12 @@ import React, { FC, useEffect } from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
-import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from './ProfileStackScreens'
-import { ScreenIDTypesConstants } from 'store/api/types'
-import { getProfileInfo, getServiceHistory } from 'store/actions'
+import { ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
+import { getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -23,10 +22,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   }, [navigation])
 
@@ -46,6 +47,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     if (militaryInfoAuthorization) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
+
+    dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -62,25 +65,39 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
 
+  useEffect(() => {
+    // Get the service history to populate the profile banner
+    if (disabilityRatingNeedsUpdate) {
+      dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
+    }
+  }, [dispatch, disabilityRatingNeedsUpdate])
+
+  const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
+
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
   const onMilitaryInformation = navigateTo('MilitaryInformation')
 
-  const onDirectDeposit = navigateTo('DirectDeposit')
+  const onDirectDeposit = isIDMESignin ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
 
   const onLettersAndDocs = navigateTo('LettersOverview')
 
   const onSettings = navigateTo('Settings')
 
+  const onDisabilityRatings = navigateTo('DisabilityRatings')
+
   const buttonDataList: Array<SimpleListItemObj> = []
+
+  buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: onDisabilityRatings })
+
   if (userProfileUpdate) {
     buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
   }
 
-  buttonDataList.push({ text: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
+  buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
 
-  // hide button if user does not have permission
-  if (directDepositBenefits) {
+  // Show if user has permission or if user did not signed in through IDME
+  if (directDepositBenefits || !isIDMESignin) {
     buttonDataList.push({ text: t('directDeposit.information'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
   }
 
@@ -101,7 +118,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (militaryInformationLoading || personalInformationLoading) {
+  if (militaryInformationLoading || personalInformationLoading || disabilityRatingLoading) {
     return (
       <React.Fragment>
         <ProfileBanner />

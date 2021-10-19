@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import _ from 'underscore'
 
@@ -26,17 +26,25 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  ScreenIDTypesConstants,
+  SecureMessagingFormData,
+  SecureMessagingSystemFolderIdConstants,
+  SecureMessagingTabTypesConstants,
+} from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessage, getMessageRecipients, getThread, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { getMessage, getMessageRecipients, getThread, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
+import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -46,6 +54,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
+  const goToDrafts = useGoToDrafts()
 
   const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
     StoreState,
@@ -56,6 +65,12 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const messageID = Number(route.params?.messageID)
   const message = messageID ? messagesById?.[messageID] : null
+  const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || []
+  const isReplyDraft = thread.length === 1 ? false : thread.length > 1 ? true : null
+  const replyToID = thread?.find((id) => {
+    const currentMessage = messagesById?.[id]
+    return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
+  })
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState(message?.category || '')
@@ -66,42 +81,69 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [isReplyDraft, setIsReplyDraft] = useState(false)
-  const [thread, setThread] = useState(threads?.find((threadIdArray) => threadIdArray.includes(messageID)))
+
+  const editCancelConfirmation = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
+    dispatch(resetSaveDraftFailed())
+
     if (messageID) {
-      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
       dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
     }
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && message?.body) {
       setBody(message?.body || '')
     }
+  }, [loading, message])
 
-    const replyThread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
-
-    if (replyThread) {
-      setThread(replyThread)
-      setIsReplyDraft(replyThread.length > 1)
+  useEffect(() => {
+    if (saveDraftComplete) {
+      navigation.navigate('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: true,
+      })
     }
-  }, [loading, message, messageID, dispatch, threads])
+  }, [saveDraftComplete, navigation])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
-  const goToCancel = navigateTo('ComposeCancelConfirmation')
+  const draftChanged = (): boolean => {
+    if (isReplyDraft) {
+      return message?.body !== body
+    } else {
+      return message?.recipientId?.toString() !== to || message?.category !== category || message?.subject !== subject || message?.body !== body
+    }
+  }
+
+  const getMessageData = (): SecureMessagingFormData => {
+    return isReplyDraft ? { body, draft_id: messageID } : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject, draft_id: messageID }
+  }
+
+  const goToCancel = (): void => {
+    const isFormValid = isReplyDraft ? !!message : !!(to && category && message && (category !== CategoryTypeFields.other || subject))
+
+    editCancelConfirmation({
+      draftMessageID: messageID,
+      isFormValid,
+      messageData: getMessageData(),
+      origin: FormHeaderTypeConstants.draft,
+      replyToID,
+    })
+  }
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+      headerLeft: (props): ReactNode => (
         <BackButton
-          onPress={noProviderError || isFormBlank ? navigation.goBack : goToCancel}
+          onPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.cancel}
           showCarat={false}
@@ -141,14 +183,15 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading) {
-    return <LoadingComponent />
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null) {
+    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : undefined
+    return <LoadingComponent text={text} />
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants[isReplyDraft ? 'reply' : 'compose'], attachmentFileToRemove: attachmentFile })
+    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.draft, attachmentFileToRemove: attachmentFile, messageID })
   }
 
   const isSetToGeneral = (text: string): boolean => {
@@ -174,7 +217,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants[isReplyDraft ? 'reply' : 'compose'], attachmentsList })
+  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
 
   let formFieldsList: Array<FormFieldType<unknown>> = []
 
@@ -263,17 +306,17 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject }
+    const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, messageID, isReplyDraft))
+      dispatch(saveDraft(messageData, messageID, isReplyDraft, replyToID))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       navigation.navigate('SendConfirmation', {
         originHeader: t('secureMessaging.drafts.edit'),
         messageData,
         uploads: attachmentsList,
-        messageID,
+        replyToID, // any message in the thread that isn't the draft can be replied to
       })
     }
   }
@@ -296,16 +339,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       )
     }
 
-    if (savingDraft) {
-      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
-    }
-
     return (
       <Box>
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
-          saveDraftComplete={saveDraftComplete}
           saveDraftFailed={saveDraftFailed}
           savingDraft={savingDraft}
           sendMessageFailed={sendMessageFailed}
@@ -331,7 +369,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             <>
               <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
               <TextView variant="MobileBodyBold" accessible={true}>
-                {message?.senderName}
+                {message?.recipientName}
               </TextView>
               <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
                 {t('secureMessaging.formMessage.subject')}

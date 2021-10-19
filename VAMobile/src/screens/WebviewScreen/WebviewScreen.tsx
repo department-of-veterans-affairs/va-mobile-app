@@ -1,5 +1,5 @@
 import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -7,7 +7,6 @@ import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
@@ -21,14 +20,25 @@ type ReloadButtonProps = {
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const { dimensions, colors } = theme
+
+  const reloadBoxProps: BoxProps = {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    mr: dimensions.textIconMargin,
+    height: dimensions.webviewReloadButtonHeight,
+  }
 
   return (
-    <Box mb={isIOS() ? theme.dimensions.headerButtonMargin : 0} mr={theme.dimensions.textIconMargin} height={isIOS() ? 64 : 45}>
+    <Box {...reloadBoxProps}>
       <WebviewControlButton
+        width={dimensions.webviewReloadButtonSize}
+        height={dimensions.webviewReloadButtonSize}
         onPress={reloadPressed}
         disabled={false}
         icon={'WebviewRefresh'}
-        fill={theme.colors.icon.contrast}
+        fill={colors.icon.contrast}
         testID={t('refresh')}
         a11yHint={t('refresh.a11yHint')}
       />
@@ -79,9 +89,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />,
       headerTitle: () => <WebviewTitle title={displayTitle} />,
       headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
     })

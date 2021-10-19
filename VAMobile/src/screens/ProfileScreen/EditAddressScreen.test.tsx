@@ -2,27 +2,26 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import {TouchableWithoutFeedback} from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { context, findByTestID, findByTypeWithSubstring, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
-import {VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton} from 'components'
+import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton, BackButton } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
-import { validateAddress, deleteAddress } from 'store/actions'
+import { validateAddress, deleteAddress, finishValidateAddress } from 'store/actions'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
-import RemoveData from "./RemoveData";
 
 jest.mock('@react-navigation/stack', () => {
   return {
     useHeaderHeight: jest.fn().mockReturnValue(44),
     createStackNavigator: jest.fn(),
-    createBottomTabNavigator: jest.fn()
+    createBottomTabNavigator: jest.fn(),
   }
 })
 
@@ -33,18 +32,38 @@ jest.mock('../../store/actions', () => {
     validateAddress: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
     }),
     deleteAddress: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
+
+    finishValidateAddress: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
   }
 })
 
+const mockAlertSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
+  return {
+    ...original,
+    useDestructiveAlert: () => mockAlertSpy,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+  }
+})
 
 jest.mock('@react-navigation/native', () => {
   let actual = jest.requireActual('@react-navigation/native')
@@ -52,10 +71,10 @@ jest.mock('@react-navigation/native', () => {
     ...actual,
     useNavigation: () => ({
       setOptions: jest.fn(),
-      goBack: jest.fn()
+      goBack: jest.fn(),
     }),
-  };
-});
+  }
+})
 
 context('EditAddressScreen', () => {
   let store: any
@@ -66,7 +85,13 @@ context('EditAddressScreen', () => {
   let goBackSpy: any
   let navHeaderSpy: any
 
-  const initializeTestInstance = (profile?: UserDataProfile, addressSaved?: any, isResidential?: boolean, errorsState: ErrorsState = initialErrorsState, showValidation = false) => {
+  const initializeTestInstance = (
+    profile?: UserDataProfile,
+    addressSaved?: any,
+    isResidential?: boolean,
+    errorsState: ErrorsState = initialErrorsState,
+    showValidation = false,
+  ) => {
     goBackSpy = jest.fn()
 
     props = mockNavProps(
@@ -76,30 +101,31 @@ context('EditAddressScreen', () => {
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined
+            save: options.headerRight ? options.headerRight({}) : undefined,
           }
         },
       },
       {
         params: {
           displayTitle: isResidential ? 'Home Address' : 'Mailing Address',
-          addressType:  isResidential ? 'residentialAddress' : 'mailingAddress'
-        }
-      }
+          addressType: isResidential ? 'residentialAddress' : 'mailingAddress',
+        },
+      },
     )
 
     store = mockStore({
       ...InitialState,
-      personalInformation: { 
-        profile, 
-        loading: false, 
-        addressSaved, 
-        showValidation, 
+      personalInformation: {
+        profile,
+        loading: false,
+        addressSaved,
+        showValidation,
         needsDataLoad: false,
-        emailSaved: false,  
+        emailSaved: false,
         preloadComplete: false,
-        phoneNumberSaved: false, },
-      errors: errorsState
+        phoneNumberSaved: false,
+      },
+      errors: errorsState,
     })
 
     act(() => {
@@ -180,6 +206,7 @@ context('EditAddressScreen', () => {
         phoneType: 'HOME',
       },
       formattedFaxPhone: '(858)-690-1286',
+      signinService: 'IDME',
     }
 
     initializeTestInstance(profileInfo)
@@ -190,26 +217,26 @@ context('EditAddressScreen', () => {
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(profileInfo, undefined, undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(profileInfo, undefined, undefined, errorState)
@@ -454,7 +481,7 @@ context('EditAddressScreen', () => {
   })
 
   describe('when a text input item does not exist', () => {
-    it('should set it to an empty string initially', async() => {
+    it('should set it to an empty string initially', async () => {
       initializeTestInstance()
       const addressLine1VATextInput = testInstance.findAllByType(VATextInput)[0]
       expect(addressLine1VATextInput.props.value).toEqual('')
@@ -462,7 +489,7 @@ context('EditAddressScreen', () => {
   })
 
   describe('when a picker item does not exist', () => {
-    it('should set it to an empty string initially', async() => {
+    it('should set it to an empty string initially', async () => {
       initializeTestInstance()
       const statePicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(statePicker.props.selectedValue).toEqual('')
@@ -474,17 +501,17 @@ context('EditAddressScreen', () => {
       profileInfo.mailingAddress = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
-          addressLine2: 'Address line 2',
-          addressLine3: 'Address line 3',
-          addressPou: 'RESIDENCE/CHOICE',
-          addressType: 'OVERSEAS MILITARY',
-          city: 'Tiburon',
-          countryCodeIso3: '1',
-          internationalPostalCode: '1',
-          province: 'province',
-          stateCode: 'CA',
-          zipCode: '94920',
-          zipCodeSuffix: '1234',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'Tiburon',
+        countryCodeIso3: '1',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
       }
 
       initializeTestInstance(profileInfo)
@@ -529,13 +556,12 @@ context('EditAddressScreen', () => {
       })
     })
 
-
     it('should disable the country picker', async () => {
       const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
       expect(countryPicker.props.disabled).toEqual(true)
     })
 
-    it('should set the state picker pickerOptions to MilitaryStates', async () =>{
+    it('should set the state picker pickerOptions to MilitaryStates', async () => {
       const statePicker = testInstance.findAllByType(VAModalPicker)[2]
       expect(statePicker.props.pickerOptions).toEqual(MilitaryStates)
     })
@@ -553,7 +579,7 @@ context('EditAddressScreen', () => {
   })
 
   describe('when checkboxSelected is false', () => {
-    it('should set the state picker pickerOptions to States', async () =>{
+    it('should set the state picker pickerOptions to States', async () => {
       const statePicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(statePicker.props.pickerOptions).toEqual(States)
     })
@@ -635,18 +661,25 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
       expect(testInstance.findAllByType(AddressValidation).length).toEqual(1)
     })
+
+    it('when cancel is pressed during address validation', async () => {
+      initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
+
+      navHeaderSpy.back.props.onPress()
+      expect(mockAlertSpy).toHaveBeenCalled()
+    })
   })
 
   describe('when content is invalid for domestic address', () => {
     it('should display an AlertBox and a field error for each required field', async () => {
       act(() => {
         const pickers = testInstance.findAllByType(VAModalPicker)
-        pickers.forEach(picker => {
+        pickers.forEach((picker) => {
           picker.props.onSelectionChange('')
         })
 
         const textInputs = testInstance.findAllByType(VATextInput)
-        textInputs.forEach(textInput => {
+        textInputs.forEach((textInput) => {
           textInput.props.onChange('')
         })
 
@@ -654,14 +687,13 @@ context('EditAddressScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
 
       // TODO: find a better way to pick the right textview
-      expect(textViews[238].props.children).toEqual('Country is required')
-      expect(textViews[243].props.children).toEqual('Street address is required')
-      expect(textViews[251].props.children).toEqual('City is required')
-      expect(textViews[324].props.children).toEqual('State is required')
-      expect(textViews[328].props.children).toEqual('Zip code is required')
+      expect(findByTypeWithText(testInstance, TextView, 'Country is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'State is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Zip code is required')).toBeTruthy()
     })
   })
 
@@ -679,8 +711,8 @@ context('EditAddressScreen', () => {
       const textViews = testInstance.findAllByType(TextView)
 
       expect(textViews[242].props.children).toEqual('Street address is required')
-      expect(textViews[258].props.children).toEqual('Please select a valid option')
-      expect(textViews[270].props.children).toEqual('Please select a valid option')
+      expect(textViews[257].props.children).toEqual('Please select a valid option')
+      expect(textViews[269].props.children).toEqual('Please select a valid option')
       expect(textViews[274].props.children).toEqual('Zip code is required')
     })
   })
@@ -697,10 +729,9 @@ context('EditAddressScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
-
-      expect(textViews[242].props.children).toEqual('Street address is required')
-      expect(textViews[250].props.children).toEqual('City is required')
-      expect(textViews[255].props.children).toEqual('Postal code is required')
+      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
     })
   })
 
@@ -708,7 +739,7 @@ context('EditAddressScreen', () => {
     it('should display the remove button', () => {
       initializeTestInstance(profileInfo, false, true)
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home address')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Home Address')
     })
   })
 
@@ -736,20 +767,23 @@ context('EditAddressScreen', () => {
           navHeaderSpy.save.props.onSave()
         })
 
-        expect(validateAddress).toBeCalledWith({
-          id: 0,
-          addressLine1: '127 Harvest Moon Dr',
-          addressLine2: '',
-          addressLine3: '',
-          addressPou: 'CORRESPONDENCE',
-          addressType: 'INTERNATIONAL',
-          city: 'Bolton',
-          countryName: 'Canada',
-          countryCodeIso3: 'CAN',
-          internationalPostalCode: 'L7E 2W1',
-          zipCode: '',
-          province: 'Ontario',
-        }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
+        expect(validateAddress).toBeCalledWith(
+          {
+            id: 0,
+            addressLine1: '127 Harvest Moon Dr',
+            addressLine2: '',
+            addressLine3: '',
+            addressPou: 'CORRESPONDENCE',
+            addressType: 'INTERNATIONAL',
+            city: 'Bolton',
+            countryName: 'Canada',
+            countryCodeIso3: 'CAN',
+            internationalPostalCode: 'L7E 2W1',
+            zipCode: '',
+            province: 'Ontario',
+          },
+          ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
+        )
       })
     })
 
@@ -777,24 +811,27 @@ context('EditAddressScreen', () => {
           navHeaderSpy.save.props.onSave()
         })
 
-        expect(validateAddress).toBeCalledWith({
-          id: 0,
-          addressLine1: '1707 Tiburon Blvd',
-          addressLine2: 'Address line 2',
-          addressLine3: 'Address line 3',
-          addressPou: 'CORRESPONDENCE',
-          addressType: 'DOMESTIC',
-          city: 'Tiburon',
-          countryName: 'United States',
-          countryCodeIso3: 'USA',
-          stateCode: 'CA',
-          zipCode: '94920',
-          internationalPostalCode: ''
-        }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
-       })
+        expect(validateAddress).toBeCalledWith(
+          {
+            id: 0,
+            addressLine1: '1707 Tiburon Blvd',
+            addressLine2: 'Address line 2',
+            addressLine3: 'Address line 3',
+            addressPou: 'CORRESPONDENCE',
+            addressType: 'DOMESTIC',
+            city: 'Tiburon',
+            countryName: 'United States',
+            countryCodeIso3: 'USA',
+            stateCode: 'CA',
+            zipCode: '94920',
+            internationalPostalCode: '',
+          },
+          ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
+        )
+      })
     })
 
-    describe('when OVERSEAS MILITARY',  () => {
+    describe('when OVERSEAS MILITARY', () => {
       it('should pass stateCode and zipCode as part of the expected payload', async () => {
         profileInfo.mailingAddress = {
           id: 0,
@@ -817,26 +854,29 @@ context('EditAddressScreen', () => {
           navHeaderSpy.save.props.onSave()
         })
 
-        expect(validateAddress).toBeCalledWith({
-          id: 0,
-          addressLine1: 'Unit 2050 Box 4190',
-          addressLine2: '',
-          addressLine3: '',
-          addressPou: 'CORRESPONDENCE',
-          addressType: 'OVERSEAS MILITARY',
-          countryName: 'United States',
-          city: 'APO',
-          countryCodeIso3: 'USA',
-          internationalPostalCode: '',
-          stateCode: 'AP',
-          zipCode: '96278',
-        }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
+        expect(validateAddress).toBeCalledWith(
+          {
+            id: 0,
+            addressLine1: 'Unit 2050 Box 4190',
+            addressLine2: '',
+            addressLine3: '',
+            addressPou: 'CORRESPONDENCE',
+            addressType: 'OVERSEAS MILITARY',
+            countryName: 'United States',
+            city: 'APO',
+            countryCodeIso3: 'USA',
+            internationalPostalCode: '',
+            stateCode: 'AP',
+            zipCode: '96278',
+          },
+          ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
+        )
       })
     })
   })
 
   describe('delete address', () => {
-    it('should call the deleteAddress action', async () => {
+    it('should call the useDestructive hook', async () => {
       profileInfo.residentialAddress = {
         id: 25,
         addressLine1: '1707 Tiburon Blvd',
@@ -855,23 +895,10 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo, false, true)
 
       act(() => {
-        testInstance.findByType(RemoveData).props.confirmFn()
+        testInstance.findByType(VAButton).props.onPress()
       })
 
-      expect(deleteAddress).toBeCalledWith({
-        id: 25,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: 'Tiburon',
-        countryCodeIso3: 'USA',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
+      expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
 })

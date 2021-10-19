@@ -1,5 +1,4 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
-import _ from 'underscore'
 
 import * as api from '../api'
 import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
@@ -13,7 +12,7 @@ import {
   ClaimsAndAppealsGetData,
   ClaimsAndAppealsList,
   ScreenIDTypes,
-} from '../api/types'
+} from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -21,12 +20,14 @@ import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndApp
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
-import { UserAnalytics } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { getItemsInRange } from 'utils/common'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { getItemsInRange, isErrorObject } from 'utils/common'
+import { registerReviewEvent } from 'utils/inAppReviews'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 // Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
 const getLoadedClaimsAndAppeals = (
@@ -250,8 +251,10 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
 
       dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(activeClaimsAndAppeals, closedClaimsAndAppeals))
     } catch (error) {
-      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(undefined, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(undefined, undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -300,8 +303,10 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimType, claimsAndAppeals))
     } catch (error) {
-      dispatch(dispatchFinishAllClaimsAndAppeals(claimType, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishAllClaimsAndAppeals(claimType, undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -345,11 +350,18 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
       }
 
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
+      const [totalTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
+      await registerReviewEvent()
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
     } catch (error) {
-      dispatch(dispatchFinishGetClaim(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetClaim(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -390,11 +402,18 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
         appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
       }
 
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
+      const [totalTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
+      await registerReviewEvent()
       dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
-      dispatch(dispatchFinishGetAppeal(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetAppeal(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -429,8 +448,10 @@ export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): 
 
       dispatch(dispatchFinishSubmitClaimDecision())
     } catch (error) {
-      dispatch(dispatchFinishSubmitClaimDecision(error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishSubmitClaimDecision(error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -461,34 +482,66 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
 
     try {
       if (files.length > 1) {
-        const fileStrings = _.compact(_.pluck(files, 'base64'))
+        const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse) => {
+          if ('assets' in file) {
+            return file.assets ? file.assets[0].base64 : undefined
+          } else if ('size' in file) {
+            return file.base64
+          }
+        })
 
-        const payload = {
-          files: fileStrings,
-          tracked_item_id: request.trackedItemId,
-          document_type: request.documentType,
-        }
+        const payload = JSON.parse(
+          JSON.stringify({
+            files: fileStrings,
+            tracked_item_id: request.trackedItemId,
+            document_type: request.documentType,
+          }),
+        )
 
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
       } else {
         const formData = new FormData()
         const fileToUpload = files[0]
+        let nameOfFile: string | undefined
+        let typeOfFile: string | undefined
+        let uriOfFile: string | undefined
 
-        formData.append('file', {
-          name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',
-          uri: fileToUpload.uri || '',
-          type: fileToUpload.type || '',
-        })
+        if ('assets' in fileToUpload) {
+          if (fileToUpload.assets && fileToUpload.assets.length > 0) {
+            const { fileName, type, uri } = fileToUpload.assets[0]
+            nameOfFile = fileName
+            typeOfFile = type
+            uriOfFile = uri
+          }
+        } else if ('size' in fileToUpload) {
+          const { name, uri, type } = fileToUpload
+          nameOfFile = name
+          typeOfFile = type
+          uriOfFile = uri
+        }
+        // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
+        formData.append(
+          'uploads[]',
+          JSON.parse(
+            JSON.stringify({
+              name: nameOfFile || '',
+              uri: uriOfFile || '',
+              type: typeOfFile || '',
+            }),
+          ),
+        )
 
-        formData.append('trackedItemId', request.trackedItemId)
-        formData.append('documentType', request.documentType)
+        formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
+        formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
 
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
       }
 
       dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
-      dispatch(dispatchFinishFileUpload(error))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishFileUpload(error))
+      }
     }
   }
 }

@@ -1,8 +1,9 @@
 import { Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactNode, useState } from 'react'
 
-import { Box, TextArea, VAIcon, VA_ICON_MAP } from './index'
+import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
+import { VABorderColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -13,6 +14,8 @@ export type AccordionCollapsibleProps = {
   expandedContent: ReactNode
   /** testID for the header */
   testID?: string
+  /** a11yHint for the header */
+  a11yHint?: string
   /** component to display on when the accordion is collapsed */
   collapsedContent?: ReactNode
   /** if true hides the accordion arrow and only displays header & collapsed content */
@@ -23,6 +26,8 @@ export type AccordionCollapsibleProps = {
   expandedInitialValue?: boolean
   /** gets rid of border of TextArea so the top and bottom borders don't double up in message threads when accordion is opened */
   noBorder?: boolean
+  /** applies a border to create the alert effect on the view **/
+  alertBorder?: keyof VABorderColors
 }
 
 const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
@@ -35,6 +40,8 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   expandedInitialValue,
   noBorder,
   children,
+  alertBorder,
+  a11yHint,
 }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -51,7 +58,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
-    accessibilityHint: t('viewMoreDetails'),
+    accessibilityHint: a11yHint || t('viewMoreDetails'),
     accessibilityRole: 'spinbutton',
   }
 
@@ -63,7 +70,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
         <Box flex={1}>{header}</Box>
         {!hideArrow && (
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <VAIcon name={iconName} fill={'#000'} width={16} height={10} />
+            <VAIcon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={16} height={10} />
           </Box>
         )}
       </Box>
@@ -80,8 +87,21 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     )
   }
 
+  const leftBorderProps = alertBorder
+    ? {
+        borderLeftWidth: theme.dimensions.alertBorderWidth,
+        borderLeftColor: alertBorder,
+      }
+    : {}
+
+  const boxProps: BoxProps = {
+    ...leftBorderProps,
+    borderBottomColor: 'primary',
+    borderBottomWidth: theme.dimensions.borderWidth,
+  }
+
   return (
-    <Box borderBottomColor={'primary'} borderBottomWidth={theme.dimensions.borderWidth}>
+    <Box {...boxProps} {...testIdProps('accordion-wrapper')}>
       <TextArea noBorder={noBorder}>
         {renderHeader()}
         {!expanded && collapsedContent}

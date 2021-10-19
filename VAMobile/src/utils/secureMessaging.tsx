@@ -1,8 +1,8 @@
 import { TFunction } from 'i18next'
 
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
+import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
@@ -15,7 +15,7 @@ import {
   READ,
 } from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
-import { generateTestIDForTextIconList } from './common'
+import { generateTestIDForTextIconList, isErrorObject } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 
 export const getMessagesListItems = (
@@ -177,9 +177,15 @@ export const onFileFolderSelect = async (
   fileUris: Array<string>,
   t: TFunction,
 ): Promise<void> => {
+  const {
+    pickSingle,
+    isCancel,
+    types: { allFiles },
+  } = DocumentPicker
+
   try {
-    const document = await DocumentPicker.pick({
-      type: [DocumentPicker.types.allFiles],
+    const document = await pickSingle({
+      type: [allFiles],
     })
 
     const { size, type, uri } = document
@@ -197,11 +203,15 @@ export const onFileFolderSelect = async (
       callbackIfUri(document, false)
     }
   } catch (docError) {
-    if (DocumentPicker.isCancel(docError)) {
-      return
-    }
+    if (isErrorObject(docError)) {
+      if (isCancel(docError)) {
+        return
+      }
 
-    setError(docError.code)
+      if (docError.code) {
+        setError(docError.code)
+      }
+    }
   }
 }
 
@@ -224,7 +234,8 @@ export const postCameraOrImageLaunchOnFileAttachments = (
   imageBase64s: Array<string>,
   t: TFunction,
 ): void => {
-  const { fileSize, errorMessage, uri, didCancel, type, base64 } = response
+  const { assets, errorMessage, didCancel } = response
+  const { fileSize, type, uri, base64 } = assets ? assets[0] : ({} as Asset)
 
   if (didCancel) {
     return

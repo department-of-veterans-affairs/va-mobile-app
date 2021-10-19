@@ -1,4 +1,3 @@
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -6,7 +5,6 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AlertBox, BackButton, Box, ErrorComponent, FieldType, FocusedNavHeaderText, FormFieldType, FormWrapper, LoadingComponent, SaveButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HeaderTitleType } from '../../../../styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
@@ -36,11 +34,9 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={saveDisabled} />,
-      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   })
 

@@ -3,17 +3,17 @@ import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { fetchInboxMessages, listFolders, updateSecureMessagingTab } from 'store/actions'
+import { fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/actions'
 
 import { AuthorizedServicesState, SecureMessagingState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
-import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
+import CernerAlert from '../CernerAlert'
 import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
@@ -27,8 +27,7 @@ export const getInboxUnreadCount = (state: StoreState): number => {
   return inbox?.attributes?.unreadCount || 0
 }
 
-const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation, route }) => {
-  const goToDrafts = route.params?.goToDrafts
+const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -45,14 +44,8 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (secureMessaging) {
-      if (goToDrafts) {
-        navigation.navigate('FolderMessages', {
-          folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-          folderName: FolderNameTypeConstants.drafts,
-          draftSaved: true,
-        })
-        return
-      }
+      dispatch(resetSaveDraftComplete())
+      dispatch(resetSaveDraftFailed())
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
       // prefetch inbox message list
       dispatch(fetchInboxMessages(1, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
@@ -63,7 +56,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation, route }) => {
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
-  }, [dispatch, secureMessaging, goToDrafts, navigation, secureMessagingTab])
+  }, [dispatch, secureMessaging, navigation, secureMessagingTab])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
@@ -106,6 +99,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation, route }) => {
               accessibilityHints={a11yHints}
             />
           </Box>
+          <CernerAlert />
           {serviceErrorAlert()}
           <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
             {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}

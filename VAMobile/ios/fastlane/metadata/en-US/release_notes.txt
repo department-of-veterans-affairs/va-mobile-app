@@ -1,0 +1,1 @@
+You can now check if you or the facility canceled an appointment. We've also fixed a few bugs.

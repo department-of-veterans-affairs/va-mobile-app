@@ -1,15 +1,15 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import UploadFile from './UploadFile'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import {InitialState} from 'store/reducers'
-import {TextView, VAButton, VAModalPicker} from 'components'
-import {DocumentPickerResponse} from '../../../../../ClaimsStackScreens'
-import {ImagePickerResponse} from 'react-native-image-picker'
+import { InitialState } from 'store/reducers'
+import { TextView, VAButton, VAModalPicker } from 'components'
+import { DocumentPickerResponse } from '../../../../../ClaimsStackScreens'
+import { ImagePickerResponse } from 'react-native-image-picker'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../../../utils/hooks', () => {
@@ -37,7 +37,7 @@ context('UploadFile', () => {
     date: '2020-07-16',
     status: 'NEEDED',
     uploaded: false,
-    uploadsAllowed: true
+    uploadsAllowed: true,
   }
 
   const initializeTestInstance = (fileUploaded?: DocumentPickerResponse, imageUploaded?: ImagePickerResponse) => {
@@ -47,12 +47,12 @@ context('UploadFile', () => {
       ...InitialState,
       claimsAndAppeals: {
         ...InitialState.claimsAndAppeals,
-        claim: Claim
-      }
+        claim: Claim,
+      },
     })
 
     act(() => {
-      component = renderWithProviders(<UploadFile {...props}/>, store)
+      component = renderWithProviders(<UploadFile {...props} />, store)
     })
 
     testInstance = component.root
@@ -79,14 +79,14 @@ context('UploadFile', () => {
 
   describe('when a file is uploaded', () => {
     it('should display the uploaded file name', async () => {
-      initializeTestInstance({ name: 'uploadedFile',  uri: '', copyError: '', fileCopyUri: '', size: 10, type: 'pdf' })
+      initializeTestInstance({ name: 'uploadedFile', uri: '', copyError: '', fileCopyUri: '', size: 10, type: 'pdf' })
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('uploadedFile')
     })
   })
 
   describe('when an image is uploaded', () => {
     it('should display the uploaded image name', async () => {
-      initializeTestInstance(undefined, { fileName: 'uploadedImage' })
+      initializeTestInstance(undefined, { assets: [{ fileName: 'uploadedImage' }] })
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('uploadedImage')
     })
   })

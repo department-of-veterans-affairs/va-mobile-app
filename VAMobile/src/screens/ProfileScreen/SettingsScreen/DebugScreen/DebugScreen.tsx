@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 
-import { AuthState, AuthorizedServicesState, DemoState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { debugResetFirstTimeLogin } from 'store/actions'
 import { requestReview } from '../../../../utils/rnReviews'
@@ -13,7 +13,6 @@ import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
   const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
@@ -50,16 +49,14 @@ const DebugScreen: FC = ({}) => {
       <VAScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={onResetFirstTimeLogin} label={'Reset First Time Login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
-        {demoMode && (
-          <Box mt={theme.dimensions.contentMarginTop}>
-            <TextArea>
-              <VAButton onPress={testInAppReview} label={'Test In-App Review Flow'} buttonType={ButtonTypesConstants.buttonPrimary} />
-            </TextArea>
-          </Box>
-        )}
+        <Box mt={theme.dimensions.contentMarginTop}>
+          <TextArea>
+            <VAButton onPress={testInAppReview} label={'Test In-App Review Flow'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>

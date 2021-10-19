@@ -1,4 +1,4 @@
-import { Linking, Share } from 'react-native'
+import { Share, StyleProp, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -11,18 +11,19 @@ import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
+import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
 type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
-const SettingsScreen: FC<SettingsScreenProps> = () => {
+const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.SETTINGS)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
 
   const onToggleTouchId = (): void => {
@@ -43,9 +44,14 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
-  const onDebug = navigateTo('Debug')
+  const onDebug = () => {
+    navigation.navigate('Debug')
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onManage = () => {
+    navigation.navigate('ManageYourAccount')
+  }
+
   const onShare = async (): Promise<void> => {
     try {
       await Share.share({
@@ -57,17 +63,21 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const onPrivacyPolicy = async (): Promise<void> => {
-    await Linking.openURL(LINK_URL_PRIVACY_POLICY)
+    launchExternalLink(LINK_URL_PRIVACY_POLICY)
   }
 
   const items: Array<SimpleListItemObj> = _.flatten([
-    { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
+    { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onManage },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
     // TODO: update this once approved
-    // { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
+    { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
+
+  const mainViewStyle: StyleProp<ViewStyle> = {
+    flexGrow: 1,
+  }
 
   const debugMenu = (): ReactNode => {
     const debugButton: Array<SimpleListItemObj> = [
@@ -86,8 +96,8 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Settings-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+    <VAScrollView {...testIdProps('Settings-page')} contentContainerStyle={mainViewStyle}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} flex={1}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <SimpleList items={items} />
           {SHOW_DEBUG_MENU && debugMenu()}
@@ -96,6 +106,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
           <SignoutButton />
         </Box>
       </Box>
+      <AppVersionAndBuild />
     </VAScrollView>
   )
 }

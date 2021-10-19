@@ -1,4 +1,3 @@
-import { HeaderTitle, StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,6 +8,7 @@ import {
   AlertBox,
   BackButton,
   Box,
+  ButtonTypesConstants,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -16,25 +16,26 @@ import {
   LoadingComponent,
   PickerItem,
   SaveButton,
+  VAButton,
   VAScrollView,
   VATextInputTypes,
   ValidationFunctionItems,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
-import { HeaderTitleType } from 'styles/common'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
-import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
+import { deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/actions'
 import { profileAddressOptions } from './AddressSummary'
+import { stringToTitleCase } from '../../utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
-import RemoveData from './RemoveData'
+import HeaderTitle from 'components/HeaderTitle'
 
 const MAX_ADDRESS_LENGTH = 35
 const ZIP_CODE_LENGTH = 5
@@ -84,6 +85,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
+  const destructiveAlert = useDestructiveAlert()
 
   const [deleting, setDeleting] = useState(false)
 
@@ -106,6 +108,28 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const getInitialStateForCheckBox = (itemToGet: AddressDataEditedFields): boolean => {
     const item = getInitialState(itemToGet)
     return item ? item === addressTypeFields.overseasMilitary : false
+  }
+
+  const onCancel = (): void => {
+    dispatch(finishValidateAddress())
+    navigation.goBack()
+  }
+
+  const onConfirmCancel = (): void => {
+    destructiveAlert({
+      title: t('editAddress.validation.cancelConfirm.title'),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('editAddress.validation.cancelConfirm.confirm'),
+          onPress: onCancel,
+        },
+      ],
+    })
   }
 
   const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
@@ -153,7 +177,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
-  const onSave = (): void => {
+  const getAddressValues = (): AddressData => {
     const addressLocationType = getAddressLocationType()
 
     const addressId = profile?.[addressType]?.id || 0
@@ -186,8 +210,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       delete addressPost.stateCode
       addressPost.province = state
     }
+    return addressPost
+  }
 
-    dispatch(validateAddress(addressPost, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+  const onSave = (): void => {
+    dispatch(validateAddress(getAddressValues(), ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -205,17 +232,15 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }, [addressSaved, navigation, dispatch])
 
+  const cancelFn = showValidation ? onConfirmCancel : onCancel
+
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (header: HeaderTitleType) => (
-        <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
-          <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
-        </Box>
-      ),
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
+      headerTitle: () => <HeaderTitle {...testIdProps(displayTitle)} headerTitle={displayTitle} />,
+      headerLeft: (props): ReactNode => <BackButton onPress={cancelFn} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+      headerRight: () => {
+        return !showValidation ? <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} /> : <></>
+      },
     })
   })
 
@@ -231,14 +256,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   if (showValidation) {
     const addressValidationProps = {
-      addressLine1: addressLine1.trim(),
-      addressLine2: addressLine2?.trim(),
-      addressLine3: addressLine3?.trim(),
-      city: checkboxSelected ? militaryPostOffice?.trim() : city?.trim(),
-      state,
-      zipCode: zipCode.trim(),
+      addressEntered: getAddressValues(),
       addressId: profile?.[addressType]?.id || 0,
-      country: country,
     }
     return <AddressValidation {...addressValidationProps} />
   }
@@ -449,12 +468,37 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
   const noAddressData = !profile?.[addressType]
 
+  const lowerCaseTitle = displayTitle.toLowerCase()
+
+  const onDeletePressed = (): void => {
+    destructiveAlert({
+      title: t('personalInformation.areYouSureYouWantToDelete', { alertText: lowerCaseTitle }),
+      message: t('personalInformation.deleteDataInfo', { alertText: lowerCaseTitle }),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('common:remove'),
+          onPress: onDelete,
+        },
+      ],
+    })
+  }
+
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
+            <VAButton
+              onPress={onDeletePressed}
+              label={t('personalInformation.removeData', { pageName: stringToTitleCase(lowerCaseTitle) })}
+              buttonType={ButtonTypesConstants.buttonImportant}
+              a11yHint={t('personalInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
+            />
           </Box>
         )}
         {formContainsError && (

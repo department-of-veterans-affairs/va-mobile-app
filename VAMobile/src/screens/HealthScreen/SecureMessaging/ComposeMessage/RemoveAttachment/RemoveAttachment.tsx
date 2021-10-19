@@ -1,14 +1,12 @@
-import React, { FC, ReactNode, useEffect } from 'react'
-
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-
 import { AlertBox, BackButton, Box, ButtonTypesConstants, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 type RemoveAttachmentProps = StackScreenProps<HealthStackParamList, 'RemoveAttachment'>
 
@@ -20,9 +18,7 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
@@ -30,9 +26,9 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
     if (origin === FormHeaderTypeConstants.compose) {
       navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove })()
     } else if (origin === FormHeaderTypeConstants.reply) {
-      navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
+      navigateTo('ReplyMessage', { messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
     } else {
-      navigateTo('EditDraft', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
+      navigateTo('EditDraft', { messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
     }
   }
 

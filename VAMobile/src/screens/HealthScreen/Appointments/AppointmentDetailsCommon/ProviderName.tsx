@@ -7,29 +7,38 @@ import { getAllFieldsThatExist } from 'utils/common'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type ProviderNameProps = {
+  /* The type of appointment */
   appointmentType: AppointmentType
+  /* The practitioner name object*/
   practitioner: AppointmentPractitioner | undefined
+  /* The provider name string  */
+  healthcareProvider: string | null
 }
 
-const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) => {
+const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, healthcareProvider }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
+  let practitionerName = ''
 
-  if (appointmentType !== AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || !practitioner) {
-    return <></>
+  if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE && practitioner) {
+    practitionerName = getAllFieldsThatExist([practitioner.firstName || '', practitioner.middleName || '', practitioner.lastName || ''])
+      .join(' ')
+      .trim()
+  } else if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && healthcareProvider) {
+    practitionerName = healthcareProvider
   }
 
-  const practitionerName = getAllFieldsThatExist([practitioner.firstName || '', practitioner.middleName || '', practitioner.lastName || ''])
-    .join(' ')
-    .trim()
-
   return (
-    <Box mb={theme.dimensions.standardMarginBetween}>
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
-        {t('upcomingAppointmentDetails.provider')}
-      </TextView>
-      <TextView variant="MobileBody">{practitionerName}</TextView>
-    </Box>
+    <>
+      {!!practitionerName && (
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.provider')}
+          </TextView>
+          <TextView variant="MobileBody">{practitionerName}</TextView>
+        </Box>
+      )}
+    </>
   )
 }
 

@@ -149,7 +149,7 @@ context('EditEmailScreen', () => {
     it('should display the remove button', () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' }, }})
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove email address')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Email Address')
     })
 
     it('should allow you to delete the email', () => {
@@ -169,8 +169,8 @@ context('EditEmailScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       prepTestInstanceWithStore(undefined, errorState)
@@ -182,8 +182,8 @@ context('EditEmailScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       prepTestInstanceWithStore(undefined, errorState)

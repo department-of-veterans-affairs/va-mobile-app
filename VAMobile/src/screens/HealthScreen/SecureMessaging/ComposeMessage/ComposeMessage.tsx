@@ -1,7 +1,8 @@
+import { InteractionManager } from 'react-native'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import _ from 'underscore'
 
@@ -26,15 +27,23 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingTabTypesConstants } from 'store/api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  ScreenIDTypesConstants,
+  SecureMessagingFormData,
+  SecureMessagingSystemFolderIdConstants,
+  SecureMessagingTabTypesConstants,
+} from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, resetSaveDraftComplete, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
@@ -59,9 +68,15 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+
+  const composeCancelConfirmation = useComposeCancelConfirmation()
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
   }, [dispatch])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
@@ -69,14 +84,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const goToCancel = () => {
     const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
-    navigation.navigate('ComposeCancelConfirmation', { draftMessageID: savedDraftID, messageData, isFormValid })
+    composeCancelConfirmation({ origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
   }
-
-  const goBack = () => {
-    dispatch(resetSaveDraftComplete())
-    navigation.goBack()
-  }
-
   useEffect(() => {
     if (!saveDraftConfirmFailed) {
       return
@@ -87,8 +96,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={noProviderError || isFormBlank ? goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      headerLeft: (props): ReactNode => (
+        <BackButton
+          onPress={noProviderError || isFormBlank ? navigation.goBack : goToCancel}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.cancel}
+          showCarat={false}
+        />
       ),
       headerRight: () =>
         !noRecipientsReceived && (
@@ -126,12 +140,25 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
 
+  useEffect(() => {
+    if (saveDraftComplete) {
+      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+      navigation.navigate('SecureMessaging')
+      navigation.navigate('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: true,
+      })
+    }
+  }, [saveDraftComplete, navigation, dispatch])
+
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!hasLoadedRecipients) {
-    return <LoadingComponent />
+  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft) {
+    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.formMessage.composeMessage.loading')
+    return <LoadingComponent text={text} />
   }
 
   const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || message)
@@ -253,6 +280,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       subject: subjectLine,
     } as SecureMessagingFormData
 
+    if (savedDraftID) {
+      messageData.draft_id = savedDraftID
+    }
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, savedDraftID))
     } else {
@@ -260,7 +290,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.composeMessage.compose'),
         messageData,
         uploads: attachmentsList,
-        messageID: savedDraftID,
       })
     }
   }
@@ -283,16 +312,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       )
     }
 
-    if (savingDraft) {
-      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
-    }
-
     return (
       <Box>
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
-          saveDraftComplete={saveDraftComplete}
           saveDraftFailed={saveDraftFailed}
           savingDraft={savingDraft}
           sendMessageFailed={sendMessageFailed}

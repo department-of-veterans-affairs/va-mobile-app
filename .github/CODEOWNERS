@@ -1,0 +1,14 @@
+# These owners will be the default owners for everything in
+# the repo.
+
+@narin
+
+# Order is important; the last matching pattern takes the most
+# precedence.
+
+.circleci             @lexicalninja
+.github               @lexicalninja
+
+/VAMobile/android/    @lexicalninja
+/VAMobile/ios/        @lexicalninja
+/VAMobile/fastfiles/  @lexicalninja

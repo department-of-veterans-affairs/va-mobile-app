@@ -57,6 +57,9 @@ local.properties
 **/android/tmp
 **/android/app/src/main/assets/
 
+# Android Build
+**/android/vendor
+
 # Node
 node_modules
 *.log
@@ -114,6 +117,7 @@ coverage
 
 #iOS build
 **/ios/output
+**/ios/vendor
 
 # Xcode
 #
@@ -140,6 +144,11 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+*/fastlane/README.md
+
+# CircleCI
+  # CCI installs all the deps including yarn at the project root and we don't want to check this in
+**/package-lock.json
 
 # Bundle artifact
 *.jsbundle
@@ -156,5 +165,9 @@ buck-out/
 /VAMobile/ios/Flagship_Mobile_App.mobileprovision
 /VAMobile/ios/distribution.p12
 /VAMobile/ios/GoogleService-Info.plist
-/VAMobile/android/fastlane/report.xml
 /VAMobile/android/app/release
+/VAMobile/android/keystore
+/VAMobile/ios/fastlane/Preview.html
+**/fastlane/report.xml
+/VAMobile/ios/fastlane/README.md
+/VAMobile/android/fastlane/README.md

@@ -97,6 +97,7 @@ export type SecureMessagingFormData = {
   category?: CategoryTypes
   body: string
   subject?: string
+  draft_id?: number
 }
 
 /**
@@ -213,6 +214,7 @@ export type SecureMessagingRecipientDataAttributes = {
   triageTeamId: number
   name: string
   relationType: SecureMessagingRecipientDataAttributesRelationType
+  preferredTeam: boolean
 }
 
 export type SecureMessagingRecipientData = {

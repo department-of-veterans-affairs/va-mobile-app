@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, DemoState, StoreState, dispatchStartAuthLogin, updateDemoMode } from 'store'
+import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
@@ -57,7 +58,7 @@ const LoginScreen: FC = () => {
 
   const onLoginInit = demoMode
     ? () => {
-        dispatch(dispatchStartAuthLogin(true))
+        dispatch(loginStart(true))
       }
     : firstTimeLogin
     ? navigateTo('LoaGate')
@@ -81,7 +82,7 @@ const LoginScreen: FC = () => {
             label={t('login:signin')}
             testID={t('login:signin')}
             a11yHint={t('login:signin.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonSecondary}
+            buttonType={ButtonTypesConstants.buttonWhite}
             hideBorder={true}
           />
           <Pressable
@@ -97,6 +98,7 @@ const LoginScreen: FC = () => {
             </Box>
           </Pressable>
         </Box>
+        <AppVersionAndBuild textColor={'primaryContrast'} />
       </Box>
     </VAScrollView>
   )

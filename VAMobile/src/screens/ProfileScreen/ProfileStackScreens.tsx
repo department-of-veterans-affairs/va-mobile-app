@@ -8,8 +8,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import BenefitSummaryServiceVerification from './Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
+import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 import GenericLetter from './Letters/GenericLetter/GenericLetter'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
+import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
 import ManageYourAccount from './SettingsScreen/ManageYourAccount/ManageYourAccount'
@@ -38,6 +40,8 @@ export type ProfileStackParamList = {
     screenID: ScreenIDTypes
     descriptionA11yLabel?: string
   }
+  DisabilityRatings: undefined
+  HowToUpdateDirectDeposit: undefined
 }
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
@@ -62,5 +66,12 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
       options={{ title: t('letters.overview.title') }}
     />,
     <ProfileStack.Screen key={'GenericLetter'} name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />,
+    <ProfileStack.Screen key={'DisabilityRatings'} name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ title: t('disabilityRatingDetails.title') }} />,
+    <ProfileStack.Screen
+      key={'HowToUpdateDirectDeposit'}
+      name="HowToUpdateDirectDeposit"
+      component={HowToUpdateDirectDepositScreen}
+      options={{ title: t('directDeposit.title') }}
+    />,
   ]
 }

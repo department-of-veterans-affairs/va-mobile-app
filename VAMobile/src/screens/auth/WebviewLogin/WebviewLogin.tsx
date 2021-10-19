@@ -2,11 +2,12 @@ import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
-import { AuthParamsLoadingStateTypeConstants, handleTokenCallbackUrl, setPKCEParams } from 'store'
+import { AuthParamsLoadingStateTypeConstants, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, sendLoginStartAnalytics, setPKCEParams } from 'store'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
+import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
@@ -54,13 +55,18 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
-        if (e.code === '000') {
-          navigation.goBack()
-        } else {
-          crashlytics().recordError(e, 'iOS Login Error')
+        if (isErrorObject(e)) {
+          if (e.code === '000') {
+            dispatch(cancelWebLogin())
+            navigation.goBack()
+          } else {
+            crashlytics().recordError(e, 'iOS Login Error')
+            dispatch(sendLoginFailedAnalytics(e))
+          }
         }
       }
     }
+    dispatch(sendLoginStartAnalytics())
     if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.READY && isIOS()) {
       iosAuth()
     }
@@ -89,6 +95,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
             err.stack = JSON.stringify(e.nativeEvent)
             err.name = e.nativeEvent.title
             crashlytics().recordError(err, 'Android Login Webview Error')
+            dispatch(sendLoginFailedAnalytics(err))
           }}
           renderLoading={(): ReactElement => loadingSpinner}
           {...testIdProps('Sign-in: Webview-login', true)}

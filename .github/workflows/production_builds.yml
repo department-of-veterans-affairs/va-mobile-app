@@ -1,0 +1,26 @@
+name: "Build PR Merged "
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches:
+      - master
+jobs:
+  tag_for_release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Tag for release
+        run: |
+          if [[ ${{github.event.pull_request.title}} =~ (^v[0-9]+\.[0-9]+\.[0-9]+$) ]];
+          then
+            git config --global user.name 'VA Automation Bot'
+            git config --global user.email 'va-mobileapp@adhocteam.us'
+            git tag -a ${{github.event.pull_request.title}} -m ${{github.event.pull_request.title}}
+            git push origin ${{github.event.pull_request.title}}
+          else
+            echo 'Non-release PR, exiting'
+            exit 0
+          fi
+        shell: bash

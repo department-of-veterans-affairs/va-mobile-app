@@ -24,7 +24,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
   const theme = useTheme()
-  const { messagesByFolderId, loading, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
 
   useEffect(() => {
@@ -33,6 +33,13 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     // If draft saved message showing, clear status so it doesn't show again
     dispatch(resetSaveDraftComplete())
   }, [dispatch, folderID, route])
+
+  useEffect(() => {
+    if (saveDraftComplete) {
+      // If draft saved message showing, clear status so it doesn't show again
+      dispatch(resetSaveDraftComplete())
+    }
+  }, [dispatch, saveDraftComplete])
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
     const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
@@ -45,7 +52,8 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }
 
   if (loading) {
-    return <LoadingComponent text={t('secureMessaging.messages.loading')} />
+    const text = draftSaved ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.messages.loading')
+    return <LoadingComponent text={text} />
   }
 
   const folderMessages = messagesByFolderId ? messagesByFolderId[folderID] : { data: [], links: {}, meta: {} }

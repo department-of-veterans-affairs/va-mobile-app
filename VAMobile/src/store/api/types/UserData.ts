@@ -1,6 +1,18 @@
 import { AddressData } from './AddressData'
 import { PhoneData } from './PhoneData'
 
+export type SigninServiceTypes = 'IDME' | 'DSL' | 'MHV'
+
+export const SigninServiceTypesConstants: {
+  IDME: SigninServiceTypes
+  DSL: SigninServiceTypes
+  MHV: SigninServiceTypes
+} = {
+  IDME: 'IDME',
+  DSL: 'DSL',
+  MHV: 'MHV',
+}
+
 export type UserDataProfile = {
   firstName: string
   middleName: string
@@ -21,6 +33,18 @@ export type UserDataProfile = {
   formattedWorkPhone?: string
   faxNumber: PhoneData
   formattedFaxPhone?: string
+  signinService: SigninServiceTypes
+}
+
+export type Facility = {
+  facilityId: string
+  isCerner: boolean
+  facilityName: string
+}
+
+export type CernerData = {
+  isCernerPatient: boolean
+  facilities: Array<Facility>
 }
 
 export type EmailData = {
@@ -65,6 +89,7 @@ export type UserData = {
       type: string
       authorizedServices: Array<VAServices>
       profile: UserDataProfile
+      health: CernerData
     }
   }
 }
@@ -90,4 +115,14 @@ export type EditResponseData = {
       }
     }
   }
+}
+
+export const UserGreetingTimeConstants: {
+  MORNING: number
+  AFTERNOON: number
+  EVENING: number
+} = {
+  MORNING: 12,
+  AFTERNOON: 18,
+  EVENING: 4,
 }

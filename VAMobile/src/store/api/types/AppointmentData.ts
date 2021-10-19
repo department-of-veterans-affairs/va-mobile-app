@@ -24,6 +24,18 @@ export const AppointmentStatusConstants: {
   CANCELLED: 'CANCELLED',
 }
 
+export const AppointmentStatusDetailTypeConsts: {
+  CLINIC_REBOOK: AppointmentStatusDetailType
+  CLINIC: AppointmentStatusDetailType
+  PATIENT_REBOOK: AppointmentStatusDetailType
+  PATIENT: AppointmentStatusDetailType
+} = {
+  CLINIC_REBOOK: 'CANCELLED BY CLINIC & AUTO RE-BOOK',
+  CLINIC: 'CANCELLED BY CLINIC',
+  PATIENT_REBOOK: 'CANCELLED BY PATIENT & AUTO-REBOOK',
+  PATIENT: 'CANCELLED BY PATIENT',
+}
+
 export const AppointmentTypeConstants: {
   COMMUNITY_CARE: AppointmentType
   VA: AppointmentType
@@ -93,21 +105,28 @@ export type AppointmentTimeZone = 'Pacific/Honolulu' | 'America/Anchorage' | 'Am
 
 export type AppointmentStatus = 'BOOKED' | 'CANCELLED'
 
+export type AppointmentStatusDetailType = 'CANCELLED BY CLINIC & AUTO RE-BOOK' | 'CANCELLED BY CLINIC' | 'CANCELLED BY PATIENT & AUTO-REBOOK' | 'CANCELLED BY PATIENT'
+
 export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE' | 'VA_VIDEO_CONNECT_GFE'
 
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
   cancelId?: string
   status: AppointmentStatus
+  statusDetail: AppointmentStatusDetailType | null
   minutesDuration: number
   comment: string
   timeZone: AppointmentTimeZone
   healthcareService: string
+  healthcareProvider: string | null
   location: AppointmentLocation
   practitioner?: AppointmentPractitioner
   facilityId?: string
   startDateLocal: string
   startDateUtc: string
+  phoneOnly: boolean
+  reason: string | null
+  isCovidVaccine: boolean
 }
 
 export type AppointmentData = {

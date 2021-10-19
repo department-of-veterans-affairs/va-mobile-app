@@ -7,6 +7,7 @@ export const lightTheme = {
     footerButtonActive: colors.primaryDarkest,
     textBox: colors.white,
     list: colors.white,
+    listActive: colors.white,
     segmentedController: colors.grayLighter,
     shadow: colors.grayMedium,
     profileBanner: colors.primary,
@@ -62,6 +63,8 @@ export const lightTheme = {
     covid19Vaccinations: colors.white,
     grayDark: colors.grayDark,
     pagination: colors.white,
+    chevronCollapsible: colors.white,
+    chevronListItem: colors.white,
   },
   text: {
     footerButton: colors.primary,
@@ -87,6 +90,8 @@ export const lightTheme = {
     buttonImportantActive: colors.white,
     buttonDisabled: colors.grayMedium,
     buttonSecondaryDisabled: colors.grayLight,
+    buttonWhite: colors.white,
+    buttonWhiteActive: colors.white,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -120,6 +125,7 @@ export const darkTheme = {
     footerButtonActive: colors.primaryDarkest,
     textBox: colors.white,
     list: colors.white,
+    listActive: colors.white,
     segmentedController: colors.grayLighter,
     shadow: colors.grayMedium,
     profileBanner: colors.primary,
@@ -175,6 +181,8 @@ export const darkTheme = {
     covid19Vaccinations: colors.white,
     grayDark: colors.grayDark,
     pagination: colors.white,
+    chevronCollapsible: colors.white,
+    chevronListItem: colors.white,
   },
   text: {
     footerButton: colors.primary,
@@ -200,6 +208,8 @@ export const darkTheme = {
     buttonImportantActive: colors.white,
     buttonDisabled: colors.grayMedium,
     buttonSecondaryDisabled: colors.grayLight,
+    buttonWhite: colors.white,
+    buttonWhiteActive: colors.white,
   },
   buttonText: {
     buttonPrimary: colors.white,

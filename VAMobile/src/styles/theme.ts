@@ -7,6 +7,8 @@ export type VAButtonBackgroundColors = {
   buttonSecondaryDisabled: string
   buttonImportant: string
   buttonImportantActive: string
+  buttonWhite: string
+  buttonWhiteActive: string
 }
 
 export type VAButtonBorderColors = {
@@ -59,6 +61,8 @@ export type VAIconColors = {
   covid19Vaccinations: string
   grayDark: string
   pagination: string
+  chevronCollapsible: string
+  chevronListItem: string
 }
 
 export type VATypographyThemeVariants = {
@@ -82,6 +86,7 @@ export type VABackgroundColors = {
   footerButtonActive: string
   textBox: string
   list: string
+  listActive: string
   segmentedController: string
   shadow: string
   profileBanner: string
@@ -209,6 +214,13 @@ export type VATheme = {
     paginationTopPadding: number
     collapsibleIconMargin: number
     loginContentMarginBottom: number
+    webviewReloadButtonHeight: number
+    webviewReloadButtonSize: number
+    webviewButtonSize: number
+    webviewButtona11ySize: number
+    errorLabelBottomMargin: number
+    selectorWidth: number
+    selectorHeight: number
   }
   fontFace: {
     regular: string

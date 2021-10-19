@@ -116,7 +116,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const getBenefitAndDisabilityToggleList = (): Array<SimpleListItemObj> => {
     const toggleListItems: Array<SimpleListItemObj> = []
-    const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage } = letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
+    const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage, hasChapter35Eligibility, hasServiceConnectedDisabilities } =
+      letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
     if (!!monthlyAwardAmount || !!awardEffectiveDate) {
       let text = ''
@@ -165,7 +166,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
     const nonDataDrivenData: Array<SimpleListItemObj> = [
       {
-        text: t('letters.benefitService.disabledDueToService'),
+        text: t('letters.benefitService.disabledDueToService', { areOrNot: hasChapter35Eligibility ? 'are' : "aren't" }),
         onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
@@ -175,7 +176,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
       },
       {
-        text: t('letters.benefitService.oneOrMoreServiceDisabilities'),
+        text: t('letters.benefitService.oneOrMoreServiceDisabilities', { haveOrNot: hasServiceConnectedDisabilities ? 'have' : "don't have" }),
         onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
@@ -210,8 +211,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('Try again to download your letter')} />
   }
 
-  if (downloading) {
-    return <LoadingComponent text={t('letters.loading')} />
+  if (downloading || !letterBeneficiaryData) {
+    return <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
   }
 
   return (
@@ -259,7 +260,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           <VAButton
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}
-            testID="view-letter"
+            testID={t('letters.benefitService.viewLetter')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('letters.benefitService.viewLetterA11yHint')}
           />

@@ -1,24 +1,28 @@
-import { AccessibilityInfo, PixelRatio, findNodeHandle } from 'react-native'
-import { MutableRefObject, ReactNode, useCallback, useContext, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, UIManager, findNodeHandle } from 'react-native'
+import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
 
-import { HeaderTitle, StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
+import { StackNavigationOptions } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, ErrorsState, StoreState } from 'store'
-import { BackButton, Box } from 'components'
+import { AccessibilityState, ErrorsState, PatientState, StoreState } from 'store'
+import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HeaderTitleType, getHeaderStyles } from 'styles/common'
+import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
+import { WebProtocolTypesConstants } from 'constants/common'
+import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
-import { isIOS } from './platform'
+import { isAndroid, isIOS } from './platform'
+import { updateAccessibilityFocus } from 'store/actions'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import HeaderTitle from 'components/HeaderTitle'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
@@ -67,14 +71,8 @@ export const useHeaderStyles = (): StackNavigationOptions => {
 
   headerStyles = {
     ...headerStyles,
-    headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-      <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
-    ),
-    headerTitle: (header: HeaderTitleType) => (
-      <Box accessibilityRole="header" accessible={true}>
-        <HeaderTitle {...header} />
-      </Box>
-    ),
+    headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
+    headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
   }
   return headerStyles
 }
@@ -117,7 +115,7 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
     return (): void => {
-      navigation.navigate(routeName as string, args)
+      navigation.navigate(routeName as never, args as never)
     }
   }
 }
@@ -133,21 +131,136 @@ type RouteNavParams<T extends ParamListBase> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
   const ref = useRef(null)
+  const dispatch = useDispatch()
+  const screanReaderEnabled = useIsScreanReaderEnabled()
 
   const setFocus = useCallback(() => {
-    if (ref.current) {
-      const focusPoint = findNodeHandle(ref.current)
-      if (focusPoint) {
-        /**
-         * There is a race condition during transition that causes the accessibility focus
-         * to intermittently fail to be set https://github.com/facebook/react-native/issues/30097
-         */
-        setTimeout(() => {
-          AccessibilityInfo.setAccessibilityFocus(focusPoint)
-        }, 20)
-      }
+    if (ref.current && screanReaderEnabled) {
+      /**
+       * There is a race condition during transition that causes the accessibility focus
+       * to intermittently fail to be set https://github.com/facebook/react-native/issues/30097
+       */
+      const timeOutPageFocus = setTimeout(() => {
+        const focusPoint = findNodeHandle(ref.current)
+        if (focusPoint) {
+          /**
+           * Due to bug https://github.com/react-navigation/react-navigation/issues/6909 when setting
+           * the focus on android with this timeout and using the keyboard the keyboard focus and the
+           * accessibiltiy focus are not sync so trigering a render after accessibility focus is set makes
+           * the keyboard focus and accessibilty focus synced.
+           */
+          if (isAndroid()) {
+            dispatch(updateAccessibilityFocus(false))
+            // @ts-ignore: sendAccessibilityEvent is missing from @types/react-native
+            UIManager.sendAccessibilityEvent(
+              focusPoint,
+              // @ts-ignore: AccessibilityEventTypes is missing from @types/react-native
+              UIManager.AccessibilityEventTypes.typeViewFocused,
+            )
+            dispatch(updateAccessibilityFocus(true))
+          } else {
+            AccessibilityInfo.setAccessibilityFocus(focusPoint)
+          }
+        }
+      }, 300)
+
+      return () => clearTimeout(timeOutPageFocus)
     }
-  }, [ref])
+  }, [ref, dispatch, screanReaderEnabled])
 
   return [ref, setFocus]
+}
+
+/**
+ * Hook to check if the screan reader is enabled
+ */
+export function useIsScreanReaderEnabled(): boolean {
+  const [screanReaderEnabled, setScreanReaderEnabled] = useState(false)
+
+  useEffect(() => {
+    let isMounted = true
+    AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
+      if (isMounted) {
+        setScreanReaderEnabled(isScreenReaderEnabled)
+      }
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [screanReaderEnabled])
+
+  return screanReaderEnabled
+}
+
+/**
+ * Hook to display a warning that the user is leaving the app when tapping an external link
+ */
+export function useExternalLink(): (url: string) => void {
+  const t = useTranslation(NAMESPACE.COMMON)
+
+  return (url: string) => {
+    if (url.startsWith(WebProtocolTypesConstants.http)) {
+      Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
+        {
+          text: t('cancel'),
+          style: 'cancel',
+        },
+        { text: t('leavingApp.ok'), onPress: (): Promise<void> => Linking.openURL(url), style: 'default' },
+      ])
+    } else {
+      Linking.openURL(url)
+    }
+  }
+}
+
+/**
+ * Returns whether user has cerner facilities or not
+ */
+export const useHasCernerFacilities = (): boolean => {
+  const { cernerFacilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  return cernerFacilities.length > 0
+}
+
+export type UseDestructiveAlertButtonProps = {
+  /** text of button */
+  text: string
+  /** handler for onClick */
+  onPress?: () => void
+}
+
+export type UseDestructiveAlertProps = {
+  /** title of alert */
+  title: string
+  /** message of alert */
+  message?: string // message for the alert
+  /** ios destructive index */
+  destructiveButtonIndex: number
+  /** ios cancel index */
+  cancelButtonIndex: number
+  /** options to show in alert */
+  buttons: Array<UseDestructiveAlertButtonProps>
+}
+/**
+ * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
+ */
+export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
+  return (props: UseDestructiveAlertProps) => {
+    if (isIOS()) {
+      const { buttons, ...remainingProps } = props
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          ...remainingProps,
+          options: buttons.map((button) => button.text),
+        },
+        (buttonIndex) => {
+          const onPress = buttons[buttonIndex]?.onPress
+          if (onPress) {
+            onPress()
+          }
+        },
+      )
+    } else {
+      Alert.alert(props.title, props.message, props.buttons as AlertButton[])
+    }
+  }
 }

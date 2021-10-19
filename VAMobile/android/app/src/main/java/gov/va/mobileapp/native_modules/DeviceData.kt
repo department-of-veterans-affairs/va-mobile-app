@@ -5,6 +5,7 @@ import android.provider.Settings.Global.DEVICE_NAME
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
+import gov.va.mobileapp.BuildConfig
 
 /**
  * React Native NativeModule to expose system level information from the Android device
@@ -21,5 +22,26 @@ class DeviceData(reactContext: ReactApplicationContext): ReactContextBaseJavaMod
     fun getDeviceName(): String {
         return Settings.Global.getString(reactApplicationContext.contentResolver, DEVICE_NAME)
     }
+
+    /**
+     * Exposes the app version name.
+     * @returns version name of the app (1.1.1).
+     *
+     */
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun getVersionName(): String {
+        return BuildConfig.VERSION_NAME
+    }
+
+    /**
+     * Exposes the app version name.
+     * @returns version name of the app (ie).
+     *
+     */
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    fun getBuildNumber(): Int {
+        return BuildConfig.VERSION_CODE
+    }
+
 
 }

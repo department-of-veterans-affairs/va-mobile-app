@@ -1,64 +1,47 @@
-import { useDispatch } from 'react-redux'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 
 import { ButtonTypesConstants } from './VAButton'
 import { NAMESPACE } from 'constants/namespaces'
 import { VAButton } from './index'
 import { logout } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useFocusEffect } from '@react-navigation/native'
-import { useTranslation } from 'utils/hooks'
-import ConfirmationAlert from './ConfirmationAlert'
+import { useDestructiveAlert, useTranslation } from 'utils/hooks'
+import { useDispatch } from 'react-redux'
 
 const SignoutButton: FC = ({}) => {
-  const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.SETTINGS)
-
-  const [displayConfirm, setDisplayConfirm] = useState(false)
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setDisplayConfirm(false)
-    }, []),
-  )
-
-  const onLogout = (): void => {
+  const dispatch = useDispatch()
+  const signOutAlert = useDestructiveAlert()
+  const _logout = () => {
     dispatch(logout())
   }
 
-  const onCancel = (): void => {
-    setDisplayConfirm(false)
-  }
-
   const onShowConfirm = (): void => {
-    setDisplayConfirm(true)
+    signOutAlert({
+      title: t('logout.confirm.text'),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('logout.title'),
+          onPress: _logout,
+        },
+      ],
+    })
   }
 
-  if (displayConfirm) {
-    return (
-      <ConfirmationAlert
-        title={t('logout.confirm.text')}
-        background="noCardBackground"
-        border="warning"
-        confirmLabel={t('common:confirm')}
-        confirmA11y={t('logout.confirm.a11yHint')}
-        confirmOnPress={onLogout}
-        cancelLabel={t('common:cancel')}
-        cancelA11y={t('logout.cancel.a11yHint')}
-        cancelOnPress={onCancel}
-      />
-    )
-  } else {
-    return (
-      <VAButton
-        onPress={onShowConfirm}
-        label={t('logout.title')}
-        buttonType={ButtonTypesConstants.buttonImportant}
-        a11yHint={t('logout.a11yHint')}
-        {...testIdProps(t('logout.title'))}
-      />
-    )
-  }
+  return (
+    <VAButton
+      onPress={onShowConfirm}
+      label={t('logout.title')}
+      buttonType={ButtonTypesConstants.buttonImportant}
+      a11yHint={t('logout.a11yHint')}
+      {...testIdProps(t('logout.title'))}
+    />
+  )
 }
 
 export default SignoutButton

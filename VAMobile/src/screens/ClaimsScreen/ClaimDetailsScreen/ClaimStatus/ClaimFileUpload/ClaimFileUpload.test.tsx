@@ -118,14 +118,14 @@ context('ClaimFileUpload', () => {
 
   describe('on click of the take or select photos button', () => {
     it('should call useRouteNavigation', async () => {
-      findByTestID(testInstance, 'Take or select photos').props.onPress()
+      findByTestID(testInstance, 'Take or Select Photos').props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the select files button', () => {
     it('should call useRouteNavigation', async () => {
-      findByTestID(testInstance, 'Select a file').props.onPress()
+      findByTestID(testInstance, 'Select a File').props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
@@ -134,8 +134,8 @@ context('ClaimFileUpload', () => {
     it('should display the select a file and take or select photos buttons', async () => {
       const buttons = testInstance.findAllByType(VAButton)
       expect(buttons.length).toEqual(3)
-      expect(buttons[0].props.label).toEqual('Select a file')
-      expect(buttons[1].props.label).toEqual('Take or select photos')
+      expect(buttons[0].props.label).toEqual('Select a File')
+      expect(buttons[1].props.label).toEqual('Take or Select Photos')
     })
   })
 
@@ -173,8 +173,8 @@ context('ClaimFileUpload', () => {
       errorsByScreenID[ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(requests, undefined, errorState)
@@ -186,8 +186,8 @@ context('ClaimFileUpload', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(requests, undefined, errorState)

@@ -2,18 +2,12 @@ import 'react-native'
 import React from 'react'
 import { TextInput } from 'react-native'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditDirectDepositScreen from './EditDirectDepositScreen'
-import {
-  InitialState,
-  initialDirectDepositState,
-  ErrorsState,
-  initialErrorsState,
-  initializeErrorsByScreenID
-} from 'store/reducers'
-import {AlertBox, VASelector, ErrorComponent, LoadingComponent, VAModalPicker, VATextInput, TextView} from 'components'
-import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
+import { InitialState, initialDirectDepositState, ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
+import { AlertBox, VASelector, ErrorComponent, LoadingComponent, VAModalPicker, VATextInput, TextView } from 'components'
+import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import { updateBankInfo } from 'store/actions'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -25,9 +19,9 @@ jest.mock('../../../../store/actions', () => {
     updateBankInfo: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
@@ -42,15 +36,14 @@ context('EditDirectDepositScreen', () => {
   let confirmCheckBox: ReactTestInstance
   let navHeaderSpy: any
 
-
   const initializeTestInstance = (saving = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       ...InitialState,
       directDeposit: {
         ...initialDirectDepositState,
-        saving
+        saving,
       },
-      errors: errorsState
+      errors: errorsState,
     })
 
     props = mockNavProps(
@@ -61,10 +54,10 @@ context('EditDirectDepositScreen', () => {
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined
+            save: options.headerRight ? options.headerRight({}) : undefined,
           }
         },
-      }
+      },
     )
 
     act(() => {
@@ -149,10 +142,10 @@ context('EditDirectDepositScreen', () => {
         navHeaderSpy.save.props.onSave()
       })
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Enter the bank\'s 9-digit routing number.')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual("Enter the bank's 9-digit routing number.")
       expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Enter your account number.')
-      expect(testInstance.findAllByType(TextView)[23].props.children).toEqual('Select the type that best describes the account.')
-      expect(testInstance.findAllByType(TextView)[25].props.children).toEqual('Confirm this information is correct.')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Select the type that best describes the account.')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Confirm this information is correct.')
     })
   })
 
@@ -162,8 +155,8 @@ context('EditDirectDepositScreen', () => {
         ...InitialState,
         directDeposit: {
           ...InitialState.directDeposit,
-          bankInfoUpdated: true
-        }
+          bankInfoUpdated: true,
+        },
       })
 
       act(() => {
@@ -182,8 +175,8 @@ context('EditDirectDepositScreen', () => {
         directDeposit: {
           ...InitialState.directDeposit,
           bankInfoUpdated: true,
-          invalidRoutingNumberError: true
-        }
+          invalidRoutingNumberError: true,
+        },
       })
 
       act(() => {
@@ -196,26 +189,26 @@ context('EditDirectDepositScreen', () => {
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(true, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(true, errorState)

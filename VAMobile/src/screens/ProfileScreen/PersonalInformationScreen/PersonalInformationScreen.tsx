@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
@@ -15,10 +15,12 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
+import _ from 'underscore'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
@@ -82,11 +84,15 @@ const getPhoneNumberData = (
   faxText = faxText.concat(getTextForPhoneData(profile, 'formattedFaxPhone', 'faxNumber', t))
 
   return [
-    { textLines: homeText, a11yHintText: t('personalInformation.editOrAddHomeNumber'), onPress: onHomePhone },
-    { textLines: workText, a11yHintText: t('personalInformation.editOrAddWorkNumber'), onPress: onWorkPhone },
-    { textLines: cellText, a11yHintText: t('personalInformation.editOrAddCellNumber'), onPress: onCellPhone },
-    { textLines: faxText, a11yHintText: t('personalInformation.editOrAddFaxNumber'), onPress: onFax },
+    { textLines: homeText, a11yHintText: t('personalInformation.editOrAddHomeNumber'), onPress: onHomePhone, testId: getA11yLabelText(homeText) },
+    { textLines: workText, a11yHintText: t('personalInformation.editOrAddWorkNumber'), onPress: onWorkPhone, testId: getA11yLabelText(workText) },
+    { textLines: cellText, a11yHintText: t('personalInformation.editOrAddCellNumber'), onPress: onCellPhone, testId: getA11yLabelText(cellText) },
+    { textLines: faxText, a11yHintText: t('personalInformation.editOrAddFaxNumber'), onPress: onFax, testId: getA11yLabelText(faxText) },
   ]
+}
+
+const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
+  return _.map(itemTexts, 'text').join(' ')
 }
 
 const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
@@ -98,7 +104,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
     textLines.push({ text: t('personalInformation.addYour', { field: t('personalInformation.emailAddress').toLowerCase() }) })
   }
 
-  return [{ textLines: textLines, a11yHintText: t('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress }]
+  return [{ textLines: textLines, a11yHintText: t('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress, testId: getA11yLabelText(textLines) }]
 }
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
@@ -121,6 +127,13 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     }, [dispatch, needsDataLoad]),
   )
 
+  /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
+  const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
+  if (!reviewEventRegistered) {
+    console.debug('REVIEW EVENT REGISTERED')
+    registerReviewEvent()
+    setReviewEventRegistered(true)
+  }
   const onMailingAddress = navigateTo('EditAddress', {
     displayTitle: t('personalInformation.mailingAddress'),
     addressType: profileAddressOptions.MAILING_ADDRESS,
@@ -191,7 +204,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         {t('personalInformation.editNote')}
       </TextView>
 
-      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.headerTitle')} />
+      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.buttonTitle')} />
 
       <Pressable
         onPress={navigateTo('HowDoIUpdate')}

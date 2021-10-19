@@ -25,6 +25,8 @@ const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMe
 
 export type SecureMessagingState = {
   loading: boolean
+  loadingInbox: boolean
+  loadingFolders: boolean
   loadingAttachments: boolean
   loadingFile: boolean
   loadingFileKey?: string
@@ -33,14 +35,14 @@ export type SecureMessagingState = {
   fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
   error?: APIError
-  inbox?: SecureMessagingFolderData
-  inboxMessages?: SecureMessagingMessageList
-  folders?: SecureMessagingFolderList
-  folderById?: SecureMessagingFolderMap
-  messagesByFolderId?: SecureMessagingFolderMessagesMap
-  messagesById?: SecureMessagingMessageMap
-  threads?: SecureMessagingThreads
-  recipients?: SecureMessagingRecipientDataList
+  inbox: SecureMessagingFolderData
+  inboxMessages: SecureMessagingMessageList
+  folders: SecureMessagingFolderList
+  folderById: SecureMessagingFolderMap
+  messagesByFolderId: SecureMessagingFolderMessagesMap
+  messagesById: SecureMessagingMessageMap
+  threads: SecureMessagingThreads
+  recipients: SecureMessagingRecipientDataList
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
@@ -58,6 +60,8 @@ export type SecureMessagingState = {
 
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
+  loadingInbox: false,
+  loadingFolders: false,
   loadingFile: false,
   loadingFileKey: undefined,
   loadingAttachments: false,
@@ -92,11 +96,11 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingInbox: true,
     }
   },
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
-    const messages = inboxMessages?.data
+    const messages = inboxMessages ? inboxMessages.data : []
     const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
     const messagesById = messages?.reduce(
       (obj, m) => {
@@ -112,7 +116,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       // TODO add to folderMessagesById(0)
       // TODO inject folderId?
       messagesById,
-      loading: false,
+      loadingInbox: false,
       error,
       paginationMetaByFolderId: {
         ...state.paginationMetaByFolderId,
@@ -125,7 +129,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingFolders: true,
     }
   },
   SECURE_MESSAGING_FINISH_LIST_FOLDERS: (state, { folderData }) => {
@@ -133,7 +137,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       folders: folderData?.data || state.folders,
       // TODO map to foldersbyId
-      loading: false,
+      loadingFolders: false,
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDER_MESSAGES: (state, payload) => {
@@ -160,13 +164,15 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       }
     }
 
-    const messagesById = messageData?.data.reduce(
-      (obj, m) => {
-        obj[m.attributes.messageId] = m.attributes
-        return obj
-      },
-      { ...state.messagesById },
-    )
+    const messagesById = messageData
+      ? messageData.data.reduce(
+          (obj, m) => {
+            obj[m.attributes.messageId] = m.attributes
+            return obj
+          },
+          { ...state.messagesById },
+        )
+      : ({} as SecureMessagingMessageMap)
 
     return {
       ...state,
@@ -187,7 +193,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_GET_INBOX: (state, { inboxData, error }) => {
     return {
       ...state,
-      inbox: inboxData?.data,
+      inbox: inboxData ? inboxData.data : ({} as SecureMessagingFolderData),
       hasLoadedInbox: true,
       error,
     }
@@ -322,7 +328,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: (state, { recipients, error }) => {
     return {
       ...state,
-      recipients,
+      recipients: recipients || [],
       error,
       hasLoadedRecipients: true,
     }

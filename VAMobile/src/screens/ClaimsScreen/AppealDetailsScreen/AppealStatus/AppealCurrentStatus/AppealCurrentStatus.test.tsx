@@ -8,7 +8,21 @@ import AppealCurrentStatus from './AppealCurrentStatus'
 import {AppealAOJTypes, AppealStatusData, AppealTypes, EmailData, PhoneData} from 'store/api/types'
 import {InitialState} from 'store/reducers'
 import {TextView} from 'components'
-import {Linking} from 'react-native'
+
+const mockExternalLinkSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
+
+  return {
+    ...original,
+    useExternalLink: () => mockExternalLinkSpy,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+  }
+})
 
 context('AppealStatus', () => {
   let component: any
@@ -25,7 +39,7 @@ context('AppealStatus', () => {
     props = mockNavProps({
       status,
       aoj,
-      appealType, 
+      appealType,
       docketName,
       programArea
     })
@@ -47,7 +61,8 @@ context('AppealStatus', () => {
           mobilePhoneNumber: {} as PhoneData,
           workPhoneNumber: {} as PhoneData,
           faxNumber: {} as PhoneData,
-          fullName: 'Larry Brown'
+          fullName: 'Larry Brown',
+          signinService: 'IDME',
         }
       }
     })
@@ -291,9 +306,9 @@ context('AppealStatus', () => {
     })
 
     describe('on click of the link text view', () => {
-      it('should call Linking openURL', async () => {
+      it('should launch external link', async () => {
         testInstance.findAllByType(TextView)[3].props.onPress()
-        expect(Linking.openURL).toHaveBeenCalled()
+        expect(mockExternalLinkSpy).toHaveBeenCalled()
       })
     })
   })

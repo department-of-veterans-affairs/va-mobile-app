@@ -6,12 +6,14 @@ import { AppointmentsMetaPagination } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { getItemsInRange } from 'utils/common'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { getItemsInRange, isErrorObject } from 'utils/common'
+import { registerReviewEvent } from 'utils/inAppReviews'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   return {
@@ -104,34 +106,29 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 
       // use loaded data if we have it
       const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
-      if (loadedPastAppointments) {
-        pastAppointments = loadedPastAppointments
-      } else {
-        pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
-          startDate: past.startDate,
-          endDate: past.endDate,
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          'page[number]': '1', // prefetch assume always first page
-          sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
-        } as Params)
-      }
+      //All mock data should be removed after backend implementation
       // TODO: delete in story #19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       if (signInEmail === 'vets.gov.user+1414@gmail.com') {
-        upcomingAppointments = {
+        pastAppointments = {
           data: [
             {
               type: 'appointment',
-              id: '1',
+              id: '4',
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
                 status: AppointmentStatusConstants.BOOKED,
-                startDateLocal: '2021-02-06T19:53:14.000+00:00',
-                startDateUtc: '2021-02-06T19:53:14.000+00:00',
+                phoneOnly: false,
+                statusDetail: null,
+                isCovidVaccine: true,
+                startDateLocal: '2021-09-06T19:53:14.000+00:00',
+                startDateUtc: '2021-09-06T19:53:14.000+00:00',
                 minutesDuration: 60,
                 comment: 'Please arrive 20 minutes before the start of your appointment',
                 timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
                 healthcareService: 'Blind Rehabilitation Center',
+                healthcareProvider: null,
+                reason: null,
                 location: {
                   name: 'VA Long Beach Healthcare System',
                   address: {
@@ -154,6 +151,173 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                   middleName: '',
                   lastName: 'TestDoctor',
                 },
+              },
+            },
+            {
+              id: '2',
+              type: 'appointment',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA,
+                healthcareService: 'CHY PC VAR2',
+                healthcareProvider: null,
+                location: {
+                  name: 'Cheyenne VA Medical Center',
+                  address: {
+                    street: '2360 East Pershing Boulevard',
+                    city: 'Cheyenne',
+                    state: 'WY',
+                    zipCode: '82001-5356',
+                  },
+                  phone: {
+                    areaCode: '307',
+                    number: '778-7550',
+                    extension: '',
+                  },
+                  url: '',
+                  code: '',
+                },
+                minutesDuration: 60,
+                phoneOnly: true,
+                isCovidVaccine: false,
+                startDateLocal: '2021-09-17T13:10:00.000-06:00',
+                startDateUtc: '2021-09-17T19:10:00.000+00:00',
+                status: AppointmentStatusConstants.BOOKED,
+                statusDetail: null,
+                timeZone: 'America/Denver' as AppointmentTimeZone,
+                comment: '',
+                reason: null,
+              },
+            },
+          ],
+        }
+      } else {
+        if (loadedPastAppointments) {
+          pastAppointments = loadedPastAppointments
+        } else {
+          pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+            startDate: past.startDate,
+            endDate: past.endDate,
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1', // prefetch assume always first page
+            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
+          } as Params)
+        }
+      }
+
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+        upcomingAppointments = {
+          data: [
+            {
+              type: 'appointment',
+              id: '1',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA,
+                status: AppointmentStatusConstants.CANCELLED,
+                phoneOnly: false,
+                statusDetail: null,
+                isCovidVaccine: true,
+                startDateLocal: '2022-09-06T19:53:14.000+00:00',
+                startDateUtc: '2022-09-06T19:53:14.000+00:00',
+                minutesDuration: 60,
+                comment: 'Please arrive 20 minutes before the start of your appointment',
+                timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
+                healthcareService: 'Blind Rehabilitation Center',
+                healthcareProvider: null,
+                reason: null,
+                location: {
+                  name: 'VA Long Beach Healthcare System',
+                  address: {
+                    street: '5901 East 7th Street',
+                    city: 'Long Beach',
+                    state: 'CA',
+                    zipCode: '90822',
+                  },
+                  phone: {
+                    number: '456-7890',
+                    extension: '',
+                    areaCode: '123',
+                  },
+                  url: '',
+                  code: '',
+                },
+                practitioner: {
+                  prefix: 'Dr.',
+                  firstName: 'Larry',
+                  middleName: '',
+                  lastName: 'TestDoctor',
+                },
+              },
+            },
+            {
+              id: '2',
+              type: 'appointment',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA,
+                healthcareService: 'CHY PC VAR2',
+                healthcareProvider: null,
+                location: {
+                  name: 'Cheyenne VA Medical Center',
+                  address: {
+                    street: '2360 East Pershing Boulevard',
+                    city: 'Cheyenne',
+                    state: 'WY',
+                    zipCode: '82001-5356',
+                  },
+                  phone: {
+                    areaCode: '307',
+                    number: '778-7550',
+                    extension: '',
+                  },
+                  url: '',
+                  code: '',
+                },
+                minutesDuration: 60,
+                phoneOnly: false,
+                isCovidVaccine: true,
+                startDateLocal: '2022-09-17T13:10:00.000-06:00',
+                startDateUtc: '2022-09-17T19:10:00.000+00:00',
+                status: AppointmentStatusConstants.BOOKED,
+                statusDetail: null,
+                timeZone: 'America/Denver' as AppointmentTimeZone,
+                comment: '',
+                reason: null,
+              },
+            },
+            {
+              id: '3',
+              type: 'appointment',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
+                cancelId: '',
+                comment: '',
+                healthcareService: 'CHEYENNE VAMC',
+                healthcareProvider: null,
+                location: {
+                  name: 'Cheyenne VA Medical Center',
+                  address: {
+                    street: '2360 East Pershing Boulevard',
+                    city: 'Cheyenne',
+                    state: 'WY',
+                    zipCode: '82001-5356',
+                  },
+                  phone: {
+                    areaCode: '307',
+                    number: '778-7550',
+                    extension: '',
+                  },
+                  url:
+                    'https://dev.care.va.gov/vvc-app/?name=NADEAU%2CMARCY&join=1&media=1&escalate=1&conference=VAC000416762@dev.care.va.gov&pin=990510&aid=c821687c-5844-4421-9180-dcc18236a62a#',
+                  code: '990510#',
+                },
+                minutesDuration: 20,
+                phoneOnly: false,
+                startDateLocal: '2022-09-01T11:15:00.000-06:00',
+                startDateUtc: '2022-09-01T17:15:00.000+00:00',
+                status: AppointmentStatusConstants.BOOKED,
+                statusDetail: null,
+                timeZone: 'America/Denver' as AppointmentTimeZone,
+                reason: null,
+                isCovidVaccine: false,
               },
             },
           ],
@@ -179,8 +343,10 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       }
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
-      dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
-      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
+        dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
+      }
     }
   }
 }
@@ -216,8 +382,10 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
       } as Params)
       dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, appointmentsList))
     } catch (error) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }
@@ -237,6 +405,11 @@ const dispatchGetAppointment = (appointmentID: string): ReduxAction => {
 export const getAppointment = (appointmentID: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+    const [totalTime] = getAnalyticsTimers(_getState())
+    await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
+    await registerReviewEvent()
+    await dispatch(resetAnalyticsActionStart())
+    await dispatch(setAnalyticsTotalTimeStart())
     dispatch(dispatchGetAppointment(appointmentID))
   }
 }
@@ -269,10 +442,13 @@ export const cancelAppointment = (cancelID?: string, appointmentID?: string, scr
 
     try {
       await api.put('/v0/appointments/cancel/' + cancelID)
+      await registerReviewEvent()
       dispatch(dispatchFinishCancelAppointment(appointmentID))
     } catch (error) {
-      dispatch(dispatchFinishCancelAppointment(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishCancelAppointment(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
     }
   }
 }

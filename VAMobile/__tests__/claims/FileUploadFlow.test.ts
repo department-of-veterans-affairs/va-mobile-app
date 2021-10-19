@@ -55,7 +55,7 @@ export default () => {
               await ClaimsDetailsStatusScreen.waitForIsShown()
 
               if (driver.isAndroid) {
-                await androidScrollToElementWithText('View file requests')
+                await androidScrollToElementWithText('Review File Requests')
               }
 
               const viewFileRequestsButton = await ClaimsDetailsStatusScreen.viewFileRequestsButton
@@ -93,7 +93,7 @@ export default () => {
                 await FileUploadScreen.waitForIsShown()
 
                 if (driver.isAndroid) {
-                  await androidScrollToElementWithText('Select a file')
+                  await androidScrollToElementWithText('Select a File')
                 }
 
                 const selectAFileButton = await FileUploadScreen.selectFileButton
