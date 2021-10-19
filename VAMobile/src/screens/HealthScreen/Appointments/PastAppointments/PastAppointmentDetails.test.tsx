@@ -36,7 +36,7 @@ context('PastAppointmentDetails', () => {
     appointmentType: AppointmentType = AppointmentTypeConstants.VA,
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     statusDetail: AppointmentStatusDetailType | null = null,
-    isCovidVaccine?: boolean,
+    isCovidVaccine: boolean = false,
   ): void => {
     store = mockStore({
       ...InitialState,
