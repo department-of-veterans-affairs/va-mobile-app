@@ -1,6 +1,5 @@
 import { ReduxAction } from './types'
 import { Store, applyMiddleware, createStore } from 'redux'
-import logger from 'redux-logger'
 import rootReducer, { StoreState } from './reducers'
 import thunk from 'redux-thunk'
 

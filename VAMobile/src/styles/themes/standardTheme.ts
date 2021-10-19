@@ -1,4 +1,4 @@
-import { Appearance, Platform, useColorScheme } from 'react-native'
+import { Appearance, Platform } from 'react-native'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
