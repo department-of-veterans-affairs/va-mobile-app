@@ -175,6 +175,7 @@
   "secureMessaging.formMessage.addFiles.a11yHint": "Add files to this message",
   "secureMessaging.formMessage.cancel.a11yHint": "cancel this message and return to the previous page",
   "secureMessaging.formMessage.checkYourMessage": "Check your message",
+  "secureMessaging.formMessage.composeMessage.loading": "We're loading compose a message",
   "secureMessaging.formMessage.message": "Message",
   "secureMessaging.formMessage.message.fieldError": "The message cannot be blank",
   "secureMessaging.formMessage.saveDraft.validation.title": "Recheck information",
