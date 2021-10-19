@@ -4,7 +4,6 @@ import React, { FC, useState } from 'react'
 import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, VAIcon } from 'components'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 import MessagesCountTag from './MessagesCountTag'
 
@@ -108,7 +107,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const testId = generateTestID(`${title} ${tagCountA11y || ''}`.trim(), '')
+  const testId = `${title} ${tagCountA11y || ''}`.trim()
 
   return (
     <Box {...boxProps}>
