@@ -127,6 +127,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
                 status: AppointmentStatusConstants.BOOKED,
+                statusDetail: null,
                 startDateLocal: '2021-02-06T19:53:14.000+00:00',
                 startDateUtc: '2021-02-06T19:53:14.000+00:00',
                 minutesDuration: 60,

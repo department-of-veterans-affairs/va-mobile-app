@@ -49,8 +49,6 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   healthcareService: 'Blind Rehabilitation Center',
   location: defaultAppointmentLocation,
   practitioner: defaultAppointmentPractitioner,
-  phoneOnly: false,
-  reason: null,
 }
 
 export const defaultAppoinment: AppointmentData = {

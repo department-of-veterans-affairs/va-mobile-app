@@ -33,7 +33,6 @@ import {
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
-import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { clearAppointmentCancellation, getAppointment } from 'store/actions'
@@ -41,7 +40,6 @@ import { getEpochSecondsOfDate } from 'utils/formattingUtils'
 import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
-import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
 import ProviderName from '../AppointmentDetailsCommon/ProviderName'
 import getEnv from 'utils/env'
@@ -63,11 +61,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail, reason } =
+  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail } =
     attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
   const whoCanceled =
     statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
@@ -76,9 +73,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [dispatch, appointmentID])
 
   useEffect(() => {
@@ -285,8 +279,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  if (loadingAppointmentCancellation || !isTransitionComplete) {
-    return <LoadingComponent text={t(!isTransitionComplete ? 'appointmentDetails.loading' : 'upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+  if (loadingAppointmentCancellation) {
+    return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
   }
 
   return (
@@ -301,6 +295,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             isAppointmentCanceled={isAppointmentCanceled}
             whoCanceled={whoCanceled}
           />
+
           <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
@@ -314,8 +309,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <Atlas_AppointmentData />
 
           <CommunityCare_AppointmentData />
-
-          {reason && <AppointmentReason reason={reason} />}
         </TextArea>
 
         <Box mt={theme.dimensions.condensedMarginBetween}>
