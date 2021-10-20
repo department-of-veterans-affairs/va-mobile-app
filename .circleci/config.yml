@@ -278,12 +278,6 @@ jobs:
           lane: "release"
       - ios_fastlane:
           lane: "release"
-  fix_fb:
-    executor: android
-    steps:
-      - checkout
-      - decode_android_keys
-      - read_file
 
 workflows:
   pr:
