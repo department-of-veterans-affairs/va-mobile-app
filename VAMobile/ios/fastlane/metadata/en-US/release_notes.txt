@@ -1,1 +1,1 @@
-You can now identify which appointments will be on video and which will be phone calls, and you can add a reason for your appointment. We’ve also optimized the app for iOS 15 and fixed a few bugs.
+We've updated the app with some new features. You can now view your disability rating and details. We've also fixed a few bugs and improved the app experience for iPad users.
