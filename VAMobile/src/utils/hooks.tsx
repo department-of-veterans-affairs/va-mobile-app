@@ -1,27 +1,28 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, Linking, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
 
-import { HeaderTitle, StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
+import { StackNavigationOptions } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
 import { AccessibilityState, ErrorsState, StoreState } from 'store'
-import { BackButton, Box } from 'components'
+import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HeaderTitleType, getHeaderStyles } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
+import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
 import { updateAccessibilityFocus } from 'store/actions'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import HeaderTitle from 'components/HeaderTitle'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
@@ -67,30 +68,11 @@ export const useTranslation = (ns?: i18n_NS): TFunction => {
 export const useHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
   let headerStyles = getHeaderStyles(insets.top, useTheme())
-  const {
-    dimensions: { headerHeight },
-  } = useTheme()
-
-  // for ios to be able to traverse using keyboard on accessibility
-  const defaultStyle = StyleSheet.create({
-    headerText: {
-      alignItems: 'center',
-      display: 'flex',
-      flexDirection: 'row',
-      height: headerHeight,
-    },
-  })
 
   headerStyles = {
     ...headerStyles,
-    headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-      <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
-    ),
-    headerTitle: (header: HeaderTitleType) => (
-      <Box accessibilityRole="header" accessible={true} style={defaultStyle.headerText}>
-        <HeaderTitle {...header} />
-      </Box>
-    ),
+    headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
+    headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
   }
   return headerStyles
 }
@@ -133,7 +115,7 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
     return (): void => {
-      navigation.navigate(routeName as string, args)
+      navigation.navigate(routeName as never, args as never)
     }
   }
 }
@@ -180,7 +162,7 @@ export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
             AccessibilityInfo.setAccessibilityFocus(focusPoint)
           }
         }
-      }, 200)
+      }, 300)
 
       return () => clearTimeout(timeOutPageFocus)
     }
@@ -231,31 +213,46 @@ export function useExternalLink(): (url: string) => void {
   }
 }
 
+export type UseDestructiveAlertButtonProps = {
+  /** text of button */
+  text: string
+  /** handler for onClick */
+  onPress?: () => void
+}
+
+export type UseDestructiveAlertProps = {
+  /** title of alert */
+  title: string
+  /** message of alert */
+  message?: string // message for the alert
+  /** ios destructive index */
+  destructiveButtonIndex: number
+  /** ios cancel index */
+  cancelButtonIndex: number
+  /** options to show in alert */
+  buttons: Array<UseDestructiveAlertButtonProps>
+}
 /**
  * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
  */
-export function useDestructiveAlert(): (alertTitleKey: string, alertMsgKey: string, confirmButtonKey: string, onConfirm: () => void, t: TFunction) => void {
-  return (alertTitleKey: string, alertMsgKey: string, confirmButtonKey: string, onConfirm: () => void, t: TFunction) => {
+export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
+  return (props: UseDestructiveAlertProps) => {
     if (isIOS()) {
+      const { buttons, ...remainingProps } = props
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          title: t(alertTitleKey),
-          message: t(alertMsgKey),
-          options: [t('common:cancel'), t(confirmButtonKey)],
-          destructiveButtonIndex: 1,
-          cancelButtonIndex: 0,
+          ...remainingProps,
+          options: buttons.map((button) => button.text),
         },
         (buttonIndex) => {
-          if (buttonIndex === 1) {
-            onConfirm()
+          const onPress = buttons[buttonIndex]?.onPress
+          if (onPress) {
+            onPress()
           }
         },
       )
     } else {
-      Alert.alert(t(alertTitleKey), t(alertMsgKey), [
-        { text: t('common:cancel'), style: 'cancel' },
-        { text: t(confirmButtonKey), onPress: onConfirm },
-      ])
+      Alert.alert(props.title, props.message, props.buttons as AlertButton[])
     }
   }
 }

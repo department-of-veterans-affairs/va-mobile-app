@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import _ from 'underscore'
 
@@ -44,6 +44,7 @@ import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessage, getMessageRecipients, getThread, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
+import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -53,6 +54,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
+  const goToDrafts = useGoToDrafts()
 
   const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
     StoreState,
@@ -79,6 +81,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+
+  const editCancelConfirmation = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
@@ -126,7 +130,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const goToCancel = (): void => {
     const isFormValid = isReplyDraft ? !!message : !!(to && category && message && (category !== CategoryTypeFields.other || subject))
 
-    navigation.navigate('ComposeCancelConfirmation', {
+    editCancelConfirmation({
       draftMessageID: messageID,
       isFormValid,
       messageData: getMessageData(),
@@ -137,9 +141,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+      headerLeft: (props): ReactNode => (
         <BackButton
-          onPress={noProviderError || isFormBlank || !draftChanged() ? navigation.goBack : goToCancel}
+          onPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.cancel}
           showCarat={false}

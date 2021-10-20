@@ -63,7 +63,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail, reason } =
+  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail, reason, isCovidVaccine } =
     attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
@@ -98,7 +98,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
     metaData: {
-      title: t(AppointmentTypeToID[appointmentType]),
+      title: t(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType]),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
@@ -300,6 +300,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             appointmentType={appointmentType}
             isAppointmentCanceled={isAppointmentCanceled}
             whoCanceled={whoCanceled}
+            isCovidVaccine={isCovidVaccine}
           />
           <AddToCalendar />
 
@@ -309,7 +310,14 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
 
-          <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} location={location} phone={phone} />
+          <AppointmentAddressAndNumber
+            appointmentType={appointmentType}
+            healthcareService={healthcareService}
+            address={address}
+            location={location}
+            phone={phone}
+            isCovidVaccine={isCovidVaccine}
+          />
 
           <Atlas_AppointmentData />
 

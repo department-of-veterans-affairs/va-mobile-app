@@ -48,6 +48,16 @@ jest.mock('store/actions', () => {
   }
 })
 
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy
+  }
+})
+
 context('ComposeMessage', () => {
   let component: any
   let testInstance: ReactTestInstance
@@ -220,7 +230,7 @@ context('ComposeMessage', () => {
       })
       navHeaderSpy.back.props.onPress()
       expect(goBack).not.toHaveBeenCalled()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
   })
 

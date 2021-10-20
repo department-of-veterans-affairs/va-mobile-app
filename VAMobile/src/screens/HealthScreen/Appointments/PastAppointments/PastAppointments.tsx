@@ -73,7 +73,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         label: t('pastAppointments.pastThreeMonths'),
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
-        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ day: 1 }).endOf('day') },
+        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ days: 1 }).endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
       {
@@ -101,7 +101,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
         a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
-        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ day: 1 }).endOf('day') },
+        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ days: 1 }).endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       },
       {
@@ -129,21 +129,23 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment, index) => {
       const {
-        attributes: { appointmentType, startDateUtc, timeZone, phoneOnly, location, status },
+        attributes: { appointmentType, startDateUtc, timeZone, phoneOnly, location, status, isCovidVaccine },
       } = appointment
 
-      const textLines: Array<TextLineWithIconProps> = [
+      const textLines: Array<TextLineWithIconProps> = []
+
+      if (status === AppointmentStatusConstants.CANCELLED) {
+        textLines.push({ text: t('appointments.canceled'), isTextTag: true })
+      }
+
+      textLines.push(
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         {
-          text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
+          text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
           iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
         },
-      ]
-
-      if (status === AppointmentStatusConstants.CANCELLED) {
-        textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
-      }
+      )
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = tc('common:listPosition', { position, total: totalEntries })

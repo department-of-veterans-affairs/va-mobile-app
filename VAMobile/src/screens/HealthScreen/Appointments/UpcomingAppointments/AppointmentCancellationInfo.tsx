@@ -31,7 +31,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const navigateTo = useRouteNavigation()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -48,27 +48,32 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   let body
   let bodyA11yLabel
 
-  switch (appointmentType) {
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      title = t('upcomingAppointmentDetails.doYouNeedToCancel')
-      body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
-      bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
-      break
-    case AppointmentTypeConstants.COMMUNITY_CARE:
-      title = t('upcomingAppointmentDetails.doYouNeedToCancel')
-      body = t('upcomingAppointmentDetails.cancelCommunityCareAppointment.body')
-      break
-    case AppointmentTypeConstants.VA:
-      title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
-      body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
-      break
-    default:
-      title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
-      body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
-      break
+  if (isCovidVaccine) {
+    title = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title')
+    body = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.body')
+  } else {
+    switch (appointmentType) {
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
+        title = t('upcomingAppointmentDetails.doYouNeedToCancel')
+        body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
+        bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
+        break
+      case AppointmentTypeConstants.COMMUNITY_CARE:
+        title = t('upcomingAppointmentDetails.doYouNeedToCancel')
+        body = t('upcomingAppointmentDetails.cancelCommunityCareAppointment.body')
+        break
+      case AppointmentTypeConstants.VA:
+        title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
+        body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+        break
+      default:
+        title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
+        body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+        break
+    }
   }
 
   const linkOrPhone = phone ? (
@@ -89,7 +94,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween}>
         {body}
       </TextView>
-      {appointmentType === AppointmentTypeConstants.VA ? (
+      {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
         <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
             onPress={cancelAppointment}

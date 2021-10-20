@@ -48,6 +48,18 @@ jest.mock('store/actions', () => {
   }
 })
 
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+let mockUseGoToDraftSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
+    useGoToDrafts: () => mockUseGoToDraftSpy,
+  }
+})
+
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
 
@@ -259,19 +271,11 @@ context('EditDraft', () => {
       })
       navHeaderSpy.back.props.onPress()
       expect(goBack).not.toHaveBeenCalled()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of save (draft)', () => {
-    describe('when a required field is not filled', () => {
-      beforeEach(() => {
-        act(() => {
-          navHeaderSpy.save.props.onSave()
-        })
-      })
-    })
-
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
         navHeaderSpy.save.props.onSave()

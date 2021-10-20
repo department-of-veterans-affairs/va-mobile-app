@@ -2,9 +2,11 @@ import { Dimensions, TextInput } from 'react-native'
 import { RefObject } from 'react'
 import { contains, isEmpty } from 'underscore'
 
+import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
-import { ImagePickerResponse } from 'react-native-image-picker'
 
+import { ErrorObject } from 'store/api'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
@@ -175,13 +177,14 @@ export type ImageMaxWidthAndHeight = {
  */
 export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
   const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
+  const { width, height } = image.assets ? image.assets[0] : ({} as Asset)
   if (image && !isEmpty(image)) {
-    if (image.width && image.width < Dimensions.get('window').width) {
-      result.maxWidth = `${image.width}px`
+    if (width && width < Dimensions.get('window').width) {
+      result.maxWidth = `${width}px`
     }
 
-    if (image.height && image.height < messagePhotoAttachmentMaxHeight) {
-      result.height = image.height
+    if (height && height < messagePhotoAttachmentMaxHeight) {
+      result.height = height
     }
   }
 
@@ -204,4 +207,14 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
   if (beginIdx < items.length) {
     return items.slice(beginIdx, endIdx)
   }
+}
+
+/**
+ * Returns type Predicate for the type guard
+ *
+ * @param error - error object coming from exception in catch
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+export const isErrorObject = (error: any): error is ErrorObject => {
+  return ['json', 'stack', 'networkError'].some((item) => item in error)
 }

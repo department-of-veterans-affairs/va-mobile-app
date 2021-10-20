@@ -3,7 +3,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { updateSecureMessagingTab } from 'store/actions'
 import { useDispatch } from 'react-redux'
@@ -25,9 +25,7 @@ const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => 
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={onGoToInbox} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={onGoToInbox} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
     })
   })
 

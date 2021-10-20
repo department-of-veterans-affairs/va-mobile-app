@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import _ from 'underscore'
 
@@ -42,6 +42,7 @@ import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
@@ -67,6 +68,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
 
+  const composeCancelConfirmation = useComposeCancelConfirmation()
+
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [dispatch])
@@ -76,7 +79,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const goToCancel = () => {
     const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
-    navigation.navigate('ComposeCancelConfirmation', { origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
+    composeCancelConfirmation({ origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
   }
   useEffect(() => {
     if (!saveDraftConfirmFailed) {
@@ -88,7 +91,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+      headerLeft: (props): ReactNode => (
         <BackButton
           onPress={noProviderError || isFormBlank ? navigation.goBack : goToCancel}
           canGoBack={props.canGoBack}

@@ -38,6 +38,7 @@ const CarouselStackComponent: FC<CarouselStackComponentProps> = ({ screenList })
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        detachPreviousScreen: false,
       }}>
       {_.map(screenList, (screen, index) => {
         return <CarouselStack.Screen name={screen.name as never} component={screen.component} key={index} />
@@ -60,7 +61,7 @@ type CarouselProps = {
 const Carousel: FC<CarouselProps> = ({ screenList, onCarouselEnd, translation }) => {
   return (
     <CarouselTabNav.Navigator tabBar={(props): React.ReactNode => <CarouselTabBar {...props} onCarouselEnd={onCarouselEnd} translation={translation} screenList={screenList} />}>
-      <CarouselTabNav.Screen name="Main" children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} />
+      <CarouselTabNav.Screen name="Main" children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} options={{ headerShown: false }} />
     </CarouselTabNav.Navigator>
   )
 }
