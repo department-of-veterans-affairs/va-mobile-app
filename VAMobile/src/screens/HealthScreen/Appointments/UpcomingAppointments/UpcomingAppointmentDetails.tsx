@@ -63,8 +63,21 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail, reason, isCovidVaccine } =
-    attributes || ({} as AppointmentAttributes)
+  const {
+    appointmentType,
+    healthcareService,
+    location,
+    startDateUtc,
+    minutesDuration,
+    timeZone,
+    comment,
+    practitioner,
+    status,
+    statusDetail,
+    reason,
+    isCovidVaccine,
+    healthcareProvider,
+  } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
@@ -308,7 +321,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAVCAtHome_AppointmentData />
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} healthcareProvider={healthcareProvider} />
 
           <AppointmentAddressAndNumber
             appointmentType={appointmentType}
