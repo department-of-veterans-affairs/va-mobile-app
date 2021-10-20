@@ -206,7 +206,7 @@ commands:
             bash <<parameters.script_name>> <<parameters.script_options>>
   read_file:
     steps:
-      - command: cat ${FIREBASE_DIST_KEY_FILEPATH}
+      - run: cat ${FIREBASE_DIST_KEY_FILEPATH}
 jobs:
   test:
     executor: default
