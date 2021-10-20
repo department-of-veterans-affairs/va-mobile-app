@@ -160,7 +160,7 @@ commands:
       - decode_file:
           workingDir: "~/project/VAMobile/android/keys"
           secretString: ${FIREBASE_DIST_FILE_BASE64}
-          destination: ${FIREBASE_DIST_KEY_FILEPATH}
+          destination: "firebase-dist.json"
   android_fastlane:
     description: "Builds and deploys for Android to the specified lane and version."
     parameters:
