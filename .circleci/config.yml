@@ -160,7 +160,7 @@ commands:
       - decode_file:
           workingDir: "~/project/VAMobile/android/keys"
           secretString: ${FIREBASE_DIST_FILE_BASE64}
-          destination: "firebase-dist.json"
+          destination: ${FIREBASE_DIST_DECODE_PATH}
   android_fastlane:
     description: "Builds and deploys for Android to the specified lane and version."
     parameters:
@@ -204,11 +204,6 @@ commands:
           command: |
             chmod +x <<parameters.script_name>>
             bash <<parameters.script_name>> <<parameters.script_options>>
-  read_file:
-    steps:
-      - run:
-          working_directory: "~/project/VAMobile/android/keys"
-          command: cat firebase-dist.json
 jobs:
   test:
     executor: default
@@ -337,9 +332,3 @@ workflows:
               only: master
     jobs:
       - run_release_lanes
-  test:
-    jobs:
-      - fix_fb:
-          filters:
-            branches:
-              only: feature/fix-fb-dist
