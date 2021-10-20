@@ -34,6 +34,7 @@ context('DisabilityRatingsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
+  const _ = undefined
   const ratingData = {
     combinedDisabilityRating: 70,
     combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
@@ -88,26 +89,27 @@ context('DisabilityRatingsScreen', () => {
     expect(profileBanner).toBeTruthy()
 
     const headers = testInstance.findAllByProps({ accessibilityRole: 'header' })
-    expect(headers[5].props.children).toBe('Combined disability rating')
-    expect(headers[15].props.children).toBe('Individual ratings')
-    expect(headers[20].props.children).toBe('Learn about VA disability ratings')
-    expect(headers[30].props.children).toBe('Need Help?')
+    expect(headers[0].props.children).toBe('Combined Disability Rating')
+    expect(headers[4].props.children).toBe('Individual Ratings')
+    expect(headers[8].props.children).toBe('Learn about VA disability ratings')
+    expect(headers[12].props.children).toBe('Need help?')
 
     const texts = testInstance.findAllByType(TextView)
     expect(texts[2].props.children).toBe('70%')
     expect(texts[3].props.children).toBe(
-      "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
+      "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims and appeals with the Claim Status tool.",
     )
+    expect(texts[4].props.children).toBe('Check Claims and Appeals')
 
-    expect(texts[5].props.children).toBe('50%')
-    expect(texts[6].props.children).toBe('PTSD')
-    expect(texts[7].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[8].props.children).toBe('Effective date:  12/01/2012')
+    expect(texts[6].props.children).toBe('50%')
+    expect(texts[7].props.children).toBe('PTSD')
+    expect(texts[8].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[9].props.children).toBe('Effective date:  12/01/2012')
 
-    expect(texts[9].props.children).toBe('30%')
-    expect(texts[10].props.children).toBe('Headaches, migraine')
-    expect(texts[11].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[12].props.children).toBe('Effective date:  08/09/2013')
+    expect(texts[10].props.children).toBe('30%')
+    expect(texts[11].props.children).toBe('Headaches, migraine')
+    expect(texts[12].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[13].props.children).toBe('Effective date:  08/09/2013')
 
     const links = testInstance.findAllByProps({ accessibilityRole: 'link' })
     expect(links[0].findByType(TextView).props.children).toBe('About VA disability ratings')
@@ -132,8 +134,15 @@ context('DisabilityRatingsScreen', () => {
         tryAgain: () => Promise.resolve(),
       }
 
-      initializeTestInstance(undefined, errorState)
+      initializeTestInstance(_, errorState)
       expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
+    })
+  })
+
+  describe('when clicking on Check Claims And Appeals', () => {
+    it('should call navigations navigate for Claims', async () => {
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })

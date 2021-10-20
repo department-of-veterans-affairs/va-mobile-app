@@ -1,5 +1,6 @@
 import {
   Box,
+  ButtonTypesConstants,
   CallHelpCenter,
   ClickForActionLink,
   ClickToCallPhoneNumber,
@@ -13,6 +14,7 @@ import {
   TextLine,
   TextView,
   TextViewProps,
+  VAButton,
   VAScrollView,
 } from 'components'
 import { DateTime } from 'luxon'
@@ -24,7 +26,7 @@ import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { map } from 'underscore'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
@@ -33,6 +35,7 @@ const DisabilityRatingsScreen: FC = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
+  const navigateTo = useRouteNavigation()
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
@@ -42,22 +45,20 @@ const DisabilityRatingsScreen: FC = () => {
   const totalCombinedRating = ratingData?.combinedDisabilityRating
 
   useEffect(() => {
-    // Get the disability rating data if not loaded already
+    // Get the service history to populate the profile banner
     if (needsDataLoad) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
   }, [dispatch, needsDataLoad])
 
+  const onClaimsAndAppeals = navigateTo('Claims')
+
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
-
+    const percentageText = ratingPercentage !== undefined ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : undefined
+    const formattedDate = DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy')
+    const formattedEffectiveDateText = t('disabilityRatingDetails.effectiveDate', { dateEffective: formattedDate })
     const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
-    // must check only for null or undefined. 0 is a valid rating
-    const percentageText = ratingPercentage !== undefined && ratingPercentage !== null ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : ''
-    const formattedEffectiveDateText =
-      effectiveDate !== undefined && effectiveDate !== null
-        ? t('disabilityRatingDetails.effectiveDate', { dateEffective: DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy') })
-        : ''
 
     let textLines: Array<TextLine> = []
 
@@ -76,13 +77,10 @@ const DisabilityRatingsScreen: FC = () => {
       {
         text: decisionText,
       },
-    ]
-
-    if (formattedEffectiveDateText) {
-      textLines.push({
+      {
         text: formattedEffectiveDateText,
-      })
-    }
+      },
+    ]
 
     return {
       textLines,
@@ -91,14 +89,12 @@ const DisabilityRatingsScreen: FC = () => {
   })
 
   const getCombinedTotalSection = () => {
-    // must check only for null or undefined. 0 is a valid rating
-    const combinedPercentText =
-      totalCombinedRating !== undefined && totalCombinedRating !== null ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
+    const combinedPercentText = totalCombinedRating !== undefined ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
     const combinedTotalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
     return (
       <Box>
-        <Box accessible={true} accessibilityRole={'header'}>
+        <Box accessible={true}>
           <TextView {...titleProps} selectable={false}>
             {t('disabilityRatingDetails.combinedTotalTitle')}
           </TextView>
@@ -115,6 +111,14 @@ const DisabilityRatingsScreen: FC = () => {
               {combinedTotalSummaryText}
             </TextView>
           </Box>
+          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={condensedMarginBetween}>
+            <VAButton
+              onPress={onClaimsAndAppeals}
+              label={t('disabilityRatingDetails.checkClaimsAndAppeal')}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+              a11yHint={t('disabilityRatingDetails.checkClaimsAndAppealA11yHint')}
+            />
+          </Box>
         </TextArea>
       </Box>
     )
@@ -123,12 +127,10 @@ const DisabilityRatingsScreen: FC = () => {
   const getLearnAboutVaRatingSection = () => {
     return (
       <TextArea>
-        <Box accessible={true} accessibilityRole={'header'}>
+        <Box accessible={true}>
           <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
             {t('disabilityRating.learnAbout')}
           </TextView>
-        </Box>
-        <Box accessible={true}>
           <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')}>
             {t('disabilityRating.learnAboutSummary')}
           </TextView>
@@ -141,17 +143,14 @@ const DisabilityRatingsScreen: FC = () => {
   const getNeedHelpSection = () => {
     return (
       <TextArea>
-        <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('disabilityRatingDetails.needHelp')}
-          </TextView>
-        </Box>
         <Box accessible={true}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('claims:claimDetails.needHelp')}
+          </TextView>
           <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claims:claimDetails.callVA.a11yLabel')}>
             {t('claims:claimDetails.callVA')}
           </TextView>
         </Box>
-
         <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />
       </TextArea>
     )
