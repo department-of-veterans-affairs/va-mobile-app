@@ -1,6 +1,6 @@
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, Ref } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,11 +15,15 @@ import { useTheme, useTranslation } from 'utils/hooks'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
+  /* message object */
   message: SecureMessagingMessageAttributes
+  /* if it is the message selected */
   isInitialMessage: boolean
+  /* ref for the message */
+  collapsibleMessageRef?: Ref<View>
 }
 
-const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
+const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const tCom = useTranslation(NAMESPACE.COMMON)
@@ -83,14 +87,18 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const getHeader = (): ReactNode => {
     return (
       <Box flexDirection={'column'}>
-        <TextView variant="MobileBodyBold">{senderName}</TextView>
+        <TextView variant="MobileBodyBold" accessible={false}>
+          {senderName}
+        </TextView>
         <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>
           {attachment && (
             <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
             </Box>
           )}
-          <TextView variant="MobileBody">{dateTime}</TextView>
+          <TextView accessible={false} variant="MobileBody">
+            {dateTime}
+          </TextView>
         </Box>
       </Box>
     )
@@ -105,6 +113,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
     noBorder: true,
+    headerRef: collapsibleMessageRef,
   }
 
   return <AccordionCollapsible {...accordionProps} />
