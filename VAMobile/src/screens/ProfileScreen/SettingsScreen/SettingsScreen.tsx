@@ -11,16 +11,17 @@ import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
 type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
-const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
+const SettingsScreen: FC<SettingsScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.SETTINGS)
+  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
@@ -43,14 +44,9 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
-  const onDebug = () => {
-    navigation.navigate('Debug')
-  }
+  const onDebug = navigateTo('Debug')
 
-  const onManage = () => {
-    navigation.navigate('ManageYourAccount')
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onShare = async (): Promise<void> => {
     try {
       await Share.share({
@@ -66,11 +62,11 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const items: Array<SimpleListItemObj> = _.flatten([
-    { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onManage },
+    { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
     // TODO: update this once approved
-    { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
+    // { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
