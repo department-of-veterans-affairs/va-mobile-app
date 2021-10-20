@@ -281,6 +281,12 @@ jobs:
           lane: "release"
       - ios_fastlane:
           lane: "release"
+  fix_fb:
+    executor: android
+    steps:
+      - checkout
+      - decode_android_keys
+      - read_file
 
 workflows:
   pr:
@@ -331,20 +337,7 @@ workflows:
       - run_release_lanes
   test:
     jobs:
-      - checkout:
+      - fix_fb:
           filters:
             branches:
               only: feature/fix-fb-dist
-      - decode_android_keys:
-          filters:
-            branches:
-              only: feature/fix-fb-dist
-          requires:
-            - checkout
-      - read_file:
-          filters:
-            branches:
-              only: feature/fix-fb-dist
-          requires:
-            - checkout
-            - decode_android_keys
