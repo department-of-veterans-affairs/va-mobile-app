@@ -12,7 +12,6 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
@@ -128,15 +127,12 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
                 status: AppointmentStatusConstants.BOOKED,
-                phoneOnly: true,
-                statusDetail: null,
-                startDateLocal: '2021-09-06T19:53:14.000+00:00',
-                startDateUtc: '2021-09-06T19:53:14.000+00:00',
+                startDateLocal: '2021-02-06T19:53:14.000+00:00',
+                startDateUtc: '2021-02-06T19:53:14.000+00:00',
                 minutesDuration: 60,
                 comment: 'Please arrive 20 minutes before the start of your appointment',
                 timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
                 healthcareService: 'Blind Rehabilitation Center',
-                reason: null,
                 location: {
                   name: 'VA Long Beach Healthcare System',
                   address: {
@@ -159,74 +155,6 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                   middleName: '',
                   lastName: 'TestDoctor',
                 },
-              },
-            },
-            {
-              id: '2',
-              type: 'appointment',
-              attributes: {
-                appointmentType: AppointmentTypeConstants.VA,
-                healthcareService: 'CHY PC VAR2',
-                location: {
-                  name: 'Cheyenne VA Medical Center',
-                  address: {
-                    street: '2360 East Pershing Boulevard',
-                    city: 'Cheyenne',
-                    state: 'WY',
-                    zipCode: '82001-5356',
-                  },
-                  phone: {
-                    areaCode: '307',
-                    number: '778-7550',
-                    extension: '',
-                  },
-                  url: '',
-                  code: '',
-                },
-                minutesDuration: 60,
-                phoneOnly: false,
-                startDateLocal: '2021-09-17T13:10:00.000-06:00',
-                startDateUtc: '2021-09-17T19:10:00.000+00:00',
-                status: AppointmentStatusConstants.CANCELLED,
-                statusDetail: null,
-                timeZone: 'America/Denver' as AppointmentTimeZone,
-                comment: '',
-                reason: null,
-              },
-            },
-            {
-              id: '3',
-              type: 'appointment',
-              attributes: {
-                appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
-                cancelId: '',
-                comment: '',
-                healthcareService: 'CHEYENNE VAMC',
-                location: {
-                  name: 'Cheyenne VA Medical Center',
-                  address: {
-                    street: '2360 East Pershing Boulevard',
-                    city: 'Cheyenne',
-                    state: 'WY',
-                    zipCode: '82001-5356',
-                  },
-                  phone: {
-                    areaCode: '307',
-                    number: '778-7550',
-                    extension: '',
-                  },
-                  url:
-                    'https://dev.care.va.gov/vvc-app/?name=NADEAU%2CMARCY&join=1&media=1&escalate=1&conference=VAC000416762@dev.care.va.gov&pin=990510&aid=c821687c-5844-4421-9180-dcc18236a62a#',
-                  code: '990510#',
-                },
-                minutesDuration: 20,
-                phoneOnly: false,
-                startDateLocal: '2021-09-01T11:15:00.000-06:00',
-                startDateUtc: '2021-09-01T17:15:00.000+00:00',
-                status: AppointmentStatusConstants.BOOKED,
-                statusDetail: null,
-                timeZone: 'America/Denver' as AppointmentTimeZone,
-                reason: null,
               },
             },
           ],
@@ -312,7 +240,6 @@ export const getAppointment = (appointmentID: string): AsyncReduxAction => {
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
     const [totalTime] = getAnalyticsTimers(_getState())
     await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
-    await registerReviewEvent()
     await dispatch(resetAnalyticsActionStart())
     await dispatch(setAnalyticsTotalTimeStart())
     dispatch(dispatchGetAppointment(appointmentID))
@@ -347,7 +274,6 @@ export const cancelAppointment = (cancelID?: string, appointmentID?: string, scr
 
     try {
       await api.put('/v0/appointments/cancel/' + cancelID)
-      await registerReviewEvent()
       dispatch(dispatchFinishCancelAppointment(appointmentID))
     } catch (error) {
       dispatch(dispatchFinishCancelAppointment(undefined, error))
