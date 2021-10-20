@@ -206,7 +206,9 @@ commands:
             bash <<parameters.script_name>> <<parameters.script_options>>
   read_file:
     steps:
-      - run: cat ${FIREBASE_DIST_KEY_FILEPATH}
+      - run:
+          working_directory: "~/project/VAMobile/android/keys"
+          command: cat firebase-dist.json
 jobs:
   test:
     executor: default
