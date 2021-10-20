@@ -157,7 +157,10 @@ commands:
           workingDir: "~/project/VAMobile/android/app"
           secretString: ${GOOGLE_SERVICES_JSON}
           destination: ${GOOGLE_SERVICES_PATH}
-
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/keys"
+          secretString: ${FIREBASE_DIST_FILE_BASE64}
+          destination: ${FIREBASE_DIST_KEY_FILEPATH}
   android_fastlane:
     description: "Builds and deploys for Android to the specified lane and version."
     parameters:
@@ -201,6 +204,9 @@ commands:
           command: |
             chmod +x <<parameters.script_name>>
             bash <<parameters.script_name>> <<parameters.script_options>>
+  read_file:
+    steps:
+      - command: cat ${FIREBASE_DIST_KEY_FILEPATH}
 jobs:
   test:
     executor: default
@@ -323,3 +329,22 @@ workflows:
               only: master
     jobs:
       - run_release_lanes
+  test:
+    jobs:
+      - checkout:
+          filters:
+            branches:
+              only: feature/fix-fb-dist
+      - decode_android_keys:
+          filters:
+            branches:
+              only: feature/fix-fb-dist
+          requires:
+            - checkout
+      - read_file:
+          filters:
+            branches:
+              only: feature/fix-fb-dist
+          requires:
+            - checkout
+            - decode_android_keys
