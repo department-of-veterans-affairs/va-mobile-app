@@ -32,16 +32,7 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
 
   return (
     <Box {...reloadBoxProps}>
-      <WebviewControlButton
-        width={dimensions.webviewReloadButtonSize}
-        height={dimensions.webviewReloadButtonSize}
-        onPress={reloadPressed}
-        disabled={false}
-        icon={'WebviewRefresh'}
-        fill={colors.icon.contrast}
-        testID={t('refresh')}
-        a11yHint={t('refresh.a11yHint')}
-      />
+      <WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={colors.icon.contrast} testID={t('refresh')} a11yHint={t('refresh.a11yHint')} />
     </Box>
   )
 }
