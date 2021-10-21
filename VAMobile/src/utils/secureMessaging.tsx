@@ -184,9 +184,9 @@ export const onFileFolderSelect = async (
   } = DocumentPicker
 
   try {
-    const document = await pickSingle({
+    const document = (await pickSingle({
       type: [allFiles],
-    })
+    })) as DocumentPickerResponse
 
     const { size, type, uri } = document
 
