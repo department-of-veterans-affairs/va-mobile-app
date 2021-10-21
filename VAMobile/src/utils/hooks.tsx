@@ -1,4 +1,4 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
@@ -128,10 +128,9 @@ type RouteNavParams<T extends ParamListBase> = {
  * previous screen rather than what is on the top left (https://github.com/react-navigation/react-navigation/issues/7056) This hook allows you to manually set the accessibility
  * focus on the element we know will be in the correct place.
  */
-
-export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ref: MutableRefObject<any> = useRef<T>(null)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
+  const ref = useRef(null)
   const dispatch = useDispatch()
   const screanReaderEnabled = useIsScreanReaderEnabled()
 
@@ -264,34 +263,4 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
       Alert.alert(props.title, props.message, props.buttons as AlertButton[])
     }
   }
-}
-
-export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void] {
-  const scrollRef = useRef<ScrollView>(null)
-  const [messageRef, setFocus] = useAccessibilityFocus<View>()
-  const scrollToElement = useCallback(() => {
-    const timeOut = setTimeout(() => {
-      requestAnimationFrame(() => {
-        if (messageRef.current && scrollRef.current) {
-          const currentObject = scrollRef.current
-          const scrollPoint = findNodeHandle(currentObject)
-          if (scrollPoint) {
-            messageRef.current.measureLayout(
-              scrollPoint,
-              (_, y, __, height) => {
-                currentObject.scrollTo({ y: y * height, animated: false })
-              },
-              () => {
-                currentObject.scrollTo({ y: 0 })
-              },
-            )
-          }
-        }
-      })
-      setFocus()
-    }, 200)
-    return () => clearTimeout(timeOut)
-  }, [messageRef, setFocus])
-
-  return [scrollRef, messageRef, scrollToElement]
 }

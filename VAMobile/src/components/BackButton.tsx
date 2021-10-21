@@ -24,20 +24,17 @@ export type BackButtonProps = {
   showCarat?: boolean | true
   /** optional param to add accessibility hint to back button */
   a11yHint?: string
-  /** boolean to specify if we want accesibility to focus on the back button */
-  focusOnButton?: boolean
 }
 
 /**
  * Button used by the stack navigation to go back to the previous screen
  */
-export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint, focusOnButton = true }) => {
+export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-
-  useFocusEffect(focusOnButton ? setFocus : () => {})
+  const [focusRef, setFocus] = useAccessibilityFocus()
+  useFocusEffect(setFocus)
 
   if (!canGoBack) {
     return null
