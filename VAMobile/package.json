@@ -35,8 +35,8 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@expo/react-native-action-sheet": "^3.9.0",
-    "@react-native-async-storage/async-storage": "^1.14.1",
+    "@expo/react-native-action-sheet": "^3.12.0",
+    "@react-native-async-storage/async-storage": "^1.15.9",
     "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/datetimepicker": "^3.2.0",
     "@react-native-community/picker": "^1.8.1",
@@ -64,7 +64,7 @@
     "react-native-gesture-handler": "1.10.3",
     "react-native-image-picker": "^4.1.2",
     "react-native-keyboard-manager": "^6.5.4-3",
-    "react-native-keychain": "^7.0.0",
+    "react-native-keychain": "^8.0.0",
     "react-native-localize": "^2.0.2",
     "react-native-reanimated": "^2.2.3",
     "react-native-responsive-screen": "^1.4.2",
