@@ -94,8 +94,9 @@ export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
     }
     dispatch(dispatchClearAllMetadata())
     dispatch(dispatchClearErrorType(CommonErrorTypesConstants.DOWNTIME_ERROR))
-    const maint_windows = response.data.filter((w) => DateTime.fromISO(w.startTime) <= DateTime.now() && !!DowntimeFeatureToScreenID[w.service])
-    for (const maint_window of maint_windows) {
+    const maint_windows = response.data.filter((w) => DateTime.fromISO(w.attributes.startTime) <= DateTime.now() && !!DowntimeFeatureToScreenID[w.attributes.service])
+    for (const m of maint_windows) {
+      const maint_window = m.attributes
       const screenID = DowntimeFeatureToScreenID[maint_window.service]
       if (!screenID) {
         continue
