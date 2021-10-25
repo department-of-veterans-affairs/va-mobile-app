@@ -74,5 +74,6 @@ then
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
 else
-  exit 1
+  echo "Not scheduled for new release branch this week. Exiting."
+  exit 0
 fi
