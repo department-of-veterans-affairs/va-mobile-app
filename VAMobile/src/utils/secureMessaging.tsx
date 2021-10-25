@@ -184,9 +184,9 @@ export const onFileFolderSelect = async (
   } = DocumentPicker
 
   try {
-    const document = await pickSingle({
+    const document = (await pickSingle({
       type: [allFiles],
-    })
+    })) as DocumentPickerResponse
 
     const { size, type, uri } = document
 
@@ -276,7 +276,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  */
 export const onAddFileAttachments = (
   t: TFunction,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i: number) => void) => void,
+  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
