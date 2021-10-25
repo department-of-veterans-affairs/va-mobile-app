@@ -22,15 +22,14 @@ const CernerAlert: FC = () => {
     return <></>
   }
 
+  // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
+  const allCernerFacilities = facilities.length === cernerFacilities.length
+  const headerText = allCernerFacilities ? t('cernerAlert.header.all') : t('cernerAlert.header.some')
+
   const accordionHeader = (): ReactNode => {
-    // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
-    const allCernerFacilities = facilities.length === cernerFacilities.length
-    const headerText = allCernerFacilities ? t('cernerAlert.header.all') : t('cernerAlert.header.some')
     return (
       <Box>
-        <TextView variant="MobileBodyBold" {...testIdProps(headerText)}>
-          {headerText}
-        </TextView>
+        <TextView variant="MobileBodyBold">{headerText}</TextView>
       </Box>
     )
   }
@@ -38,7 +37,11 @@ const CernerAlert: FC = () => {
   const accordionContent = (): ReactNode => {
     const body = cernerFacilities.map((facility: Facility) => {
       return (
-        <TextView variant="MobileBodyBold" key={facility.facilityId} mt={theme.dimensions.standardMarginBetween} {...testIdProps(facility.facilityName)}>
+        <TextView
+          variant="MobileBodyBold"
+          key={facility.facilityId}
+          mt={theme.dimensions.standardMarginBetween}
+          {...testIdProps(`${facility.facilityName} (${t('cernerAlert.nowUsing')})`)}>
           {facility.facilityName}
           <TextView variant="MobileBody">{` (${t('cernerAlert.nowUsing')})`}</TextView>
         </TextView>
@@ -67,13 +70,7 @@ const CernerAlert: FC = () => {
   }
 
   return (
-    <AccordionCollapsible
-      header={accordionHeader()}
-      expandedContent={accordionContent()}
-      testID={t('cernerAlert.header')}
-      alertBorder={'warning'}
-      a11yHint={t('cernerAlert.header.a11yHint')}
-    />
+    <AccordionCollapsible header={accordionHeader()} expandedContent={accordionContent()} testID={headerText} alertBorder={'warning'} a11yHint={t('cernerAlert.header.a11yHint')} />
   )
 }
 
