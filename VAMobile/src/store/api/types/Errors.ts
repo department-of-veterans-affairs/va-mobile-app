@@ -106,10 +106,13 @@ export type MaintenanceWindowsGetData = {
 }
 
 export type MaintenanceWindowsEntry = {
-  service: DowntimeFeatureType
-  startTime: string
-  endTime: string
-  description: string
+  attributes: {
+    service: DowntimeFeatureType
+    startTime: string
+    endTime: string
+  }
+  id: string
+  type: string
 }
 
 export type ErrorObject = {
