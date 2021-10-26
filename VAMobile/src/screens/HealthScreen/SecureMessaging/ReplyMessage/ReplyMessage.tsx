@@ -86,7 +86,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
-  }, [dispatch])
+  }, [dispatch, signature])
 
   useEffect(() => {
     navigation.setOptions({

@@ -83,7 +83,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
-  }, [dispatch])
+  }, [dispatch, signature])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
