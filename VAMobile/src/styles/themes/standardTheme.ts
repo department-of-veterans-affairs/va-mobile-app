@@ -30,6 +30,10 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
   }
 }
 
+export const getTheme = (): VATheme => {
+  return theme
+}
+
 const claimPhaseLineHeight = Platform.OS === 'ios' ? 25 : 30
 
 const fontSizes = {

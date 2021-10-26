@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar, useColorScheme } from 'react-native'
+import { AppState, AppStateStatus, Appearance, Linking, StatusBar, useColorScheme } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
@@ -41,7 +41,7 @@ import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScr
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
-import theme, { setColorScheme } from 'styles/themes/standardTheme'
+import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 
 enableScreens(true)
 
@@ -83,12 +83,21 @@ const MainApp: FC = () => {
   const scheme = useColorScheme()
   setColorScheme(scheme)
 
+  const [currentTheme, setCurrentTheme] = useState(getTheme())
+
   /**
    * Used by the navigation container to initialize the first route.
    */
   const navOnReady = (): void => {
     routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name || ''
   }
+
+  Appearance.addChangeListener((preferences: Appearance.AppearancePreferences) => {
+    const { colorScheme } = preferences
+    setColorScheme(colorScheme)
+
+    setCurrentTheme(getTheme())
+  })
 
   /**
    * When the nav state changes, track the screen view using firebase analytics
@@ -110,12 +119,12 @@ const MainApp: FC = () => {
 
   return (
     <ActionSheetProvider>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={currentTheme}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
               <SafeAreaProvider>
-                <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                <StatusBar barStyle="light-content" backgroundColor={currentTheme.colors.icon.active} />
                 <AuthGuard />
               </SafeAreaProvider>
             </NavigationContainer>
