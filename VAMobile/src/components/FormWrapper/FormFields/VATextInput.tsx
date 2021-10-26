@@ -1,4 +1,4 @@
-import { AccessibilityProps, KeyboardTypeOptions, NativeSyntheticEvent, Pressable, TextInput, TextInputFocusEventData, TextInputProps } from 'react-native'
+import { AccessibilityProps, KeyboardTypeOptions, Pressable, TextInput, TextInputProps } from 'react-native'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
 import { Box, BoxProps, ValidationFunctionItems } from '../../index'
