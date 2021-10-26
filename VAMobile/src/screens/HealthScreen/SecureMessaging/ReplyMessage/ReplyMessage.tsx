@@ -53,7 +53,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
-  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature } = useSelector<
+  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
     StoreState,
     SecureMessagingState
   >((state) => state.secureMessaging)
@@ -80,7 +80,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
-    dispatch(getMessageSignature())
+    if (!signature) {
+      dispatch(getMessageSignature())
+    }
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })

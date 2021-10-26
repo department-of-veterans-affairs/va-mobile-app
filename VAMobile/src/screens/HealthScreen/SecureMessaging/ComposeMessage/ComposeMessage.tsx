@@ -54,7 +54,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature } = useSelector<
+  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
     StoreState,
     SecureMessagingState
   >((state) => state.secureMessaging)
@@ -76,7 +76,10 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-    dispatch(getMessageSignature())
+
+    if (!signature) {
+      dispatch(getMessageSignature())
+    }
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
