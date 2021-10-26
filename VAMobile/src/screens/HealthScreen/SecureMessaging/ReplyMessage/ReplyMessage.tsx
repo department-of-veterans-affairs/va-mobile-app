@@ -1,3 +1,4 @@
+import { InteractionManager } from 'react-native'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
@@ -28,12 +29,12 @@ import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, Secure
 import { SecureMessagingState, StoreState, dispatchSetActionStart, resetSendMessageFailed } from 'store'
 import { StackScreenProps } from '@react-navigation/stack'
 import { formatSubject } from 'utils/secureMessaging'
+import { getMessageSignature, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useDispatch, useSelector } from 'react-redux'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
 import _ from 'underscore'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
@@ -46,15 +47,17 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
-  const [messageReply, setMessageReply] = useState('')
+  const [messageReply, setMessageReply] = useMessageWithSignature()
+  const validateMessage = useValidateMessageWithSignature()
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
-  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
-
+  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
+    StoreState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const replyCancelConfirmation = useComposeCancelConfirmation()
 
   const message = messagesById?.[messageID]
@@ -77,12 +80,23 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
-  }, [dispatch])
+    if (!signature) {
+      dispatch(getMessageSignature())
+    }
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
+  }, [dispatch, signature])
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
-        <BackButton onPress={messageReply ? goToCancel : navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton
+          onPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.cancel}
+          showCarat={false}
+        />
       ),
       headerRight: () => (
         <SaveButton
@@ -127,7 +141,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  if (loading || savingDraft) {
+  if (loading || savingDraft || loadingSignature || !isTransitionComplete) {
     const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.viewMessage.loading')
     return <LoadingComponent text={text} />
   }
@@ -165,6 +179,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         labelKey: 'health:secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
+        setInputCursorToBeginning: true,
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
