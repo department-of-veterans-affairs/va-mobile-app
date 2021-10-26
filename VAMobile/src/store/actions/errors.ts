@@ -94,10 +94,11 @@ export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
     }
     dispatch(dispatchClearAllMetadata())
     dispatch(dispatchClearErrorType(CommonErrorTypesConstants.DOWNTIME_ERROR))
-    const maint_windows = response.data.filter((w) => DateTime.fromISO(w.attributes.startTime) <= DateTime.now() && !!DowntimeFeatureToScreenID[w.attributes.service])
-    for (const m of maint_windows) {
-      const maint_window = m.attributes
-      const screenID = DowntimeFeatureToScreenID[maint_window.service]
+    // filtering out any maintenance windows that haven't started yet and ones we haven't mapped to a screen in the app
+    const maintWindows = response.data.filter((w) => DateTime.fromISO(w.attributes.startTime) <= DateTime.now() && !!DowntimeFeatureToScreenID[w.attributes.service])
+    for (const m of maintWindows) {
+      const maintWindow = m.attributes
+      const screenID = DowntimeFeatureToScreenID[maintWindow.service]
       if (!screenID) {
         continue
       }
@@ -105,8 +106,8 @@ export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
         featureName: '',
         endTime: '',
       }
-      metadata.featureName = DowntimeFeatureNameConstants[maint_window.service]
-      metadata.endTime = DateTime.fromISO(maint_window.endTime).toFormat('fff')
+      metadata.featureName = DowntimeFeatureNameConstants[maintWindow.service]
+      metadata.endTime = DateTime.fromISO(maintWindow.endTime).toFormat('fff')
       dispatch(dispatchSetMetadata(metadata, screenID))
       dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
     }
