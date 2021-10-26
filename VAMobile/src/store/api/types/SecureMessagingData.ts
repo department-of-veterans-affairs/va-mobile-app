@@ -239,3 +239,17 @@ export const SecureMessagingSystemFolderIdConstants: {
   SENT: -1,
   DRAFTS: -2,
 }
+
+export type SecureMessagingSignatureDataAttributes = {
+  signatureName: string
+  includeSignature: boolean
+  signatureTitle: string
+}
+
+export type SecureMessagingSignatureData = {
+  data: {
+    id: string
+    type: string
+    attributes: SecureMessagingSignatureDataAttributes
+  }
+}

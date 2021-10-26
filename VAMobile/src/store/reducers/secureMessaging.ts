@@ -16,7 +16,7 @@ import {
 } from 'store/api'
 import { READ } from 'constants/secureMessaging'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { SecureMessagingSignatureDataAttributes, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { hasErrorCode } from 'utils/errors'
 import createReducer from './createReducer'
 
@@ -56,6 +56,8 @@ export type SecureMessagingState = {
   replyTriageError: boolean
   termsAndConditionError: boolean
   messageIDsOfError?: Array<number>
+  signature?: SecureMessagingSignatureDataAttributes
+  loadingSignature: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -75,6 +77,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   messagesById: {} as SecureMessagingMessageMap,
   threads: [] as SecureMessagingThreads,
   recipients: [] as SecureMessagingRecipientDataList,
+
   paginationMetaByFolderId: {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
@@ -89,6 +92,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   replyTriageError: false,
   termsAndConditionError: false,
   messageIDsOfError: undefined,
+  loadingSignature: false,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -410,6 +414,22 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       hasLoadedRecipients: false,
+    }
+  },
+
+  SECURE_MESSAGING_START_GET_SIGNATURE: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loadingSignature: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_GET_SIGNATURE: (state, { signature, error }) => {
+    return {
+      ...state,
+      signature,
+      error,
+      loadingSignature: false,
     }
   },
 })

@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, ErrorsState, PatientState, StoreState } from 'store'
+import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
@@ -266,6 +266,9 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
   }
 }
 
+/**
+ * Hook to autoscroll to an element
+ */
 export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void] {
   const scrollRef = useRef<ScrollView>(null)
   const [messageRef, setFocus] = useAccessibilityFocus<View>()
@@ -294,4 +297,33 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
   }, [messageRef, setFocus])
 
   return [scrollRef, messageRef, scrollToElement]
+}
+
+/**
+ * Hook to add signature to a message
+ */
+export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
+  const { signature, loadingSignature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const [message, setMessage] = useState('')
+  useEffect(() => {
+    if (signature && signature.includeSignature) {
+      setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
+    }
+  }, [loadingSignature, signature])
+  return [message, setMessage]
+}
+
+/**
+ * Hook to validate message that could have a signature
+ */
+export function useValidateMessageWithSignature(): (message: string) => boolean {
+  const { signature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+
+  return (message: string): boolean => {
+    let isMessageBlank = !!message
+    if (signature && signature.includeSignature) {
+      isMessageBlank = message.trim() !== `${signature?.signatureName}\n${signature?.signatureTitle}`
+    }
+    return isMessageBlank
+  }
 }

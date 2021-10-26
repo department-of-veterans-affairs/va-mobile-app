@@ -3249,7 +3249,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-## boost-for-react-native
+## boost
 
 Boost Software License - Version 1.0 - August 17th, 2003
 
@@ -3532,7 +3532,7 @@ SOFTWARE.
 
 MIT License
 
-Copyright (c) 2020 Elyx0 <elyx00@gmail.com> (@Elyx0)
+Copyright (c) 2016 Elyx0
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

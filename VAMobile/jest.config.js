@@ -7,8 +7,7 @@ module.exports = {
 	"reporters": [ "default", "jest-junit" ],
 	transform: {
 		...tsjPreset.transform,
-		//"^.+\\.[t|j]sx?$": "babel-jest",
-		'\\.js$': '<rootDir>/node_modules/react-native/jest/preprocessor.js',
+	
 	},
 
 	"moduleNameMapper":{
