@@ -1,4 +1,4 @@
-import { AccessibilityProps, KeyboardTypeOptions, Pressable, TextInput, TextInputProps } from 'react-native'
+import { AccessibilityProps, KeyboardTypeOptions, NativeSyntheticEvent, Pressable, TextInput, TextInputFocusEventData, TextInputProps } from 'react-native'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
 import { Box, BoxProps, ValidationFunctionItems } from '../../index'
@@ -47,17 +47,37 @@ export type VATextInputProps = {
   validationList?: Array<ValidationFunctionItems>
   /** optional boolean that when true displays a text area rather than a single line text input */
   isTextArea?: boolean
+  /** optional boolean to set the cursor to the beginning of a string value */
+  setInputCursorToBeginning?: boolean
 }
 
 /**
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error, validationList, isTextArea } = props
+  const {
+    inputType,
+    value,
+    labelKey,
+    onChange,
+    maxLength,
+    onEndEditing,
+    inputRef,
+    testID,
+    isRequiredField,
+    helperTextKey,
+    setError,
+    error,
+    validationList,
+    isTextArea,
+    setInputCursorToBeginning,
+  } = props
   const t = useTranslation()
   const theme = useTheme()
+  const startTextPositon = { start: 0, end: 0 }
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
+  const [selection, setSelection] = useState<{ start: number; end?: number } | undefined>(setInputCursorToBeginning ? startTextPositon : undefined)
   const ref = useRef<TextInput>(null)
 
   useEffect(() => {
@@ -86,6 +106,13 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     setFocusUpdated(true)
   }
 
+  const onFocus = () => {
+    setIsFocused(true)
+    if (setInputCursorToBeginning) {
+      setSelection(undefined)
+    }
+  }
+
   const inputProps: TextInputProps = {
     value: value,
     textContentType,
@@ -106,8 +133,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       fontFamily: theme.fontFace.regular,
       marginRight: theme.dimensions.textInputMargin,
     },
-    onFocus: () => setIsFocused(true),
+    onFocus,
     onBlur,
+    selection,
   }
 
   const textAreaWrapperProps: BoxProps = {

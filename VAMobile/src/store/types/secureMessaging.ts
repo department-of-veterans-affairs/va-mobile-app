@@ -117,6 +117,19 @@ export type SecureMessagingFinishGetRecipients = {
 }
 
 /**
+ * Redux payload for the SECURE_MESSAGING_START_GET_SIGNATURE action
+ */
+export type SecureMessagingStartGetSignature = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_FINISH_GET_SIGNATURE action
+ */
+export type SecureMessagingFinishGetSignature = {
+  signature?: api.SecureMessagingSignatureDataAttributes
+  error?: api.APIError
+}
+
+/**
  * Redux payload for the SECURE_MESSAGING_START_SAVE_DRAFT action
  */
 export type SecureMessagingStartSaveDraft = Record<string, unknown>
@@ -236,4 +249,6 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: ActionDef<'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES', SecureMessagingClearLoadedMessagesPayload>
   SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR: ActionDef<'SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR', SecureMessagingResetReplyTriageError>
   SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS: ActionDef<'SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS', SecureMessagingResetHasLoadedRecipients>
+  SECURE_MESSAGING_FINISH_GET_SIGNATURE: ActionDef<'SECURE_MESSAGING_FINISH_GET_SIGNATURE', SecureMessagingFinishGetSignature>
+  SECURE_MESSAGING_START_GET_SIGNATURE: ActionDef<'SECURE_MESSAGING_START_GET_SIGNATURE', SecureMessagingStartGetSignature>
 }
