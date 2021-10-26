@@ -18,7 +18,7 @@ export default createReducer<PatientState>(initialState, {
   CERNER_UPDATE: (state, { cerner = { ...initialPatientState }, error }) => {
     const cernerFacilities =
       cerner?.facilities.filter((f) => {
-        return f.isCerner
+        return f.isCerner && !!f.facilityName
       }) || []
 
     return {
