@@ -167,7 +167,7 @@ export const postCameraLaunchCallback = (
  **/
 export const onAddPhotos = (
   t: TFunction,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i: number) => void) => void,
+  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
