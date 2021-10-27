@@ -118,6 +118,7 @@ export type AppointmentAttributes = {
   comment: string
   timeZone: AppointmentTimeZone
   healthcareService: string
+  healthcareProvider: string | null
   location: AppointmentLocation
   practitioner?: AppointmentPractitioner
   facilityId?: string
@@ -125,7 +126,7 @@ export type AppointmentAttributes = {
   startDateUtc: string
   phoneOnly: boolean
   reason: string | null
-  covidVaccination?: boolean
+  isCovidVaccine: boolean
 }
 
 export type AppointmentData = {

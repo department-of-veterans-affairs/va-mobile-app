@@ -157,7 +157,10 @@ commands:
           workingDir: "~/project/VAMobile/android/app"
           secretString: ${GOOGLE_SERVICES_JSON}
           destination: ${GOOGLE_SERVICES_PATH}
-
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/keys"
+          secretString: ${FIREBASE_DIST_FILE_BASE64}
+          destination: ${FIREBASE_DIST_DECODE_PATH}
   android_fastlane:
     description: "Builds and deploys for Android to the specified lane and version."
     parameters:
@@ -270,6 +273,7 @@ jobs:
   run_release_lanes:
     executor: default
     steps:
+      - checkout
       - android_fastlane:
           lane: "release"
       - ios_fastlane:

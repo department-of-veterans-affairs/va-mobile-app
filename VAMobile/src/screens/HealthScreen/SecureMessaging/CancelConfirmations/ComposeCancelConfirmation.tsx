@@ -22,6 +22,7 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveAlert()
+  const goToDrafts = useGoToDrafts()
 
   return (props: ComposeCancelConfirmationProps) => {
     const { replyToID, messageData, draftMessageID, isFormValid, origin } = props
@@ -33,14 +34,6 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       dispatch(resetSaveDraftComplete())
       dispatch(resetSaveDraftFailed())
       dispatch(resetHasLoadedRecipients())
-    }
-
-    const goToDrafts = (draftSaved: boolean): void => {
-      navigateTo('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved,
-      })()
     }
 
     const onSaveDraft = (): void => {
@@ -62,7 +55,7 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       }
     }
 
-    const onCancel = (): void => {
+    const onDiscard = (): void => {
       resetAlerts()
       if (isReply && replyToID) {
         navigateTo('ViewMessageScreen', { messageID: replyToID })()
@@ -77,10 +70,14 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       title: t('secureMessaging.composeMessage.cancel.saveDraftQuestion'),
       message: t('secureMessaging.composeMessage.cancel.saveDraftDescription'),
       cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
       buttons: [
         {
+          text: t('common:cancel'),
+        },
+        {
           text: t('secureMessaging.composeMessage.cancel.discard'),
-          onPress: onCancel,
+          onPress: onDiscard,
         },
         {
           text: t('secureMessaging.composeMessage.cancel.saveDraft'),
@@ -88,5 +85,16 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
         },
       ],
     })
+  }
+}
+
+export function useGoToDrafts(): (draftSaved: boolean) => void {
+  const navigateTo = useRouteNavigation()
+  return (draftSaved: boolean): void => {
+    navigateTo('FolderMessages', {
+      folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+      folderName: FolderNameTypeConstants.drafts,
+      draftSaved,
+    })()
   }
 }

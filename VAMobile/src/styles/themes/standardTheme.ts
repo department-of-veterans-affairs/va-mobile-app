@@ -161,7 +161,7 @@ const theme: VATheme = {
       buttonPrimary: colors.primary,
       buttonPrimaryActive: colors.primaryDarkest,
       buttonSecondary: colors.white,
-      buttonSecondaryActive: colors.white,
+      buttonSecondaryActive: colors.primaryAltLightest,
       buttonImportant: colors.white,
       buttonImportantActive: colors.white,
       buttonDisabled: colors.grayMedium,
@@ -216,7 +216,7 @@ const theme: VATheme = {
     listItemDecoratorMarginLeft: 20,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
-    pickerLabelMargin: 5,
+    pickerLabelMargin: 9,
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
     navBarHeight: 56,
@@ -257,6 +257,9 @@ const theme: VATheme = {
     webviewReloadButtonSize: 17,
     webviewButtonSize: 16,
     webviewButtona11ySize: 44,
+    errorLabelBottomMargin: 3,
+    selectorWidth: 22,
+    selectorHeight: 22,
   },
 
   fontFace: {

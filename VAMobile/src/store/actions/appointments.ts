@@ -120,13 +120,14 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 status: AppointmentStatusConstants.BOOKED,
                 phoneOnly: false,
                 statusDetail: null,
-                covidVaccination: true,
+                isCovidVaccine: true,
                 startDateLocal: '2021-09-06T19:53:14.000+00:00',
                 startDateUtc: '2021-09-06T19:53:14.000+00:00',
                 minutesDuration: 60,
                 comment: 'Please arrive 20 minutes before the start of your appointment',
                 timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
                 healthcareService: 'Blind Rehabilitation Center',
+                healthcareProvider: null,
                 reason: null,
                 location: {
                   name: 'VA Long Beach Healthcare System',
@@ -158,6 +159,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
                 healthcareService: 'CHY PC VAR2',
+                healthcareProvider: null,
                 location: {
                   name: 'Cheyenne VA Medical Center',
                   address: {
@@ -176,7 +178,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 },
                 minutesDuration: 60,
                 phoneOnly: true,
-                covidVaccination: false,
+                isCovidVaccine: false,
                 startDateLocal: '2021-09-17T13:10:00.000-06:00',
                 startDateUtc: '2021-09-17T19:10:00.000+00:00',
                 status: AppointmentStatusConstants.BOOKED,
@@ -213,13 +215,14 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 status: AppointmentStatusConstants.CANCELLED,
                 phoneOnly: false,
                 statusDetail: null,
-                covidVaccination: true,
+                isCovidVaccine: true,
                 startDateLocal: '2022-09-06T19:53:14.000+00:00',
                 startDateUtc: '2022-09-06T19:53:14.000+00:00',
                 minutesDuration: 60,
                 comment: 'Please arrive 20 minutes before the start of your appointment',
                 timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
                 healthcareService: 'Blind Rehabilitation Center',
+                healthcareProvider: null,
                 reason: null,
                 location: {
                   name: 'VA Long Beach Healthcare System',
@@ -251,6 +254,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
               attributes: {
                 appointmentType: AppointmentTypeConstants.VA,
                 healthcareService: 'CHY PC VAR2',
+                healthcareProvider: null,
                 location: {
                   name: 'Cheyenne VA Medical Center',
                   address: {
@@ -269,7 +273,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 },
                 minutesDuration: 60,
                 phoneOnly: false,
-                covidVaccination: true,
+                isCovidVaccine: true,
                 startDateLocal: '2022-09-17T13:10:00.000-06:00',
                 startDateUtc: '2022-09-17T19:10:00.000+00:00',
                 status: AppointmentStatusConstants.BOOKED,
@@ -287,6 +291,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 cancelId: '',
                 comment: '',
                 healthcareService: 'CHEYENNE VAMC',
+                healthcareProvider: null,
                 location: {
                   name: 'Cheyenne VA Medical Center',
                   address: {
@@ -312,6 +317,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                 statusDetail: null,
                 timeZone: 'America/Denver' as AppointmentTimeZone,
                 reason: null,
+                isCovidVaccine: false,
               },
             },
           ],

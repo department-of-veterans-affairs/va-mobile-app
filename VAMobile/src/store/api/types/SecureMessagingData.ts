@@ -214,6 +214,7 @@ export type SecureMessagingRecipientDataAttributes = {
   triageTeamId: number
   name: string
   relationType: SecureMessagingRecipientDataAttributesRelationType
+  preferredTeam: boolean
 }
 
 export type SecureMessagingRecipientData = {
@@ -237,4 +238,18 @@ export const SecureMessagingSystemFolderIdConstants: {
   INBOX: 0,
   SENT: -1,
   DRAFTS: -2,
+}
+
+export type SecureMessagingSignatureDataAttributes = {
+  signatureName: string
+  includeSignature: boolean
+  signatureTitle: string
+}
+
+export type SecureMessagingSignatureData = {
+  data: {
+    id: string
+    type: string
+    attributes: SecureMessagingSignatureDataAttributes
+  }
 }

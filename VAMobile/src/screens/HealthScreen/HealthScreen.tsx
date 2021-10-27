@@ -11,7 +11,8 @@ import { getInbox } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import CernerAlert from './CernerAlert'
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -23,6 +24,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
+  const hasCernerFacilities = useHasCernerFacilities()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
@@ -47,7 +49,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   return (
     <VAScrollView {...testIdProps('Health-care-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments.title')}
           subText={t('appointments.subText')}
@@ -80,6 +82,9 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
         />
+      </Box>
+      <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>
+        <CernerAlert />
       </Box>
     </VAScrollView>
   )

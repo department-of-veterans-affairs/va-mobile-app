@@ -10,7 +10,13 @@ const NoInboxMessages: FC = () => {
   const theme = useTheme()
 
   return (
-    <Box {...testIdProps('Messages: No-messages-page')} flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+    <Box
+      {...testIdProps('Messages: No-messages-page')}
+      flex={1}
+      justifyContent="center"
+      mx={theme.dimensions.gutter}
+      alignItems="center"
+      mt={theme.dimensions.standardMarginBetween}>
       <Box accessible={true} accessibilityRole={'header'}>
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {t('secureMessaging.inbox.noMessages.title')}

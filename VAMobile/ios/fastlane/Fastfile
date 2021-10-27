@@ -34,54 +34,15 @@ platform :ios do
     puts('Begin QA lane' )
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
-    match(type: "appstore", readonly: true)
-    gym(
-      workspace: "VAMobile.xcworkspace",
-      scheme: ENV['IOS_SCHEME'],
-      silent: true,
-      export_method: "app-store",
-    )
-    upload_to_testflight(
-      api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
-      beta_app_review_info: {
-          notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
-        },
-      distribute_external: true,
-      notify_external_testers: true,
-      groups: ["Development Team"],
-      changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
-    )
+    sign
+    build
+    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
+    upload_tf(notes, "Development Team")
+    upload_deobfuscation_file
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
-    message = "New QA build successfully uploaded to TestFlight"
+    message = "New QA build successfully uploaded to TestFlight Group - Development Team"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
-  end
-
-  desc "Push a new on demand build to TestFlight"
-  lane :on_demand_qa do |options|
-    puts('Begin On Demand lane' )
-    update_version(options[:version])
-    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: options[:app_name]) # TODO: add default display_name
-    match(type: "appstore", readonly: true)
-    gym(
-      workspace: "VAMobile.xcworkspace",
-      scheme: ENV['IOS_SCHEME'],
-      silent: true,
-      export_method: "app-store",
-    )
-    upload_to_testflight(
-      api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
-      beta_app_review_info: {
-          notes: "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y") # make customizable
-        },
-      distribute_external: true,
-      notify_external_testers: true,
-      groups: ["Development Team"], # make customizable
-      changelog: "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y") # make customizable
-    )
-    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
-    message = "New On Demand QA build successfully uploaded to TestFlight"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand QA", message, "iOS")
   end
 
   desc "Push new demo version to TestFlight"
@@ -93,24 +54,10 @@ platform :ios do
   lane :review do |options|
     puts("Begin Review Lane")
     update_version(options[:version])
-    match(type: "appstore", readonly: true)
-        gym(
-          workspace: "VAMobile.xcworkspace",
-          scheme: ENV['IOS_SCHEME'],
-          silent: true,
-          export_method: "app-store",
-        )
-    deliver(
-        submit_for_review: true,
-        automatic_release: false,
-        force: true,
-        overwrite_screenshots: true,
-        run_precheck_before_submit: false,
-        submission_information: {
-          add_id_info_uses_idfa: false
-        },
-      )
-    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+    sign
+    build
+    upload_app_store
+    upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New Production build successfully uploaded to App Store for review"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Production", message, "iOS")
@@ -126,13 +73,27 @@ platform :ios do
     end
   end
 
+  desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
+  lane :on_demand do |options|
+    puts "on demand run"
+    update_version(options[:version])
+    sign
+    build
+    notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
+    upload_tf(notes, options[:tfGroup])
+    upload_deobfuscation_file
+    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+    message = "New On Demand build successfully uploaded to TestFlight Group " + options[:tfGroup]
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS")
+  end
+
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
   end
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-#     slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
+    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
   end
 
 
@@ -173,9 +134,55 @@ platform :ios do
       tag = "ios-build-" + build.to_s
       puts "Tagging commit with " + tag
       add_git_tag(tag: tag)
+      push_git_tags
     rescue => e
         puts e.to_s
       slack_github_error(e, "Error tagging iOS build", "iOS")
     end
+  end
+
+  desc "Sign the build"
+  def sign
+    match(type: "appstore", readonly: true)
+  end
+
+  desc "Build the app for upload"
+  def build
+    gym(
+      workspace: "VAMobile.xcworkspace",
+      scheme: ENV['IOS_SCHEME'],
+      silent: true,
+      export_method: "app-store",
+    )
+  end
+
+  def upload_tf(test_notes, group)
+    upload_to_testflight(
+      api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+      beta_app_review_info: {
+          notes: test_notes
+        },
+      distribute_external: true,
+      notify_external_testers: true,
+      groups: [group], # make customizable
+      changelog: test_notes
+    )
+  end
+
+  def upload_app_store
+    deliver(
+        submit_for_review: true,
+        automatic_release: false,
+        force: true,
+        overwrite_screenshots: true,
+        run_precheck_before_submit: false,
+        submission_information: {
+          add_id_info_uses_idfa: false
+        },
+      )
+  end
+
+  def upload_deobfuscation_file
+    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
   end
 end
