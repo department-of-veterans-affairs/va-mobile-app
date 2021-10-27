@@ -335,7 +335,7 @@ export function useValidateMessageWithSignature(): (message: string) => boolean 
 type imageDocumentResponseType = DocumentPickerResponse | ImagePickerResponse
 
 /**
- * Hook to add and remove attachments from the attachement list
+ * Hook to add and remove attachments from the attachment list
  */
 export function useAttchments(): [
   Array<imageDocumentResponseType>,
