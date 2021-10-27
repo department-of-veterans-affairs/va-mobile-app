@@ -63,8 +63,21 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail, reason, covidVaccination } =
-    attributes || ({} as AppointmentAttributes)
+  const {
+    appointmentType,
+    healthcareService,
+    location,
+    startDateUtc,
+    minutesDuration,
+    timeZone,
+    comment,
+    practitioner,
+    status,
+    statusDetail,
+    reason,
+    isCovidVaccine,
+    healthcareProvider,
+  } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
@@ -98,7 +111,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
     metaData: {
-      title: t(covidVaccination ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType]),
+      title: t(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType]),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
@@ -300,7 +313,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             appointmentType={appointmentType}
             isAppointmentCanceled={isAppointmentCanceled}
             whoCanceled={whoCanceled}
-            covidVaccination={covidVaccination}
+            isCovidVaccine={isCovidVaccine}
           />
           <AddToCalendar />
 
@@ -308,7 +321,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAVCAtHome_AppointmentData />
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} healthcareProvider={healthcareProvider} />
 
           <AppointmentAddressAndNumber
             appointmentType={appointmentType}
@@ -316,7 +329,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             address={address}
             location={location}
             phone={phone}
-            covidVaccination={covidVaccination}
+            isCovidVaccine={isCovidVaccine}
           />
 
           <Atlas_AppointmentData />

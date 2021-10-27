@@ -1,4 +1,4 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, UIManager, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, ErrorsState, StoreState } from 'store'
+import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
@@ -128,9 +128,10 @@ type RouteNavParams<T extends ParamListBase> = {
  * previous screen rather than what is on the top left (https://github.com/react-navigation/react-navigation/issues/7056) This hook allows you to manually set the accessibility
  * focus on the element we know will be in the correct place.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
-  const ref = useRef(null)
+
+export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ref: MutableRefObject<any> = useRef<T>(null)
   const dispatch = useDispatch()
   const screanReaderEnabled = useIsScreanReaderEnabled()
 
@@ -213,6 +214,14 @@ export function useExternalLink(): (url: string) => void {
   }
 }
 
+/**
+ * Returns whether user has cerner facilities or not
+ */
+export const useHasCernerFacilities = (): boolean => {
+  const { cernerFacilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  return cernerFacilities.length > 0
+}
+
 export type UseDestructiveAlertButtonProps = {
   /** text of button */
   text: string
@@ -225,8 +234,8 @@ export type UseDestructiveAlertProps = {
   title: string
   /** message of alert */
   message?: string // message for the alert
-  /** ios destructive index, will make option red if defined */
-  destructiveButtonIndex?: number
+  /** ios destructive index */
+  destructiveButtonIndex: number
   /** ios cancel index */
   cancelButtonIndex: number
   /** options to show in alert */
@@ -254,5 +263,67 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
     } else {
       Alert.alert(props.title, props.message, props.buttons as AlertButton[])
     }
+  }
+}
+
+/**
+ * Hook to autoscroll to an element
+ */
+export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void] {
+  const scrollRef = useRef<ScrollView>(null)
+  const [messageRef, setFocus] = useAccessibilityFocus<View>()
+  const scrollToElement = useCallback(() => {
+    const timeOut = setTimeout(() => {
+      requestAnimationFrame(() => {
+        if (messageRef.current && scrollRef.current) {
+          const currentObject = scrollRef.current
+          const scrollPoint = findNodeHandle(currentObject)
+          if (scrollPoint) {
+            messageRef.current.measureLayout(
+              scrollPoint,
+              (_, y, __, height) => {
+                currentObject.scrollTo({ y: y * height, animated: false })
+              },
+              () => {
+                currentObject.scrollTo({ y: 0 })
+              },
+            )
+          }
+        }
+      })
+      setFocus()
+    }, 200)
+    return () => clearTimeout(timeOut)
+  }, [messageRef, setFocus])
+
+  return [scrollRef, messageRef, scrollToElement]
+}
+
+/**
+ * Hook to add signature to a message
+ */
+export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
+  const { signature, loadingSignature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const [message, setMessage] = useState('')
+  useEffect(() => {
+    if (signature && signature.includeSignature) {
+      setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
+    }
+  }, [loadingSignature, signature])
+  return [message, setMessage]
+}
+
+/**
+ * Hook to validate message that could have a signature
+ */
+export function useValidateMessageWithSignature(): (message: string) => boolean {
+  const { signature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+
+  return (message: string): boolean => {
+    let isMessageBlank = !!message
+    if (signature && signature.includeSignature) {
+      isMessageBlank = message.trim() !== `${signature?.signatureName}\n${signature?.signatureTitle}`
+    }
+    return isMessageBlank
   }
 }

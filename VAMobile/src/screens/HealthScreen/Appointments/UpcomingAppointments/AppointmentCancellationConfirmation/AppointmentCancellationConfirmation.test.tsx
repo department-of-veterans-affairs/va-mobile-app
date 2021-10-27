@@ -76,8 +76,8 @@ context('AppointmentCancellationConfirmation', () => {
       errorsByScreenID[ScreenIDTypesConstants.APPOINTMENT_CANCELLATION_CONFIRMATION] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(errorState)
@@ -89,8 +89,8 @@ context('AppointmentCancellationConfirmation', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(errorState)

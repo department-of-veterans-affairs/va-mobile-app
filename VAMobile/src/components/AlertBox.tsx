@@ -1,3 +1,4 @@
+import { AccessibilityRole } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
@@ -18,12 +19,14 @@ export type AlertBoxProps = {
   textA11yLabel?: string
   /** optional accessibility label for the title */
   titleA11yLabel?: string
+  /** optional accessibility role for the title */
+  titleRole?: AccessibilityRole
 }
 
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text, textA11yLabel, titleA11yLabel }) => {
+const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
 
   const boxProps: BoxProps = {
@@ -34,17 +37,19 @@ const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text
     px: theme.dimensions.alertPaddingX,
   }
 
+  const titleAccessibilityRole = titleRole ? titleRole : text || children ? 'header' : undefined
+
   return (
     <Box {...boxProps}>
       {title && (
-        <Box {...testIdProps(titleA11yLabel || title)} accessibilityRole={text || children ? 'header' : undefined} accessible={true}>
+        <Box {...testIdProps(titleA11yLabel || title)} accessibilityRole={titleAccessibilityRole} accessible={true}>
           <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
             {title}
           </TextView>
         </Box>
       )}
       {text && (
-        <Box>
+        <Box accessible={true}>
           <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody">
             {text}
           </TextView>

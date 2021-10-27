@@ -50,7 +50,7 @@ context('UpcomingAppointmentDetails', () => {
     appointmentType: AppointmentType = AppointmentTypeConstants.VA,
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     phoneData: AppointmentPhone | null = apptPhoneData,
-    covidVaccination?: boolean,
+    isCovidVaccine: boolean = false,
     appointmentCancellationStatus?: AppointmentCancellationStatusTypes,
     statusDetail: AppointmentStatusDetailType | null = null,
   ): void => {
@@ -65,7 +65,7 @@ context('UpcomingAppointmentDetails', () => {
             appointmentType,
             status,
             statusDetail,
-            covidVaccination,
+            isCovidVaccine,
             location: {
               ...defaultAppointmentLocation,
               phone: phoneData === null ? undefined : phoneData,
