@@ -46,7 +46,7 @@ export const getVaccines = (screenID?: ScreenIDTypes): AsyncReduxAction => {
     } catch (err) {
       if (isErrorObject(err)) {
         dispatch(dispatchFinishGetVaccines(undefined, err))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err, screenID), screenID))
       }
     }
   }

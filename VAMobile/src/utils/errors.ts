@@ -30,7 +30,10 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
     // Check error code to see if the error is specifically a loading message error
     // Or check it's from secure messaging and has status >= 500.
     error.json?.errors?.some((err) => appLevelErrorLoadingMessagesCodes.indexOf(err.code) > -1) ||
-    (screenID && ([ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID].includes(screenID)) &&
+    (screenID &&
+      [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID].includes(
+        screenID,
+      ) &&
       error.status &&
       error.status >= 500)
   ) {
