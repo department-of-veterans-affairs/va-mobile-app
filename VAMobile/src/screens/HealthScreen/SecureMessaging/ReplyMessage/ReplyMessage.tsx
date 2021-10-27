@@ -20,10 +20,8 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SecureMessagingState, StoreState, dispatchSetActionStart, resetSendMessageFailed } from 'store'
@@ -32,9 +30,9 @@ import { formatSubject } from 'utils/secureMessaging'
 import { getMessageSignature, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
+import { useAttchments, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
 import _ from 'underscore'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
@@ -51,8 +49,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const validateMessage = useValidateMessageWithSignature()
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
-  const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
+  const [attachmentsList, addAttachment, removeAttachment] = useAttchments()
+  const { messageID, attachmentFileToAdd } = route.params
   const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
     StoreState,
     SecureMessagingState
@@ -114,18 +112,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
-      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
+      addAttachment(attachmentFileToAdd)
       navigation.setParams({ attachmentFileToAdd: {} })
     }
-  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
-
-  useEffect(() => {
-    // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
-    if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
-      setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
-      navigation.setParams({ attachmentFileToRemove: {} })
-    }
-  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
+  }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
   useEffect(() => {
     if (saveDraftComplete) {
@@ -148,16 +138,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
 
-  const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.reply, attachmentFileToRemove: attachmentFile, messageID })()
-  }
-
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         originHeader: t('secureMessaging.reply'),
-        removeOnPress: removeAttachment,
+        removeOnPress: (file) => removeAttachment(file),
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {

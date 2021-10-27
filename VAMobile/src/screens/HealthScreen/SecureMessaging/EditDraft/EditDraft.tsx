@@ -1,10 +1,5 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
-import _ from 'underscore'
-
 import {
   AlertBox,
   BackButton,
@@ -34,18 +29,20 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypesConstants,
 } from 'store/api/types'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { StackScreenProps } from '@react-navigation/stack'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessage, getMessageRecipients, getThread, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
+import { useAttchments, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDispatch, useSelector } from 'react-redux'
+import _ from 'underscore'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -61,7 +58,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     SecureMessagingState
   >((state) => state.secureMessaging)
 
-  const { attachmentFileToAdd, attachmentFileToRemove } = route.params
+  const { attachmentFileToAdd } = route.params
 
   const messageID = Number(route.params?.messageID)
   const message = messageID ? messagesById?.[messageID] : null
@@ -75,7 +72,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
-  const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
+  const [attachmentsList, addAttachment, removeAttachment] = useAttchments()
   const [body, setBody] = useState(message?.body || '')
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
@@ -166,18 +163,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   useEffect(() => {
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
-      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
+      addAttachment(attachmentFileToAdd)
       navigation.setParams({ attachmentFileToAdd: {} })
     }
-  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
-
-  useEffect(() => {
-    // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
-    if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
-      setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
-      navigation.setParams({ attachmentFileToRemove: {} })
-    }
-  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
+  }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
@@ -189,10 +178,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
-
-  const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.draft, attachmentFileToRemove: attachmentFile, messageID })
-  }
 
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
@@ -269,7 +254,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         originHeader: t('secureMessaging.drafts.edit'),
-        removeOnPress: removeAttachment,
+        removeOnPress: (file) => removeAttachment(file),
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {

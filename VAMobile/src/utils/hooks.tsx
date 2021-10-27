@@ -3,24 +3,25 @@ import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
 
-import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
-import { StackNavigationOptions } from '@react-navigation/stack'
-import { TFunction } from 'i18next'
-import { useTranslation as realUseTranslation } from 'react-i18next'
-import { useNavigation } from '@react-navigation/native'
-
 import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from 'constants/namespaces'
+import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { ScreenIDTypes } from '../store/api/types'
+import { StackNavigationOptions } from '@react-navigation/stack'
+import { TFunction } from 'i18next'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
+import { useTranslation as realUseTranslation } from 'react-i18next'
 import { updateAccessibilityFocus } from 'store/actions'
+import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderTitle from 'components/HeaderTitle'
 
@@ -326,4 +327,51 @@ export function useValidateMessageWithSignature(): (message: string) => boolean 
     }
     return isMessageBlank
   }
+}
+
+/**
+ * The image and document response type
+ */
+type imageDocumentResponseType = DocumentPickerResponse | ImagePickerResponse
+
+/**
+ * Hook to add and remove attachments from the attachement list
+ */
+export function useAttchments(): [
+  Array<imageDocumentResponseType>,
+  (attachmentFileToAdd: imageDocumentResponseType) => void,
+  (attachmentFileToRemove: imageDocumentResponseType) => void,
+] {
+  const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
+  const destructiveAlert = useDestructiveAlert()
+  const t = useTranslation(NAMESPACE.HEALTH)
+
+  const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
+    setAttachmentsList([...attachmentsList, attachmentFileToAdd])
+  }
+
+  const onRemove = (attachmentFileToRemove: imageDocumentResponseType) => {
+    setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
+  }
+
+  const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
+    destructiveAlert({
+      title: t('secureMessaging.attachments.removeAttachmentAreYouSure'),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('common:remove'),
+          onPress: () => {
+            onRemove(attachmentFileToRemove)
+          },
+        },
+      ],
+    })
+  }
+
+  return [attachmentsList, addAttachment, removeAttachment]
 }
