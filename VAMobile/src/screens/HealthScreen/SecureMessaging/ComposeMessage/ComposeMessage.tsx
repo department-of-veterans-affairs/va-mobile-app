@@ -38,7 +38,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessageRecipients, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useAttchments, useError, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
+import { useAttachments, useError, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useDispatch, useSelector } from 'react-redux'
 import _ from 'underscore'
@@ -60,7 +60,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
   const [subjectLine, setSubjectLine] = useState('')
-  const [attachmentsList, addAttachment, removeAttachment] = useAttchments()
+  const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const [message, setMessage] = useMessageWithSignature()
   const validateMessage = useValidateMessageWithSignature()
   const [onSendClicked, setOnSendClicked] = useState(false)

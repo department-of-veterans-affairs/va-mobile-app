@@ -337,7 +337,7 @@ type imageDocumentResponseType = DocumentPickerResponse | ImagePickerResponse
 /**
  * Hook to add and remove attachments from the attachment list
  */
-export function useAttchments(): [
+export function useAttachments(): [
   Array<imageDocumentResponseType>,
   (attachmentFileToAdd: imageDocumentResponseType) => void,
   (attachmentFileToRemove: imageDocumentResponseType) => void,
