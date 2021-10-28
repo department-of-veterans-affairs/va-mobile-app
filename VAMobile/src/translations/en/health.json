@@ -313,7 +313,7 @@
   "vaccines.details.series": "Series status",
   "vaccines.details.series.display": "{{doseNumber}} of {{seriesDoses}}",
   "vaccines.details.status": "Status",
-  "vaccines.details.title": "V\uFEFFA vaccine detail",
+  "vaccines.details.title": "V\uFEFFA Vaccine Detail",
   "vaccines.list.a11y": "Review your V\uFEFFA vaccine record",
   "vaccines.loading": "We're loading your vaccine record",
   "vaccines.vaccineName": "{{name}} vaccine",
@@ -322,5 +322,5 @@
   "vaImmunizations.title": "V\ufeffA Immunizations",
   "vaVaccines.a11yHint": "View all your V\ufeffA vaccines",
   "vaVaccines.subText": "View all your V\ufeffA vaccines",
-  "vaVaccines.title": "V\ufeffA vaccines"
+  "vaVaccines.title": "V\ufeffA Vaccines"
 }
