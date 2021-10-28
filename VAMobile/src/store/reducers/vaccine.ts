@@ -30,7 +30,7 @@ export default createReducer<VaccineState>(initialVaccineState, {
     const vaccineList = vaccines || []
 
     vaccineList.sort((a, b) => {
-      return compareDateStrings(a.attributes.date, b.attributes.date, true)
+      return compareDateStrings(a.attributes?.date || '', b.attributes?.date || '', true)
     })
 
     return {
