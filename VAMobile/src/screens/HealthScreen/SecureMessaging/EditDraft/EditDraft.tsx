@@ -254,7 +254,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         originHeader: t('secureMessaging.drafts.edit'),
-        removeOnPress: (file) => removeAttachment(file),
+        removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {

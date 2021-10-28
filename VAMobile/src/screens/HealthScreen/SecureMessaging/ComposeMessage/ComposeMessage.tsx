@@ -224,7 +224,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         originHeader: t('secureMessaging.composeMessage.compose'),
-        removeOnPress: (file) => removeAttachment(file),
+        removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
