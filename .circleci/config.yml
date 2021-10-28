@@ -2,14 +2,14 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: cimg/ruby:2.4.10-node
+      - image: cimg/ruby:3.0.2-node
   android:
     docker:
-      - image: circleci/android:api-30-node
+      - image: cimg/android:2021.10.2-node
     resource_class: large
   ios:
     macos:
-      xcode: 12.5.1
+      xcode: 13.1.0
 commands:
   install_deps:
     description: "Install dependencies"
