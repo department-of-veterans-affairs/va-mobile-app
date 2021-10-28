@@ -24,6 +24,10 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
 
   const vaccine = vaccinesById[vaccineId]
 
+  if (!vaccine) {
+    return <></>
+  }
+
   return (
     <VAScrollView {...testIdProps('Vaccine-details-page')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
