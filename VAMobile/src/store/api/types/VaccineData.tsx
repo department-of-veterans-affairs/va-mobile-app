@@ -17,8 +17,8 @@ export type Vaccine = {
 export type VaccineAttributes = {
   cvxCode: number
   date: string
-  doseNumber: string | null
-  doseSeries: number | null
+  doseNumber: number | string | null
+  doseSeries: number | string | null
   groupName: string
   manufacturer: string | null
   note: string | null
