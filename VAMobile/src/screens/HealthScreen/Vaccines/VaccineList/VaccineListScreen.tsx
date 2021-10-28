@@ -13,6 +13,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getVaccines } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
 
@@ -51,6 +52,10 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
 
   if (loading) {
     return <LoadingComponent text={t('vaccines.loading')} />
+  }
+
+  if (vaccines.length === 0) {
+    return <NoVaccineRecords />
   }
 
   return (
