@@ -1,11 +1,11 @@
 import 'react-native'
 import React from 'react'
 
-import { context, renderWithProviders} from 'testUtils'
+import { context, renderWithProviders } from 'testUtils'
 import { act } from 'react-test-renderer'
 
 import NoVaccineRecords from './NoVaccineRecords'
-import {Linking, TouchableWithoutFeedback} from "react-native";
+import { Linking, TouchableWithoutFeedback } from 'react-native'
 
 context('NoVaccineRecords', () => {
   let component: any
