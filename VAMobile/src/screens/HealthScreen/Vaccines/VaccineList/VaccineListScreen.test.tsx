@@ -24,85 +24,31 @@ context('VaccineListScreen', () => {
         ...initialVaccineState,
         vaccines: noVaccines ? [] : [
           {
-            id: 'abc',
-            vaccineCode: 'COVID-19 vaccine',
-            recorded: '2021-09-25',
-            primarySource: true,
-            status: "Completed",
-            lotNumber: '205A21A',
-            expirationDate: '2030-09-25',
-            manufacturer: {
-              active: true,
-              name: 'Pfizer'
-            },
-            location: {
-              id: '1',
-              name: 'Cheyenne VA Medical Center',
-              address: {
-                type: 'both',
-                city: 'Cheyenne',
-                state: 'WY',
-                postalCode: '82001-5356',
-                country: 'US'
-              }
-            },
-            reaction: [{
-              date: '2021-09-25',
-              reported: true,
-              detail: {
-                display: 'Lethargy'
-              }
-            }],
-            doseQuantity: {
-              text: '0.3ML'
-            },
-            notes: [],
-            protocolApplied: {
-              series: 'series x',
-              targetDisease: 'COVID-19',
-              doseNumber: '2',
-              seriesDoses: '2'
+            "id": "I2-A7XD2XUPAZQ5H4Y5D6HJ352GEQ000000",
+            "type": "immunization",
+            "attributes": {
+              "cvxCode": 140,
+              "date": "2009-03-19T12:24:55Z",
+              "doseNumber": "Booster",
+              "doseSeries": 1,
+              "groupName": "FLU",
+              "manufacturer": null,
+              "note": "Dose #45 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.",
+              "shortDescription": "Influenza  seasonal  injectable  preservative free"
             }
           },
           {
-            id: 'abc',
-            vaccineCode: 'Influenza vaccine',
-            recorded: '2021-09-25',
-            primarySource: true,
-            status: "Completed",
-            lotNumber: '205A21A',
-            expirationDate: '2030-09-25',
-            manufacturer: {
-              active: true,
-              name: 'Pfizer'
-            },
-            location: {
-              id: '1',
-              name: 'Cheyenne VA Medical Center',
-              address: {
-                type: 'both',
-                city: 'Cheyenne',
-                state: 'WY',
-                postalCode: '82001-5356',
-                country: 'US'
-              }
-            },
-            reaction: [{
-              date: '2021-09-25',
-              reported: true,
-              detail: {
-                display: 'Lethargy'
-              }
-            }],
-            doseQuantity: {
-              text: '0.3ML'
-            },
-            notes: [],
-            protocolApplied: {
-              series: 'series x',
-              targetDisease: 'Influenza',
-              doseNumber: '2',
-              seriesDoses: '2'
+            "id": "I2-N7A6Q5AU6W5C6O4O7QEDZ3SJXM000000",
+            "type": "immunization",
+            "attributes": {
+              "cvxCode": 207,
+              "date": "2020-12-18T12:24:55Z",
+              "doseNumber": null,
+              "doseSeries": null,
+              "groupName": "COVID-19",
+              "manufacturer": null,
+              "note": "Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.",
+              "shortDescription": "COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose"
             }
           },
         ],
@@ -134,7 +80,7 @@ context('VaccineListScreen', () => {
     it('should show the correct list items', async () => {
       initializeTestInstance()
       expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Influenza vaccine')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'FLU vaccine')).toBeTruthy()
     })
   })
 

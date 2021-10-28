@@ -33,8 +33,8 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
 
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine) => {
     const textLines: Array<TextLine> = [
-      { text: t('vaccines.vaccineName', { name: vaccine.protocolApplied.targetDisease }), variant: 'MobileBodyBold' },
-      { text: formatDateMMMMDDYYYY(vaccine.recorded) },
+      { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
+      { text: formatDateMMMMDDYYYY(vaccine.attributes?.date || '') },
     ]
 
     const vaccineButton: DefaultListItemObj = {
