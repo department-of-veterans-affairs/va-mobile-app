@@ -15,14 +15,14 @@ context('VaccineListScreen', () => {
   let store: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (loaded: boolean = true) => {
+  const initializeTestInstance = (loaded: boolean = true, noVaccines: boolean = false) => {
     props = mockNavProps()
 
     store = mockStore({
       auth: { ...initialAuthState },
       vaccine: {
         ...initialVaccineState,
-        vaccines: [
+        vaccines: noVaccines ? [] : [
           {
             "id": "I2-A7XD2XUPAZQ5H4Y5D6HJ352GEQ000000",
             "type": "immunization",
@@ -63,11 +63,9 @@ context('VaccineListScreen', () => {
 
     testInstance = component.root
   }
-  beforeEach(() => {
-    initializeTestInstance()
-  })
 
   it('initializes correctly', async () => {
+    initializeTestInstance()
     expect(component).toBeTruthy()
   })
 
@@ -83,6 +81,13 @@ context('VaccineListScreen', () => {
       initializeTestInstance()
       expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'FLU vaccine')).toBeTruthy()
+    })
+  })
+
+  describe('when there are no vaccines', () => {
+    it('should show no Vaccine Records', async () => {
+      initializeTestInstance(true, true)
+      expect(findByTypeWithText(testInstance, TextView, 'We couldn\'t find information about your V\ufeffA vaccines.')).toBeTruthy()
     })
   })
 })
