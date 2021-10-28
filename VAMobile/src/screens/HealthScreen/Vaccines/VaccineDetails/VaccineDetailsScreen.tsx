@@ -29,25 +29,25 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
-            {formatDateMMMMDDYYYY(vaccine.attributes.date)}
+            {formatDateMMMMDDYYYY(vaccine.attributes?.date || '')}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-            <TextView variant="BitterBoldHeading">{t('vaccines.vaccineName', { name: vaccine.attributes.groupName })}</TextView>
+            <TextView variant="BitterBoldHeading">{t('vaccines.vaccineName', { name: vaccine.attributes?.groupName })}</TextView>
           </Box>
           <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-          <TextView variant="MobileBody">{vaccine.attributes.shortDescription}</TextView>
-          {vaccine.attributes.doseNumber && vaccine.attributes.doseSeries && (
+          <TextView variant="MobileBody">{vaccine.attributes?.shortDescription}</TextView>
+          {vaccine.attributes?.doseNumber && vaccine.attributes?.doseSeries && (
             <TextView variant="MobileBodyBold">
               {t('vaccines.details.series') + ' '}
               <TextView variant="MobileBody">
-                {t('vaccines.details.series.display', { doseNumber: vaccine.attributes.doseNumber, seriesDoses: vaccine.attributes.doseSeries })}
+                {t('vaccines.details.series.display', { doseNumber: vaccine.attributes?.doseNumber, seriesDoses: vaccine.attributes?.doseSeries })}
               </TextView>
             </TextView>
           )}
-          {vaccine.attributes.note && (
+          {vaccine.attributes?.note && (
             <Box mt={theme.dimensions.contentMarginTop}>
               <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
-              <TextView variant="MobileBody">{vaccine.attributes.note}</TextView>
+              <TextView variant="MobileBody">{vaccine.attributes?.note}</TextView>
             </Box>
           )}
         </TextArea>
