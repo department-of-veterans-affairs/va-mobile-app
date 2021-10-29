@@ -36,7 +36,7 @@ commands:
       - run:
           command: |
             echo INSTALLING BUNDLER
-            gem install bundler
+            sudo gem install bundler
   bundle_app:
     description: "Bundles the app for the OS specified"
     parameters:
