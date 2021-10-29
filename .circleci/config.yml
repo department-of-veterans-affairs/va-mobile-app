@@ -2,14 +2,14 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: cimg/ruby:2.4.10-node
+      - image: cimg/ruby:3.0.2-node
   android:
     docker:
-      - image: circleci/android:api-30-node
+      - image: cimg/android:2021.10.2-node
     resource_class: large
   ios:
     macos:
-      xcode: 12.5.1
+      xcode: 13.1.0
 commands:
   install_deps:
     description: "Install dependencies"
@@ -157,7 +157,10 @@ commands:
           workingDir: "~/project/VAMobile/android/app"
           secretString: ${GOOGLE_SERVICES_JSON}
           destination: ${GOOGLE_SERVICES_PATH}
-
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/keys"
+          secretString: ${FIREBASE_DIST_FILE_BASE64}
+          destination: ${FIREBASE_DIST_DECODE_PATH}
   android_fastlane:
     description: "Builds and deploys for Android to the specified lane and version."
     parameters:
@@ -236,9 +239,10 @@ jobs:
   cut_release_branch:
     executor: default
     steps:
+      - checkout
       - run_script:
           script_name: "release_branch.sh"
-          script_options: "-v $CIRCLE_TAG"
+          script_options: ""
           workingDir: "~/project/VAMobile"
   build_ios_release:
     executor: ios
@@ -269,6 +273,7 @@ jobs:
   run_release_lanes:
     executor: default
     steps:
+      - checkout
       - android_fastlane:
           lane: "release"
       - ios_fastlane:

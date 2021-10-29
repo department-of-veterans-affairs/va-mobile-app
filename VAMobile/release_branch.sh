@@ -56,7 +56,7 @@ then
   git pull origin master &&
 
   echo "Fetching latest tag"
-  checks for latest tag on master that matches vX.Y.Z
+  # checks for latest tag on master that matches vX.Y.Z
   latest=$(git describe --match "v[0-9]*.[0-9]*.[0-9]*" --abbrev=0) &&
 
   echo "Incrementing latest tag $latest by minor version"
@@ -74,5 +74,6 @@ then
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
 else
-  exit 1
+  echo "Not scheduled for new release branch this week. Exiting."
+  exit 0
 fi

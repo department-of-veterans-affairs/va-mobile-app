@@ -1,21 +1,33 @@
-import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, SaveButton, VAScrollView } from 'components'
+import {
+  AlertBox,
+  BackButton,
+  Box,
+  ButtonTypesConstants,
+  ErrorComponent,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  LoadingComponent,
+  SaveButton,
+  VAButton,
+  VAScrollView,
+} from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneTypeConstants } from 'store/api/types'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { deleteUsersNumber, dispatchClearErrors, editUsersNumber, finishEditPhoneNumber } from 'store/actions'
-import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
+import { formatPhoneNumber, getNumbersFromString, stringToTitleCase } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
-import RemoveData from '../../RemoveData'
+import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import HeaderTitle from 'components/HeaderTitle'
 
 const MAX_DIGITS = 10
 const MAX_DIGITS_AFTER_FORMAT = 14
@@ -27,6 +39,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const { displayTitle, phoneType, phoneData } = route.params
+  const deletePhoneAlert = useDestructiveAlert()
 
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
@@ -95,14 +108,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (header: HeaderTitleType) => (
-        <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
-          <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
-        </Box>
-      ),
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerTitle: () => <HeaderTitle {...testIdProps(displayTitle)} headerTitle={displayTitle} />,
+      headerLeft: (props): ReactNode => <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
   })
@@ -149,14 +156,37 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   ]
 
   const testIdPrefix = phoneType === PhoneTypeConstants.FAX ? 'fax-number: ' : `${phoneType.toLowerCase()}-phone: `
-  const alertText = phoneType === PhoneTypeConstants.FAX ? displayTitle.toLowerCase() : t('personalInformation.number', { phoneType: displayTitle.toLowerCase() })
+  const buttonTitle = displayTitle.toLowerCase()
+
+  const onDeletePressed = (): void => {
+    deletePhoneAlert({
+      title: t('editPhoneNumber.remove.title', { numberType: buttonTitle }),
+      message: t('editPhoneNumber.remove.message', { numberType: buttonTitle }),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('common:remove'),
+          onPress: onDelete,
+        },
+      ],
+    })
+  }
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={alertText} confirmFn={onDelete} />
+            <VAButton
+              onPress={onDeletePressed}
+              label={t('personalInformation.removeData', { pageName: stringToTitleCase(buttonTitle) })}
+              buttonType={ButtonTypesConstants.buttonImportant}
+              a11yHint={t('personalInformation.removeData.a11yHint', { pageName: buttonTitle })}
+            />
           </Box>
         )}
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} background="noCardBackground" border="informational" />

@@ -1,4 +1,3 @@
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
@@ -7,7 +6,7 @@ import DocumentPicker from 'react-native-document-picker'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
+import { ClaimsStackParamList, DocumentPickerResponse } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
@@ -28,17 +27,20 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
   const onFileFolder = async (): Promise<void> => {
+    const {
+      pickSingle,
+      types: { images, plainText, pdf },
+    } = DocumentPicker
+
     try {
-      const document = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images, DocumentPicker.types.plainText, DocumentPicker.types.pdf],
-      })
+      const document = (await pickSingle({
+        type: [images, plainText, pdf],
+      })) as DocumentPickerResponse
 
       if (document.size > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
         setError(t('fileUpload.fileSizeError'))
@@ -52,8 +54,9 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
       setError('')
       navigateTo('UploadFile', { request, fileUploaded: document })()
-    } catch (docError) {
-      if (DocumentPicker.isCancel(docError)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (docError: any) {
+      if (DocumentPicker.isCancel(docError as Error)) {
         return
       }
 

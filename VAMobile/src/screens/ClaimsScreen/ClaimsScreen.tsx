@@ -6,7 +6,6 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
 import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
-import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getProfileInfo, prefetchClaimsAndAppeals } from 'store/actions'
@@ -48,7 +47,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   }, [navigation])
 

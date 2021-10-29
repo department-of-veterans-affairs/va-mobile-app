@@ -104,6 +104,7 @@ context('AddressSummary', () => {
         phoneType: 'HOME',
       },
       formattedFaxPhone: '(858)-690-1286',
+      signinService: 'IDME',
     }
 
     onPressSpy = jest.fn()

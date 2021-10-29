@@ -143,8 +143,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const content = (
       <Box>
         {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
-        {valueBox}
         {!!error && renderInputError(theme, error)}
+        {valueBox}
       </Box>
     )
 

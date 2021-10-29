@@ -3,7 +3,7 @@ import React from 'react'
 import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import UpcomingAppointments from './UpcomingAppointments'
 import NoAppointments from '../NoAppointments'
@@ -11,24 +11,20 @@ import { initialAppointmentsState, InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from 'store/api/types'
 import { LoadingComponent, TextView } from 'components'
 import { getAppointmentsInDateRange } from 'store/actions'
-import {
-  defaultAppoinment,
-  defaultAppointmentAttributes,
-  defaultAppointmentLocation,
-  defaultAppointmentAddress,
-  defaultAppointmentPhone
-} from 'utils/tests/appointments'
+import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation, defaultAppointmentAddress, defaultAppointmentPhone } from 'utils/tests/appointments'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../../utils/hooks")
-  let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
+  let original = jest.requireActual('../../../../utils/hooks')
+  let theme = jest.requireActual('../../../../styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(()=> {
-      return {...theme}
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
-    useRouteNavigation: () => { return () => mockNavigationSpy},
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
   }
 })
 
@@ -39,9 +35,17 @@ jest.mock('../../../../store/actions', () => {
     getAppointmentsInDateRange: jest.fn(() => {
       return {
         type: '',
-        payload: {}
+        payload: {},
       }
-    })
+    }),
+  }
+})
+
+jest.mock('../../../../store/api', () => {
+  let api = jest.requireActual('../../../../store/api')
+
+  return {
+    ...api,
   }
 })
 
@@ -52,11 +56,11 @@ context('UpcomingAppointments', () => {
 
   let appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
-      '3': [{...defaultAppoinment}],
-    }
+      '3': [{ ...defaultAppoinment }],
+    },
   }
 
-  const initializeTestInstance = (currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear, loading: boolean = false ) => {
+  const initializeTestInstance = (currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear, loading: boolean = false) => {
     const props = mockNavProps()
 
     store = mockStore({
@@ -88,9 +92,9 @@ context('UpcomingAppointments', () => {
             currentPage: 2,
             totalEntries: 2,
             perPage: 1,
-          }
+          },
         },
-      }
+      },
     })
 
     act(() => {
@@ -130,10 +134,10 @@ context('UpcomingAppointments', () => {
   })
 
   describe('when the status is CANCELLED', () => {
-    it('should render the last line of the appointment item as the text "Canceled"', async () => {
+    it('should render the first line of the appointment item as the text "Canceled"', async () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = 'CANCELLED'
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Canceled')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('CANCELED')
     })
   })
 

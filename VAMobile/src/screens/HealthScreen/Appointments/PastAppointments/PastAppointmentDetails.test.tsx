@@ -29,12 +29,14 @@ context('PastAppointmentDetails', () => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()
     })
+    jest.runAllTimers()
   }
 
   const initializeTestInstance = (
     appointmentType: AppointmentType = AppointmentTypeConstants.VA,
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     statusDetail: AppointmentStatusDetailType | null = null,
+    isCovidVaccine: boolean = false,
   ): void => {
     store = mockStore({
       ...InitialState,
@@ -47,6 +49,7 @@ context('PastAppointmentDetails', () => {
             status,
             statusDetail,
             appointmentType,
+            isCovidVaccine,
           },
         },
       },
@@ -76,14 +79,14 @@ context('PastAppointmentDetails', () => {
       runAfterTransition(() => {
         allTextViews = testInstance.findAllByType(TextView)
         expect(allTextViews.length).toEqual(4)
-        expect(allTextViews[0].props.children).toEqual('VA Video Connect using a VA device')
+        expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nusing a VA device')
       })
 
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       runAfterTransition(() => {
         allTextViews = testInstance.findAllByType(TextView)
         expect(allTextViews.length).toEqual(4)
-        expect(allTextViews[0].props.children).toEqual('VA Video Connect at home')
+        expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nhome')
       })
     })
   })
@@ -132,6 +135,20 @@ context('PastAppointmentDetails', () => {
   describe('when navigating to past appointment details page', () => {
     it('should show loading component', async () => {
       expect(testInstance.findByType(TextView).props.children).toEqual("We're loading your appointment details")
+    })
+  })
+
+  describe('when the appointment type is covid vaccine', () => {
+    beforeEach(() => {
+      initializeTestInstance(undefined, undefined, undefined, true)
+      runAfterTransition(() => {
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('COVID-19 vaccine')
+      })
+    })
+    it('should display the name of the facility location', async () => {
+      runAfterTransition(() => {
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('COVID-19 vaccine')
+      })
     })
   })
 })

@@ -1,16 +1,14 @@
-import React, { FC, ReactNode, useEffect } from 'react'
-
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-
 import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState, resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
+import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 type SendConfirmationProps = StackScreenProps<HealthStackParamList, 'SendConfirmation'>
 
@@ -24,9 +22,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
       headerTitle: originHeader,
     })
   })

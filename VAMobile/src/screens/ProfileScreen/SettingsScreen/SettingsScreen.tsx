@@ -1,4 +1,4 @@
-import { Share } from 'react-native'
+import { Share, StyleProp, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -12,6 +12,7 @@ import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils
 import { setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
@@ -79,6 +80,10 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
+  const mainViewStyle: StyleProp<ViewStyle> = {
+    flexGrow: 1,
+  }
+
   const debugMenu = (): ReactNode => {
     const debugButton: Array<SimpleListItemObj> = [
       {
@@ -96,8 +101,8 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Settings-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+    <VAScrollView {...testIdProps('Settings-page')} contentContainerStyle={mainViewStyle}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} flex={1}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <SimpleList items={items} />
           {SHOW_DEBUG_MENU && debugMenu()}
@@ -106,6 +111,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
           <SignoutButton />
         </Box>
       </Box>
+      <AppVersionAndBuild />
     </VAScrollView>
   )
 }

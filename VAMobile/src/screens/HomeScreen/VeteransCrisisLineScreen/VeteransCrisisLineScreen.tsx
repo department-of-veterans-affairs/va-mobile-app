@@ -43,6 +43,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <Box mt={standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+              accessibilityLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
               linkType={LinkTypeOptionsConstants.call}
               fireAnalytic={fireAnalyticFn}
@@ -52,6 +53,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <Box mt={standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.textNumberDisplayed')}
+              accessibilityLabel={t('veteransCrisisLine.textNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.textNumber')}
               linkType={LinkTypeOptionsConstants.text}
               fireAnalytic={fireAnalyticFn}
@@ -73,6 +75,7 @@ const VeteransCrisisLineScreen: FC = () => {
             </TextView>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
+              accessibilityLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
               linkType={LinkTypeOptionsConstants.callTTY}
               fireAnalytic={fireAnalyticFn}

@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import { InitialState } from 'store/reducers'
@@ -27,7 +27,7 @@ context('AppointmentAddressAndNumber', () => {
       appointmentType,
       healthcareService: 'Rehabilitation Clinic',
       location: {
-        name: 'VA Long Beach Healthcare System'
+        name: 'VA Long Beach Healthcare System',
       },
       address,
       phone: {
@@ -103,7 +103,9 @@ context('AppointmentAddressAndNumber', () => {
     })
   })
 
-  describe('should render the Get Directions component', async () => {
-    expect(testInstance.findAllByType(ClickForActionLink).length).toEqual(1)
+  describe('default', () => {
+    it('should render the Get Directions component', async () => {
+      expect(testInstance.findAllByType(ClickForActionLink).length).toBeTruthy()
+    })
   })
 })

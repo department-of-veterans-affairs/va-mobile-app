@@ -4,6 +4,7 @@ import * as api from 'store/api'
 import { ScreenIDTypes } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
 
 const dispatchStartGetHistory = (): ReduxAction => {
   return {
@@ -45,8 +46,10 @@ export const getServiceHistory = (screenID?: ScreenIDTypes): AsyncReduxAction =>
 
       dispatch(dispatchFinishGetHistory(mshData?.data.attributes.serviceHistory))
     } catch (err) {
-      dispatch(dispatchFinishGetHistory(undefined, err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishGetHistory(undefined, err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }

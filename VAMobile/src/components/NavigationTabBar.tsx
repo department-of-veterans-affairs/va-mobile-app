@@ -72,15 +72,15 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
     })
   }
 
-  const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
-    switch (route.name) {
+  const tabBarIcon = (routeName: string, focused: boolean): React.ReactNode => {
+    switch (routeName) {
       case 'Health':
       case 'Claims':
       case 'Profile':
       case 'Home':
         const iconProps = {
-          id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
-          name: `${route.name}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
+          id: `${routeName.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
+          name: `${routeName}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
         }
         return <VAIcon {...iconProps} />
       default:
@@ -99,7 +99,8 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
         accessibilityRole="toolbar">
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
-          const translatedName = translation(`${route.name.toLowerCase()}:title`)
+          const routeName = route.name.replace('Tab', '')
+          const translatedName = translation(`${routeName.toLowerCase()}:title`)
 
           type TouchableProps = {
             key: string
@@ -126,7 +127,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  {tabBarIcon(route as TabBarRoute, isFocused)}
+                  {tabBarIcon(routeName, isFocused)}
                 </Box>
                 <StyledLabel allowFontScaling={false} isFocused={isFocused}>
                   {translatedName}

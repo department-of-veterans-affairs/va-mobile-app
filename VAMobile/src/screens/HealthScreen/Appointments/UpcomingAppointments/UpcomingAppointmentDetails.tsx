@@ -41,6 +41,7 @@ import { getEpochSecondsOfDate } from 'utils/formattingUtils'
 import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
+import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
 import ProviderName from '../AppointmentDetailsCommon/ProviderName'
 import getEnv from 'utils/env'
@@ -62,8 +63,21 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail } =
-    attributes || ({} as AppointmentAttributes)
+  const {
+    appointmentType,
+    healthcareService,
+    location,
+    startDateUtc,
+    minutesDuration,
+    timeZone,
+    comment,
+    practitioner,
+    status,
+    statusDetail,
+    reason,
+    isCovidVaccine,
+    healthcareProvider,
+  } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
@@ -97,7 +111,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
     metaData: {
-      title: t(AppointmentTypeToID[appointmentType]),
+      title: t(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType]),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
@@ -299,21 +313,30 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             appointmentType={appointmentType}
             isAppointmentCanceled={isAppointmentCanceled}
             whoCanceled={whoCanceled}
+            isCovidVaccine={isCovidVaccine}
           />
-
           <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
 
           <VAVCAtHome_AppointmentData />
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} healthcareProvider={healthcareProvider} />
 
-          <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} location={location} phone={phone} />
+          <AppointmentAddressAndNumber
+            appointmentType={appointmentType}
+            healthcareService={healthcareService}
+            address={address}
+            location={location}
+            phone={phone}
+            isCovidVaccine={isCovidVaccine}
+          />
 
           <Atlas_AppointmentData />
 
           <CommunityCare_AppointmentData />
+
+          {reason && <AppointmentReason reason={reason} />}
         </TextArea>
 
         <Box mt={theme.dimensions.condensedMarginBetween}>

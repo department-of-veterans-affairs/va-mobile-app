@@ -6,7 +6,7 @@ import React, { FC, useState } from 'react'
 import { AuthState, AuthorizedServicesState, DemoState, NotificationsState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { DEVICE_ENDPOINT_SID, debugResetFirstTimeLogin } from 'store/actions'
-import { requestReview } from '../../../../utils/rnReviews'
+import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -53,8 +53,8 @@ const DebugScreen: FC = ({}) => {
     dispatch(debugResetFirstTimeLogin())
   }
 
-  const testInAppReview = (): void => {
-    requestReview()
+  const resetInAppReview = (): void => {
+    resetReviewActionCount()
   }
 
   return (
@@ -67,7 +67,7 @@ const DebugScreen: FC = ({}) => {
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={testInAppReview} label={'Test In-App Review Flow'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={resetInAppReview} label={'Reset In-App Review Actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

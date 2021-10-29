@@ -1,8 +1,6 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react'
-
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
 import {
@@ -34,7 +32,6 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypesConstants,
 } from 'store/api/types'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -44,7 +41,8 @@ import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessage, getMessageRecipients, getThread, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAttachments, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -53,13 +51,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
+  const goToDrafts = useGoToDrafts()
 
   const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
     StoreState,
     SecureMessagingState
   >((state) => state.secureMessaging)
 
-  const { attachmentFileToAdd, attachmentFileToRemove } = route.params
+  const { attachmentFileToAdd } = route.params
 
   const messageID = Number(route.params?.messageID)
   const message = messageID ? messagesById?.[messageID] : null
@@ -73,12 +72,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
-  const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
+  const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const [body, setBody] = useState(message?.body || '')
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+
+  const editCancelConfirmation = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
@@ -126,7 +127,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const goToCancel = (): void => {
     const isFormValid = isReplyDraft ? !!message : !!(to && category && message && (category !== CategoryTypeFields.other || subject))
 
-    navigation.navigate('ComposeCancelConfirmation', {
+    editCancelConfirmation({
       draftMessageID: messageID,
       isFormValid,
       messageData: getMessageData(),
@@ -137,9 +138,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+      headerLeft: (props): ReactNode => (
         <BackButton
-          onPress={noProviderError || isFormBlank || !draftChanged() ? navigation.goBack : goToCancel}
+          onPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.cancel}
           showCarat={false}
@@ -162,18 +163,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   useEffect(() => {
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
-      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
+      addAttachment(attachmentFileToAdd)
       navigation.setParams({ attachmentFileToAdd: {} })
     }
-  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
-
-  useEffect(() => {
-    // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
-    if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
-      setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
-      navigation.setParams({ attachmentFileToRemove: {} })
-    }
-  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
+  }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
@@ -185,10 +178,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
-
-  const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.draft, attachmentFileToRemove: attachmentFile, messageID })
-  }
 
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
@@ -305,7 +294,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, messageID, isReplyDraft))
+      dispatch(saveDraft(messageData, messageID, isReplyDraft, replyToID))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       navigation.navigate('SendConfirmation', {
@@ -365,7 +354,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             <>
               <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
               <TextView variant="MobileBodyBold" accessible={true}>
-                {message?.senderName}
+                {message?.recipientName}
               </TextView>
               <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
                 {t('secureMessaging.formMessage.subject')}

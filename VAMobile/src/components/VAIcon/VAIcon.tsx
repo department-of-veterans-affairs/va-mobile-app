@@ -67,10 +67,12 @@ import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import PaperClip from './svgs/paperClip.svg'
+import PhoneSolid from './svgs/phoneSolid.svg'
 import QuestionMark from './svgs/questionMark.svg'
 import Remove from './svgs/remove.svg'
 import Reply from './svgs/reply.svg'
 import UnreadIcon from './svgs/unread_icon.svg'
+import VideoCamera from './svgs/videoCamera.svg'
 
 export const VA_ICON_MAP = {
   HomeSelected,
@@ -119,6 +121,8 @@ export const VA_ICON_MAP = {
   QuestionMark,
   Remove,
   UnreadIcon,
+  VideoCamera,
+  PhoneSolid,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
@@ -158,8 +162,8 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
-    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
-    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+    const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+    return (): void => sub.remove()
   }, [dispatch, fontScale])
 
   if (fill) {

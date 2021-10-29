@@ -27,37 +27,45 @@ import gov.va.mobileapp.native_modules.RNNotificationPrefsPackage;
 import gov.va.mobileapp.native_modules.RNReviewPackage;
 import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
 import gov.va.mobileapp.notifications.VAPushNotifications;
+import com.facebook.react.bridge.JSIModulePackage;
+import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 
 public class MainApplication extends Application implements ReactApplication, INotificationsApplication {
 
-    private final ReactNativeHost mReactNativeHost =
-            new ReactNativeHost(this) {
-                @Override
-                public boolean getUseDeveloperSupport() {
-                    return BuildConfig.DEBUG;
-                }
+    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
 
-                @Override
-                protected List<ReactPackage> getPackages() {
-                    @SuppressWarnings("UnnecessaryLocalVariable")
-                    List<ReactPackage> packages = new PackageList(this).getPackages();
-                    // Packages that cannot be autolinked yet can be added manually here, for example:
-                    // Add the DeviceData bridge
-                    packages.add(new DeviceDataPackage());
-                    packages.add(new RNCalendarPackage());
-                    packages.add(new RNCheckVoiceOverPackage());
-                    packages.add(new RNNotificationPrefsPackage());
-                    packages.add(new RNSecureRandomPackage());
-                    packages.add(new RNReviewPackage());
+        @Override
+        protected List<ReactPackage> getPackages() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            List<ReactPackage> packages = new PackageList(this).getPackages();
+            // Packages that cannot be autolinked yet can be added manually here, for
+            // example:
+            // Add the DeviceData bridge
+            packages.add(new DeviceDataPackage());
+            packages.add(new RNCalendarPackage());
+            packages.add(new RNCheckVoiceOverPackage());
+            packages.add(new RNNotificationPrefsPackage());
+            packages.add(new RNSecureRandomPackage());
+            packages.add(new RNReviewPackage());
 
-                    return packages;
-                }
+            return packages;
+        }
 
-                @Override
-                protected String getJSMainModuleName() {
-                    return "index";
-                }
-            };
+        @Override
+        protected String getJSMainModuleName() {
+            return "index";
+        }
+
+        @Override
+        protected JSIModulePackage getJSIModulePackage() {
+            return new ReanimatedJSIModulePackage();
+        }
+
+    };
 
     @Override
     public ReactNativeHost getReactNativeHost() {
@@ -75,24 +83,23 @@ public class MainApplication extends Application implements ReactApplication, IN
     }
 
     /**
-     * Loads Flipper in React Native templates. Call this in the onCreate method with something like
-     * initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+     * Loads Flipper in React Native templates. Call this in the onCreate method
+     * with something like initializeFlipper(this,
+     * getReactNativeHost().getReactInstanceManager());
      *
      * @param context
      * @param reactInstanceManager
      */
-    private static void initializeFlipper(
-            Context context, ReactInstanceManager reactInstanceManager) {
+    private static void initializeFlipper(Context context, ReactInstanceManager reactInstanceManager) {
         if (BuildConfig.DEBUG) {
             try {
-        /*
-         We use reflection here to pick up the class that initializes Flipper,
-        since Flipper library is not available in release mode
-        */
+                /*
+                 * We use reflection here to pick up the class that initializes Flipper, since
+                 * Flipper library is not available in release mode
+                 */
                 Class<?> aClass = Class.forName("com.vamobile.ReactNativeFlipper");
-                aClass
-                        .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
-                        .invoke(null, context, reactInstanceManager);
+                aClass.getMethod("initializeFlipper", Context.class, ReactInstanceManager.class).invoke(null, context,
+                        reactInstanceManager);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {

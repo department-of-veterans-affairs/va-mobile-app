@@ -42,8 +42,8 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
   }
 
   const clickToCallProps: LinkButtonProps = {
-    displayedText: t('claimDetails.VANumberDisplayed'),
-    numberOrUrlLink: t('claimDetails.VANumber'),
+    displayedText: t('common:8008271000.displayText'),
+    numberOrUrlLink: t('common:8008271000'),
     linkType: LinkTypeOptionsConstants.call,
   }
 

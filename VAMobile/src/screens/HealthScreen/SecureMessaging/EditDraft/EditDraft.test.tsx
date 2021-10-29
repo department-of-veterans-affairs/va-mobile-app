@@ -48,6 +48,18 @@ jest.mock('store/actions', () => {
   }
 })
 
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+let mockUseGoToDraftSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
+    useGoToDrafts: () => mockUseGoToDraftSpy,
+  }
+})
+
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
 
@@ -60,7 +72,7 @@ const mockMessages: SecureMessagingMessageMap = {
     body: 'message 1 body text',
     attachment: false,
     sentDate: '1',
-    senderId: 2,
+    senderId: 3,
     senderName: 'mock sender 1',
     recipientId: 3,
     recipientName: 'mock recipient name 1',
@@ -73,7 +85,7 @@ const mockMessages: SecureMessagingMessageMap = {
     body: 'test 2',
     attachment: false,
     sentDate: '2',
-    senderId: 2,
+    senderId: 4,
     senderName: 'mock sender 2',
     recipientId: 3,
     recipientName: 'mock recipient name 2',
@@ -86,7 +98,7 @@ const mockMessages: SecureMessagingMessageMap = {
     body: 'Last accordion collapsible should be open, so the body text of this message should display',
     attachment: false,
     sentDate: '3',
-    senderId: 2,
+    senderId: 5,
     senderName: 'mock sender 3',
     recipientId: 3,
     recipientName: 'mock recipient name 3',
@@ -158,6 +170,7 @@ context('EditDraft', () => {
                   triageTeamId: 0,
                   name: 'Doctor 1',
                   relationType: 'PATIENT',
+                  preferredTeam: true,
                 },
               },
               {
@@ -167,6 +180,7 @@ context('EditDraft', () => {
                   triageTeamId: 1,
                   name: 'Doctor 2',
                   relationType: 'PATIENT',
+                  preferredTeam: true,
                 },
               },
             ],
@@ -259,24 +273,16 @@ context('EditDraft', () => {
       })
       navHeaderSpy.back.props.onPress()
       expect(goBack).not.toHaveBeenCalled()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of save (draft)', () => {
-    describe('when a required field is not filled', () => {
-      beforeEach(() => {
-        act(() => {
-          navHeaderSpy.save.props.onSave()
-        })
-      })
-    })
-
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
         navHeaderSpy.save.props.onSave()
         testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(saveDraft).toHaveBeenCalledWith(expect.objectContaining({ draft_id: expect.any(Number) }), expect.anything(), expect.anything())
+        expect(saveDraft).toHaveBeenCalledWith(expect.objectContaining({ draft_id: 2, body: 'test 2' }), 2, true, 1)
       })
     })
   })
