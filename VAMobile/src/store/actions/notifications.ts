@@ -77,7 +77,7 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
             deviceToken,
             appName: PUSH_APP_NAME,
             osName: isIOS() ? PushOsName.ios : PushOsName.android,
-            debug: __DEV__,
+            debug: false, //TODO debug true is suppose to only work for ios but is currently causing a 502 error(android always set to false)
           }
           const response = await api.put<api.PushRegistrationResponse>('/v0/push/register', params)
           console.debug(`push registration response: ${response}`)
