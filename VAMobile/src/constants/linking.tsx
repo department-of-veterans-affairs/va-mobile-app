@@ -3,7 +3,8 @@ import { LoadingComponent } from '../components'
 import { NavigationState } from 'react-navigation'
 import React, { ReactElement } from 'react'
 
-export const linking: LinkingOptions = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const linking: LinkingOptions<any> = {
   prefixes: [
     /* your linking prefixes */
     'vamobile://',

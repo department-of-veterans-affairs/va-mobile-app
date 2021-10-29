@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, DemoState, NotificationsState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, NotificationsState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { DEVICE_ENDPOINT_SID, debugResetFirstTimeLogin } from 'store/actions'
 import { resetReviewActionCount } from 'utils/inAppReviews'
@@ -14,7 +14,6 @@ import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
   const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
