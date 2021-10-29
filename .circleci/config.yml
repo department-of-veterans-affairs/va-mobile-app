@@ -326,9 +326,3 @@ workflows:
               only: master
     jobs:
       - run_release_lanes
-  new_runner:
-    jobs:
-      - build_android_qa:
-          filters:
-            branches:
-              only: feature/new-runner
