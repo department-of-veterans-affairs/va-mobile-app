@@ -90,7 +90,7 @@ context('SettingsScreen', () => {
 
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', async () => {
-      findByOnPressFunction(testInstance, BaseListItem, 'onManage')?.props.onPress()
+      findByTestID(testInstance, 'manage-your-account').props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
     })
   })
