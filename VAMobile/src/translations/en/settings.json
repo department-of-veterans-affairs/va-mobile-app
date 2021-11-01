@@ -31,6 +31,8 @@
   "manageAccount.title": "Manage your account",
   "manageAccount.titlePage": "Manage your account page",
   "manageAccount.toConfirmOrUpdateEmail": "To confirm or update your sign-in email, go to the website where you manage your account information.",
+  "notifications.a11yHint": "Go to the notifications page",
+  "notifications.title": "Notifications",
   "privacyPolicy.a11yHint": "Takes you to the privacy policy page. This page will open in your device's browser",
   "privacyPolicy.title": "Privacy policy",
   "settings.backButton.a11yHint": "Go back to settings",
