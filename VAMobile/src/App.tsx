@@ -35,6 +35,7 @@ import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import LoaGate from './screens/auth/LoaGate'
+import NotificationManger from './components/NotificationManger'
 import OnboardingCarousel from './screens/OnboardingCarousel'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
@@ -109,10 +110,12 @@ const MainApp: FC = () => {
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
-              <SafeAreaProvider>
-                <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
-                <AuthGuard />
-              </SafeAreaProvider>
+              <NotificationManger>
+                <SafeAreaProvider>
+                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                  <AuthGuard />
+                </SafeAreaProvider>
+              </NotificationManger>
             </NavigationContainer>
           </I18nextProvider>
         </Provider>

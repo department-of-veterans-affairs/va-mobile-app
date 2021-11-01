@@ -38,6 +38,10 @@ export type AppointmentsFinishPrefetchAppointmentsPayload = {
   error?: Error
 }
 
+export type AppointmentsNotificationPayload = {
+  appointmentNotification: boolean
+}
+
 /**
  * Redux payload for APPOINTMENTS_START_CANCEL_APPOINTMENT action
  */

@@ -31,7 +31,7 @@ export const setDemoMode = (demoMode: boolean): void => {
 }
 
 export type Params = {
-  [key: string]: string | Array<string> | FormData
+  [key: string]: string | Array<string> | FormData | boolean
 }
 
 export type ContentTypes = 'application/json' | 'multipart/form-data'
@@ -64,7 +64,7 @@ const doRequest = async function (
       ...fetchObj.headers,
       'Content-Type': contentType,
     }
-    fetchObj.body = contentType === contentTypes.multipart ? ((params as unknown) as FormData) : JSON.stringify(params)
+    fetchObj.body = contentType === contentTypes.multipart ? (params as unknown as FormData) : JSON.stringify(params)
   } else {
     if (_.keys(params).length > 0) {
       endpoint +=
@@ -125,7 +125,7 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
     return await response.json()
   } else {
     // we are in demo and need to transform the request from the demo store
-    return ((await transform(method, endpoint, params)) as unknown) as T
+    return (await transform(method, endpoint, params)) as unknown as T
   }
 }
 

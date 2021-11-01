@@ -68,7 +68,7 @@ const setDemoStore = (data: DemoStore) => {
  */
 export const initDemoStore = async (): Promise<void> => {
   const data = await import('./demo.json')
-  setDemoStore((data.default as unknown) as DemoStore)
+  setDemoStore(data.default as unknown as DemoStore)
 }
 
 /**
@@ -179,10 +179,10 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
       return updateEmail(params.emailAddress as string)
     }
     case '/v0/user/addresses/validate': {
-      return validationReturn((params as unknown) as AddressData)
+      return validationReturn(params as unknown as AddressData)
     }
     case '/v0/user/addresses': {
-      return updateAddress((params as unknown) as AddressData)
+      return updateAddress(params as unknown as AddressData)
     }
     default: {
       return undefined
@@ -204,14 +204,14 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
       return updateEmail(params.emailAddress as string)
     }
     case '/v0/user/addresses': {
-      return updateAddress((params as unknown) as AddressData)
+      return updateAddress(params as unknown as AddressData)
     }
     case '/v0/payment-information/benefits': {
       if (!store) {
         return undefined
       }
-      store['/v0/payment-information/benefits'].data.attributes.paymentAccount = (params as unknown) as PaymentAccountData
-      return directDepositTransform((params as unknown) as PaymentAccountData)
+      store['/v0/payment-information/benefits'].data.attributes.paymentAccount = params as unknown as PaymentAccountData
+      return directDepositTransform(params as unknown as PaymentAccountData)
     }
     default: {
       return undefined
@@ -247,7 +247,7 @@ const transformDeleteCall = (endpoint: string, params: Params): DemoApiReturns =
       return MOCK_EDIT_RESPONSE
     }
     case '/v0/user/addresses': {
-      const type = getAddressType(((params as unknown) as AddressData).addressPou)
+      const type = getAddressType((params as unknown as AddressData).addressPou)
       store['/v0/user'].data.attributes.profile[type] = undefined
       return MOCK_EDIT_RESPONSE
     }
@@ -268,7 +268,7 @@ const updateUserPhone = (params: Params): EditResponseData | undefined => {
   const { phoneType } = params
   const [type, formattedType] = getPhoneTypes(phoneType as PhoneType)
 
-  store['/v0/user'].data.attributes.profile[type] = (params as unknown) as PhoneData
+  store['/v0/user'].data.attributes.profile[type] = params as unknown as PhoneData
   const { areaCode, phoneNumber } = params
   store['/v0/user'].data.attributes.profile[formattedType] = `${areaCode} + ${phoneNumber}`
   return MOCK_EDIT_RESPONSE
@@ -323,21 +323,8 @@ const updateEmail = (emailAddress: string): EditResponseData | undefined => {
  * @returns AddressValidationData- object needed to run the validation to complete address updates
  */
 const validationReturn = (addressData: AddressData): AddressValidationData => {
-  const {
-    id,
-    addressLine1,
-    addressLine2,
-    addressLine3,
-    addressPou,
-    addressType,
-    city,
-    countryCodeIso3,
-    internationalPostalCode,
-    province,
-    stateCode,
-    zipCode,
-    zipCodeSuffix,
-  } = addressData
+  const { id, addressLine1, addressLine2, addressLine3, addressPou, addressType, city, countryCodeIso3, internationalPostalCode, province, stateCode, zipCode, zipCodeSuffix } =
+    addressData
   return {
     data: [
       {
