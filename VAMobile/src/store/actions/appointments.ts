@@ -305,8 +305,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                     number: '778-7550',
                     extension: '',
                   },
-                  url:
-                    'https://dev.care.va.gov/vvc-app/?name=NADEAU%2CMARCY&join=1&media=1&escalate=1&conference=VAC000416762@dev.care.va.gov&pin=990510&aid=c821687c-5844-4421-9180-dcc18236a62a#',
+                  url: 'https://dev.care.va.gov/vvc-app/?name=NADEAU%2CMARCY&join=1&media=1&escalate=1&conference=VAC000416762@dev.care.va.gov&pin=990510&aid=c821687c-5844-4421-9180-dcc18236a62a#',
                   code: '990510#',
                 },
                 minutesDuration: 20,

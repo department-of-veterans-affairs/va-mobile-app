@@ -498,7 +498,7 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
           }),
         )
 
-        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, payload as unknown as api.Params)
       } else {
         const formData = new FormData()
         const fileToUpload = files[0]
@@ -534,7 +534,7 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
         formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
         formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
 
-        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
       }
 
       dispatch(dispatchFinishFileUpload(undefined, request.description))

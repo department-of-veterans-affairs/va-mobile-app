@@ -46,21 +46,19 @@ const NotificationsSettingsScreen: FC = () => {
     : t('notifications.settings.personalize.text.systemNotificationsOff')
 
   const preferenceList = (): ReactNode => {
-    const prefsItems = preferences.map(
-      (pref): SimpleListItemObj => {
-        return {
-          a11yHintText: t('notifications.settings.switch.a11yHint', { notificationChannelName: pref.preferenceName }),
-          text: pref.preferenceName,
-          decorator: ButtonDecoratorType.Switch,
-          decoratorProps: {
-            on: pref.value,
-          },
-          onPress: () => {
-            dispatch(setPushPref(pref))
-          },
-        }
-      },
-    )
+    const prefsItems = preferences.map((pref): SimpleListItemObj => {
+      return {
+        a11yHintText: t('notifications.settings.switch.a11yHint', { notificationChannelName: pref.preferenceName }),
+        text: pref.preferenceName,
+        decorator: ButtonDecoratorType.Switch,
+        decoratorProps: {
+          on: pref.value,
+        },
+        onPress: () => {
+          dispatch(setPushPref(pref))
+        },
+      }
+    })
     return (
       <Box mt={condensedMarginBetween}>
         <SimpleList items={prefsItems} />
