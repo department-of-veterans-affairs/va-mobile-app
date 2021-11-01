@@ -59,7 +59,7 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   ///   - reject: React Native Promise rejecter.
   /// - Returns: resolves with the callback url or rejects with an error.
   @objc(beginAuthSession:clientId:redirectUri:scope:codeChallenge:state:resolver:rejecter:)
-  func beginAuthSession(_ authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+  func beginAuthSession(_ authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
     let authUrl: URL? = generateUrl(authUrl: authUrl, clientId: clientId, redirectUri: redirectUri, scope: scope, codeChallenge: codeChallenge, state: state)
     guard let url = authUrl else {
       reject("002", "RNAuthSession Error", RNAuthSessionError.authUrlError)
