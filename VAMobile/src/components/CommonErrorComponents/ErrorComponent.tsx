@@ -34,7 +34,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             onTryAgain={tryAgain}
             errorText={t('health:secureMessaging.sendError.ifTheAppStill')}
             errorA11y={t('health:secureMessaging.sendError.ifTheAppStill.a11y')}
-            callPhone={t('health:secureMessaging.attachments.FAQ.ifYourProblem.phone')}
+            callPhone={t('common:8773270022.displayText')}
           />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:

@@ -106,12 +106,22 @@ export const sortByDate = (dataList: Array<{ [key: string]: string }>, dateField
     const aDateField = a[dateField]
     const bDateField = b[dateField]
 
-    const infiniteNum = isDescending ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
-
-    const d1 = aDateField && aDateField !== '' ? DateTime.fromISO(aDateField).toMillis() : infiniteNum
-    const d2 = bDateField && bDateField !== '' ? DateTime.fromISO(bDateField).toMillis() : infiniteNum
-    return isDescending ? d2 - d1 : d1 - d2
+    return compareDateStrings(aDateField, bDateField, isDescending)
   })
+}
+
+/**
+ * Compare function to use on dates represented as string. Can be used by sort functions
+ * @param a - first date to compare
+ * @param b - second date to compare
+ * @param isDescending - optional param for whether to favor most recent
+ */
+export const compareDateStrings = (a: string, b: string, isDescending?: boolean): number => {
+  const infiniteNum = isDescending ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
+
+  const d1 = a && a !== '' ? DateTime.fromISO(a).toMillis() : infiniteNum
+  const d2 = b && b !== '' ? DateTime.fromISO(b).toMillis() : infiniteNum
+  return isDescending ? d2 - d1 : d1 - d2
 }
 
 const invalidStrings = ['not_found', 'undefined', 'null']

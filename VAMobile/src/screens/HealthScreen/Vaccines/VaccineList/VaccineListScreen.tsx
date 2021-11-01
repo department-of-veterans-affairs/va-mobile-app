@@ -13,6 +13,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getVaccines } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
 
@@ -32,8 +33,8 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
 
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine) => {
     const textLines: Array<TextLine> = [
-      { text: t('vaccines.vaccineName', { name: vaccine.protocolApplied.targetDisease }), variant: 'MobileBodyBold' },
-      { text: formatDateMMMMDDYYYY(vaccine.recorded) },
+      { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
+      { text: formatDateMMMMDDYYYY(vaccine.attributes?.date || '') },
     ]
 
     const vaccineButton: DefaultListItemObj = {
@@ -51,6 +52,10 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
 
   if (loading) {
     return <LoadingComponent text={t('vaccines.loading')} />
+  }
+
+  if (vaccines.length === 0) {
+    return <NoVaccineRecords />
   }
 
   return (

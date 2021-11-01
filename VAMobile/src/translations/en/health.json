@@ -69,6 +69,8 @@
   "noMatch.title": "We couldn't match your information to our VA patient records",
   "noMatch.titleA11yLabel": "We couldn't match your information to our V-A patient records",
   "noMatch.whatYouCanDo": "What you can do",
+  "noVaccineRecords.alert.title": "We couldn't find information about your V\ufeffA vaccines.",
+  "noVaccineRecords.alert.text": "We’re sorry. Vaccine records are updated every 24 hours. If you think this is an error, call the My HealtheVet Help Desk. We’re here Monday to Friday, 8:00 a.m. to 8:00 p.m. ET.",
   "page.title": "Health Care",
   "pastAppointmentDetails.title": "Past Appointment",
   "pastAppointmentDetails.toScheduleAnotherAppointment": "To schedule another appointment, please visit VA.gov or call your VA medical center.",
@@ -112,7 +114,6 @@
   "secureMessaging.attachments.FAQ.note.bullet2": "The file size for a single attachment cannot exceed 6 MB and the total size of the attachments cannot exceed 10 MB.",
   "secureMessaging.attachments.FAQ.ifYourProblem": "If your problem persists, please contact the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.",
   "secureMessaging.attachments.FAQ.ifYourProblemA11y": "If your problem persists, please contact the My Healthy Vet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.",
-  "secureMessaging.attachments.FAQ.ifYourProblem.phone": "877-327-0022",
   "secureMessaging.attachments.goBack": "Go back to the previous page",
   "secureMessaging.attachments.hasAttachment": "Has attachment",
   "secureMessaging.attachments.noGoBackToMessage": "No, Go Back to Message",
@@ -313,7 +314,7 @@
   "vaccines.details.series": "Series status",
   "vaccines.details.series.display": "{{doseNumber}} of {{seriesDoses}}",
   "vaccines.details.status": "Status",
-  "vaccines.details.title": "V\uFEFFA vaccine detail",
+  "vaccines.details.title": "V\uFEFFA Vaccine Detail",
   "vaccines.list.a11y": "Review your V\uFEFFA vaccine record",
   "vaccines.loading": "We're loading your vaccine record",
   "vaccines.vaccineName": "{{name}} vaccine",
@@ -322,5 +323,5 @@
   "vaImmunizations.title": "V\ufeffA Immunizations",
   "vaVaccines.a11yHint": "View all your V\ufeffA vaccines",
   "vaVaccines.subText": "View all your V\ufeffA vaccines",
-  "vaVaccines.title": "V\ufeffA vaccines"
+  "vaVaccines.title": "V\ufeffA Vaccines"
 }
