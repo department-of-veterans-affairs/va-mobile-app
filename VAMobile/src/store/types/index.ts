@@ -12,6 +12,7 @@ import { DisabilityRatingActions } from './disabilityRating'
 import { ErrorsActions } from './errors'
 import { LettersActions } from './letters'
 import { MilitaryServiceActions } from './militaryService'
+import { NotificationsActions } from './notifications'
 import { PatientActions } from './patient'
 import { PersonalInformationActions } from './personalInformation'
 import { SecureMessagingActions } from './secureMessaging'
@@ -28,6 +29,7 @@ export * from './claimsAndAppeals'
 export * from './authorizedServices'
 export * from './errors'
 export * from './accessibility'
+export * from './notifications'
 export * from './secureMessaging'
 export * from './demo'
 export * from './analytics'
@@ -56,6 +58,7 @@ export type AllActionDefs = AuthActions &
   ClaimsAndAppealsActions &
   AuthorizedServicesActions &
   ErrorsActions &
+  NotificationsActions &
   AccessibilityActions &
   SecureMessagingActions &
   DemoActions &

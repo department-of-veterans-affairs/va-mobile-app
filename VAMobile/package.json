@@ -66,6 +66,7 @@
     "react-native-keyboard-manager": "^6.5.4-3",
     "react-native-keychain": "^8.0.0",
     "react-native-localize": "^2.0.2",
+    "react-native-notifications": "^3.5.0",
     "react-native-reanimated": "^2.2.3",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.2",
