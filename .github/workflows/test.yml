@@ -16,4 +16,4 @@ jobs:
           repo: request-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: echo "${{ steps.get_issues.outputs.data }}"
+      - run: echo "${{ owner }}"
