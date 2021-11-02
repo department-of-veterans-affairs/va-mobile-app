@@ -16,7 +16,7 @@ jobs:
           repo: va-mobile-app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: printf "%s" "${{ steps.get_issues.outputs.data }}" > output.txt
+      - run: printf "%s\n" "${{ steps.get_issues.outputs.data }}" > output.txt
       - name: Archive results
         uses: actions/upload-artifact@v2
         with:
