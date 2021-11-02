@@ -16,7 +16,7 @@ jobs:
           repo: request-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: echo "${{ steps.get_issues.outputs.data }}" >> output.txt
+      - run: printf "%s" "${{ steps.get_issues.outputs.data }}" > output.txt
       - name: Archive results
         uses: actions/upload-artifact@v2
         with:
