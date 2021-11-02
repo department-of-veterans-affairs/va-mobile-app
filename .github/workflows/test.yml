@@ -12,8 +12,8 @@ jobs:
         id: get_issues
         with:
           route: GET /repos/{owner}/{repo}/issues
-          owner: octokit
-          repo: request-action
+          owner: department-of-veterans-affairs
+          repo: va-mobile-app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: printf "%s" "${{ steps.get_issues.outputs.data }}" > output.txt
