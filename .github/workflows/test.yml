@@ -11,9 +11,9 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_issues
         with:
-          route: GET /repos/department-of-veterans-affairs/va-mobile-app/releases
+          route: GET /repos/department-of-veterans-affairs/va-mobile-app/pulls
           owner: octokit
           repo: request-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: echo "${{ owner }}"
+      - run: echo "${{ steps.get_issues.outputs.data }}"
