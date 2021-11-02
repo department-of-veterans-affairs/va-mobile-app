@@ -1,0 +1,19 @@
+name: Test get issues by label
+on:
+  push:
+    branches:
+      - feature/add-bugs-to-release-ticket
+
+jobs:
+  getIssues:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: octokit/request-action@v2.x
+        id: get_issues
+        with:
+          route: GET /repos/department-of-veterans-affairs/va-mobile-app/issues?labels=sev-1,sev-2
+          owner: octokit
+          repo: request-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: "echo issues {{ steps.get_issues.outputs.data }}"
