@@ -11,7 +11,7 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_issues
         with:
-          route: GET /repos/{owner}/{repo}/issues?labels=sev-1,sev-2
+          route: GET /repos/{owner}/{repo}/issues?labels=sev-2
           owner: department-of-veterans-affairs
           repo: va-mobile-app
         env:
