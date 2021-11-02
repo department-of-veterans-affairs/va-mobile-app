@@ -87,7 +87,7 @@ context('VaccineListScreen', () => {
   describe('when there are no vaccines', () => {
     it('should show no Vaccine Records', async () => {
       initializeTestInstance(true, true)
-      expect(findByTypeWithText(testInstance, TextView, 'We couldn\'t find information about your V\ufeffA vaccines.')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'We couldn\'t find information about your V\ufeffA vaccines')).toBeTruthy()
     })
   })
 })

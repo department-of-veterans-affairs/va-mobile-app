@@ -115,7 +115,7 @@ context('HealthScreen', () => {
     it('should not render a messagesCountTag', async () => {
       initializeTestInstance(0)
       expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Messages')
-      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Review and send secure messages')
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Send and receive secure messages')
     })
   })
 })

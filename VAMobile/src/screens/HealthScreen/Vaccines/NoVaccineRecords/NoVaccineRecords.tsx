@@ -14,7 +14,7 @@ const NoVaccineRecords: FC = () => {
     <VAScrollView>
       <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
         <AlertBox title={t('noVaccineRecords.alert.title')} border="informational" background="noCardBackground" text={t('noVaccineRecords.alert.text')}>
-          <ClickToCallPhoneNumber phone={t('common:8773270022')} displayedText={t('common:8773270022.displayText')} />
+          <ClickToCallPhoneNumber phone={t('common:8006982411')} displayedText={t('common:8006982411.displayText')} />
         </AlertBox>
       </Box>
     </VAScrollView>
