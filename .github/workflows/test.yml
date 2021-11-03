@@ -8,18 +8,11 @@ jobs:
   getIssues:
     runs-on: ubuntu-latest
     steps:
-      - uses: octokit/request-action@v2.x
-        id: get_issues
-        with:
-          route: GET /repos/{owner}/{repo}/issues?labels=sev-2
-          owner: department-of-veterans-affairs
-          repo: va-mobile-app
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: issues=$(gh issue list -l "sev-2" --json number,title)
       - run: |
           table="| Issue | Title | Notes |\n"
           table="${table}|-------|-------|-------|\n"
-          for i in ${{ steps.get_issues.outputs.data }}[@]
+          for i in "${issues[@]}"
           do
             table="${table}|#${i[number]}|${i[title]}| |\n"
           done
