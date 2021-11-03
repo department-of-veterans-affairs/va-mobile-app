@@ -51,7 +51,6 @@ export const getVaccines = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
       // Ensure all required fields(date, groupName, and type and dosage) exist; otherwise throw API Error
       if (!hasRequiredFields) {
-        // throw API ERROR
         throw { status: 500, json: { errors: [] } } as APIError
       }
 
