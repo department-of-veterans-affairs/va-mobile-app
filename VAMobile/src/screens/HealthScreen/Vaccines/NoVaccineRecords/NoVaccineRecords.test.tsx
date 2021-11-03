@@ -23,9 +23,9 @@ context('NoVaccineRecords', () => {
   })
 
   describe('when the My HealtheVet phone number link is clicked', () => {
-    it('should call Linking open url with the parameter tel:8773270022', async () => {
+    it('should call Linking open url with the parameter tel:8006982411', async () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-      expect(Linking.openURL).toBeCalledWith('tel:8773270022')
+      expect(Linking.openURL).toBeCalledWith('tel:8006982411')
     })
   })
 

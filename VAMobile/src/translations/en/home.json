@@ -1,6 +1,6 @@
 {
-  "claimsAndAppeals.a11yHint": "Check your claim or appeal status",
-  "claimsAndAppeals.subText": "Check your claim or appeal status",
+  "claimsAndAppeals.a11yHint": "Review your claim or appeal status",
+  "claimsAndAppeals.subText": "Review your claim or appeal status",
   "claimsAndAppeals.title": "Claims and appeals",
   "component.crisisLine.hint": "Go to Veterans Crisis Line",
   "component.crisisLine.now": "now",
@@ -36,7 +36,7 @@
   "greetings.afternoon": "Good afternoon",
   "greetings.evening": "Good evening",
   "healthCare.a11yHint": "Go to health",
-  "healthCare.subText": "Review your appointments, vaccine records, and send messages",
+  "healthCare.subText": "Review your appointments, send messages, and get your vaccine records",
   "healthCare.title": "Health care",
   "letters.title": "Letters",
   "letters.subText": "Download common VA letters and documents",

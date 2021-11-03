@@ -47,6 +47,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
         )
       case CommonErrorTypesConstants.DOWNTIME_ERROR:
         return <DowntimeError screenID={screenID} />
+      case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
+        return <CallHelpCenter onTryAgain={tryAgain} titleText={t('common:errors.callHelpCenter.vaAppNotWorking')} callPhone={t('common:8006982411.displayText')} />
       default:
         return <CallHelpCenter onTryAgain={tryAgain} />
     }
