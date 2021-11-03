@@ -1,5 +1,6 @@
 import { AsyncReduxAction, ReduxAction } from '../types'
 
+import * as api from '../api'
 import { APIError, ScreenIDTypes, VaccineList, VaccineListData } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -41,8 +42,10 @@ export const getVaccines = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
     try {
       dispatch(dispatchStartGetVaccines())
-      const mockData = (await import('./mocks/vaccines.json')) as VaccineListData
-      dispatch(dispatchFinishGetVaccines(mockData.data))
+
+      const vaccineData = await api.get<VaccineListData>('/v0/health/immunizations')
+
+      dispatch(dispatchFinishGetVaccines(vaccineData?.data))
     } catch (err) {
       if (isErrorObject(err)) {
         dispatch(dispatchFinishGetVaccines(undefined, err))

@@ -23,38 +23,47 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
 
   const vaccine = vaccinesById[vaccineId]
+  const placeHolder = t('vaccines.details.unavailable')
 
   if (!vaccine) {
     return <></>
   }
+
+  const displayDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes.date) : placeHolder
+
+  const displayName = vaccine.attributes?.groupName ? t('vaccines.vaccineName', { name: vaccine.attributes.groupName }) : placeHolder
+
+  const hasSeries = vaccine.attributes?.doseNumber && vaccine.attributes?.doseSeries
+  const displaySeries = hasSeries ? t('vaccines.details.series.display', { doseNumber: vaccine.attributes?.doseNumber, seriesDoses: vaccine.attributes?.doseSeries }) : placeHolder
+
+  const isPartialData = !hasSeries || !vaccine.attributes?.note
 
   return (
     <VAScrollView {...testIdProps('Vaccine-details-page')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
-            {formatDateMMMMDDYYYY(vaccine.attributes?.date || '')}
+            {displayDate}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-            <TextView variant="BitterBoldHeading">{t('vaccines.vaccineName', { name: vaccine.attributes?.groupName })}</TextView>
+            <TextView variant="BitterBoldHeading">{displayName}</TextView>
           </Box>
           <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-          <TextView variant="MobileBody">{vaccine.attributes?.shortDescription}</TextView>
-          {vaccine.attributes?.doseNumber && vaccine.attributes?.doseSeries && (
-            <TextView variant="MobileBodyBold">
-              {t('vaccines.details.series') + ' '}
-              <TextView variant="MobileBody">
-                {t('vaccines.details.series.display', { doseNumber: vaccine.attributes?.doseNumber, seriesDoses: vaccine.attributes?.doseSeries })}
-              </TextView>
-            </TextView>
-          )}
-          {vaccine.attributes?.note && (
-            <Box mt={theme.dimensions.contentMarginTop}>
-              <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
-              <TextView variant="MobileBody">{vaccine.attributes?.note}</TextView>
-            </Box>
-          )}
+          <TextView variant="MobileBody">{vaccine.attributes?.shortDescription || placeHolder}</TextView>
+          <TextView variant="MobileBodyBold">
+            {t('vaccines.details.series') + '  '}
+            <TextView variant="MobileBody">{displaySeries}</TextView>
+          </TextView>
+          <Box mt={theme.dimensions.contentMarginTop}>
+            <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
+            <TextView variant="MobileBody">{vaccine.attributes?.note || placeHolder}</TextView>
+          </Box>
         </TextArea>
+        {isPartialData && (
+          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <TextView variant="HelperText">{t('vaccines.details.weBaseThis')}</TextView>
+          </Box>
+        )}
       </Box>
     </VAScrollView>
   )
