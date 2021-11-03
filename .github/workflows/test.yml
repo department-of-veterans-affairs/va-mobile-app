@@ -19,10 +19,9 @@ jobs:
       - run: |
           table="| Issue | Title | Notes |\n"
           table="${table}|-------|-------|-------|\n"
-          issues="${{ steps.get_issues.outputs.data }}"
-          for i in "${issues[@]}"
+          for i in "${${{ steps.get_issues.outputs.data }}[@]}"
           do
-            table="${table}|#${id[number]}|${id[title]}| |\n"
+            table="${table}|#${i[number]}|${i[title]}| |\n"
           done
           echo "${table}"
       - name: Archive results
