@@ -17,12 +17,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          table='| Issue | Title | Notes |\n'
-          table='${table}|-------|-------|-------|\n'
-          issues='${{ steps.get_issues.output.data }}'
+          table="| Issue | Title | Notes |\n"
+          table="${table}|-------|-------|-------|\n"
+          issues="${{ steps.get_issues.output.data }}"
           for i in "${issues[@]}"
           do
-            table='${table}|#${id[number]}|${id[title]}| |\n'
+            table="${table}|#${id[number]}|${id[title]}| |\n"
           done
           echo "${table}"
       - name: Archive results
