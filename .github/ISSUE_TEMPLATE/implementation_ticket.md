@@ -8,10 +8,10 @@ assignees:
 
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 
-# **Description**
+## Description
 <!-- Goal of these tickets:  Provide general explanation of a the feature written from the perspective of the end user or customer. -->  
 
-As a _____________ (type of user/persona), I want to (goal/objective) _______________, so that ___________(benefit/desired result/some reason).
+As a [type of user/persona], I want to [goal/objective], so that [benefit/desired result/some reason].
 
 
 As part of this story we want to: <!-- List the desired outcome(s) for this ticket -->  
@@ -19,18 +19,18 @@ As part of this story we want to: <!-- List the desired outcome(s) for this tick
 - 
 
 
-# **Acceptance Criteria**
+## Acceptance Criteria
 <!-- Add a checkbox for each item required to fulfill the user story/issue. 
 E.g Verify that XYZ, Create XYZ -->  
 
-[ ]
+- [ ]
 
-[ ]
+- [ ]
 
-[ ]
+- [ ]
 
 
-# **Notes & Open Questions**
+## Notes & Open Questions
 
 - Dependencies/Roadblocks:
 - Test Acct Needed: Y/N
