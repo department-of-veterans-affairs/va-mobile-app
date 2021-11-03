@@ -24,7 +24,7 @@ jobs:
           do
             table='${table}|#${id[number]}|${id[title]}| |\n'
           done
-          echo '${table}'
+          echo "${table}"
       - name: Archive results
         uses: actions/upload-artifact@v2
         with:
