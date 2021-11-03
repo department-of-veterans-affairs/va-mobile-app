@@ -45,6 +45,15 @@ export const getVaccines = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
       const vaccineData = await api.get<VaccineListData>('/v0/health/immunizations')
 
+      const hasRequiredFields = vaccineData?.data.every((v) => {
+        return !!v.attributes?.date && !!v.attributes?.groupName && !!v.attributes?.shortDescription
+      })
+
+      // Ensure all required fields(date, groupName, and type and dosage) exist; otherwise throw API Error
+      if (!hasRequiredFields) {
+        throw { status: 500, json: { errors: [] } } as APIError
+      }
+
       dispatch(dispatchFinishGetVaccines(vaccineData?.data))
     } catch (err) {
       if (isErrorObject(err)) {
