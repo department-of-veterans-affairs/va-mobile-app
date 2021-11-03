@@ -315,6 +315,8 @@
   "vaccines.details.series.display": "{{doseNumber}} of {{seriesDoses}}",
   "vaccines.details.status": "Status",
   "vaccines.details.title": "V\uFEFFA Vaccine Detail",
+  "vaccines.details.unavailable": "Unavailable",
+  "vaccines.details.weBaseThis": "We base this information on your current V\ufeffA health records. If you have any questions, contact your health care team",
   "vaccines.list.a11y": "Review your V\uFEFFA vaccine record",
   "vaccines.loading": "We're loading your vaccine record",
   "vaccines.vaccineName": "{{name}} vaccine",
