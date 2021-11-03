@@ -19,7 +19,7 @@ jobs:
       - run: |
           table='| Issue | Title | Notes |\n'
           table='${table}|-------|-------|-------|\n'
-          issues = "${{ steps.get_issues.output.data }}"
+          issues='${{ steps.get_issues.output.data }}'
           for i in "${issues[@]}"
           do
             table='${table}|#${id[number]}|${id[title]}| |\n'
