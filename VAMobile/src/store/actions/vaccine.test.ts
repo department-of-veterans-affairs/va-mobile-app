@@ -2,7 +2,7 @@ import { find } from 'underscore'
 
 import { context, realStore } from 'testUtils'
 import { getVaccines } from './vaccine'
-import * as api from "../api";
+import * as api from '../api'
 
 context('vaccine', () => {
   describe('getVaccines', () => {
