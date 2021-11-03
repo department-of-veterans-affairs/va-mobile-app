@@ -8,6 +8,7 @@ jobs:
   getIssues:
     runs-on: ubuntu-latest
     steps:
+      - run: gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
       - run: issues=$(gh issue list -l "sev-2" --json number,title)
       - run: |
           table="| Issue | Title | Notes |\n"
