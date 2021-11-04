@@ -15,7 +15,9 @@ jobs:
           issues=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
           table="| Issue | Title | Notes |\n"
           table="${table}|-------|-------|-------|\n${issues}"
-          echo "TABLE<<${table}" >> $GITHUB_ENV
+          echo 'TABLE<<EOF' >> $GITHUB_ENV
+          echo '${table}'
+          echo 'EOF' >> $GITHUB_ENV
       - uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/test.md
