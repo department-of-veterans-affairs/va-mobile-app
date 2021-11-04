@@ -11,17 +11,14 @@ jobs:
       - uses: actions/checkout@v2
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
-#      - run: gh issue list -l "sev-2" --jq 'map("|\(.number)|\(.title)|") | join("\n") ' --json number,title
-#      - run: issues=$(gh issue list -l "sev-2" --jq 'map("|\(.number)|\(.title)|") | join("\n") ' --json number,title)
-#      - run: echo $issues
       - run: |
-          issues=$(gh issue list -l "sev-2" --jq 'map("|\(.number)|\(.title)|") | join("\n") ' --json number,title)
-          echo ${issues}
+          issues=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
           table="| Issue | Title | Notes |\n"
           table="${table}|-------|-------|-------|\n"
-          echo "${table}${issues}"
-      - name: Archive results
-        uses: actions/upload-artifact@v2
+          echo "TABLE=${table}${issues}" >> $GITHUB_ENV
+      - uses: JasonEtco/create-an-issue@v2
         with:
-          name: issues output
-          path: outputs.txt
+          filename: .github/ISSUE_TEMPLATE/test.md
+        env:
+          table: ${{ env.TABLE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
