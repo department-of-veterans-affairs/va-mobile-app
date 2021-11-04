@@ -8,7 +8,7 @@ assignees: lexicalninja
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 # Epic
 <!-- Goal of these tickets: Define whole features we're adding to the app as an epic. -->  
-
+{{ env.table }}
 ## User Story?
 <!-- As a user of the VA mobile app, I want to use [...] feature in the app so that I can [...] -->  
 ## Discovery Task (feature discovery)
@@ -23,4 +23,5 @@ assignees: lexicalninja
 
 ### Blockers
 <!--Is there anything that keeps us from finishing this feature? Lack of staging accounts? Are there ACs we can't define? Why? -->
-{{ env.table}}
+
+{{ env.table }}
