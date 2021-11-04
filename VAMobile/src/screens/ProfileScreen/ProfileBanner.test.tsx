@@ -62,7 +62,6 @@ context('ProfileBanner', () => {
             phoneType: 'HOME',
           },
           formattedFaxPhone: '(858)-690-1286',
-          signinService: 'IDME',
         }},
       militaryService: {
         ...InitialState.militaryService,
@@ -198,10 +197,7 @@ context('ProfileBanner', () => {
     it('should display the disability rating component', async () => {
       testInstance = component.root
       const disabilityRating = findByTypeWithText(testInstance, TextView,'100% Service Connected')
-      const yourDisabilityRating = findByTypeWithText(testInstance, TextView, 'Your Disability Rating: ')
-      
       expect(disabilityRating).toBeTruthy()
-      expect(yourDisabilityRating).toBeTruthy()
     })
 
     it('should display the disability rating component', async () => {
