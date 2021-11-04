@@ -17,6 +17,7 @@ import { PatientActions } from './patient'
 import { PersonalInformationActions } from './personalInformation'
 import { SecureMessagingActions } from './secureMessaging'
 import { StoreState } from 'store'
+import { VaccineActions } from './vaccine'
 
 export * from './auth'
 export * from './directDeposit'
@@ -33,6 +34,7 @@ export * from './secureMessaging'
 export * from './demo'
 export * from './analytics'
 export * from './disabilityRating'
+export * from './vaccine'
 export * from './patient'
 
 type ActObjs<T extends keyof AllActionDefs> = AllActionDefs[T]
@@ -62,6 +64,7 @@ export type AllActionDefs = AuthActions &
   DemoActions &
   AnalyticsActions &
   DisabilityRatingActions &
+  VaccineActions &
   PatientActions
 
 type AllActionTypes = keyof AllActionDefs
