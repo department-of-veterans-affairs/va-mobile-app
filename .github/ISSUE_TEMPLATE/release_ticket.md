@@ -43,3 +43,4 @@ Indicate NA if no changes.
 
 ## Severe bugs:
 <!-- Link any severe bug tickets here and indicate if they need review or if they are scheduled/blocked -->
+{{ env.issues }}
