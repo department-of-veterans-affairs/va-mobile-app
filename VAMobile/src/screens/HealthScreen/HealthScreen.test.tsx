@@ -92,6 +92,13 @@ context('HealthScreen', () => {
     })
   })
 
+  describe('on click of the vaccines button', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[2].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(undefined, false)
@@ -108,7 +115,7 @@ context('HealthScreen', () => {
     it('should not render a messagesCountTag', async () => {
       initializeTestInstance(0)
       expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Messages')
-      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Review and send secure messages')
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Send and receive secure messages')
     })
   })
 })
