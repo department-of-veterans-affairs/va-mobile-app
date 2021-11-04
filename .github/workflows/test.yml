@@ -16,7 +16,7 @@ jobs:
           table="| Issue | Title | Notes |\n"
           table="${table}|-------|-------|-------|\n${issues}"
           echo 'TABLE<<EOF' >> $GITHUB_ENV
-          echo "${table}"
+          echo "${table}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - run: echo $TABLE
       - uses: JasonEtco/create-an-issue@v2
