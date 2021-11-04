@@ -12,7 +12,7 @@ jobs:
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
       - run: |
-          issues=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
+          issues=$(gh issue list -l "sev-2" -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
           table='| Issue | Title | Notes |
           |-------|-------|-------|
           '
