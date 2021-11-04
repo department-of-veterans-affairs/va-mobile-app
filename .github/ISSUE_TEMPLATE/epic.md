@@ -3,9 +3,8 @@ name: Epic Ticket
 about: Template for new Epics
 title: [Epic Name]
 labels: 
-assignees:
+assignees: 
 ---
-<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 # Epic
 <!-- Goal of these tickets: Define whole features we're adding to the app as an epic. -->  
 
