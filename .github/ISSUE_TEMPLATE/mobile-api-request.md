@@ -3,8 +3,9 @@ name: New Mobile Endpoint Request
 about: Template for requesting a new mobile API end point
 title: End Point Request
 labels: back-end
-assignees:
---- 
+assignees: ''
+
+---
 
 ## Description of end point
 <!-- Please include a description of the endpoint and context. Why is this endpoint needed? What service is it pulling from and where does it fit in the mobile app? The description should be more
