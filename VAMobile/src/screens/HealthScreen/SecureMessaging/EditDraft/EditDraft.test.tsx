@@ -48,15 +48,14 @@ jest.mock('store/actions', () => {
   }
 })
 
+
 let mockUseComposeCancelConfirmationSpy = jest.fn()
-let mockUseGoToDraftSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
-    useGoToDrafts: () => mockUseGoToDraftSpy,
+    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy
   }
 })
 
