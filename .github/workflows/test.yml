@@ -13,7 +13,9 @@ jobs:
       - run: gh auth login --with-token < token.txt
       - run: |
           issues=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-          table='| Issue | Title | Notes |\n|-------|-------|-------|\n'
+          table='| Issue | Title | Notes |
+          |-------|-------|-------|
+          '
           table="${table}${issues}"
           echo 'TABLE<<EOF' >> $GITHUB_ENV
           echo "${table}" >> $GITHUB_ENV
