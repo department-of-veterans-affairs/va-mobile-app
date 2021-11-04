@@ -11,8 +11,9 @@ jobs:
       - uses: actions/checkout@v2
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
+      - run: gh issue list -l "sev-2" --jq 'map("|\(.number)|\(.title)|") | join("\n") ' --json number,title
       - run: issues=$(gh issue list -l "sev-2" --jq 'map("|\(.number)|\(.title)|") | join("\n") ' --json number,title)
-      - run: echo "${issues}"
+      - run: echo $issues
       - run: |
           table="| Issue | Title | Notes |\n"
           table="${table}|-------|-------|-------|\n"
