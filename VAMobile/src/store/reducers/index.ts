@@ -13,9 +13,11 @@ import disabilityRating, { DisabilityRatingState, initialDisabilityRatingState }
 import errors, { ErrorsState, initialErrorsState } from './errors'
 import letters, { LettersState, initialLettersState } from './letters'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
+import notifications, { NotificationsState, initialNotificationsState } from './notifications'
 import patient, { PatientState, initialPatientState } from './patient'
 import personalInformation, { PersonalInformationState, initialPersonalInformationState } from './personalInformation'
 import secureMessaging, { SecureMessagingState, initialSecureMessagingState } from './secureMessaging'
+import vaccine, { VaccineState, initialVaccineState } from './vaccine'
 
 export * from './auth'
 export * from './directDeposit'
@@ -27,10 +29,12 @@ export * from './claimsAndAppeals'
 export * from './authorizedServices'
 export * from './errors'
 export * from './accessibility'
+export * from './notifications'
 export * from './secureMessaging'
 export * from './demo'
 export * from './analytics'
 export * from './disabilityRating'
+export * from './vaccine'
 export * from './patient'
 
 export interface StoreState {
@@ -44,10 +48,12 @@ export interface StoreState {
   authorizedServices: AuthorizedServicesState
   errors: ErrorsState
   accessibility: AccessibilityState
+  notifications: NotificationsState
   secureMessaging: SecureMessagingState
   demo: DemoState
   analytics: AnalyticsState
   disabilityRating: DisabilityRatingState
+  vaccine: VaccineState
   patient: PatientState
 }
 
@@ -62,10 +68,12 @@ export const InitialState: StoreState = {
   authorizedServices: initialAuthorizedServicesState,
   errors: initialErrorsState,
   accessibility: initialAccessibilityState,
+  notifications: initialNotificationsState,
   secureMessaging: initialSecureMessagingState,
   demo: initialDemoState,
   analytics: initialAnalyticsState,
   disabilityRating: initialDisabilityRatingState,
+  vaccine: initialVaccineState,
   patient: initialPatientState,
 }
 
@@ -80,10 +88,12 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   authorizedServices,
   errors,
   accessibility,
+  notifications,
   secureMessaging,
   demo,
   analytics,
   disabilityRating,
+  vaccine,
   patient,
 })
 

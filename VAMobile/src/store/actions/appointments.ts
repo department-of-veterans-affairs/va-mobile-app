@@ -5,7 +5,7 @@ import { AppointmentsGetData, Params, ScreenIDTypes } from 'store/api'
 import { AppointmentsMetaPagination } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -109,7 +109,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       //All mock data should be removed after backend implementation
       // TODO: delete in story #19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         pastAppointments = {
           data: [
             {
@@ -204,7 +204,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
         }
       }
 
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         upcomingAppointments = {
           data: [
             {
@@ -305,8 +305,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
                     number: '778-7550',
                     extension: '',
                   },
-                  url:
-                    'https://dev.care.va.gov/vvc-app/?name=NADEAU%2CMARCY&join=1&media=1&escalate=1&conference=VAC000416762@dev.care.va.gov&pin=990510&aid=c821687c-5844-4421-9180-dcc18236a62a#',
+                  url: 'https://dev.care.va.gov/vvc-app/?name=NADEAU%2CMARCY&join=1&media=1&escalate=1&conference=VAC000416762@dev.care.va.gov&pin=990510&aid=c821687c-5844-4421-9180-dcc18236a62a#',
                   code: '990510#',
                 },
                 minutesDuration: 20,

@@ -1,5 +1,5 @@
 import { ActionDef } from './index'
-import { VAServices } from '../api/types'
+import { VAServices } from '../api'
 
 /**
  * Redux payload for AUTHORIZED_SERVICES_UPDATE action
