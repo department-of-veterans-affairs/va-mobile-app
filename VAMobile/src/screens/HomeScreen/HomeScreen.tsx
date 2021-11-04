@@ -1,9 +1,11 @@
+import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
 import { DateTime } from 'luxon'
+import { HeaderTitleType } from '../../styles/common'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -12,7 +14,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo } from 'store/actions'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useExternalLink, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
 
@@ -23,7 +25,6 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.HOME)
-  const launchExternalLink = useExternalLink()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
@@ -38,22 +39,22 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
     })
   }, [navigation])
 
   const onScreeningTool = (): void => {
-    launchExternalLink(LINK_URL_COVID19_SCREENING)
+    Linking.openURL(LINK_URL_COVID19_SCREENING)
   }
 
   const onCovid = navigateTo('Webview', { url: LINK_URL_COVID_FORM, displayTitle: t('common:webview.vagov') })
-  const onClaimsAndAppeals = navigateTo('ClaimsTab')
+  const onClaimsAndAppeals = navigateTo('Claims')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
-  const onHealthCare = navigateTo('HealthTab')
+  const onHealthCare = navigateTo('Health')
 
   const buttonDataList: Array<SimpleListItemObj> = [
     {
@@ -87,9 +88,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
-          <TextView variant="MobileBodyBold" accessibilityRole={'header'}>
-            {heading}
-          </TextView>
+          <TextView variant="MobileBodyBold">{heading}</TextView>
         </Box>
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
