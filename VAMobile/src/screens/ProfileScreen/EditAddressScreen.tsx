@@ -1,4 +1,3 @@
-import { HeaderTitle, StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,7 +21,6 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
-import { HeaderTitleType } from 'styles/common'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,6 +32,7 @@ import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
+import HeaderTitle from 'components/HeaderTitle'
 import RemoveData from './RemoveData'
 
 const MAX_ADDRESS_LENGTH = 35
@@ -212,14 +211,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (header: HeaderTitleType) => (
-        <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
-          <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
-        </Box>
-      ),
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerTitle: () => <HeaderTitle {...testIdProps(displayTitle)} headerTitle={displayTitle} />,
+      headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
   })
