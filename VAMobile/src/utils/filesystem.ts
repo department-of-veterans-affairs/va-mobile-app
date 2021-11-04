@@ -1,5 +1,6 @@
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
-import { refreshAccessToken } from '../store/actions'
+
+import { refreshAccessToken } from 'store/slices/authSlice'
 import RNFetchBlob, { FetchBlobResponse, RNFetchBlobConfig } from 'rn-fetch-blob'
 
 const DocumentDirectoryPath = `${RNFetchBlob.fs.dirs.DocumentDir}/`

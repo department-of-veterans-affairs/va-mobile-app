@@ -1,4 +1,4 @@
-import { refreshAccessToken } from 'store/actions/auth'
+import { refreshAccessToken } from 'store/slices/authSlice'
 import { transform } from './demo/store'
 import _ from 'underscore'
 import getEnv from 'utils/env'

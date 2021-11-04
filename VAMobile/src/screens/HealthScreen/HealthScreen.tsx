@@ -1,17 +1,14 @@
-import React, { FC, useEffect } from 'react'
-
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import React, { FC, useEffect } from 'react'
 
 import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, StoreState } from 'store/reducers'
-import { getInbox } from 'store'
+import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from './CernerAlert'
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
@@ -20,10 +17,10 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
-  const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
+  const { hasLoadedInbox } = useAppSelector((state) => state.secureMessaging)
+  const unreadCount = useAppSelector(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')

@@ -1,17 +1,15 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, StoreState } from 'store/reducers'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
 
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { listFolderMessages, resetSaveDraftComplete } from 'store/actions'
+import { listFolderMessages, resetSaveDraftComplete } from 'store/slices/secureMessagingSlice'
 import { testIdProps } from 'utils/accessibility'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
@@ -22,9 +20,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { folderID, folderName, draftSaved } = route.params
 
   const t = useTranslation(NAMESPACE.HEALTH)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete } = useAppSelector((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
 
   useEffect(() => {

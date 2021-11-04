@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import _ from 'underscore'
@@ -8,10 +7,9 @@ import { Countries } from 'constants/countries'
 import { DefaultList, DefaultListItemObj, ListProps, TextLine } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
 import { TFunction } from 'i18next'
 import { generateTestID, getAllFieldsThatExist } from 'utils/common'
-import { useTranslation } from 'utils/hooks'
+import { useAppSelector, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -118,7 +116,7 @@ export type AddressSummaryProps = {
 } & Partial<ListProps>
 
 const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile } = useAppSelector((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const data = getAddressData(profile, t, addressData)

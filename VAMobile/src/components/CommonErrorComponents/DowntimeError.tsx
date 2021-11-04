@@ -1,12 +1,10 @@
-import { ErrorsState, StoreState } from 'store'
 import { ViewStyle } from 'react-native'
-import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from 'store/api/types'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppSelector, useTheme, useTranslation } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   screenID: ScreenIDTypes
@@ -26,7 +24,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
-  const { errorMetadataByScreenID } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { errorMetadataByScreenID } = useAppSelector((state) => state.error)
   const featureName = errorMetadataByScreenID[screenID]?.featureName
   const endTime = errorMetadataByScreenID[screenID]?.endTime
 

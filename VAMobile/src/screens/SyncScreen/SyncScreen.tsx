@@ -1,14 +1,15 @@
 import { ViewStyle } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, DemoState, DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { completeSync, getDisabilityRating, getProfileInfo, getServiceHistory, logInDemoMode } from 'store/actions'
-import { dispatchCheckForDowntimeErrors } from 'store/actions'
+import { completeSync, logInDemoMode } from 'store/slices/authSlice'
+import { dispatchCheckForDowntimeErrors } from 'store/slices/errorSlice'
+import { getDisabilityRating } from 'store/slices/disabilityRatingSlice'
+import { getProfileInfo } from 'store/slices/personalInformationSlice'
+import { getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 const SyncScreen: FC<SyncScreenProps> = () => {
@@ -18,15 +19,15 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     justifyContent: 'center',
     backgroundColor: theme.colors.background.splashScreen,
   }
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.LOGIN)
 
-  const { loggedIn, loggingOut, syncing } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
-  const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
-  const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { preloadComplete: disabilityRatingLoaded } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
+  const { loggedIn, loggingOut, syncing } = useAppSelector((state) => state.auth)
+  const { demoMode } = useAppSelector((state) => state.demo)
+  const { preloadComplete: personalInformationLoaded } = useAppSelector((s) => s.personalInformation)
+  const { preloadComplete: militaryHistoryLoaded } = useAppSelector((s) => s.militaryService)
+  const { preloadComplete: disabilityRatingLoaded } = useAppSelector((s) => s.disabilityRating)
+  const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useAppSelector((state) => state.authorizedServices)
 
   const [displayMessage, setDisplayMessage] = useState()
 

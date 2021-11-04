@@ -1,13 +1,11 @@
-import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
-import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
+import { useAppSelector, useTheme, useTranslation } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
-import { useTheme, useTranslation } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
@@ -15,9 +13,9 @@ import { useTheme, useTranslation } from 'utils/hooks'
 export type ProfileBannerProps = Record<string, unknown>
 
 const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const { mostRecentBranch } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { profile } = useAppSelector((state) => state.personalInformation)
+  const { mostRecentBranch } = useAppSelector((s) => s.militaryService)
+  const { ratingData } = useAppSelector((s) => s.disabilityRating)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const t = useTranslation(NAMESPACE.PROFILE)
 

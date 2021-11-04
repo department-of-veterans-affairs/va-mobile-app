@@ -2,10 +2,8 @@ import React, { FC } from 'react'
 
 import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { ErrorsState, StoreState } from 'store'
 import { ScreenIDTypes } from 'store/api/types'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'utils/hooks'
+import { useAppSelector, useTranslation } from 'utils/hooks'
 
 export type ErrorComponentProps = {
   screenID: ScreenIDTypes
@@ -14,7 +12,7 @@ export type ErrorComponentProps = {
 }
 
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
-  const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { errorsByScreenID, tryAgain: storeTryAgain } = useAppSelector((state) => state.error)
   const t = useTranslation()
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {

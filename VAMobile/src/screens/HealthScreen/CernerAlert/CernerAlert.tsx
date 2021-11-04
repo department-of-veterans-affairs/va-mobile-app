@@ -3,10 +3,8 @@ import React, { FC, ReactNode } from 'react'
 import { AccordionCollapsible, Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
 import { Facility } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { PatientState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
-import { useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useAppSelector, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
@@ -14,7 +12,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const CernerAlert: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const { cernerFacilities, facilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  const { cernerFacilities, facilities } = useAppSelector((state) => state.patient)
   const hasCernerFacilities = useHasCernerFacilities()
 
   // if no cerner facilities then do not show the alert

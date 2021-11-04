@@ -1,16 +1,15 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { ViewStyle } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
-import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getProfileInfo, prefetchClaimsAndAppeals } from 'store/actions'
+import { getProfileInfo } from 'store/slices/personalInformationSlice'
+import { prefetchClaimsAndAppeals } from 'store/slices/claimsAndAppealsSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
@@ -19,11 +18,11 @@ type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const dispatch = useDispatch()
-  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const dispatch = useAppDispatch()
+  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useAppSelector((state) => state.claimsAndAppeals)
+  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useAppSelector((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
-  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useAppSelector((state) => state.personalInformation)
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])

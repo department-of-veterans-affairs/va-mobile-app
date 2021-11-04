@@ -1,19 +1,17 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView, VAScrollView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getClaim } from 'store/actions'
+import { getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -24,7 +22,7 @@ export const getClaimType = (claim: ClaimData | undefined, translation: TFunctio
 type ClaimDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'ClaimDetailsScreen'>
 
 const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
@@ -32,7 +30,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType } = route.params
-  const { claim, loadingClaim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, loadingClaim } = useAppSelector((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)

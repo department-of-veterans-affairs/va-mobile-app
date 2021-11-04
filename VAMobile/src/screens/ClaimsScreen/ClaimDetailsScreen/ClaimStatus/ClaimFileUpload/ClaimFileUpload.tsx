@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
@@ -17,15 +16,14 @@ import {
   VAIcon,
   VAScrollView,
 } from 'components'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { getClaim } from 'store/actions'
+import { getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ClaimFileUploadProps = StackScreenProps<ClaimsStackParamList, 'ClaimFileUpload'>
 
@@ -33,9 +31,9 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim } = useAppSelector((state) => state.claimsAndAppeals)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
 
   // need to get the claim to keep track of if/when files were uploaded for a request

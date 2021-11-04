@@ -1,5 +1,4 @@
 import { TFunction } from 'i18next'
-import { useSelector } from 'react-redux'
 
 import React, { FC, ReactNode } from 'react'
 
@@ -9,10 +8,9 @@ import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components
 import { FolderNameTypeConstants, HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
-import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,
@@ -99,7 +97,7 @@ const Folders: FC<FoldersProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { folders, loadingFolders } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { folders, loadingFolders } = useAppSelector((state) => state.secureMessaging)
 
   const onFolderPress = (folderID: number, folderName: string): void => {
     navigateTo('FolderMessages', { folderID, folderName })()

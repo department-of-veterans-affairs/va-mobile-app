@@ -1,12 +1,12 @@
+import { StackScreenProps } from '@react-navigation/stack'
+import { testIdProps } from 'utils/accessibility'
+
 import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
-import { StackScreenProps } from '@react-navigation/stack'
-import { testIdProps } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store/slices/secureMessagingSlice'
+import { useAppDispatch, useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -17,8 +17,8 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const { originHeader, messageData, uploads, replyToID } = route.params
   const navigateTo = useRouteNavigation()
-  const dispatch = useDispatch()
-  const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const dispatch = useAppDispatch()
+  const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useAppSelector((state) => state.secureMessaging)
 
   useEffect(() => {
     navigation.setOptions({

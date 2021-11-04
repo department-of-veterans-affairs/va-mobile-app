@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import {
@@ -30,15 +29,14 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
-import { AppointmentsState, StoreState } from 'store/reducers'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { clearAppointmentCancellation, getAppointment } from 'store/actions'
+import { clearAppointmentCancellation, getAppointment } from 'store/slices/appointmentsSlice'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
-import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
@@ -57,10 +55,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useAppSelector((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const {

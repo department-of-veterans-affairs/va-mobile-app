@@ -1,18 +1,15 @@
 import { DateTime } from 'luxon'
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
-
 import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
-import { AppointmentsState, AuthorizedServicesState, StoreState } from 'store/reducers'
+import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
@@ -33,14 +30,12 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
-  const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<StoreState, AppointmentsState>(
-    (state) => state.appointments,
-  )
-  const { appointments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useAppSelector((state) => state.appointments)
+  const { appointments } = useAppSelector((state) => state.authorizedServices)
   const hasCernerFacilities = useHasCernerFacilities()
 
   // Resets scroll position to top whenever current page appointment list changes:

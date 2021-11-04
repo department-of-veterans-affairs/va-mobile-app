@@ -4,10 +4,11 @@ import { ThunkDispatch } from 'redux-thunk'
 import _ from 'underscore'
 
 import { Action } from 'redux'
-import { StoreState } from 'store/reducers'
 import { TextLine } from 'components/types'
 import { isIOS } from './platform'
-import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/actions'
+
+import { RootState } from 'store'
+import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/slices/accessibilitySlice'
 import getEnv from 'utils/env'
 
 const { RNCheckVoiceOver } = NativeModules
@@ -54,7 +55,7 @@ export const a11yValueProp = (a11yValue: AccessibilityValue): { accessibilityVal
  * @param fontScale - current font scale value
  * @param dispatch - used to call updateCurrentFontScale action
  */
-export const updateFontScale = (newState: AppStateStatus, fontScale: number, dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>): void => {
+export const updateFontScale = (newState: AppStateStatus, fontScale: number, dispatch: ThunkDispatch<RootState, undefined, Action<unknown>>): void => {
   if (newState === 'active') {
     const fontScaleUpdated = PixelRatio.getFontScale()
     if (fontScale !== fontScaleUpdated) {
@@ -74,7 +75,7 @@ export const updateFontScale = (newState: AppStateStatus, fontScale: number, dis
 export const updateIsVoiceOverTalkBackRunning = async (
   newState: AppStateStatus,
   isVoiceOverTalkBackRunning: boolean | undefined,
-  dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
+  dispatch: ThunkDispatch<RootState, undefined, Action<unknown>>,
 ): Promise<void> => {
   if (newState === 'active') {
     const isRunning = await RNCheckVoiceOver.isVoiceOverRunning()

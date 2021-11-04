@@ -1,31 +1,28 @@
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { AuthorizedServicesState, DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from './ProfileStackScreens'
 import { ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
-import { getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/actions'
+import { getDisabilityRating } from 'store/slices/disabilityRatingSlice'
+import { getProfileInfo } from 'store/slices/personalInformationSlice'
+import { getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useHeaderStyles, useTranslation } from 'utils/hooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
-  const {
-    directDepositBenefits,
-    userProfileUpdate,
-    militaryServiceHistory: militaryInfoAuthorization,
-  } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
-  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useAppSelector((state) => state.authorizedServices)
+
+  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useAppSelector((s) => s.militaryService)
+  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useAppSelector((s) => s.personalInformation)
+  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useAppSelector((s) => s.disabilityRating)
+  const { profile } = useAppSelector((state) => state.personalInformation)
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,7 +30,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     })
   }, [navigation])
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()

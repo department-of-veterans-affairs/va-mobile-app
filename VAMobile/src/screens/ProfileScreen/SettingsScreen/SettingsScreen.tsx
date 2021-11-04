@@ -1,17 +1,18 @@
 import { Share, StyleProp, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
-import { AuthState, StoreState } from 'store'
 import { Box, ButtonDecoratorType, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { setBiometricsPreference } from 'store/actions'
+
+import { setBiometricsPreference } from 'store/slices/authSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+
+import { useAppSelector, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
@@ -25,7 +26,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useAppSelector((state) => state.auth)
 
   const onToggleTouchId = (): void => {
     // toggle the value from previous state

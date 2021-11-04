@@ -1,18 +1,16 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { ViewStyle } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/actions'
-
-import { AuthorizedServicesState, SecureMessagingState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices/secureMessagingSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from '../CernerAlert'
 import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
 import Folders from './Folders/Folders'
@@ -22,7 +20,7 @@ import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
-export const getInboxUnreadCount = (state: StoreState): number => {
+export const getInboxUnreadCount = (state: RootState): number => {
   const inbox = state && state.secureMessaging && state.secureMessaging.inbox
   return inbox?.attributes?.unreadCount || 0
 }
@@ -30,11 +28,11 @@ export const getInboxUnreadCount = (state: StoreState): number => {
 const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
-  const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
-  const { secureMessagingTab, termsAndConditionError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
-  const { secureMessaging } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const inboxUnreadCount = useAppSelector(getInboxUnreadCount)
+  const { secureMessagingTab, termsAndConditionError } = useAppSelector((state) => state.secureMessaging)
+  const { secureMessaging } = useAppSelector((state) => state.authorizedServices)
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 

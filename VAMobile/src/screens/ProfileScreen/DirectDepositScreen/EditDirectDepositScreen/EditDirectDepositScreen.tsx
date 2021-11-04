@@ -1,9 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
-import { AccessibilityState, DirectDepositState, StoreState } from 'store/reducers'
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
 import {
@@ -26,9 +24,9 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { finishEditBankInfo, updateBankInfo } from 'store/actions'
+import { finishEditBankInfo, updateBankInfo } from 'store/slices/directDepositSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -39,13 +37,13 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
  * Screen for displaying editing direct deposit information
  */
 const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const tc = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
-  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
-  const { isFocus: isAccessibilityFocused } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useAppSelector((state) => state.directDeposit)
+  const { isFocus: isAccessibilityFocused } = useAppSelector((state) => state.accessability)
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')

@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import {
@@ -20,24 +19,24 @@ import {
   TextViewProps,
   VAScrollView,
 } from 'components'
-import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
+import { getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import ProfileBanner from '../ProfileBanner'
 import getEnv from 'utils/env'
 
 const DisabilityRatingsScreen: FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
-  const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { loading, needsDataLoad, ratingData } = useAppSelector((state) => state.disabilityRating)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []

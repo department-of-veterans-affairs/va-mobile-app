@@ -218,3 +218,9 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
 export const isErrorObject = (error: any): error is ErrorObject => {
   return ['json', 'stack', 'networkError'].some((item) => item in error)
 }
+
+export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
+  if (item) {
+    return JSON.parse(JSON.stringify(item))
+  }
+}

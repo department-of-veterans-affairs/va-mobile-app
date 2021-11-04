@@ -1,23 +1,24 @@
 import { pick } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, NotificationsState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
-import { DEVICE_ENDPOINT_SID, debugResetFirstTimeLogin } from 'store/actions'
+
+import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
+import { DEVICE_ENDPOINT_SID } from 'store/slices/notificationSlice'
+import { debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useTheme } from 'utils/hooks'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
-  const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { authCredentials } = useAppSelector((state) => state.auth)
+  const authorizedServices = useAppSelector((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
@@ -26,7 +27,7 @@ const DebugScreen: FC = ({}) => {
   }
 
   // push data
-  const { deviceToken } = useSelector<StoreState, NotificationsState>((state) => state.notifications)
+  const { deviceToken } = useAppSelector((state) => state.notifications)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 

@@ -1,19 +1,19 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
+import { loginStart } from 'store/slices/authSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { updateDemoMode } from 'store/slices/demoSlice'
+import { useAppDispatch, useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { firstTimeLogin } = useAppSelector((state) => state.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const TAPS_FOR_DEMO = 20
@@ -26,7 +26,7 @@ const LoginScreen: FC = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
+  const { demoMode } = useAppSelector((state) => state.demo)
 
   const onFacilityLocator = navigateTo('Webview', {
     url: WEBVIEW_URL_FACILITY_LOCATOR,
@@ -44,7 +44,7 @@ const LoginScreen: FC = () => {
     py: theme.dimensions.buttonPadding,
   }
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const tapForDemo = () => {
     demoTaps++
     if (demoTaps > TAPS_FOR_DEMO) {

@@ -1,6 +1,5 @@
 import { InteractionManager, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, Ref, useEffect, useState } from 'react'
 
 import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
@@ -11,11 +10,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
-import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
-import { getMessage, getThread } from 'store/actions'
+import { getMessage, getThread } from 'store/slices/secureMessagingSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
 import ReplyMessageFooter from '../ReplyMessageFooter/ReplyMessageFooter'
 
@@ -50,8 +48,8 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const dispatch = useDispatch()
-  const { messagesById, threads, loading, messageIDsOfError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const dispatch = useAppDispatch()
+  const { messagesById, threads, loading, messageIDsOfError } = useAppSelector((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))

@@ -5,7 +5,7 @@ import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScroll
 import { HealthStackParamList } from '../../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { cancelAppointment } from 'store/actions'
+import { cancelAppointment } from 'store/slices/appointmentsSlice'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
 import { useError, useTheme, useTranslation } from 'utils/hooks'

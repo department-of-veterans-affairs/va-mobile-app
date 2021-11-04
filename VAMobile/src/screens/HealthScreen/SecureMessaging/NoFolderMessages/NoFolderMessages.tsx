@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
-import { updateSecureMessagingTab } from 'store/actions'
+import { updateSecureMessagingTab } from 'store/slices/secureMessagingSlice'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 

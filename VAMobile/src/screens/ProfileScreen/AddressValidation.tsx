@@ -1,16 +1,14 @@
 import { map } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
 import { AccordionCollapsible, Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
 import { AddressData, AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ViewStyle } from 'react-native'
-import { finishValidateAddress, updateAddress } from 'store'
+import { finishValidateAddress, updateAddress } from 'store/slices/personalInformationSlice'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
@@ -21,15 +19,13 @@ export type AddressValidationProps = {
 }
 
 const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
   const theme = useTheme()
 
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
-  const { validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useSelector<StoreState, PersonalInformationState>(
-    (storeState) => storeState.personalInformation,
-  )
+  const { validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useAppSelector((storeState) => storeState.personalInformation)
   const [selectedSuggestedAddress, setSelectedSuggestedAddress] = useState<AddressData | SuggestedAddress>()
 
   const scrollStyles: ViewStyle = {

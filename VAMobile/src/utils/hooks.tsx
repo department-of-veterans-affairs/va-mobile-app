@@ -4,13 +4,13 @@ import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationOptions } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { useTranslation as realUseTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React from 'react'
 
-import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
+import { AppDispatch, RootState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
@@ -22,16 +22,14 @@ import { WebProtocolTypesConstants } from 'constants/common'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
-import { updateAccessibilityFocus } from 'store/actions'
+import { updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import HeaderTitle from 'components/HeaderTitle'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
-  const { errorsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
-    return state.errors
-  })
+  const { errorsByScreenID } = useAppSelector((state) => state.error)
   return !!errorsByScreenID[currentScreenID]
 }
 
@@ -39,7 +37,7 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
  * Returns a function to calculate 'value' based on fontScale
  */
 export const useFontScale = (): ((val: number) => number) => {
-  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { fontScale } = useAppSelector((state) => state.accessability)
 
   return (value: number): number => {
     const pixelRatio = PixelRatio.getFontScale()
@@ -219,7 +217,7 @@ export function useExternalLink(): (url: string) => void {
  * Returns whether user has cerner facilities or not
  */
 export const useHasCernerFacilities = (): boolean => {
-  const { cernerFacilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  const { cernerFacilities } = useAppSelector((state) => state.patient)
   return cernerFacilities.length > 0
 }
 
@@ -304,7 +302,7 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
  * Hook to add signature to a message
  */
 export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const { signature, loadingSignature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { signature, loadingSignature } = useAppSelector((state) => state.secureMessaging)
   const [message, setMessage] = useState('')
   useEffect(() => {
     if (signature && signature.includeSignature) {
@@ -318,7 +316,7 @@ export function useMessageWithSignature(): [string, React.Dispatch<React.SetStat
  * Hook to validate message that could have a signature
  */
 export function useValidateMessageWithSignature(): (message: string) => boolean {
-  const { signature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { signature } = useAppSelector((state) => state.secureMessaging)
 
   return (message: string): boolean => {
     let isMessageBlank = !!message
@@ -375,3 +373,6 @@ export function useAttachments(): [
 
   return [attachmentsList, addAttachment, removeAttachment]
 }
+
+export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

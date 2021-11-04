@@ -5,9 +5,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
-import { updateSecureMessagingTab } from 'store/actions'
-import { useDispatch } from 'react-redux'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { updateSecureMessagingTab } from 'store/slices/secureMessagingSlice'
+import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 type SuccessfulSendScreenProps = StackScreenProps<HealthStackParamList, 'SuccessfulSendScreen'>
@@ -15,7 +14,7 @@ type SuccessfulSendScreenProps = StackScreenProps<HealthStackParamList, 'Success
 const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {

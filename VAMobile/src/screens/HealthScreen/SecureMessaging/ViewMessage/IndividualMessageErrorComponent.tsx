@@ -1,15 +1,13 @@
 import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
-import { ErrorsState, StoreState } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
-import { useSelector } from 'react-redux'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppSelector, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC } from 'react'
 
 const IndividualMessageErrorComponent: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { tryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { tryAgain } = useAppSelector((state) => state.error)
 
   const { standardMarginBetween } = theme.dimensions
 

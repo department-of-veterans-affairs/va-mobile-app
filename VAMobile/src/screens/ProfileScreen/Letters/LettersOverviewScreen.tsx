@@ -1,11 +1,9 @@
-import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from '../AddressSummary'
 
 type LettersOverviewProps = Record<string, unknown>
@@ -17,7 +15,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { loading } = useAppSelector((state) => state.personalInformation)
 
   const onViewPressed = navigateTo('LettersList')
 
