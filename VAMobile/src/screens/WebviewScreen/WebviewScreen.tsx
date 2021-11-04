@@ -1,5 +1,5 @@
 import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -32,16 +32,7 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
 
   return (
     <Box {...reloadBoxProps}>
-      <WebviewControlButton
-        width={dimensions.webviewReloadButtonSize}
-        height={dimensions.webviewReloadButtonSize}
-        onPress={reloadPressed}
-        disabled={false}
-        icon={'WebviewRefresh'}
-        fill={colors.icon.contrast}
-        testID={t('refresh')}
-        a11yHint={t('refresh.a11yHint')}
-      />
+      <WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={colors.icon.contrast} testID={t('refresh')} a11yHint={t('refresh.a11yHint')} />
     </Box>
   )
 }
@@ -89,7 +80,9 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />,
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />
+      ),
       headerTitle: () => <WebviewTitle title={displayTitle} />,
       headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
     })
