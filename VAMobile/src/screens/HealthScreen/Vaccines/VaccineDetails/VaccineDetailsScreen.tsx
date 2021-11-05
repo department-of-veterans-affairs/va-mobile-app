@@ -70,7 +70,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
             {t('vaccines.details.series') + '  '}
             <TextView variant="MobileBody">{displaySeries}</TextView>
           </TextView>
-          <Box mt={theme.dimensions.contentMarginTop}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
             {location?.attributes && (
               <>
@@ -87,7 +87,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
             )}
             {!location?.attributes && <TextView variant="MobileBody">{placeHolder}</TextView>}
           </Box>
-          <Box mt={theme.dimensions.contentMarginTop}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <Box>
               <TextView variant="MobileBodyBold">
                 {t('vaccines.details.reaction') + '  '}

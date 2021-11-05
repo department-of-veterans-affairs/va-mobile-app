@@ -5,7 +5,7 @@ import {getVaccineLocation, getVaccines} from './vaccine'
 import * as api from '../api'
 import { when } from 'jest-when'
 import { CommonErrorTypesConstants } from '../../constants/errors'
-import { ScreenIDTypesConstants } from '../api'
+import { ScreenIDTypesConstants } from '../api/types/Screens'
 
 context('vaccine', () => {
   describe('getVaccines', () => {
