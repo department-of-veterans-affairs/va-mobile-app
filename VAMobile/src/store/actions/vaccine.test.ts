@@ -1,11 +1,11 @@
 import { find } from 'underscore'
 
 import { context, realStore } from 'testUtils'
-import { getVaccines } from './vaccine'
+import {getVaccineLocation, getVaccines} from './vaccine'
 import * as api from '../api'
 import { when } from 'jest-when'
 import { CommonErrorTypesConstants } from '../../constants/errors'
-import { ScreenIDTypesConstants } from '../api/types/Screens'
+import { ScreenIDTypesConstants } from '../api'
 
 context('vaccine', () => {
   describe('getVaccines', () => {
@@ -80,6 +80,24 @@ context('vaccine', () => {
 
       const { errors } = store.getState()
       expect(errors.errorsByScreenID.VACCINE_LIST_SCREEN_ID).toEqual(CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE)
+    })
+  })
+
+  describe('getVaccineLocation', () => {
+    it('should get location data for an ID', async () => {
+      const store = realStore()
+      await store.dispatch(getVaccineLocation('vax1', 'location1'))
+      const actions = store.getActions()
+
+      const startAction = find(actions, { type: 'VACCINE_START_GET_LOCATION' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.vaccine.detailsLoading).toBeTruthy()
+
+      expect(api.get as jest.Mock).toBeCalledWith('/v0/health/locations/location1')
+
+      const finishAction = find(actions, { type: 'VACCINE_FINISH_GET_LOCATION' })
+      expect(finishAction).toBeTruthy()
+      expect(finishAction?.state.vaccine.detailsLoading).toBeFalsy()
     })
   })
 })
