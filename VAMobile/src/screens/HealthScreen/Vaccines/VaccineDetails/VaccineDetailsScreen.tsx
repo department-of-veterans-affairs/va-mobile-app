@@ -1,12 +1,14 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
-import React, { FC } from 'react'
+import { every } from 'underscore'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect } from 'react'
 
-import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StoreState, VaccineState } from 'store/reducers'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { getVaccineLocation } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -17,16 +19,29 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
  */
 const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const { vaccineId } = route.params
-  const { vaccinesById } = useSelector<StoreState, VaccineState>((state) => state.vaccine)
+  const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<StoreState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
+  const dispatch = useDispatch()
 
   const vaccine = vaccinesById[vaccineId]
+  const location = vaccineLocationsById[vaccineId]
+
   const placeHolder = t('vaccines.details.unavailable')
+
+  useEffect(() => {
+    if (vaccine && !vaccineLocationsById[vaccineId]) {
+      dispatch(getVaccineLocation(vaccineId, vaccine.relationships?.location?.data?.id || ''))
+    }
+  }, [dispatch, vaccineLocationsById, vaccineId, vaccine])
 
   if (!vaccine) {
     return <></>
+  }
+
+  if (detailsLoading) {
+    return <LoadingComponent text={t('vaccines.loading')} />
   }
 
   const displayDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes.date) : placeHolder
@@ -36,7 +51,8 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const hasSeries = vaccine.attributes?.doseNumber && vaccine.attributes?.doseSeries
   const displaySeries = hasSeries ? t('vaccines.details.series.display', { doseNumber: vaccine.attributes?.doseNumber, seriesDoses: vaccine.attributes?.doseSeries }) : placeHolder
 
-  const isPartialData = !hasSeries || !vaccine.attributes?.note
+  const optionalFields = [hasSeries, vaccine.attributes?.note, location?.attributes, vaccine.attributes?.reaction]
+  const isPartialData = !every(optionalFields)
 
   return (
     <VAScrollView {...testIdProps('Vaccine-details-page')}>
@@ -55,6 +71,29 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
             <TextView variant="MobileBody">{displaySeries}</TextView>
           </TextView>
           <Box mt={theme.dimensions.contentMarginTop}>
+            <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
+            {location?.attributes && (
+              <>
+                <TextView variant="MobileBody">{location.attributes.name}</TextView>
+                <TextView variant="MobileBody">{location.attributes.address?.street}</TextView>
+                <TextView variant="MobileBody">
+                  {t('vaccines.details.address', {
+                    city: location.attributes.address?.city,
+                    state: location.attributes.address?.state,
+                    zip: location.attributes.address?.zipCode,
+                  })}
+                </TextView>
+              </>
+            )}
+            {!location?.attributes && <TextView variant="MobileBody">{placeHolder}</TextView>}
+          </Box>
+          <Box mt={theme.dimensions.contentMarginTop}>
+            <Box>
+              <TextView variant="MobileBodyBold">
+                {t('vaccines.details.reaction') + '  '}
+                <TextView variant="MobileBody">{vaccine.attributes?.reaction || placeHolder}</TextView>
+              </TextView>
+            </Box>
             <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
             <TextView variant="MobileBody">{vaccine.attributes?.note || placeHolder}</TextView>
           </Box>
