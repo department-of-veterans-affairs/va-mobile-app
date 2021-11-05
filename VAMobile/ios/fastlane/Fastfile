@@ -37,7 +37,7 @@ platform :ios do
     sign
     build
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
-    upload_tf(notes, options[:tfGroup])
+    upload_tf(notes, "Development Team")
     upload_deobfuscation_file
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
@@ -93,7 +93,7 @@ platform :ios do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-#     slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
+    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
   end
 
 

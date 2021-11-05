@@ -85,7 +85,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
-  const deleteAlert = useDestructiveAlert()
+  const destructiveAlert = useDestructiveAlert()
 
   const [deleting, setDeleting] = useState(false)
 
@@ -113,6 +113,23 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const onCancel = (): void => {
     dispatch(finishValidateAddress())
     navigation.goBack()
+  }
+
+  const onConfirmCancel = (): void => {
+    destructiveAlert({
+      title: t('editAddress.validation.cancelConfirm.title'),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('editAddress.validation.cancelConfirm.confirm'),
+          onPress: onCancel,
+        },
+      ],
+    })
   }
 
   const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
@@ -215,10 +232,12 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }, [addressSaved, navigation, dispatch])
 
+  const cancelFn = showValidation ? onConfirmCancel : onCancel
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: () => <HeaderTitle {...testIdProps(displayTitle)} headerTitle={displayTitle} />,
-      headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+      headerLeft: (props): ReactNode => <BackButton onPress={cancelFn} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
       headerRight: () => {
         return !showValidation ? <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} /> : <></>
       },
@@ -239,7 +258,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     const addressValidationProps = {
       addressEntered: getAddressValues(),
       addressId: profile?.[addressType]?.id || 0,
-      onCancel,
     }
     return <AddressValidation {...addressValidationProps} />
   }
@@ -453,7 +471,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const lowerCaseTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
-    deleteAlert({
+    destructiveAlert({
       title: t('personalInformation.areYouSureYouWantToDelete', { alertText: lowerCaseTitle }),
       message: t('personalInformation.deleteDataInfo', { alertText: lowerCaseTitle }),
       destructiveButtonIndex: 1,
@@ -463,7 +481,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           text: t('common:cancel'),
         },
         {
-          text: t('common:confirm'),
+          text: t('common:remove'),
           onPress: onDelete,
         },
       ],

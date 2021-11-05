@@ -4,7 +4,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
-import { ScreenIDTypesConstants, SecureMessagingFormData } from 'store/api/types'
+import { ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
 
 import {
   Params,
@@ -403,10 +403,56 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
 
     try {
       const recipientsData = await api.get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
-      dispatch(dispatchFinishGetMessageRecipients(recipientsData?.data))
+      const preferredList = recipientsData?.data.filter((recipient) => recipient.attributes.preferredTeam)
+      dispatch(dispatchFinishGetMessageRecipients(preferredList))
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishGetMessageRecipients(undefined, error))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      }
+    }
+  }
+}
+
+/**
+ * Redux action to start the get message signature
+ */
+const dispatchStartGetMessageSignature = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_GET_SIGNATURE',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to finish the get message signature
+ */
+const dispatchFinishGetMessageSignature = (signature?: SecureMessagingSignatureDataAttributes, error?: api.APIError): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_GET_SIGNATURE',
+    payload: {
+      signature,
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to get message signature
+ */
+export const getMessageSignature = (screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageSignature(screenID))))
+    dispatch(dispatchStartGetMessageSignature())
+
+    try {
+      const signatureData = await api.get<SecureMessagingSignatureData>('/v0/messaging/health/messages/signature')
+      const signature = signatureData?.data.attributes
+      dispatch(dispatchFinishGetMessageSignature(signature))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishGetMessageSignature(undefined, error))
         dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
       }
     }
