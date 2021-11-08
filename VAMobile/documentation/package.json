@@ -30,6 +30,7 @@
     "react-dom": "^17.0.1",
     "react-native-web": "^0.17.5",
     "styled-components": "^5.3.3",
+    "svg-react-loader": "^0.4.6",
     "url-loader": "^4.1.1"
   },
   "devDependencies": {

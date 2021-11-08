@@ -17,7 +17,27 @@ const config = {
   projectName: 'va-mobile-app', // Usually your repo name.
    plugins: [
         'docusaurus-plugin-relative-paths',
-        './docusaurus-plugin-react-native-web'
+        './docusaurus-plugin-react-native-web',
+        [
+            'docusaurus-plugin-react-docgen-typescript',
+            {
+                // pass in a single string or an array of strings
+                src: ['../src/components/**/*.tsx', '!../src/**/*test.*'],
+                global: true,
+                parserOptions: {
+                    // pass parserOptions to react-docgen-typescript
+                    // here is a good starting point which filters out all
+                    // types from react
+                    propFilter: (prop, component) => {
+                        if (prop.parent) {
+                            return !prop.parent.fileName.includes('@types/react');
+                        }
+
+                        return true;
+                    },
+                },
+            },
+        ],
     ],
   
 

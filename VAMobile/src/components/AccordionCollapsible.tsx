@@ -32,6 +32,9 @@ export type AccordionCollapsibleProps = {
   headerRef?: Ref<View>
 }
 
+/**
+ * A common component to show content inside of a collapsible accordion.
+ */
 const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   header,
   expandedContent,
