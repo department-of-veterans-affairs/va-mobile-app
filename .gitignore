@@ -154,6 +154,7 @@ buck-out/
 *.jsbundle
 /VAMobile/env/script.env
 /VAMobile/env/.env
+/VAMobile/env/.env.test.ts
 /VAMobile/ios/VAMobile/GoogleService-Info.plist
 /VAMobile/android/google-services.json
 

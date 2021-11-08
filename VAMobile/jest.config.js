@@ -11,7 +11,7 @@ module.exports = {
 	},
 
 	"moduleNameMapper":{
-		"@env":"<rootDir>/env/test.env.ts",
+		"@env":"<rootDir>/env/.env.test.ts",
 		"\\.svg": "<rootDir>/jest/svgMock.ts"
 	},
 	"testRegex": ".*\\.test\\.tsx?",
