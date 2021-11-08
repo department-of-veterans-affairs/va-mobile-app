@@ -6,6 +6,10 @@ export type VaccinesMap = {
   [key: string]: Vaccine
 }
 
+export type VaccineLocationsMap = {
+  [key: string]: VaccineLocation
+}
+
 export type VaccineList = Array<Vaccine>
 
 /**
@@ -17,6 +21,7 @@ export type Vaccine = {
   id?: string | null
   type?: string | null
   attributes?: VaccineAttributes
+  relationships?: VaccineRelationships
 }
 
 export type VaccineAttributes = {
@@ -28,4 +33,40 @@ export type VaccineAttributes = {
   manufacturer?: string | null
   note?: string | null
   shortDescription?: string | null
+  reaction?: string | null
+}
+
+export type VaccineRelationships = {
+  location?: VaccineLocationRef
+}
+
+export type VaccineLocationRef = {
+  data?: VaccineLocationRefData | null
+}
+
+export type VaccineLocationRefData = {
+  id?: string | null
+  type?: string | null
+}
+
+export type VaccineLocationData = {
+  data: VaccineLocation
+}
+
+export type VaccineLocation = {
+  type?: string | null
+  id?: string | null
+  attributes: VaccineLocationAttributes
+}
+
+export type VaccineLocationAttributes = {
+  name?: string | null
+  address: VaccineLocationAddress | null
+}
+
+export type VaccineLocationAddress = {
+  street?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
 }
