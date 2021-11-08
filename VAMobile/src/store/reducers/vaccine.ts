@@ -8,12 +8,16 @@ export type VaccineState = {
   loading: boolean
   vaccines: api.VaccineList
   vaccinesById: api.VaccinesMap
+  vaccineLocationsById: api.VaccineLocationsMap
+  detailsLoading: boolean
 }
 
 export const initialVaccineState = {
   loading: false,
+  detailsLoading: false,
   vaccines: [],
   vaccinesById: {},
+  vaccineLocationsById: {},
 }
 
 export default createReducer<VaccineState>(initialVaccineState, {
@@ -39,6 +43,26 @@ export default createReducer<VaccineState>(initialVaccineState, {
       vaccines: vaccineList,
       vaccinesById,
       error,
+    }
+  },
+  VACCINE_START_GET_LOCATION: (state) => {
+    return {
+      ...state,
+      detailsLoading: true,
+    }
+  },
+  VACCINE_FINISH_GET_LOCATION: (state, payload) => {
+    const { vaccineId, location, error } = payload
+    const locationMap = state.vaccineLocationsById
+
+    if (!error && vaccineId && location) {
+      locationMap[vaccineId] = location
+    }
+
+    return {
+      ...state,
+      detailsLoading: false,
+      vaccineLocationsById: locationMap,
     }
   },
 })
