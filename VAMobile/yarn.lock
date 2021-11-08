@@ -2787,6 +2787,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/rn-fetch-blob@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@types/rn-fetch-blob/-/rn-fetch-blob-1.2.2.tgz#e611cf4eebf0d6a2dd2975e2b8379ef0b4716f4a"
+  integrity sha512-fUAPkePEoLejWnUaOjJErdpfkmSVQrR+g9b1XOdkz6O8bj4R/wKPnLaeQqslQ5qf5cPSibvNSPm3fcGtS3PlNQ==
+
 "@types/scheduler@*":
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"

@@ -28,12 +28,15 @@
     "react": "^17.0.1",
     "react-docgen-typescript": "^2.1.1",
     "react-dom": "^17.0.1",
+    "react-native-web": "^0.17.5",
     "styled-components": "^5.3.3",
     "url-loader": "^4.1.1"
   },
   "devDependencies": {
+    "@babel/preset-flow": "^7.16.0",
     "@docusaurus/module-type-aliases": "2.0.0-beta.9",
     "@tsconfig/docusaurus": "^1.0.4",
+    "babel-plugin-react-native-web": "^0.17.5",
     "typescript": "^4.3.5"
   },
   "browserslist": {
