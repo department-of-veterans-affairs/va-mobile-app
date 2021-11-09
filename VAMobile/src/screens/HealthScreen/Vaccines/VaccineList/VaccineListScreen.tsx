@@ -31,7 +31,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
     dispatch(getVaccines(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID))
   }, [dispatch])
 
-  const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine) => {
+  const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
     const textLines: Array<TextLine> = [
       { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
       { text: formatDateMMMMDDYYYY(vaccine.attributes?.date || '') },
@@ -41,6 +41,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
       textLines,
       onPress: navigateTo('VaccineDetails', { vaccineId: vaccine.id }),
       a11yHintText: t('vaccines.list.a11y'),
+      a11yValue: t('common:listPosition', { position: index + 1, total: vaccines.length }),
     }
 
     return vaccineButton
