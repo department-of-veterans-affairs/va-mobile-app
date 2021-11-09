@@ -26,8 +26,9 @@ platform :android do
   desc "Deploy a QA new version to the Google Play"
   lane :qa do |options|
     update_version_and_build(options[:version ])
-    bundle("Debug")
+    bundle("Release")
     upload("Development Team")
+    bundle("Debug")
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
     distribute_to_firebase(notes, "qa")
     tag_build
