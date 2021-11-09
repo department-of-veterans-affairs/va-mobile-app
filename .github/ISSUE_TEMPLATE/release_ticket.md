@@ -3,7 +3,7 @@ name: Release Review Template
 about: Template for requesting a production release for VA mobile app
 title: "{{ env.releaseDate }} Release Sign-Off: {{ env.versionNumber }}"
 labels: release
-assignees: lexicalninja, ayushchak, DJUltraTom, travis-newby, leanna-usds, drjecker
+assignees: lexicalninja, MekoHong, DJUltraTom, travis-newby, leanna-usds, drjecker, b-rocha
 
 ---
 
@@ -33,6 +33,8 @@ This ticket should be complete by {{ env.vaDueDate }}
 <!-- Define the content for the What's New sections of the app stores here -->
 You can now [describe xyz new feature(s)]. We’ve also [enhanced or improved abc] and fixed a few bugs.
 
+Or if there aren't any new features use standard messaging: We added general improvements and fixed a few bugs.
+
 ## App Store content changes?
 All changes should be made to the files in the repo and not directly to the stores. 
 Indicate NA if no changes.
@@ -43,3 +45,4 @@ Indicate NA if no changes.
 
 ## Severe bugs:
 <!-- Link any severe bug tickets here and indicate if they need review or if they are scheduled/blocked -->
+{{ env.issues }}

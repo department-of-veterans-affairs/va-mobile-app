@@ -13,6 +13,9 @@ import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from './CernerAlert'
+import getEnv from 'utils/env'
+
+const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -29,6 +32,8 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
+  const onVaVaccines = navigateTo('VaccineList')
+  const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
 
   useEffect(() => {
     // fetch inbox metadata to display unread messages count tag
@@ -70,6 +75,26 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           borderStyle={'solid'}
           tagCount={unreadCount}
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
+        />
+        <LargeNavButton
+          title={t('vaVaccines.title')}
+          subText={t('vaVaccines.subText')}
+          a11yHint={t('vaVaccines.a11yHint')}
+          onPress={onVaVaccines}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+        />
+        <LargeNavButton
+          title={t('covid19Updates.title')}
+          subText={t('covid19Updates.subText')}
+          a11yHint={t('covid19Updates.a11yHint')}
+          onPress={onCoronaVirusFAQ}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
         />
       </Box>
       <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>

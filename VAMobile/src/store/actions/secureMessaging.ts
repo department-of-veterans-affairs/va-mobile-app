@@ -6,6 +6,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
 
+import { MockUsersEmail } from 'constants/common'
 import {
   Params,
   ScreenIDTypes,
@@ -62,7 +63,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
     try {
       // TODO story #25035, remove once ready
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         throw {
           json: {
             errors: [
