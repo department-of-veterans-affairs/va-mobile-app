@@ -77,7 +77,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
         <LargeNavButton
-          title={t('vaVaccines.title')}
+          title={t('vaVaccines.buttonTitle')}
           subText={t('vaVaccines.subText')}
           a11yHint={t('vaVaccines.a11yHint')}
           onPress={onVaVaccines}
