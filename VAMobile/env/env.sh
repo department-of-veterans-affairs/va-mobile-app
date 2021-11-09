@@ -11,10 +11,6 @@ done
 cd ./env
 # clear the env file
 echo "" > .env
-if [[ $isTest == 'true' ]]
-  then
-    echo "" > .env.test.ts
-fi
 # Get the environment related variables
 if [[ $environment == 'staging' ]]
 then
@@ -61,35 +57,3 @@ echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 while read p; do
   echo "$p" >> .env
 done<constant.env
-
-# Create env.test.ts file
-if [[ $isTest == 'true' ]]
-  then
-    exportPrefix="export const"
-    echo "$exportPrefix API_ROOT=\"https://test-api\"" >> .env.test.ts
-    echo "$exportPrefix AUTH_ALLOW_NON_BIOMETRIC_SAVE=\"false\"" >> .env.test.ts
-    echo "$exportPrefix AUTH_CLIENT_SECRET=\"TEST_SECRET\"" >> .env.test.ts
-    echo "$exportPrefix AUTH_ENDPOINT=\"https://test.gov/oauth/authorize\"" >> .env.test.ts
-    echo "$exportPrefix AUTH_TOKEN_EXCHANGE_URL=\"https://test.gov/oauth/token\"" >> .env.test.ts
-    echo "$exportPrefix AUTH_REVOKE_URL=\"https://test.gov/oauth/revoke\"" >> .env.test.ts
-    echo "$exportPrefix SHOW_DEBUG_MENU=true" >> .env.test.ts
-    echo "$exportPrefix IS_TEST=true" >> .env.test.ts
-    echo "$exportPrefix ENVIRONMENT=test" >> .env.test.ts
-    while read t; do
-      # grab name
-      envName=${t%%=*}
-      # grab value
-      envValue=${t#*=}
-      # skip empty lines
-      if [[ -z "$t" ]]
-        then
-          continue
-      fi
-      # add double quotes if it doesnt already have double quotes
-      if [[ ${envValue:0:1} != "\"" ]]
-        then
-          envValue="\"$envValue\""
-      fi
-      echo "$exportPrefix $envName=$envValue" >> .env.test.ts
-    done < constant.env
-fi
