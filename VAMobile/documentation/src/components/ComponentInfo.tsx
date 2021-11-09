@@ -2,6 +2,7 @@ import React from 'react'
 import useGlobalData from '@docusaurus/useGlobalData'
 import CodeBlock from '@theme/CodeBlock'
 import Tabs from '@theme/Tabs'
+import Accordion from 'react-bootstrap/Accordion'
 
 import TabItem from '@theme/TabItem'
 
@@ -12,25 +13,29 @@ export const getGlobalDataForComponent = (componentName: string) => {
 }
 
 const getComponentsProps = (propsObject) => {
-  var tifOptions = Object.keys(propsObject).map(function (key) {
-    const { defaultValue, description, name, required } = propsObject[key]
+  var tifOptions = Object.keys(propsObject).map(function (key, index) {
+    const { defaultValue, description, name, required, type } = propsObject[key]
     return (
-      <>
-        <div>
-          <p>
-            <strong>Name: </strong>
-            {name}
-          </p>
-          <p>
-            <strong>Description: </strong>
-            {description}
-          </p>
+      // <Accordion.Item eventKey={index.toString()} key={index}>
+      //   <Accordion.Header>
+      //     <strong style={{ color: 'blue' }}>{name}</strong>&nbsp;&nbsp; {type.name}
+      //   </Accordion.Header>
+      //   <Accordion.Body>{description}</Accordion.Body>
+      // </Accordion.Item>
+      <details
+        key={index}
+        className={
+          'isBrowser_node_modules-@docusaurus-theme-common-lib-components-Details-styles-module alert alert--info details_node_modules-@docusaurus-theme-classic-lib-next-theme-Details-styles-module alert-custom'
+        }>
+        <summary>{name}</summary>
+        <div className={'collapsibleContent_node_modules-@docusaurus-theme-common-lib-components-Details-styles-module'}>
+          <div>This is the detailed content</div>
         </div>
-      </>
+      </details>
     )
   })
 
-  return tifOptions
+  return <Accordion>{tifOptions}</Accordion>
 }
 
 export default function ComponentInfo(props): JSX.Element {
