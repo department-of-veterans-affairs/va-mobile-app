@@ -44,7 +44,7 @@ platform :android do
     bundle("Release")
     upload("Pre-Prod Stash")
     tag_build
-    message = "New Production build successfully uploaded to Beta Track on Google Play"
+    message = "New Production build successfully uploaded to Pre=Prod Stash Track on Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
 
