@@ -57,9 +57,10 @@ platform :android do
   lane :on_demand do |options|
     puts "on demand run"
     update_version_and_build(options[:version ])
-    bundle("Debug")
+    bundle("Release")
     puts options[:psTrack]
     upload(options[:psTrack])
+    bundle("Debug")
     notes = "New On Demand version for " + Time.new.strftime("%m.%d.%Y")
     distribute_to_firebase(notes, "qa")
     tag_build
