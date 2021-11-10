@@ -22,7 +22,11 @@ export type PickerListItemObj = {
 export type PickerListProps = {
   /** list of items of which a button will be rendered per item */
   items: Array<PickerListItemObj>
-} & Partial<ListProps>
+  /** optional title to use for the list */
+  title?: string
+  /**optional a11y hint for the title */
+  titleA11yLabel?: string
+}
 
 /**
  * Display a list of buttons with text and optional actions

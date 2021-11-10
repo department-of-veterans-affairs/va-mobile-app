@@ -67,6 +67,9 @@ module.exports = function() {
     extensions: [".ts", ".tsx", ".jsx", ".js"],
     alias: {
       "react-native$": "react-native-web",
+      "@componentsDocs": "../../../../src/components",
+      "@componentsSubDirectoryDocs": "../../../../../src/components"
+
     },
   },
   module: {

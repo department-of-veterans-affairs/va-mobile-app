@@ -1,0 +1,16 @@
+import CodeBlock from '@theme/CodeBlock'
+import AttachmentLinkString from '!!raw-loader!@componentsDocs/AlertBox'
+
+import ComponentTopInfo from '../../../src/components/ComponentInfo'
+
+export const exampleString = `<AttachmentLink
+name={'filename'}
+formattedSize={'byteSize'}
+a11yHint={'a11yHint'}
+a11yValue={'a11yValue'}
+onPress={() => {console.log('press function')}}
+load={true}
+/>`
+
+
+<ComponentTopInfo componentName="AttachmentLink" example={exampleString} codeString={AttachmentLinkString} />

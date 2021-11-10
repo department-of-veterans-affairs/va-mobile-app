@@ -11,6 +11,7 @@ type TextLinesProps = {
   listOfText?: Array<TextLine | TextLineWithIconProps>
 }
 
+/**Component to render individual lines of text. Each text line will wrap as needed and subsequent lines will be on the next line*/
 export const TextLines: FC<TextLinesProps> = ({ listOfText }) => {
   return (
     <Box flex={1}>

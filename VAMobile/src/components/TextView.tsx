@@ -68,7 +68,7 @@ const StyledText = styled(Text)`
 `
 
 /**
- * Text is an element to quickly style text
+ * A common component for styling text in the application. It also conforms to the Box properties so you don't need to wrap it with a Box view for margins / paddings
  *
  * @returns TextView component
  */

@@ -14,6 +14,7 @@ export type TextLineWithIconProps = {
   }
 } & TextLine
 
+/**Common component to show an icon with a line of text*/
 export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, variant, textAlign, color }) => {
   const themes = useTheme()
   const iconNotOwnRow = !(iconProps && iconProps.isOwnLine)

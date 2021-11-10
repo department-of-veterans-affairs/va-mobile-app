@@ -26,7 +26,7 @@ export type AccordionCollapsibleProps = {
   expandedInitialValue?: boolean
   /** gets rid of border of TextArea so the top and bottom borders don't double up in message threads when accordion is opened */
   noBorder?: boolean
-  /** applies a border to create the alert effect on the view **/
+  /** applies a border to create the alert effect on the view */
   alertBorder?: keyof VABorderColors
   /** Ref for the header section */
   headerRef?: Ref<View>

@@ -1,0 +1,13 @@
+import CodeBlock from '@theme/CodeBlock'
+import VATextInputString from '!!raw-loader!@componentsSubDirectoryDocs/FormWrapper/FormFields/VATextInput'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<VATextInput 
+inputType={'email'} 
+value={selected} 
+onChange={(textValue) => { setSelected(textValue) }} 
+isTextArea={false}/>`
+
+
+<ComponentTopInfo componentName="VATextInput" example={exampleString} codeString={VATextInputString} />

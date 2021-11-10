@@ -14,8 +14,16 @@
   --ifm-color-primary-lighter: rgb(102, 212, 189);
   --ifm-color-primary-lightest: rgb(146, 224, 208);
   --ifm-code-font-size: 95%;
-  --docusaurus-details-decoration-color: black;
+  --pre-background: rgb(246, 248, 250);
+  --navyBlue : #112e51;
+  --ifm-table-head-background: var(--pre-background);
+  --icon-colors : rgb(0, 113, 188);
 }
+
+html[data-theme='dark']  {
+  --ifm-table-head-background: rgb(40, 42, 54);
+}
+
 
 .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.1);
@@ -29,21 +37,51 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
 }
 
 .hero--primary {
-  --ifm-color-primary: #112e51 !important;
+  --ifm-color-primary: var(--navyBlue) !important;
 }
 
 .footer--dark {
-  --ifm-footer-background-color: #112e51 !important;
+  --ifm-footer-background-color: var(--navyBlue) !important;
 }
 
-.alert.alert-custom {
-  background-color:rgb(246, 248, 250);
-  border-color: #112e51;
-  margin-bottom: 10px;
+.preText {
+  font: inherit;
+  background-color: var(--pre-background);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
 
-html[data-theme='dark'] .alert.alert-custom  {
+html[data-theme='dark'] .preText {
+  background: rgb(40, 42, 54);
+}
 
-  background-color:rgb(40, 42, 54);
-  border: 0;
+table {
+  display: inline-table;
+  width: 100%;
+}
+
+.icons {
+  fill: var(--icon-colors);
+  height: 30px;
+  width: 30px;
+}
+
+.linkIcons {
+  fill: var(--icon-colors);
+  height: 40px;
+  width: 40px;
+}
+
+.iconsStroke {
+  stroke:  var(--icon-colors);
+}
+
+
+.dodIcons {
+   height: 80px;
+  width: 80px;
 }

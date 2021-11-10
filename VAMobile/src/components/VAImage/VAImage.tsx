@@ -30,7 +30,7 @@ export type VAImageProps = {
 }
 
 /**
- * VAImage displays a static image that takes up the full width of device minus the gutters
+ * A common component to display static images. New images need to be placed in VAImge/image and in Xcode under VAMobile/Images.xcassets. Examples/details can be found in VAImage component.
  *
  * @returns VAImage component
  */
