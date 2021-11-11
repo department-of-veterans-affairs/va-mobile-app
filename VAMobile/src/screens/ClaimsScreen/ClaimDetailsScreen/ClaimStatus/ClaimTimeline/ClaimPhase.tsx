@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
@@ -7,8 +7,10 @@ import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } f
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 
@@ -91,6 +93,7 @@ export type ClaimPhaseProps = {
 const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
+  const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { eventsTimeline } = attributes
@@ -98,6 +101,19 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const phaseLessThanEqualToCurrent = phase <= current
   const heading = getHeading(phase, t)
   const updatedLastDate = phaseLessThanEqualToCurrent ? updatedLast(eventsTimeline, phase) : ''
+  const showClaimFileUploadBtn = needItemsFromVet(attributes) && !attributes.waiverSubmitted
+
+  useEffect(() => {
+    if (current === 3) {
+      dispatch(sendClaimStep3Analytics())
+    }
+  }, [dispatch, current])
+
+  useEffect(() => {
+    if (current === 3 && showClaimFileUploadBtn) {
+      dispatch(sendClaimStep3FileRequestAnalytics())
+    }
+  }, [dispatch, current, showClaimFileUploadBtn])
 
   const getPhaseHeader = (): ReactNode => {
     return (
@@ -131,7 +147,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
 
   return (
     <AccordionCollapsible noBorder={true} header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>
-      {phase === 3 && needItemsFromVet(attributes) && !attributes.waiverSubmitted && (
+      {phase === 3 && showClaimFileUploadBtn && (
         <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">
             <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
