@@ -104,16 +104,16 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const showClaimFileUploadBtn = needItemsFromVet(attributes) && !attributes.waiverSubmitted
 
   useEffect(() => {
-    if (current === 3) {
+    if (phase === 3 && current === 3) {
       dispatch(sendClaimStep3Analytics())
     }
-  }, [dispatch, current])
+  }, [dispatch, phase, current])
 
   useEffect(() => {
-    if (current === 3 && showClaimFileUploadBtn) {
+    if (phase === 3 && current === 3 && showClaimFileUploadBtn) {
       dispatch(sendClaimStep3FileRequestAnalytics())
     }
-  }, [dispatch, current, showClaimFileUploadBtn])
+  }, [dispatch, phase, current, showClaimFileUploadBtn])
 
   const getPhaseHeader = (): ReactNode => {
     return (
