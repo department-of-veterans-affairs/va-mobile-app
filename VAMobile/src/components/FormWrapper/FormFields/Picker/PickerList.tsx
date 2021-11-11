@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { ButtonDecoratorType, List, ListItemObj, ListProps } from 'components'
+import { ButtonDecoratorType, List, ListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextLine } from 'components/types'
 import { TextLines } from 'components/TextLines'

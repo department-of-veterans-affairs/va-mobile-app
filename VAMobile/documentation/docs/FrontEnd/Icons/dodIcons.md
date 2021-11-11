@@ -4,15 +4,18 @@ import { ReactComponent as Navy} from '@componentsDocs/VAIcon/svgs/dodBranch/nav
 import { ReactComponent as Army} from '@componentsDocs/VAIcon/svgs/dodBranch/army.svg';
 import { ReactComponent as CoastGuard} from '@componentsDocs/VAIcon/svgs/dodBranch/coast-guard.svg';
 
-# DOD Branch Icons
+# DOD Branch
 
+:::info
+These icons are loacted under `VaMobile/src/components/VAIcon/svgs/dodBranch`.
+:::
 
-Name | Icon | File Location 
---- | --- | --- 
-Marines | <Marines  className="dodIcons"/> | src/components/VAIcon/svgs/dodBranch/marine.svg 
-Air Force | <AirForce  className="dodIcons"/> | src/components/VAIcon/svgs/dodBranch/air-force.svg 
-Navy | <Navy  className="dodIcons"/> | src/components/VAIcon/svgs/dodBranch/navy.svg 
-Army | <Army  className="dodIcons"/> | src/components/VAIcon/svgs/dodBranch/army.svg 
-Coast Guard | <CoastGuard  className="dodIcons"/> | src/components/VAIcon/svgs/dodBranch/coast-guard.svg 
+Name | Icon | File Name 
+:---: | :---: | :---: 
+Marines | <Marines  className="dodIcons"/> | marine.svg 
+Air Force | <AirForce  className="dodIcons"/> | air-force.svg 
+Navy | <Navy  className="dodIcons"/> | navy.svg 
+Army | <Army  className="dodIcons"/> | army.svg 
+Coast Guard | <CoastGuard  className="dodIcons"/> | coast-guard.svg 
 
 

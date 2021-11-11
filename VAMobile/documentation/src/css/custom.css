@@ -18,6 +18,8 @@
   --navyBlue : #112e51;
   --ifm-table-head-background: var(--pre-background);
   --icon-colors : rgb(0, 113, 188);
+ 
+
 }
 
 html[data-theme='dark']  {
@@ -76,8 +78,9 @@ table {
   width: 40px;
 }
 
-.iconsStroke {
-  stroke:  var(--icon-colors);
+.iconDirection {
+      background: var(--icon-colors);
+    border-radius: 20px;
 }
 
 
@@ -85,3 +88,13 @@ table {
    height: 80px;
   width: 80px;
 }
+
+.customCircle circle  {
+  stroke: var(--icon-colors);
+}
+
+.logoIcon {
+  background-color: var(--navyBlue);
+  padding: 5px;
+}
+

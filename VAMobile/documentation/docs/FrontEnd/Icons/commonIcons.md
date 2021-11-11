@@ -13,21 +13,24 @@ import { ReactComponent as Reply} from '@componentsDocs/VAIcon/svgs/reply.svg';
 import { ReactComponent as Unread} from '@componentsDocs/VAIcon/svgs/unread_icon.svg';
 import { ReactComponent as VideoCamera} from '@componentsDocs/VAIcon/svgs/videoCamera.svg';
 
-# Common Icons
+# Common
 
+:::info
+These icons are loacted under `VaMobile/src/components/VAIcon/svgs`.
+:::
 
 Name | Icon | File Location 
---- | --- | --- 
-Bullet | <DocusaurusSvg  className="icons"/> | src/components/VAIcon/svgs/bullet.svg 
-Check Mark | <CheckMark  className="icons"/> | src/components/VAIcon/svgs/check-mark.svg
-Check Mark Circle | <CheckMarkCircle  className="icons"/> | src/components/VAIcon/svgs/checkmark-in-circle.svg
-Chevron Down | <ChevronDown  className="icons"/> | src/components/VAIcon/svgs/chevron-down.svg
-Chevron Right | <ChevronRight  className="icons iconsStroke"/> | src/components/VAIcon/svgs/chevron-right.svg
-Compose | <Compose  className="icons"/> | src/components/VAIcon/svgs/compose.svg
-Paper Clip | <PaperClip  className="icons"/> | src/components/VAIcon/svgs/paperClip.svg
-Phone Solid | <PhoneSolid  className="icons"/> | src/components/VAIcon/svgs/phoneSolid.svg
-Question Mark | <QuestionMark  className="icons"/> | src/components/VAIcon/svgs/questionMark.svg
-Remove | <Remove  className="icons"/> | src/components/VAIcon/svgs/remove.svg
-Reply | <Reply  className="icons"/> | src/components/VAIcon/svgs/reply.svg
-Unread | <Unread  className="icons"/> | src/components/VAIcon/svgs/unread_icon.svg
-Video Camera | <VideoCamera  className="icons"/> | src/components/VAIcon/svgs/videoCamera.svg
+:---: | :---: | :---: 
+Bullet | <DocusaurusSvg  className="icons"/> | bullet.svg 
+Check Mark | <CheckMark  className="icons"/> | check-mark.svg
+Check Mark Circle | <CheckMarkCircle  className="icons"/> |checkmark-in-circle.svg
+Chevron Down | <ChevronDown  className="icons"/> | svgs/chevron-down.svg
+Chevron Right | <ChevronRight  className="icons iconsStroke"/> | chevron-right.svg
+Compose | <Compose  className="icons"/> | compose.svg
+Paper Clip | <PaperClip  className="icons"/> | paperClip.svg
+Phone Solid | <PhoneSolid  className="icons"/> | phoneSolid.svg
+Question Mark | <QuestionMark  className="icons"/> | questionMark.svg
+Remove | <Remove  className="icons"/> | remove.svg
+Reply | <Reply  className="icons"/> | reply.svg
+Unread | <Unread  className="icons"/> | unread_icon.svg
+Video Camera | <VideoCamera  className="icons"/> | videoCamera.svg

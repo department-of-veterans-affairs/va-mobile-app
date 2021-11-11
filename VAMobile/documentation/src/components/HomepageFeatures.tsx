@@ -7,40 +7,55 @@
 import React from 'react'
 import clsx from 'clsx'
 import styles from './HomepageFeatures.module.css'
+import Link from '@docusaurus/Link'
 
 type FeatureItem = {
   title: string
   image: string
   description: JSX.Element
+  useMobileImageCss?: boolean
 }
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    image: '/img/undraw_docusaurus_mountain.svg',
-    description: <>Docusaurus was designed from the ground up to be easily installed and used to get your website up and running quickly.</>,
-  },
-  {
-    title: 'Focus on What Matters',
-    image: '/img/undraw_docusaurus_tree.svg',
+    title: 'React Native',
+    image: '/img/react-native-logo.png',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go ahead and move your docs into the <code>docs</code> directory.
+        The <code>front end</code> is built using{' '}
+        <Link href="" target="_blank">
+          React Native
+        </Link>
+        .
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    image: '/img/undraw_docusaurus_react.svg',
-    description: <>Extend or customize your website layout by reusing React. Docusaurus can be extended while reusing the same header and footer.</>,
+    title: 'VA: Health and Benefits App',
+    image: '/img/mobile-app.png',
+    useMobileImageCss: true,
+    description: <>The mobile app allows Veterans to more easily complete key transactions across VA Health and Benefits services..</>,
+  },
+  {
+    title: 'Ruby on Rails',
+    image: '/img/ruby-logo.png',
+    description: (
+      <>
+        The <code>back end</code> is built using{' '}
+        <Link href="" target="_blank">
+          Ruby on Rails
+        </Link>
+        .
+      </>
+    ),
   },
 ]
 
-function Feature({ title, image, description }: FeatureItem) {
+function Feature({ title, image, description, useMobileImageCss }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <img className={styles.featureSvg} alt={title} src={image} />
+        <img className={useMobileImageCss ? styles.mobilePhoneSvg : styles.featureSvg} alt={title} src={image} />
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
