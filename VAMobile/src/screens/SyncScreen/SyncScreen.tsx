@@ -6,7 +6,7 @@ import { AuthState, AuthorizedServicesState, DemoState, DisabilityRatingState, M
 import { Box, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { completeSync, getDisabilityRating, getProfileInfo, getServiceHistory, logInDemoMode } from 'store/actions'
-import { dispatchCheckForDowntimeErrors } from 'store/actions'
+// import { dispatchCheckForDowntimeErrors } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -30,9 +30,9 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
   const [displayMessage, setDisplayMessage] = useState()
 
-  useEffect(() => {
-    dispatch(dispatchCheckForDowntimeErrors())
-  }, [dispatch])
+  // useEffect(() => {
+  //   dispatch(dispatchCheckForDowntimeErrors())
+  // }, [dispatch])
 
   useEffect(() => {
     if (demoMode && !loggedIn) {
