@@ -6,6 +6,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
 
+import { MockUsersEmail } from 'constants/common'
 import {
   Params,
   ScreenIDTypes,
@@ -62,7 +63,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
     try {
       // TODO story #25035, remove once ready
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         throw {
           json: {
             errors: [
@@ -505,10 +506,10 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
       let response
       if (messageID) {
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
-        response = await api.put<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
+        response = await api.put<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
       } else {
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
-        response = await api.post<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
+        response = await api.post<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
       }
       const [totalTime, actionTime] = getAnalyticsTimers(_getState())
       await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime))
@@ -615,7 +616,7 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
     try {
       await api.post<SecureMessagingMessageData>(
         replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
-        (postData as unknown) as api.Params,
+        postData as unknown as api.Params,
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
 

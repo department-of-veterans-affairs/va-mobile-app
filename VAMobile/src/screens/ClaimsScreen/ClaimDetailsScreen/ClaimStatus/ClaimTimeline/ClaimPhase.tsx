@@ -64,7 +64,7 @@ const getDetails = (phase: number, translate: TFunction): string => {
  */
 const updatedLast = (events: ClaimEventData[], phase: number): string => {
   const phases = groupTimelineActivity(events)
-  const currentPhase = ((phases[`${phase}`] as unknown) as Array<{ [key: string]: string }>) || []
+  const currentPhase = (phases[`${phase}`] as unknown as Array<{ [key: string]: string }>) || []
   sortByDate(currentPhase, 'date', true)
 
   const lastUpdate = currentPhase.length > 0 && currentPhase[0]?.date
