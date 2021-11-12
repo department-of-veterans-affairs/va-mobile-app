@@ -27,7 +27,7 @@ import HeaderTitle from 'components/HeaderTitle'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
- * @currentScreenID  the id of the screen being check for errors
+ * @param currentScreenID - the id of the screen being check for errors
  * @returns boolean to show the error
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
@@ -40,7 +40,7 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
 /**
  * Hook to calculate based on fontScale
  *
- * @val number to calculate by
+ * @param val - number to calculate by
  * @returns a function to calculate 'value' based on fontScale
  */
 export const useFontScale = (): ((val: number) => number) => {
@@ -62,7 +62,7 @@ export const useTheme = (): VATheme => {
 }
 
 /** Provides a helper function to get typed checked namespace for VA
- * @ns the namespace
+ * @param ns - the namespace
  * @returns the translation function
  */
 export const useTranslation = (ns?: i18n_NS): TFunction => {
@@ -118,7 +118,7 @@ export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof
 /**
  * Navigation hook to use in onPress events.
  *
- * @routeName the string value for Navigation Route to open
+ * @param routeName - the string value for Navigation Route to open
  * @returns useRouteNavigation function to use as a closure for onPress events
  */
 export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFunction<T> => {
@@ -187,7 +187,7 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
 /**
  * Hook to check if the screan reader is enabled
  *
- * @return boolean if the screen reader is on
+ * @returns boolean if the screen reader is on
  */
 export function useIsScreanReaderEnabled(): boolean {
   const [screanReaderEnabled, setScreanReaderEnabled] = useState(false)
@@ -261,11 +261,11 @@ export type UseDestructiveAlertProps = {
 }
 /**
  * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
- * @title title of the alert
- * @message optional message for the alert
- * @destructiveButtonIndex ios destructive index
- * @cancelButtonIndex ios cancel index
- * @buttons Array<{text: string, onPress: () => {}}> options to show in the alert
+ * @param title - title of the alert
+ * @param message - optional message for the alert
+ * @param destructiveButtonIndex - ios destructive index
+ * @param cancelButtonIndex - ios cancel index
+ * @param buttons - options to show in the alert
  * @returns an action sheet for ios and an alert for android
  */
 export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
@@ -343,7 +343,7 @@ export function useMessageWithSignature(): [string, React.Dispatch<React.SetStat
 /**
  * Hook to validate message that could have a signature
  *
- * @message the message to be validated
+ * @param message - the message to be validated
  * @returns boolean if the message is valid
  */
 export function useValidateMessageWithSignature(): (message: string) => boolean {
