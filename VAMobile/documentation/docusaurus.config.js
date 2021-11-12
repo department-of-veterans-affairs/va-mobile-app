@@ -22,7 +22,7 @@ const config = {
             'docusaurus-plugin-react-docgen-typescript',
             {
                 // pass in a single string or an array of strings
-                src: ['../src/components/**/*.tsx', '!../src/**/*test.*'],
+                src: ['../src/components/**/*.tsx', '../src/utils/hooks.tsx', '!../src/**/*test.*'],
                 global: true,
                 parserOptions: {
                     // pass parserOptions to react-docgen-typescript

@@ -2,15 +2,14 @@ import React from 'react'
 import CodeBlock from '@theme/CodeBlock'
 import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
-import { PropTable } from './PropTable'
 import { useGlobalDataForComponent } from '@site/utils/common'
+import { HooksParamTable } from './HooksParamTable'
 
-export default function ComponentInfo(props) {
+export default function HooksInfo(props) {
   const globaldata = useGlobalDataForComponent(props.componentName)
+  const { description, displayName, tags } = globaldata[0]
 
-  const { description, displayName, props: ComponentProps } = globaldata[0]
   const howToUseString = `How to use the ${displayName} component`
-  const fullCodeString = `Full code for the ${displayName} component`
 
   return (
     <>
@@ -18,8 +17,8 @@ export default function ComponentInfo(props) {
         <TabItem value="description" label="Description">
           <pre className={'preText'}>{description}</pre>
         </TabItem>
-        <TabItem value="props" label="Props">
-          <PropTable props={ComponentProps} />
+        <TabItem value="params" label="Params and Return">
+          <HooksParamTable props={tags} />
         </TabItem>
         <TabItem value="example" label="Example">
           {props.example && (
@@ -27,16 +26,6 @@ export default function ComponentInfo(props) {
               {props.example}
             </CodeBlock>
           )}
-        </TabItem>
-        <TabItem value="code" label="Full Code Source">
-          {props.codeString && (
-            <CodeBlock title={fullCodeString} className="language-tsx">
-              {props.codeString}
-            </CodeBlock>
-          )}
-        </TabItem>
-        <TabItem value="accessibility" label="Accessibility">
-          {<pre className={'preText'}>{props.accessibilityInfo}</pre>}
         </TabItem>
       </Tabs>
     </>

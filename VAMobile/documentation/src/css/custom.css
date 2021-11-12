@@ -22,11 +22,6 @@
 
 }
 
-html[data-theme='dark']  {
-  --ifm-table-head-background: rgb(40, 42, 54);
-}
-
-
 .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.1);
   display: block;
@@ -34,16 +29,8 @@ html[data-theme='dark']  {
   padding: 0 var(--ifm-pre-padding);
 }
 
-html[data-theme='dark'] .docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
 .hero--primary {
   --ifm-color-primary: var(--navyBlue) !important;
-}
-
-.footer--dark {
-  --ifm-footer-background-color: var(--navyBlue) !important;
 }
 
 .preText {
@@ -55,10 +42,6 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;
-}
-
-html[data-theme='dark'] .preText {
-  background: rgb(40, 42, 54);
 }
 
 table {
@@ -83,7 +66,6 @@ table {
     border-radius: 20px;
 }
 
-
 .dodIcons {
    height: 80px;
   width: 80px;
@@ -98,3 +80,20 @@ table {
   padding: 5px;
 }
 
+
+/* Dark Theme Section */
+html[data-theme='dark']  {
+  --ifm-table-head-background: rgb(40, 42, 54);
+}
+
+html[data-theme='dark'] .preText {
+  background: rgb(40, 42, 54);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.footer--dark {
+  --ifm-footer-background-color: var(--navyBlue) !important;
+}
