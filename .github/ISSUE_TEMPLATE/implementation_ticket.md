@@ -1,7 +1,7 @@
 ---
-name: Implementation User Story
-about: Feature ticket for the VA mobile app that is ready to hand off to engineering for implementation
-title: Implementation Ticket
+name: User Story
+about: Template for creating user stories and acceptance criteria 
+title: User Story
 labels: 
 assignees:
 ---
