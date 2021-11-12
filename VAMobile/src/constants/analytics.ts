@@ -116,6 +116,31 @@ export const Events = {
       },
     }
   },
+  vama_claim_step_three: (): Event => {
+    return {
+      name: 'vama_claim_step_three',
+    }
+  },
+  vama_claim_file_request: (): Event => {
+    return {
+      name: 'vama_claim_file_request',
+    }
+  },
+  vama_claim_upload_start: (): Event => {
+    return {
+      name: 'vama_claim_upload_start',
+    }
+  },
+  vama_claim_upload_compl: (): Event => {
+    return {
+      name: 'vama_claim_upload_compl',
+    }
+  },
+  vama_claim_upload_fail: (): Event => {
+    return {
+      name: 'vama_claim_upload_fail',
+    }
+  },
 }
 
 export const UserAnalytics = {
