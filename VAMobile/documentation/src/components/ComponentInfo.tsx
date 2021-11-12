@@ -2,8 +2,9 @@ import React from 'react'
 import CodeBlock from '@theme/CodeBlock'
 import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
-import { PropTable } from './PropTable'
+
 import { useGlobalDataForComponent } from '@site/utils/common'
+import { PropTable } from './PropTable'
 
 export default function ComponentInfo(props) {
   const globaldata = useGlobalDataForComponent(props.componentName)
