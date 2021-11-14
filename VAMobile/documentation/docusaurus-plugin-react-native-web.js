@@ -19,13 +19,7 @@ const babelLoaderConfiguration = {
   include: [
      path.resolve('../src/components'), // Entry to your application
     path.resolve( './src/*'),
-
-    ...compileNodeModules,
-  ],
-  exclude: [
-    path.resolve('../src/store'), 
-    path.resolve('../node_modules/@react-native-community/cookies'), 
-
+  
   ],
   use: {
     loader: 'babel-loader',
@@ -67,21 +61,16 @@ module.exports = function() {
     extensions: [".ts", ".tsx", ".jsx", ".js"],
     alias: {
       "react-native$": "react-native-web",
-      "@componentsDocs": "../../../../src/components",
-      "@componentsSubDirectoryDocs": "../../../../../src/components"
-
+      "@componentsDocs": `${appDirectory}/../src/components`,
     },
   },
   module: {
     rules: [
      babelLoaderConfiguration,
        imageLoaderConfiguration,
-     svgLoaderConfiguration,
-   
-     
+     svgLoaderConfiguration, 
    ],
  },
- 
 }}
   }
 }
