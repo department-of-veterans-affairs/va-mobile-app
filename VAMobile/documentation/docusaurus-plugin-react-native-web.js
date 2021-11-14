@@ -19,7 +19,7 @@ const babelLoaderConfiguration = {
   include: [
      path.resolve('../src/components'), // Entry to your application
     path.resolve( './src/*'),
-  
+    ...compileNodeModules
   ],
   use: {
     loader: 'babel-loader',
