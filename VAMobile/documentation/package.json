@@ -15,8 +15,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "0.0.0-4198",
-    "@docusaurus/preset-classic": "0.0.0-4198",
+    "@docusaurus/core": "^2.0.0-beta.9",
+    "@docusaurus/preset-classic": "2.0.0-beta.9",
     "@mdx-js/react": "^1.6.21",
     "@svgr/webpack": "^5.5.0",
     "bootstrap": "5.1.3",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@babel/preset-flow": "^7.16.0",
-    "@docusaurus/module-type-aliases": "0.0.0-4198",
+    "@docusaurus/module-type-aliases": "2.0.0-beta.9",
     "@tsconfig/docusaurus": "^1.0.4",
     "babel-plugin-react-native-web": "^0.17.5",
     "typescript": "^4.3.5"
