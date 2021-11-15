@@ -30,6 +30,11 @@ export type ErrorsSetTryAgainFunctionPayload = {
   tryAgain: () => Promise<void>
 }
 
+export type ErrorClearErrorTypeByScreenPayload = {
+  errorType: CommonErrorTypes
+  screenID: ScreenIDTypes
+}
+
 /**
  *  All errors actions
  */
@@ -46,6 +51,8 @@ export interface ErrorsActions {
   ERRORS_CLEAR_ALL_METADATA: ActionDef<'ERRORS_CLEAR_ALL_METADATA', null>
   /** Redux action to signify that clear error type request has started */
   ERRORS_CLEAR_ERROR_TYPE: ActionDef<'ERRORS_CLEAR_ERROR_TYPE', ErrorClearErrorTypePayload>
+  /** Redux action to signify that clear error type by screenID request has started */
+  ERRORS_CLEAR_ERROR_TYPE_BY_SCREEN: ActionDef<'ERRORS_CLEAR_ERROR_TYPE_BY_SCREEN', ErrorClearErrorTypeByScreenPayload>
   /** Redux action to signify that errors set try again request has started */
   ERRORS_SET_TRY_AGAIN_FUNCTION: ActionDef<'ERRORS_SET_TRY_AGAIN_FUNCTION', ErrorsSetTryAgainFunctionPayload>
 }

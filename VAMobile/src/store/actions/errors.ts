@@ -83,6 +83,19 @@ export const dispatchClearErrorType = (errorType: CommonErrorTypes): ReduxAction
 }
 
 /**
+ * Clears the error type for a screen ID
+ */
+export const dispatchClearErrorTypeByScreen = (errorType: CommonErrorTypes, screenID: ScreenIDTypes): ReduxAction => {
+  return {
+    type: 'ERRORS_CLEAR_ERROR_TYPE_BY_SCREEN',
+    payload: {
+      errorType,
+      screenID,
+    },
+  }
+}
+
+/**
  * checks for downtime by getting a list from the backend API
  * clears all metadata and current downtimes first and sets errors based on which downtime is active from API call
  */
