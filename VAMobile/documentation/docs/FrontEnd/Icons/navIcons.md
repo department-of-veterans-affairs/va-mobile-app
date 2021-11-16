@@ -6,11 +6,12 @@ import { ReactComponent as HomeSelected} from '@componentsDocs/VAIcon/svgs/navIc
 import { ReactComponent as HomeUnselected} from '@componentsDocs/VAIcon/svgs/navIcon/homeUnselected.svg';
 import { ReactComponent as ProfileSelected} from '@componentsDocs/VAIcon/svgs/navIcon/profileSelected.svg';
 import { ReactComponent as ProfileUnselected} from '@componentsDocs/VAIcon/svgs/navIcon/profileUnselected.svg';
+import IconsPathSection from '@site/src/components/IconsPathSection'
 
 # Navigation
 
 :::info
-These icons are loacted under `VaMobile/src/components/VAIcon/svgs/navIcon`.
+<IconsPathSection folder={"navIcon"} />
 :::
 
 Name | Icon | File Name 

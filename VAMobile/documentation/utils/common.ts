@@ -1,4 +1,5 @@
 import useGlobalData from '@docusaurus/useGlobalData'
+import React from 'react'
 
 export const useGlobalDataForComponent = (componentName: string): Record<string, any> => {
   const globalData = useGlobalData()
