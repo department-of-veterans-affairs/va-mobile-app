@@ -1,1 +1,1 @@
-You can now check if you or the facility canceled an appointment. We've also fixed a few bugs.
+You can now view your VA vaccination history and receive push notification reminders for your upcoming appointments. We’ve also fixed a few bugs.
