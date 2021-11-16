@@ -25,14 +25,14 @@ jobs:
           node-version: '12.x'
       - name: Test Docusaurus Build
         run: |
+          cd VAMobile/documentation
           if [ -e yarn.lock ]; then
-            cd VAMobile/documentation
             yarn install --frozen-lockfile
-            yarn build
           else
             echo 'yarn.lock not found. Exiting'
             exit 0
           fi
+          yarn build
   gh-release:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
@@ -49,13 +49,13 @@ jobs:
           USE_SSH: true
           GIT_USER: git
         run: |
-          git config --global user.email "narin@adhocteam.us"
-          git config --global user.name "Narin Ratana"
+          cd VAMobile/documentation
           if [ -e yarn.lock ]; then
-            cd VAMobile/documentation
             yarn install --frozen-lockfile
-            yarn deploy
           else
             echo 'yarn.lock not found. Exiting'
             exit 0
           fi
+          git config --global user.email "narin@adhocteam.us"
+          git config --global user.name "Narin Ratana"
+          yarn deploy
