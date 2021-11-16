@@ -9,6 +9,7 @@ import HeaderTitle from './HeaderTitle'
  *  Properties for {@link FocusedNavHeaderText}
  */
 export type FocusedNavHeaderTextProps = {
+  /**sets the title's text */
   headerTitle: string
 }
 

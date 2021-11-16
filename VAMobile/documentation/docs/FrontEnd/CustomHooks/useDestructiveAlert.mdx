@@ -1,0 +1,22 @@
+import HooksInfo from '../../../src/components/HooksInfo'
+
+export const exampleString = `const deletePhoneAlert = useDestructiveAlert()\n
+const onDeletePressed = (): void => {
+    deletePhoneAlert({
+      title: t('editPhoneNumber.remove.title', { numberType: buttonTitle }),
+      message: t('editPhoneNumber.remove.message', { numberType: buttonTitle }),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('common:remove'),
+          onPress: onDelete,
+        },
+      ],
+    })
+  }`
+
+<HooksInfo componentName="useDestructiveAlert" example={exampleString}/>

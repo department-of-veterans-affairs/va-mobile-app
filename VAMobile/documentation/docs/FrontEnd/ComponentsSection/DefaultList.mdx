@@ -1,0 +1,24 @@
+import CodeBlock from '@theme/CodeBlock'
+import DefaultListString from '!!raw-loader!@componentsDocs/DefaultList'
+
+import ComponentTopInfo from '../../../src/components/ComponentInfo'
+
+export const exampleString =`const exampleList: Array<DefaultListItemObj> = 
+[
+    {
+        textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }],
+        a11yHintText: 'press this button to do something',
+        onPress: () => { console.log('button 1 pressed') },
+        testId: 'line-1-on-the-button',
+    },
+    {
+        textLines: [{ text: 'line 1 on the second button' }, { text: 'line 2 on the second button' }],
+        a11yHintText: 'press this button to do something',
+        onPress: () => { console.log('button 2 pressed') },
+        testId: 'line-1-on-the-second-button',
+    },
+]\n
+<DefaultList items={exampleList} />`
+
+
+<ComponentTopInfo componentName="DefaultList" example={exampleString} codeString={DefaultListString} />

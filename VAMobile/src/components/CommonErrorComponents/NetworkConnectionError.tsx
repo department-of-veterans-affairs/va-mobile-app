@@ -9,6 +9,7 @@ export type NetworkConnectionErrorProps = {
   onTryAgain: () => void
 }
 
+/**A common component to show an alert for when it is a network error*/
 const NetworkConnectionError: FC<NetworkConnectionErrorProps> = ({ onTryAgain }) => {
   const t = useTranslation(NAMESPACE.COMMON)
 

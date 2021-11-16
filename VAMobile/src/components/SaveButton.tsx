@@ -8,11 +8,15 @@ import { useTheme, useTranslation } from 'utils/hooks'
 import TextView from './TextView'
 
 type SaveButtonProps = {
+  /**function to run on save pressed*/
   onSave: () => void
+  /**disables this component */
   disabled: boolean
+  /**a11y hint for this component */
   a11yHint?: string
 }
 
+/**A common component for the save button located at the header. */
 const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
