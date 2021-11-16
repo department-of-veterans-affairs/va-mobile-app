@@ -1,18 +1,18 @@
-name: docusaurus
-
-defaults:
-  run:
-    working-directory: VAMobile/documentation
+name: documentation
 
 on:
   pull_request:
     branches: [develop]
     paths:
       - VAMobile/documentation/**
+      - VAMobile/src/components/**
+      - VAMobile/src/utils/hooks.tsx
   push:
     branches: [develop]
     paths:
       - VAMobile/documentation/**
+      - VAMobile/src/components/**
+      - VAMobile/src/utils/hooks.tsx
 
 jobs:
   checks:
@@ -26,6 +26,7 @@ jobs:
       - name: Test Docusaurus Build
         run: |
           if [ -e yarn.lock ]; then
+            cd VAMobile/documentation
             yarn install --frozen-lockfile
             yarn build
           else
@@ -51,6 +52,7 @@ jobs:
           git config --global user.email "narin@adhocteam.us"
           git config --global user.name "Narin Ratana"
           if [ -e yarn.lock ]; then
+            cd VAMobile/documentation
             yarn install --frozen-lockfile
             yarn deploy
           else
