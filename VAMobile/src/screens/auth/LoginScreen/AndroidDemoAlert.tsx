@@ -13,7 +13,7 @@ export type AlertPromptProps = {
   /** Function to set modal visibility */
   setVisible: (value: boolean) => void
   /** Function to be called when user confirms input*/
-  onConfirm: (password: string) => void
+  onConfirm: () => void
 }
 
 /**
@@ -32,7 +32,7 @@ const AndroidDemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm
     setVisible(false)
     setInput('')
     if (input === DEMO_PASSWORD) {
-      onConfirm(input)
+      onConfirm()
     } else {
       Alert.alert('Invalid Code', 'Try Again')
     }
