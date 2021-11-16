@@ -1,11 +1,13 @@
 import { ReactComponent as RadioEmpty} from '@componentsDocs/VAIcon/svgs/radio/radioEmpty.svg';
 import { ReactComponent as RadioDisabled} from '@componentsDocs/VAIcon/svgs/radio/radioDisabled.svg';
 import { ReactComponent as RadioFilled} from '@componentsDocs/VAIcon/svgs/radio/radioFilled.svg';
+import IconsPathSection from '@site/src/components/IconsPathSection'
+
 
 # Radio Button
 
 :::info
-These icons are loacted under `VaMobile/src/components/VAIcon/svgs/radio`.
+<IconsPathSection folder={"radio"} />
 :::
 
 Name | Icon | File Name 
