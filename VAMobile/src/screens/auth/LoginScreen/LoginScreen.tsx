@@ -1,13 +1,15 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
 import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
+import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import AndroidDemoAlert from './AndroidDemoAlert'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
@@ -16,6 +18,7 @@ const LoginScreen: FC = () => {
   const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 20
   let demoTaps = 0
 
@@ -45,13 +48,18 @@ const LoginScreen: FC = () => {
   }
 
   const dispatch = useDispatch()
+  const handleUpdateDemoMode = () => {
+    dispatch(updateDemoMode(true))
+  }
   const tapForDemo = () => {
     demoTaps++
     if (demoTaps > TAPS_FOR_DEMO) {
       demoTaps = 0
-      demoAlert(() => {
-        dispatch(updateDemoMode(true))
-      })
+      if (isAndroid()) {
+        setDemoPromptVisible(true)
+      } else {
+        demoAlert(handleUpdateDemoMode)
+      }
     }
   }
 
@@ -65,6 +73,7 @@ const LoginScreen: FC = () => {
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+      <AndroidDemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && (
         <Box mx={theme.dimensions.gutter}>
