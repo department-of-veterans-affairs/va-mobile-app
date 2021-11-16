@@ -1,0 +1,12 @@
+import CodeBlock from '@theme/CodeBlock'
+import VAModalPickerString from '!!raw-loader!@componentsDocs/FormWrapper/FormFields/Picker/VAModalPicker'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<VAModalPicker 
+selectedValue={selected} 
+onSelectionChange={(textValue) => { setSelected(textValue) }} 
+pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
+
+
+<ComponentTopInfo componentName="VAModalPicker" example={exampleString} codeString={VAModalPickerString} />

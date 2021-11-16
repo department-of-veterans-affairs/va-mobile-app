@@ -1,0 +1,8 @@
+import HooksInfo from '../../../src/components/HooksInfo'
+
+export const exampleString = `const screanReaderEnabled = useIsScreanReaderEnabled()\n
+const setFocus = useCallback(() => {
+    if (ref.current && screanReaderEnabled) {}
+}`
+
+<HooksInfo componentName="useIsScreanReaderEnabled" example={exampleString}/>

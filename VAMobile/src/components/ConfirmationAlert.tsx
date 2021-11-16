@@ -5,16 +5,25 @@ import { AlertBoxProps } from './AlertBox'
 import { useTheme } from 'utils/hooks'
 
 export type ConfirmationAlertProps = {
+  /**sets the confirm label */
   confirmLabel: string
+  /** sets the cancel label */
   cancelLabel: string
+  /**sets the listener function for the confirm action*/
   confirmOnPress: () => void
+  /**sets the listener function for the cancel action*/
   cancelOnPress: () => void
+  /**sets the a11ly tesxt for the confirm action*/
   confirmA11y?: string
+  /**sets the a11ly tesxt for the cancel action*/
   cancelA11y?: string
+  /**sets the button type for the confirm button*/
   button1type?: ButtonTypes
+  /**sets the button type for the cancel button*/
   button2type?: ButtonTypes
 } & AlertBoxProps
 
+/**Show a confirmation alert that the user can confirm or cancel the action */
 const ConfirmationAlert: FC<ConfirmationAlertProps> = ({
   title,
   text,

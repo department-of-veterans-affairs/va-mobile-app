@@ -21,54 +21,103 @@ export type BorderWidths = 'default' | number
 type NumOrStrPx = number | string
 
 export type BoxProps = ViewProps & {
+  /** set margin of this component*/
   m?: NumOrStrPx
+  /** set margin top of this component*/
   mt?: NumOrStrPx
+  /** set margin right of this component*/
   mr?: NumOrStrPx
+  /** set margin bottom of this component*/
   mb?: NumOrStrPx
+  /** set margin left of this component*/
   ml?: NumOrStrPx
+  /** set margin right and left of this component*/
   mx?: NumOrStrPx | 'auto'
+  /** set margin top and bottom of this component*/
   my?: NumOrStrPx
+  /** set padding of this component*/
   p?: NumOrStrPx
+  /** set padding top of this component*/
   pt?: NumOrStrPx
+  /** set padding right of this component*/
   pr?: NumOrStrPx
+  /** set padding bottom of this component*/
   pb?: NumOrStrPx
+  /** set padding left of this component*/
   pl?: NumOrStrPx
+  /** set padding right and left of this component*/
   px?: NumOrStrPx
+  /** set padding top and bottom of this component*/
   py?: NumOrStrPx
+  /** sets the number of logical pixels to offset the top edge of this component*/
   top?: string | number
+  /** sets the number of logical pixels to offset the left edge of this component*/
   left?: string | number
+  /** sets the number of logical pixels to offset the right edge of this component*/
   right?: string | number
+  /** sets the number of logical pixels to offset the bottom edge of this component*/
   bottom?: string | number
+  /** sets the positioning to relative or absolute of this component*/
   position?: 'relative' | 'absolute'
+  /**sets the display type of this component*/
   display?: 'flex' | 'none'
+  /**sets the flex property of this component*/
   flex?: number
+  /**describes how any space within a container should be distributed among its children along the main axis*/
   flexGrow?: number
+  /**flexShrink describes how to shrink children along the main axis in the case in which the total size of the children overflows the size of the container on the main axis*/
   flexShrink?: number
+  /**controls whether children can wrap around after they hit the end of a flex container*/
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
-  overflow?: 'hidden' | 'visible' | 'scroll'
-  justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between'
-  alignItems?: 'center' | 'flex-start' | 'flex-end'
-  alignSelf?: 'auto' | FlexAlignType
-  children?: ReactNode
-  width?: number | string
-  minWidth?: number | string
-  height?: number | string
-  minHeight?: number | string
+  /**controls which directions children of a container go*/
   flexDirection?: 'column' | 'row'
+  /**controls how children are measured and displayed*/
+  overflow?: 'hidden' | 'visible' | 'scroll'
+  /**aligns children in the main direction*/
+  justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between'
+  /**aligns children in the cross direction*/
+  alignItems?: 'center' | 'flex-start' | 'flex-end'
+  /**controls how a child aligns in the cross direction, overriding the alignItems of the parent*/
+  alignSelf?: 'auto' | FlexAlignType
+  /** react nodes passed to the component*/
+  children?: ReactNode
+  /** sets the width of this component*/
+  width?: number | string
+  /** sets the min width of this component*/
+  minWidth?: number | string
+  /** sets the height of this component*/
+  height?: number | string
+  /** sets the min height of this component*/
+  minHeight?: number | string
+  /**alings the text of this component*/
   textAlign?: 'center' | 'left' | 'right'
+  /** sets the background color of this component*/
   backgroundColor?: BackgroundVariant
+  /** sets the opacity of this component*/
   opacity?: number
+  /** sets the border width of this component*/
   borderWidth?: BorderWidths
+  /** sets the border color of this component*/
   borderColor?: BorderColorVariant
+  /** sets the border style of this component*/
   borderStyle?: BorderStyles
+  /** sets the bottom border's width of this component*/
   borderBottomWidth?: BorderWidths
+  /** sets the bottom border's color of this component*/
   borderBottomColor?: BorderColorVariant
+  /** sets the top border's width of this component*/
   borderTopWidth?: BorderWidths
+  /** sets the top border's color of this component*/
   borderTopColor?: BorderColorVariant
+  /** sets the right border's width of this component*/
   borderRightWidth?: BorderWidths
+  /** sets the right border's color of this component*/
   borderRightColor?: BorderColorVariant
+  /** sets the left border's width of this component*/
   borderLeftWidth?: BorderWidths
+  /** sets the left border's color of this component*/
   borderLeftColor?: BorderColorVariant
+  /** sets the border's radius of this component*/
   borderRadius?: number | string
 }
 
@@ -221,7 +270,7 @@ const StyledBox = styled(View)`
   ${themeFn<BoxProps>((theme, props) => createBoxStyles(theme, props))};
 `
 /**
- * Text is an element to quickly style text
+ * A common component for layout. It conforms to the convention of [m] [my] [mx] [mt] [mb] [ml] [mr] for specifying margins. It also accepts dimensions for padding in the same form.
  *
  * @returns TextView component
  */
