@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="13px" viewBox="0 0 10 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>376291D4-3A7E-45BF-A7FF-64BB35690121</title>
+    <g id="Homescreen" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home" transform="translate(-291.000000, -444.000000)" fill="#000" fill-rule="nonzero">
+            <g id="Controls/Tables/Row/Regular/Light/Default" transform="translate(0.000000, 428.000000)">
+                <g id="Right-Detail" transform="translate(39.130435, 0.000000)">
+                    <g id="Disclosure" transform="translate(241.869565, 0.000000)">
+                        <g id="chevron-right-solid" transform="translate(11.000000, 16.000000)">
+                            <path d="M7.6716621,7.00370548 L1.90346119,12.7718767 C1.62526712,13.0500708 1.17424429,13.0500708 0.896079909,12.7718767 L0.223315068,12.0991119 C-0.0544041096,11.8213927 -0.0549383562,11.37129 0.222127854,11.0929178 L4.7935274,6.5 L0.222127854,1.90711187 C-0.0549383562,1.62873973 -0.0544041096,1.17863699 0.223315068,0.900917808 L0.896079909,0.228152968 C1.17427397,-0.0500410959 1.6252968,-0.0500410959 1.90346119,0.228152968 L7.67163242,5.9963242 C7.94982648,6.27448858 7.94982648,6.72551142 7.6716621,7.00370548 Z" id="Path"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
