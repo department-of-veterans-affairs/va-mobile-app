@@ -206,4 +206,16 @@ export const UserAnalytics = {
       value: 'true',
     }
   },
+  vama_uses_large_text: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_uses_large_text',
+      value: value.toString(),
+    }
+  },
+  vama_uses_screen_reader: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_uses_screen_reader',
+      value: value.toString(),
+    }
+  },
 }
