@@ -2,21 +2,11 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import {context, renderWithProviders} from 'testUtils'
+import { context, renderWithProviders } from 'testUtils'
 import { act } from 'react-test-renderer'
 
-import {
-  AppointmentData,
-  AppointmentPhone,
-  AppointmentStatus,
-  AppointmentType,
-  AppointmentTypeConstants
-} from 'store/api/types'
-import {
-  defaultAppoinment,
-  defaultAppointmentAttributes,
-  defaultAppointmentLocation,
-} from 'utils/tests/appointments'
+import { AppointmentData, AppointmentPhone, AppointmentStatus, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
+import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation } from 'utils/tests/appointments'
 import { ClickForActionLink, TextView, VAButton } from 'components'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
@@ -47,9 +37,8 @@ context('AppointmentCancellationInfo', () => {
       },
     }
 
-
     act(() => {
-      component = renderWithProviders(<AppointmentCancellationInfo appointment={mockAppointment}/>)
+      component = renderWithProviders(<AppointmentCancellationInfo appointment={mockAppointment} />)
     })
 
     testInstance = component.root
@@ -71,7 +60,9 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Do you need to cancel?')
     })
     it('should display the correct cancellation body', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Call your VA health facility. You can\'t cancel VA Video Connect at an ATLAS location appointments online.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
+        "Call your VA health facility. You can't cancel V\ufeffA Video Connect at an ATLAS location appointments online.",
+      )
     })
     it('should display the correct location name', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
@@ -89,7 +80,9 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Do you need to cancel?')
     })
     it('should display the correct cancellation body', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Call your VA health facility. You can\'t cancel VA Video Connect at a VA location appointments online.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
+        "Call your VA health facility. You can't cancel V\ufeffA Video Connect at a VA location appointments online.",
+      )
     })
     it('should display the correct location name', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
@@ -107,7 +100,9 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Do you need to cancel?')
     })
     it('should display the correct cancellation body', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Call your VA health facility. You can\'t cancel VA Video Connect using a VA device appointments online.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
+        "Call your VA health facility. You can't cancel V\ufeffA Video Connect using a VA device appointments online.",
+      )
     })
     it('should display the correct location name', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
@@ -125,7 +120,7 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Do you need to cancel?')
     })
     it('should display the correct cancellation body', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Call your VA health facility. You can\'t cancel VA Video Connect at home appointments online.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("Call your VA health facility. You can't cancel V\ufeffA Video Connect at home appointments online.")
     })
     it('should display the correct location name', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
@@ -143,7 +138,7 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Do you need to cancel?')
     })
     it('should display the correct cancellation body', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Call your community care provider. You can\'t cancel community care appointments online.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("Call your community care provider. You can't cancel community care appointments online.")
     })
     it('should display the correct location name', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
@@ -161,7 +156,9 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Cancel this appointment')
     })
     it('should display the correct cancellation body', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('If you want to reschedule this appointment, you\'ll need to first cancel this one and then create a new appointment.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
+        "If you want to reschedule this appointment, you'll need to first cancel this one and then create a new appointment.",
+      )
     })
     it('should display a VA button', async () => {
       expect(testInstance.findByType(VAButton)).toBeTruthy()
@@ -176,7 +173,7 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Do you need to cancel?')
     })
     it('should display the correct cancellation body', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Call your community care provider. You can\'t cancel community care appointments online.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("Call your community care provider. You can't cancel community care appointments online.")
     })
     it('should display the correct location name', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
