@@ -1,6 +1,4 @@
 {
-  "8008271000": "8008271000",
-  "8008271000.displayText": "800-827-1000",
   "accountType.checking": "Checking",
   "accountType.savings": "Savings",
   "and": "and",
@@ -20,8 +18,6 @@
   "done": "Done",
   "done.a11yHint": "Exits out of the web view and navigates to the previous page",
   "done.picker.a11yHint": "confirms selection and closes the menu",
-  "downtime.title": "Some online tools or services aren’t working right now",
-  "downtime.message": "{{featureName}} on V\ufeffA mobile app is currently unavailable. We’re working to fix this. We intend to restore this by {{endTime}}. Please check back soon.",
   "editing": "Editing: {{ text }}",
   "editingNoValue": "Editing value",
   "empty": "Empty",
