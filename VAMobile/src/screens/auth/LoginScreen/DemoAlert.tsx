@@ -19,7 +19,7 @@ export type AlertPromptProps = {
 /**
  * Prompt to unlock demo mode for App. Used for Android as IOS already has `Alert.prompt`
  */
-const AndroidDemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => {
+const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
   const [input, setInput] = useState('')
@@ -96,4 +96,4 @@ const AndroidDemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm
   )
 }
 
-export default AndroidDemoAlert
+export default DemoAlert
