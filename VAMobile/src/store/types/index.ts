@@ -12,10 +12,12 @@ import { DisabilityRatingActions } from './disabilityRating'
 import { ErrorsActions } from './errors'
 import { LettersActions } from './letters'
 import { MilitaryServiceActions } from './militaryService'
+import { NotificationsActions } from './notifications'
 import { PatientActions } from './patient'
 import { PersonalInformationActions } from './personalInformation'
 import { SecureMessagingActions } from './secureMessaging'
 import { StoreState } from 'store'
+import { VaccineActions } from './vaccine'
 
 export * from './auth'
 export * from './directDeposit'
@@ -27,10 +29,12 @@ export * from './claimsAndAppeals'
 export * from './authorizedServices'
 export * from './errors'
 export * from './accessibility'
+export * from './notifications'
 export * from './secureMessaging'
 export * from './demo'
 export * from './analytics'
 export * from './disabilityRating'
+export * from './vaccine'
 export * from './patient'
 
 type ActObjs<T extends keyof AllActionDefs> = AllActionDefs[T]
@@ -54,11 +58,13 @@ export type AllActionDefs = AuthActions &
   ClaimsAndAppealsActions &
   AuthorizedServicesActions &
   ErrorsActions &
+  NotificationsActions &
   AccessibilityActions &
   SecureMessagingActions &
   DemoActions &
   AnalyticsActions &
   DisabilityRatingActions &
+  VaccineActions &
   PatientActions
 
 type AllActionTypes = keyof AllActionDefs

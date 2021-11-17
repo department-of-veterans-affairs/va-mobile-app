@@ -18,7 +18,7 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { contentTypes } from 'store/api/api'
@@ -180,11 +180,11 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
 
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       // simulate common error try again
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         throw {
           status: 503,
         }
-      } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
+      } else if (signInEmail === MockUsersEmail.user_1402) {
         // appeals unavailable with no claims
         activeClaimsAndAppeals.meta = {
           dataFromStore: false,
@@ -202,7 +202,7 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
         closedClaimsAndAppeals.meta = activeClaimsAndAppeals.meta
         activeClaimsAndAppeals.data = []
         closedClaimsAndAppeals.data = []
-      } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
+      } else if (signInEmail === MockUsersEmail.user_1401) {
         // claims unavailable with appeals
         activeClaimsAndAppeals.meta = {
           dataFromStore: false,
@@ -223,7 +223,7 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
         closedClaimsAndAppeals.data = closedClaimsAndAppeals.data.filter((item) => {
           return item.type === 'appeal'
         })
-      } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
+      } else if (signInEmail !== MockUsersEmail.user_366) {
         const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
         const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
         const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
@@ -342,7 +342,7 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
 
       // TODO: remove once file upload flow checked
       let singleClaim
-      if (signInEmail === 'vets.gov.user+366@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_366) {
         singleClaim = {
           data: Claim,
         }
@@ -394,7 +394,7 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
     try {
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       let appeal
-      if (signInEmail === 'vets.gov.user+226@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_226) {
         appeal = {
           data: Appeal,
         }
@@ -498,7 +498,7 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
           }),
         )
 
-        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, payload as unknown as api.Params)
       } else {
         const formData = new FormData()
         const fileToUpload = files[0]
@@ -534,7 +534,7 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
         formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
         formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
 
-        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
       }
 
       dispatch(dispatchFinishFileUpload(undefined, request.description))

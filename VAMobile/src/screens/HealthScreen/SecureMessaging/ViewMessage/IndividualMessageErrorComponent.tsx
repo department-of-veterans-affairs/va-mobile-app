@@ -26,7 +26,7 @@ const IndividualMessageErrorComponent: FC = () => {
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}
             </TextView>
-            <ClickToCallPhoneNumber displayedText={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} />
+            <ClickToCallPhoneNumber displayedText={t('common:8773270022.displayText')} phone={t('common:8773270022')} />
             {tryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <VAButton

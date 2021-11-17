@@ -210,7 +210,7 @@ android {
 
 dependencies {
 
-        //Please make sure the jsc dependency is before the React Native dependency.    
+        //Please make sure the jsc dependency is before the React Native dependency.
      if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
@@ -241,6 +241,10 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
+
+    implementation project(':react-native-notifications')
+    implementation 'com.google.firebase:firebase-core:19.0.0'
+    implementation "com.google.firebase:firebase-iid"
 
     // playstore core for in-app reviews
     implementation 'com.google.android.play:core:1.10.0'

@@ -11,18 +11,31 @@ import { initialAuthState, initialErrorsState, initialSecureMessagingState } fro
 import Inbox from './SecureMessaging/Inbox/Inbox'
 import { LoadingComponent, TextView, MessagesCountTag } from 'components'
 
-let mockNavigationSpy = jest.fn()
+const mockNavigateToSpy = jest.fn()
+const mockNavigateToCrisisLineSpy = jest.fn()
+const mockNavigateToAppointmentSpy = jest.fn()
+const mockNavigateToSecureMessagingSpy = jest.fn()
+const mockNavigateToVAVaccinesSpy = jest.fn()
+const mockNavigateToCovidUpdateSpy = jest.fn()
+
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
+
   return {
     ...original,
+    useRouteNavigation: () => {
+      return mockNavigateToSpy
+          .mockReturnValueOnce(mockNavigateToCrisisLineSpy)
+          .mockReturnValueOnce(mockNavigateToAppointmentSpy)
+          .mockReturnValueOnce(mockNavigateToSecureMessagingSpy)
+          .mockReturnValueOnce(mockNavigateToVAVaccinesSpy)
+          .mockReturnValueOnce(mockNavigateToCovidUpdateSpy)
+          .mockReturnValue(() => {})
+    },
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => {
-      return () => mockNavigationSpy
-    },
   }
 })
 
@@ -74,21 +87,45 @@ context('HealthScreen', () => {
   describe('on click of the crisis line button', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(1, 'VeteransCrisisLine')
+      expect(mockNavigateToCrisisLineSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the appointments button', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(2, 'Appointments')
+      expect(mockNavigateToAppointmentSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the secure messaging button', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(3, 'SecureMessaging')
+      expect(mockNavigateToSecureMessagingSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of the vaccines button', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[2].props.onPress()
+      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(4, 'VaccineList')
+      expect(mockNavigateToVAVaccinesSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of the covid-19 updates button', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[3].props.onPress()
+      const expectNavArgs =
+          {
+            url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
+            displayTitle: 'va.gov'
+          }
+      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(5, 'Webview', expectNavArgs)
+      expect(mockNavigateToCovidUpdateSpy).toHaveBeenCalled()
     })
   })
 
@@ -108,7 +145,7 @@ context('HealthScreen', () => {
     it('should not render a messagesCountTag', async () => {
       initializeTestInstance(0)
       expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Messages')
-      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Review and send secure messages')
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Send and receive secure messages')
     })
   })
 })

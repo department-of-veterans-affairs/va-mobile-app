@@ -51,7 +51,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
             <TextView variant="MobileBody" accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
               {t('secureMessaging.attachments.FAQ.ifYourProblem')}
             </TextView>
-            <ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />
+            <ClickToCallPhoneNumber phone={t('common:8773270022.displayText')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />
           </Box>
         </TextArea>
       </Box>
