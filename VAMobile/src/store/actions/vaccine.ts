@@ -2,9 +2,11 @@ import { AsyncReduxAction, ReduxAction } from '../types'
 
 import * as api from '../api'
 import { APIError, ScreenIDTypes, VaccineList, VaccineListData, VaccineLocation, VaccineLocationData } from '../api'
+import { Events } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from '../../utils/common'
+import { logAnalyticsEvent } from 'utils/analytics'
 
 /**
  * Action to signify the beginning of the vaccine list loading.
@@ -115,5 +117,16 @@ export const getVaccineLocation = (vaccineId: string, locationId: string): Async
         dispatch(dispatchFinishGetLocation(undefined, undefined, err))
       }
     }
+  }
+}
+
+/**
+ * Redux Action to send va vaccine details analytics
+ *
+ * @returns AsyncReduxAction
+ */
+export const sendVaccineDetailsAnalytics = (groupName: string): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_vaccine_details(groupName))
   }
 }
