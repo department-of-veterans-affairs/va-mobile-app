@@ -5,11 +5,11 @@ import React, { FC, useEffect } from 'react'
 
 import {
   Box,
+  CallHelpCenter,
   ClickForActionLink,
   ClickToCallPhoneNumber,
   DefaultList,
   DefaultListItemObj,
-  ErrorComponent,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -160,7 +160,7 @@ const DisabilityRatingsScreen: FC = () => {
   }
 
   if (useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
+    return <CallHelpCenter titleText={t('disabilityRating.errorTitle')} titleA11yHint={t('disabilityRating.errorTitleA11y')} callPhone={t('disabilityRating.errorPhoneNumber')} />
   }
 
   if (loading) {
