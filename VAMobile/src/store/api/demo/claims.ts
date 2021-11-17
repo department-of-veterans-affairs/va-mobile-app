@@ -2,6 +2,9 @@ import { ClaimGetData, ClaimsAndAppealsGetData } from '../types'
 import { DemoStore } from './store'
 import { Params } from '../api'
 
+/**
+ * Type denoting the demo data store
+ */
 export type ClaimsDemoStore = {
   '/v0/claims-and-appeals-overview': {
     open: ClaimsAndAppealsGetData
@@ -11,6 +14,9 @@ export type ClaimsDemoStore = {
   '/v0/claim/600236068': ClaimGetData
 }
 
+/**
+ * Type to define the mock returns to keep type safety
+ */
 export type ClaimsDemoApiReturnTypes = ClaimGetData | ClaimsAndAppealsGetData
 
 export const getClaimsAndAppealsOverview = (store: DemoStore, params: Params): ClaimsAndAppealsGetData => {

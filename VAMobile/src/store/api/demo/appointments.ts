@@ -4,6 +4,9 @@ import { Params } from '../api'
 
 import { DateTime } from 'luxon'
 
+/**
+ * Type denoting the demo data store
+ */
 export type AppointmentsDemoStore = {
   '/v0/appointments': {
     past: AppointmentsGetData
@@ -17,7 +20,7 @@ export type AppointmentsDemoStore = {
 export type AppointmentDemoReturnTypes = undefined | AppointmentsGetData
 
 /**
- * Function used to get user appointments. This avoids reuse for the PUT/POST calls required for phones
+ * Function used to get user appointments
  * @param params- PUT/POST params that will be used to update the demo store.
  */
 export const getAppointments = (store: DemoStore, params: Params): AppointmentsGetData | undefined => {
