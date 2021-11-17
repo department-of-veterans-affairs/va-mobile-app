@@ -29,11 +29,19 @@ As part of this story we want to: <!-- List the desired outcome(s) for this tick
 ## Notes & Open Questions
 
 - Dependencies/Roadblocks:
-- Test Acct Needed: Y/N
-- Frontend/Backend:
+    - Any internal/external dependencies?
+    - Test accounts needed?
 - Does this require QA?
-- Can we finish this in 10 days?
-- Is the ticket labeled accordingly (i.e.labels-(fe/be/ux,feature), epic,etc)
-
+    
 - Dev Notes: 
+
+
+## Ticket Checklist
+
+- [ ] Acceptance criteria defined
+- [ ] Labels added (front-end, back-end, feature)
+- [ ] Linked to an Epic
+
+
+
  
