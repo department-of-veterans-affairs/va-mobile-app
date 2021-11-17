@@ -21,7 +21,7 @@ import {
 export type DemoStore = AppointmentsDemoStore & ClaimsDemoStore & ProfileDemoStore
 
 /**
- * Intersection type to define the mock returns to keep type safety
+ * Union type to define the mock returns to keep type safety
  */
 type DemoApiReturns = ClaimsDemoApiReturnTypes | AppointmentDemoReturnTypes | ProfileDemoReturnTypes
 
