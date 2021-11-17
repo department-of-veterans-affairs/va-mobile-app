@@ -33,10 +33,6 @@
 #include <folly/hash/SpookyHashV2.h>
 #include <folly/lang/Bits.h>
 
-#if FOLLY_HAS_STRING_VIEW
-#include <string_view>
-#endif
-
 namespace folly {
 namespace hash {
 
@@ -73,15 +69,6 @@ constexpr uint64_t hash_128_to_64(
   b ^= (b >> 47);
   b *= kMul;
   return b;
-}
-
-// Order-independent way to reduce multiple 64 bit hashes into a single hash.
-FOLLY_DISABLE_UNDEFINED_BEHAVIOR_SANITIZER("unsigned-integer-overflow")
-constexpr uint64_t commutative_hash_128_to_64(
-    const uint64_t upper, const uint64_t lower) noexcept {
-  // Commutative accumulator taken from this paper:
-  // https://www.preprints.org/manuscript/201710.0192/v1/download
-  return 3860031 + (upper + lower) * 2779 + (upper * lower * 2);
 }
 
 //  twang_mix64
@@ -565,20 +552,6 @@ struct hasher<std::string> {
 template <typename K>
 struct IsAvalanchingHasher<hasher<std::string>, K> : std::true_type {};
 
-#if FOLLY_HAS_STRING_VIEW
-template <>
-struct hasher<std::string_view> {
-  using folly_is_avalanching = std::true_type;
-
-  size_t operator()(const std::string_view& key) const {
-    return static_cast<size_t>(
-        hash::SpookyHashV2::Hash64(key.data(), key.size(), 0));
-  }
-};
-template <typename K>
-struct IsAvalanchingHasher<hasher<std::string_view>, K> : std::true_type {};
-#endif
-
 template <typename T>
 struct hasher<T, std::enable_if_t<std::is_enum<T>::value>> {
   size_t operator()(T key) const noexcept { return Hash()(to_underlying(key)); }
@@ -670,7 +643,9 @@ uint64_t commutative_hash_combine_value_generic(
     uint64_t seed, Hash const& hasher, Value const& value) {
   auto const x = hasher(value);
   auto const y = IsAvalanchingHasher<Hash, Value>::value ? x : twang_mix64(x);
-  return commutative_hash_128_to_64(seed, y);
+  // Commutative accumulator taken from this paper:
+  // https://www.preprints.org/manuscript/201710.0192/v1/download
+  return 3860031 + (seed + y) * 2779 + (seed * y * 2);
 }
 
 // hash_range combines hashes of items in the range [first, last) in an

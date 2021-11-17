@@ -19,7 +19,7 @@ const HeaderTitle: FC<HeaderTitleProps> = ({ focusRef, headerTitle, testID, acce
   const combinestyle = StyleSheet.flatten([{ height: headerHeight }, defaultStyle.headerText])
   return (
     <View ref={focusRef} accessibilityRole="header" accessible={accessible} style={combinestyle} testID={testID} accessibilityLabel={accessabilityLabel}>
-      <TextView accessible={false} importantForAccessibility={'no'} color={'primaryContrast'} allowFontScaling={false}>
+      <TextView accessible={false} importantForAccessibility={'no'} color={'primaryContrast'}>
         {headerTitle}
       </TextView>
     </View>

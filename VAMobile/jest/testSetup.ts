@@ -19,15 +19,6 @@ NativeModules.DeviceData = {
   getBuildNumber: jest.fn().mockReturnValue(0),
 }
 
-NativeModules.DeviceData = {
-	deviceName: 'Device Name',
-	getDeviceName: jest.fn().mockReturnValue('Device Name'),
-	versionName: 'v0.0.0',
-	getVersionName: jest.fn().mockReturnValue('v0.0.0'),
-	buildNumber: 0,
-	getBuildNumber: jest.fn().mockReturnValue(0),
-}
-
 jest.mock('react-native-safe-area-context', () => {
   let original = jest.requireActual('react-native-safe-area-context')
   return {
@@ -147,7 +138,7 @@ jest.mock('@react-native-async-storage/async-storage', () => {
   }
 })
 
-jest.mock('@react-native-cookies/cookies', () => {
+jest.mock('@react-native-community/cookies', () => {
   return {
     clearAll: jest.fn(),
   }

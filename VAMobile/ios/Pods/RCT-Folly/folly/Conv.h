@@ -243,7 +243,7 @@ to(Src&& value) {
  */
 template <class Tgt, class Src>
 typename std::enable_if<
-    is_arithmetic_v<Src> && !std::is_same<Tgt, Src>::value &&
+    std::is_arithmetic<Src>::value && !std::is_same<Tgt, Src>::value &&
         std::is_same<Tgt, bool>::value,
     Expected<Tgt, ConversionCode>>::type
 tryTo(const Src& value) {
@@ -252,7 +252,7 @@ tryTo(const Src& value) {
 
 template <class Tgt, class Src>
 typename std::enable_if<
-    is_arithmetic_v<Src> && !std::is_same<Tgt, Src>::value &&
+    std::is_arithmetic<Src>::value && !std::is_same<Tgt, Src>::value &&
         std::is_same<Tgt, bool>::value,
     Tgt>::type
 to(const Src& value) {
@@ -312,8 +312,9 @@ auto getLastElement(const Ts&... ts)
 }
 
 template <class... Ts>
-struct LastElement : std::decay<decltype(LastElementImpl<Ts...>::call(
-                         std::declval<Ts>()...))> {};
+struct LastElement : std::decay<decltype(
+                         LastElementImpl<Ts...>::call(std::declval<Ts>()...))> {
+};
 #endif
 
 } // namespace detail
@@ -528,8 +529,8 @@ constexpr typename std::
  */
 template <class Tgt, class Src>
 typename std::enable_if<
-    is_integral_v<Src> && is_signed_v<Src> && IsSomeString<Tgt>::value &&
-    sizeof(Src) >= 4>::type
+    std::is_integral<Src>::value && std::is_signed<Src>::value &&
+    IsSomeString<Tgt>::value && sizeof(Src) >= 4>::type
 toAppend(Src value, Tgt* result) {
   char buffer[to_ascii_size_max_decimal<uint64_t>];
   auto uvalue = value < 0 ? ~static_cast<uint64_t>(value) + 1
@@ -542,8 +543,8 @@ toAppend(Src value, Tgt* result) {
 
 template <class Src>
 typename std::enable_if<
-    is_integral_v<Src> && is_signed_v<Src> && sizeof(Src) >= 4 &&
-        sizeof(Src) < 16,
+    std::is_integral<Src>::value && std::is_signed<Src>::value &&
+        sizeof(Src) >= 4 && sizeof(Src) < 16,
     size_t>::type
 estimateSpaceNeeded(Src value) {
   auto uvalue = value < 0 ? ~static_cast<uint64_t>(value) + 1
@@ -556,8 +557,8 @@ estimateSpaceNeeded(Src value) {
  */
 template <class Tgt, class Src>
 typename std::enable_if<
-    is_integral_v<Src> && !is_signed_v<Src> && IsSomeString<Tgt>::value &&
-    sizeof(Src) >= 4>::type
+    std::is_integral<Src>::value && !std::is_signed<Src>::value &&
+    IsSomeString<Tgt>::value && sizeof(Src) >= 4>::type
 toAppend(Src value, Tgt* result) {
   char buffer[to_ascii_size_max_decimal<uint64_t>];
   result->append(buffer, to_ascii_decimal(buffer, value));
@@ -565,8 +566,8 @@ toAppend(Src value, Tgt* result) {
 
 template <class Src>
 typename std::enable_if<
-    is_integral_v<Src> && !is_signed_v<Src> && sizeof(Src) >= 4 &&
-        sizeof(Src) < 16,
+    std::is_integral<Src>::value && !std::is_signed<Src>::value &&
+        sizeof(Src) >= 4 && sizeof(Src) < 16,
     size_t>::type
 estimateSpaceNeeded(Src value) {
   return to_ascii_size_decimal(value);
@@ -578,20 +579,24 @@ estimateSpaceNeeded(Src value) {
  */
 template <class Tgt, class Src>
 typename std::enable_if<
-    is_integral_v<Src> && IsSomeString<Tgt>::value && sizeof(Src) < 4>::type
+    std::is_integral<Src>::value && IsSomeString<Tgt>::value &&
+    sizeof(Src) < 4>::type
 toAppend(Src value, Tgt* result) {
-  typedef typename std::conditional<is_signed_v<Src>, int64_t, uint64_t>::type
-      Intermediate;
+  typedef
+      typename std::conditional<std::is_signed<Src>::value, int64_t, uint64_t>::
+          type Intermediate;
   toAppend<Tgt>(static_cast<Intermediate>(value), result);
 }
 
 template <class Src>
 typename std::enable_if<
-    is_integral_v<Src> && sizeof(Src) < 4 && !std::is_same<Src, char>::value,
+    std::is_integral<Src>::value && sizeof(Src) < 4 &&
+        !std::is_same<Src, char>::value,
     size_t>::type
 estimateSpaceNeeded(Src value) {
-  typedef typename std::conditional<is_signed_v<Src>, int64_t, uint64_t>::type
-      Intermediate;
+  typedef
+      typename std::conditional<std::is_signed<Src>::value, int64_t, uint64_t>::
+          type Intermediate;
   return estimateSpaceNeeded(static_cast<Intermediate>(value));
 }
 
@@ -1080,7 +1085,7 @@ convertTo(StringPiece* src) noexcept {
 
 template <typename T>
 typename std::enable_if<
-    is_integral_v<T> && !std::is_same<T, bool>::value,
+    std::is_integral<T>::value && !std::is_same<T, bool>::value,
     Expected<T, ConversionCode>>::type
 convertTo(StringPiece* src) noexcept {
   return str_to_integral<T>(src);
@@ -1094,15 +1099,15 @@ convertTo(StringPiece* src) noexcept {
  */
 template <typename Tgt>
 typename std::enable_if<
-    is_integral_v<Tgt> && !std::is_same<Tgt, bool>::value,
+    std::is_integral<Tgt>::value && !std::is_same<Tgt, bool>::value,
     Expected<Tgt, ConversionCode>>::type
 tryTo(const char* b, const char* e) {
   return detail::digits_to<Tgt>(b, e);
 }
 
 template <typename Tgt>
-typename std::enable_if< //
-    is_integral_v<Tgt> && !std::is_same<Tgt, bool>::value,
+typename std::enable_if<
+    std::is_integral<Tgt>::value && !std::is_same<Tgt, bool>::value,
     Tgt>::type
 to(const char* b, const char* e) {
   return tryTo<Tgt>(b, e).thenOrThrow(
@@ -1120,8 +1125,8 @@ to(const char* b, const char* e) {
  * Parsing strings to numeric types.
  */
 template <typename Tgt>
-FOLLY_NODISCARD inline typename std::enable_if< //
-    is_arithmetic_v<Tgt>,
+FOLLY_NODISCARD inline typename std::enable_if<
+    std::is_arithmetic<Tgt>::value,
     Expected<StringPiece, ConversionCode>>::type
 parseTo(StringPiece src, Tgt& out) {
   return detail::convertTo<Tgt>(&src).then(
@@ -1142,7 +1147,7 @@ namespace detail {
 template <class Tgt>
 typename std::enable_if<
     !std::is_same<Tgt, bool>::value &&
-        (is_integral_v<Tgt> || std::is_floating_point<Tgt>::value),
+        (std::is_integral<Tgt>::value || std::is_floating_point<Tgt>::value),
     Expected<Tgt, ConversionCode>>::type
 convertTo(const bool& value) noexcept {
   return static_cast<Tgt>(value ? 1 : 0);
@@ -1155,19 +1160,20 @@ convertTo(const bool& value) noexcept {
  */
 template <class Tgt, class Src>
 typename std::enable_if<
-    is_integral_v<Src> && !std::is_same<Tgt, Src>::value &&
-        !std::is_same<Tgt, bool>::value && is_integral_v<Tgt>,
+    std::is_integral<Src>::value && !std::is_same<Tgt, Src>::value &&
+        !std::is_same<Tgt, bool>::value && std::is_integral<Tgt>::value,
     Expected<Tgt, ConversionCode>>::type
 convertTo(const Src& value) noexcept {
   if /* constexpr */ (
-      make_unsigned_t<Tgt>(std::numeric_limits<Tgt>::max()) <
-      make_unsigned_t<Src>(std::numeric_limits<Src>::max())) {
+      std::make_unsigned_t<Tgt>(std::numeric_limits<Tgt>::max()) <
+      std::make_unsigned_t<Src>(std::numeric_limits<Src>::max())) {
     if (greater_than<Tgt, std::numeric_limits<Tgt>::max()>(value)) {
       return makeUnexpected(ConversionCode::ARITH_POSITIVE_OVERFLOW);
     }
   }
   if /* constexpr */ (
-      is_signed_v<Src> && (!is_signed_v<Tgt> || sizeof(Src) > sizeof(Tgt))) {
+      std::is_signed<Src>::value &&
+      (!std::is_signed<Tgt>::value || sizeof(Src) > sizeof(Tgt))) {
     if (less_than<Tgt, std::numeric_limits<Tgt>::min()>(value)) {
       return makeUnexpected(ConversionCode::ARITH_NEGATIVE_OVERFLOW);
     }
@@ -1204,7 +1210,7 @@ convertTo(const Src& value) noexcept {
  */
 template <typename Tgt, typename Src>
 inline typename std::enable_if<
-    std::is_floating_point<Src>::value && is_integral_v<Tgt> &&
+    std::is_floating_point<Src>::value && std::is_integral<Tgt>::value &&
         !std::is_same<Tgt, bool>::value,
     bool>::type
 checkConversion(const Src& value) {
@@ -1219,7 +1225,7 @@ checkConversion(const Src& value) {
         std::numeric_limits<Tgt>::max() - static_cast<Tgt>(mmax)) {
       return false;
     }
-  } else if (is_signed_v<Tgt> && value <= tgtMinAsSrc) {
+  } else if (std::is_signed<Tgt>::value && value <= tgtMinAsSrc) {
     if (value < tgtMinAsSrc) {
       return false;
     }
@@ -1235,7 +1241,7 @@ checkConversion(const Src& value) {
 // Integers can always safely be converted to floating point values
 template <typename Tgt, typename Src>
 constexpr typename std::enable_if<
-    is_integral_v<Src> && std::is_floating_point<Tgt>::value,
+    std::is_integral<Src>::value && std::is_floating_point<Tgt>::value,
     bool>::type
 checkConversion(const Src&) {
   return true;
@@ -1260,8 +1266,8 @@ checkConversion(const Src&) {
  */
 template <typename Tgt, typename Src>
 typename std::enable_if<
-    (is_integral_v<Src> && std::is_floating_point<Tgt>::value) ||
-        (std::is_floating_point<Src>::value && is_integral_v<Tgt>),
+    (std::is_integral<Src>::value && std::is_floating_point<Tgt>::value) ||
+        (std::is_floating_point<Src>::value && std::is_integral<Tgt>::value),
     Expected<Tgt, ConversionCode>>::type
 convertTo(const Src& value) noexcept {
   if (LIKELY(checkConversion<Tgt>(value))) {
@@ -1284,7 +1290,7 @@ inline std::string errorValue(const Src& value) {
 template <typename Tgt, typename Src>
 using IsArithToArith = bool_constant<
     !std::is_same<Tgt, Src>::value && !std::is_same<Tgt, bool>::value &&
-    is_arithmetic_v<Src> && is_arithmetic_v<Tgt>>;
+    std::is_arithmetic<Src>::value && std::is_arithmetic<Tgt>::value>;
 
 } // namespace detail
 
@@ -1354,15 +1360,6 @@ inline Expected<StringPiece, ConversionCode> parseTo(
   return detail::parseToStr(in, out);
 }
 
-#if FOLLY_HAS_STRING_VIEW
-FOLLY_NODISCARD
-inline Expected<StringPiece, ConversionCode> parseTo(
-    StringPiece in, std::string_view& out) {
-  out = std::string_view(in.data(), in.size());
-  return StringPiece{in.end(), in.end()};
-}
-#endif
-
 FOLLY_NODISCARD
 inline Expected<StringPiece, ConversionCode> parseTo(
     StringPiece in, fbstring& out) {
@@ -1419,8 +1416,8 @@ parseToWrap(StringPiece sp, Tgt& out) {
 }
 
 template <typename Tgt>
-using ParseToError = ExpectedErrorType<decltype(detail::parseToWrap(
-    StringPiece{}, std::declval<Tgt&>()))>;
+using ParseToError = ExpectedErrorType<decltype(
+    detail::parseToWrap(StringPiece{}, std::declval<Tgt&>()))>;
 
 } // namespace detail
 
@@ -1437,7 +1434,7 @@ tryTo(StringPiece src) {
   Tgt result{};
   using Error = detail::ParseToError<Tgt>;
   using Check = typename std::conditional<
-      is_arithmetic_v<Tgt>,
+      std::is_arithmetic<Tgt>::value,
       detail::CheckTrailingSpace,
       detail::ReturnUnit<Error>>::type;
   return parseTo(src, result).then(Check(), [&](Unit) {
@@ -1460,7 +1457,7 @@ inline
   Tgt result{};
   using Error = detail::ParseToError<Tgt>;
   using Check = typename std::conditional<
-      is_arithmetic_v<Tgt>,
+      std::is_arithmetic<Tgt>::value,
       detail::CheckTrailingSpace,
       detail::ReturnUnit<Error>>::type;
   auto tmp = detail::parseToWrap(src, result);

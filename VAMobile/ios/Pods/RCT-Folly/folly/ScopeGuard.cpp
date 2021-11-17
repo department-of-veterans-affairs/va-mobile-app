@@ -16,14 +16,12 @@
 
 #include <folly/ScopeGuard.h>
 
-#include <exception>
 #include <iostream>
 
-/*static*/ void folly::detail::ScopeGuardImplBase::terminate() noexcept {
+/*static*/ void folly::detail::ScopeGuardImplBase::warnAboutToCrash() noexcept {
   // Ensure the availability of std::cerr
   std::ios_base::Init ioInit;
   std::cerr
       << "This program will now terminate because a folly::ScopeGuard callback "
          "threw an \nexception.\n";
-  std::rethrow_exception(std::current_exception());
 }

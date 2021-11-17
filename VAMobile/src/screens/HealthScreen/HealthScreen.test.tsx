@@ -4,21 +4,21 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {HealthScreen} from '../index'
-import {Pressable, TouchableWithoutFeedback} from 'react-native'
-import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
-import Inbox from "./SecureMessaging/Inbox/Inbox";
-import {LoadingComponent, TextView, MessagesCountTag} from "components";
+import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { HealthScreen } from '../index'
+import { Pressable, TouchableWithoutFeedback } from 'react-native'
+import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
+import Inbox from './SecureMessaging/Inbox/Inbox'
+import { LoadingComponent, TextView, MessagesCountTag } from 'components'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual("utils/hooks")
-  let theme = jest.requireActual("styles/themes/standardTheme").default
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(()=> {
-      return {...theme}
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
     useRouteNavigation: () => {
       return () => mockNavigationSpy
@@ -37,7 +37,7 @@ context('HealthScreen', () => {
     props = mockNavProps()
 
     store = mockStore({
-      auth: {...initialAuthState},
+      auth: { ...initialAuthState },
       secureMessaging: {
         ...initialSecureMessagingState,
         hasLoadedInbox,
@@ -52,16 +52,13 @@ context('HealthScreen', () => {
             unreadCount: unreadCount,
             systemFolder: true,
           },
-        }
+        },
       },
       errors: initialErrorsState,
-
     })
 
     act(() => {
-      component = renderWithProviders(
-          <HealthScreen {...props} />, store
-      )
+      component = renderWithProviders(<HealthScreen {...props} />, store)
     })
 
     testInstance = component.root
@@ -97,22 +94,21 @@ context('HealthScreen', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance( undefined, false)
+      initializeTestInstance(undefined, false)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
 
   it('should render messagesCountTag with the correct count number', async () => {
     expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
-    expect(testInstance.findAllByType(TextView)[7].props.children).toBe(13)
+    expect(testInstance.findAllByType(TextView)[8].props.children).toBe(13)
   })
 
   describe('when there are zero unread inbox messages', () => {
     it('should not render a messagesCountTag', async () => {
-      initializeTestInstance( 0)
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe('Messages')
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Review and send secure messages')
+      initializeTestInstance(0)
+      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Messages')
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Review and send secure messages')
     })
   })
-
 })
