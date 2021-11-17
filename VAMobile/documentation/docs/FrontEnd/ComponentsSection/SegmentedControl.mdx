@@ -1,0 +1,17 @@
+import CodeBlock from '@theme/CodeBlock'
+import SegmentedControlString from '!!raw-loader!@componentsDocs/SegmentedControl'
+
+import ComponentTopInfo from '../../../src/components/ComponentInfo'
+
+export const exampleString = `<SegmentedControl 
+values={[1, 2, 3, 4] 
+titles={['One', 'Two', 'Three', 'Four'] 
+onChange={doSomething(selection: string)} />\n
+<SegmentedControl 
+values={['a', 'b'] 
+titles={['Alpha', 'Bravo'] 
+onChange={doSomething(selection: string)} 
+selected={1} />`
+
+
+<ComponentTopInfo componentName="SegmentedControl" example={exampleString} codeString={SegmentedControlString} />

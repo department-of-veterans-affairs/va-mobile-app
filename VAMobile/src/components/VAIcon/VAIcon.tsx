@@ -148,7 +148,7 @@ export type VAIconProps = BoxProps & {
 }
 
 /**
- * Reusable component to display svgs
+ * A common component to display assets(svgs). Svgs need to place in VAIcon/svgs folder. Set fill to #000 and stroke to #00F in the svg so VAIcon component can set the fill/stroke color. Examples/details can be found in VAIcon component.
  *
  * @returns VAIcon component
  */
