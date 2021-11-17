@@ -141,6 +141,14 @@ export const Events = {
       name: 'vama_claim_upload_fail',
     }
   },
+  vama_vaccine_details: (groupName: string): Event => {
+    return {
+      name: 'vama_vaccine_details',
+      params: {
+        groupName,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {
