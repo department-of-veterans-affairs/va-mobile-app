@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTestID, findByTypeWithSubstring, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
@@ -16,6 +16,7 @@ import { validateAddress, deleteAddress, finishValidateAddress } from 'store/act
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
+import RemoveData from './RemoveData'
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -47,20 +48,6 @@ jest.mock('../../store/actions', () => {
         type: '',
         payload: '',
       }
-    }),
-  }
-})
-
-const mockAlertSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-  return {
-    ...original,
-    useDestructiveAlert: () => mockAlertSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
     }),
   }
 })
@@ -206,7 +193,6 @@ context('EditAddressScreen', () => {
         phoneType: 'HOME',
       },
       formattedFaxPhone: '(858)-690-1286',
-      signinService: 'IDME',
     }
 
     initializeTestInstance(profileInfo)
@@ -222,8 +208,8 @@ context('EditAddressScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
-        ...initialErrorsState,
         errorsByScreenID,
+        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(profileInfo, undefined, undefined, errorState)
@@ -235,8 +221,8 @@ context('EditAddressScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
-        ...initialErrorsState,
         errorsByScreenID,
+        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(profileInfo, undefined, undefined, errorState)
@@ -666,7 +652,8 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
 
       navHeaderSpy.back.props.onPress()
-      expect(mockAlertSpy).toHaveBeenCalled()
+      expect(finishValidateAddress).toBeCalled()
+      expect(goBackSpy).toBeCalled()
     })
   })
 
@@ -687,13 +674,14 @@ context('EditAddressScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      const textViews = testInstance.findAllByType(TextView)
 
       // TODO: find a better way to pick the right textview
-      expect(findByTypeWithText(testInstance, TextView, 'Country is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'State is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Zip code is required')).toBeTruthy()
+      expect(textViews[238].props.children).toEqual('Country is required')
+      expect(textViews[243].props.children).toEqual('Street address is required')
+      expect(textViews[251].props.children).toEqual('City is required')
+      expect(textViews[324].props.children).toEqual('State is required')
+      expect(textViews[328].props.children).toEqual('Zip code is required')
     })
   })
 
@@ -711,8 +699,8 @@ context('EditAddressScreen', () => {
       const textViews = testInstance.findAllByType(TextView)
 
       expect(textViews[242].props.children).toEqual('Street address is required')
-      expect(textViews[257].props.children).toEqual('Please select a valid option')
-      expect(textViews[269].props.children).toEqual('Please select a valid option')
+      expect(textViews[258].props.children).toEqual('Please select a valid option')
+      expect(textViews[270].props.children).toEqual('Please select a valid option')
       expect(textViews[274].props.children).toEqual('Zip code is required')
     })
   })
@@ -729,9 +717,10 @@ context('EditAddressScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
-      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
+
+      expect(textViews[242].props.children).toEqual('Street address is required')
+      expect(textViews[250].props.children).toEqual('City is required')
+      expect(textViews[255].props.children).toEqual('Postal code is required')
     })
   })
 
@@ -876,7 +865,7 @@ context('EditAddressScreen', () => {
   })
 
   describe('delete address', () => {
-    it('should call the useDestructive hook', async () => {
+    it('should call the deleteAddress action', async () => {
       profileInfo.residentialAddress = {
         id: 25,
         addressLine1: '1707 Tiburon Blvd',
@@ -895,10 +884,26 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo, false, true)
 
       act(() => {
-        testInstance.findByType(VAButton).props.onPress()
+        testInstance.findByType(RemoveData).props.confirmFn()
       })
 
-      expect(mockAlertSpy).toHaveBeenCalled()
+      expect(deleteAddress).toBeCalledWith(
+        {
+          id: 25,
+          addressLine1: '1707 Tiburon Blvd',
+          addressLine2: 'Address line 2',
+          addressLine3: 'Address line 3',
+          addressPou: 'RESIDENCE/CHOICE',
+          addressType: 'DOMESTIC',
+          city: 'Tiburon',
+          countryCodeIso3: 'USA',
+          province: 'province',
+          stateCode: 'CA',
+          zipCode: '94920',
+          zipCodeSuffix: '1234',
+        },
+        ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
+      )
     })
   })
 })
