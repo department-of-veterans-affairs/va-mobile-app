@@ -1,8 +1,9 @@
-import { AccessibilityProps, Modal, Pressable, PressableProps, View } from 'react-native'
+import { AccessibilityProps, Modal, Pressable, PressableProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
+import { VAIconProps } from 'components/VAIcon'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -16,6 +17,8 @@ export type PickerItem = {
   label: string
   /** value is the unique value of the item, used to update and keep track of the current label displayed */
   value: string
+  /** icon to show */
+  icon?: VAIconProps
 }
 
 export type VAModalPickerProps = {
@@ -43,6 +46,12 @@ export type VAModalPickerProps = {
   validationList?: Array<ValidationFunctionItems>
   /** If true, will include a blank option at the top of the list with a blank value */
   includeBlankPlaceholder?: boolean
+  /** renders a button instead of form field */
+  displayButton?: boolean
+  /** i18n key text for the name of the button */
+  buttonText?: string
+  /** i18n key  text for the picker confirm button */
+  confirmBtnText?: string
 }
 
 /**A common component to display a picker for the device with an optional label*/
@@ -59,6 +68,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   error,
   validationList,
   includeBlankPlaceholder,
+  displayButton = false,
+  buttonText,
+  confirmBtnText,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
@@ -116,6 +128,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
         handleSelection(pickerOption.value)
       },
       isSelected: currentSelectedValue === pickerOption.value,
+      icon: pickerOption.icon,
     }
   })
 
@@ -156,6 +169,28 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     )
   }
 
+  const renderButton = () => {
+    const color = disabled ? 'primaryContrastDisabled' : 'primaryContrast'
+
+    const props: TouchableWithoutFeedbackProps = {
+      onPress: showModal,
+      disabled,
+      accessibilityRole: 'button',
+      accessible: true,
+      accessibilityState: disabled ? { disabled: true } : { disabled: false },
+    }
+
+    return (
+      <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(t('common:pickerLaunchBtn.a11yHint'))}>
+        <Box pr={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerButtonPadding}>
+          <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
+            {t(buttonText || '')}
+          </TextView>
+        </Box>
+      </TouchableWithoutFeedback>
+    )
+  }
+
   const actionsBarBoxProps: BoxProps = {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -170,7 +205,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
 
   const cancelLabel = t('common:cancel')
-  const doneLabel = t('common:done')
+  const confirmLabel = t(confirmBtnText || 'common:done')
 
   const cancelButtonProps: PressableProps = {
     accessible: true,
@@ -182,7 +217,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const doneButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    ...testIdProps(doneLabel),
+    ...testIdProps(confirmLabel),
     ...a11yHintProp(t('common:done.picker.a11yHint')),
   }
 
@@ -209,7 +244,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                 </TextView>
               </Box>
               <Pressable onPress={onDone} {...doneButtonProps}>
-                <TextView allowFontScaling={false}>{doneLabel}</TextView>
+                <TextView allowFontScaling={false}>{confirmLabel}</TextView>
               </Pressable>
             </Box>
             <VAScrollView bounces={false}>
@@ -218,7 +253,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           </Box>
         </Box>
       </Modal>
-      {renderSelectionBox()}
+      {displayButton ? renderButton() : renderSelectionBox()}
     </View>
   )
 }

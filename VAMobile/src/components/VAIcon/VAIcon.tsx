@@ -64,6 +64,7 @@ import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
 import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
+import FolderSolid from './svgs/folder-solid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import PaperClip from './svgs/paperClip.svg'
@@ -97,6 +98,7 @@ export const VA_ICON_MAP = {
   Directions,
   EmptyCheckBox,
   FilledCheckBox,
+  FolderSolid,
   EmptyRadio,
   FilledRadio,
   DisabledRadio,
