@@ -1,0 +1,407 @@
+{
+  "/v0/messaging/health/folders": {
+    "data": [
+      {
+        "id": "0",
+        "type": "folders",
+        "attributes": {
+          "folderId": 0,
+          "name": "Inbox",
+          "count": 12,
+          "unreadCount": 0,
+          "systemFolder": true
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0"
+        }
+      },
+      {
+        "id": "-2",
+        "type": "folders",
+        "attributes": {
+          "folderId": -2,
+          "name": "Drafts",
+          "count": 49,
+          "unreadCount": 39,
+          "systemFolder": true
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2"
+        }
+      },
+      {
+        "id": "-1",
+        "type": "folders",
+        "attributes": {
+          "folderId": -1,
+          "name": "Sent",
+          "count": 69,
+          "unreadCount": 0,
+          "systemFolder": true
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-1"
+        }
+      },
+      {
+        "id": "-3",
+        "type": "folders",
+        "attributes": {
+          "folderId": -3,
+          "name": "Deleted",
+          "count": 1,
+          "unreadCount": 0,
+          "systemFolder": true
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3"
+        }
+      },
+      {
+        "id": "1937904",
+        "type": "folders",
+        "attributes": {
+          "folderId": 1937904,
+          "name": "Custom Folder 2",
+          "count": 3,
+          "unreadCount": 0,
+          "systemFolder": false
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904"
+        }
+      },
+      {
+        "id": "690824",
+        "type": "folders",
+        "attributes": {
+          "folderId": 690824,
+          "name": "Test",
+          "count": 3,
+          "unreadCount": 0,
+          "systemFolder": false
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824"
+        }
+      }
+    ],
+    "links": {
+      "self": "https://staging-api.va.gov/mobile//v0/messaging/health/folders?",
+      "first": "https://staging-api.va.gov/mobile//v0/messaging/health/folders?page=1&per_page=10",
+      "prev": null,
+      "next": null,
+      "last": "https://staging-api.va.gov/mobile//v0/messaging/health/folders?page=1&per_page=10"
+    },
+    "meta": {
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalEntries": 6
+      }
+    }
+  },
+  "/v0/messaging/health/folders/0": {
+    "data": {
+      "id": "0",
+      "type": "folders",
+      "attributes": {
+        "folderId": 0,
+        "name": "Inbox",
+        "count": 12,
+        "unreadCount": 0,
+        "systemFolder": false
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0"
+      }
+    }
+  },
+  "/v0/messaging/health/folders/0/messages": {
+    "1": {
+      "data": [
+        {
+          "id": "2092809",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2092809,
+            "category": "MEDICATIONS",
+            "subject": "Naproxen side effects",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-10-26T22:22:06.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
+          }
+        },
+        {
+          "id": "2092803",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2092803,
+            "category": "COVID",
+            "subject": "Your requested info",
+            "body": null,
+            "attachment": true,
+            "sentDate": "2021-10-26T22:21:11.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
+          }
+        },
+        {
+          "id": "2092789",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2092789,
+            "category": "COVID",
+            "subject": "Vaccine Booster",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-10-26T22:17:38.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092789"
+          }
+        },
+        {
+          "id": "2092775",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2092775,
+            "category": "APPOINTMENTS",
+            "subject": "Preparing for your visit",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-10-26T22:14:45.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092775"
+          }
+        },
+        {
+          "id": "2088259",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2088259,
+            "category": "COVID",
+            "subject": "COVID vaccine booster?",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-10-21T15:59:15.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088259"
+          }
+        },
+        {
+          "id": "2088250",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2088250,
+            "category": "APPOINTMENTS",
+            "subject": "Preparing for your visit",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-10-21T15:58:36.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088250"
+          }
+        },
+        {
+          "id": "2060125",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2060125,
+            "category": "EDUCATION",
+            "subject": "Good morning to you ",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-09-17T23:17:02.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060125"
+          }
+        },
+        {
+          "id": "2060114",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2060114,
+            "category": "MEDICATIONS",
+            "subject": "Medication Inquiry",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-09-17T23:16:44.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060114"
+          }
+        },
+        {
+          "id": "2060047",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2060047,
+            "category": "COVID",
+            "subject": "COVID Inquiry",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-09-17T23:13:58.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060047"
+          }
+        },
+        {
+          "id": "2060025",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2060025,
+            "category": "COVID",
+            "subject": "Test ",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-09-17T23:13:30.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060025"
+          }
+        }
+      ],
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?",
+        "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
+        "prev": null,
+        "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=2&per_page=10",
+        "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10"
+      },
+      "meta": {
+        "sort": {
+          "sentDate": "DESC"
+        },
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 2,
+          "totalEntries": 12
+        }
+      }
+    },
+    "2": {
+      "data": [
+        {
+          "id": "2060013",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2060013,
+            "category": "OTHER",
+            "subject": "General Inquiry 2 Attachment",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-09-17T23:12:45.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060013"
+          }
+        },
+        {
+          "id": "2060006",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2060006,
+            "category": "APPOINTMENTS",
+            "subject": "Appointment Inquiry 1",
+            "body": null,
+            "attachment": false,
+            "sentDate": "2021-09-17T23:11:23.000Z",
+            "senderId": 1835650,
+            "senderName": "RATANA, NARIN ",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ"
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060006"
+          }
+        }
+      ],
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=2",
+        "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
+        "prev": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
+        "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10",
+        "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10"
+      },
+      "meta": {
+        "sort": {
+          "sentDate": "DESC"
+        },
+        "pagination": {
+          "currentPage": 2,
+          "perPage": 10,
+          "totalPages": 2,
+          "totalEntries": 12
+        }
+      }
+    }
+  }
+}
