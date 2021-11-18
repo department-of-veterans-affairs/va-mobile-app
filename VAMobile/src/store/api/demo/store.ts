@@ -14,16 +14,17 @@ import {
   updateUserPhone,
   validateAddress,
 } from './profile'
+import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getInboxMessage } from './secureMessaging'
 
 /**
  * Intersection type denoting the demo data store
  */
-export type DemoStore = AppointmentsDemoStore & ClaimsDemoStore & ProfileDemoStore
+export type DemoStore = AppointmentsDemoStore & ClaimsDemoStore & ProfileDemoStore & SecureMessagingDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
  */
-type DemoApiReturns = ClaimsDemoApiReturnTypes | AppointmentDemoReturnTypes | ProfileDemoReturnTypes
+type DemoApiReturns = ClaimsDemoApiReturnTypes | AppointmentDemoReturnTypes | ProfileDemoReturnTypes | SecureMessagingDemoApiReturnTypes
 
 let store: DemoStore | undefined
 
@@ -39,7 +40,7 @@ const setDemoStore = (data: DemoStore) => {
  * function to import the demo data store from the JSON file and initialize the demo store.
  */
 export const initDemoStore = async (): Promise<void> => {
-  const data = await Promise.all([import('./mocks/appointments.json'), import('./mocks/claims.json'), import('./mocks/profile.json')])
+  const data = await Promise.all([import('./mocks/appointments.json'), import('./mocks/claims.json'), import('./mocks/profile.json'), import('./mocks/secureMessaging.json')])
   setDemoStore(data.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
 
@@ -93,6 +94,13 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
      */
     case '/v0/claims-and-appeals-overview': {
       return getClaimsAndAppealsOverview(store, params)
+    }
+    /**
+     * Secure Messaging
+     */
+    case '/v0/messaging/health/folders/0/messages': {
+      // TODO TODO replace 0 with SecureMessagingSystemFolderIdConstants.INDEX?
+      return getInboxMessage(store, params)
     }
     default: {
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns
