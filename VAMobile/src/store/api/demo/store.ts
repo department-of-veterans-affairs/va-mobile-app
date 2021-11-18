@@ -99,7 +99,6 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
      * Secure Messaging
      */
     case '/v0/messaging/health/folders/0/messages': {
-      // TODO TODO replace 0 with SecureMessagingSystemFolderIdConstants.INDEX?
       return getInboxMessage(store, params)
     }
     default: {

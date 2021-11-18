@@ -7,7 +7,6 @@ type MessagePageNumber = '1' | '2'
 /**
  * Type denoting the demo data store for secure messaging
  */
-// TODO replace 0 with SecureMessagingSystemFolderIdConstants.INDEX?
 export type SecureMessagingDemoStore = {
   '/v0/messaging/health/folders': SecureMessagingFoldersGetData
   '/v0/messaging/health/folders/0': SecureMessagingFolderGetData
