@@ -20,7 +20,7 @@
             "subtype": "Compensation",
             "completed": false,
             "dateFiled": "2021-07-20",
-            "updatedAt": "2016-07-30",
+            "updatedAt": "2021-07-20",
             "displayTitle": "Compensation"
           }
         },
@@ -31,7 +31,7 @@
             "subtype": "Dependency",
             "completed": false,
             "dateFiled": "2016-01-01",
-            "updatedAt": "2021-07-20",
+            "updatedAt": "2016-07-30",
             "displayTitle": "Dependency"
           }
         }
