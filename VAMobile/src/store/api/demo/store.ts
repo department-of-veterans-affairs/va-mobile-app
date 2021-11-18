@@ -1,4 +1,4 @@
-import { AddressData, PaymentAccountData } from '../types'
+import { AddressData, PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { Params } from '../api'
@@ -98,7 +98,7 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     /**
      * Secure Messaging
      */
-    case '/v0/messaging/health/folders/0/messages': {
+    case `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`: {
       return getInboxMessage(store, params)
     }
     default: {
