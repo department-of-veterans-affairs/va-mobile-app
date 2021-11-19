@@ -21,8 +21,8 @@
         "attributes": {
           "folderId": -2,
           "name": "Drafts",
-          "count": 49,
-          "unreadCount": 39,
+          "count": 3,
+          "unreadCount": 0,
           "systemFolder": true
         },
         "links": {
@@ -411,7 +411,7 @@
       "attributes": {
         "folderId": -1,
         "name": "Sent",
-        "count": 5,
+        "count": 3,
         "unreadCount": 0,
         "systemFolder": false
       },
@@ -873,5 +873,324 @@
   },
   "/v0/messaging/health/messages/2095016/thread": {
     "data": []
+  },
+  "/v0/messaging/health/folders/-2": {
+    "data": {
+      "id": "-2",
+      "type": "folders",
+      "attributes": {
+        "folderId": -2,
+        "name": "Draft",
+        "count": 5,
+        "unreadCount": 0,
+        "systemFolder": false
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-1"
+      }
+    }
+  },
+  "/v0/messaging/health/folders/-2/messages": {
+    "data": [
+      {
+        "id": "2113141",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2113141,
+          "category": "TEST_RESULTS",
+          "subject": "Test Inquiry",
+          "body": null,
+          "attachment": false,
+          "sentDate": "2021-11-17T01:00:53.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": null
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113141"
+        }
+      },
+      {
+        "id": "2113020",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2113020,
+          "category": "MEDICATIONS",
+          "subject": "Naproxen side effects",
+          "body": null,
+          "attachment": false,
+          "sentDate": "2021-11-16T17:19:04.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113020"
+        }
+      },
+      {
+        "id": "2112896",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2112896,
+          "category": "COVID",
+          "subject": "Your requested info",
+          "body": null,
+          "attachment": false,
+          "sentDate": "2021-11-16T16:46:36.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2112896"
+        }
+      }
+    ],
+    "links": {
+      "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2/messages?page=1",
+      "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2/messages?page=1&per_page=10",
+      "prev": null,
+      "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2/messages?page=2&per_page=10",
+      "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2/messages?page=5&per_page=10"
+    },
+    "meta": {
+      "sort": {
+        "sentDate": "DESC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalEntries": 3
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2113141": {
+    "data": {
+      "id": "2113141",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2113141,
+        "category": "TEST_RESULTS",
+        "subject": "Test Inquiry",
+        "body": "Melvin Freeman\nUSMC Veteran",
+        "attachment": false,
+        "sentDate": null,
+        "senderId": 523757,
+        "senderName": "FREEMAN, MELVIN  V",
+        "recipientId": 1918816,
+        "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+        "readReceipt": null
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113141"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2113141/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2112896": {
+    "data": {
+      "id": "2112896",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2112896,
+        "category": "COVID",
+        "subject": "Your requested info",
+        "body": "Test test \n\n\n\n\nMelvin Freeman\nUSMC Veteran",
+        "attachment": false,
+        "sentDate": null,
+        "senderId": 523757,
+        "senderName": "FREEMAN, MELVIN  V",
+        "recipientId": 1918816,
+        "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+        "readReceipt": null
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2112896"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2112896/thread": {
+    "data": [
+      {
+        "id": "2092803",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2092803,
+          "category": "COVID",
+          "subject": "Your requested info",
+          "body": "Here is the information about COVID vaccines that you requested.  Let us know if you have any questions.\r\n\r\nDr. Duma\r\n",
+          "attachment": true,
+          "sentDate": "2021-10-26T22:21:11.000Z",
+          "senderId": 1835650,
+          "senderName": "RATANA, NARIN ",
+          "recipientId": 523757,
+          "recipientName": "FREEMAN, MELVIN  V",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
+        }
+      }
+    ]
+  },
+  "/v0/messaging/health/messages/2113020": {
+    "data": {
+      "id": "2113020",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2113020,
+        "category": "MEDICATIONS",
+        "subject": "Naproxen side effects",
+        "body": "Yes test test \n\nTest test \n\n\nMelvin Freeman\nUSMC Veteran",
+        "attachment": false,
+        "sentDate": null,
+        "senderId": 523757,
+        "senderName": "FREEMAN, MELVIN  V",
+        "recipientId": 1918816,
+        "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+        "readReceipt": null
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113020"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2113020/thread": {
+    "data": [
+      {
+        "id": "2098942",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2098942,
+          "category": "MEDICATIONS",
+          "subject": "Naproxen side effects",
+          "body": "Simple reply\n\n\n\nMelvin Freeman\nUSMC Veteran",
+          "attachment": false,
+          "sentDate": "2021-11-03T16:14:24.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": null
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098942"
+        }
+      },
+      {
+        "id": "2098903",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2098903,
+          "category": "MEDICATIONS",
+          "subject": "Naproxen side effects",
+          "body": "Reply \n\n\n\nMelvin Freeman\nUSMC Veteran",
+          "attachment": false,
+          "sentDate": "2021-11-03T16:06:13.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": null
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098903"
+        }
+      },
+      {
+        "id": "2095725",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2095725,
+          "category": "MEDICATIONS",
+          "subject": "Naproxen side effects",
+          "body": "A reply. \n\n\n\nMelvin Freeman\nUSMC Veteran",
+          "attachment": false,
+          "sentDate": "2021-10-29T18:00:41.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": null
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095725"
+        }
+      },
+      {
+        "id": "2092809",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2092809,
+          "category": "MEDICATIONS",
+          "subject": "Naproxen side effects",
+          "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.",
+          "attachment": false,
+          "sentDate": "2021-10-26T22:22:06.000Z",
+          "senderId": 1835650,
+          "senderName": "RATANA, NARIN ",
+          "recipientId": 523757,
+          "recipientName": "FREEMAN, MELVIN  V",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
+        }
+      }
+    ]
+  },
+  "/v0/messaging/health/recipients": {
+    "data": [
+      {
+        "id": "1918816",
+        "type": "triage_teams",
+        "attributes": {
+          "triageTeamId": 1918816,
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "relationType": "PATIENT",
+          "preferredTeam": true
+        }
+      },
+      {
+        "id": "1766073",
+        "type": "triage_teams",
+        "attributes": {
+          "triageTeamId": 1766073,
+          "name": "VA Flagship mobile applications interface_DAYT29",
+          "relationType": "PATIENT",
+          "preferredTeam": true
+        }
+      }
+    ],
+    "meta": {
+      "sort": {
+        "name": "ASC"
+      }
+    }
   }
 }
