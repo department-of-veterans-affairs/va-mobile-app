@@ -14,7 +14,7 @@ import {
   updateUserPhone,
   validateAddress,
 } from './profile'
-import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getInboxMessage } from './secureMessaging'
+import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getFolderMessages } from './secureMessaging'
 
 /**
  * Intersection type denoting the demo data store
@@ -98,8 +98,9 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     /**
      * Secure Messaging
      */
+    case `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`:
     case `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`: {
-      return getInboxMessage(store, params)
+      return getFolderMessages(store, params, endpoint)
     }
     default: {
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns
