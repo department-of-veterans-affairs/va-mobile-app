@@ -59,7 +59,8 @@
           "directDepositBenefits",
           "lettersAndDocuments",
           "militaryServiceHistory",
-          "userProfileUpdate"
+          "userProfileUpdate",
+          "secureMessaging"
         ],
         "health": {
           "facilities": [
