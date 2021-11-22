@@ -2,7 +2,7 @@ import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { DateTime } from 'luxon'
-import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, ScreenIDTypes } from '../api/types'
+import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes } from '../api/types'
 import { DowntimeWindow, DowntimeWindowsByScreenIDType, ErrorsByScreenIDType } from 'store'
 
 export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: ScreenIDTypes): ReduxAction => {
@@ -45,9 +45,8 @@ export const dispatchSetTryAgainFunction = (tryAgain: () => Promise<void>): Redu
 /**
  * Sets the error metadata for a given screen ID. Currently only utilized for downtime messages
  * @param metadata - Any key value pair of data
- * @param screenID - ID of the screen with the error
  */
-export const dispatchSetDowntime = (downtimeWindows: DowntimeWindowsByScreenIDType, screenID?: ScreenIDTypes): ReduxAction => {
+export const dispatchSetDowntime = (downtimeWindows: DowntimeWindowsByScreenIDType): ReduxAction => {
   return {
     type: 'ERRORS_SET_DOWNTIME',
     payload: {
@@ -110,40 +109,9 @@ export const dispatchClearErrorTypeByScreen = (errorType: CommonErrorTypes, scre
  */
 export const checkForDowntimeErrors = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    // const response = await api.get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
-    // if (!response) {
-    //   return
-    // }
-    const response = {
-      data: [
-        {
-          attributes: {
-            service: 'direct_deposit_benefits',
-            startTime: '2021-11-18T11:00:00.000Z',
-            endTime: '2021-11-18T23:00:00.000Z',
-          },
-          id: '1',
-          type: 'maintenance_window',
-        },
-        {
-          attributes: {
-            service: 'military_service_history',
-            startTime: '2021-11-18T11:00:00.000Z',
-            endTime: '2021-11-18T23:00:00.000Z',
-          },
-          id: '2',
-          type: 'maintenance_window',
-        },
-        {
-          attributes: {
-            service: 'secure_messaging',
-            startTime: '2021-11-18T11:00:00.000Z',
-            endTime: '2021-11-18T23:00:00.000Z',
-          },
-          id: '3',
-          type: 'maintenance_window',
-        },
-      ],
+    const response = await api.get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
+    if (!response) {
+      return
     }
     dispatch(dispatchClearAllDowntime())
     dispatch(dispatchClearErrorType(CommonErrorTypesConstants.DOWNTIME_ERROR))
@@ -172,7 +140,7 @@ export const updateCurrentDowntimes = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     const metadata = _getState().errors.downtimeWindowsByScreenID
     let errors = _getState().errors.errorsByScreenID
-    for (const [screenID, data] of Object.entries(metadata).filter(([k, v]) => !!v)) {
+    for (const [screenID, data] of Object.entries(metadata).filter(([, v]) => !!v)) {
       const { startTime, endTime } = data
       if (startTime < DateTime.now() && DateTime.now() < endTime && !errors[screenID as ScreenIDTypes]) {
         errors = {
