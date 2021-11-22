@@ -2,7 +2,8 @@ import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { DateTime } from 'luxon'
-import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes } from '../api/types'
+import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, ScreenIDTypes } from '../api/types'
+import { DowntimeWindow, DowntimeWindowsByScreenIDType, ErrorsByScreenIDType } from 'store'
 
 export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: ScreenIDTypes): ReduxAction => {
   return {
@@ -10,6 +11,15 @@ export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: Screen
     payload: {
       errorType,
       screenID,
+    },
+  }
+}
+
+export const dispatchSetErrors = (errors: ErrorsByScreenIDType): ReduxAction => {
+  return {
+    type: 'ERRORS_SET_ERRORS',
+    payload: {
+      errors,
     },
   }
 }
@@ -37,12 +47,11 @@ export const dispatchSetTryAgainFunction = (tryAgain: () => Promise<void>): Redu
  * @param metadata - Any key value pair of data
  * @param screenID - ID of the screen with the error
  */
-export const dispatchSetMetadata = (metadata?: { [key: string]: string }, screenID?: ScreenIDTypes): ReduxAction => {
+export const dispatchSetDowntime = (downtimeWindows: DowntimeWindowsByScreenIDType, screenID?: ScreenIDTypes): ReduxAction => {
   return {
-    type: 'ERRORS_SET_METADATA',
+    type: 'ERRORS_SET_DOWNTIME',
     payload: {
-      metadata,
-      screenID,
+      downtimeWindows,
     },
   }
 }
@@ -51,9 +60,9 @@ export const dispatchSetMetadata = (metadata?: { [key: string]: string }, screen
  * Clears the error metadata for a given screen ID
  * @param screenID - screen ID of the screen to clear
  */
-export const dispatchClearMetadata = (screenID?: ScreenIDTypes): ReduxAction => {
+export const dispatchClearDowntime = (screenID?: ScreenIDTypes): ReduxAction => {
   return {
-    type: 'ERRORS_CLEAR_METADATA',
+    type: 'ERRORS_CLEAR_DOWNTIME',
     payload: {
       screenID,
     },
@@ -63,9 +72,9 @@ export const dispatchClearMetadata = (screenID?: ScreenIDTypes): ReduxAction => 
 /**
  * Clears the error metadata for all screen IDs
  */
-export const dispatchClearAllMetadata = (): ReduxAction => {
+export const dispatchClearAllDowntime = (): ReduxAction => {
   return {
-    type: 'ERRORS_CLEAR_ALL_METADATA',
+    type: 'ERRORS_CLEAR_ALL_DOWNTIME',
     payload: null,
   }
 }
@@ -99,30 +108,84 @@ export const dispatchClearErrorTypeByScreen = (errorType: CommonErrorTypes, scre
  * checks for downtime by getting a list from the backend API
  * clears all metadata and current downtimes first and sets errors based on which downtime is active from API call
  */
-export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
+export const checkForDowntimeErrors = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    const response = await api.get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
-    if (!response) {
-      return
+    // const response = await api.get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
+    // if (!response) {
+    //   return
+    // }
+    const response = {
+      data: [
+        {
+          attributes: {
+            service: 'direct_deposit_benefits',
+            startTime: '2021-11-18T11:00:00.000Z',
+            endTime: '2021-11-18T23:00:00.000Z',
+          },
+          id: '1',
+          type: 'maintenance_window',
+        },
+        {
+          attributes: {
+            service: 'military_service_history',
+            startTime: '2021-11-18T11:00:00.000Z',
+            endTime: '2021-11-18T23:00:00.000Z',
+          },
+          id: '2',
+          type: 'maintenance_window',
+        },
+        {
+          attributes: {
+            service: 'secure_messaging',
+            startTime: '2021-11-18T11:00:00.000Z',
+            endTime: '2021-11-18T23:00:00.000Z',
+          },
+          id: '3',
+          type: 'maintenance_window',
+        },
+      ],
     }
-    dispatch(dispatchClearAllMetadata())
+    dispatch(dispatchClearAllDowntime())
     dispatch(dispatchClearErrorType(CommonErrorTypesConstants.DOWNTIME_ERROR))
-    // filtering out any maintenance windows that haven't started yet and ones we haven't mapped to a screen in the app
-    const maintWindows = response.data.filter((w) => DateTime.fromISO(w.attributes.startTime) <= DateTime.now() && !!DowntimeFeatureToScreenID[w.attributes.service])
+    // filtering out any maintenance windows we haven't mapped to a screen in the app
+    const maintWindows = response.data.filter((w) => !!DowntimeFeatureToScreenID[w.attributes.service])
+    let downtimeWindows = _getState().errors.downtimeWindowsByScreenID
     for (const m of maintWindows) {
       const maintWindow = m.attributes
       const screenID = DowntimeFeatureToScreenID[maintWindow.service]
-      if (!screenID) {
-        continue
+      const metadata: DowntimeWindow = {
+        featureName: DowntimeFeatureNameConstants[maintWindow.service],
+        startTime: DateTime.fromISO(maintWindow.startTime),
+        endTime: DateTime.fromISO(maintWindow.endTime),
       }
-      const metadata = {
-        featureName: '',
-        endTime: '',
+      downtimeWindows = {
+        ...downtimeWindows,
+        [screenID]: metadata,
       }
-      metadata.featureName = DowntimeFeatureNameConstants[maintWindow.service]
-      metadata.endTime = DateTime.fromISO(maintWindow.endTime).toFormat('fff')
-      dispatch(dispatchSetMetadata(metadata, screenID))
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
     }
+    dispatch(dispatchSetDowntime(downtimeWindows))
+    dispatch(updateCurrentDowntimes())
+  }
+}
+
+export const updateCurrentDowntimes = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    const metadata = _getState().errors.downtimeWindowsByScreenID
+    let errors = _getState().errors.errorsByScreenID
+    for (const [screenID, data] of Object.entries(metadata).filter(([k, v]) => !!v)) {
+      const { startTime, endTime } = data
+      if (startTime < DateTime.now() && DateTime.now() < endTime && !errors[screenID as ScreenIDTypes]) {
+        errors = {
+          ...errors,
+          [screenID as ScreenIDTypes]: CommonErrorTypesConstants.DOWNTIME_ERROR,
+        }
+      } else {
+        errors = {
+          ...errors,
+          [screenID as ScreenIDTypes]: errors[screenID as ScreenIDTypes],
+        }
+      }
+    }
+    dispatch(dispatchSetErrors(errors))
   }
 }

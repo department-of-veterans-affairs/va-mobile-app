@@ -4,7 +4,7 @@ import { DateTime, Settings } from 'luxon'
 
 import { context, realStore } from 'testUtils'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { dispatchClearErrors, dispatchSetError, dispatchCheckForDowntimeErrors } from './errors'
+import { dispatchClearErrors, dispatchSetError, checkForDowntimeErrors } from './errors'
 import { initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
 import { ScreenIDTypesConstants, MaintenanceWindowsGetData } from '../api/types'
 import * as api from '../api'
@@ -90,7 +90,7 @@ context('errors', () => {
         .mockResolvedValue(mockMaintenanceWindows)
 
       const store = realStore()
-      await store.dispatch(dispatchCheckForDowntimeErrors())
+      await store.dispatch(checkForDowntimeErrors())
       return store
     }
 
@@ -98,13 +98,13 @@ context('errors', () => {
       const store = await initializeMaintenanceWindows()
       const actions = store.getActions()
 
-      const clearMetadata = find(actions, { type: 'ERRORS_CLEAR_ALL_METADATA' })
+      const clearMetadata = find(actions, { type: 'ERRORS_CLEAR_ALL_DOWNTIME' })
       expect(clearMetadata).toBeTruthy()
       const clearErrors = find(actions, { type: 'ERRORS_CLEAR_ERROR_TYPE' })
       expect(clearErrors).toBeTruthy()
       const setErrors = find(actions, { type: 'ERRORS_SET_ERROR' })
       expect(setErrors).toBeTruthy()
-      const setMetadata = find(actions, { type: 'ERRORS_SET_METADATA' })
+      const setMetadata = find(actions, { type: 'ERRORS_SET_DOWNTIME' })
       expect(setMetadata).toBeTruthy()
     })
 

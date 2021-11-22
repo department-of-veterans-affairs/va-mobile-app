@@ -26,9 +26,9 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
-  const { errorMetadataByScreenID } = useSelector<StoreState, ErrorsState>((s) => s.errors)
-  const featureName = errorMetadataByScreenID[screenID]?.featureName
-  const endTime = errorMetadataByScreenID[screenID]?.endTime
+  const { downtimeWindowsByScreenID } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const featureName = downtimeWindowsByScreenID[screenID]?.featureName
+  const endTime = downtimeWindowsByScreenID[screenID]?.endTime.toFormat('fff')
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>

@@ -1,6 +1,8 @@
 import { APIError, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
+import { DowntimeWindowsByScreenIDType } from 'store'
 import { flatten, includes, map, some } from 'lodash'
+import { DateTime } from 'luxon'
 
 export const getErrorKeys = (error: APIError): (string | undefined)[] => {
   if (!error) {
@@ -43,4 +45,13 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
   } else if (includes(appLevelErrorWithRefreshStatusCodes, error.status)) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_WITH_REFRESH
   }
+}
+
+export const isInDowntime = (screenID: ScreenIDTypes, downtimeWindows: DowntimeWindowsByScreenIDType): boolean => {
+  const mw = downtimeWindows[screenID]
+  if (!mw) return false
+  if (mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
+    return true
+  }
+  return false
 }

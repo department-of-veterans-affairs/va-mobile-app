@@ -1,4 +1,5 @@
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
+import { DateTime } from 'luxon'
 import { ScreenIDTypes } from '../api'
 import { ScreenIDTypesConstants } from '../api/types/Screens'
 import { reduce } from 'underscore'
@@ -8,15 +9,19 @@ export type ErrorsByScreenIDType = {
   [key in ScreenIDTypes]?: CommonErrorTypes
 }
 
-export type ErrorMetadataByScreenIDType = {
-  [key in ScreenIDTypes]?: {
-    [key: string]: string
-  }
+export type DowntimeWindowsByScreenIDType = {
+  [key in ScreenIDTypes]?: DowntimeWindow
+}
+
+export type DowntimeWindow = {
+  featureName: string
+  startTime: DateTime
+  endTime: DateTime
 }
 
 export type ErrorsState = {
   errorsByScreenID: ErrorsByScreenIDType
-  errorMetadataByScreenID: ErrorMetadataByScreenIDType
+  downtimeWindowsByScreenID: DowntimeWindowsByScreenIDType
   tryAgain: () => Promise<void>
 }
 
@@ -31,21 +36,21 @@ export const initializeErrorsByScreenID = (): ErrorsByScreenIDType => {
   )
 }
 
-export const initializeErrorMetadataByScreenID = (): ErrorMetadataByScreenIDType => {
+export const initializeDowntimeWindowsByScreenID = (): DowntimeWindowsByScreenIDType => {
   return reduce(
     ScreenIDTypesConstants,
-    (memo: ErrorMetadataByScreenIDType, value: ScreenIDTypes): ErrorMetadataByScreenIDType => {
+    (memo: DowntimeWindowsByScreenIDType, value: ScreenIDTypes): DowntimeWindowsByScreenIDType => {
       memo[value] = undefined
       return memo
     },
-    {} as ErrorMetadataByScreenIDType,
+    {} as DowntimeWindowsByScreenIDType,
   )
 }
 
 export const initialErrorsState: ErrorsState = {
   tryAgain: () => Promise.resolve(),
   errorsByScreenID: initializeErrorsByScreenID(),
-  errorMetadataByScreenID: initializeErrorMetadataByScreenID(),
+  downtimeWindowsByScreenID: initializeDowntimeWindowsByScreenID(),
 }
 
 export default createReducer<ErrorsState>(initialErrorsState, {
@@ -61,8 +66,15 @@ export default createReducer<ErrorsState>(initialErrorsState, {
       errorsByScreenID,
     }
   },
+  ERRORS_SET_ERRORS: (state, { errors }) => {
+    const errorsByScreenID = errors
+    return {
+      ...state,
+      errorsByScreenID,
+    }
+  },
   ERRORS_CLEAR_ERRORS: (state, { screenID }) => {
-    const errorMetadataByScreenID = state.errorMetadataByScreenID
+    const downtimeWindowsByScreenID = state.downtimeWindowsByScreenID
     const errorsByScreenID = !screenID
       ? state.errorsByScreenID
       : {
@@ -72,44 +84,39 @@ export default createReducer<ErrorsState>(initialErrorsState, {
     return {
       ...initialErrorsState,
       errorsByScreenID,
-      errorMetadataByScreenID,
+      downtimeWindowsByScreenID,
     }
   },
-  ERRORS_SET_METADATA: (state, { metadata, screenID }) => {
-    const errorMetadataByScreenID = !screenID
-      ? state.errorMetadataByScreenID
-      : {
-          ...state.errorMetadataByScreenID,
-          [screenID as ScreenIDTypes]: metadata,
-        }
+  ERRORS_SET_DOWNTIME: (state, { downtimeWindows }) => {
+    const downtimeWindowsByScreenID = downtimeWindows
     return {
       ...state,
-      errorMetadataByScreenID,
+      downtimeWindowsByScreenID,
     }
   },
-  ERRORS_CLEAR_METADATA: (state, { screenID }) => {
-    const errorMetadataByScreenID = !screenID
-      ? state.errorMetadataByScreenID
+  ERRORS_CLEAR_DOWNTIME: (state, { screenID }) => {
+    const downtimeWindowsByScreenID = !screenID
+      ? state.downtimeWindowsByScreenID
       : {
-          ...state.errorMetadataByScreenID,
+          ...state.downtimeWindowsByScreenID,
           [screenID as ScreenIDTypes]: undefined,
         }
     return {
       ...state,
-      errorMetadataByScreenID,
+      downtimeWindowsByScreenID,
     }
   },
-  ERRORS_CLEAR_ALL_METADATA: (state) => {
-    let errorMetadataByScreenID = state.errorMetadataByScreenID
+  ERRORS_CLEAR_ALL_DOWNTIME: (state) => {
+    let downtimeWindowsByScreenID = state.downtimeWindowsByScreenID
     for (const screenID in ScreenIDTypesConstants) {
-      errorMetadataByScreenID = {
-        ...state.errorMetadataByScreenID,
+      downtimeWindowsByScreenID = {
+        ...state.downtimeWindowsByScreenID,
         [screenID as ScreenIDTypes]: undefined,
       }
     }
     return {
       ...state,
-      errorMetadataByScreenID,
+      downtimeWindowsByScreenID,
     }
   },
   ERRORS_CLEAR_ERROR_TYPE: (state, { errorType }) => {
@@ -128,22 +135,19 @@ export default createReducer<ErrorsState>(initialErrorsState, {
     }
   },
   ERRORS_CLEAR_ERROR_TYPE_BY_SCREEN: (state, { errorType, screenID }) => {
-    if (!screenID) {
-      return { ...state }
-    }
     const error = state.errorsByScreenID[screenID]
     const errorsByScreenID = {
       ...state.errorsByScreenID,
       [screenID as ScreenIDTypes]: error === errorType ? undefined : error,
     }
-    const errorMetadataByScreenID = {
-      ...state.errorMetadataByScreenID,
-      [screenID as ScreenIDTypes]: error === errorType ? undefined : state.errorMetadataByScreenID[screenID],
+    const downtimeWindowsByScreenID = {
+      ...state.downtimeWindowsByScreenID,
+      [screenID as ScreenIDTypes]: error === errorType ? undefined : state.downtimeWindowsByScreenID[screenID],
     }
     return {
       ...state,
       errorsByScreenID,
-      errorMetadataByScreenID,
+      downtimeWindowsByScreenID,
     }
   },
   ERRORS_SET_TRY_AGAIN_FUNCTION: (state, { tryAgain }) => {

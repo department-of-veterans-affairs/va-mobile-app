@@ -22,6 +22,7 @@ import { WebProtocolTypesConstants } from 'constants/common'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
+import { isInDowntime } from 'utils/errors'
 import { updateAccessibilityFocus } from 'store/actions'
 import HeaderTitle from 'components/HeaderTitle'
 
@@ -29,10 +30,10 @@ import HeaderTitle from 'components/HeaderTitle'
  * Hook to determine if an error should be shown for a given screen id
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
-  const { errorsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
+  const { errorsByScreenID, downtimeWindowsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
     return state.errors
   })
-  return !!errorsByScreenID[currentScreenID]
+  return isInDowntime(currentScreenID, downtimeWindowsByScreenID) || !!errorsByScreenID[currentScreenID]
 }
 
 /**
