@@ -404,6 +404,426 @@
       }
     }
   },
+  "/v0/messaging/health/messages/2092809": {
+    "data": {
+      "id": "2092809",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2092809,
+        "category": "MEDICATIONS",
+        "subject": "Naproxen side effects",
+        "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.",
+        "attachment": false,
+        "sentDate": "2021-10-26T22:22:06.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2092809/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2092803": {
+    "data": {
+      "id": "2092803",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2092803,
+        "category": "COVID",
+        "subject": "Your requested info",
+        "body": "Here is the information about COVID vaccines that you requested.  Let us know if you have any questions.\r\n\r\nDr. Duma\r\n",
+        "attachment": true,
+        "sentDate": "2021-10-26T22:21:11.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": [
+            {
+              "id": "2092801",
+              "type": "attachments"
+            }
+          ]
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
+      }
+    },
+    "included": [
+      {
+        "id": "2092801",
+        "type": "attachments",
+        "attributes": {
+          "name": "COVID-19-mRNA-infographic_G_508.pdf",
+          "messageId": 2092803,
+          "attachmentSize": 180141
+        },
+        "links": {
+          "download": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803/attachments/2092801"
+        }
+      }
+    ]
+  },
+  "/v0/messaging/health/messages/2092803/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2092789": {
+    "data": {
+      "id": "2092789",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2092789,
+        "category": "COVID",
+        "subject": "Vaccine Booster",
+        "body": "As discussed in your last visit, we recommend getting a vaccine booster to improve your immunity to COVID-19. Please let us know if you have any other questions.",
+        "attachment": false,
+        "sentDate": "2021-10-26T22:17:38.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092789"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2092789/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2092775": {
+    "data": {
+      "id": "2092775",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2092775,
+        "category": "APPOINTMENTS",
+        "subject": "Preparing for your visit",
+        "body": "See you at your appointment.  Please do not forget to fast for at least 12 hours before your blood test.",
+        "attachment": false,
+        "sentDate": "2021-10-26T22:14:45.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092775"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2092775/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2088259": {
+    "data": {
+      "id": "2088259",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2088259,
+        "category": "COVID",
+        "subject": "COVID vaccine booster?",
+        "body": "Boosters are recommended and to improve your prevention.",
+        "attachment": false,
+        "sentDate": "2021-10-21T15:59:15.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088259"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2088259/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2088250": {
+    "data": {
+      "id": "2088250",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2088250,
+        "category": "APPOINTMENTS",
+        "subject": "Preparing for your visit",
+        "body": "See you at your appointment.  Please do not forget to fast.",
+        "attachment": false,
+        "sentDate": "2021-10-21T15:58:36.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088250"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2088250/thread": {
+    "data": [
+      {
+        "id": "2084703",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2084703,
+          "category": "APPOINTMENTS",
+          "subject": "Preparing for your visit",
+          "body": "Testing ",
+          "attachment": false,
+          "sentDate": "2021-10-15T22:55:06.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2084703"
+        }
+      },
+      {
+        "id": "2069243",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2069243,
+          "category": "APPOINTMENTS",
+          "subject": "Preparing for your visit",
+          "body": "Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.",
+          "attachment": false,
+          "sentDate": "2021-10-01T22:23:13.000Z",
+          "senderId": 1835650,
+          "senderName": "RATANA, NARIN ",
+          "recipientId": 523757,
+          "recipientName": "FREEMAN, MELVIN  V",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2069243"
+        }
+      }
+    ]
+  },
+  "/v0/messaging/health/messages/2060125": {
+    "data": {
+      "id": "2060125",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2060125,
+        "category": "EDUCATION",
+        "subject": "Good morning to you ",
+        "body": "test",
+        "attachment": false,
+        "sentDate": "2021-09-17T23:17:02.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060125"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2060125/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2060114": {
+    "data": {
+      "id": "2060114",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2060114,
+        "category": "MEDICATIONS",
+        "subject": "Medication Inquiry",
+        "body": "test reply",
+        "attachment": false,
+        "sentDate": "2021-09-17T23:16:44.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060114"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2060114/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2060047": {
+    "data": {
+      "id": "2060047",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2060047,
+        "category": "COVID",
+        "subject": "COVID Inquiry",
+        "body": "test reply",
+        "attachment": false,
+        "sentDate": "2021-09-17T23:13:58.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060047"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2060047/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2060025": {
+    "data": {
+      "id": "2060025",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2060025,
+        "category": "COVID",
+        "subject": "Test ",
+        "body": "test",
+        "attachment": false,
+        "sentDate": "2021-09-17T23:13:30.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060025"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2060025/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2060013": {
+    "data": {
+      "id": "2060013",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2060013,
+        "category": "OTHER",
+        "subject": "General Inquiry 2 Attachment",
+        "body": "test",
+        "attachment": false,
+        "sentDate": "2021-09-17T23:12:45.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060013"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2060013/thread": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/2060006": {
+    "data": {
+      "id": "2060006",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2060006,
+        "category": "APPOINTMENTS",
+        "subject": "Appointment Inquiry 1",
+        "body": "test",
+        "attachment": false,
+        "sentDate": "2021-09-17T23:11:23.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060006"
+      }
+    }
+  },
+  "/v0/messaging/health/messages/2060006/thread": {
+    "data": []
+  },
   "/v0/messaging/health/folders/-1": {
     "data": {
       "id": "-1",
