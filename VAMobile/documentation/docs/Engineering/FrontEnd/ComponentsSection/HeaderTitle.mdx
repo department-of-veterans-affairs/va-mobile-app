@@ -1,0 +1,14 @@
+import CodeBlock from '@theme/CodeBlock'
+import HeaderTitleString from '!!raw-loader!@componentsDocs/HeaderTitle'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `useEffect(() => {
+    navigation.setOptions({
+      // using react-navigation internal HeaderTitle component to easily maintain font and styling while being able to add an accessibilityLabel
+      headerTitle: (header) => <HeaderTitle {...testIdProps('contactVA.title.a11yLabel')} headerTitle={header.children} />,
+    })
+})`
+
+
+<ComponentTopInfo componentName="HeaderTitle" example={exampleString} codeString={HeaderTitleString} />

@@ -1,51 +1,50 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const lightCodeTheme = require('prism-react-renderer/themes/github')
+const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'VA: Health and Benefits app documentation',
   tagline: 'All the documentation for the VA mobile app',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://didactic-lamp-12152085.pages.github.io/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'department-of-veterans-affairs', // Usually your GitHub org/user name.
   projectName: 'va-mobile-app', // Usually your repo name.
-   plugins: [
-        'docusaurus-plugin-relative-paths',
-        './docusaurus-plugin-react-native-web',
-        [
-            'docusaurus-plugin-react-docgen-typescript',
-            {
-                // pass in a single string or an array of strings
-                src: ['../src/components/**/*.tsx', '../src/utils/hooks.tsx', '!../src/**/*test.*'],
-                global: true,
-                parserOptions: {
-                    // pass parserOptions to react-docgen-typescript
-                    // here is a good starting point which filters out all
-                    // types from react
-                    propFilter: (prop, component) => {
-                        if (prop.parent) {
-                            return !prop.parent.fileName.includes('@types/react');
-                        }
+  plugins: [
+    'docusaurus-plugin-relative-paths',
+    './docusaurus-plugin-react-native-web',
+    [
+      'docusaurus-plugin-react-docgen-typescript',
+      {
+        // pass in a single string or an array of strings
+        src: ['../src/components/**/*.tsx', '../src/utils/hooks.tsx', '!../src/**/*test.*'],
+        global: true,
+        parserOptions: {
+          // pass parserOptions to react-docgen-typescript
+          // here is a good starting point which filters out all
+          // types from react
+          propFilter: (prop, component) => {
+            if (prop.parent) {
+              return !prop.parent.fileName.includes('@types/react')
+            }
 
-                        return true;
-                    },
-                },
-            },
-        ],
+            return true
+          },
+        },
+      },
     ],
-  
+  ],
 
   presets: [
     [
       '@docusaurus/preset-classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
@@ -53,13 +52,13 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-      }),
+      },
     ],
   ],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
+    {
       navbar: {
         title: 'VA Mobile Docs',
         logo: {
@@ -120,18 +119,16 @@ const config = {
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} VA Mobile App, Inc. Built with Docusaurus.`,
-        logo:{
-          src: 'img/va-blue-logo.png'
-        }
-        
+        logo: {
+          src: 'img/va-blue-logo.png',
+        },
       },
-    
-     
+
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
-    }),
-};
+    },
+}
 
-module.exports = config;
+module.exports = config
