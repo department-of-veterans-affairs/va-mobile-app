@@ -1,4 +1,10 @@
+import { NativeModules, PixelRatio } from 'react-native'
+
 import { AsyncReduxAction, ReduxAction } from '../types'
+import { UserAnalytics } from 'constants/analytics'
+import { setAnalyticsUserProperty } from 'utils/analytics'
+
+const { RNCheckVoiceOver } = NativeModules
 
 const dispatchUpdateFontScale = (fontScale: number): ReduxAction => {
   return {
@@ -51,5 +57,25 @@ const dispatchUpdateAccessibilityFocus = (isFocus: boolean): ReduxAction => {
 export const updateAccessibilityFocus = (isFocus: boolean): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchUpdateAccessibilityFocus(isFocus))
+  }
+}
+
+/**
+ * Redux action to send to analytics if the users is using large text
+ */
+export const sendUsesLargeTextAnalytics = (): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    const islargeText = PixelRatio.getFontScale() > 1
+    await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(islargeText))
+  }
+}
+
+/**
+ * Redux action to send to analytics if the users is using screen reader
+ */
+export const sendUsesScreenReaderAnalytics = (): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    const isRunning = await RNCheckVoiceOver.isVoiceOverRunning()
+    await setAnalyticsUserProperty(UserAnalytics.vama_uses_screen_reader(isRunning))
   }
 }

@@ -50,7 +50,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
 
     return _.map(imagesList, (image, index) => {
-      const { uri } = image.assets ? image.assets[index] : ({} as Asset)
+      const { uri } = image.assets ? image.assets[0] : ({} as Asset)
       return (
         /** Rightmost photo doesn't need right margin b/c of gutter margins
          * Every 3rd photo, right margin is changed to zero*/
