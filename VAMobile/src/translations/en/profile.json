@@ -1,7 +1,7 @@
 {
   "disabilityRating.a11yHint": "Go to the disability rating page",
-  "disabilityRating.yourRating": "Your Disability Rating: ",
-  "disabilityRating.combinePercent": "{{combinedPercent}}% Service Connected",
+  "disabilityRating.yourRating": "Your disability rating: ",
+  "disabilityRating.combinePercent": "{{combinedPercent}}% service connected",
   "disabilityRating.errorTitle": "Disability rating isn't working right now",
   "disabilityRating.errorTitleA11y": "Disability rating isn't working right now",
   "disabilityRating.errorPhoneNumber": "800-827-1000",
