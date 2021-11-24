@@ -55,7 +55,7 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
     onChangeText: setInput,
     keyboardType: 'default',
     autoFocus: true,
-    style: { fontSize: 20 },
+    style: { fontSize: 20, color: theme.colors.text.primary },
   }
 
   return (
