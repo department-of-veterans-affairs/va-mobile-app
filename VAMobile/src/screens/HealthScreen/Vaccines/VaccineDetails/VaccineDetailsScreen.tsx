@@ -64,14 +64,18 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
             <TextView variant="BitterBoldHeading">{displayName}</TextView>
           </Box>
-          <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+            {t('vaccines.details.manufacturer')}
+          </TextView>
           <TextView variant="MobileBody">{vaccine.attributes?.shortDescription || placeHolder}</TextView>
-          <TextView variant="MobileBodyBold">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
             {t('vaccines.details.series') + '  '}
             <TextView variant="MobileBody">{displaySeries}</TextView>
           </TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+              {t('vaccines.details.provider')}
+            </TextView>
             {location?.attributes && (
               <>
                 <TextView variant="MobileBody">{location.attributes.name}</TextView>
@@ -89,12 +93,14 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Box>
-              <TextView variant="MobileBodyBold">
+              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
                 {t('vaccines.details.reaction') + '  '}
                 <TextView variant="MobileBody">{vaccine.attributes?.reaction || placeHolder}</TextView>
               </TextView>
             </Box>
-            <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+              {t('vaccines.details.notes')}
+            </TextView>
             <TextView variant="MobileBody">{vaccine.attributes?.note || placeHolder}</TextView>
           </Box>
         </TextArea>

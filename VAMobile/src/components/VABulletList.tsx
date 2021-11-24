@@ -86,7 +86,11 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' 
             </Box>
             <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
               {text.trim()}
-              {!!boldedText && <TextView variant="MobileBodyBold">{boldedText}</TextView>}
+              {!!boldedText && (
+                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                  {boldedText}
+                </TextView>
+              )}
             </TextView>
           </Box>
         )

@@ -39,7 +39,7 @@ export const getMessagesListItems = (
         text: t('common:text.raw', { text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? recipientName : senderName}` }),
         variant: 'MobileBodyBold',
         textAlign: 'left',
-        color: 'primary',
+        color: 'primaryTitle',
         iconProps: unreadIconProps,
       },
       { text: t('common:text.raw', { text: formatSubject(category, subject, t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },

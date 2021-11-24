@@ -69,7 +69,7 @@ const NotificationsSettingsScreen: FC = () => {
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         {!systemNotificationsOn && alert()}
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} color={'primaryTitle'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
           {t('notifications.settings.personalize.heading')}
         </TextView>
         <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>

@@ -42,7 +42,7 @@ const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => 
           text={t('secureMessaging.sent.threeBusinessDays')}
           textA11yLabel={t('secureMessaging.sent.threeBusinessDays.a11y')}>
           <Box {...testIdProps(t('secureMessaging.composeMessage.important'))} accessibilityRole={'header'} accessible={true}>
-            <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={theme.dimensions.standardMarginBetween}>
               {t('secureMessaging.composeMessage.important')}
             </TextView>
           </Box>

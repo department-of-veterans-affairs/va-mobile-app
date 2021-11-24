@@ -13,13 +13,15 @@ export const ButtonTypesConstants: {
   buttonSecondary: ButtonTypes
   buttonImportant: ButtonTypes
   buttonWhite: ButtonTypes
+  brandedPrimary: ButtonTypes
 } = {
   buttonPrimary: 'buttonPrimary',
   buttonSecondary: 'buttonSecondary',
   buttonImportant: 'buttonImportant',
   buttonWhite: 'buttonWhite',
+  brandedPrimary: 'brandedPrimary',
 }
-export type ButtonTypes = 'buttonPrimary' | 'buttonSecondary' | 'buttonImportant' | 'buttonWhite'
+export type ButtonTypes = 'buttonPrimary' | 'buttonSecondary' | 'buttonImportant' | 'buttonWhite' | 'brandedPrimary'
 
 /**
  * Props for the {@link VAButton}
@@ -81,6 +83,8 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
         return 'buttonImportantActive'
       } else if (buttonType === ButtonTypesConstants.buttonWhite) {
         return 'buttonWhiteActive'
+      } else if (buttonType === ButtonTypesConstants.brandedPrimary) {
+        return 'brandedPrimaryActive'
       } else {
         return 'buttonSecondaryActive'
       }

@@ -48,7 +48,9 @@ const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecisi
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold">{header}</TextView>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+          {header}
+        </TextView>
         <TextView variant="MobileBody">{subText}</TextView>
         <VABulletList listOfText={getIssuesListOfText(specificIssues)} />
       </Box>

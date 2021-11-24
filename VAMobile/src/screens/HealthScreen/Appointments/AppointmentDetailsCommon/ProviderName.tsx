@@ -32,7 +32,7 @@ const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, he
     <>
       {!!practitionerName && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.provider')}
           </TextView>
           <TextView variant="MobileBody">{practitionerName}</TextView>

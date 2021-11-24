@@ -12,7 +12,6 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text }) => {
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.main,
   }
 
   return (

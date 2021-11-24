@@ -50,7 +50,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
   return (
     <TextArea>
       <Box {...testIdProps(t('claimDetails.needHelp'))} accessible={true}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('claimDetails.needHelp')}
         </TextView>
       </Box>

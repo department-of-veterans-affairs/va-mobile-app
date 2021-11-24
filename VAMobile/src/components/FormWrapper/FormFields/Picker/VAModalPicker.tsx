@@ -203,7 +203,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                 <TextView allowFontScaling={false}>{cancelLabel}</TextView>
               </Pressable>
               <Box flex={4}>
-                <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
+                <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign={'center'} allowFontScaling={false}>
                   {t(labelKey || '')}
                 </TextView>
               </Box>

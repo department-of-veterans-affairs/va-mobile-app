@@ -122,7 +122,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.specialInstructions')}
           </TextView>
           <TextView variant="MobileBody">{comment}</TextView>
@@ -153,7 +153,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (isVideoAppt && !isAppointmentCanceled) {
       return (
         <Box mb={isGFE ? 0 : theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
           <TextView variant="MobileBody">{t(getVideoInstructionsTranslationID())}</TextView>
@@ -198,7 +198,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       return (
         <Box>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoinVirtualSession')}
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
@@ -221,7 +221,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.appointmentCode', { code: code })}
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.useCode')}</TextView>

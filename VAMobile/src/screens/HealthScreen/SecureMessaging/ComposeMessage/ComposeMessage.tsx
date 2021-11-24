@@ -320,7 +320,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             </Box>
             <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
               <TextView>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
+                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                  {t('secureMessaging.composeMessage.important')}
+                </TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
             </Box>

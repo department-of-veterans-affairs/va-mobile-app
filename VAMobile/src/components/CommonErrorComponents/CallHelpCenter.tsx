@@ -21,7 +21,6 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.main,
   }
 
   const containerStyles = {

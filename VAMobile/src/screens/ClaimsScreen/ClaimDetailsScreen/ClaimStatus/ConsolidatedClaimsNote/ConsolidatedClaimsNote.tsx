@@ -29,7 +29,7 @@ const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = ({ navigation })
     <VAScrollView {...testIdProps(generateTestID(t('claimDetails.consolidatedClaims.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('claimDetails.consolidatedClaims.noteHeader')}
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.consolidatedClaims.noteContent')}</TextView>

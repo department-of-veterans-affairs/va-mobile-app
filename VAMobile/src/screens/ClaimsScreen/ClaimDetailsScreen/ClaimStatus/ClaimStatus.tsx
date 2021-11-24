@@ -70,7 +70,9 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <Box {...testIdProps(claimWasClosedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold">{claimWasClosedOn}</TextView>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                {claimWasClosedOn}
+              </TextView>
             </Box>
             <Box {...testIdProps(t('claimDetails.decisionPacketMailed'))} accessible={true}>
               <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>

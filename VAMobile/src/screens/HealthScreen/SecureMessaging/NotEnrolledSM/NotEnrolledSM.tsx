@@ -73,7 +73,9 @@ const NotEnrolledSM: FC = () => {
             </Box>
             <Box mb={standardMarginBetween}>
               <TextView>
-                <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
+                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                  {tc('note') + ' '}
+                </TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
               </TextView>
             </Box>

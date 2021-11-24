@@ -18,7 +18,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.main,
   }
 
   const containerStyles = {

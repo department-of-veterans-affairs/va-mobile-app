@@ -65,4 +65,9 @@ export default {
   crisisLineRed: '#b51c08',
   toolbarBackgroundGray: '#f9f9f9',
   whiteWith70PercentOpacity: '#ffffffb3',
+  // dark mode
+  darkmodeGrayDark: '#121212',
+  darkmodeBorder: '#4C4C4C',
+  darkmodeLightBlue: '#409CFF',
+  darkmodeRed: '#C4232E',
 }

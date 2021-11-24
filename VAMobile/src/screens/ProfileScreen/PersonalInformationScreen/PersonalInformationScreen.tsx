@@ -23,8 +23,8 @@ import ProfileBanner from '../ProfileBanner'
 import _ from 'underscore'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
-  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
-  const genderTextIDs: Array<TextLine> = [{ text: t('personalInformation.gender'), variant: 'MobileBodyBold' }]
+  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  const genderTextIDs: Array<TextLine> = [{ text: t('personalInformation.gender'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
 
   if (profile && profile.birthDate) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
@@ -73,10 +73,10 @@ const getPhoneNumberData = (
   onCellPhone: () => void,
   onFax: () => void,
 ): Array<DefaultListItemObj> => {
-  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold' }]
-  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold' }]
-  let cellText: Array<TextLine> = [{ text: t('personalInformation.mobile'), variant: 'MobileBodyBold' }]
-  let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), variant: 'MobileBodyBold' }]
+  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  let cellText: Array<TextLine> = [{ text: t('personalInformation.mobile'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
 
   homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homePhoneNumber', t))
   workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workPhoneNumber', t))
@@ -96,7 +96,7 @@ const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
 }
 
 const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
-  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold' }]
+  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
 
   if (profile?.contactEmail?.emailAddress) {
     textLines.push({ text: t('personalInformation.dynamicField', { field: profile.contactEmail.emailAddress }) })

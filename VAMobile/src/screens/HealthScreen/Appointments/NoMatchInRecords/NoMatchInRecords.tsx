@@ -22,7 +22,7 @@ const NoMatchInRecords: FC = () => {
 
   const accordionHeader = (textID: string, textA11yLabelID: string): ReactNode => {
     return (
-      <TextView variant="MobileBodyBold" {...testIdProps(t(`noMatch.${textA11yLabelID}`))}>
+      <TextView variant="MobileBodyBold" color={'primaryTitle'} {...testIdProps(t(`noMatch.${textA11yLabelID}`))}>
         {t(`noMatch.${textID}`)}
       </TextView>
     )
@@ -41,7 +41,9 @@ const NoMatchInRecords: FC = () => {
             </TextView>
           </Box>
           <Box {...testIdProps(t('noMatch.whatYouCanDo'))} accessibilityRole="header" accessible={true}>
-            <TextView variant="MobileBodyBold">{t('noMatch.whatYouCanDo')}</TextView>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+              {t('noMatch.whatYouCanDo')}
+            </TextView>
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

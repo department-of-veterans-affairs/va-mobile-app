@@ -12,7 +12,7 @@ const NoMilitaryInformationAccess: FC = () => {
 
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
-      <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
+      <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign="center" accessibilityRole="header">
         {t('militaryInformation.noMilitaryInfoAccess.title')}
       </TextView>
       <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}>

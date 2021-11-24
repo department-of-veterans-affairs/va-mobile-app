@@ -20,7 +20,7 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Appointments: No-appointments-page')} alignItems="center">
       <Box {...testIdProps(t('noAppointments.youDontHave'))} accessibilityRole="header" accessible={true}>
-        <TextView variant="MobileBodyBold" textAlign="center">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign="center">
           {t('noAppointments.youDontHave')}
         </TextView>
       </Box>

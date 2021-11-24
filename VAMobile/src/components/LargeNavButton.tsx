@@ -8,40 +8,38 @@ import { useTheme } from 'utils/hooks'
 import MessagesCountTag from './MessagesCountTag'
 
 interface HomeNavButtonProps {
+  /** title text */
   title: string
+  /** text appearing under the title */
   subText: string
+  /** accessibility hint for the button */
   a11yHint: string
+  /** called when the button is pressed */
   onPress: () => void
+  /** optional background color of the button */
   backgroundColor?: BackgroundVariant
+  /** optional background color for the button active state */
   backgroundColorActive?: BackgroundVariant
+  /** optional text color for the title */
   textColor?: keyof VATextColors
+  /** optional text color for the subtext */
+  secondaryTextColor?: keyof VATextColors
+  /** optional color for the arrow icon */
   iconColor?: keyof VAIconColors
+  /** optional width of the border */
   borderWidth?: BorderWidths
+  /** optional border color */
   borderColor?: BorderColorVariant
+  /** optional border color for the active state */
   borderColorActive?: BorderColorVariant
+  /** optional border style */
   borderStyle?: BorderStyles
+  /** optional value to display a count tag */
   tagCount?: number
+  /** optional accessibility text for the count */
   tagCountA11y?: string
 }
 
-/**
- * Reusable menu item for the HomeScreen
- *
- * @param title - string for header and used to create testID for accessibility
- * @param subText - string secondary text that seats on the second row
- * @param onPress - function to be called when press occurs
- * @param a11yHint - string for accessibility hint
- * @param backgroundColor - BackgroundVariant color for background
- * @param backgroundColorActive - BackgroundVariant color for active state
- * @param textColor - VATextColors color for text
- * @param iconColor - VAIconColors icon color
- * @param borderWidth - BorderWidths possible widths for HomeNavButton
- * @param borderColor - BorderColorVariant color for the borders
- * @param borderColorActive - BorderColorVariant color for active state for the borders
- * @param borderStyle - BorderStyles denotes the styling of the borders
- *
- * @returns LargeNavButton component
- */
 const LargeNavButton: FC<HomeNavButtonProps> = ({
   title,
   subText,
@@ -122,14 +120,14 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         {...testIdProps(testId)}>
         <Box flex={1}>
           <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
+            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor || 'primaryTitle'}>
               {title}
             </TextView>
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
           <TextView color={textColor}>{subText}</TextView>
         </Box>
-        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
+        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>
     </Box>
   )

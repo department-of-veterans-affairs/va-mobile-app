@@ -35,7 +35,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.main,
   }
   const containerStyles = {
     flex: 0,
@@ -137,7 +136,11 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
 
   const accordionHeader = (): ReactNode => {
-    return <TextView variant="MobileBodyBold">{getAlertTitle()}</TextView>
+    return (
+      <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+        {getAlertTitle()}
+      </TextView>
+    )
   }
 
   const getAlert = (): ReactNode => {

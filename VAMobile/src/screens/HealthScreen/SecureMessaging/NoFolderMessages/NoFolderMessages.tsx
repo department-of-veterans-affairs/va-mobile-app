@@ -28,7 +28,7 @@ const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
   return (
     <>
       <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
-        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign="center" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
           {t(noEntriesTextKey, { folderName })}
         </TextView>
         <Box width={'100%'}>

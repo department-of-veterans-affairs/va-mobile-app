@@ -29,7 +29,9 @@ const CernerAlert: FC = () => {
   const accordionHeader = (): ReactNode => {
     return (
       <Box>
-        <TextView variant="MobileBodyBold">{headerText}</TextView>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+          {headerText}
+        </TextView>
       </Box>
     )
   }
@@ -39,6 +41,7 @@ const CernerAlert: FC = () => {
       return (
         <TextView
           variant="MobileBodyBold"
+          color={'primaryTitle'}
           key={facility.facilityId}
           mt={theme.dimensions.standardMarginBetween}
           {...testIdProps(`${facility.facilityName} (${t('cernerAlert.nowUsing')})`)}>

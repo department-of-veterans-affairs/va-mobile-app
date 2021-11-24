@@ -99,13 +99,13 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
             <AlertBox text={error} border="error" background="noCardBackground" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.pleaseRequestFromPhoneFiles')}
         </TextView>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.acceptedFileTypes')}
         </TextView>
         <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>

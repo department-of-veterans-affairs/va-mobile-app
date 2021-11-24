@@ -68,7 +68,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
         borderRadius: 6,
         opacity: index === currentScreenIndex ? 1 : 0.5,
         m: theme.dimensions.carouselProgressDotsMargin,
-        backgroundColor: 'textBox',
+        backgroundColor: 'carouselTab',
       }
 
       return <Box {...boxProps} key={index} />

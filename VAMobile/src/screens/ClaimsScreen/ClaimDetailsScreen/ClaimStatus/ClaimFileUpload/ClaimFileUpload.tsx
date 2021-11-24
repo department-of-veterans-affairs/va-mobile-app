@@ -57,7 +57,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     return (
       <Box display="flex" flexDirection="row" alignItems="center">
         <VAIcon name="CircleCheckMark" fill="dark" width={18} height={18} />
-        <TextView variant="MobileBodyBold" accessibilityRole="header" ml={theme.dimensions.textIconMargin}>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" ml={theme.dimensions.textIconMargin}>
           {dateDisplayed}
         </TextView>
       </Box>
@@ -67,7 +67,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const getUploadRequestHeader = (displayName?: string, dateDisplayed?: string): ReactNode => {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {displayName}
         </TextView>
         {!!dateDisplayed && uploadedDateDisplayed(dateDisplayed)}
@@ -125,15 +125,15 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     <VAScrollView {...testIdProps('File-upload-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('fileUpload.uploadFileToClaim')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.toHelpUs')}</TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.50MB')}</TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.acceptedFileTypes')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>

@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps, ValidationFunctionItems } from '../../index'
+import { BorderColorVariant, Box, BoxProps, ColorVariant, TextView, TextViewProps, ValidationFunctionItems } from '../../index'
 import { VATheme } from '../../../styles/theme'
 
 /**
@@ -10,9 +10,10 @@ import { VATheme } from '../../../styles/theme'
  */
 const generateInputLabel = (error: string | undefined, disabled: boolean | undefined, isRequiredField: boolean | undefined, labelKey: string, t: TFunction): ReactElement => {
   const variant = error ? 'MobileBodyBold' : 'MobileBody'
+  const color: ColorVariant = disabled ? 'placeholder' : 'primaryTitle'
 
   const labelProps: TextViewProps = {
-    color: disabled ? 'placeholder' : 'primary',
+    color,
     variant,
   }
 
@@ -23,7 +24,7 @@ const generateInputLabel = (error: string | undefined, disabled: boolean | undef
       <Box display="flex" flexDirection="row" flexWrap="wrap">
         {label}
         <TextView>&nbsp;</TextView>
-        <TextView color="error" variant={variant}>
+        <TextView color={'inputRequired'} variant={variant}>
           {t('common:required')}
         </TextView>
       </Box>

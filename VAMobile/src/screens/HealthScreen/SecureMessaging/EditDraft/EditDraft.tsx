@@ -343,7 +343,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             </Box>
             <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
               <TextView>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
+                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                  {t('secureMessaging.composeMessage.important')}
+                </TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
             </Box>
@@ -353,13 +355,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           {message && isReplyDraft && (
             <>
               <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
-              <TextView variant="MobileBodyBold" accessible={true}>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
                 {message?.recipientName}
               </TextView>
               <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
                 {t('secureMessaging.formMessage.subject')}
               </TextView>
-              <TextView variant="MobileBodyBold" accessible={true}>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
                 {subjectHeader}
               </TextView>
             </>
@@ -402,7 +404,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
+          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'} color={'primaryTitle'}>
             {t('secureMessaging.reply.messageThread')}
           </TextView>
         </Box>

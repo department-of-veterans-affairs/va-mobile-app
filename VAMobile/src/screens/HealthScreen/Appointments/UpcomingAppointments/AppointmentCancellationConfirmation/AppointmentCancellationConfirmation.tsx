@@ -31,7 +31,7 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
   return (
     <VAScrollView {...testIdProps('Cancel-appointment-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('upcomingAppointmentDetails.cancellationConfirmation.doYouWantToCancel')}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>

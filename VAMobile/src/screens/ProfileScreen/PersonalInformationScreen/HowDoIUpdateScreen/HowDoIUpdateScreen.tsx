@@ -42,13 +42,13 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps(generateTestID(t('howDoIUpdate.title'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('howDoIUpdate.ifEnrolledInVAHealth')}
           </TextView>
           <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('howDoIUpdate.pleaseContactNearestVAMed')}
           </TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('howDoIUpdate.ifNotEnrolledInVAHealth')}
           </TextView>
           <TextView variant="MobileBody" mt={7} mb={20}>

@@ -43,7 +43,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text
     <Box {...boxProps}>
       {title && (
         <Box {...testIdProps(titleA11yLabel || title)} accessibilityRole={titleAccessibilityRole} accessible={true}>
-          <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} mb={text ? theme.dimensions.standardMarginBetween : 0}>
             {title}
           </TextView>
         </Box>

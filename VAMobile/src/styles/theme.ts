@@ -9,6 +9,8 @@ export type VAButtonBackgroundColors = {
   buttonImportantActive: string
   buttonWhite: string
   buttonWhiteActive: string
+  brandedPrimary: string
+  brandedPrimaryActive: string
 }
 
 export type VAButtonBorderColors = {
@@ -16,6 +18,8 @@ export type VAButtonBorderColors = {
   buttonSecondaryActive: string
   buttonImportant: string
   buttonImportantActive: string
+  brandedPrimary: string
+  brandedPrimaryActive: string
 }
 
 export type VAButtonTextColors = {
@@ -23,6 +27,8 @@ export type VAButtonTextColors = {
   buttonSecondary: string
   buttonDisabled: string
   buttonImportant: string
+  buttonWhite: string
+  brandedPrimary: string
 }
 
 export type VATextColors = {
@@ -30,6 +36,7 @@ export type VATextColors = {
   footerButtonActive: string
   navBar: string
   primary: string
+  primaryTitle: string
   primaryContrast: string
   primaryContrastDisabled: string
   secondary: string
@@ -39,6 +46,10 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
+  input: string
+  inputFocused: string
+  inputRequired: string
+  brandedPrimaryText: string
 }
 
 export type VAIconColors = {
@@ -46,6 +57,7 @@ export type VAIconColors = {
   footerButtonActive: string
   link: string
   nav: string
+  largeNav: string
   disclosure: string
   success: string
   error: string
@@ -103,6 +115,8 @@ export type VABackgroundColors = {
   modalOverlay: string
   pickerSelectedItem: string
   navButton: string
+  brandedMainBackground: string
+  carouselTab: string
 }
 
 export type VABorderColors = {

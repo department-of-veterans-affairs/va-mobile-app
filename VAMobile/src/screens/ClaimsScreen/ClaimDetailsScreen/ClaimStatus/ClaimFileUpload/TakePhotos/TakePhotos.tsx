@@ -40,7 +40,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
             <AlertBox text={error} border="error" background="noCardBackground" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('fileUpload.uploadFileUsingCamera')}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
