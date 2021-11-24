@@ -28,7 +28,7 @@ import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getCommonErrorFromAPIError, isInDowntime } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
@@ -108,14 +108,18 @@ const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, e
 }
 
 export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
+    const { downtimeWindowsByScreenID } = getState().errors
+    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+      return
+    }
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))
     dispatch(dispatchStartListFolders())
 
     try {
       let folders
-      const currentStateFolders = _getState().secureMessaging?.folders
+      const currentStateFolders = getState().secureMessaging?.folders
 
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
@@ -150,8 +154,13 @@ const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?
 }
 
 export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
+    const { downtimeWindowsByScreenID } = getState().errors
+    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+      return
+    }
+
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
     dispatch(dispatchStartGetInbox())
 
@@ -189,8 +198,13 @@ const dispatchFinishListFolderMessages = (folderID: number, messageData?: Secure
 }
 
 export const listFolderMessages = (folderID: number, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
+    const { downtimeWindowsByScreenID } = getState().errors
+    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+      return
+    }
+
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolderMessages(folderID, page, screenID))))
     dispatch(dispatchStartListFolderMessages())
 
@@ -227,8 +241,13 @@ const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, mess
 }
 
 export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
+    const { downtimeWindowsByScreenID } = getState().errors
+    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+      return
+    }
+
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getThread(messageID))))
     dispatch(dispatchStartGetThread())
 
@@ -278,8 +297,13 @@ export const getMessage = (
   /** Set to true if we want to display the inline activity indicator instead of of the one that takes up the whole screen */
   loadingAttachments = false,
 ): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
+    const { downtimeWindowsByScreenID } = getState().errors
+    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+      return
+    }
+
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
 
     if (loadingAttachments) {
@@ -289,7 +313,7 @@ export const getMessage = (
     }
 
     try {
-      const { messagesById } = _getState().secureMessaging
+      const { messagesById } = getState().secureMessaging
       let response
       // If no message contents, then this messageID was added during fetch folder/inbox message call and does not contain the full info yet
       // Message content of some kind is required on the reply/compose forms.
@@ -397,8 +421,13 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
  * Redux action to get all possible recipients of a message
  */
 export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
+    const { downtimeWindowsByScreenID } = getState().errors
+    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+      return
+    }
+
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageRecipients(screenID))))
     dispatch(dispatchStartGetMessageRecipients())
 
@@ -442,8 +471,13 @@ const dispatchFinishGetMessageSignature = (signature?: SecureMessagingSignatureD
  * Redux action to get message signature
  */
 export const getMessageSignature = (screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
+    const { downtimeWindowsByScreenID } = getState().errors
+    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+      return
+    }
+
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageSignature(screenID))))
     dispatch(dispatchStartGetMessageSignature())
 
