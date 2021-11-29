@@ -12,6 +12,8 @@ export type ClaimsDemoStore = {
   }
   '/v0/claim/600232852': ClaimGetData
   '/v0/claim/600236068': ClaimGetData
+  '/v0/claim/600246732': ClaimGetData
+  '/v0/claim/600080331': ClaimGetData
 }
 
 /**
