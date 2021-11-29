@@ -8,38 +8,42 @@ import { useTheme } from 'utils/hooks'
 import MessagesCountTag from './MessagesCountTag'
 
 interface HomeNavButtonProps {
-  /** title text */
+  /**string for header and used to create testID for accessibility*/
   title: string
-  /** text appearing under the title */
+  /**string secondary text that seats on the second row */
   subText: string
-  /** accessibility hint for the button */
+  /**string for accessibility hint */
   a11yHint: string
-  /** called when the button is pressed */
+  /**function to be called when press occurs */
   onPress: () => void
-  /** optional background color of the button */
+  /**BackgroundVariant color for background */
   backgroundColor?: BackgroundVariant
-  /** optional background color for the button active state */
+  /**BackgroundVariant color for active state */
   backgroundColorActive?: BackgroundVariant
-  /** optional text color for the title */
+  /**VATextColors color for text */
   textColor?: keyof VATextColors
   /** optional text color for the subtext */
   secondaryTextColor?: keyof VATextColors
-  /** optional color for the arrow icon */
+  /** VAIconColors icon color*/
   iconColor?: keyof VAIconColors
-  /** optional width of the border */
+  /**BorderWidths possible widths for HomeNavButton*/
   borderWidth?: BorderWidths
-  /** optional border color */
+  /**BorderColorVariant color for the borders*/
   borderColor?: BorderColorVariant
-  /** optional border color for the active state */
+  /**BorderColorVariant color for active state for the borders*/
   borderColorActive?: BorderColorVariant
-  /** optional border style */
+  /**BorderStyles denotes the styling of the borders*/
   borderStyle?: BorderStyles
-  /** optional value to display a count tag */
+  /**number for the tag */
   tagCount?: number
-  /** optional accessibility text for the count */
+  /**a11y for the tag */
   tagCountA11y?: string
 }
 
+/**
+ * Reusable large navigation button
+ * @returns LargeNavButton component
+ */
 const LargeNavButton: FC<HomeNavButtonProps> = ({
   title,
   subText,

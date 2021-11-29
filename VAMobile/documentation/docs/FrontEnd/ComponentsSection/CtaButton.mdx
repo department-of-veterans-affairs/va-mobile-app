@@ -1,0 +1,19 @@
+import CodeBlock from '@theme/CodeBlock'
+import CtaButtonString from '!!raw-loader!@componentsDocs/CtaButton'
+
+import ComponentTopInfo from '../../../src/components/ComponentInfo'
+
+export const exampleString = `<CtaButton {...props}>
+    <TextView color="primaryContrast" variant="MobileBody">
+    {t('component.crisisLine.talkToThe')}
+    </TextView>
+    <TextView color="primaryContrast" variant="MobileBodyBold">
+    &nbsp;{'component.crisisLine.veteranCrisisLine'}
+    </TextView>
+    <TextView color="primaryContrast" variant="MobileBody">
+    &nbsp;{'component.crisisLine.now'}
+    </TextView>
+</CtaButton>>`
+
+
+<ComponentTopInfo componentName="CtaButton" example={exampleString} codeString={CtaButtonString} />

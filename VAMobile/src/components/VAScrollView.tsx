@@ -12,6 +12,7 @@ export type VAScrollViewProps = {
   backgroundColor?: BackgroundVariant
 } & ScrollViewProps
 
+/**A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix */
 const VAScrollView: FC<VAScrollViewProps> = (props) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()

@@ -41,9 +41,8 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
+import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
-
 enableScreens(true)
 
 const store = configureStore()
@@ -146,9 +145,7 @@ export const AuthGuard: FC = () => {
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
-
   const [currNewState, setCurrNewState] = useState('active')
-
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
@@ -162,6 +159,12 @@ export const AuthGuard: FC = () => {
       setCurrNewState('inactive')
     }
   }, [isVoiceOverTalkBackRunning, dispatch, currNewState])
+
+  useEffect(() => {
+    // only run on app load
+    dispatch(sendUsesLargeTextAnalytics())
+    dispatch(sendUsesScreenReaderAnalytics())
+  }, [dispatch])
 
   useEffect(() => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back

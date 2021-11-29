@@ -479,7 +479,7 @@ const dispatchFinishFileUpload = (error?: Error, eventDescription?: string): Red
 export const uploadFileToClaim = (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartFileUpload())
-
+    await logAnalyticsEvent(Events.vama_claim_upload_start())
     try {
       if (files.length > 1) {
         const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse) => {
@@ -521,7 +521,7 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
         }
         // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
         formData.append(
-          'uploads[]',
+          'file',
           JSON.parse(
             JSON.stringify({
               name: nameOfFile || '',
@@ -536,10 +536,11 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
 
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
       }
-
+      await logAnalyticsEvent(Events.vama_claim_upload_compl())
       dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
       if (isErrorObject(error)) {
+        await logAnalyticsEvent(Events.vama_claim_upload_fail())
         dispatch(dispatchFinishFileUpload(error))
       }
     }
@@ -566,5 +567,23 @@ export const dispatchClearLoadedClaimsAndAppeals = (): ReduxAction => {
   return {
     type: 'CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS',
     payload: {},
+  }
+}
+
+/**
+ * Redux action to track when a user is on step 3 of claims
+ */
+export const sendClaimStep3Analytics = (): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_claim_step_three())
+  }
+}
+
+/**
+ * Redux action to track when a user is on step 3 of claims and has a file request
+ */
+export const sendClaimStep3FileRequestAnalytics = (): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_claim_file_request())
   }
 }

@@ -39,6 +39,7 @@ export type VASelectorProps = {
   isRequiredField?: boolean
 }
 
+/**A common component to display a checkbox with text*/
 const VASelector: FC<VASelectorProps> = ({
   selectorType = SelectorType.Checkbox,
   selected,

@@ -8,7 +8,7 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StoreState, VaccineState } from 'store/reducers'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getVaccineLocation } from 'store/actions'
+import { getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -35,6 +35,10 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
       dispatch(getVaccineLocation(vaccineId, vaccine.relationships?.location?.data?.id || ''))
     }
   }, [dispatch, vaccineLocationsById, vaccineId, vaccine])
+
+  useEffect(() => {
+    dispatch(sendVaccineDetailsAnalytics(vaccine?.attributes?.groupName || ''))
+  }, [dispatch, vaccineId, vaccine])
 
   if (!vaccine) {
     return <></>
@@ -69,9 +73,9 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           </TextView>
           <TextView variant="MobileBody">{vaccine.attributes?.shortDescription || placeHolder}</TextView>
           <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-            {t('vaccines.details.series') + '  '}
-            <TextView variant="MobileBody">{displaySeries}</TextView>
+            {t('vaccines.details.series')}
           </TextView>
+          <TextView variant="MobileBody">{displaySeries}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView variant="MobileBodyBold" color={'primaryTitle'}>
               {t('vaccines.details.provider')}
@@ -94,9 +98,9 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Box>
               <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                {t('vaccines.details.reaction') + '  '}
-                <TextView variant="MobileBody">{vaccine.attributes?.reaction || placeHolder}</TextView>
+                {t('vaccines.details.reaction')}
               </TextView>
+              <TextView variant="MobileBody">{vaccine.attributes?.reaction || placeHolder}</TextView>
             </Box>
             <TextView variant="MobileBodyBold" color={'primaryTitle'}>
               {t('vaccines.details.notes')}

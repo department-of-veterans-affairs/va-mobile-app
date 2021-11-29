@@ -38,7 +38,7 @@ export type ListProps = {
 }
 
 /**
- * Display a list of buttons with text and optional actions
+ * A common component for showing a list of <ListItem>.
  */
 const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   const theme = useTheme()

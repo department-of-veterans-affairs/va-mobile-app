@@ -8,13 +8,19 @@ import { useTheme, useTranslation } from 'utils/hooks'
 export type CallHelpCenterProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
+  /** optional text for the title */
   titleText?: string
+  /** optional title a11y hint*/
   titleA11yHint?: string
+  /** optional text for the error */
   errorText?: string
+  /** optional a11y hint for the error */
   errorA11y?: string
+  /** optional phone number */
   callPhone?: string
 }
 
+/**A common component to show the help center contact info for when an error happens*/
 const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA11yHint, errorText, errorA11y, callPhone }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

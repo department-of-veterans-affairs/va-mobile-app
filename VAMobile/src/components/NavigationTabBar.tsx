@@ -48,7 +48,7 @@ export type NavigationTabBarProps = {
 const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${themeFn((theme) => theme.colors.background.navButton)};
 `
-
+/**Component for the bottom tab navigation*/
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)

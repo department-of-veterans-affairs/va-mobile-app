@@ -4,8 +4,11 @@ import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
 
 export type LoadingComponentProps = {
+  /**Text to be shown under the spinner */
   text?: string
 }
+
+/**A common component to show a loading spinner */
 const LoadingComponent: FC<LoadingComponentProps> = ({ text }) => {
   const theme = useTheme()
 

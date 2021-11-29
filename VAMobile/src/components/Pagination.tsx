@@ -60,7 +60,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
     </Pressable>
   )
 }
-
+/**A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item. */
 const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev, onNext }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)

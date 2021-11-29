@@ -50,7 +50,7 @@ export type VAButtonProps = {
 }
 
 /**
- * Large button filling the width of the container
+ * A common component to show a button that takes the full width of the view with gutters
  */
 const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps }) => {
   const theme = useTheme()

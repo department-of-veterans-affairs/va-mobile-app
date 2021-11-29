@@ -37,6 +37,7 @@ type CarouselTabBarProps = {
   screenList: Array<CarouselScreen>
 }
 
+/**A common component with the carousel tab bar content. Displays skip button, continue button, and a progress bar*/
 const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, screenList, translation }) => {
   const theme = useTheme()
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)

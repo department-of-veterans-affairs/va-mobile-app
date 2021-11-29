@@ -12,11 +12,13 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'utils/hooks'
 
 export type ErrorComponentProps = {
+  /**The screen id for the screen that has the errors*/
   screenID: ScreenIDTypes
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
 }
 
+/**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
   const t = useTranslation()
