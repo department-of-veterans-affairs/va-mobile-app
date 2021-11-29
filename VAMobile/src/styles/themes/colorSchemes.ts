@@ -26,7 +26,6 @@ export const lightTheme = {
     navButton: colors.toolbarBackgroundGray,
     brandedMainBackground: colors.grayLightest,
     carouselTab: colors.white,
-    statusBar: colors.primary,
   },
   alertBox: {
     cardBackground: colors.grayLightest,
@@ -159,7 +158,6 @@ export const darkTheme = {
     navButton: colors.base,
     brandedMainBackground: colors.grayLightest,
     carouselTab: colors.white,
-    statusBar: colors.base,
   },
   alertBox: {
     cardBackground: colors.base,
