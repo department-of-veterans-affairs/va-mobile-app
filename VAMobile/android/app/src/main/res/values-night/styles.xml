@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/primaryDarkerDarkMode</item>
+<!--        <item name="android:windowBackground">@color/primaryDarkerDarkMode</item>-->
         <item name="android:navigationBarColor" tools:targetApi="27">@color/toolbarBackgroundDark</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
     </style>

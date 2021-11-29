@@ -126,7 +126,7 @@ const MainApp: FC = () => {
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
               <NotificationManger>
                 <SafeAreaProvider>
-                  <StatusBar barStyle="light-content" backgroundColor={currentTheme.colors.icon.active} />
+                  <StatusBar barStyle="light-content" backgroundColor={currentTheme.colors.background.navHeader} />
                   <AuthGuard />
                 </SafeAreaProvider>
               </NotificationManger>

@@ -117,6 +117,7 @@ export type VABackgroundColors = {
   navButton: string
   brandedMainBackground: string
   carouselTab: string
+  statusBar: string
 }
 
 export type VABorderColors = {
