@@ -209,7 +209,7 @@
 				2C9F25FEA7DA45CA8AD34801 /* Resources */,
 				46F7B02639B9A5F11BEC7D29 /* Pods */,
 			);
-			indentWidth = 2;
+			indentWidth = 1;
 			sourceTree = "<group>";
 			tabWidth = 2;
 			usesTabs = 0;

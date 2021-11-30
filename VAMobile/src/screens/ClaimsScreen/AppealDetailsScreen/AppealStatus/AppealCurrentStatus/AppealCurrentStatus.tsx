@@ -581,7 +581,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
 
   return (
     <TextArea>
-      <TextView variant="BitterBoldHeading" accessibilityRole="header">
+      <TextView variant="BitterBoldHeading" color={'primaryTitle'} accessibilityRole="header">
         {t('appealDetails.currentStatus')}
       </TextView>
       <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop} accessibilityRole="header">

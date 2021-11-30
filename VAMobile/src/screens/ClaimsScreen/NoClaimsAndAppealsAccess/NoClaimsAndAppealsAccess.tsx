@@ -11,7 +11,9 @@ const NoClaimsAndAppealsAccess: FC = () => {
   return (
     <VAScrollView {...testIdProps('Claims: No-claims-and-appeals-page')}>
       <Box my={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-        <TextView variant="BitterBoldHeading">{t('claimsAndAppeals.noClaimsAndAppealsAccess.title')}</TextView>
+        <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
+          {t('claimsAndAppeals.noClaimsAndAppealsAccess.title')}
+        </TextView>
       </Box>
       <TextArea>
         <TextView {...testIdProps(t('claimsAndAppeals.noClaimsAndAppealsAccess.body.a11yLabel'))}>{t('claimsAndAppeals.noClaimsAndAppealsAccess.body')}</TextView>

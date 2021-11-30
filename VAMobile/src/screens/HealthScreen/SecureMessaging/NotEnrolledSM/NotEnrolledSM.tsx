@@ -46,7 +46,9 @@ const NotEnrolledSM: FC = () => {
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme.dimensions.gutter} mb={standardMarginBetween}>
-          <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
+          <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
+            {t('notEnrolledSM.title')}
+          </TextView>
         </Box>
         <Box>
           <TextArea>

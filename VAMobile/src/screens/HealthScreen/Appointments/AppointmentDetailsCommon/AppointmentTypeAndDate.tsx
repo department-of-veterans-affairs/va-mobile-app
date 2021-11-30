@@ -35,7 +35,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
       </TextView>
       {isAppointmentCanceled ? (
         <>
-          <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant={'BitterBoldHeading'} color={'primaryTitle'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
             {t('appointments.canceled.whoCanceled', { whoCanceled })}
           </TextView>
 
@@ -45,8 +45,12 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
         </>
       ) : (
         <Box {...testIdProps(`${date} ${time}`)} accessibilityRole={'header'} accessible={true}>
-          <TextView variant={'BitterBoldHeading'}>{date}</TextView>
-          <TextView variant={'BitterBoldHeading'}>{time}</TextView>
+          <TextView variant={'BitterBoldHeading'} color={'primaryTitle'}>
+            {date}
+          </TextView>
+          <TextView variant={'BitterBoldHeading'} color={'primaryTitle'}>
+            {time}
+          </TextView>
         </Box>
       )}
     </Box>

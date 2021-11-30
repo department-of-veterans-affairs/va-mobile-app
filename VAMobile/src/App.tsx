@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Appearance, Linking, StatusBar, useColorScheme } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
@@ -28,7 +28,7 @@ import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
+import { useColorScheme, useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -42,7 +42,7 @@ import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScr
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store'
-import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
+import theme, { getTheme } from 'styles/themes/standardTheme'
 enableScreens(true)
 
 const store = configureStore()
@@ -80,10 +80,9 @@ const MainApp: FC = () => {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
 
-  const scheme = useColorScheme()
-  setColorScheme(scheme)
-
   const [currentTheme, setCurrentTheme] = useState(getTheme())
+
+  useColorScheme(setCurrentTheme)
 
   /**
    * Used by the navigation container to initialize the first route.
@@ -91,13 +90,6 @@ const MainApp: FC = () => {
   const navOnReady = (): void => {
     routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name || ''
   }
-
-  Appearance.addChangeListener((preferences: Appearance.AppearancePreferences) => {
-    const { colorScheme } = preferences
-    setColorScheme(colorScheme)
-
-    setCurrentTheme(getTheme())
-  })
 
   /**
    * When the nav state changes, track the screen view using firebase analytics

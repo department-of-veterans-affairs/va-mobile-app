@@ -267,7 +267,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
+              <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
+                {subjectHeader}
+              </TextView>
             </Box>
             {renderMessages(message, messagesById, thread)}
           </Box>

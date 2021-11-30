@@ -105,7 +105,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       <VAScrollView {...testIdProps('ViewMessage-page')} scrollViewRef={scrollRef}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-            <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
+            <TextView variant="BitterBoldHeading" color={'primaryTitle'} accessibilityRole={'header'}>
               {formatSubject(category, subject, t)}
             </TextView>
           </Box>
