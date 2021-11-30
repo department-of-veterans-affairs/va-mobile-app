@@ -2,18 +2,19 @@ import { InteractionManager, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, Ref, useEffect, useState } from 'react'
+import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, TextView, VAButton, VAIconProps, VAModalPicker, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAButton, VAIconProps, VAModalPicker, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
+import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
+import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { deleteMessage, getMessage, getThread, moveMessage } from 'store/actions'
 import { formatSubject } from 'utils/secureMessaging'
-import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -44,14 +45,18 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
 
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
   const messageID = Number(route.params.messageID)
+  const currentFolderID = Number(route.params.folderID)
+  const currentPage = Number(route.params.currentPage)
+  const messagesLeft = Number(route.params.messagesLeft)
   const [scrollRef, messageRef, scrollToSelectedMessage] = useAutoScrollToElement()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
+  const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderID.toString())
 
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { messagesById, threads, loading, messageIDsOfError, folders } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesById, threads, loading, messageIDsOfError, folders, movingMessage } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -73,21 +78,58 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     }
   }, [loading, isTransitionComplete, scrollToSelectedMessage])
 
-  const getFolders = () => {
-    const iconProp = {
-      fill: theme.colors.icon.dark,
-      height: theme.fontSizes.MobileBody.fontSize,
-      width: theme.fontSizes.MobileBody.fontSize,
-      name: 'FolderSolid',
-    } as VAIconProps
+  const getfolderName = (id: string) => {
+    return _.filter(folders, (folder) => {
+      return folder.id === id
+    })[0].attributes.name
+  }
 
-    return (folders || []).map((folder) => {
+  const onMove = (value: string) => {
+    const newFolder = Number(value)
+    if (currentFolderID !== newFolder) {
+      setNewCurrentFolderID(value)
+      if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
+        dispatch(deleteMessage(messageID, currentFolderID, currentPage, messagesLeft))
+      } else {
+        dispatch(moveMessage(messageID, newFolder, currentFolderID, currentPage, messagesLeft))
+      }
+    }
+  }
+
+  const getFolders = (): PickerItem[] => {
+    let indexOfDeleted: number | undefined
+    const filteredFolder = _.filter(folders, (folder) => {
+      const folderName = folder.attributes.name
+      return folderName !== FolderNameTypeConstants.drafts && folderName !== FolderNameTypeConstants.sent
+    }).map((folder, index) => {
+      let label = folder.attributes.name
+
+      const icon = {
+        fill: 'dark',
+        height: theme.fontSizes.MobileBody.fontSize,
+        width: theme.fontSizes.MobileBody.fontSize,
+        name: 'FolderSolid',
+      } as VAIconProps
+
+      if (label === FolderNameTypeConstants.deleted) {
+        label = TRASH_FOLDER_NAME
+        icon.fill = 'error'
+        icon.name = 'TrashSolid'
+        indexOfDeleted = index
+      }
+
       return {
-        label: folder.attributes.name,
+        label,
         value: folder.id,
-        icon: iconProp,
+        icon,
       }
     })
+
+    if (indexOfDeleted !== undefined) {
+      filteredFolder.unshift(filteredFolder.splice(indexOfDeleted, 1)[0])
+    }
+
+    return filteredFolder
   }
 
   useEffect(() => {
@@ -95,17 +137,20 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       headerLeft: (props): ReactNode => (
         <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} focusOnButton={false} showCarat={true} />
       ),
-      headerRight: () => (
-        <VAModalPicker
-          displayButton={true}
-          selectedValue={'test'}
-          onSelectionChange={() => {}}
-          pickerOptions={getFolders()}
-          labelKey={'common:pickerMoveMessageToFolder'}
-          buttonText={'common:pickerLaunchBtn'}
-          confirmBtnText={'common:pickerLaunchBtn'}
-        />
-      ),
+      headerRight: () =>
+        currentFolderID !== SecureMessagingSystemFolderIdConstants.SENT ? (
+          <VAModalPicker
+            displayButton={true}
+            selectedValue={newCurrentFolderID}
+            onSelectionChange={onMove}
+            pickerOptions={getFolders()}
+            labelKey={'common:pickerMoveMessageToFolder'}
+            buttonText={'common:pickerLaunchBtn'}
+            confirmBtnText={'common:pickerLaunchBtn'}
+          />
+        ) : (
+          <></>
+        ),
     })
   })
 
@@ -114,8 +159,10 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
   }
 
-  if (loading || !isTransitionComplete) {
-    return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
+  if (loading || !isTransitionComplete || movingMessage) {
+    return (
+      <LoadingComponent text={movingMessage ? t('secureMessaging.movingMessage', { folderName: getfolderName(newCurrentFolderID) }) : t('secureMessaging.viewMessage.loading')} />
+    )
   }
 
   if (!message || !messagesById || !thread) {

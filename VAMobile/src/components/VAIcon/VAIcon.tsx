@@ -72,6 +72,7 @@ import PhoneSolid from './svgs/phoneSolid.svg'
 import QuestionMark from './svgs/questionMark.svg'
 import Remove from './svgs/remove.svg'
 import Reply from './svgs/reply.svg'
+import TrashSolid from './svgs/trash-solid.svg'
 import UnreadIcon from './svgs/unread_icon.svg'
 import VideoCamera from './svgs/videoCamera.svg'
 
@@ -125,6 +126,7 @@ export const VA_ICON_MAP = {
   UnreadIcon,
   VideoCamera,
   PhoneSolid,
+  TrashSolid,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

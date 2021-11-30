@@ -199,6 +199,7 @@
   "secureMessaging.goToInbox.a11yHint.sent": "Go to the inbox page.",
   "secureMessaging.messages.loading": "We're loading your messages",
   "secureMessaging.myFolders": "My Folders",
+  "secureMessaging.movingMessage": "Moving message to {{folderName}}",
   "secureMessaging.reply": "Reply",
   "secureMessaging.reply.error.youCantSend": "You can no longer send messages to this triage group.",
   "secureMessaging.reply.error.ifYouThink": "Please contact your My HealtheVet Coordinator at this VA Medical Center to see if this triage group is currently participating in Secure Messaging and if you are enrolled in the triage group.",

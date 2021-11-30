@@ -92,7 +92,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     }
   }
 
-  const onDone = (): void => {
+  const onConfirm = (): void => {
     onSelectionChange(currentSelectedValue)
     setModalVisible(false)
     setIsFocused(false)
@@ -214,7 +214,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     ...a11yHintProp(t('common:cancel.picker.a11yHint')),
   }
 
-  const doneButtonProps: PressableProps = {
+  const confirmButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
     ...testIdProps(confirmLabel),
@@ -243,7 +243,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                   {t(labelKey || '')}
                 </TextView>
               </Box>
-              <Pressable onPress={onDone} {...doneButtonProps}>
+              <Pressable onPress={onConfirm} {...confirmButtonProps}>
                 <TextView allowFontScaling={false}>{confirmLabel}</TextView>
               </Pressable>
             </Box>

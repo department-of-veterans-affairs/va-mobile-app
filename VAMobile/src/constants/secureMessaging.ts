@@ -8,6 +8,8 @@ export const MAX_IMAGE_DIMENSION = 1375
 
 export const READ = 'READ'
 
+export const TRASH_FOLDER_NAME = 'Trash'
+
 export type FolderNameType = 'Drafts' | 'Deleted' | 'Sent'
 
 export const FolderNameTypeConstants: {

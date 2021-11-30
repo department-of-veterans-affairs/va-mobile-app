@@ -41,7 +41,7 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
     // Move all of the properties except text lines to the standard list item object
     const { text, icon, testId, isSelected, ...listItemObj } = item
 
-    const textLine = icon ? [{ text, iconProps: icon } as TextLineWithIconProps] : [{ text } as TextLine]
+    const textLine = icon ? [{ text, iconProps: icon, color: icon.fill } as TextLineWithIconProps] : [{ text } as TextLine]
     const content = <TextLines listOfText={textLine} />
 
     const backgroundColor = isSelected ? 'pickerSelectedItem' : 'list'
