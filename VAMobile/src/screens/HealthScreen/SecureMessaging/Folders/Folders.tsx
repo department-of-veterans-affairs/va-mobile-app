@@ -1,8 +1,6 @@
 import { TFunction } from 'i18next'
 import { useSelector } from 'react-redux'
-
 import React, { FC, ReactNode } from 'react'
-
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
