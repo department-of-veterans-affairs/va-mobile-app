@@ -1,20 +1,21 @@
 import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native'
+import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import React, { FC } from 'react'
 
 import { Box } from 'components'
 import { BoxProps } from './Box'
-import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
-import { useDispatch } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
 import colors from '../styles/themes/VAColors'
 
+/**
+ * Common snackbar component. This component is warraped by the react-native-toast-notification library.
+ */
 const SnackBar: FC<ToastProps> = (toast) => {
   const { message, data } = toast
-  const { onConfirmAction, isReduxAction, isError, actionBtnText } = data || {}
+  const { onConfirmAction, isError, actionBtnText, isUndo } = data || {}
   const { dimensions } = useTheme()
-  const dispatch = useDispatch()
 
   const btnStlye: StyleProp<ViewStyle> = {
     marginLeft: dimensions.snackBarBetweenSpace,
@@ -46,6 +47,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
     flexDirection: 'row',
     alignItems: 'center',
     flexGrow: 1,
+    mr: dimensions.snackBarBetweenSpace,
   }
 
   const btnContainerProps: BoxProps = {
@@ -56,11 +58,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const onActionPress = () => {
     if (onConfirmAction && typeof onConfirmAction === 'function') {
-      if (isReduxAction) {
-        dispatch(onConfirmAction())
-      } else {
-        onConfirmAction()
-      }
+      onConfirmAction()
     }
     toast.onHide()
   }
@@ -69,18 +67,20 @@ const SnackBar: FC<ToastProps> = (toast) => {
     <Box {...mainContainerProps}>
       <Box {...messageContainerProps}>
         <Box mr={dimensions.snackBarBetweenSpace}>
-          <VAIcon name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'} fill={colors.white} height={18} width={18} />
+          <VAIcon name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'} fill={colors.white} height={dimensions.snackBarIconSize} width={dimensions.snackBarIconSize} />
         </Box>
         <TextView variant={'HelperText'} color={'primaryContrast'}>
           {message}
         </TextView>
       </Box>
       <Box {...btnContainerProps}>
-        <TouchableOpacity onPress={onActionPress} style={btnStlye}>
-          <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'} display={'flex'}>
-            {actionBtnText || isError ? 'Retry' : 'Undo'}
-          </TextView>
-        </TouchableOpacity>
+        {!isUndo && (
+          <TouchableOpacity onPress={onActionPress} style={btnStlye}>
+            <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'} display={'flex'}>
+              {actionBtnText || isError ? 'Retry' : 'Undo'}
+            </TextView>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity onPress={() => toast.onHide()} style={btnStlye}>
           <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'}>
             {'Dismiss'}

@@ -277,6 +277,7 @@ const theme: VATheme = {
     snackBarShadowX: 0,
     snackBarShadowY: 4,
     snackBarShadowOpacity: 0.6,
+    snackBarIconSize: 18,
   },
 
   fontFace: {

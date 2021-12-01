@@ -1,7 +1,6 @@
 import 'react-native-gesture-handler'
-
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar, Text, TouchableOpacity, View } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
@@ -11,7 +10,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import KeyboardManager from 'react-native-keyboard-manager'
 import React, { FC, useEffect, useRef, useState } from 'react'
-import ToastContainer, { ToastProvider } from 'react-native-toast-notifications'
+import ToastContainer from 'react-native-toast-notifications'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 
@@ -111,6 +110,7 @@ const MainApp: FC = () => {
 
   const snackBarProps: Partial<ToastProps> = {
     duration: 900000,
+    animationDuration: 100,
     renderType: {
       custom_snackbar: (toast) => <SnackBar {...toast} />,
     },

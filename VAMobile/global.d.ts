@@ -27,6 +27,21 @@ declare module 'react-native-keyboard-manager' {
   export function setEnableAutoToolbar(arg: boolean): void
 }
 
+// this makes it posible to call the snackbar from outside react components and also types the data object
+type ToastOptions = import('react-native-toast-notifications/lib/typescript/toast').ToastOptions
 type ToastType = import('react-native-toast-notifications').ToastType
 
-declare var snackBar: ToastType
+type modifyToastOptions = Omit<ToastOptions, 'data'> & {
+  data?: {
+    onConfirmAction?: () => void
+    isError?: boolean
+    actionBtnText?: string
+    isUndo?: boolean
+  }
+}
+
+type modifyToastType = Omit<ToastType, 'show'> & {
+  show: (message: string | JSX.Element, toastOptions?: modifyToastOptions | undefined) => string
+}
+
+declare var snackBar: modifyToastType

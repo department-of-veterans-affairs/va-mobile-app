@@ -233,6 +233,7 @@ export type VATheme = {
     snackBarShadowX: number
     snackBarShadowY: number
     snackBarShadowOpacity: number
+    snackBarIconSize: number
   }
   fontFace: {
     regular: string
