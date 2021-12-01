@@ -6,7 +6,9 @@ import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView,
 import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
+import { useEffect } from 'react'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useToast } from 'react-native-toast-notifications'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -19,6 +21,14 @@ const LoginScreen: FC = () => {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 20
   let demoTaps = 0
+  const toast = useToast()
+
+  useEffect(() => {
+    toast.show('Move to Test folder 33', {
+      type: 'with_close_button',
+      animationDuration: 100,
+    })
+  }, [toast])
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 

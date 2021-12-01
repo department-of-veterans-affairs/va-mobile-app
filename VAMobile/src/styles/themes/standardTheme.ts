@@ -100,6 +100,7 @@ const theme: VATheme = {
       modalOverlay: colors.base,
       pickerSelectedItem: colors.primaryAltLightest,
       navButton: colors.toolbarBackgroundGray,
+      snackbar: colors.snackBarBlack,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -156,6 +157,7 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
       claimPhase: colors.white,
+      snackBarBtn: colors.lightBlue,
     },
     buttonBackground: {
       buttonPrimary: colors.primary,
@@ -260,6 +262,17 @@ const theme: VATheme = {
     errorLabelBottomMargin: 3,
     selectorWidth: 22,
     selectorHeight: 22,
+    snackBarWidth: '90%',
+    snackBarHorizontalPadding: 16,
+    snackBarVerticalPadding: 6,
+    snackBarVerticalMarging: 10,
+    snackBarBorderRadius: 4,
+    snackBarButtonHeight: 44,
+    snackBarBtuttonWidth: 76,
+    snackBarBetweenSpace: 8,
+    snackBarShadowX: 0,
+    snackBarShadowY: 6,
+    snackBarShadowOpacity: 0.6,
   },
 
   fontFace: {

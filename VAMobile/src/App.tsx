@@ -1,12 +1,13 @@
 import 'react-native-gesture-handler'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar, Text, TouchableOpacity, View } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
+import { ToastProvider } from 'react-native-toast-notifications'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import KeyboardManager from 'react-native-keyboard-manager'
@@ -37,6 +38,7 @@ import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationSc
 import LoaGate from './screens/auth/LoaGate'
 import NotificationManger from './components/NotificationManger'
 import OnboardingCarousel from './screens/OnboardingCarousel'
+import SnackBar from 'components/SnackBar'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
@@ -112,8 +114,14 @@ const MainApp: FC = () => {
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
               <NotificationManger>
                 <SafeAreaProvider>
-                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
-                  <AuthGuard />
+                  <ToastProvider
+                    duration={900000}
+                    renderType={{
+                      with_close_button: (toast) => <SnackBar {...toast} />,
+                    }}>
+                    <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                    <AuthGuard />
+                  </ToastProvider>
                 </SafeAreaProvider>
               </NotificationManger>
             </NavigationContainer>
