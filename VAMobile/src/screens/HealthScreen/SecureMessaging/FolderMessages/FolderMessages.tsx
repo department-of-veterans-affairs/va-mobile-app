@@ -26,6 +26,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
+  const paginationMetaData = paginationMetaByFolderId?.[folderID]
 
   useEffect(() => {
     // Load first page messages
@@ -43,7 +44,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
     const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
-    const args = isDraft ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} } : { messageID }
+    const args = isDraft
+      ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
+      : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
     navigation.navigate(screen, args)
   }
 
@@ -74,7 +77,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
       return <></>
     }
 
-    const paginationMetaData = paginationMetaByFolderId?.[folderID]
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {

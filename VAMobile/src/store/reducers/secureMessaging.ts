@@ -58,6 +58,7 @@ export type SecureMessagingState = {
   messageIDsOfError?: Array<number>
   signature?: SecureMessagingSignatureDataAttributes
   loadingSignature: boolean
+  movingMessage: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -93,6 +94,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   termsAndConditionError: false,
   messageIDsOfError: undefined,
   loadingSignature: false,
+  movingMessage: false,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -430,6 +432,19 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       signature,
       error,
       loadingSignature: false,
+    }
+  },
+  SECURE_MESSAGING_START_MOVE_MESSAGE: (state) => {
+    return {
+      ...state,
+      movingMessage: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_MOVE_MESSAGE: (state, { error }) => {
+    return {
+      ...state,
+      movingMessage: false,
+      error,
     }
   },
 })
