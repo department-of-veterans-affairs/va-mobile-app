@@ -64,6 +64,7 @@ import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
 import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
+import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import PaperClip from './svgs/paperClip.svg'
@@ -123,6 +124,7 @@ export const VA_ICON_MAP = {
   UnreadIcon,
   VideoCamera,
   PhoneSolid,
+  ExclamationTriangleSolid,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

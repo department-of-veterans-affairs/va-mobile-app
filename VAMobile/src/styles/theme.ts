@@ -80,6 +80,7 @@ export type VATypographyThemeVariants = {
   ActionBar: string
   VASelector: string
   HelperText: string
+  SnackBarBtnText: string
 }
 
 export type VABackgroundColors = {

@@ -26,3 +26,7 @@ declare module 'react-native-keyboard-manager' {
   export function setKeyboardDistanceFromTextField(arg: number): void
   export function setEnableAutoToolbar(arg: boolean): void
 }
+
+type ToastType = import('react-native-toast-notifications').ToastType
+
+declare var snackBar: ToastType

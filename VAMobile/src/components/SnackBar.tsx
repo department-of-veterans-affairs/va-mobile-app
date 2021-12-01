@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { Box } from 'components'
 import { BoxProps } from './Box'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
+import { useDispatch } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -11,7 +12,9 @@ import colors from '../styles/themes/VAColors'
 
 const SnackBar: FC<ToastProps> = (toast) => {
   const { message, data } = toast
+  const { onConfirmAction, isReduxAction, isError, actionBtnText } = data || {}
   const { dimensions } = useTheme()
+  const dispatch = useDispatch()
 
   const btnStlye: StyleProp<ViewStyle> = {
     marginLeft: dimensions.snackBarBetweenSpace,
@@ -51,23 +54,36 @@ const SnackBar: FC<ToastProps> = (toast) => {
     flexGrow: 1,
   }
 
+  const onActionPress = () => {
+    if (onConfirmAction && typeof onConfirmAction === 'function') {
+      if (isReduxAction) {
+        dispatch(onConfirmAction())
+      } else {
+        onConfirmAction()
+      }
+    }
+    toast.onHide()
+  }
+
   return (
     <Box {...mainContainerProps}>
       <Box {...messageContainerProps}>
         <Box mr={dimensions.snackBarBetweenSpace}>
-          <VAIcon name={'CircleCheckMark'} fill={colors.white} height={18} width={18} />
+          <VAIcon name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'} fill={colors.white} height={18} width={18} />
         </Box>
-        <TextView color={'primaryContrast'}>{message}</TextView>
+        <TextView variant={'HelperText'} color={'primaryContrast'}>
+          {message}
+        </TextView>
       </Box>
       <Box {...btnContainerProps}>
-        <TouchableOpacity onPress={() => (toast.onPress ? toast.onPress('1') : undefined)} style={btnStlye}>
-          <TextView variant={'MobileBodyBold'} color={'snackBarBtn'} display={'flex'}>
-            {data?.actionBtnText || 'Undo'}
+        <TouchableOpacity onPress={onActionPress} style={btnStlye}>
+          <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'} display={'flex'}>
+            {actionBtnText || isError ? 'Retry' : 'Undo'}
           </TextView>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toast.onHide()} style={btnStlye}>
-          <TextView variant={'MobileBodyBold'} color={'snackBarBtn'}>
-            {data?.actionBtnText || 'Dismiss'}
+          <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'}>
+            {'Dismiss'}
           </TextView>
         </TouchableOpacity>
       </Box>

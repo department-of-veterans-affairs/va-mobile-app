@@ -61,6 +61,10 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
+  SnackBarBtnText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -264,14 +268,14 @@ const theme: VATheme = {
     selectorHeight: 22,
     snackBarWidth: '90%',
     snackBarHorizontalPadding: 16,
-    snackBarVerticalPadding: 6,
+    snackBarVerticalPadding: 2,
     snackBarVerticalMarging: 10,
     snackBarBorderRadius: 4,
-    snackBarButtonHeight: 44,
-    snackBarBtuttonWidth: 76,
+    snackBarButtonHeight: 41,
+    snackBarBtuttonWidth: 70,
     snackBarBetweenSpace: 8,
     snackBarShadowX: 0,
-    snackBarShadowY: 6,
+    snackBarShadowY: 4,
     snackBarShadowOpacity: 0.6,
   },
 
@@ -309,6 +313,7 @@ const theme: VATheme = {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
+    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
   },
 }
 
