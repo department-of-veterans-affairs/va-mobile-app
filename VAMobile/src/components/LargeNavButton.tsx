@@ -13,7 +13,7 @@ interface HomeNavButtonProps {
   /**string secondary text that seats on the second row */
   subText: string
   /**string for accessibility hint */
-  a11yHint: string
+  a11yHint?: string
   /**function to be called when press occurs */
   onPress: () => void
   /**BackgroundVariant color for background */
@@ -109,7 +109,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const testId = `${title} ${tagCountA11y || ''}`.trim()
+  const testId = `${title} ${tagCountA11y || ''} ${subText}`.trim()
 
   return (
     <Box {...boxProps}>
@@ -120,7 +120,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         onPressOut={_onPressOut}
         accessible={true}
         accessibilityRole={'menuitem'}
-        {...a11yHintProp(a11yHint)}
+        {...a11yHintProp(a11yHint || '')}
         {...testIdProps(testId)}>
         <Box flex={1}>
           <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>
