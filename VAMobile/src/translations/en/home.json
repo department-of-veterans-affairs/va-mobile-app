@@ -1,5 +1,4 @@
 {
-  "claimsAndAppeals.a11yHint": "Review your claim or appeal status",
   "claimsAndAppeals.subText": "Review your claim or appeal status",
   "claimsAndAppeals.title": "Claims and appeals",
   "component.crisisLine.hint": "Go to Veterans Crisis Line",
@@ -32,12 +31,10 @@
   "greetings.morning": "Good morning",
   "greetings.afternoon": "Good afternoon",
   "greetings.evening": "Good evening",
-  "healthCare.a11yHint": "Go to health",
   "healthCare.subText": "Review your appointments, send messages, and get your vaccine records",
   "healthCare.title": "Health care",
   "letters.title": "Letters",
   "letters.subText": "Download common VA letters and documents",
-  "letters.a11yHint": "Download common V-A letters and documents",
   "secureMessaging.title": "Messages",
   "title": "Home",
   "veteransCrisisLine.callA11yHint": "Dials this number via your device’s call function",
