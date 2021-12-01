@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, StoreState } from 'store/reducers'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
-
+import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SecureMessagingState, StoreState } from 'store/reducers'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { listFolderMessages, resetSaveDraftComplete } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
@@ -105,7 +105,10 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
             <MessageAlert saveDraftComplete={draftSaved} />
           </Box>
         )}
-        <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName} />
+        <MessageList
+          items={getMessagesListItems(messages, t, onMessagePress, folderName)}
+          title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}
+        />
         {renderPagination()}
       </VAScrollView>
       <ComposeMessageFooter />
