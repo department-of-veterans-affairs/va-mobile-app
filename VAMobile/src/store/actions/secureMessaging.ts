@@ -1,11 +1,18 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import {
+  DowntimeFeatureTypeConstants,
+  ScreenIDTypesConstants,
+  SecureMessagingFormData,
+  SecureMessagingSignatureData,
+  SecureMessagingSignatureDataAttributes,
+} from 'store/api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
-import { ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
 
+import { CommonErrorTypesConstants, SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { MockUsersEmail } from 'constants/common'
 import {
   Params,
@@ -23,7 +30,6 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
-import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
@@ -110,8 +116,8 @@ const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, e
 export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    const { downtimeWindowsByScreenID } = getState().errors
-    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
+      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
       return
     }
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))
@@ -156,8 +162,8 @@ const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?
 export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    const { downtimeWindowsByScreenID } = getState().errors
-    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
+      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
       return
     }
 
@@ -200,8 +206,8 @@ const dispatchFinishListFolderMessages = (folderID: number, messageData?: Secure
 export const listFolderMessages = (folderID: number, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    const { downtimeWindowsByScreenID } = getState().errors
-    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
+      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
       return
     }
 
@@ -243,8 +249,8 @@ const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, mess
 export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    const { downtimeWindowsByScreenID } = getState().errors
-    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
+      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
       return
     }
 
@@ -299,8 +305,8 @@ export const getMessage = (
 ): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    const { downtimeWindowsByScreenID } = getState().errors
-    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
+      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
       return
     }
 
@@ -423,8 +429,8 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
 export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    const { downtimeWindowsByScreenID } = getState().errors
-    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
+      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
       return
     }
 
@@ -473,8 +479,8 @@ const dispatchFinishGetMessageSignature = (signature?: SecureMessagingSignatureD
 export const getMessageSignature = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    const { downtimeWindowsByScreenID } = getState().errors
-    if (screenID && isInDowntime(screenID, downtimeWindowsByScreenID)) {
+    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
+      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
       return
     }
 

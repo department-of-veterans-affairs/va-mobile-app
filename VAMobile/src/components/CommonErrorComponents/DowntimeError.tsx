@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
+import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypes } from 'store/api/types'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
@@ -26,9 +26,10 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
-  const { downtimeWindowsByScreenID } = useSelector<StoreState, ErrorsState>((s) => s.errors)
-  const featureName = downtimeWindowsByScreenID[screenID]?.featureName
-  const endTime = downtimeWindowsByScreenID[screenID]?.endTime.toFormat('fff')
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const feature = DowntimeScreenIDToFeature[screenID]
+  const featureName = downtimeWindowsByFeature[feature]?.featureName
+  const endTime = downtimeWindowsByFeature[feature]?.endTime.toFormat('fff')
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>

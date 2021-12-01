@@ -14,8 +14,8 @@ import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, St
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DowntimeScreenIDToFeature, ScreenIDTypes } from '../store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
@@ -30,10 +30,10 @@ import HeaderTitle from 'components/HeaderTitle'
  * Hook to determine if an error should be shown for a given screen id
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
-  const { errorsByScreenID, downtimeWindowsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
+  const { errorsByScreenID, downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => {
     return state.errors
   })
-  return isInDowntime(currentScreenID, downtimeWindowsByScreenID) || !!errorsByScreenID[currentScreenID]
+  return isInDowntime(DowntimeScreenIDToFeature[currentScreenID], downtimeWindowsByFeature) || !!errorsByScreenID[currentScreenID]
 }
 
 /**

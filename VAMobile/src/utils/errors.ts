@@ -1,7 +1,7 @@
-import { APIError, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
+import { APIError, DowntimeFeatureType, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { DateTime } from 'luxon'
-import { DowntimeWindowsByScreenIDType } from 'store'
+import { DowntimeWindowsByFeatureType } from 'store'
 import { flatten, includes, map, some } from 'lodash'
 
 export const getErrorKeys = (error: APIError): (string | undefined)[] => {
@@ -47,8 +47,8 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
   }
 }
 
-export const isInDowntime = (screenID: ScreenIDTypes, downtimeWindows: DowntimeWindowsByScreenIDType): boolean => {
-  const mw = downtimeWindows[screenID]
+export const isInDowntime = (feature: DowntimeFeatureType, downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
+  const mw = downtimeWindows[feature]
   if (!mw) {
     return false
   }

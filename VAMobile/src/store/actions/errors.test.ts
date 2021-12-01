@@ -98,10 +98,6 @@ context('errors', () => {
       const store = await initializeMaintenanceWindows()
       const actions = store.getActions()
 
-      const clearMetadata = find(actions, { type: 'ERRORS_CLEAR_ALL_DOWNTIME' })
-      expect(clearMetadata).toBeTruthy()
-      const clearErrors = find(actions, { type: 'ERRORS_CLEAR_ERROR_TYPE' })
-      expect(clearErrors).toBeTruthy()
       const setErrors = find(actions, { type: 'ERRORS_SET_ERROR' })
       expect(setErrors).toBeTruthy()
       const setMetadata = find(actions, { type: 'ERRORS_SET_DOWNTIME' })
