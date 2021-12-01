@@ -1,11 +1,11 @@
-import { TFunction } from 'i18next'
-
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { TFunction } from 'i18next'
 import DocumentPicker from 'react-native-document-picker'
+import _ from 'underscore'
 
-import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import {
   FolderNameTypeConstants,
@@ -314,4 +314,10 @@ export const onAddFileAttachments = (
       }
     },
   )
+}
+
+export const getfolderName = (id: string, folders: SecureMessagingFolderList): string => {
+  return _.filter(folders, (folder) => {
+    return folder.id === id
+  })[0].attributes.name
 }
