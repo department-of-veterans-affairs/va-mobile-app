@@ -1,12 +1,10 @@
 import { TFunction } from 'i18next'
 import { useSelector } from 'react-redux'
-
 import React, { FC, ReactNode } from 'react'
-
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { FolderNameTypeConstants, HIDDEN_FOLDERS } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -33,14 +31,15 @@ const getListItemsForFolders = (
       // unreadCount
     } = attributes
     const draftDisplay = folder.attributes.name === FolderNameTypeConstants.drafts && count > 0
+    const nameOfFolder = name === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : name
     listItems.push({
-      text: `${t('common:text.raw', { text: name })}${draftDisplay ? ` (${count})` : ''}`,
-      onPress: () => onFolderPress(folderId, name),
+      text: `${t('common:text.raw', { text: nameOfFolder })}${draftDisplay ? ` (${count})` : ''}`,
+      onPress: () => onFolderPress(folderId, nameOfFolder),
       a11yHintText: draftDisplay
-        ? t('secureMessaging.folders.count.a11yHint', { count, folderName: name })
-        : t('secureMessaging.foldersViewMessages.a11yHint', { folderName: name }),
+        ? t('secureMessaging.folders.count.a11yHint', { count, folderName: nameOfFolder })
+        : t('secureMessaging.foldersViewMessages.a11yHint', { folderName: nameOfFolder }),
       a11yValue: t('common:listPosition', { position: index + 1, total: visibleFolders.length }),
-      testId: t('common:text.raw', { text: name }),
+      testId: t('common:text.raw', { text: nameOfFolder }),
     })
   })
 
@@ -59,7 +58,7 @@ export const getSystemFolders = (
   }
 
   const systemFolders = _.filter(folders, (folder) => {
-    return folder.attributes.systemFolder && folder.attributes.name !== FolderNameTypeConstants.deleted
+    return folder.attributes.systemFolder
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 

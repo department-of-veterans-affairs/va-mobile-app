@@ -24,6 +24,8 @@ import {
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
+import { StoreState } from 'store'
+import { ThunkDispatch } from 'redux-thunk'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
@@ -658,4 +660,76 @@ export const resetHasLoadedRecipients = (): ReduxAction => {
     type: 'SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS',
     payload: {},
   }
+}
+
+/**
+ * Redux action to start the move of a message to another folder
+ */
+const dispatchStartMoveMessage = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_MOVE_MESSAGE',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to finish the move of a message to another folder
+ */
+const dispatchFinishMoveMessage = (error?: api.APIError): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_MOVE_MESSAGE',
+    payload: {
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action that moves a message to another folder
+ */
+export const moveMessage = (messageID: number, newFolderID: number, currentFolderID: number, currentPage: number, messagesLeft: number): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(moveMessage(messageID, newFolderID, currentFolderID, currentPage, messagesLeft))))
+    dispatch(dispatchStartMoveMessage())
+    try {
+      await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
+      refreshFoldersAfterMove(dispatch, currentFolderID, currentPage, messagesLeft)
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishMoveMessage(error))
+      }
+    }
+  }
+}
+
+/**
+ * Redux action that moves a message to the delete folder
+ */
+export const deleteMessage = (messageID: number, currentFolderID: number, currentPage: number, messagesLeft: number): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteMessage(messageID, currentFolderID, currentPage, messagesLeft))))
+    dispatch(dispatchStartMoveMessage())
+    try {
+      await api.del(`/v0/messaging/health/messages/${messageID}`)
+      refreshFoldersAfterMove(dispatch, currentFolderID, currentPage, messagesLeft)
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishMoveMessage(error))
+      }
+    }
+  }
+}
+
+const refreshFoldersAfterMove = (dispatch: ThunkDispatch<StoreState, undefined, ReduxAction>, currentFolderID: number, currentPage: number, messagesLeft: number) => {
+  const page = currentPage === 1 ? currentPage : messagesLeft === 1 ? currentPage - 1 : currentPage
+  const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
+
+  if (currentFolderID === SecureMessagingSystemFolderIdConstants.INBOX) {
+    dispatch(fetchInboxMessages(page, folderScreenID))
+  } else {
+    dispatch(listFolderMessages(currentFolderID, page, folderScreenID))
+  }
+
+  dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
+  dispatch(dispatchFinishMoveMessage())
 }
