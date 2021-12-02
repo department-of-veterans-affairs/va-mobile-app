@@ -1,0 +1,8 @@
+import HooksInfo from '../../../src/components/HooksInfo'
+
+export const exampleString = ` const launchExternalLink = useExternalLink()\n
+const onDecisionReview = async (): Promise<void> => {
+    launchExternalLink(LINK_URL_DECISION_REVIEWS)
+}`
+
+<HooksInfo componentName="useExternalLink" example={exampleString}/>

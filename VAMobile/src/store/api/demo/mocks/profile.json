@@ -1,0 +1,182 @@
+{
+  "/v0/user": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "user",
+      "attributes": {
+        "profile": {
+          "firstName": "COLDER",
+          "middleName": "TUX",
+          "lastName": "POLARBEAR",
+          "fullName": "COLDER TUX POLARBEAR",
+          "contactEmail": {
+            "id": 183571,
+            "emailAddress": "attended1@gmail.com"
+          },
+          "signinEmail": "vets.gov.user+228@gmail.com",
+          "birthDate": "1950-01-01",
+          "gender": "M",
+          "residentialAddress": null,
+          "mailingAddress": {
+            "id": 269569,
+            "addressLine1": "3101 N Fort Valley Rd",
+            "addressLine2": null,
+            "addressLine3": null,
+            "addressPou": "CORRESPONDENCE",
+            "addressType": "DOMESTIC",
+            "city": "Flagstaff",
+            "countryCodeIso3": "USA",
+            "internationalPostalCode": null,
+            "province": null,
+            "stateCode": "AZ",
+            "zipCode": "86001",
+            "zipCodeSuffix": "8348"
+          },
+          "homePhoneNumber": {
+            "areaCode": "555",
+            "countryCode": "1",
+            "phoneNumber": "4446666",
+            "phoneType": "HOME"
+          },
+          "mobilePhoneNumber": {
+            "areaCode": "555",
+            "countryCode": "1",
+            "phoneNumber": "4446666",
+            "phoneType": "HOME"
+          },
+          "workPhoneNumber": {
+            "areaCode": "555",
+            "countryCode": "1",
+            "phoneNumber": "4446666",
+            "phoneType": "HOME"
+          },
+          "faxNumber": null
+        },
+        "authorizedServices": [
+          "appeals",
+          "appointments",
+          "claims",
+          "directDepositBenefits",
+          "lettersAndDocuments",
+          "militaryServiceHistory",
+          "userProfileUpdate",
+          "secureMessaging"
+        ],
+        "health": {
+          "facilities": [
+            {
+              "facilityId": "983",
+              "isCerner": false
+            },
+            {
+              "facilityId": "556",
+              "isCerner": false
+            },
+            {
+              "facilityId": "668",
+              "isCerner": true
+            },
+            {
+              "facilityId": "984",
+              "isCerner": false
+            },
+            {
+              "facilityId": "987",
+              "isCerner": false
+            }
+          ],
+          "isCernerPatient": false
+        }
+      }
+    },
+    "meta": {
+      "availableServices": [
+        "appeals",
+        "appointments",
+        "claims",
+        "directDepositBenefits",
+        "lettersAndDocuments",
+        "militaryServiceHistory",
+        "userProfileUpdate",
+        "secureMessaging"
+      ]
+    }
+  },
+  "/v0/military-service-history": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "militaryInformation",
+      "attributes": {
+        "serviceHistory": [
+          {
+            "branchOfService": "United States Coast Guard",
+            "beginDate": "1970-07-13",
+            "endDate": "1998-08-31",
+            "formattedBeginDate": "July 13, 1970",
+            "formattedEndDate": "August 31, 1998"
+          }
+        ]
+      }
+    }
+  },
+  "/v0/letters": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "letters",
+      "attributes": {
+        "letters": [
+          {
+            "name": "Commissary Letter",
+            "letterType": "commissary"
+          },
+          {
+            "name": "Proof of Service Letter",
+            "letterType": "proof_of_service"
+          },
+          {
+            "name": "Service Verification Letter",
+            "letterType": "service_verification"
+          },
+          {
+            "name": "Civil Service Preference Letter",
+            "letterType": "civil_service"
+          },
+          {
+            "name": "Benefit Summary and Service Verification Letter",
+            "letterType": "benefit_summary"
+          },
+          {
+            "name": "Benefit Verification Letter",
+            "letterType": "benefit_verification"
+          }
+        ]
+      }
+    }
+  },
+  "/v0/payment-information/benefits": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "paymentInformation",
+      "attributes": {
+        "accountControl": {
+          "canUpdateAddress": false,
+          "corpAvailIndicator": true,
+          "corpRecFoundIndicator": false,
+          "hasNoBdnPaymentsIndicator": true,
+          "identityIndicator": true,
+          "isCompetentIndicator": true,
+          "indexIndicator": true,
+          "noFiduciaryAssignedIndicator": true,
+          "notDeceasedIndicator": true,
+          "canUpdatePayment": true
+        },
+        "paymentAccount": {
+          "accountType": null,
+          "financialInstitutionName": null,
+          "accountNumber": null,
+          "financialInstitutionRoutingNumber": null
+        }
+      }
+    }
+  }
+}

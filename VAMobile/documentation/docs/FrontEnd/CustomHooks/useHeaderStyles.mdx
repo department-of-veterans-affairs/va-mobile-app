@@ -1,0 +1,10 @@
+import HooksInfo from '../../../src/components/HooksInfo'
+
+export const exampleString = `const headerStyles = useHeaderStyles()\n
+return (
+    <HealthScreenStack.Navigator screenOptions={headerStyles}>
+        <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('page.title') }} />
+    </HealthScreenStack.Navigator>
+)`
+
+<HooksInfo componentName="useHeaderStyles" example={exampleString}/>

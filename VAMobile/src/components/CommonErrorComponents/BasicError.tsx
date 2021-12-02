@@ -9,18 +9,19 @@ import { useTheme, useTranslation } from 'utils/hooks'
 export type BasicErrorProps = {
   /** function called when the Try again button is pressed */
   onTryAgain: () => void
-  /** message to display **/
+  /** message to display */
   messageText: string
-  /** text to appear in bold  **/
+  /** text to appear in bold  */
   headerText?: string
-  /** accessibility hint for the header **/
+  /** accessibility hint for the header */
   headerA11yLabel?: string
-  /** hint for the try again button **/
+  /** hint for the try again button */
   buttonA11yHint?: string
-  /** label for button and accessibility title **/
+  /** label for button and accessibility title */
   label?: string
 }
 
+/**A common component to show an error*/
 const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, label }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

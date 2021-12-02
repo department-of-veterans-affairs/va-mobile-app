@@ -22,7 +22,7 @@ export type DefaultListProps = {
 } & Partial<ListProps>
 
 /**
- * Display a list of buttons with text and optional actions
+ *Component to show a list composed of lines of display text built using TextLines
  */
 const DefaultList: FC<DefaultListProps> = ({ items, title, titleA11yLabel }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {

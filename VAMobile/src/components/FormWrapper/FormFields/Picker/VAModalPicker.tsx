@@ -45,6 +45,7 @@ export type VAModalPickerProps = {
   includeBlankPlaceholder?: boolean
 }
 
+/**A common component to display a picker for the device with an optional label*/
 const VAModalPicker: FC<VAModalPickerProps> = ({
   selectedValue,
   onSelectionChange,
