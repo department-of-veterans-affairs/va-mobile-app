@@ -1,5 +1,5 @@
-import { Pressable, PressableProps, View } from 'react-native'
-import React, { FC, ReactNode, Ref, useState } from 'react'
+import { Pressable, PressableProps } from 'react-native'
+import React, { FC, ReactNode, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
@@ -14,8 +14,6 @@ export type AccordionCollapsibleProps = {
   expandedContent: ReactNode
   /** testID for the header */
   testID?: string
-  /** a11yHint for the header */
-  a11yHint?: string
   /** component to display on when the accordion is collapsed */
   collapsedContent?: ReactNode
   /** if true hides the accordion arrow and only displays header & collapsed content */
@@ -28,8 +26,6 @@ export type AccordionCollapsibleProps = {
   noBorder?: boolean
   /** applies a border to create the alert effect on the view **/
   alertBorder?: keyof VABorderColors
-  /** Ref for the header section */
-  headerRef?: Ref<View>
 }
 
 const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
@@ -43,8 +39,6 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   noBorder,
   children,
   alertBorder,
-  a11yHint,
-  headerRef,
 }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -61,7 +55,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
-    accessibilityHint: a11yHint || t('viewMoreDetails'),
+    accessibilityHint: t('viewMoreDetails'),
     accessibilityRole: 'spinbutton',
   }
 
@@ -84,7 +78,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     }
 
     return (
-      <Pressable {...pressableProps} {...testIdProps(testID || '')} ref={headerRef}>
+      <Pressable {...pressableProps} {...testIdProps(testID || '')}>
         {data}
       </Pressable>
     )
@@ -104,7 +98,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   }
 
   return (
-    <Box {...boxProps} {...testIdProps('accordion-wrapper', true)} importantForAccessibility={'no'}>
+    <Box {...boxProps} {...testIdProps('accordion-wrapper')}>
       <TextArea noBorder={noBorder}>
         {renderHeader()}
         {!expanded && collapsedContent}
