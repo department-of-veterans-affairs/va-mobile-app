@@ -31,6 +31,7 @@ import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import _ from 'underscore'
@@ -54,6 +55,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     (state) => state.secureMessaging,
   )
 
+  const replyCancelConfirmation = useComposeCancelConfirmation()
+
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
   const subject = message ? message.subject : ''
@@ -63,12 +66,14 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
-  const goToCancel = navigateTo('ComposeCancelConfirmation', {
-    origin: FormHeaderTypeConstants.reply,
-    replyToID: messageID,
-    messageData: { body: messageReply },
-    isFormValid: true,
-  })
+  const goToCancel = () => {
+    replyCancelConfirmation({
+      origin: FormHeaderTypeConstants.reply,
+      replyToID: messageID,
+      messageData: { body: messageReply },
+      isFormValid: true,
+    })
+  }
 
   useEffect(() => {
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
