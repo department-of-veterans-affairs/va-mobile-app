@@ -1,29 +1,25 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
-import { ImagePickerResponse } from 'react-native-image-picker'
+import { AccessibilityInfo, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
-import { StackNavigationOptions } from '@react-navigation/stack'
-import { TFunction } from 'i18next'
-import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigation } from '@react-navigation/native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React from 'react'
 
-import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
-import { BackButton } from 'components'
+import { HeaderTitle, StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
+import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
+import { TFunction } from 'i18next'
+import { useTranslation as realUseTranslation } from 'react-i18next'
+import { useNavigation } from '@react-navigation/native'
+
+import { AccessibilityState, ErrorsState, StoreState } from 'store'
+import { BackButton, Box } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
+import { HeaderTitleType, getHeaderStyles } from 'styles/common'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
-import { WebProtocolTypesConstants } from 'constants/common'
-import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
 import { updateAccessibilityFocus } from 'store/actions'
-import HeaderTitle from 'components/HeaderTitle'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
@@ -69,11 +65,30 @@ export const useTranslation = (ns?: i18n_NS): TFunction => {
 export const useHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
   let headerStyles = getHeaderStyles(insets.top, useTheme())
+  const {
+    dimensions: { headerHeight },
+  } = useTheme()
+
+  // for ios to be able to traverse using keyboard on accessibility
+  const defaultStyle = StyleSheet.create({
+    headerText: {
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'row',
+      height: headerHeight,
+    },
+  })
 
   headerStyles = {
     ...headerStyles,
-    headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
-    headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
+    headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+      <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
+    ),
+    headerTitle: (header: HeaderTitleType) => (
+      <Box accessibilityRole="header" accessible={true} style={defaultStyle.headerText}>
+        <HeaderTitle {...header} />
+      </Box>
+    ),
   }
   return headerStyles
 }
@@ -116,7 +131,7 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
     return (): void => {
-      navigation.navigate(routeName as never, args as never)
+      navigation.navigate(routeName as string, args)
     }
   }
 }
@@ -129,10 +144,9 @@ type RouteNavParams<T extends ParamListBase> = {
  * previous screen rather than what is on the top left (https://github.com/react-navigation/react-navigation/issues/7056) This hook allows you to manually set the accessibility
  * focus on the element we know will be in the correct place.
  */
-
-export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ref: MutableRefObject<any> = useRef<T>(null)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
+  const ref = useRef(null)
   const dispatch = useDispatch()
   const screanReaderEnabled = useIsScreanReaderEnabled()
 
@@ -164,7 +178,7 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
             AccessibilityInfo.setAccessibilityFocus(focusPoint)
           }
         }
-      }, 300)
+      }, 50)
 
       return () => clearTimeout(timeOutPageFocus)
     }
@@ -192,186 +206,4 @@ export function useIsScreanReaderEnabled(): boolean {
   }, [screanReaderEnabled])
 
   return screanReaderEnabled
-}
-
-/**
- * Hook to display a warning that the user is leaving the app when tapping an external link
- */
-export function useExternalLink(): (url: string) => void {
-  const t = useTranslation(NAMESPACE.COMMON)
-
-  return (url: string) => {
-    if (url.startsWith(WebProtocolTypesConstants.http)) {
-      Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
-        {
-          text: t('cancel'),
-          style: 'cancel',
-        },
-        { text: t('leavingApp.ok'), onPress: (): Promise<void> => Linking.openURL(url), style: 'default' },
-      ])
-    } else {
-      Linking.openURL(url)
-    }
-  }
-}
-
-/**
- * Returns whether user has cerner facilities or not
- */
-export const useHasCernerFacilities = (): boolean => {
-  const { cernerFacilities } = useSelector<StoreState, PatientState>((state) => state.patient)
-  return cernerFacilities.length > 0
-}
-
-export type UseDestructiveAlertButtonProps = {
-  /** text of button */
-  text: string
-  /** handler for onClick */
-  onPress?: () => void
-}
-
-export type UseDestructiveAlertProps = {
-  /** title of alert */
-  title: string
-  /** message of alert */
-  message?: string // message for the alert
-  /** ios destructive index */
-  destructiveButtonIndex: number
-  /** ios cancel index */
-  cancelButtonIndex: number
-  /** options to show in alert */
-  buttons: Array<UseDestructiveAlertButtonProps>
-}
-/**
- * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
- */
-export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
-  return (props: UseDestructiveAlertProps) => {
-    if (isIOS()) {
-      const { buttons, ...remainingProps } = props
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          ...remainingProps,
-          options: buttons.map((button) => button.text),
-        },
-        (buttonIndex) => {
-          const onPress = buttons[buttonIndex]?.onPress
-          if (onPress) {
-            onPress()
-          }
-        },
-      )
-    } else {
-      Alert.alert(props.title, props.message, props.buttons as AlertButton[])
-    }
-  }
-}
-
-/**
- * Hook to autoscroll to an element
- */
-export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void] {
-  const scrollRef = useRef<ScrollView>(null)
-  const [messageRef, setFocus] = useAccessibilityFocus<View>()
-  const scrollToElement = useCallback(() => {
-    const timeOut = setTimeout(() => {
-      requestAnimationFrame(() => {
-        if (messageRef.current && scrollRef.current) {
-          const currentObject = scrollRef.current
-          const scrollPoint = findNodeHandle(currentObject)
-          if (scrollPoint) {
-            messageRef.current.measureLayout(
-              scrollPoint,
-              (_, y, __, height) => {
-                currentObject.scrollTo({ y: y * height, animated: false })
-              },
-              () => {
-                currentObject.scrollTo({ y: 0 })
-              },
-            )
-          }
-        }
-      })
-      setFocus()
-    }, 200)
-    return () => clearTimeout(timeOut)
-  }, [messageRef, setFocus])
-
-  return [scrollRef, messageRef, scrollToElement]
-}
-
-/**
- * Hook to add signature to a message
- */
-export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const { signature, loadingSignature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
-  const [message, setMessage] = useState('')
-  useEffect(() => {
-    if (signature && signature.includeSignature) {
-      setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
-    }
-  }, [loadingSignature, signature])
-  return [message, setMessage]
-}
-
-/**
- * Hook to validate message that could have a signature
- */
-export function useValidateMessageWithSignature(): (message: string) => boolean {
-  const { signature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
-
-  return (message: string): boolean => {
-    let isMessageBlank = !!message
-    if (signature && signature.includeSignature) {
-      isMessageBlank = message.trim() !== `${signature?.signatureName}\n${signature?.signatureTitle}`
-    }
-    return isMessageBlank
-  }
-}
-
-/**
- * The image and document response type
- */
-type imageDocumentResponseType = DocumentPickerResponse | ImagePickerResponse
-
-/**
- * Hook to add and remove attachments from the attachment list
- */
-export function useAttachments(): [
-  Array<imageDocumentResponseType>,
-  (attachmentFileToAdd: imageDocumentResponseType) => void,
-  (attachmentFileToRemove: imageDocumentResponseType) => void,
-] {
-  const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
-  const destructiveAlert = useDestructiveAlert()
-  const t = useTranslation(NAMESPACE.HEALTH)
-
-  const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
-    setAttachmentsList([...attachmentsList, attachmentFileToAdd])
-  }
-
-  const onRemove = (attachmentFileToRemove: imageDocumentResponseType) => {
-    setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
-  }
-
-  const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
-    destructiveAlert({
-      title: t('secureMessaging.attachments.removeAttachmentAreYouSure'),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('common:cancel'),
-        },
-        {
-          text: t('common:remove'),
-          onPress: () => {
-            onRemove(attachmentFileToRemove)
-          },
-        },
-      ],
-    })
-  }
-
-  return [attachmentsList, addAttachment, removeAttachment]
 }

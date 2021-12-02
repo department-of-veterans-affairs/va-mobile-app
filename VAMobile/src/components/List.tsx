@@ -66,7 +66,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   return (
     <Box>
       {title && (
-        <Box accessible={true} accessibilityRole={'header'}>
+        <Box accessible={true}>
           <TextView {...titleProps} {...testIdProps(generateTestID(titleA11yLabel ? titleA11yLabel : title, ''))}>
             {title}
           </TextView>
