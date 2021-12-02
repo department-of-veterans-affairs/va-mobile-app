@@ -49,6 +49,7 @@
     "@react-navigation/stack": "^6.0.7",
     "eslint-plugin-tsdoc": "^0.2.11",
     "i18next": "^21.0.0",
+    "jsc-android": "^250230.2.1",
     "jwt-decode": "^3.1.2",
     "luxon": "^2.0.2",
     "patch-package": "^6.4.7",
