@@ -22,13 +22,14 @@ context('AppointmentCancellationInfo', () => {
 
   let appointmentLocationName = 'VA Long Beach Healthcare System'
 
-  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone): void => {
+  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone, covidVaccination?: boolean): void => {
     const mockAppointment: AppointmentData = {
       ...defaultAppoinment,
       attributes: {
         ...defaultAppointmentAttributes,
         appointmentType,
         status,
+        covidVaccination,
         location: {
           ...defaultAppointmentLocation,
           name: appointmentLocationName,
@@ -180,6 +181,26 @@ context('AppointmentCancellationInfo', () => {
     })
     it('should display the find VA locations link', async () => {
       expect(testInstance.findByType(ClickForActionLink).props.displayedText).toEqual('Find your VA location')
+    })
+  })
+
+  describe('when the appointment type is covid vaccine', () => {
+    beforeEach(() => {
+      initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE, 'BOOKED', appointmentPhoneData, true)
+    })
+    it('should display the correct cancellation title', async () => {
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('To cancel this appointment, call your V\ufeffA  medical center')
+    })
+    it('should display the correct cancellation body', async () => {
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
+        "COVID-19 appointments can't be canceled online. Please call the V\ufeffA facility to cancel your appointment",
+      )
+    })
+    it('should display the correct location name', async () => {
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
+    })
+    it('should display the correct phone number', async () => {
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('123-' + appointmentPhoneData.number)
     })
   })
 })
