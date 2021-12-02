@@ -267,8 +267,7 @@ const theme: VATheme = {
     selectorWidth: 22,
     selectorHeight: 22,
     snackBarWidth: '90%',
-    snackBarHorizontalPadding: 16,
-    snackBarVerticalPadding: 2,
+    snackBarPadding: 12,
     snackBarVerticalMarging: 10,
     snackBarBorderRadius: 4,
     snackBarButtonHeight: 41,
@@ -278,6 +277,8 @@ const theme: VATheme = {
     snackBarShadowY: 4,
     snackBarShadowOpacity: 0.6,
     snackBarIconSize: 18,
+    snackBarBottomOffset: 20,
+    snackBarBottomOffsetWithNav: 96,
   },
 
   fontFace: {

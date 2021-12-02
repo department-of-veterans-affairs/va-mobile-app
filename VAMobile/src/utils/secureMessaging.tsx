@@ -13,6 +13,7 @@ import {
   MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES,
   MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES,
   READ,
+  TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
 import { generateTestIDForTextIconList, isErrorObject } from './common'
@@ -317,7 +318,9 @@ export const onAddFileAttachments = (
 }
 
 export const getfolderName = (id: string, folders: SecureMessagingFolderList): string => {
-  return _.filter(folders, (folder) => {
+  const folderName = _.filter(folders, (folder) => {
     return folder.id === id
   })[0].attributes.name
+
+  return folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName
 }

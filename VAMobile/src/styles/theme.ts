@@ -223,8 +223,7 @@ export type VATheme = {
     selectorWidth: number
     selectorHeight: number
     snackBarWidth: number | string
-    snackBarHorizontalPadding: number
-    snackBarVerticalPadding: number
+    snackBarPadding: number
     snackBarVerticalMarging: number
     snackBarBorderRadius: number
     snackBarButtonHeight: number
@@ -234,6 +233,8 @@ export type VATheme = {
     snackBarShadowY: number
     snackBarShadowOpacity: number
     snackBarIconSize: number
+    snackBarBottomOffset: number
+    snackBarBottomOffsetWithNav: number
   }
   fontFace: {
     regular: string

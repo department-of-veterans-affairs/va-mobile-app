@@ -2,8 +2,8 @@ import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { FolderNameTypeConstants, READ } from 'constants/secureMessaging'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { READ } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants, SecureMessagingFolderList, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
 
 import { MockUsersEmail } from 'constants/common'
@@ -24,7 +24,7 @@ import {
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
-import { StoreState } from 'store'
+import { StoreState, updatBottomOffset } from 'store'
 import { ThunkDispatch } from 'redux-thunk'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -36,6 +36,7 @@ import { isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
+import theme from 'styles/themes/standardTheme'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
   return {
@@ -695,20 +696,26 @@ export const moveMessage = (
   messageID: number,
   newFolderID: number,
   currentFolderID: number,
+  folderToRefresh: number,
   currentPage: number,
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
+  replyExpired: boolean,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(moveMessage(messageID, newFolderID, currentFolderID, currentPage, messagesLeft, isUndo, folders))))
+    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
+    dispatch(updatBottomOffset(replyExpired ? theme.dimensions.snackBarBottomOffset : theme.dimensions.snackBarBottomOffsetWithNav))
+
     try {
       await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
-      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, currentPage, messagesLeft, isUndo, folders)
+      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired)
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage(undefined, error))
+        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), retryFunction, false, true)
       }
     }
   }
@@ -720,49 +727,59 @@ export const moveMessage = (
 export const deleteMessage = (
   messageID: number,
   currentFolderID: number,
+  folderToRefresh: number,
   currentPage: number,
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
+  replyExpired: boolean,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, currentPage, messagesLeft, isUndo, folders))
+    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
+    dispatch(updatBottomOffset(replyExpired ? theme.dimensions.snackBarBottomOffset : theme.dimensions.snackBarBottomOffsetWithNav))
+
     try {
       await api.del(`/v0/messaging/health/messages/${messageID}`)
-      refreshFoldersAfterMove(dispatch, messageID, SecureMessagingSystemFolderIdConstants.DELETED, currentFolderID, currentPage, messagesLeft, isUndo, folders)
+      refreshFoldersAfterMove(
+        dispatch,
+        messageID,
+        SecureMessagingSystemFolderIdConstants.DELETED,
+        currentFolderID,
+        folderToRefresh,
+        currentPage,
+        messagesLeft,
+        isUndo,
+        folders,
+        replyExpired,
+      )
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage(undefined, error))
+        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), retryFunction, false, true)
       }
     }
   }
 }
 
+// method to refresh the folders after move and handle the undo
 const refreshFoldersAfterMove = (
   dispatch: ThunkDispatch<StoreState, undefined, ReduxAction>,
   messageID: number,
   newFolderID: number,
   currentFolderID: number,
+  folderToRefresh: number,
   currentPage: number,
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
+  replyExpired: boolean,
 ) => {
   const page = currentPage === 1 ? currentPage : messagesLeft === 1 && isUndo === false ? currentPage - 1 : currentPage
   const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
-  const inboxFolderId = SecureMessagingSystemFolderIdConstants.INBOX
-  const deletedFolderId = SecureMessagingSystemFolderIdConstants.DELETED
 
-  const folderName = getfolderName(newFolderID.toString(), folders)
-  const folderString =
-    newFolderID !== inboxFolderId && newFolderID !== deletedFolderId ? `${folderName} folder` : `${folderName === FolderNameTypeConstants.deleted ? 'Trash' : folderName}`
-
-  const message = !isUndo ? `Message moved to ${folderString}` : `Message moved back to ${folderString}`
-  const folderToRefresh = isUndo ? newFolderID : currentFolderID
-
-  if (folderToRefresh === inboxFolderId) {
+  if (folderToRefresh === SecureMessagingSystemFolderIdConstants.INBOX) {
     dispatch(fetchInboxMessages(page, folderScreenID))
   } else {
     dispatch(listFolderMessages(folderToRefresh, page, folderScreenID))
@@ -771,17 +788,43 @@ const refreshFoldersAfterMove = (
   dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
   dispatch(dispatchFinishMoveMessage(false))
 
+  const message = getSnackBarMessage(newFolderID, folders, isUndo, false)
+
+  showSnackBar(
+    message,
+    () => {
+      if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
+        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, replyExpired))
+      } else {
+        dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, replyExpired))
+      }
+    },
+    isUndo,
+    false,
+  )
+}
+
+// method to create the snackbar message for the move message
+const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean) => {
+  const folderName = getfolderName(folderID.toString(), folders)
+  const folderString =
+    folderID !== SecureMessagingSystemFolderIdConstants.INBOX && folderID !== SecureMessagingSystemFolderIdConstants.DELETED ? `${folderName} folder` : folderName
+
+  const messageString = !isUndo ? `${isError ? 'Failed to move message' : 'Message moved'}` : `${isError ? 'Failed to move message back' : 'Message moved back'}`
+
+  return `${messageString} to ${folderString}`
+}
+
+// method to launch the snackbar
+const showSnackBar = (message: string, action: () => void, isUndo: boolean, isError: boolean) => {
   snackBar.show(message, {
     type: 'custom_snackbar',
     data: {
       onConfirmAction: () => {
-        if (currentFolderID !== deletedFolderId) {
-          dispatch(moveMessage(messageID, currentFolderID, newFolderID, currentPage, messagesLeft, true, folders))
-        } else {
-          dispatch(deleteMessage(messageID, currentFolderID, currentPage, messagesLeft, true, folders))
-        }
+        action()
       },
-      isUndo,
+      isUndo: isUndo,
+      isError: isError,
     },
   })
 }

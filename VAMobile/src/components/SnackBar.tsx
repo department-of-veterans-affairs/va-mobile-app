@@ -27,14 +27,14 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const mainContainerProps: BoxProps = {
     width: '90%',
-    px: dimensions.snackBarHorizontalPadding,
+    p: dimensions.snackBarPadding,
     backgroundColor: 'snackbar',
     my: dimensions.snackBarVerticalMarging,
     borderRadius: dimensions.snackBarBorderRadius,
     flexDirection: 'row',
     flexWrap: 'wrap',
     display: 'flex',
-    py: dimensions.snackBarVerticalPadding,
+
     style: {
       shadowColor: colors.black,
       shadowOffset: { width: dimensions.snackBarShadowX, height: dimensions.snackBarShadowY },
@@ -43,7 +43,6 @@ const SnackBar: FC<ToastProps> = (toast) => {
   }
 
   const messageContainerProps: BoxProps = {
-    height: dimensions.snackBarButtonHeight,
     flexDirection: 'row',
     alignItems: 'center',
     flexGrow: 1,

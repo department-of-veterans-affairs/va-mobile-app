@@ -1,7 +1,7 @@
 import { InteractionManager, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, Ref, useEffect, useState } from 'react'
+import React, { FC, ReactNode, Ref, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAButton, VAIconProps, VAModalPicker, VAScrollView } from 'components'
@@ -45,18 +45,22 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
 
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
   const messageID = Number(route.params.messageID)
-  const currentFolderID = Number(route.params.folderID)
+  const currentFolderIdParam = Number(route.params.folderID)
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
   const [scrollRef, messageRef, scrollToSelectedMessage] = useAutoScrollToElement()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
-  const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderID.toString())
+  const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
+  const folderWhereMessageIs = useRef(currentFolderIdParam.toString())
+  const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { messagesById, threads, loading, messageIDsOfError, folders, movingMessage, isUndo } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesById, threads, loading, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -79,10 +83,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }, [loading, isTransitionComplete, scrollToSelectedMessage])
 
   useEffect(() => {
-    if (isUndo) {
-      setNewCurrentFolderID(currentFolderID.toString())
+    if (isUndo || moveMessageFailed) {
+      setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
+      folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
     }
-  }, [isUndo, currentFolderID])
+  }, [isUndo, currentFolderIdParam, moveMessageFailed])
 
   const getFolders = (): PickerItem[] => {
     let indexOfDeleted: number | undefined
@@ -126,7 +131,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} focusOnButton={false} showCarat={true} />
       ),
       headerRight: () =>
-        currentFolderID !== SecureMessagingSystemFolderIdConstants.SENT ? (
+        currentFolderIdParam !== SecureMessagingSystemFolderIdConstants.SENT ? (
           <VAModalPicker
             displayButton={true}
             selectedValue={newCurrentFolderID}
@@ -153,7 +158,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       <LoadingComponent
         text={
           movingMessage
-            ? t('secureMessaging.movingMessage', { folderName: getfolderName(!isUndo ? newCurrentFolderID : currentFolderID.toString(), folders) })
+            ? t('secureMessaging.movingMessage', { folderName: getfolderName(!isUndo ? newCurrentFolderID : folderWhereMessagePreviousewas.current, folders) })
             : t('secureMessaging.viewMessage.loading')
         }
       />
@@ -171,13 +176,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const onPressCompose = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const onMove = (value: string) => {
+    const currentFolder = Number(folderWhereMessageIs.current)
+    folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
-    if (currentFolderID !== newFolder && Number(newCurrentFolderID) !== newFolder) {
+    if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
+      folderWhereMessageIs.current = value
       if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(deleteMessage(messageID, currentFolderID, currentPage, messagesLeft, false, folders))
+        dispatch(deleteMessage(messageID, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, replyExpired))
       } else {
-        dispatch(moveMessage(messageID, newFolder, currentFolderID, currentPage, messagesLeft, false, folders))
+        dispatch(moveMessage(messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, replyExpired))
       }
     }
   }
