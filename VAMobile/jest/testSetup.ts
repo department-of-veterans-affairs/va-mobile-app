@@ -19,15 +19,6 @@ NativeModules.DeviceData = {
   getBuildNumber: jest.fn().mockReturnValue(0),
 }
 
-NativeModules.DeviceData = {
-	deviceName: 'Device Name',
-	getDeviceName: jest.fn().mockReturnValue('Device Name'),
-	versionName: 'v0.0.0',
-	getVersionName: jest.fn().mockReturnValue('v0.0.0'),
-	buildNumber: 0,
-	getBuildNumber: jest.fn().mockReturnValue(0),
-}
-
 jest.mock('react-native-safe-area-context', () => {
   let original = jest.requireActual('react-native-safe-area-context')
   return {
@@ -147,7 +138,7 @@ jest.mock('@react-native-async-storage/async-storage', () => {
   }
 })
 
-jest.mock('@react-native-cookies/cookies', () => {
+jest.mock('@react-native-community/cookies', () => {
   return {
     clearAll: jest.fn(),
   }
@@ -236,24 +227,6 @@ globalAny.fetch = jest.fn(() =>
   }),
 )
 
-jest.mock('react-native-notifications', () => {
-	return {
-		Notifications: {
-			events: jest.fn(() => {
-				return {
-					registerRemoteNotificationsRegistered: jest.fn(),
-					registerRemoteNotificationsRegistrationFailed: jest.fn(),
-					registerNotificationReceivedForeground: jest.fn(),
-					registerNotificationOpened: jest.fn(),
-					registerNotificationReceivedBackground: jest.fn(),
-				}
-			}),
-			getInitialNotification: jest.fn( ()=> {
-				return Promise.resolve()
-			})
-		},
-	}
-})
 globalAny.FormData = () => ({
   append: jest.fn(),
 })

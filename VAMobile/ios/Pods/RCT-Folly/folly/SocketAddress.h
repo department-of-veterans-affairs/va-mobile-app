@@ -595,7 +595,7 @@ class SocketAddress {
     AddrStorage() : addr() {}
   } storage_{};
   // IPAddress class does nto save zone or port, and must be saved here
-  uint16_t port_{0};
+  uint16_t port_;
 
   bool external_{false};
 };

@@ -19,7 +19,6 @@
 #include <cstdint>
 #include <typeinfo>
 
-#include <folly/CppAttributes.h>
 #include <folly/detail/StaticSingletonManager.h>
 
 namespace folly {
@@ -27,20 +26,13 @@ namespace detail {
 
 class UniqueInstance {
  public:
-#if __GNUC__ && __GNUC__ < 7 && !__clang__
-  explicit UniqueInstance(...) noexcept {}
-#else
-  template <template <typename...> class Z, typename... Key, typename... Mapped>
-  FOLLY_EXPORT FOLLY_ALWAYS_INLINE explicit UniqueInstance(
-      tag_t<Z<Key..., Mapped...>>, tag_t<Key...>, tag_t<Mapped...>) noexcept {
-    static Ptr const tmpl = &typeid(key_t<Z>);
+  template <typename... Key, typename... Mapped>
+  FOLLY_EXPORT explicit UniqueInstance(
+      char const* tmpl, tag_t<Key...>, tag_t<Mapped...>) noexcept {
     static Ptr const ptrs[] = {&typeid(Key)..., &typeid(Mapped)...};
-    static Arg arg{
-        {tmpl, ptrs, sizeof...(Key), sizeof...(Mapped)},
-        {tag<Value, key_t<Z, Key...>>}};
-    enforce(arg);
+    auto& global = createGlobal<Value, tag_t<Tag, Key...>>();
+    enforce(tmpl, ptrs, sizeof...(Key), sizeof...(Mapped), global);
   }
-#endif
 
   UniqueInstance(UniqueInstance const&) = delete;
   UniqueInstance(UniqueInstance&&) = delete;
@@ -48,8 +40,7 @@ class UniqueInstance {
   UniqueInstance& operator=(UniqueInstance&&) = delete;
 
  private:
-  template <template <typename...> class Z, typename... Key>
-  struct key_t {};
+  struct Tag {};
 
   using Ptr = std::type_info const*;
   struct PtrRange {
@@ -57,17 +48,20 @@ class UniqueInstance {
     Ptr const* e;
   };
   struct Value {
-    Ptr tmpl;
+    char const* tmpl;
     Ptr const* ptrs;
     std::uint32_t key_size;
     std::uint32_t mapped_size;
   };
-  struct Arg {
-    Value local;
-    StaticSingletonManager::ArgCreate<true> global;
-  };
 
-  static void enforce(Arg& arg) noexcept;
+  //  Under Clang, this call signature shrinks the aligned and padded size of
+  //  call-sites, as compared to a call signature taking Value or Value const&.
+  static void enforce(
+      char const* tmpl,
+      Ptr const* ptrs,
+      std::uint32_t key_size,
+      std::uint32_t mapped_size,
+      Value& global) noexcept;
 };
 
 } // namespace detail
