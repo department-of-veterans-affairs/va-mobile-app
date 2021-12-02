@@ -97,7 +97,7 @@ const DirectDepositScreen: FC = () => {
         </Box>
       </Box>
       <Box mx={gutter} mb={contentMarginBottom}>
-        <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />
+        <ClickToCallPhoneNumber phone={t('common:8008271000.displayText')} />
       </Box>
     </VAScrollView>
   )

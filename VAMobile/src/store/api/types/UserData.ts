@@ -36,17 +36,6 @@ export type UserDataProfile = {
   signinService: SigninServiceTypes
 }
 
-export type Facility = {
-  facilityId: string
-  isCerner: boolean
-  facilityName: string
-}
-
-export type CernerData = {
-  isCernerPatient: boolean
-  facilities: Array<Facility>
-}
-
 export type EmailData = {
   id: string
   emailAddress: string
@@ -89,7 +78,6 @@ export type UserData = {
       type: string
       authorizedServices: Array<VAServices>
       profile: UserDataProfile
-      health: CernerData
     }
   }
 }
