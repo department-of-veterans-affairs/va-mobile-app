@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, findByTestID, renderWithProviders } from 'testUtils'
+import {context, findByTestID, renderWithProviders} from 'testUtils'
 import NotEnrolledSM from './NotEnrolledSM'
 
 const mockExternalLinkSpy = jest.fn()
@@ -27,6 +27,7 @@ context('NotEnrolledSM', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+
     act(() => {
       component = renderWithProviders(<NotEnrolledSM />)
     })
@@ -40,7 +41,7 @@ context('NotEnrolledSM', () => {
 
   describe('when Learn how to upgrade link is clicked', () => {
     it('should launch external link', async () => {
-      findByTestID(testInstance, 'Learn how to upgrade to a My HealtheVet Premium account.').props.onPress()
+      findByTestID(testInstance, 'Learn how to upgrade.').props.onPress()
       expect(mockExternalLinkSpy).toBeCalledWith('https://www.myhealth.va.gov/web/myhealthevet/upgrading-your-my-healthevet-account-through-in-person-or-online-authentication')
     })
   })
