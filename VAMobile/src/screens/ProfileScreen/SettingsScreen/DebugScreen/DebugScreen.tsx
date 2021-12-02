@@ -1,15 +1,14 @@
 import { pick } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 
-import { AuthState, AuthorizedServicesState, NotificationsState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
-import { DEVICE_ENDPOINT_SID, debugResetFirstTimeLogin } from 'store/actions'
-import { resetReviewActionCount } from 'utils/inAppReviews'
+import { debugResetFirstTimeLogin } from 'store/actions'
+import { requestReview } from '../../../../utils/rnReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
@@ -18,17 +17,6 @@ const DebugScreen: FC = ({}) => {
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useDispatch()
-
-  // helper function for anything saved in AsyncStorage
-  const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
-    const asyncVal = (await AsyncStorage.getItem(key)) || ''
-    setStateFun(asyncVal)
-  }
-
-  // push data
-  const { deviceToken } = useSelector<StoreState, NotificationsState>((state) => state.notifications)
-  const [deviceAppSid, setDeviceAppSid] = useState<string>('')
-  getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
   const props: BoxProps = {
     flex: 1,
@@ -52,8 +40,8 @@ const DebugScreen: FC = ({}) => {
     dispatch(debugResetFirstTimeLogin())
   }
 
-  const resetInAppReview = (): void => {
-    resetReviewActionCount()
+  const testInAppReview = (): void => {
+    requestReview()
   }
 
   return (
@@ -66,7 +54,7 @@ const DebugScreen: FC = ({}) => {
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={resetInAppReview} label={'Reset In-App Review Actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={testInAppReview} label={'Test In-App Review Flow'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -132,33 +120,6 @@ const DebugScreen: FC = ({}) => {
               </Box>
             )
           })}
-        </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextArea>
-            <TextView variant="BitterBoldHeading">Push Notifications</TextView>
-          </TextArea>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextArea
-              onPress={(): void => {
-                onCopy(deviceToken || '')
-              }}>
-              <TextView variant="MobileBodyBold">Device Token</TextView>
-              <TextView>{deviceToken}</TextView>
-            </TextArea>
-          </Box>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextArea
-              onPress={(): void => {
-                onCopy(deviceToken || '')
-              }}>
-              <TextView variant="MobileBodyBold">Endpoint SID</TextView>
-              <TextView>{deviceAppSid}</TextView>
-            </TextArea>
-          </Box>
         </Box>
       </VAScrollView>
     </Box>
