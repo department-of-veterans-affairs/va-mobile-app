@@ -10,7 +10,7 @@ import VAIcon from './VAIcon'
 import colors from '../styles/themes/VAColors'
 
 /**
- * Common snackbar component. This component is warraped by the react-native-toast-notification library.
+ * Common snackbar component. This component is wrapped by the react-native-toast-notification library.
  */
 const SnackBar: FC<ToastProps> = (toast) => {
   const { message, data } = toast
