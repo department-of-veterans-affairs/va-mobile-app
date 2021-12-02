@@ -102,8 +102,8 @@ context('ClaimsScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.CLAIMS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(true, false, false, errorState)
@@ -115,8 +115,8 @@ context('ClaimsScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(true, false, false, errorState)
