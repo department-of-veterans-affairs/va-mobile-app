@@ -48,7 +48,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const currentFolderIdParam = Number(route.params.folderID)
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
-  const [scrollRef, messageRef, scrollToSelectedMessage] = useAutoScrollToElement()
+  const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
   const folderWhereMessageIs = useRef(currentFolderIdParam.toString())
@@ -176,6 +176,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const onPressCompose = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const onMove = (value: string) => {
+    setShouldFocus(false)
     const currentFolder = Number(folderWhereMessageIs.current)
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)

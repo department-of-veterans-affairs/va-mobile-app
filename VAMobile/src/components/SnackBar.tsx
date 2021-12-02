@@ -1,10 +1,11 @@
-import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native'
+import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import React, { FC } from 'react'
 
 import { Box } from 'components'
 import { BoxProps } from './Box'
-import { useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useFocusEffect } from '@react-navigation/native'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
 import colors from '../styles/themes/VAColors'
@@ -16,6 +17,9 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const { message, data } = toast
   const { onConfirmAction, isError, actionBtnText, isUndo } = data || {}
   const { dimensions } = useTheme()
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
+
+  useFocusEffect(setFocus)
 
   const btnStlye: StyleProp<ViewStyle> = {
     marginLeft: dimensions.snackBarBetweenSpace,
@@ -64,23 +68,25 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   return (
     <Box {...mainContainerProps}>
-      <Box {...messageContainerProps}>
-        <Box mr={dimensions.snackBarBetweenSpace}>
-          <VAIcon name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'} fill={colors.white} height={dimensions.snackBarIconSize} width={dimensions.snackBarIconSize} />
+      <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
+        <Box {...messageContainerProps}>
+          <Box mr={dimensions.snackBarBetweenSpace}>
+            <VAIcon name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'} fill={colors.white} height={dimensions.snackBarIconSize} width={dimensions.snackBarIconSize} />
+          </Box>
+          <TextView variant={'HelperText'} color={'primaryContrast'}>
+            {message}
+          </TextView>
         </Box>
-        <TextView variant={'HelperText'} color={'primaryContrast'}>
-          {message}
-        </TextView>
-      </Box>
+      </View>
       <Box {...btnContainerProps}>
         {!isUndo && (
-          <TouchableOpacity onPress={onActionPress} style={btnStlye}>
+          <TouchableOpacity onPress={onActionPress} style={btnStlye} accessible={true} accessibilityRole={'button'}>
             <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'} display={'flex'}>
               {actionBtnText || isError ? 'Retry' : 'Undo'}
             </TextView>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={() => toast.onHide()} style={btnStlye}>
+        <TouchableOpacity onPress={() => toast.onHide()} style={btnStlye} accessible={true} accessibilityRole={'button'}>
           <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'}>
             {'Dismiss'}
           </TextView>

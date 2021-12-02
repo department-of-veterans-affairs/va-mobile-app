@@ -294,9 +294,10 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
  * Hook to autoscroll to an element
  * @returns ref to the scrollView and the elemnt to scroll to and the function to call the manual scroll
  */
-export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void] {
+export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void, React.Dispatch<React.SetStateAction<boolean>>] {
   const scrollRef = useRef<ScrollView>(null)
   const [messageRef, setFocus] = useAccessibilityFocus<View>()
+  const [shouldFocus, setShouldFocus] = useState(true)
   const scrollToElement = useCallback(() => {
     const timeOut = setTimeout(() => {
       requestAnimationFrame(() => {
@@ -316,12 +317,14 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
           }
         }
       })
-      setFocus()
+      if (shouldFocus) {
+        setFocus()
+      }
     }, 200)
     return () => clearTimeout(timeOut)
-  }, [messageRef, setFocus])
+  }, [messageRef, setFocus, shouldFocus])
 
-  return [scrollRef, messageRef, scrollToElement]
+  return [scrollRef, messageRef, scrollToElement, setShouldFocus]
 }
 
 /**
