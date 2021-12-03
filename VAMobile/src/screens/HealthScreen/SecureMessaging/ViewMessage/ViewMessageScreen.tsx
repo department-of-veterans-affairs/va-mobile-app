@@ -51,6 +51,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
+
+  /* useref is used to persist the folder the message is in Example the message was first in test folder and the user moves it to test2. The user is still under folder
+    test but the message is not. So if the user selects move again and move to another folder test3 and clicks undo you want the message to go to test2 not test which
+    the user is on. This makes the message independent from the folder and acts like gmail when the user is in the email details
+  */
   const folderWhereMessageIs = useRef(currentFolderIdParam.toString())
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
@@ -180,13 +185,14 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     const currentFolder = Number(folderWhereMessageIs.current)
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
+    const withNavBar = replyExpired ? false : true
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
       if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(deleteMessage(messageID, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, replyExpired))
+        dispatch(deleteMessage(messageID, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
       } else {
-        dispatch(moveMessage(messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, replyExpired))
+        dispatch(moveMessage(messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
       }
     }
   }

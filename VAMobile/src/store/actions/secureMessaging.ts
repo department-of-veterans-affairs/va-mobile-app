@@ -5,6 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants, SecureMessagingFolderList, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
+import FileViewer from 'react-native-file-viewer'
 
 import { MockUsersEmail } from 'constants/common'
 import {
@@ -32,10 +33,9 @@ import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getfolderName } from 'utils/secureMessaging'
-import { isErrorObject } from 'utils/common'
+import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
-import FileViewer from 'react-native-file-viewer'
 import theme from 'styles/themes/standardTheme'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
@@ -701,21 +701,20 @@ export const moveMessage = (
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
-  replyExpired: boolean,
+  withNavBar: boolean,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired))
+    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
-    dispatch(updatBottomOffset(replyExpired ? theme.dimensions.snackBarBottomOffset : theme.dimensions.snackBarBottomOffsetWithNav))
 
     try {
       await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
-      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired)
+      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage(undefined, error))
-        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), retryFunction, false, true)
+        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), dispatch, retryFunction, false, true)
       }
     }
   }
@@ -732,13 +731,12 @@ export const deleteMessage = (
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
-  replyExpired: boolean,
+  withNavBar: boolean,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired))
+    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
-    dispatch(updatBottomOffset(replyExpired ? theme.dimensions.snackBarBottomOffset : theme.dimensions.snackBarBottomOffsetWithNav))
 
     try {
       await api.del(`/v0/messaging/health/messages/${messageID}`)
@@ -752,12 +750,12 @@ export const deleteMessage = (
         messagesLeft,
         isUndo,
         folders,
-        replyExpired,
+        withNavBar,
       )
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage(undefined, error))
-        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), retryFunction, false, true)
+        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), dispatch, retryFunction, false, true, withNavBar)
       }
     }
   }
@@ -774,7 +772,7 @@ const refreshFoldersAfterMove = (
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
-  replyExpired: boolean,
+  withNavBar: boolean,
 ) => {
   const page = currentPage === 1 ? currentPage : messagesLeft === 1 && isUndo === false ? currentPage - 1 : currentPage
   const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
@@ -792,15 +790,17 @@ const refreshFoldersAfterMove = (
 
   showSnackBar(
     message,
+    dispatch,
     () => {
       if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, replyExpired))
+        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
       } else {
-        dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, replyExpired))
+        dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
       }
     },
     isUndo,
     false,
+    withNavBar,
   )
 }
 
@@ -813,18 +813,4 @@ const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList
   const messageString = !isUndo ? `${isError ? 'Failed to move message' : 'Message moved'}` : `${isError ? 'Failed to move message back' : 'Message moved back'}`
 
   return `${messageString} to ${folderString}`
-}
-
-// method to launch the snackbar
-const showSnackBar = (message: string, action: () => void, isUndo: boolean, isError: boolean) => {
-  snackBar.show(message, {
-    type: 'custom_snackbar',
-    data: {
-      onConfirmAction: () => {
-        action()
-      },
-      isUndo: isUndo,
-      isError: isError,
-    },
-  })
 }

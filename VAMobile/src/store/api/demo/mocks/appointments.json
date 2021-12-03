@@ -44,6 +44,86 @@
           }
         },
         {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": "Routine Check up. Reminder to bring your ID card",
+            "healthcareProvider": null,
+            "healthcareService": "Community Clinic Association",
+            "location": {
+              "id": null,
+              "name": "Community Clinic Association",
+              "address": {
+                "street": "1412 East Cesar Ave",
+                "city": "East Lost Angeles",
+                "state": "CA",
+                "zipCode": "93344"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "458-9423",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "2021-06-02T20:00:00.000-04:00",
+            "startDateUtc": "2021-06-03T00:00:00.000Z",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false
+          }
+        },
+        {
+          "id": "8a48dc927956f6030179632426bc001a",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": "Test",
+            "healthcareProvider": null,
+            "healthcareService": "Outpatient Clinic",
+            "location": {
+              "id": null,
+              "name": "Outpatient Clinic",
+              "address": {
+                "street": "2341 North Ave",
+                "city": "Commerce",
+                "state": "CA",
+                "zipCode": "90022"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "723-9322",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "2021-05-13T02:48:00.000-04:00",
+            "startDateUtc": "2021-05-13T06:48:00.000Z",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false
+          }
+        },
+        {
           "id": "202104211230984000285500000000000000",
           "type": "appointment",
           "attributes": {
@@ -152,7 +232,7 @@
           "currentPage": 1,
           "perPage": 10,
           "totalPages": 1,
-          "totalEntries": 4
+          "totalEntries": 6
         }
       },
       "links": {
@@ -165,6 +245,86 @@
     },
     "upcoming": {
       "data": [
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
+            "healthcareProvider": null,
+            "healthcareService": "Outpatient Clinic",
+            "location": {
+              "id": null,
+              "name": "Outpatient Clinic",
+              "address": {
+                "street": "2341 North Ave",
+                "city": "Commerce",
+                "state": "CA",
+                "zipCode": "90022"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "723-9322",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "2022-06-02T20:00:00.000-04:00",
+            "startDateUtc": "2022-06-03T00:00:00.000Z",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false
+          }
+        },
+        {
+          "id": "8a4872aa7883bc4b01788d9788d9003c",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": "Routine Check up. Reminder to bring your ID card",
+            "healthcareProvider": null,
+            "healthcareService": "Community Clinic Association",
+            "location": {
+              "id": null,
+              "name": "Community Clinic Association",
+              "address": {
+                "street": "1412 East Cesar Ave",
+                "city": "East Lost Angeles",
+                "state": "CA",
+                "zipCode": "93344"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "458-9423",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "2022-06-16T16:26:00.000-04:00",
+            "startDateUtc": "2022-06-16T20:26:00.000Z",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false
+          }
+        },
         {
           "type": "appointment",
           "id": "1",
@@ -212,8 +372,8 @@
         "pagination": {
           "currentPage": 1,
           "perPage": 10,
-          "totalPages": 0,
-          "totalEntries": 1
+          "totalPages": 1,
+          "totalEntries": 3
         }
       },
       "links": {
