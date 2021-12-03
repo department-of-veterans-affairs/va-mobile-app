@@ -25,7 +25,7 @@ import {
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
-import { StoreState, updatBottomOffset } from 'store'
+import { StoreState } from 'store'
 import { ThunkDispatch } from 'redux-thunk'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -36,7 +36,6 @@ import { getfolderName } from 'utils/secureMessaging'
 import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
-import theme from 'styles/themes/standardTheme'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
   return {
