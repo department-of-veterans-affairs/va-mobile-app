@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler'
-
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
@@ -7,10 +6,14 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
+import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import { enableScreens } from 'react-native-screens'
 import KeyboardManager from 'react-native-keyboard-manager'
 import React, { FC, useEffect, useRef, useState } from 'react'
+import Toast from 'react-native-toast-notifications'
+import ToastContainer from 'react-native-toast-notifications'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 
@@ -18,9 +21,9 @@ import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } fr
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
+import { SnackBarConstants } from 'constants/common'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { enableScreens } from 'react-native-screens'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
@@ -37,12 +40,14 @@ import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationSc
 import LoaGate from './screens/auth/LoaGate'
 import NotificationManger from './components/NotificationManger'
 import OnboardingCarousel from './screens/OnboardingCarousel'
+import SnackBar from 'components/SnackBar'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store'
 import theme from 'styles/themes/standardTheme'
+
 enableScreens(true)
 const store = configureStore()
 const Stack = createStackNavigator()
@@ -104,23 +109,35 @@ const MainApp: FC = () => {
     routeNameRef.current = currentRouteName || ''
   }
 
+  const snackBarProps: Partial<ToastProps> = {
+    duration: SnackBarConstants.duration,
+    animationDuration: SnackBarConstants.animationDuration,
+    renderType: {
+      custom_snackbar: (toast) => <SnackBar {...toast} />,
+    },
+    swipeEnabled: false,
+  }
+
   return (
-    <ActionSheetProvider>
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18n}>
-            <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
-              <NotificationManger>
-                <SafeAreaProvider>
-                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
-                  <AuthGuard />
-                </SafeAreaProvider>
-              </NotificationManger>
-            </NavigationContainer>
-          </I18nextProvider>
-        </Provider>
-      </ThemeProvider>
-    </ActionSheetProvider>
+    <>
+      <ActionSheetProvider>
+        <ThemeProvider theme={theme}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
+                <NotificationManger>
+                  <SafeAreaProvider>
+                    <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                    <AuthGuard />
+                    <Toast {...snackBarProps} ref={(ref) => ((snackBar as ToastContainer | null) = ref)} offsetBottom={20} />
+                  </SafeAreaProvider>
+                </NotificationManger>
+              </NavigationContainer>
+            </I18nextProvider>
+          </Provider>
+        </ThemeProvider>
+      </ActionSheetProvider>
+    </>
   )
 }
 
