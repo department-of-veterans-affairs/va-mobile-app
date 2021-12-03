@@ -7,7 +7,6 @@ import { AuthState, AuthorizedServicesState, NotificationsState, StoreState } fr
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { DEVICE_ENDPOINT_SID, debugResetFirstTimeLogin } from 'store/actions'
 import { resetReviewActionCount } from 'utils/inAppReviews'
-import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import AsyncStorage from '@react-native-async-storage/async-storage'
