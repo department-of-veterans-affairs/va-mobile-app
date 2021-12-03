@@ -234,7 +234,7 @@ export const isErrorObject = (error: any): error is ErrorObject => {
 }
 
 /**
- * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
+ * Function to show snackbar
  * @param message - snackbar message
  * @param dispatch - dispatch function to change the bottom offset
  * @param confirmAction - action to perform on undo
