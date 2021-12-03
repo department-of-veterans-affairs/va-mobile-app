@@ -32,7 +32,7 @@ import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getfolderName } from 'utils/secureMessaging'
-import { isErrorObject } from 'utils/common'
+import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
@@ -707,7 +707,6 @@ export const moveMessage = (
     const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
-    dispatch(updatBottomOffset(replyExpired ? theme.dimensions.snackBarBottomOffset : theme.dimensions.snackBarBottomOffsetWithNav))
 
     try {
       await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
@@ -715,7 +714,7 @@ export const moveMessage = (
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage(undefined, error))
-        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), retryFunction, false, true)
+        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), dispatch, retryFunction, false, true)
       }
     }
   }
@@ -757,7 +756,7 @@ export const deleteMessage = (
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage(undefined, error))
-        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), retryFunction, false, true)
+        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), dispatch, retryFunction, false, true, replyExpired)
       }
     }
   }
@@ -792,6 +791,7 @@ const refreshFoldersAfterMove = (
 
   showSnackBar(
     message,
+    dispatch,
     () => {
       if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
         dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, replyExpired))
@@ -801,6 +801,7 @@ const refreshFoldersAfterMove = (
     },
     isUndo,
     false,
+    replyExpired ? false : true,
   )
 }
 
@@ -813,18 +814,4 @@ const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList
   const messageString = !isUndo ? `${isError ? 'Failed to move message' : 'Message moved'}` : `${isError ? 'Failed to move message back' : 'Message moved back'}`
 
   return `${messageString} to ${folderString}`
-}
-
-// method to launch the snackbar
-const showSnackBar = (message: string, action: () => void, isUndo: boolean, isError: boolean) => {
-  snackBar.show(message, {
-    type: 'custom_snackbar',
-    data: {
-      onConfirmAction: () => {
-        action()
-      },
-      isUndo: isUndo,
-      isError: isError,
-    },
-  })
 }
