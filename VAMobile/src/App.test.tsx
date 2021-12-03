@@ -9,8 +9,9 @@ import { Linking } from 'react-native'
 import { handleTokenCallbackUrl } from 'store/actions/auth'
 import App, { AuthGuard, AuthedApp } from './App'
 import LoginScreen from 'screens/auth/LoginScreen'
-import {initialAuthState} from "./store/reducers";
+import { initialAuthState } from './store/reducers'
 import { AuthParamsLoadingStateTypeConstants } from 'store'
+import snackBar, { initialSnackBarState } from 'store/reducers/snackBar'
 
 jest.mock('./store/actions/auth', () => ({
   handleTokenCallbackUrl: jest.fn(() => ({ type: 'FOO' })),
@@ -44,7 +45,7 @@ context('App', () => {
   describe('AuthGuard', () => {
     it('should render loading spinner while initializing', async () => {
       const store = mockStore({
-        auth: {...initialAuthState},
+        auth: { ...initialAuthState },
       })
       let component: any
       act(() => {
@@ -61,7 +62,7 @@ context('App', () => {
 
     it('should initilize by registering for linking', async () => {
       const store = mockStore({
-        auth: {...initialAuthState},
+        auth: { ...initialAuthState },
       })
       let component: any
       act(() => {
@@ -79,9 +80,9 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { 
+        auth: {
           ...initialAuthState,
-          initializing: false 
+          initializing: false,
         },
       })
       act(() => {
@@ -110,10 +111,10 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { 
+        auth: {
           ...initialAuthState,
-          initializing: false 
-         },
+          initializing: false,
+        },
       })
       act(() => {
         component = renderer.create(
@@ -139,10 +140,10 @@ context('App', () => {
 
     it('should render Login when not authorized', async () => {
       const store = mockStore({
-        auth: { 
+        auth: {
           ...initialAuthState,
-          initializing: false
-         },
+          initializing: false,
+        },
       })
       let component: any
       act(() => {
@@ -158,12 +159,16 @@ context('App', () => {
 
     it('should render AuthedApp when authorized', async () => {
       const store = mockStore({
-        auth: { 
+        auth: {
           ...initialAuthState,
-          initializing: false, 
-          loggedIn: true, 
-         },
+          initializing: false,
+          loggedIn: true,
+        },
+        snackBar: {
+          ...initialSnackBarState,
+        },
       })
+
       let component: any
       act(() => {
         component = renderer.create(
