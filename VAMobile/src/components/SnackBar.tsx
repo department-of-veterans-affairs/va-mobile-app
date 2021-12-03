@@ -29,7 +29,6 @@ const SnackBar: FC<ToastProps> = (toast) => {
     width: dimensions.snackBarWidth,
     p: dimensions.snackBarPadding,
     backgroundColor: 'snackbar',
-    my: dimensions.snackBarVerticalMarging,
     borderRadius: dimensions.snackBarBorderRadius,
     flexDirection: 'row',
     flexWrap: 'wrap',

@@ -119,15 +119,6 @@ const MainApp: FC = () => {
     routeNameRef.current = currentRouteName || ''
   }
 
-  const snackBarProps: Partial<ToastProps> = {
-    duration: SnackBarConstants.duration,
-    animationDuration: SnackBarConstants.animationDuration,
-    renderType: {
-      custom_snackbar: (toast) => <SnackBar {...toast} />,
-    },
-    swipeEnabled: false,
-  }
-
   return (
     <>
       <ActionSheetProvider>
