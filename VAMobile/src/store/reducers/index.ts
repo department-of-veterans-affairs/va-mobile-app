@@ -17,6 +17,7 @@ import notifications, { NotificationsState, initialNotificationsState } from './
 import patient, { PatientState, initialPatientState } from './patient'
 import personalInformation, { PersonalInformationState, initialPersonalInformationState } from './personalInformation'
 import secureMessaging, { SecureMessagingState, initialSecureMessagingState } from './secureMessaging'
+import snackBar, { SnackBarState, initialSnackBarState } from './snackBar'
 import vaccine, { VaccineState, initialVaccineState } from './vaccine'
 
 export * from './auth'
@@ -36,6 +37,7 @@ export * from './analytics'
 export * from './disabilityRating'
 export * from './vaccine'
 export * from './patient'
+export * from './snackBar'
 
 export interface StoreState {
   auth: AuthState
@@ -55,6 +57,7 @@ export interface StoreState {
   disabilityRating: DisabilityRatingState
   vaccine: VaccineState
   patient: PatientState
+  snackBar: SnackBarState
 }
 
 export const InitialState: StoreState = {
@@ -75,6 +78,7 @@ export const InitialState: StoreState = {
   disabilityRating: initialDisabilityRatingState,
   vaccine: initialVaccineState,
   patient: initialPatientState,
+  snackBar: initialSnackBarState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -95,6 +99,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   disabilityRating,
   vaccine,
   patient,
+  snackBar,
 })
 
 export default allReducers
