@@ -6,8 +6,10 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
+import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import { enableScreens } from 'react-native-screens'
 import KeyboardManager from 'react-native-keyboard-manager'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import ToastContainer from 'react-native-toast-notifications'
@@ -18,10 +20,9 @@ import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } fr
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
+import { SnackBarConstants } from 'constants/common'
 import { SyncScreen } from './screens/SyncScreen'
-import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { enableScreens } from 'react-native-screens'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
@@ -152,8 +153,8 @@ export const AuthGuard: FC = () => {
   const [currNewState, setCurrNewState] = useState('active')
 
   const snackBarProps: Partial<ToastProps> = {
-    duration: 900000,
-    animationDuration: 100,
+    duration: SnackBarConstants.duration,
+    animationDuration: SnackBarConstants.animationDuration,
     renderType: {
       custom_snackbar: (toast) => <SnackBar {...toast} />,
     },

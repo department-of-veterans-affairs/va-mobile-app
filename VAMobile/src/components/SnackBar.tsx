@@ -30,15 +30,13 @@ const SnackBar: FC<ToastProps> = (toast) => {
   }
 
   const mainContainerProps: BoxProps = {
-    width: '90%',
+    width: dimensions.snackBarWidth,
     p: dimensions.snackBarPadding,
     backgroundColor: 'snackbar',
-    my: dimensions.snackBarVerticalMarging,
     borderRadius: dimensions.snackBarBorderRadius,
     flexDirection: 'row',
     flexWrap: 'wrap',
     display: 'flex',
-
     style: {
       shadowColor: colors.black,
       shadowOffset: { width: dimensions.snackBarShadowX, height: dimensions.snackBarShadowY },

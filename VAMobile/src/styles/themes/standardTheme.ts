@@ -277,8 +277,8 @@ const theme: VATheme = {
     snackBarShadowY: 4,
     snackBarShadowOpacity: 0.6,
     snackBarIconSize: 18,
-    snackBarBottomOffset: 20,
-    snackBarBottomOffsetWithNav: 96,
+    snackBarBottomOffset: isIOS() ? 25 : 0,
+    snackBarBottomOffsetWithNav: isIOS() ? 96 : 66,
   },
 
   fontFace: {
