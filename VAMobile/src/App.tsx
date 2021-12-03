@@ -21,6 +21,7 @@ import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } fr
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
+import { SnackBarConstants } from 'constants/common'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
@@ -109,8 +110,8 @@ const MainApp: FC = () => {
   }
 
   const snackBarProps: Partial<ToastProps> = {
-    duration: 900000,
-    animationDuration: 100,
+    duration: SnackBarConstants.duration,
+    animationDuration: SnackBarConstants.animationDuration,
     renderType: {
       custom_snackbar: (toast) => <SnackBar {...toast} />,
     },
