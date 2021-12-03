@@ -731,13 +731,12 @@ export const deleteMessage = (
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
-  replyExpired: boolean,
+  withNavBar: boolean,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired))
+    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
-    dispatch(updatBottomOffset(replyExpired ? theme.dimensions.snackBarBottomOffset : theme.dimensions.snackBarBottomOffsetWithNav))
 
     try {
       await api.del(`/v0/messaging/health/messages/${messageID}`)
@@ -751,12 +750,12 @@ export const deleteMessage = (
         messagesLeft,
         isUndo,
         folders,
-        replyExpired,
+        withNavBar,
       )
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage(undefined, error))
-        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), dispatch, retryFunction, false, true, replyExpired)
+        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), dispatch, retryFunction, false, true, withNavBar)
       }
     }
   }
@@ -773,7 +772,7 @@ const refreshFoldersAfterMove = (
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
-  replyExpired: boolean,
+  withNavBar: boolean,
 ) => {
   const page = currentPage === 1 ? currentPage : messagesLeft === 1 && isUndo === false ? currentPage - 1 : currentPage
   const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
@@ -794,14 +793,14 @@ const refreshFoldersAfterMove = (
     dispatch,
     () => {
       if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, replyExpired))
+        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
       } else {
-        dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, replyExpired))
+        dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
       }
     },
     isUndo,
     false,
-    replyExpired ? false : true,
+    withNavBar,
   )
 }
 
