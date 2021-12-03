@@ -5,12 +5,13 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import { fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/actions'
 
-import { AuthorizedServicesState, SecureMessagingState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, ErrorsState, SecureMessagingState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from '../CernerAlert'
@@ -35,6 +36,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
   const { secureMessagingTab, termsAndConditionError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { secureMessaging } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
@@ -43,7 +45,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
   useEffect(() => {
-    if (secureMessaging) {
+    if (secureMessaging && !isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, downtimeWindowsByFeature)) {
       dispatch(resetSaveDraftComplete())
       dispatch(resetSaveDraftFailed())
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
@@ -56,7 +58,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
-  }, [dispatch, secureMessaging, navigation, secureMessagingTab])
+  }, [dispatch, secureMessaging, navigation, secureMessagingTab, downtimeWindowsByFeature])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />

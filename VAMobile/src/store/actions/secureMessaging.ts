@@ -116,10 +116,6 @@ const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, e
 export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
-      return
-    }
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))
     dispatch(dispatchStartListFolders())
 
@@ -162,11 +158,6 @@ const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?
 export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
-      return
-    }
-
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
     dispatch(dispatchStartGetInbox())
 
@@ -206,11 +197,6 @@ const dispatchFinishListFolderMessages = (folderID: number, messageData?: Secure
 export const listFolderMessages = (folderID: number, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
-      return
-    }
-
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolderMessages(folderID, page, screenID))))
     dispatch(dispatchStartListFolderMessages())
 
@@ -249,11 +235,6 @@ const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, mess
 export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
-      return
-    }
-
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getThread(messageID))))
     dispatch(dispatchStartGetThread())
 
@@ -305,11 +286,6 @@ export const getMessage = (
 ): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
-      return
-    }
-
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
 
     if (loadingAttachments) {
@@ -429,11 +405,6 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
 export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
-      return
-    }
-
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageRecipients(screenID))))
     dispatch(dispatchStartGetMessageRecipients())
 
@@ -479,11 +450,6 @@ const dispatchFinishGetMessageSignature = (signature?: SecureMessagingSignatureD
 export const getMessageSignature = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    if (isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, getState().errors.downtimeWindowsByFeature)) {
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
-      return
-    }
-
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageSignature(screenID))))
     dispatch(dispatchStartGetMessageSignature())
 

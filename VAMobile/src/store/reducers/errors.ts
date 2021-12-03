@@ -68,13 +68,13 @@ export default createReducer<ErrorsState>(initialErrorsState, {
   },
   ERRORS_CLEAR_ERRORS: (state, { screenID }) => {
     const errorsByScreenID = !screenID
-      ? state.errorsByScreenID
+      ? initialErrorsState.errorsByScreenID
       : {
           ...state.errorsByScreenID,
           [screenID as ScreenIDTypes]: undefined,
         }
     return {
-      ...initialErrorsState,
+      ...state,
       errorsByScreenID,
     }
   },
