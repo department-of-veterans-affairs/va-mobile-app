@@ -3,6 +3,47 @@
     "past": {
       "data": [
         {
+          "type": "appointment",
+          "id": "4",
+          "attributes": {
+            "appointmentType": "VA",
+            "status": "BOOKED",
+            "phoneOnly": false,
+            "statusDetail": null,
+            "isCovidVaccine": true,
+            "startDateLocal": "2021-09-06T19:53:14.000+00:00",
+            "startDateUtc": "2021-09-06T19:53:14.000+00:00",
+            "minutesDuration": 60,
+            "comment": "Please arrive 20 minutes before the start of your appointment",
+            "timeZone": "America/Los_Angeles",
+            "healthcareService": "Blind Rehabilitation Center",
+            "healthcareProvider": null,
+            "reason": null,
+            "location": {
+              "name": "VA Long Beach Healthcare System",
+              "address": {
+                "street": "5901 East 7th Street",
+                "city": "Long Beach",
+                "state": "CA",
+                "zipCode": "90822"
+              },
+              "phone": {
+                "number": "456-7890",
+                "extension": "",
+                "areaCode": "123"
+              },
+              "url": "",
+              "code": ""
+            },
+            "practitioner": {
+              "prefix": "Dr.",
+              "firstName": "Larry",
+              "middleName": "",
+              "lastName": "TestDoctor"
+            }
+          }
+        },
+        {
           "id": "202104211230984000285500000000000000",
           "type": "appointment",
           "attributes": {
@@ -111,7 +152,7 @@
           "currentPage": 1,
           "perPage": 10,
           "totalPages": 1,
-          "totalEntries": 3
+          "totalEntries": 4
         }
       },
       "links": {
@@ -123,14 +164,56 @@
       }
     },
     "upcoming": {
-      "data": [],
+      "data": [
+        {
+          "type": "appointment",
+          "id": "1",
+          "attributes": {
+            "appointmentType": "VA",
+            "status": "CANCELLED",
+            "phoneOnly": false,
+            "statusDetail": null,
+            "isCovidVaccine": true,
+            "startDateLocal": "2022-09-06T19:53:14.000+00:00",
+            "startDateUtc": "2022-09-06T19:53:14.000+00:00",
+            "minutesDuration": 60,
+            "comment": "Please arrive 20 minutes before the start of your appointment",
+            "timeZone": "America/Los_Angeles",
+            "healthcareService": "Blind Rehabilitation Center",
+            "healthcareProvider": null,
+            "reason": null,
+            "location": {
+              "name": "VA Long Beach Healthcare System",
+              "address": {
+                "street": "5901 East 7th Street",
+                "city": "Long Beach",
+                "state": "CA",
+                "zipCode": "90822"
+              },
+              "phone": {
+                "number": "456-7890",
+                "extension": "",
+                "areaCode": "123"
+              },
+              "url": "",
+              "code": ""
+            },
+            "practitioner": {
+              "prefix": "Dr.",
+              "firstName": "Larry",
+              "middleName": "",
+              "lastName": "TestDoctor"
+            }
+          }
+        }
+      ],
       "meta": {
         "errors": [],
         "pagination": {
           "currentPage": 1,
           "perPage": 10,
           "totalPages": 0,
-          "totalEntries": 0
+          "totalEntries": 1
         }
       },
       "links": {
