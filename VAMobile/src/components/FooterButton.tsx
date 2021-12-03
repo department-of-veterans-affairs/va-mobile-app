@@ -3,11 +3,13 @@ import React, { FC, useState } from 'react'
 import { Pressable, PressableProps } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { VAButtonTextColors, VATextColors } from '../styles/theme'
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
+import styled from 'styled-components'
 
 export type FooterButtonProps = {
   /** text that will display on the button */
@@ -26,6 +28,10 @@ export type FooterButtonProps = {
   a11yHint?: string
 }
 
+const StyledSafeAreaView = styled(SafeAreaView)`
+  background-color: ${themeFn((theme) => theme.colors.background.navButton)};
+`
+/**A common component to show a button at the bottom of the screen that takes the full width of the display. Optional Icon can be passed in to render next to text */
 const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID, a11yHint }) => {
   const theme = useTheme()
 
@@ -45,7 +51,6 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     onPressOut: (): void => setIsPressed(false),
     accessibilityRole: 'button',
     accessible: true,
-    accessibilityHint: a11yHint || '',
   }
 
   const boxProps: BoxProps = {
@@ -62,8 +67,8 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
   }
 
   return (
-    <SafeAreaView edges={['bottom']}>
-      <Pressable {...pressableProps} {...testIdProps(testID || text)}>
+    <StyledSafeAreaView edges={['bottom']}>
+      <Pressable {...pressableProps} {...testIdProps(testID || text)} {...a11yHintProp(a11yHint || '')}>
         <Box {...boxProps}>
           {iconProps && (
             <Box mr={theme.dimensions.condensedMarginBetween}>
@@ -75,7 +80,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
           </TextView>
         </Box>
       </Pressable>
-    </SafeAreaView>
+    </StyledSafeAreaView>
   )
 }
 

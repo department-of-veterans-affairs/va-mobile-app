@@ -28,17 +28,19 @@ const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
   const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
 
   return (
-    <Box mt={mt} mb={theme.dimensions.condensedMarginBetween}>
+    <Box>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           <AlertBox border={'warning'} background={'noCardBackground'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
         </Box>
       )}
-      <ClaimPhase phase={1} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
-      <ClaimPhase phase={2} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
-      <ClaimPhase phase={3} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
-      <ClaimPhase phase={4} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
-      <ClaimPhase phase={5} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
+      <Box borderColor={'primary'} borderTopWidth={theme.dimensions.borderWidth} mt={mt} mb={theme.dimensions.condensedMarginBetween}>
+        <ClaimPhase phase={1} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
+        <ClaimPhase phase={2} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
+        <ClaimPhase phase={3} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
+        <ClaimPhase phase={4} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
+        <ClaimPhase phase={5} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
+      </Box>
     </Box>
   )
 }

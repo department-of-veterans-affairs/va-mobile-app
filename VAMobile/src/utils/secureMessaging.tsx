@@ -1,34 +1,42 @@
 import { TFunction } from 'i18next'
 
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
+import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { MAX_IMAGE_DIMENSION, MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  MAX_IMAGE_DIMENSION,
+  MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES,
+  MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES,
+  READ,
+} from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
-import { generateTestIDForTextIconList } from './common'
+import { generateTestIDForTextIconList, isErrorObject } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
-  onMessagePress: (messageID: number) => void,
+  onMessagePress: (messageID: number, isDraft?: boolean) => void,
   folderName?: string,
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
-    const isSentFolder = folderName === 'Sent'
+    const isSentFolder = folderName === FolderNameTypeConstants.sent
+    const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
+    const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isSentFolder ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
     const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<TextLineWithIconProps> = [
       {
-        text: t('common:text.raw', { text: isSentFolder ? recipientName : senderName }),
+        text: t('common:text.raw', { text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? recipientName : senderName}` }),
         variant: 'MobileBodyBold',
         textAlign: 'left',
         color: 'primary',
@@ -48,8 +56,8 @@ export const getMessagesListItems = (
       textLinesWithIcon: textLines,
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
-      onPress: () => onMessagePress(message.id),
-      a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
+      onPress: () => onMessagePress(message.id, isDraftsFolder),
+      a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
@@ -169,10 +177,16 @@ export const onFileFolderSelect = async (
   fileUris: Array<string>,
   t: TFunction,
 ): Promise<void> => {
+  const {
+    pickSingle,
+    isCancel,
+    types: { allFiles },
+  } = DocumentPicker
+
   try {
-    const document = await DocumentPicker.pick({
-      type: [DocumentPicker.types.allFiles],
-    })
+    const document = (await pickSingle({
+      type: [allFiles],
+    })) as DocumentPickerResponse
 
     const { size, type, uri } = document
 
@@ -189,11 +203,15 @@ export const onFileFolderSelect = async (
       callbackIfUri(document, false)
     }
   } catch (docError) {
-    if (DocumentPicker.isCancel(docError)) {
-      return
-    }
+    if (isErrorObject(docError)) {
+      if (isCancel(docError)) {
+        return
+      }
 
-    setError(docError.code)
+      if (docError.code) {
+        setError(docError.code)
+      }
+    }
   }
 }
 
@@ -216,7 +234,8 @@ export const postCameraOrImageLaunchOnFileAttachments = (
   imageBase64s: Array<string>,
   t: TFunction,
 ): void => {
-  const { fileSize, errorMessage, uri, didCancel, type, base64 } = response
+  const { assets, errorMessage, didCancel } = response
+  const { fileSize, type, uri, base64 } = assets ? assets[0] : ({} as Asset)
 
   if (didCancel) {
     return
@@ -257,7 +276,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  */
 export const onAddFileAttachments = (
   t: TFunction,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i: number) => void) => void,
+  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,

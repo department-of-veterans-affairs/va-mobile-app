@@ -47,7 +47,8 @@ context('OnboardingCarousel', () => {
           workPhoneNumber: {} as PhoneData,
           faxNumber: {} as PhoneData,
           fullName: '',
-          firstName: 'Billy'
+          firstName: 'Billy',
+          signinService: 'IDME',
         }
       }
     })

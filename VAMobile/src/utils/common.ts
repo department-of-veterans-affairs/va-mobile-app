@@ -2,9 +2,11 @@ import { Dimensions, TextInput } from 'react-native'
 import { RefObject } from 'react'
 import { contains, isEmpty } from 'underscore'
 
+import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
-import { ImagePickerResponse } from 'react-native-image-picker'
 
+import { ErrorObject } from 'store/api'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
@@ -104,12 +106,22 @@ export const sortByDate = (dataList: Array<{ [key: string]: string }>, dateField
     const aDateField = a[dateField]
     const bDateField = b[dateField]
 
-    const infiniteNum = isDescending ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
-
-    const d1 = aDateField && aDateField !== '' ? DateTime.fromISO(aDateField).toMillis() : infiniteNum
-    const d2 = bDateField && bDateField !== '' ? DateTime.fromISO(bDateField).toMillis() : infiniteNum
-    return isDescending ? d2 - d1 : d1 - d2
+    return compareDateStrings(aDateField, bDateField, isDescending)
   })
+}
+
+/**
+ * Compare function to use on dates represented as string. Can be used by sort functions
+ * @param a - first date to compare
+ * @param b - second date to compare
+ * @param isDescending - optional param for whether to favor most recent
+ */
+export const compareDateStrings = (a: string, b: string, isDescending?: boolean): number => {
+  const infiniteNum = isDescending ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
+
+  const d1 = a && a !== '' ? DateTime.fromISO(a).toMillis() : infiniteNum
+  const d2 = b && b !== '' ? DateTime.fromISO(b).toMillis() : infiniteNum
+  return isDescending ? d2 - d1 : d1 - d2
 }
 
 const invalidStrings = ['not_found', 'undefined', 'null']
@@ -175,13 +187,14 @@ export type ImageMaxWidthAndHeight = {
  */
 export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
   const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
+  const { width, height } = image.assets ? image.assets[0] : ({} as Asset)
   if (image && !isEmpty(image)) {
-    if (image.width && image.width < Dimensions.get('window').width) {
-      result.maxWidth = `${image.width}px`
+    if (width && width < Dimensions.get('window').width) {
+      result.maxWidth = `${width}px`
     }
 
-    if (image.height && image.height < messagePhotoAttachmentMaxHeight) {
-      result.height = image.height
+    if (height && height < messagePhotoAttachmentMaxHeight) {
+      result.height = height
     }
   }
 
@@ -204,4 +217,14 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
   if (beginIdx < items.length) {
     return items.slice(beginIdx, endIdx)
   }
+}
+
+/**
+ * Returns type Predicate for the type guard
+ *
+ * @param error - error object coming from exception in catch
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+export const isErrorObject = (error: any): error is ErrorObject => {
+  return ['json', 'stack', 'networkError'].some((item) => item in error)
 }

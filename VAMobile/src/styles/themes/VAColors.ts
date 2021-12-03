@@ -64,4 +64,7 @@ export default {
   // va-mobile-app specific colors
   crisisLineRed: '#b51c08',
   toolbarBackgroundGray: '#f9f9f9',
+  whiteWith70PercentOpacity: '#ffffffb3',
+  snackBarBlack: '#1E1E1E',
+  lightBlue: '#409CFF',
 }

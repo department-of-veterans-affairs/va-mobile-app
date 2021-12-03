@@ -24,6 +24,18 @@ export const AppointmentStatusConstants: {
   CANCELLED: 'CANCELLED',
 }
 
+export const AppointmentStatusDetailTypeConsts: {
+  CLINIC_REBOOK: AppointmentStatusDetailType
+  CLINIC: AppointmentStatusDetailType
+  PATIENT_REBOOK: AppointmentStatusDetailType
+  PATIENT: AppointmentStatusDetailType
+} = {
+  CLINIC_REBOOK: 'CANCELLED BY CLINIC & AUTO RE-BOOK',
+  CLINIC: 'CANCELLED BY CLINIC',
+  PATIENT_REBOOK: 'CANCELLED BY PATIENT & AUTO-REBOOK',
+  PATIENT: 'CANCELLED BY PATIENT',
+}
+
 export const AppointmentTypeConstants: {
   COMMUNITY_CARE: AppointmentType
   VA: AppointmentType
@@ -47,6 +59,16 @@ export const AppointmentTypeToID = {
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'upcomingAppointments.connectOnsite',
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE',
+}
+
+/* Mirrors AppointmentTypeToID but is the a11y friendly version where any VA is converted to V-A */
+export const AppointmentTypeToA11yLabel = {
+  [AppointmentTypeConstants.COMMUNITY_CARE]: 'upcomingAppointments.communityCare', // this one does not have 'VA' so it can be the plain text
+  [AppointmentTypeConstants.VA]: 'upcomingAppointments.vaAppointment.a11yLabel',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'upcomingAppointments.connectAtAtlas.a11yLabel',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome.a11yLabel',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'upcomingAppointments.connectOnsite.a11yLabel',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE.a11yLabel',
 }
 
 export type AppointmentPractitioner = {
@@ -83,21 +105,28 @@ export type AppointmentTimeZone = 'Pacific/Honolulu' | 'America/Anchorage' | 'Am
 
 export type AppointmentStatus = 'BOOKED' | 'CANCELLED'
 
+export type AppointmentStatusDetailType = 'CANCELLED BY CLINIC & AUTO RE-BOOK' | 'CANCELLED BY CLINIC' | 'CANCELLED BY PATIENT & AUTO-REBOOK' | 'CANCELLED BY PATIENT'
+
 export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE' | 'VA_VIDEO_CONNECT_GFE'
 
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
   cancelId?: string
   status: AppointmentStatus
+  statusDetail: AppointmentStatusDetailType | null
   minutesDuration: number
   comment: string
   timeZone: AppointmentTimeZone
   healthcareService: string
+  healthcareProvider: string | null
   location: AppointmentLocation
   practitioner?: AppointmentPractitioner
   facilityId?: string
   startDateLocal: string
   startDateUtc: string
+  phoneOnly: boolean
+  reason: string | null
+  isCovidVaccine: boolean
 }
 
 export type AppointmentData = {
@@ -138,7 +167,7 @@ export type AppointmentsGetDataMeta = {
   errors?: Array<AppointmentsMetaError>
   pagination?: AppointmentsMetaPagination
   // This property does not exist in api, used to track if the data(AppointmentsGetData) return was from an api call
-  dataFromStore?: boolean
+  dataFromStore: boolean
 }
 
 export type AppointmentsGetData = {

@@ -2,32 +2,208 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: circleci/node:14.10
+      - image: cimg/ruby:3.0.2-node
+  android:
+    docker:
+      - image: cimg/android:2021.10.2-node
+    resource_class: large
+  ios:
+    macos:
+      xcode: 13.1.0
 commands:
   install_deps:
-    description: "install dependencies"
+    description: "Install dependencies"
+    parameters:
+      environment:
+        type: string
+        default: staging
     steps:
-      - run: |
-         cd VAMobile
-         yarn install --frozen-lockfile --non-interactive
+      - restore_cache:
+          key: yarn-v1-{{ checksum "VAMobile/yarn.lock" }}-{{ arch }}
+      - run:
+          command: |
+            echo INSTALLING YARN
+            npm install yarn
+            echo INSTALLING NODE MODULES
+            cd VAMobile
+            yarn install --frozen-lockfile --non-interactive
+            echo CREATING ENV FILE FOR env:<<parameters.environment>>
+            yarn env:<<parameters.environment>>
+      - save_cache:
+          key: yarn-v1-{{ checksum "VAMobile/yarn.lock" }}-{{ arch }}
+          paths:
+            - VAMobile/node_modules
+      - run:
+          command: |
+            echo INSTALLING BUNDLER
+            sudo gem install bundler
+  bundle_app:
+    description: "Bundles the app for the OS specified"
+    parameters:
+      os:
+        type: string
+    steps:
+      - run:
+          working_directory: ~/project/VAMobile
+          command: yarn bundle:<<parameters.os>>
   lint:
     description: "Run lint"
     steps:
       - run:
-          command: |
-              cd VAMobile
-              yarn lint:ci
+          working_directory: ~/project/VAMobile
+          command: yarn lint:ci
           when: always
   jest:
     description: "Run jest"
     steps:
       - run:
-          command: |
-              cd VAMobile
-              yarn test -w 1
+          working_directory: ~/project/VAMobile
+          command: yarn test -w 1
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
+  install_pods:
+    description: "install cocoa pods"
+    steps:
+      - restore_cache:
+          key: pods-v1-{{ checksum "VAMobile/ios/Podfile.lock" }}-{{ arch }}
+      - run:
+          working_directory: ~/project/VAMobile/ios
+          command: |
+            echo INSTALL COCOA PODS
+            pod check || pod install
+      - save_cache:
+          key: pods-v1-{{ checksum "VAMobile/ios/Podfile.lock" }}-{{ arch }}
+          paths:
+            - VAMobile/ios/Pods
+  create_keys_directory:
+    description: "create directory for google keys"
+    steps:
+      - run:
+          command: mkdir VAMobile/android/keys
+  decode_file:
+    description: "Decode a base64 string saves to destination"
+    parameters:
+      workingDir:
+        type: string
+      secretString:
+        type: string
+      destination:
+        type: string
+    steps:
+      - run:
+          working_directory: <<parameters.workingDir>>
+          command: |
+            # decode base64 secret string
+            echo <<parameters.secretString>> | base64 --decode | tee <<parameters.destination>> >/dev/null
+  decode_ios_keys:
+    description: "Decodes all of the ios files needed to upload to Test Flight"
+    steps:
+      - decode_file:
+          workingDir: "~/project/VAMobile/ios"
+          secretString: ${IOS_CERTIFICATE_BASE64}
+          destination: ${IOS_CERTIFICATE_PATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile/ios"
+          secretString: ${IOS_PROVISIONING_BASE64}
+          destination: ${IOS_PROVISIONING_PATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile/ios"
+          secretString: ${APPSTORE_CONNECT_BASE64}
+          destination: ${APPSTORE_CONNECT_FILEPATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile/ios"
+          secretString: ${IOS_GS_PLIST_BASE64}
+          destination: ${IOS_GS_PLIST_PATH}
+  ios_fastlane:
+    description: "Builds and deploys for iOS to the specified lane and version."
+    parameters:
+      version:
+        type: string
+        default: qa
+      lane:
+        type: string
+        default: qa
+    steps:
+      - restore_cache:
+          key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
+      - run:
+          working_directory: ~/project/VAMobile/ios
+          command: bundle config set --local path 'vendor/bundle' && bundle install
+      - run:
+          working_directory: ~/project/VAMobile/ios
+          command: |
+            echo UPDATING FASTLANE
+            bundle update fastlane
+      - save_cache:
+          key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}
+          paths:
+            - VAMobile/ios/vendor/bundle
+      - run:
+          working_directory: ~/project/VAMobile/ios
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
+  decode_android_keys:
+    description: "Decodes all the keys needed to build and upload to google play"
+    steps:
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/keys"
+          secretString: ${GOOGLE_KS}
+          destination: ${GOOGLE_KS_PATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/keys"
+          secretString: ${GOOGLE_SA_JSON}
+          destination: ${GOOGLE_SA_PATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/app"
+          secretString: ${GOOGLE_SERVICES_JSON}
+          destination: ${GOOGLE_SERVICES_PATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/keys"
+          secretString: ${FIREBASE_DIST_FILE_BASE64}
+          destination: ${FIREBASE_DIST_DECODE_PATH}
+  android_fastlane:
+    description: "Builds and deploys for Android to the specified lane and version."
+    parameters:
+      version:
+        type: string
+        default: qa
+      lane:
+        type: string
+        default: qa
+    steps:
+      - restore_cache:
+          key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
+      - run:
+          working_directory: ~/project/VAMobile/android
+          command: bundle check || bundle config set --local path 'vendor/bundle' && bundle install
+      - run:
+          working_directory: ~/project/VAMobile/android
+          command: |
+            echo UPDATING FASTLANE
+            bundle update fastlane
+      - save_cache:
+          key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}
+          paths:
+            - VAMobile/android/vendor/bundle
+      - run:
+          working_directory: ~/project/VAMobile/android
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
+  run_script:
+    description: "Runs a bash script. Takes the working directory, script name and script options as params"
+    parameters:
+      workingDir:
+        type: string
+        default: ~/project/VAMobile
+      script_name:
+        type: string
+      script_options:
+        type: string
+    steps:
+      - run:
+          working_directory: <<parameters.workingDir>>
+          command: |
+            chmod +x <<parameters.script_name>>
+            bash <<parameters.script_name>> <<parameters.script_options>>
 jobs:
   test:
     executor: default
@@ -40,8 +216,115 @@ jobs:
     executor: default
     steps:
       - run: echo "run"
+  build_ios_qa:
+    executor: ios
+    steps:
+      - checkout
+      - install_deps
+      - decode_ios_keys
+      - install_pods
+      - bundle_app:
+          os: "ios"
+      - ios_fastlane
+  build_android_qa:
+    executor: android
+    steps:
+      - checkout
+      - install_deps
+      - create_keys_directory
+      - decode_android_keys
+      - bundle_app:
+          os: "android"
+      - android_fastlane
+  cut_release_branch:
+    executor: default
+    steps:
+      - checkout
+      - run_script:
+          script_name: "release_branch.sh"
+          script_options: ""
+          workingDir: "~/project/VAMobile"
+  build_ios_release:
+    executor: ios
+    steps:
+      - checkout
+      - install_deps:
+          environment: "production"
+      - decode_ios_keys
+      - install_pods
+      - bundle_app:
+          os: "ios"
+      - ios_fastlane:
+          version: ${CIRCLE_TAG}
+          lane: "review"
+  build_android_release:
+    executor: android
+    steps:
+      - checkout
+      - install_deps:
+          environment: "production"
+      - create_keys_directory
+      - decode_android_keys
+      - bundle_app:
+          os: "android"
+      - android_fastlane:
+          version: ${CIRCLE_TAG}
+          lane: "review"
+  run_release_lanes:
+    executor: default
+    steps:
+      - checkout
+      - create_keys_directory
+      - decode_android_keys
+      - android_fastlane:
+          lane: "release"
+      - ios_fastlane:
+          lane: "release"
+
 workflows:
   pr:
     jobs:
       - test
       - run
+  qa_build:
+    triggers:
+      - schedule:
+          cron: "0 5 * * 1,3,5"
+          filters:
+            branches:
+              only: develop
+    jobs:
+      - build_android_qa
+      - build_ios_qa
+  release_build:
+    jobs:
+      - build_android_release:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+/
+            branches:
+              ignore: /.*/
+      - build_ios_release:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+/
+            branches:
+              ignore: /.*/
+  new_release_branch:
+    triggers:
+      - schedule:
+          cron: "30 6 * * 3"
+          filters:
+            branches:
+              only: develop
+    jobs:
+      - cut_release_branch
+  go_live:
+    triggers:
+      - schedule:
+          cron: "0 14 * * 2"
+          filters:
+            branches:
+              only: master
+    jobs:
+      - run_release_lanes

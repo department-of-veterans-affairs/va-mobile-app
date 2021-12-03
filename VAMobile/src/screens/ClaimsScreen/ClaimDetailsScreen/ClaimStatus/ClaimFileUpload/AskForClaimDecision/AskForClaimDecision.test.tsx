@@ -1,16 +1,16 @@
 import React from 'react'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from "testUtils"
-import { act, ReactTestInstance } from "react-test-renderer"
+import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import AskForClaimDecision from './AskForClaimDecision'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
-import {AlertBox, VASelector, ErrorComponent, VAButton, TextView} from 'components'
+import { AlertBox, VASelector, ErrorComponent, VAButton, TextView } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src/types'
+import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import {submitClaimDecision} from 'store/actions'
+import { submitClaimDecision } from 'store/actions'
 
 jest.mock('../../../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../../../store/actions')
@@ -19,7 +19,7 @@ jest.mock('../../../../../../store/actions', () => {
     submitClaimDecision: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
     }),
   }
@@ -44,15 +44,15 @@ context('AskForClaimDecision', () => {
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined
+            save: options.headerRight ? options.headerRight({}) : undefined,
           }
         },
         navigate: navigateSpy,
-        goBack: goBackSpy
+        goBack: goBackSpy,
       },
       {
-        params: { claimID: 'id' }
-      }
+        params: { claimID: 'id' },
+      },
     )
 
     store = mockStore({
@@ -67,11 +67,11 @@ context('AskForClaimDecision', () => {
           attributes: {
             ...Claim.attributes,
             decisionLetterSent,
-            open: false
-          }
-        }
+            open: false,
+          },
+        },
       },
-      errors: errorsState
+      errors: errorsState,
     })
 
     act(() => {
@@ -145,7 +145,7 @@ context('AskForClaimDecision', () => {
 
         expect(submitClaimDecision).not.toHaveBeenCalled()
         const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 2].props.children).toEqual('Check to confirm the information is correct.')
+        expect(textViews[textViews.length - 3].props.children).toEqual('Check to confirm the information is correct.')
       })
     })
 
@@ -160,26 +160,26 @@ context('AskForClaimDecision', () => {
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(false, undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(false, undefined, errorState)

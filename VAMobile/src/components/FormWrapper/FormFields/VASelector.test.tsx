@@ -2,12 +2,12 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import {act, ReactTestInstance} from 'react-test-renderer'
-import {TouchableWithoutFeedback} from 'react-native'
+import { act, ReactTestInstance } from 'react-test-renderer'
+import { TouchableWithoutFeedback } from 'react-native'
 
-import {context, findByTestID, renderWithProviders} from 'testUtils'
-import VASelector, {SelectorType} from './VASelector'
-import {TextView} from '../../index'
+import { context, findByTestID, renderWithProviders } from 'testUtils'
+import VASelector, { SelectorType } from './VASelector'
+import { TextView } from '../../index'
 import Mock = jest.Mock
 
 context('VASelector', () => {
@@ -20,7 +20,7 @@ context('VASelector', () => {
 
   const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, isRequiredField?: boolean, selectorType = SelectorType.Checkbox): void => {
     selected = selectedValue
-    setSelected = jest.fn((updatedSelected) => selected = updatedSelected)
+    setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
 
     errorMessage = error || ''
     setErrorMessage = jest.fn((value?: string) => {
@@ -32,9 +32,19 @@ context('VASelector', () => {
     })
 
     act(() => {
-      component = renderWithProviders(<VASelector labelKey={'I live on a United States military base outside of the United States.'} selected={selected} disabled={disabled} onSelectionChange={setSelected} error={errorMessage} setError={setErrorMessage} isRequiredField={isRequiredField} selectorType={selectorType}/>)
+      component = renderWithProviders(
+        <VASelector
+          labelKey={'profile:editAddress.address'}
+          selected={selected}
+          disabled={disabled}
+          onSelectionChange={setSelected}
+          error={errorMessage}
+          setError={setErrorMessage}
+          isRequiredField={isRequiredField}
+          selectorType={selectorType}
+        />,
+      )
     })
-
 
     testInstance = component.root
   }
@@ -112,8 +122,7 @@ context('VASelector', () => {
       expect(errorCheckBox).toBeTruthy()
 
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 1].props.children).toEqual('ERROR MESSAGE')
+      expect(textViews[textViews.length - 2].props.children).toEqual('ERROR MESSAGE')
     })
   })
-
 })

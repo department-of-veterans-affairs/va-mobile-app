@@ -4,43 +4,42 @@ import React, { FC, useState } from 'react'
 import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, VAIcon } from 'components'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 import MessagesCountTag from './MessagesCountTag'
 
 interface HomeNavButtonProps {
+  /**string for header and used to create testID for accessibility*/
   title: string
+  /**string secondary text that seats on the second row */
   subText: string
-  a11yHint: string
+  /**string for accessibility hint */
+  a11yHint?: string
+  /**function to be called when press occurs */
   onPress: () => void
+  /**BackgroundVariant color for background */
   backgroundColor?: BackgroundVariant
+  /**BackgroundVariant color for active state */
   backgroundColorActive?: BackgroundVariant
+  /**VATextColors color for text */
   textColor?: keyof VATextColors
+  /** VAIconColors icon color*/
   iconColor?: keyof VAIconColors
+  /**BorderWidths possible widths for HomeNavButton*/
   borderWidth?: BorderWidths
+  /**BorderColorVariant color for the borders*/
   borderColor?: BorderColorVariant
+  /**BorderColorVariant color for active state for the borders*/
   borderColorActive?: BorderColorVariant
+  /**BorderStyles denotes the styling of the borders*/
   borderStyle?: BorderStyles
+  /**number for the tag */
   tagCount?: number
+  /**a11y for the tag */
   tagCountA11y?: string
 }
 
 /**
- * Reusable menu item for the HomeScreen
- *
- * @param title - string for header and used to create testID for accessibility
- * @param subText - string secondary text that seats on the second row
- * @param onPress - function to be called when press occurs
- * @param a11yHint - string for accessibility hint
- * @param backgroundColor - BackgroundVariant color for background
- * @param backgroundColorActive - BackgroundVariant color for active state
- * @param textColor - VATextColors color for text
- * @param iconColor - VAIconColors icon color
- * @param borderWidth - BorderWidths possible widths for HomeNavButton
- * @param borderColor - BorderColorVariant color for the borders
- * @param borderColorActive - BorderColorVariant color for active state for the borders
- * @param borderStyle - BorderStyles denotes the styling of the borders
- *
+ * Reusable large navigation button
  * @returns LargeNavButton component
  */
 const LargeNavButton: FC<HomeNavButtonProps> = ({
@@ -108,7 +107,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const testId = generateTestID(`${title} ${tagCountA11y || ''}`.trim(), '')
+  const testId = `${title} ${tagCountA11y || ''} ${subText}`.trim()
 
   return (
     <Box {...boxProps}>
@@ -119,7 +118,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         onPressOut={_onPressOut}
         accessible={true}
         accessibilityRole={'menuitem'}
-        {...a11yHintProp(a11yHint)}
+        {...a11yHintProp(a11yHint || '')}
         {...testIdProps(testId)}>
         <Box flex={1}>
           <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>

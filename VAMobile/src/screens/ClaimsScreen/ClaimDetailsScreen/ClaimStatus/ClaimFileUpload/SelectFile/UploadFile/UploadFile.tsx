@@ -1,4 +1,3 @@
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
@@ -20,9 +19,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
@@ -58,7 +55,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
           {request.displayName}
         </TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {fileUploaded?.name || imageUploaded?.fileName}
+          {fileUploaded?.name || (imageUploaded?.assets ? imageUploaded.assets[0].fileName : undefined)}
         </TextView>
         <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>

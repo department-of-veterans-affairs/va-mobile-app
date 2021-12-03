@@ -1,9 +1,15 @@
 import { ScrollView, ScrollViewProps } from 'react-native'
-import React, { FC } from 'react'
+import React, { FC, Ref } from 'react'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const VAScrollView: FC<ScrollViewProps> = (props) => {
+export type VAScrollViewProps = {
+  /** Optional reference prop to determine scroll position */
+  scrollViewRef?: Ref<ScrollView>
+} & ScrollViewProps
+
+/**A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix */
+const VAScrollView: FC<VAScrollViewProps> = (props) => {
   const insets = useSafeAreaInsets()
   const style = {
     paddingRight: insets.right,
@@ -15,7 +21,7 @@ const VAScrollView: FC<ScrollViewProps> = (props) => {
      * force scroll position by default to avoid visual bug where scrollbar appears in the center of a screen
      * scrollIndicatorInsets is an iOS only prop, this bug only appears on iOS
      */
-    <ScrollView scrollIndicatorInsets={{ right: 1 }} {...props} style={style} />
+    <ScrollView ref={props.scrollViewRef} scrollIndicatorInsets={{ right: 1 }} {...props} style={style} />
   )
 }
 

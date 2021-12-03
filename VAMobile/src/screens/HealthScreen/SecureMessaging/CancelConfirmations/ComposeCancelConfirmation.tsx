@@ -1,59 +1,100 @@
-import { BackButton, Box, CrisisLineCta, VAScrollView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { resetHasLoadedRecipients, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
-import { testIdProps } from 'utils/accessibility'
+import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { useDestructiveAlert, useRouteNavigation, useTranslation } from 'utils/hooks'
 import { useDispatch } from 'react-redux'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import ConfirmationAlert from 'components/ConfirmationAlert'
-import React, { FC, ReactNode, useEffect } from 'react'
 
-type ComposeCancelConfirmationProps = StackScreenProps<HealthStackParamList, 'ComposeCancelConfirmation'>
-
-const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigation }) => {
+type ComposeCancelConfirmationProps = {
+  /** Contents of the message */
+  messageData: SecureMessagingFormData
+  /** Whether or not the message is valid */
+  isFormValid: boolean
+  /** FormHeaderType describes type of message the draft is */
+  origin: FormHeaderType
+  /** id of the message the draft is replying to  */
+  replyToID?: number
+  /** id of draft message */
+  draftMessageID?: number
+}
+export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmationProps) => void {
   const t = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
+  const confirmationAlert = useDestructiveAlert()
+  const goToDrafts = useGoToDrafts()
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
-      ),
+  return (props: ComposeCancelConfirmationProps) => {
+    const { replyToID, messageData, draftMessageID, isFormValid, origin } = props
+    const isReply = origin === FormHeaderTypeConstants.reply
+    const isEditDraft = origin === FormHeaderTypeConstants.draft
+
+    const resetAlerts = () => {
+      dispatch(resetSendMessageFailed())
+      dispatch(resetSaveDraftComplete())
+      dispatch(resetSaveDraftFailed())
+      dispatch(resetHasLoadedRecipients())
+    }
+
+    const onSaveDraft = (): void => {
+      if (!isFormValid) {
+        navigateTo('ComposeMessage', { saveDraftConfirmFailed: true })()
+      } else {
+        dispatch(saveDraft(messageData, draftMessageID, !!replyToID, replyToID, true))
+        dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+        resetAlerts()
+
+        // If we've been to the drafts folder before, we can go directly there.  Otherwise, we want to pop back to the SecureMessaging
+        // screen first, then add the Drafts folder to the stack
+        if (isEditDraft) {
+          goToDrafts(true)
+        } else {
+          navigateTo('SecureMessaging')()
+          goToDrafts(true)
+        }
+      }
+    }
+
+    const onDiscard = (): void => {
+      resetAlerts()
+      if (isReply && replyToID) {
+        navigateTo('ViewMessageScreen', { messageID: replyToID })()
+      } else if (isEditDraft) {
+        goToDrafts(false)
+      } else {
+        navigateTo('SecureMessaging')()
+      }
+    }
+
+    confirmationAlert({
+      title: t('secureMessaging.composeMessage.cancel.saveDraftQuestion'),
+      message: t('secureMessaging.composeMessage.cancel.saveDraftDescription'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('secureMessaging.composeMessage.cancel.discard'),
+          onPress: onDiscard,
+        },
+        {
+          text: t('secureMessaging.composeMessage.cancel.saveDraft'),
+          onPress: onSaveDraft,
+        },
+      ],
     })
-  })
-
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
-  const onGoToInbox = (): void => {
-    dispatch(resetSendMessageFailed())
-    dispatch(resetHasLoadedRecipients())
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-    navigateTo('SecureMessaging')()
   }
-
-  return (
-    <VAScrollView {...testIdProps('Compose Message Cancel Confirmation: compose-message-cancel-confirmation-page')}>
-      <CrisisLineCta onPress={onCrisisLine} />
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <ConfirmationAlert
-          title={t('secureMessaging.composeMessage.cancel.cancelQuestion')}
-          text={t('secureMessaging.composeMessage.cancel.ifYouCancel')}
-          background="noCardBackground"
-          border="warning"
-          confirmLabel={t('secureMessaging.composeMessage.cancel.goToInbox')}
-          confirmA11y={t('secureMessaging.composeMessage.cancel.goToInboxA11y')}
-          confirmOnPress={onGoToInbox}
-          cancelA11y={t('secureMessaging.sendConfirmation.editingButton.a11y')}
-          cancelLabel={t('secureMessaging.sendConfirmation.editingButton')}
-          cancelOnPress={navigation.goBack}
-        />
-      </Box>
-    </VAScrollView>
-  )
 }
-export default ComposeCancelConfirmation
+
+export function useGoToDrafts(): (draftSaved: boolean) => void {
+  const navigateTo = useRouteNavigation()
+  return (draftSaved: boolean): void => {
+    navigateTo('FolderMessages', {
+      folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+      folderName: FolderNameTypeConstants.drafts,
+      draftSaved,
+    })()
+  }
+}

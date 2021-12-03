@@ -1,28 +1,20 @@
 import _ from 'underscore'
 import * as api from '../api'
-import {context, realStore, renderWithProviders, when} from 'testUtils'
-import {
-  fileUploadSuccess,
-  getClaimsAndAppeals,
-  getAppeal,
-  getClaim,
-  prefetchClaimsAndAppeals,
-  submitClaimDecision,
-  uploadFileToClaim
-} from './claimsAndAppeals'
+import { context, realStore, renderWithProviders, when } from 'testUtils'
+import { fileUploadSuccess, getClaimsAndAppeals, getAppeal, getClaim, prefetchClaimsAndAppeals, submitClaimDecision, uploadFileToClaim } from './claimsAndAppeals'
 import { appeal as AppealPayload } from 'screens/ClaimsScreen/appealData'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimEventData, ClaimsAndAppealsGetDataMeta } from '../api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import {initialClaimsAndAppealsState, InitialState, StoreState} from '../reducers';
-import {DocumentPickerResponse} from '../../screens/ClaimsScreen/ClaimsStackScreens';
-import {contentTypes} from 'store/api/api';
-import {act} from 'react-test-renderer';
-import NetworkConnectionError from '../../components/CommonErrorComponents/NetworkConnectionError';
-import React from 'react';
-import {ImagePickerResponse} from 'react-native-image-picker';
-import {ErrorCode} from 'react-native-image-picker/src/types';
+import { initialClaimsAndAppealsState, InitialState, StoreState } from '../reducers'
+import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { contentTypes } from 'store/api/api'
+import { act } from 'react-test-renderer'
+import NetworkConnectionError from '../../components/CommonErrorComponents/NetworkConnectionError'
+import React from 'react'
+import { ImagePickerResponse } from 'react-native-image-picker'
+import { ErrorCode } from 'react-native-image-picker/src/types'
 
 context('claimsAndAppeals', () => {
   const claimEventData: ClaimEventData = {
@@ -41,23 +33,17 @@ context('claimsAndAppeals', () => {
       type: 'jpeg',
       name: 'myfile',
       size: 100,
-      base64: '1234'
-    }
+      base64: '1234',
+    },
   ]
 
   const multiFiles: Array<ImagePickerResponse> = [
     {
-      base64: 'imgstring',
-      uri: 'path/to/file',
-      fileSize: 100,
-      fileName: 'myfile',
+      assets: [{ base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile' }],
     },
     {
-      base64: 'imgstring',
-      uri: 'path/to/file',
-      fileSize: 100,
-      fileName: 'myfile',
-    }
+      assets: [{ base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile' }],
+    },
   ]
 
   const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
@@ -69,7 +55,7 @@ context('claimsAndAppeals', () => {
         completed: false,
         dateFiled: '2020-10-22',
         updatedAt: '2020-10-28',
-        displayTitle: 'supplemental claim for disability compensation'
+        displayTitle: 'supplemental claim for disability compensation',
       },
     },
     {
@@ -80,7 +66,7 @@ context('claimsAndAppeals', () => {
         completed: false,
         dateFiled: '2020-11-13',
         updatedAt: '2020-11-30',
-        displayTitle: 'Disability'
+        displayTitle: 'Disability',
       },
     },
     {
@@ -91,7 +77,7 @@ context('claimsAndAppeals', () => {
         completed: false,
         dateFiled: '2020-06-11',
         updatedAt: '2020-12-07',
-        displayTitle: 'Compensation'
+        displayTitle: 'Compensation',
       },
     },
   ]
@@ -105,7 +91,7 @@ context('claimsAndAppeals', () => {
         completed: true,
         dateFiled: '2020-10-22',
         updatedAt: '2020-10-28',
-        displayTitle: 'supplemental claim for disability compensation'
+        displayTitle: 'supplemental claim for disability compensation',
       },
     },
     {
@@ -116,7 +102,7 @@ context('claimsAndAppeals', () => {
         completed: true,
         dateFiled: '2020-11-13',
         updatedAt: '2020-11-30',
-        displayTitle: 'Disability'
+        displayTitle: 'Disability',
       },
     },
     {
@@ -127,13 +113,12 @@ context('claimsAndAppeals', () => {
         completed: true,
         dateFiled: '2020-06-11',
         updatedAt: '2020-12-07',
-        displayTitle: 'Disability'
+        displayTitle: 'Disability',
       },
     },
   ]
 
   describe('prefetchClaimsAndAppeals', () => {
-
     const mockPagination: ClaimsAndAppealsGetDataMeta = {
       dataFromStore: false,
       pagination: {
@@ -145,11 +130,11 @@ context('claimsAndAppeals', () => {
 
     it('should dispatch the correct actions', async () => {
       when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-          .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPagination})
+        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+        .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPagination })
       when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'true','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-          .mockResolvedValue({ data: closedClaimsAndAppealsList, meta: mockPagination})
+        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'true', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+        .mockResolvedValue({ data: closedClaimsAndAppealsList, meta: mockPagination })
       const store = realStore()
       await store.dispatch(prefetchClaimsAndAppeals())
 
@@ -164,9 +149,9 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: closedClaimsAndAppealsList})
-      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: closedClaimsAndAppealsList})
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination,  CLOSED: mockPagination.pagination })
+      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList })
+      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList })
+      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination, CLOSED: mockPagination.pagination })
     })
 
     it('should return error if it fails', async () => {
@@ -174,8 +159,8 @@ context('claimsAndAppeals', () => {
 
       // Force one call to error out
       when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-          .mockRejectedValue(error)
+        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+        .mockRejectedValue(error)
       const store = realStore()
       await store.dispatch(prefetchClaimsAndAppeals())
 
@@ -199,13 +184,13 @@ context('claimsAndAppeals', () => {
           ...initialClaimsAndAppealsState,
           loadedClaimsAndAppeals: {
             ACTIVE: activeClaimsAndAppealsList,
-            CLOSED: closedClaimsAndAppealsList
+            CLOSED: closedClaimsAndAppealsList,
           },
           claimsAndAppealsMetaPagination: {
             ACTIVE: mockPagination.pagination,
-            CLOSED: mockPagination.pagination
-          }
-        }
+            CLOSED: mockPagination.pagination,
+          },
+        },
       })
 
       //prefetchClaimsAndAppeals
@@ -224,9 +209,9 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList})
-      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: closedClaimsAndAppealsList})
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination, CLOSED: mockPagination.pagination})
+      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList })
+      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList })
+      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination, CLOSED: mockPagination.pagination })
     })
   })
 
@@ -242,8 +227,8 @@ context('claimsAndAppeals', () => {
 
     it('should dispatch the correct actions', async () => {
       when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-          .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPagination})
+        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+        .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPagination })
       const store = realStore()
       await store.dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
 
@@ -258,21 +243,24 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
-      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination,  CLOSED: {
+      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: [] })
+      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: [] })
+      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({
+        ACTIVE: mockPagination.pagination,
+        CLOSED: {
           currentPage: 1,
           totalEntries: 0,
           perPage: 0,
-        }})
+        },
+      })
     })
 
     it('should return error if it fails', async () => {
       const error = new Error('backend error')
 
       when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-          .mockRejectedValue(error)
+        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+        .mockRejectedValue(error)
       const store = realStore()
       await store.dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
 
@@ -296,13 +284,13 @@ context('claimsAndAppeals', () => {
           ...initialClaimsAndAppealsState,
           loadedClaimsAndAppeals: {
             ACTIVE: activeClaimsAndAppealsList,
-            CLOSED: []
+            CLOSED: [],
           },
           claimsAndAppealsMetaPagination: {
             ACTIVE: mockPagination.pagination,
-            CLOSED: mockPagination.pagination
-          }
-        }
+            CLOSED: mockPagination.pagination,
+          },
+        },
       })
 
       //loadedClaimsAndAppeals
@@ -321,17 +309,20 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: []})
-      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: {
+      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: [] })
+      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: [] })
+      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({
+        ACTIVE: {
           currentPage: 1,
           perPage: 10,
           totalEntries: 3,
-        }, CLOSED: {
+        },
+        CLOSED: {
           currentPage: 2,
           perPage: 10,
           totalEntries: 3,
-        }})
+        },
+      })
     })
   })
 
@@ -340,8 +331,8 @@ context('claimsAndAppeals', () => {
       const claimsDetail: api.ClaimData = Claim
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/claim/245182')
-          .mockResolvedValue({ data: claimsDetail })
+        .calledWith('/v0/claim/245182')
+        .mockResolvedValue({ data: claimsDetail })
 
       const store = realStore()
       await store.dispatch(getClaim('245182'))
@@ -364,8 +355,8 @@ context('claimsAndAppeals', () => {
       const error = new Error('backend error')
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/claim/245182')
-          .mockRejectedValue(error)
+        .calledWith('/v0/claim/245182')
+        .mockRejectedValue(error)
 
       const store = realStore()
       await store.dispatch(getClaim('245182'))
@@ -381,7 +372,6 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toEqual(error) //error
-
     })
   })
 
@@ -389,8 +379,8 @@ context('claimsAndAppeals', () => {
     it('should dispatch the correct actions', async () => {
       const id = '2765759'
       when(api.get as jest.Mock)
-          .calledWith(`/v0/appeal/2765759`)
-          .mockResolvedValue({ data: AppealPayload})
+        .calledWith(`/v0/appeal/2765759`)
+        .mockResolvedValue({ data: AppealPayload })
 
       const store = realStore()
       await store.dispatch(getAppeal(id))
@@ -413,8 +403,8 @@ context('claimsAndAppeals', () => {
       const error = new Error('Backend error')
       const id = '2765759'
       when(api.get as jest.Mock)
-          .calledWith(`/v0/appeal/2765759`)
-          .mockRejectedValue(error)
+        .calledWith(`/v0/appeal/2765759`)
+        .mockRejectedValue(error)
 
       const store = realStore()
       await store.dispatch(getAppeal(id))
@@ -438,7 +428,7 @@ context('claimsAndAppeals', () => {
       const store = realStore()
       when(api.post as jest.Mock)
         .calledWith('/v0/claim/id/request-decision')
-        .mockResolvedValue({ data: { jobId: '1' }})
+        .mockResolvedValue({ data: { jobId: '1' } })
 
       await store.dispatch(submitClaimDecision('id'))
 
@@ -460,8 +450,7 @@ context('claimsAndAppeals', () => {
     beforeEach(() => {
       when(api.post as jest.Mock)
         .calledWith('/v0/claim/id/documents', expect.anything(), contentTypes.multipart)
-        .mockResolvedValue({ data: { jobId: '1' }})
-
+        .mockResolvedValue({ data: { jobId: '1' } })
     })
 
     it('should dispatch the correct actions', async () => {
@@ -507,30 +496,27 @@ context('claimsAndAppeals', () => {
               updatedAt: '',
               contentionList: [],
               vaRepresentative: '',
-              eventsTimeline: [
-                claimEventData
-              ],
-            }
-          }
-        }
+              eventsTimeline: [claimEventData],
+            },
+          },
+        },
       }
 
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(uploadFileToClaim('id', claimEventData, files))
-      const {claimsAndAppeals} = store.getState()
+      const { claimsAndAppeals } = store.getState()
 
       expect(claimsAndAppeals?.claim?.attributes.eventsTimeline[0].uploaded).toBe(true)
     })
 
     it('should call the multi image endpoint with more than one image', async () => {
-      when(api.post as jest.Mock)
-        .calledWith('/v0/claim/id/documents/multi-image', expect.anything())
+      when(api.post as jest.Mock).calledWith('/v0/claim/id/documents/multi-image', expect.anything())
 
       const store = realStore()
 
       await store.dispatch(uploadFileToClaim('id', claimEventData, multiFiles))
 
-      expect((api.post as jest.Mock)).toBeCalledWith('/v0/claim/id/documents/multi-image', {'document_type': 'L228', 'files': ['imgstring', 'imgstring'], 'tracked_item_id': 1})
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/claim/id/documents/multi-image', { document_type: 'L228', files: ['imgstring', 'imgstring'], tracked_item_id: 1 })
     })
   })
 

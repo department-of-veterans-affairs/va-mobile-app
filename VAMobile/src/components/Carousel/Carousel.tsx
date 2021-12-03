@@ -22,6 +22,8 @@ export type CarouselScreen = {
     skipHint?: string
     carouselIndicatorsHint?: string
     continueHint?: string
+    doneHint?: string
+    backHint?: string
   }
 }
 
@@ -36,6 +38,7 @@ const CarouselStackComponent: FC<CarouselStackComponentProps> = ({ screenList })
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        detachPreviousScreen: false,
       }}>
       {_.map(screenList, (screen, index) => {
         return <CarouselStack.Screen name={screen.name as never} component={screen.component} key={index} />
@@ -55,10 +58,11 @@ type CarouselProps = {
   translation: TFunction
 }
 
+/**A common component to set up a carousel of screens and display a carousel tab at the bottom of the screen, which displays a skip button, continue button, and a progress bar*/
 const Carousel: FC<CarouselProps> = ({ screenList, onCarouselEnd, translation }) => {
   return (
     <CarouselTabNav.Navigator tabBar={(props): React.ReactNode => <CarouselTabBar {...props} onCarouselEnd={onCarouselEnd} translation={translation} screenList={screenList} />}>
-      <CarouselTabNav.Screen name="Main" children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} />
+      <CarouselTabNav.Screen name="Main" children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} options={{ headerShown: false }} />
     </CarouselTabNav.Navigator>
   )
 }

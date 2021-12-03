@@ -73,10 +73,10 @@ const ClaimsStack = createStackNavigator<ClaimsStackParamList>()
 
 export const getClaimsScreens = (t: TFunction): Array<ReactNode> => {
   return [
-    <ClaimsStack.Screen key={'ClaimDetailsScreen'} name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('claimDetails.title') }} />,
+    <ClaimsStack.Screen key={'ClaimDetailsScreen'} name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('statusDetails.title') }} />,
     <ClaimsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />,
     <ClaimsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />,
-    <ClaimsStack.Screen key={'AppealDetailsScreen'} name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('appealDetails.title') }} />,
+    <ClaimsStack.Screen key={'AppealDetailsScreen'} name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('statusDetails.title') }} />,
     <ClaimsStack.Screen key={'ClaimFileUpload'} name="ClaimFileUpload" component={ClaimFileUpload} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} />,
     <ClaimsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ title: t('fileUpload.title') }} />,

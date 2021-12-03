@@ -12,12 +12,14 @@ export const ButtonTypesConstants: {
   buttonPrimary: ButtonTypes
   buttonSecondary: ButtonTypes
   buttonImportant: ButtonTypes
+  buttonWhite: ButtonTypes
 } = {
   buttonPrimary: 'buttonPrimary',
   buttonSecondary: 'buttonSecondary',
   buttonImportant: 'buttonImportant',
+  buttonWhite: 'buttonWhite',
 }
-type ButtonTypes = 'buttonPrimary' | 'buttonSecondary' | 'buttonImportant'
+export type ButtonTypes = 'buttonPrimary' | 'buttonSecondary' | 'buttonImportant' | 'buttonWhite'
 
 /**
  * Props for the {@link VAButton}
@@ -46,7 +48,7 @@ export type VAButtonProps = {
 }
 
 /**
- * Large button filling the width of the container
+ * A common component to show a button that takes the full width of the view with gutters
  */
 const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps }) => {
   const theme = useTheme()
@@ -77,6 +79,8 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
         return 'buttonPrimaryActive'
       } else if (buttonType === ButtonTypesConstants.buttonImportant) {
         return 'buttonImportantActive'
+      } else if (buttonType === ButtonTypesConstants.buttonWhite) {
+        return 'buttonWhiteActive'
       } else {
         return 'buttonSecondaryActive'
       }

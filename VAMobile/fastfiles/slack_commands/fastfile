@@ -1,0 +1,59 @@
+# sends a success message to the build slack
+def slack_build_success (buildNum, version, buildType, message, os)
+ puts "Send slack success message"
+ slack(
+   message: message,
+   success: true,
+   default_payloads: [],
+   attachment_properties: {
+     fields: [
+       {title: "OS", value: os},
+       {title: "Build Type", value: buildType},
+       {title: "Build Number", value: buildNum.to_s},
+       {title: "Build Version", value: version}
+     ]
+   }
+ )
+end
+
+def slack_build_error (e, buildType, message, os)
+  puts "Send slack build error message"
+  slack(
+    slack_url: ENV['SLACK_URL'],
+    message: message,
+    success: false,
+    default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+    attachment_properties: {
+      fields: [
+        {title: "OS", value: os},
+        {title: "Build Type", value: buildType},
+        {title: "Exception", value: e}
+      ]
+    }
+  )
+end
+
+def slack_github_error(e, message, os)
+  puts "Send slack GitHub error message"
+  slack(
+    slack_url: ENV['SLACK_URL'],
+    message: message,
+    success: false,
+    default_payloads: [:git_branch],
+    attachment_properties: {
+      fields: [
+        {title: "OS", value: os},
+        {title: "Exception", value: e}
+      ]
+    }
+  )
+end
+
+def slack_release_success(version, os)
+  puts "Send slack message to indicate release is live"
+  slack(
+     message: "Version #{version} is now live for #{os}",
+     success: true,
+     default_payloads: [],
+  )
+end

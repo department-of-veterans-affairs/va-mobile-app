@@ -1,19 +1,19 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import _ from 'underscore'
 import styled from 'styled-components'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, getMaxWidthAndHeightOfImage } from 'utils/common'
-import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from 'constants/namespaces'
-import { formHeaders } from 'constants/secureMessaging'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
@@ -43,9 +43,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
@@ -62,7 +60,13 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const getTotalBytesUsedByFiles = (): number => {
     const listOfFileSizes = _.map(attachmentsList, (attachment) => {
-      return (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || 0
+      let fileSize = 0
+      if ('assets' in attachment) {
+        fileSize = attachment.assets ? attachment.assets[0].fileSize || 0 : 0
+      } else if ('size' in attachment) {
+        fileSize = attachment.size
+      }
+      return fileSize
     })
 
     return listOfFileSizes.reduce((a, b) => a + b, 0)
@@ -72,7 +76,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     return _.map(attachmentsList, (attachment) => {
       // if the attachment is a file from DocumentPicker, get its uri
       if (_.has(attachment, 'name')) {
-        return attachment.uri || ''
+        return (attachment as DocumentPickerResponse).uri || ''
       }
 
       return ''
@@ -82,8 +86,9 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const getImageBase64s = (): Array<string> => {
     return _.map(attachmentsList, (attachment) => {
       // if the attachment is a file from ImagePicker, get its base64 value
-      if (_.has(attachment, 'base64')) {
-        return (attachment as ImagePickerResponse).base64 || ''
+      if ('assets' in attachment) {
+        const { base64 } = attachment.assets ? attachment.assets[0] : ({} as Asset)
+        return base64 || ''
       }
 
       return ''
@@ -93,7 +98,9 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const onSelectAFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
-      return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
+      const img = { fileName: 'file.txt' } as Asset
+      const assets = [img]
+      return callbackOnSuccessfulFileSelection({ assets }, true)
     }
 
     onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
@@ -101,10 +108,12 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const onAttach = (): void => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
-    if (origin === formHeaders.compose) {
+    if (origin === FormHeaderTypeConstants.compose) {
       navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+    } else if (origin === FormHeaderTypeConstants.reply) {
+      navigateTo('ReplyMessage', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
     } else {
-      navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('EditDraft', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
     }
   }
 
@@ -120,6 +129,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
   const imageMaxWidthAndHeight = getMaxWidthAndHeightOfImage(image, messagePhotoAttachmentMaxHeight)
+  const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   return (
     <VAScrollView {...testIdProps('Attachments-page')}>
@@ -133,15 +143,17 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {t('secureMessaging.attachments.youMayAttach')}
+          {t('secureMessaging.attachments.youMayAttach')} {t('secureMessaging.attachments.acceptedFileTypes')}
         </TextView>
-        <TextView variant="MobileBody">{t('secureMessaging.attachments.acceptedFileTypes')}</TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.attachments.sizeRequirements')}
         </TextView>
-        {image && image.uri && (
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+          {t('secureMessaging.attachments.attachmentsAreNotDrafts')}
+        </TextView>
+        {image && uri && (
           <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image">
-            <StyledImage source={{ uri: image.uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
+            <StyledImage source={{ uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
           </Box>
         )}
         {file?.name && file?.size && renderFileDisplay(file.name, file.size)}

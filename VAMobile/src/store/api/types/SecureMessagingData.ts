@@ -77,6 +77,10 @@ export type SecureMessagingMessageIncluded = {
   type: string
 }
 
+export type SecureMessagingSaveDraftData = {
+  data: SecureMessagingMessageData
+}
+
 export type SecureMessagingMessageGetData = {
   data: SecureMessagingMessageData
   included: Array<SecureMessagingMessageIncluded>
@@ -86,6 +90,14 @@ export type SecureMessagingMessageList = Array<SecureMessagingMessageData>
 
 export type SecureMessagingMessageMap = {
   [key: string]: SecureMessagingMessageAttributes
+}
+
+export type SecureMessagingFormData = {
+  recipient_id?: number
+  category?: CategoryTypes
+  body: string
+  subject?: string
+  draft_id?: number
 }
 
 /**
@@ -202,6 +214,7 @@ export type SecureMessagingRecipientDataAttributes = {
   triageTeamId: number
   name: string
   relationType: SecureMessagingRecipientDataAttributesRelationType
+  preferredTeam: boolean
 }
 
 export type SecureMessagingRecipientData = {
@@ -220,7 +233,25 @@ export type SecureMessagingRecipients = {
 export const SecureMessagingSystemFolderIdConstants: {
   INBOX: number
   SENT: number
+  DRAFTS: number
+  DELETED: number
 } = {
   INBOX: 0,
   SENT: -1,
+  DRAFTS: -2,
+  DELETED: -3,
+}
+
+export type SecureMessagingSignatureDataAttributes = {
+  signatureName: string
+  includeSignature: boolean
+  signatureTitle: string
+}
+
+export type SecureMessagingSignatureData = {
+  data: {
+    id: string
+    type: string
+    attributes: SecureMessagingSignatureDataAttributes
+  }
 }

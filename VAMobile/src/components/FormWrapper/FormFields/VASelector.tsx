@@ -39,6 +39,7 @@ export type VASelectorProps = {
   isRequiredField?: boolean
 }
 
+/**A common component to display a checkbox with text*/
 const VASelector: FC<VASelectorProps> = ({
   selectorType = SelectorType.Checkbox,
   selected,
@@ -54,6 +55,9 @@ const VASelector: FC<VASelectorProps> = ({
 }) => {
   const theme = useTheme()
   const t = useTranslation()
+  const {
+    dimensions: { selectorWidth, selectorHeight, checkboxLabelMargin },
+  } = theme
 
   const selectorOnPress = (): void => {
     if (!disabled) {
@@ -70,11 +74,11 @@ const VASelector: FC<VASelectorProps> = ({
 
   const getCheckBoxIcon = (): React.ReactNode => {
     if (disabled && selectorType === SelectorType.Radio) {
-      return <VAIcon name="DisabledRadio" width={22} height={22} {...testIdProps('DisabledRadio')} />
+      return <VAIcon name="DisabledRadio" width={selectorWidth} height={selectorHeight} {...testIdProps('DisabledRadio')} />
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
-      return <VAIcon name="ErrorCheckBox" width={22} height={22} {...testIdProps('ErrorCheckBox')} />
+      return <VAIcon name="ErrorCheckBox" width={selectorWidth} height={selectorHeight} {...testIdProps('ErrorCheckBox')} />
     }
 
     const filledName = selectorType === SelectorType.Checkbox ? 'FilledCheckBox' : 'FilledRadio'
@@ -86,8 +90,8 @@ const VASelector: FC<VASelectorProps> = ({
 
     const selectorIconProps: VAIconProps = {
       name,
-      width: 22,
-      height: 22,
+      width: selectorWidth,
+      height: selectorHeight,
       fill,
       stroke,
     }
@@ -106,13 +110,15 @@ const VASelector: FC<VASelectorProps> = ({
       accessibilityRole={a11yRole}
       {...hintProp}
       {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
-      <Box flexDirection="row">
-        <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
-        <Box flex={1} ml={theme.dimensions.checkboxLabelMargin}>
-          <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'primary'}>
-            {t(labelKey, labelArgs)}
-          </TextView>
-          {!!error && <Box>{renderInputError(theme, error)}</Box>}
+      <Box>
+        {!!error && <Box ml={checkboxLabelMargin + selectorWidth}>{renderInputError(theme, error)}</Box>}
+        <Box flexDirection="row">
+          <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
+          <Box flex={1} ml={checkboxLabelMargin}>
+            <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'primary'}>
+              {t(labelKey, labelArgs)}
+            </TextView>
+          </Box>
         </Box>
       </Box>
     </TouchableWithoutFeedback>

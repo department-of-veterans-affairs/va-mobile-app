@@ -4,10 +4,12 @@ import * as api from '../api'
 import { APIError, AccountTypes, ScreenIDTypes } from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DirectDepositErrors } from 'constants/errors'
-import { UserAnalytics } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 const dispatchStartGetBankInfo = (): ReduxAction => {
   return {
@@ -41,8 +43,10 @@ export const getBankData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       const bankInfo = await api.get<api.DirectDepositData>('/v0/payment-information/benefits')
       dispatch(dispatchFinishGetBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
-      dispatch(dispatchFinishGetBankInfo(undefined, err))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      if (isErrorObject(err)) {
+        dispatch(dispatchFinishGetBankInfo(undefined, err))
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
@@ -54,7 +58,7 @@ const dispatchStartSaveBankInfo = (): ReduxAction => {
   }
 }
 
-const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, error?: APIError, invalidRoutingNumberError?: boolean): ReduxAction => {
+const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, error?: APIError, invalidRoutingNumberError = false): ReduxAction => {
   return {
     type: 'DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO',
     payload: {
@@ -91,17 +95,21 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      await logAnalyticsEvent(Events.vama_prof_update_dir_dep(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
-      const errorKeys = getErrorKeys(err)
-      const invalidRoutingNumberError = includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER)
+      if (isErrorObject(err)) {
+        const invalidRoutingNumberError = checkIfRoutingNumberIsInvalid(err)
+        dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
 
-      dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
-
-      // both invalidRoutingNumber error and common app level errors share the same status codes
-      // invalidRoutingNumber error is more specific and takes priority over common error
-      if (!invalidRoutingNumberError) {
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+        // both invalidRoutingNumber error and common app level errors share the same status codes
+        // invalidRoutingNumber error is more specific and takes priority over common error
+        if (!invalidRoutingNumberError) {
+          dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+        }
       }
     }
   }
@@ -122,4 +130,13 @@ export const finishEditBankInfo = (screenID?: ScreenIDTypes): AsyncReduxAction =
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchFinishEditBankInfo())
   }
+}
+
+const checkIfRoutingNumberIsInvalid = (error: APIError): boolean => {
+  if (!error) {
+    return false
+  }
+
+  const errorKeys = getErrorKeys(error)
+  return includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER) || includes(error?.text, DirectDepositErrors.INVALID_ROUTING_NUMBER_TEXT)
 }

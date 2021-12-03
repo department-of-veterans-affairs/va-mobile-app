@@ -1,5 +1,6 @@
 import { Platform } from 'react-native'
 import { VAFontSizes, VATheme } from 'styles/theme'
+import { isIOS } from 'utils/platform'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
@@ -60,6 +61,10 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
+  SnackBarBtnText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -82,9 +87,10 @@ const theme: VATheme = {
       footerButtonActive: colors.primaryDarkest,
       textBox: colors.white,
       list: colors.white,
+      listActive: colors.primaryAltLightest,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
-      profileBanner: colors.grayDark,
+      profileBanner: colors.primary,
       ctaButton: colors.crisisLineRed,
       covid19Vaccinations: colors.primary,
       completedPhase: colors.greenDarker,
@@ -98,6 +104,7 @@ const theme: VATheme = {
       modalOverlay: colors.base,
       pickerSelectedItem: colors.primaryAltLightest,
       navButton: colors.toolbarBackgroundGray,
+      snackbar: colors.snackBarBlack,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -137,6 +144,8 @@ const theme: VATheme = {
       covid19Vaccinations: colors.white,
       grayDark: colors.grayDark,
       pagination: colors.white,
+      chevronCollapsible: colors.primary,
+      chevronListItem: colors.primary,
     },
     text: {
       footerButton: colors.primary,
@@ -152,16 +161,19 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
       claimPhase: colors.white,
+      snackBarBtn: colors.lightBlue,
     },
     buttonBackground: {
       buttonPrimary: colors.primary,
       buttonPrimaryActive: colors.primaryDarkest,
       buttonSecondary: colors.white,
-      buttonSecondaryActive: colors.white,
+      buttonSecondaryActive: colors.primaryAltLightest,
       buttonImportant: colors.white,
       buttonImportantActive: colors.white,
       buttonDisabled: colors.grayMedium,
       buttonSecondaryDisabled: colors.grayLight,
+      buttonWhite: colors.white,
+      buttonWhiteActive: colors.whiteWith70PercentOpacity,
     },
     buttonText: {
       buttonPrimary: colors.white,
@@ -210,7 +222,7 @@ const theme: VATheme = {
     listItemDecoratorMarginLeft: 20,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
-    pickerLabelMargin: 5,
+    pickerLabelMargin: 9,
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
     navBarHeight: 56,
@@ -245,6 +257,27 @@ const theme: VATheme = {
     messageSentReadLeftMargin: 23,
     syncLogoSpacing: 50,
     paginationTopPadding: 40,
+    collapsibleIconMargin: 7,
+    loginContentMarginBottom: 80,
+    webviewReloadButtonHeight: isIOS() ? 64 : 45,
+    webviewReloadButtonSize: 17,
+    webviewButtonSize: 16,
+    webviewButtona11ySize: 44,
+    errorLabelBottomMargin: 3,
+    selectorWidth: 22,
+    selectorHeight: 22,
+    snackBarWidth: '90%',
+    snackBarHorizontalPadding: 16,
+    snackBarVerticalPadding: 2,
+    snackBarVerticalMarging: 10,
+    snackBarBorderRadius: 4,
+    snackBarButtonHeight: 41,
+    snackBarBtuttonWidth: 70,
+    snackBarBetweenSpace: 8,
+    snackBarShadowX: 0,
+    snackBarShadowY: 4,
+    snackBarShadowOpacity: 0.6,
+    snackBarIconSize: 18,
   },
 
   fontFace: {
@@ -281,6 +314,7 @@ const theme: VATheme = {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
+    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
   },
 }
 

@@ -55,7 +55,7 @@ export default () => {
               await ClaimsDetailsStatusScreen.waitForIsShown()
 
               if (driver.isAndroid) {
-                await androidScrollToElementWithText('View file requests')
+                await androidScrollToElementWithText('Review File Requests')
               }
 
               const viewFileRequestsButton = await ClaimsDetailsStatusScreen.viewFileRequestsButton
@@ -93,7 +93,7 @@ export default () => {
                 await FileUploadScreen.waitForIsShown()
 
                 if (driver.isAndroid) {
-                  await androidScrollToElementWithText('Select a file')
+                  await androidScrollToElementWithText('Select a File')
                 }
 
                 const selectAFileButton = await FileUploadScreen.selectFileButton
@@ -118,6 +118,20 @@ export default () => {
                 describe('on click of upload', async () => {
                   before(async () => {
                     await UploadFileScreen.waitForIsShown()
+
+                    // select picker
+                    const documentTypePicker = await UploadFileScreen.documentTypePicker
+                    await documentTypePicker.click()
+
+                    // pick option(document type)
+                    // use src/constants/documentTypes.ts labels
+                    const selectDocumentType = await UploadFileScreen.selectDocumentType('Buddy/Lay Statement')
+                    await selectDocumentType.click()
+
+                    // select done
+                    const documentTypePickerDoneButton = await UploadFileScreen.documentTypePickerDoneButton
+                    await documentTypePickerDoneButton.click()
+
                     const uploadSelectAFileButton = await UploadFileScreen.uploadButton
                     await uploadSelectAFileButton.click()
                   })

@@ -7,6 +7,7 @@ import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, Text
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
+import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -34,17 +35,21 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const { claim, loadingClaim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
   useEffect(() => {
     dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
   }, [dispatch, claimID])
 
   if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
   }
 
-  if (loadingClaim) {
-    return <LoadingComponent />
+  if (loadingClaim || !isTransitionComplete) {
+    return <LoadingComponent text={t('cliamInformation.loading')} />
   }
 
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')

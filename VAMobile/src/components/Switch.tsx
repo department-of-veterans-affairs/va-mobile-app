@@ -25,6 +25,7 @@ export type SwitchProps = AccessibilityProps & {
   a11yHint?: string
 }
 
+/**A common component for the react native switch component*/
 const Switch: FC<SwitchProps> = (props) => {
   const { onPress, on, testID, a11yHint } = props
   const theme = useTheme()

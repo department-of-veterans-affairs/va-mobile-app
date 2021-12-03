@@ -10,7 +10,7 @@ import {
   ErrorsState,
   initialAuthorizedServicesState,
   initialAuthState,
-  initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState
+  initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState, initialPersonalInformationState
 } from 'store/reducers'
 import { ServiceData, UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
@@ -57,6 +57,8 @@ context('DirectDepositScreen', () => {
         financialInstitutionName: 'BoA',
         financialInstitutionRoutingNumber: '12341234123',
       },
+      bankInfoUpdated: false,
+      invalidRoutingNumberError: false
     }
 
     store = mockStore({
@@ -101,7 +103,11 @@ context('DirectDepositScreen', () => {
     it('should render the button with the text Add your bank account information', async () => {
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile: {} as UserDataProfile, loading: false },
+        personalInformation: { 
+          ...initialPersonalInformationState,
+          profile: {} as UserDataProfile,
+          needsDataLoad: false
+        },
         ...authorizedMilitaryState,
       })
       act(() => {
@@ -113,8 +119,9 @@ context('DirectDepositScreen', () => {
       store = mockStore({
         auth: {...initialAuthState},
         personalInformation: {
+          ...initialPersonalInformationState,
           profile: ({ bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as unknown) as UserDataProfile,
-          loading: false
+          needsDataLoad: false
         },
         ...authorizedMilitaryState,
       })
@@ -154,8 +161,8 @@ context('DirectDepositScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(false, errorState)
@@ -167,8 +174,8 @@ context('DirectDepositScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(false, errorState)

@@ -1,0 +1,101 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: rgb(33, 175, 144);
+  --ifm-color-primary-darker: rgb(31, 165, 136);
+  --ifm-color-primary-darkest: rgb(26, 136, 112);
+  --ifm-color-primary-light: rgb(70, 203, 174);
+  --ifm-color-primary-lighter: rgb(102, 212, 189);
+  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-code-font-size: 95%;
+  --pre-background: rgb(246, 248, 250);
+  --navyBlue : #112e51;
+  --ifm-table-head-background: var(--pre-background);
+  --icon-colors : rgb(0, 113, 188);
+}
+
+.footer {
+  text-align: center;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.hero--primary {
+  --ifm-color-primary: var(--navyBlue) !important;
+}
+
+.preText {
+  font: inherit;
+  background-color: var(--pre-background);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+table {
+  display: inline-table;
+  width: 100%;
+}
+
+.icons {
+  fill: var(--icon-colors);
+  height: 30px;
+  width: 30px;
+}
+
+.linkIcons {
+  fill: var(--icon-colors);
+  height: 40px;
+  width: 40px;
+}
+
+.iconDirection {
+      background: var(--icon-colors);
+    border-radius: 20px;
+}
+
+.dodIcons {
+   height: 80px;
+  width: 80px;
+}
+
+.customCircle circle  {
+  stroke: var(--icon-colors);
+}
+
+.logoIcon {
+  background-color: var(--navyBlue);
+  padding: 5px;
+}
+
+
+/* Dark Theme Section */
+html[data-theme='dark']  {
+  --ifm-table-head-background: rgb(40, 42, 54);
+}
+
+html[data-theme='dark'] .preText {
+  background: rgb(40, 42, 54);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.footer--dark {
+  --ifm-footer-background-color: var(--navyBlue) !important;
+}

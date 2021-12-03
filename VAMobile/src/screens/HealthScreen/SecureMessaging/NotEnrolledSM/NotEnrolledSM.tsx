@@ -1,10 +1,9 @@
 import React, { FC } from 'react'
 
 import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
-import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
@@ -12,21 +11,24 @@ const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 const NotEnrolledSM: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const tc = useTranslation(NAMESPACE.COMMON)
+  const launchExternalLink = useExternalLink()
   const theme = useTheme()
   const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
 
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),
     boldedText: ' ' + tc('and'),
+    a11yLabel: t('notEnrolledSM.youAreEnrolled.a11yLabel'),
   }
   const bulletTwo = {
     text: t('notEnrolledSM.youAreRegistered'),
     boldedText: ' ' + tc('and'),
+    a11yLabel: t('notEnrolledSM.youAreRegistered.a11yLabel'),
   }
-  const bulletThree = { text: t('notEnrolledSM.bothYouAndYour') }
+  const bulletThree = { text: t('notEnrolledSM.bothYouAndYour'), a11yLabel: t('notEnrolledSM.bothYouAndYour.a11yLabel') }
 
   const redirectLink = (): void => {
-    Linking.openURL(LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT)
+    launchExternalLink(LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT)
   }
 
   const textViewProps: TextViewProps = {
@@ -51,7 +53,7 @@ const NotEnrolledSM: FC = () => {
             <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
               {t('notEnrolledSM.withSM')}
             </TextView>
             <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>

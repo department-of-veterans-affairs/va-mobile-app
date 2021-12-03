@@ -89,7 +89,7 @@ context('EditPhoneNumberScreen', () => {
         phoneType: 'HOME'
       })
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home phone')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Home Phone')
     })
   })
 
@@ -183,8 +183,8 @@ context('EditPhoneNumberScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance({
@@ -202,8 +202,8 @@ context('EditPhoneNumberScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance({

@@ -27,7 +27,9 @@ context('VAIconTests', () => {
   let store = mockStore({
     ...InitialState,
     accessibility: {
-      fontScale: 2
+      fontScale: 2,
+      isVoiceOverTalkBackRunning: false,
+      isFocus: true
     }
   })
 

@@ -1,12 +1,10 @@
 import { TFunction } from 'i18next'
 import { useSelector } from 'react-redux'
-
 import React, { FC, ReactNode } from 'react'
-
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { DELETED, DRAFTS, HIDDEN_FOLDERS } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -21,24 +19,28 @@ const getListItemsForFolders = (
 ): Array<SimpleListItemObj> => {
   const listItems: Array<SimpleListItemObj> = []
 
-  _.forEach(listOfFolders, (folder, index) => {
+  // Filter out hidden folders
+  const visibleFolders = listOfFolders.filter((folder) => !HIDDEN_FOLDERS.has(folder.attributes.name))
+
+  _.forEach(visibleFolders, (folder, index) => {
     const { attributes } = folder
     const {
       name,
       folderId,
-      // count,
+      count,
       // unreadCount
     } = attributes
-
-    if (!HIDDEN_FOLDERS.has(name)) {
-      listItems.push({
-        text: t('common:text.raw', { text: name }),
-        onPress: () => onFolderPress(folderId, name),
-        a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-        a11yValue: t('common:listPosition', { position: index + 1, total: listOfFolders.length }),
-        testId: t('common:text.raw', { text: name }),
-      })
-    }
+    const draftDisplay = folder.attributes.name === FolderNameTypeConstants.drafts && count > 0
+    const nameOfFolder = name === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : name
+    listItems.push({
+      text: `${t('common:text.raw', { text: nameOfFolder })}${draftDisplay ? ` (${count})` : ''}`,
+      onPress: () => onFolderPress(folderId, nameOfFolder),
+      a11yHintText: draftDisplay
+        ? t('secureMessaging.folders.count.a11yHint', { count, folderName: nameOfFolder })
+        : t('secureMessaging.foldersViewMessages.a11yHint', { folderName: nameOfFolder }),
+      a11yValue: t('common:listPosition', { position: index + 1, total: visibleFolders.length }),
+      testId: t('common:text.raw', { text: nameOfFolder }),
+    })
   })
 
   return listItems
@@ -56,7 +58,7 @@ export const getSystemFolders = (
   }
 
   const systemFolders = _.filter(folders, (folder) => {
-    return folder.attributes.systemFolder && folder.attributes.name !== DRAFTS && folder.attributes.name !== DELETED
+    return folder.attributes.systemFolder
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 
@@ -96,13 +98,13 @@ const Folders: FC<FoldersProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { folders, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { folders, loadingFolders } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const onFolderPress = (folderID: number, folderName: string): void => {
     navigateTo('FolderMessages', { folderID, folderName })()
   }
 
-  if (loading) {
+  if (loadingFolders) {
     return <LoadingComponent text={t('secureMessaging.folders.loading')} />
   }
 

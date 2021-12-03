@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
@@ -6,7 +5,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
@@ -19,6 +18,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } 
 const VeteransCrisisLineScreen: FC = () => {
   const t = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   const fireAnalyticFn = (): void => {
@@ -27,14 +27,14 @@ const VeteransCrisisLineScreen: FC = () => {
 
   const redirectToVeteransCrisisLineLink = (): void => {
     fireAnalyticFn()
-    Linking.openURL(LINK_URL_VETERANS_CRISIS_LINE)
+    launchExternalLink(LINK_URL_VETERANS_CRISIS_LINE)
   }
 
   return (
     <VAScrollView {...testIdProps('Veterans-Crisis-Line-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
             {t('veteransCrisisLine.weAreHereForYou')}
           </TextView>
           <Box mt={standardMarginBetween}>
@@ -43,6 +43,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <Box mt={standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+              accessibilityLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
               linkType={LinkTypeOptionsConstants.call}
               fireAnalytic={fireAnalyticFn}
@@ -52,6 +53,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <Box mt={standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.textNumberDisplayed')}
+              accessibilityLabel={t('veteransCrisisLine.textNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.textNumber')}
               linkType={LinkTypeOptionsConstants.text}
               fireAnalytic={fireAnalyticFn}
@@ -73,6 +75,7 @@ const VeteransCrisisLineScreen: FC = () => {
             </TextView>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
+              accessibilityLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
               linkType={LinkTypeOptionsConstants.callTTY}
               fireAnalytic={fireAnalyticFn}

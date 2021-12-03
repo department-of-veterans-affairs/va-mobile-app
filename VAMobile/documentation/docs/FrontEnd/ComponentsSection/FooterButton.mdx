@@ -1,0 +1,13 @@
+import CodeBlock from '@theme/CodeBlock'
+import FooterButtonString from '!!raw-loader!@componentsDocs/FooterButton'
+
+import ComponentTopInfo from '../../../src/components/ComponentInfo'
+
+export const exampleString = `<FooterButton 
+text='test' 
+iconProps={{ name: 'Compose' }} 
+backgroundColor='main' 
+testID='test-id' />`
+
+
+<ComponentTopInfo componentName="FooterButton" example={exampleString} codeString={FooterButtonString} />

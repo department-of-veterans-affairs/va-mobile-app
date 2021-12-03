@@ -13,12 +13,11 @@ import {
   AppealTypesConstants,
 } from 'store/api/types'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
-import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme, useTranslation } from 'utils/hooks'
 import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
 
@@ -302,6 +301,7 @@ type AppealCurrentStatusProps = {
 const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const launchExternalLink = useExternalLink()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const marginTop = theme.dimensions.condensedMarginBetween
@@ -371,7 +371,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <TextView mt={marginTop} onPress={(): Promise<void> => Linking.openURL(LINK_URL_YOUR_CLAIMS)}>
+            <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
               <TextView variant="MobileBody">{details[1]}</TextView>
               <TextView variant="MobileBodyLink" color="link">
                 {details[2]}
@@ -386,13 +386,13 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <TextView mt={marginTop} onPress={(): Promise<void> => Linking.openURL(LINK_URL_YOUR_CLAIMS)}>
+            <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
               <TextView variant="MobileBody">{details[1]}</TextView>
               <TextView variant="MobileBodyLink" color="link">
                 {details[2]}
               </TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
-              <TextView variant="MobileBodyLink" color="link" onPress={(): Promise<void> => Linking.openURL(LINK_URL_DECISION_REVIEWS)}>
+              <TextView variant="MobileBodyLink" color="link" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
                 {details[4]}
               </TextView>
               <TextView variant="MobileBody">.</TextView>

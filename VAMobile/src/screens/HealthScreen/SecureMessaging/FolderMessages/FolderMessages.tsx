@@ -2,38 +2,52 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, StoreState } from 'store/reducers'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-
+import { Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SecureMessagingState, StoreState } from 'store/reducers'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { listFolderMessages } from 'store/actions'
+import { listFolderMessages, resetSaveDraftComplete } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
-  const { folderID, folderName } = route.params
+const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
+  const { folderID, folderName, draftSaved } = route.params
 
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
-  const { messagesByFolderId, loading, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
+  const paginationMetaData = paginationMetaByFolderId?.[folderID]
 
   useEffect(() => {
     // Load first page messages
     dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-  }, [dispatch, folderID])
+    // If draft saved message showing, clear status so it doesn't show again
+    dispatch(resetSaveDraftComplete())
+  }, [dispatch, folderID, route])
 
-  const onMessagePress = (messageID: number): void => {
-    navigateTo('ViewMessageScreen', { messageID })()
+  useEffect(() => {
+    if (saveDraftComplete) {
+      // If draft saved message showing, clear status so it doesn't show again
+      dispatch(resetSaveDraftComplete())
+    }
+  }, [dispatch, saveDraftComplete])
+
+  const onMessagePress = (messageID: number, isDraft?: boolean): void => {
+    const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
+    const args = isDraft
+      ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
+      : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
+    navigation.navigate(screen, args)
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
@@ -41,7 +55,8 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   }
 
   if (loading) {
-    return <LoadingComponent text={t('secureMessaging.messages.loading')} />
+    const text = draftSaved ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.messages.loading')
+    return <LoadingComponent text={text} />
   }
 
   const folderMessages = messagesByFolderId ? messagesByFolderId[folderID] : { data: [], links: {}, meta: {} }
@@ -56,13 +71,12 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     dispatch(listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }
 
-  // Render pagination for sent folderMessages only
+  // Render pagination for sent and drafts folderMessages only
   const renderPagination = (): ReactNode => {
-    if (folderID !== SecureMessagingSystemFolderIdConstants.SENT) {
+    if (!trackedPagination.includes(folderID)) {
       return <></>
     }
 
-    const paginationMetaData = paginationMetaByFolderId?.[folderID]
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -86,7 +100,15 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   return (
     <>
       <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
-        <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName} />
+        {draftSaved && (
+          <Box mt={theme.dimensions.contentMarginTop}>
+            <MessageAlert saveDraftComplete={draftSaved} />
+          </Box>
+        )}
+        <MessageList
+          items={getMessagesListItems(messages, t, onMessagePress, folderName)}
+          title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}
+        />
         {renderPagination()}
       </VAScrollView>
       <ComposeMessageFooter />

@@ -1,14 +1,14 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
-import { useSelector } from 'react-redux'
-import React, { FC } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useState } from 'react'
 
-import { AuthState, StoreState } from 'store'
-import { Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
+import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
+import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
-
-import { useRouteNavigation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import AppVersionAndBuild from 'components/AppVersionAndBuild'
+import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
@@ -16,7 +16,9 @@ const LoginScreen: FC = () => {
   const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  // TODO handle error
+  const [demoPromptVisible, setDemoPromptVisible] = useState(false)
+  const TAPS_FOR_DEMO = 20
+  let demoTaps = 0
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -25,7 +27,7 @@ const LoginScreen: FC = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
-  const onLoginInit = firstTimeLogin ? navigateTo('LoaGate') : navigateTo('WebviewLogin')
+  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
 
   const onFacilityLocator = navigateTo('Webview', {
     url: WEBVIEW_URL_FACILITY_LOCATOR,
@@ -43,20 +45,46 @@ const LoginScreen: FC = () => {
     py: theme.dimensions.buttonPadding,
   }
 
+  const dispatch = useDispatch()
+  const handleUpdateDemoMode = () => {
+    dispatch(updateDemoMode(true))
+  }
+  const tapForDemo = () => {
+    demoTaps++
+    if (demoTaps > TAPS_FOR_DEMO) {
+      demoTaps = 0
+      setDemoPromptVisible(true)
+    }
+  }
+
+  const onLoginInit = demoMode
+    ? () => {
+        dispatch(loginStart(true))
+      }
+    : firstTimeLogin
+    ? navigateTo('LoaGate')
+    : navigateTo('WebviewLogin')
+
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+      <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
+      {demoMode && (
+        <Box mx={theme.dimensions.gutter}>
+          <AlertBox border={'informational'} background={'cardBackground'} title={'DEMO MODE'} />
+        </Box>
+      )}
       <Box flex={1}>
-        <Box alignItems={'center'} flex={1} justifyContent={'center'}>
+        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween}>
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.loginContentMarginBottom}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}
             testID={t('login:signin')}
             a11yHint={t('login:signin.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonSecondary}
+            buttonType={ButtonTypesConstants.buttonWhite}
             hideBorder={true}
           />
           <Pressable
@@ -68,10 +96,11 @@ const LoginScreen: FC = () => {
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
-              <VAIcon name="ArrowRight" fill="#FFF" />
+              <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
             </Box>
           </Pressable>
         </Box>
+        <AppVersionAndBuild textColor={'primaryContrast'} />
       </Box>
     </VAScrollView>
   )

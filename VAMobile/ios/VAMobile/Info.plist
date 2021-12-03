@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>VA Mobile</string>
+	<string>VA</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -37,8 +37,6 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
@@ -52,6 +50,9 @@
 	<string>This app needs this permission in order to save your appointments to your calendar.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs this permission in order to take and upload photos.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>This lets you add appointments to your shared calendars.
+</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This allows you to securely sign into the app after going through the login process.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -66,6 +67,10 @@
 		<string>SourceSansPro-Regular.ttf</string>
 		<string>SourceSansPro-SemiBold.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -77,8 +82,11 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>aps-environment</key>
+	<string>production</string>
 </dict>
 </plist>

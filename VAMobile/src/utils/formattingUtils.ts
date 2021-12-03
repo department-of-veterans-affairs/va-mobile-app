@@ -154,6 +154,32 @@ export const capitalizeFirstLetter = (originalStr: string): string => {
 }
 
 /**
+ * Returns the string formatted in title case
+ *
+ * @param originalStr - string to format
+ *
+ * @returns string with the first letter after any spaces capitalized
+ */
+export const stringToTitleCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map((s) => capitalizeFirstLetter(s))
+    .join(' ')
+}
+
+/**
+ * Returns the given number as a string rounded to the hundredths place
+ *
+ * @param number - number to round
+ *
+ * @returns string of number rounded to the hundredths place
+ */
+export const roundToHundredthsPlace = (num: number): string => {
+  return (Math.round(num * 100) / 100).toFixed(2)
+}
+
+/**
  * Returns original string split by spaces to create individual words from camel case input
  *
  * @param originalStr - camel case string to split into words

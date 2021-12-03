@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 
-import { Pressable, PressableProps } from 'react-native'
+import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import { TextArea } from './index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
@@ -36,18 +36,18 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     setExpanded(!expanded)
   }
 
-  const textWrapper: BoxProps = {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    borderBottomWidth: theme.dimensions.borderWidth,
+  const boxStyles: BoxProps = {
+    // flexShrink is necessary to keep textView from expanding too far and causing a gap between text contents and arrow icon
+    // also keeps textView from pushing arrow beyond right margin when large text is enabled
+    flexShrink: 1,
+    mr: theme.dimensions.collapsibleIconMargin,
+    borderBottomWidth: 2,
     borderBottomColor: 'secondary',
-    alignSelf: 'flex-start',
   }
 
   const getArrowIcon = (): React.ReactNode => {
     const iconProps: VAIconProps = {
-      fill: 'expandCollapse',
+      fill: theme.colors.icon.chevronCollapsible,
       name: expanded ? 'ArrowUp' : 'ArrowDown',
       width: 9,
       height: 7,
@@ -61,20 +61,23 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     accessibilityRole: 'spinbutton',
   }
 
+  const pressableStyles: ViewStyle = {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: theme.dimensions.touchableMinHeight,
+  }
+
   const childrenDisplayed = expanded && <Box>{children}</Box>
 
   const touchableRow = (
-    <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} {...pressableProps}>
-      <Box minHeight={theme.dimensions.touchableMinHeight}>
-        <Box {...textWrapper}>
-          <TextView variant={'MobileBody'} mr={theme.dimensions.textIconMargin}>
-            {text}
-          </TextView>
-          {getArrowIcon()}
-          <Box />
+    <Box minHeight={theme.dimensions.touchableMinHeight}>
+      <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} style={pressableStyles} {...pressableProps}>
+        <Box {...boxStyles}>
+          <TextView variant={'MobileBody'}>{text}</TextView>
         </Box>
-      </Box>
-    </Pressable>
+        {getArrowIcon()}
+      </Pressable>
+    </Box>
   )
 
   // If none of the content is shown in a text area

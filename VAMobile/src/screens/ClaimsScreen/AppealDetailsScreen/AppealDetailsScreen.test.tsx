@@ -9,7 +9,7 @@ import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialSta
 import { appeal } from '../appealData'
 import { ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
 import AppealStatus from './AppealStatus/AppealStatus'
-import AppealDetails from './AppealDetails/AppealDetails'
+import AppealIssues from './AppealIssues/AppealIssues'
 import { AppealEventData, AppealTypes } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -71,9 +71,9 @@ context('AppealDetailsScreen', () => {
   })
 
   describe('when the selected tab is issues', () => {
-    it('should display the AppealDetails component', async () => {
-      testInstance.findByType(SegmentedControl).props.onChange('Details')
-      expect(testInstance.findAllByType(AppealDetails).length).toEqual(1)
+    it('should display the AppealIssues component', async () => {
+      testInstance.findByType(SegmentedControl).props.onChange('Issues')
+      expect(testInstance.findAllByType(AppealIssues).length).toEqual(1)
     })
   })
 
@@ -131,8 +131,8 @@ context('AppealDetailsScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance('appeal', undefined, false, errorState)
@@ -144,8 +144,8 @@ context('AppealDetailsScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
+        ...initialErrorsState,
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance('appeal', undefined, false, errorState)

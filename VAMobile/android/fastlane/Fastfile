@@ -16,23 +16,172 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+
+  before_all do |lane, options|
+    import('../../fastfiles/slack_commands/fastfile')
+    version = options[:version]
+    puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  desc "Deploy a QA new version to the Google Play"
+  lane :qa do |options|
+    update_version_and_build(options[:version ])
+    bundle("Release")
+    upload("Development Team")
+    bundle("Debug")
+    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
+    distribute_to_firebase(notes, "qa")
+    tag_build
+    message = "New QA build successfully uploaded to Google Play"
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  # review lane uploads to beta track for promotion to the store on release date
+  desc "Build new Production version for Google Play and stash in Pre-Prod Stash track"
+  lane :review do |options|
+    puts 'Run the review lane'
+    update_version_and_build(options[:version ])
+    bundle("Release")
+    upload("Pre-Prod Stash")
+    tag_build
+    message = "New Production build successfully uploaded to Pre=Prod Stash Track on Google Play"
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
+  end
+
+  desc "Promote the release in Pre-Prod stash to Production"
+  lane :release do
+    promote_pre_prod
+  end
+
+  desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
+  lane :on_demand do |options|
+    puts "on demand run"
+    update_version_and_build(options[:version ])
+    bundle("Release")
+    puts options[:psTrack]
+    upload(options[:psTrack])
+    bundle("Debug")
+    notes = "New On Demand version for " + Time.new.strftime("%m.%d.%Y")
+    distribute_to_firebase(notes, "qa")
+    tag_build
+    message = "New On Demand build successfully uploaded to Google Play"
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On-Demand", message, "Android")
+  end
+
+  desc "add a tester to Firebase Distribution. options.emails is a comma-separated string of emails to add to testers. Once added, they will need to be added to the QA team in Firebase Distribution console."
+  lane :firebase_app_dist_add_testers do |options|
+    firebase_app_distribution_add_testers(
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        project_number: ENV["FIREBASE_PROJECT_NUMBER"],
+        emails: options[:emails]
+    )
+  end
+
+  desc "remove a tester from Firebase Distribution. options.emails is a comma-separated string of emails to remove to testers."
+  lane :firebase_app_dist_remove_testers do |options|
+    firebase_app_distribution_remove_testers(
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        project_number: ENV["FIREBASE_PROJECT_NUMBER"],
+        emails: options[:emails]
+    )
+  end
+
+  after_all do |lane, options|
+    # This block is called, only if the executed lane was successful
+  end
+
+  error do |lane, exception, options|
+    puts("ERROR REPORT")
+    slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+  end
+
+# method to update the version and build in the repo
+  def update_version_and_build(version)
+    latestBuild = get_latest_build_num
+    if version=='qa'
+      latestVersion = get_latest_version_name
+      puts('latest build is ' + latestBuild.to_s)
+      puts('latest version is ' + latestVersion.to_s)
+      props = { latestBuild: latestBuild, latestVersion: latestVersion }
+      gradle(task: 'doNewQaVersion', properties: props)
+    else
+      versionNumber = /\d+\.\d+\.\d+/.match(version)
+      puts('latest build is ' + latestBuild.to_s)
+      puts('release version is ' + versionNumber.to_s)
+      props = { latestBuild: latestBuild, version: versionNumber }
+      gradle(task: 'updateVersionNumber', properties: props)
+    end
+    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
+    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
+  end
+
+
+# method to get the highest build number from all tracks in the Play Store
+  def get_latest_build_num
+    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office", "Pre-Prod Stash"]
+    highest = 0
+    allLanes.each do |track|
+      builds = google_play_track_version_codes(track:track.to_s)
+      if builds.max > highest
+        highest = builds.max
+      end
+    end
+    highest
+  end
+
+# method to get the highest version number from all tracks in the Play Store
+  def get_latest_version_name
+  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office", "Pre-Prod Stash"]
+      highest = "0.0.0"
+      allLanes.each do |track|
+        versions = google_play_track_release_names(track:track.to_s)
+        max = versions.max_by{ |s| Gem::Version.new(s) }
+        if  max > highest
+          highest = max
+        end
+      end
+      highest
+  end
+
+  desc "Tagging Android build number"
+  def tag_build()
+    begin
+      tag = "android-build-" + ENV['BUILD_NUM'].to_s
+      puts "Tagging commit with " + tag
+      add_git_tag(tag: tag)
+      push_git_tags
+    rescue => e
+      slack_github_error(e, "Error tagging Android build", "Android")
+    end
+  end
+
+  def bundle(type)
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: type)
+  end
+
+  def upload(track)
+    supply(track: track, package_name: "gov.va.mobileapp")
+  end
+
+  def promote_pre_prod
+    prod = google_play_track_version_codes(track:"production")
+    stash =  google_play_track_version_codes(track:"Pre-Prod Stash")
+    # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
+    if stash.max > prod.max
+      supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
+      version = google_play_track_release_names(track:"production")
+      slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
+    end
+  end
+
+  def distribute_to_firebase(notes, groups)
+    firebase_app_distribution(
+        app: ENV["FIREBASE_ANDROID_APP_ID"],
+        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+        release_notes: notes,
+        groups: groups,
+        android_artifact_type: "AAB"
+    )
   end
 end

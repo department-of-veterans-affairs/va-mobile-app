@@ -1,0 +1,11 @@
+import CodeBlock from '@theme/CodeBlock'
+import TextLineWithIconString from '!!raw-loader!@componentsDocs/TextLineWithIcon'
+
+import ComponentTopInfo from '../../../src/components/ComponentInfo'
+
+export const exampleString = `{textLinesWithIcon?.map((textObj: TextLineWithIconProps, index: number) => {
+    return <TextLineWithIcon key={index} {...textObj} />
+})}`
+
+
+<ComponentTopInfo componentName="TextLineWithIcon" example={exampleString} codeString={TextLineWithIconString} />

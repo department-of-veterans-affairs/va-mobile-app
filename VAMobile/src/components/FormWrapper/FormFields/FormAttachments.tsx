@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react'
 
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import _ from 'underscore'
 
 import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } from 'components/index'
@@ -23,6 +23,7 @@ export type FormAttachmentsProps = {
   a11yHint?: string
 }
 
+/**A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button. */
 const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList, a11yHint }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
@@ -31,8 +32,19 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
 
   const renderFileNames = (): ReactNode => {
     return _.map(attachmentsList || [], (attachment, index) => {
-      const fileName = (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name || ''
-      const fileSize = (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || ''
+      let fileName: string | undefined
+      let fileSize: number | undefined
+
+      if ('assets' in attachment) {
+        const { fileName: name, fileSize: size } = attachment.assets ? attachment.assets[0] : ({} as Asset)
+        fileName = name || ''
+        fileSize = size
+      } else if ('size' in attachment) {
+        const { name, size } = attachment
+        fileName = name || ''
+        fileSize = size
+      }
+
       const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
       const text = [fileName, formattedFileSize].join(' ').trim()
 

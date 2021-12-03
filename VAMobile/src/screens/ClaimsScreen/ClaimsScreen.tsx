@@ -3,12 +3,12 @@ import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
-import { AuthorizedServicesState, ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
+import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { prefetchClaimsAndAppeals } from 'store/actions'
+import { getProfileInfo, prefetchClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -16,19 +16,26 @@ import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppe
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 
-const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
+const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
   const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
-
+  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
+
+  useEffect(() => {
+    // Fetch the profile information
+    if (personalInformationNeedsUpdate) {
+      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    }
+  }, [dispatch, personalInformationNeedsUpdate])
 
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
@@ -38,6 +45,12 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     }
   }, [dispatch, claimsAndAppealsAccess])
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
+    })
+  }, [navigation])
+
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
   }
@@ -46,12 +59,12 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
   }
 
-  if (!claimsAndAppealsAccess) {
-    return <NoClaimsAndAppealsAccess />
+  if (loadingClaimsAndAppeals || personalInformationLoading) {
+    return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 
-  if (loadingClaimsAndAppeals) {
-    return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+  if (!claimsAndAppealsAccess) {
+    return <NoClaimsAndAppealsAccess />
   }
 
   const serviceErrorAlert = (): ReactElement => {
@@ -126,7 +139,7 @@ const ClaimsStackScreen: FC<ClaimsStackScreenProps> = () => {
 
   return (
     <ClaimsScreenStack.Navigator screenOptions={headerStyles}>
-      <ClaimsScreenStack.Screen name="Appointment" component={ClaimsScreen} options={{ title: t('title') }} />
+      <ClaimsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('title') }} />
     </ClaimsScreenStack.Navigator>
   )
 }

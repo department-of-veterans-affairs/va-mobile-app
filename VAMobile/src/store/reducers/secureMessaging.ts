@@ -16,12 +16,17 @@ import {
 } from 'store/api'
 import { READ } from 'constants/secureMessaging'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { SecureMessagingSignatureDataAttributes, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { hasErrorCode } from 'utils/errors'
 import createReducer from './createReducer'
 
+// which folders to track pagination on
+const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
+
 export type SecureMessagingState = {
   loading: boolean
+  loadingInbox: boolean
+  loadingFolders: boolean
   loadingAttachments: boolean
   loadingFile: boolean
   loadingFileKey?: string
@@ -30,27 +35,36 @@ export type SecureMessagingState = {
   fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
   error?: APIError
-  inbox?: SecureMessagingFolderData
-  inboxMessages?: SecureMessagingMessageList
-  folders?: SecureMessagingFolderList
-  folderById?: SecureMessagingFolderMap
-  messagesByFolderId?: SecureMessagingFolderMessagesMap
-  messagesById?: SecureMessagingMessageMap
-  threads?: SecureMessagingThreads
-  recipients?: SecureMessagingRecipientDataList
+  inbox: SecureMessagingFolderData
+  inboxMessages: SecureMessagingMessageList
+  folders: SecureMessagingFolderList
+  folderById: SecureMessagingFolderMap
+  messagesByFolderId: SecureMessagingFolderMessagesMap
+  messagesById: SecureMessagingMessageMap
+  threads: SecureMessagingThreads
+  recipients: SecureMessagingRecipientDataList
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
+  saveDraftComplete: boolean
+  saveDraftFailed: boolean
+  savingDraft: boolean
+  savedDraftID?: number
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
   replyTriageError: boolean
   termsAndConditionError: boolean
   messageIDsOfError?: Array<number>
+  signature?: SecureMessagingSignatureDataAttributes
+  loadingSignature: boolean
+  movingMessage: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
+  loadingInbox: false,
+  loadingFolders: false,
   loadingFile: false,
   loadingFileKey: undefined,
   loadingAttachments: false,
@@ -64,16 +78,23 @@ export const initialSecureMessagingState: SecureMessagingState = {
   messagesById: {} as SecureMessagingMessageMap,
   threads: [] as SecureMessagingThreads,
   recipients: [] as SecureMessagingRecipientDataList,
+
   paginationMetaByFolderId: {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
+    [SecureMessagingSystemFolderIdConstants.DRAFTS]: {} as SecureMessagingPaginationMeta,
   },
+  saveDraftComplete: false,
+  saveDraftFailed: false,
+  savingDraft: false,
   sendMessageComplete: false,
   sendMessageFailed: false,
   sendingMessage: false,
   replyTriageError: false,
   termsAndConditionError: false,
   messageIDsOfError: undefined,
+  loadingSignature: false,
+  movingMessage: false,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -81,11 +102,11 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingInbox: true,
     }
   },
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
-    const messages = inboxMessages?.data
+    const messages = inboxMessages ? inboxMessages.data : []
     const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
     const messagesById = messages?.reduce(
       (obj, m) => {
@@ -101,7 +122,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       // TODO add to folderMessagesById(0)
       // TODO inject folderId?
       messagesById,
-      loading: false,
+      loadingInbox: false,
       error,
       paginationMetaByFolderId: {
         ...state.paginationMetaByFolderId,
@@ -114,7 +135,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingFolders: true,
     }
   },
   SECURE_MESSAGING_FINISH_LIST_FOLDERS: (state, { folderData }) => {
@@ -122,7 +143,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       folders: folderData?.data || state.folders,
       // TODO map to foldersbyId
-      loading: false,
+      loadingFolders: false,
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDER_MESSAGES: (state, payload) => {
@@ -141,21 +162,23 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state.paginationMetaByFolderId,
     }
 
-    // only track sent messages for now
-    if (folderID === SecureMessagingSystemFolderIdConstants.SENT) {
+    // only track sent and drafts messages for now
+    if (trackedPagination.includes(folderID)) {
       updatedPaginationMeta = {
         ...state.paginationMetaByFolderId,
-        [SecureMessagingSystemFolderIdConstants.SENT]: messageData?.meta?.pagination,
+        [folderID]: messageData?.meta?.pagination,
       }
     }
 
-    const messagesById = messageData?.data.reduce(
-      (obj, m) => {
-        obj[m.attributes.messageId] = m.attributes
-        return obj
-      },
-      { ...state.messagesById },
-    )
+    const messagesById = messageData
+      ? messageData.data.reduce(
+          (obj, m) => {
+            obj[m.attributes.messageId] = m.attributes
+            return obj
+          },
+          { ...state.messagesById },
+        )
+      : ({} as SecureMessagingMessageMap)
 
     return {
       ...state,
@@ -176,7 +199,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_GET_INBOX: (state, { inboxData, error }) => {
     return {
       ...state,
-      inbox: inboxData?.data,
+      inbox: inboxData ? inboxData.data : ({} as SecureMessagingFolderData),
       hasLoadedInbox: true,
       error,
     }
@@ -311,13 +334,44 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: (state, { recipients, error }) => {
     return {
       ...state,
-      recipients,
+      recipients: recipients || [],
       error,
       hasLoadedRecipients: true,
     }
   },
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: () => {
     return initialSecureMessagingState
+  },
+  SECURE_MESSAGING_START_SAVE_DRAFT: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      savingDraft: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_SAVE_DRAFT: (state, { messageID, error }) => {
+    return {
+      ...state,
+      savedDraftID: messageID,
+      error,
+      saveDraftFailed: !!error,
+      saveDraftComplete: !error,
+      savingDraft: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: (state) => {
+    return {
+      ...state,
+      savedDraftID: undefined,
+      saveDraftComplete: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED: (state) => {
+    return {
+      ...state,
+      saveDraftComplete: false,
+      saveDraftFailed: false,
+    }
   },
   SECURE_MESSAGING_START_SEND_MESSAGE: (state, payload) => {
     return {
@@ -362,6 +416,35 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       hasLoadedRecipients: false,
+    }
+  },
+
+  SECURE_MESSAGING_START_GET_SIGNATURE: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loadingSignature: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_GET_SIGNATURE: (state, { signature, error }) => {
+    return {
+      ...state,
+      signature,
+      error,
+      loadingSignature: false,
+    }
+  },
+  SECURE_MESSAGING_START_MOVE_MESSAGE: (state) => {
+    return {
+      ...state,
+      movingMessage: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_MOVE_MESSAGE: (state, { error }) => {
+    return {
+      ...state,
+      movingMessage: false,
+      error,
     }
   },
 })

@@ -1,0 +1,14 @@
+import CodeBlock from '@theme/CodeBlock'
+import TextAreaString from '!!raw-loader!@componentsDocs/TextArea'
+
+import ComponentTopInfo from '../../../src/components/ComponentInfo'
+
+export const exampleString = `<TextArea>
+    <VAButton 
+    onPress={resetInAppReview} 
+    label={'Reset In-App Review Actions'} 
+    buttonType={ButtonTypesConstants.buttonPrimary} />
+</TextArea>`
+
+
+<ComponentTopInfo componentName="TextArea" example={exampleString} codeString={TextAreaString} />

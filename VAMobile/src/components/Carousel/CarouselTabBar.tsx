@@ -37,9 +37,11 @@ type CarouselTabBarProps = {
   screenList: Array<CarouselScreen>
 }
 
+/**A common component with the carousel tab bar content. Displays skip button, continue button, and a progress bar*/
 const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, screenList, translation }) => {
   const theme = useTheme()
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
+  const a11yHints = screenList[currentScreenIndex].a11yHints
 
   const onContinue = (): void => {
     const updatedIndex = currentScreenIndex + 1
@@ -53,14 +55,20 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
     navigation.navigate(screenList[updatedIndex].name)
   }
 
+  const goBack = (): void => {
+    const updatedIndex = currentScreenIndex - 1
+    setCurrentScreenIndex(updatedIndex)
+    navigation.navigate(screenList[updatedIndex].name)
+  }
+
   const getProgressBar = (): ReactElement[] => {
     return _.map(screenList, (screen, index) => {
       const boxProps: BoxProps = {
-        width: 5,
-        height: 5,
-        borderRadius: 2.5,
+        width: 12,
+        height: 12,
+        borderRadius: 6,
         opacity: index === currentScreenIndex ? 1 : 0.5,
-        mr: theme.dimensions.carouselProgressDotsMargin,
+        m: theme.dimensions.carouselProgressDotsMargin,
         backgroundColor: 'textBox',
       }
 
@@ -68,40 +76,73 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
     })
   }
 
+  const goBackOrSkipBtn = () => {
+    let onPressCallback: TFunction
+    let buttonText: string
+    let allyHint: string | undefined
+
+    if (currentScreenIndex === 0) {
+      onPressCallback = onCarouselEnd
+      buttonText = 'common:skip'
+      allyHint = a11yHints?.skipHint
+    } else {
+      onPressCallback = goBack
+      buttonText = 'common:back'
+      allyHint = a11yHints?.backHint
+    }
+
+    return (
+      <StyledPressable onPress={onPressCallback} accessibilityRole="button" {...testIdProps(translation(buttonText))} {...a11yHintProp(allyHint || '')}>
+        <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} mr="auto" selectable={false}>
+          {translation(buttonText)}
+        </TextView>
+      </StyledPressable>
+    )
+  }
+
+  const nextOrDoneBtn = () => {
+    let buttonText: string
+    let allyHint: string | undefined
+
+    if (currentScreenIndex === screenList.length - 1) {
+      buttonText = 'common:done'
+      allyHint = a11yHints?.doneHint
+    } else {
+      buttonText = 'common:next'
+      allyHint = a11yHints?.continueHint
+    }
+
+    return (
+      <StyledPressable onPress={onContinue} accessibilityRole="button" {...testIdProps(translation(buttonText))} {...a11yHintProp(allyHint || '')}>
+        <TextView variant="MobileBodyBold" color="primaryContrast" allowFontScaling={false} ml="auto" selectable={false}>
+          {translation(buttonText)}
+        </TextView>
+      </StyledPressable>
+    )
+  }
+
   const progressBarContainerProps: BoxProps = {
     flex: 1,
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     accessibilityRole: 'progressbar',
     accessible: true,
+    minHeight: theme.dimensions.touchableMinHeight,
   }
-
-  const a11yHints = screenList[currentScreenIndex].a11yHints
-  const onLastPage = currentScreenIndex === screenList.length - 1
-  const continueOrDoneText = onLastPage ? translation('common:done') : translation('common:continue')
 
   return (
     <StyledSafeAreaView edges={['bottom']}>
       <Box display="flex" flexDirection="row" height={70} backgroundColor="carousel" alignItems="center" mx={theme.dimensions.gutter}>
         <Box flex={1} display="flex" justifyContent="center">
-          {!onLastPage && (
-            <StyledPressable onPress={onCarouselEnd} accessibilityRole="button" {...testIdProps(translation('common:skip'))} {...a11yHintProp(a11yHints?.skipHint || '')}>
-              <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} mr="auto">
-                {translation('common:skip')}
-              </TextView>
-            </StyledPressable>
-          )}
+          {goBackOrSkipBtn()}
         </Box>
         <Box {...testIdProps(translation('common:carouselIndicators'))} {...a11yHintProp(a11yHints?.carouselIndicatorsHint || '')} {...progressBarContainerProps}>
           {getProgressBar()}
         </Box>
         <Box flex={1} display="flex" justifyContent="center">
-          <StyledPressable onPress={onContinue} accessibilityRole="button" {...testIdProps(continueOrDoneText)} {...a11yHintProp(a11yHints?.continueHint || '')}>
-            <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} ml="auto">
-              {continueOrDoneText}
-            </TextView>
-          </StyledPressable>
+          {nextOrDoneBtn()}
         </Box>
       </Box>
     </StyledSafeAreaView>

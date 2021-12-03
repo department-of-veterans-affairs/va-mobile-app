@@ -2,10 +2,11 @@ import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, DemoState, DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { completeSync, getProfileInfo, getServiceHistory } from 'store/actions'
+import { completeSync, getDisabilityRating, getProfileInfo, getServiceHistory, logInDemoMode } from 'store/actions'
+// import { dispatchCheckForDowntimeErrors } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -20,37 +21,59 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.LOGIN)
 
-  const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { loggedIn, loggingOut, syncing } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { preloadComplete: disabilityRatingLoaded } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
   const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
 
   const [displayMessage, setDisplayMessage] = useState()
+
+  // useEffect(() => {
+  //   dispatch(dispatchCheckForDowntimeErrors())
+  // }, [dispatch])
+
+  useEffect(() => {
+    if (demoMode && !loggedIn) {
+      dispatch(logInDemoMode())
+    }
+  }, [dispatch, demoMode, loggedIn])
 
   useEffect(() => {
     if (loggedIn) {
       if (!personalInformationLoaded) {
         dispatch(getProfileInfo())
-      } else if (authorizedServicesLoaded && militaryInfoAuthorization) {
+      } else if (authorizedServicesLoaded && militaryInfoAuthorization && !militaryHistoryLoaded) {
         dispatch(getServiceHistory())
+      } else if (!disabilityRatingLoaded) {
+        dispatch(getDisabilityRating())
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, disabilityRatingLoaded, militaryHistoryLoaded])
 
   useEffect(() => {
-    if (!loggedIn) {
-      setDisplayMessage(t('sync.progress.signin'))
-    } else if (!personalInformationLoaded) {
-      setDisplayMessage(t('sync.progress.personalInfo'))
-    } else if (!militaryHistoryLoaded) {
-      setDisplayMessage(t('sync.progress.military'))
+    if (syncing) {
+      if (!loggedIn) {
+        setDisplayMessage(t('sync.progress.signin'))
+      } else if (loggingOut) {
+        setDisplayMessage(t('sync.progress.signout'))
+      } else if (!personalInformationLoaded) {
+        setDisplayMessage(t('sync.progress.personalInfo'))
+      } else if (!militaryHistoryLoaded) {
+        setDisplayMessage(t('sync.progress.military'))
+      } else if (!disabilityRatingLoaded) {
+        setDisplayMessage(t('sync.progress.disabilityRating'))
+      }
+    } else {
+      setDisplayMessage(t(''))
     }
 
     const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
-    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn) {
+    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
+  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>

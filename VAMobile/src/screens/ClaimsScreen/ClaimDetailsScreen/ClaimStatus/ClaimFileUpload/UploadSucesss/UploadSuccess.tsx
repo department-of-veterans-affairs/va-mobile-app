@@ -1,4 +1,3 @@
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
@@ -23,7 +22,7 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+      headerLeft: (props): ReactNode => (
         <BackButton
           onPress={navigateToFileRequests}
           canGoBack={props.canGoBack}

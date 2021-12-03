@@ -1,0 +1,20 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureSvg {
+  height: 200px;
+  width: 160px;
+ 
+}
+
+.mobilePhoneSvg {
+  height: 200px;
+  width: 120px;
+   padding: 2px;
+  background-color: #112e51;
+  border-radius: 12px
+}

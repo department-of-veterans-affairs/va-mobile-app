@@ -1,0 +1,1 @@
+You can now view your VA vaccine records and receive push notification reminders for your upcoming appointments. We’ve also fixed a few bugs.

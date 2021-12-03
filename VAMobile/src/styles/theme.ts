@@ -7,6 +7,8 @@ export type VAButtonBackgroundColors = {
   buttonSecondaryDisabled: string
   buttonImportant: string
   buttonImportantActive: string
+  buttonWhite: string
+  buttonWhiteActive: string
 }
 
 export type VAButtonBorderColors = {
@@ -37,6 +39,7 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
+  snackBarBtn: string
 }
 
 export type VAIconColors = {
@@ -59,6 +62,8 @@ export type VAIconColors = {
   covid19Vaccinations: string
   grayDark: string
   pagination: string
+  chevronCollapsible: string
+  chevronListItem: string
 }
 
 export type VATypographyThemeVariants = {
@@ -75,6 +80,7 @@ export type VATypographyThemeVariants = {
   ActionBar: string
   VASelector: string
   HelperText: string
+  SnackBarBtnText: string
 }
 
 export type VABackgroundColors = {
@@ -82,6 +88,7 @@ export type VABackgroundColors = {
   footerButtonActive: string
   textBox: string
   list: string
+  listActive: string
   segmentedController: string
   shadow: string
   profileBanner: string
@@ -98,6 +105,7 @@ export type VABackgroundColors = {
   modalOverlay: string
   pickerSelectedItem: string
   navButton: string
+  snackbar: string
 }
 
 export type VABorderColors = {
@@ -205,6 +213,27 @@ export type VATheme = {
     syncLogoSpacing: number
     navBarHeight: number
     paginationTopPadding: number
+    collapsibleIconMargin: number
+    loginContentMarginBottom: number
+    webviewReloadButtonHeight: number
+    webviewReloadButtonSize: number
+    webviewButtonSize: number
+    webviewButtona11ySize: number
+    errorLabelBottomMargin: number
+    selectorWidth: number
+    selectorHeight: number
+    snackBarWidth: number | string
+    snackBarHorizontalPadding: number
+    snackBarVerticalPadding: number
+    snackBarVerticalMarging: number
+    snackBarBorderRadius: number
+    snackBarButtonHeight: number
+    snackBarBtuttonWidth: number
+    snackBarBetweenSpace: number
+    snackBarShadowX: number
+    snackBarShadowY: number
+    snackBarShadowOpacity: number
+    snackBarIconSize: number
   }
   fontFace: {
     regular: string
