@@ -55,7 +55,6 @@ const DebugScreen: FC = ({}) => {
 
   const resetInAppReview = (): void => {
     resetReviewActionCount()
-    showSnackBar('test', dispatch)
   }
 
   return (
