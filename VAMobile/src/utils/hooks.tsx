@@ -29,6 +29,12 @@ import HeaderTitle from 'components/HeaderTitle'
 
 const SCHEME_DEBOUNCE = 250
 
+/**
+ * Listen for changes to the system dark mode settings. Uses a timeout as a workaround for an issue discussed
+ * https://github.com/facebook/react-native/issues/28525 where the listener is sometimes returning the wrong mode
+ * before switching back to the correct one causing the screen to flash between light and dark modes.
+ * @param setCurrentTheme - function to set the scheme so changes are reflected at the App level
+ */
 export const useColorScheme = (setCurrentTheme: (value: ((prevState: VATheme) => VATheme) | VATheme) => void): NonNullable<ColorSchemeName> => {
   const [scheme, setScheme] = useState(Appearance.getColorScheme())
 

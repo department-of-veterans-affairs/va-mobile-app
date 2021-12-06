@@ -27,6 +27,8 @@ export const getHeaderStyles = (insetsTop: number, theme: VATheme): StackNavigat
     headerStyle: {
       backgroundColor: theme?.colors?.background?.navHeader,
       height: insetsTop + theme.dimensions.headerHeight,
+      borderBottomWidth: 0,
+      shadowColor: 'transparent',
     },
     headerTintColor: theme?.colors?.text?.primaryContrast,
     headerTitleStyle: {

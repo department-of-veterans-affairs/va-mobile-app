@@ -50,7 +50,7 @@
   "placeHolder": "placeholder",
   "remove": "Remove",
   "remove.a11yHint": "Click to remove {{ content }} from added attachments",
-  "required": "(*Required)",
+  "required": "(Required)",
   "required.a11yLabel": "required",
   "textInput": "text input",
   "errors.networkConnection.body": "You aren't connected to the internet. Check your internet connection and try again.",

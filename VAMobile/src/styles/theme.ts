@@ -50,6 +50,7 @@ export type VATextColors = {
   inputFocused: string
   inputRequired: string
   brandedPrimaryText: string
+  segmentControllerActive: string
 }
 
 export type VAIconColors = {
@@ -97,6 +98,7 @@ export type VABackgroundColors = {
   main: string
   footerButtonActive: string
   textBox: string
+  textBoxInactive: string
   list: string
   listActive: string
   segmentedController: string

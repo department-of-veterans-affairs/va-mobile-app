@@ -67,10 +67,12 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
   return (
     <Box {...boxProps}>
       {values.map((value, index) => {
+        const isSelected = selected === index
+
         return (
           <ButtonContainer
             onPress={(): void => onChange(values[index])}
-            isSelected={selected === index}
+            isSelected={isSelected}
             key={index}
             widthPct={`${100 / values.length}%`}
             {...testIdProps(value)}
@@ -78,7 +80,11 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
             {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: values.length }) })}
             accessibilityRole={'tab'}
             accessibilityState={{ selected: selected === index }}>
-            <TextView variant={selected === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary" allowFontScaling={false}>
+            <TextView
+              variant={selected === index ? 'MobileBodyBold' : 'MobileBody'}
+              textAlign="center"
+              color={isSelected ? 'segmentControllerActive' : 'secondary'}
+              allowFontScaling={false}>
               {titles[index]}
             </TextView>
           </ButtonContainer>
