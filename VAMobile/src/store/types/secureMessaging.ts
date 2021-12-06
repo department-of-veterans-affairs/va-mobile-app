@@ -192,12 +192,13 @@ export type SecureMessagingResetHasLoadedRecipients = Record<string, unknown>
 /**
  * Redux payload for the SECURE_MESSAGING_START_MOVE_MESSAGE action
  */
-export type SecureMessagingStartMoveMessage = Record<string, unknown>
+export type SecureMessagingStartMoveMessage = { isUndo?: boolean }
 
 /**
  * Redux payload for the SECURE_MESSAGING_FINISH_MOVE_MESSAGE action
  */
 export type SecureMessagingFinishMoveMessage = {
+  isUndo?: boolean
   error?: api.APIError
 }
 

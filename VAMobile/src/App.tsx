@@ -45,7 +45,16 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store'
+import configureStore, {
+  AccessibilityState,
+  AuthState,
+  SnackBarState,
+  StoreState,
+  handleTokenCallbackUrl,
+  initializeAuth,
+  sendUsesLargeTextAnalytics,
+  sendUsesScreenReaderAnalytics,
+} from 'store'
 import theme from 'styles/themes/standardTheme'
 
 enableScreens(true)
@@ -104,18 +113,10 @@ const MainApp: FC = () => {
         screen_class: currentRouteName,
       })
     }
+    snackBar.hideAll()
 
     // Save the current route name for later comparison
     routeNameRef.current = currentRouteName || ''
-  }
-
-  const snackBarProps: Partial<ToastProps> = {
-    duration: SnackBarConstants.duration,
-    animationDuration: SnackBarConstants.animationDuration,
-    renderType: {
-      custom_snackbar: (toast) => <SnackBar {...toast} />,
-    },
-    swipeEnabled: false,
   }
 
   return (
@@ -129,7 +130,6 @@ const MainApp: FC = () => {
                   <SafeAreaProvider>
                     <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
                     <AuthGuard />
-                    <Toast {...snackBarProps} ref={(ref) => ((snackBar as ToastContainer | null) = ref)} offsetBottom={20} />
                   </SafeAreaProvider>
                 </NotificationManger>
               </NavigationContainer>
@@ -145,11 +145,21 @@ export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { bottomOffset } = useSelector<StoreState, SnackBarState>((state) => state.snackBar)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
   const [currNewState, setCurrNewState] = useState('active')
+
+  const snackBarProps: Partial<ToastProps> = {
+    duration: SnackBarConstants.duration,
+    animationDuration: SnackBarConstants.animationDuration,
+    renderType: {
+      custom_snackbar: (toast) => <SnackBar {...toast} />,
+    },
+    swipeEnabled: false,
+  }
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
@@ -213,7 +223,12 @@ export const AuthGuard: FC = () => {
   } else if (firstTimeLogin && loggedIn) {
     content = <OnboardingCarousel />
   } else if (loggedIn) {
-    content = <AuthedApp />
+    content = (
+      <>
+        <AuthedApp />
+        <Toast {...snackBarProps} ref={(ref) => ((global.snackBar as ToastContainer | null) = ref)} offsetBottom={bottomOffset} />
+      </>
+    )
   } else {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
