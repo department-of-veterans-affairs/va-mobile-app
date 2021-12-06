@@ -1,11 +1,11 @@
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import React, { FC } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Box } from 'components'
 import { BoxProps } from './Box'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
-import { useFocusEffect } from '@react-navigation/native'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
 import colors from '../styles/themes/VAColors'
