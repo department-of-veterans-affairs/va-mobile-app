@@ -8,8 +8,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import { HealthScreen } from '../index'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
-import Inbox from './SecureMessaging/Inbox/Inbox'
-import { LoadingComponent, TextView, MessagesCountTag } from 'components'
+import { TextView, MessagesCountTag } from 'components'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigateToCrisisLineSpy = jest.fn()
@@ -26,12 +25,12 @@ jest.mock('utils/hooks', () => {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
-          .mockReturnValueOnce(mockNavigateToCrisisLineSpy)
-          .mockReturnValueOnce(mockNavigateToAppointmentSpy)
-          .mockReturnValueOnce(mockNavigateToSecureMessagingSpy)
-          .mockReturnValueOnce(mockNavigateToVAVaccinesSpy)
-          .mockReturnValueOnce(mockNavigateToCovidUpdateSpy)
-          .mockReturnValue(() => {})
+        .mockReturnValueOnce(mockNavigateToCrisisLineSpy)
+        .mockReturnValueOnce(mockNavigateToAppointmentSpy)
+        .mockReturnValueOnce(mockNavigateToSecureMessagingSpy)
+        .mockReturnValueOnce(mockNavigateToVAVaccinesSpy)
+        .mockReturnValueOnce(mockNavigateToCovidUpdateSpy)
+        .mockReturnValue(() => { })
     },
     useTheme: jest.fn(() => {
       return { ...theme }
@@ -120,19 +119,12 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[3].props.onPress()
       const expectNavArgs =
-          {
-            url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-            displayTitle: 'va.gov'
-          }
+      {
+        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
+        displayTitle: 'va.gov'
+      }
       expect(mockNavigateToSpy).toHaveBeenNthCalledWith(5, 'Webview', expectNavArgs)
       expect(mockNavigateToCovidUpdateSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(undefined, false)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
 

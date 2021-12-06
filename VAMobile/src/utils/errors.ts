@@ -49,10 +49,7 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
 
 export const isInDowntime = (feature: DowntimeFeatureType, downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
   const mw = downtimeWindows[feature]
-  if (!mw) {
-    return false
-  }
-  if (mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
+  if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
     return true
   }
   return false
