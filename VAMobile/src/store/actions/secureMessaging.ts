@@ -1,18 +1,11 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import {
-  DowntimeFeatureTypeConstants,
-  ScreenIDTypesConstants,
-  SecureMessagingFormData,
-  SecureMessagingSignatureData,
-  SecureMessagingSignatureDataAttributes,
-} from 'store/api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
+import { ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
 
-import { CommonErrorTypesConstants, SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { MockUsersEmail } from 'constants/common'
 import {
   Params,
@@ -30,11 +23,12 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { getCommonErrorFromAPIError, isInDowntime } from 'utils/errors'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
@@ -156,7 +150,7 @@ const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?
 }
 
 export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, getState): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
     dispatch(dispatchStartGetInbox())
@@ -195,7 +189,7 @@ const dispatchFinishListFolderMessages = (folderID: number, messageData?: Secure
 }
 
 export const listFolderMessages = (folderID: number, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, getState): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolderMessages(folderID, page, screenID))))
     dispatch(dispatchStartListFolderMessages())
@@ -233,7 +227,7 @@ const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, mess
 }
 
 export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, getState): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getThread(messageID))))
     dispatch(dispatchStartGetThread())
@@ -403,7 +397,7 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
  * Redux action to get all possible recipients of a message
  */
 export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, getState): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageRecipients(screenID))))
     dispatch(dispatchStartGetMessageRecipients())
@@ -448,7 +442,7 @@ const dispatchFinishGetMessageSignature = (signature?: SecureMessagingSignatureD
  * Redux action to get message signature
  */
 export const getMessageSignature = (screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, getState): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageSignature(screenID))))
     dispatch(dispatchStartGetMessageSignature())
@@ -505,7 +499,7 @@ export const resetSaveDraftFailed = (): ReduxAction => {
  * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
  */
 export const saveDraft = (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
     dispatch(dispatchStartSaveDraft())
     try {
@@ -517,7 +511,7 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
         response = await api.post<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
       }
-      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
@@ -576,7 +570,7 @@ export const resetSendMessageFailed = (): ReduxAction => {
  * make an API call to get the latest contents anyway.
  */
 export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     let formData: FormData
     let postData
     if (uploads && uploads.length !== 0) {
@@ -626,7 +620,7 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
 
-      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())

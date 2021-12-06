@@ -1,4 +1,4 @@
-import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
+import { CommonErrorTypes } from 'constants/errors'
 import { DateTime } from 'luxon'
 import { DowntimeFeatureType, DowntimeFeatureTypeConstants, ScreenIDTypes } from '../api'
 import { ScreenIDTypesConstants } from '../api/types/Screens'

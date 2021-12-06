@@ -1,6 +1,6 @@
 import { ActionDef } from './index'
 import { CommonErrorTypes } from 'constants/errors'
-import { DowntimeWindowsByFeatureType, ErrorsByScreenIDType } from 'store'
+import { DowntimeWindowsByFeatureType } from 'store'
 import { ScreenIDTypes } from '../api'
 
 export type ErrorsSetErrorPayload = {
