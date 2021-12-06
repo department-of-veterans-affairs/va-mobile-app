@@ -1,8 +1,8 @@
 import _ from 'underscore'
 
 import { LetterBeneficiaryData, LetterMilitaryService, LettersList } from 'store/api'
-import { sortByDate } from 'utils/common'
 import { getSubstringBeforeChar } from 'utils/formattingUtils'
+import { sortByDate } from 'utils/common'
 import createReducer from './createReducer'
 
 export type LettersState = {
