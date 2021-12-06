@@ -5,13 +5,17 @@ import { contains, isEmpty } from 'underscore'
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
 
+import { Action } from 'redux'
 import { ErrorObject } from 'store/api'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { PhoneData } from 'store/api/types/PhoneData'
+import { StoreState, updatBottomOffset } from 'store'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
+import { ThunkDispatch } from 'redux-thunk'
 import { formatPhoneNumber } from './formattingUtils'
+import theme from 'styles/themes/standardTheme'
 
 /**
  * Generates testID string for reusable components
@@ -227,4 +231,37 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export const isErrorObject = (error: any): error is ErrorObject => {
   return ['json', 'stack', 'networkError'].some((item) => item in error)
+}
+
+/**
+ * Function to show snackbar
+ * @param message - snackbar message
+ * @param dispatch - dispatch function to change the bottom offset
+ * @param confirmAction - action to perform on undo
+ * @param isUndo - if user pressed undo it will not show undo again
+ * @param isError - if it is an error will show the error icon
+ * @param withNav - offset snackbar to be over the bottom nav
+ * @returns snackbar
+ */
+export function showSnackBar(
+  message: string,
+  dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
+  confirmAction?: () => void,
+  isUndo?: boolean,
+  isError?: boolean,
+  withNavBar = false,
+): void {
+  dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
+  snackBar.show(message, {
+    type: 'custom_snackbar',
+    data: {
+      onConfirmAction: () => {
+        if (confirmAction) {
+          confirmAction()
+        }
+      },
+      isUndo,
+      isError,
+    },
+  })
 }

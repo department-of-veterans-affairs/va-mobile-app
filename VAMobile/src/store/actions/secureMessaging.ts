@@ -4,7 +4,8 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
-import { ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
+import { ScreenIDTypesConstants, SecureMessagingFolderList, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
+import FileViewer from 'react-native-file-viewer'
 
 import { MockUsersEmail } from 'constants/common'
 import {
@@ -31,10 +32,10 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
+import { getfolderName } from 'utils/secureMessaging'
+import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
-import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
   return {
@@ -665,21 +666,24 @@ export const resetHasLoadedRecipients = (): ReduxAction => {
 /**
  * Redux action to start the move of a message to another folder
  */
-const dispatchStartMoveMessage = (): ReduxAction => {
+const dispatchStartMoveMessage = (isUndo?: boolean): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_START_MOVE_MESSAGE',
-    payload: {},
+    payload: {
+      isUndo,
+    },
   }
 }
 
 /**
  * Redux action to finish the move of a message to another folder
  */
-const dispatchFinishMoveMessage = (error?: api.APIError): ReduxAction => {
+const dispatchFinishMoveMessage = (isUndo?: boolean, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_MOVE_MESSAGE',
     payload: {
       error,
+      isUndo,
     },
   }
 }
@@ -687,16 +691,29 @@ const dispatchFinishMoveMessage = (error?: api.APIError): ReduxAction => {
 /**
  * Redux action that moves a message to another folder
  */
-export const moveMessage = (messageID: number, newFolderID: number, currentFolderID: number, currentPage: number, messagesLeft: number): AsyncReduxAction => {
+export const moveMessage = (
+  messageID: number,
+  newFolderID: number,
+  currentFolderID: number,
+  folderToRefresh: number,
+  currentPage: number,
+  messagesLeft: number,
+  isUndo: boolean,
+  folders: SecureMessagingFolderList,
+  withNavBar: boolean,
+): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(moveMessage(messageID, newFolderID, currentFolderID, currentPage, messagesLeft))))
-    dispatch(dispatchStartMoveMessage())
+    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchStartMoveMessage(isUndo))
+
     try {
       await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
-      refreshFoldersAfterMove(dispatch, currentFolderID, currentPage, messagesLeft)
+      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
     } catch (error) {
       if (isErrorObject(error)) {
-        dispatch(dispatchFinishMoveMessage(error))
+        dispatch(dispatchFinishMoveMessage(undefined, error))
+        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), dispatch, retryFunction, false, true)
       }
     }
   }
@@ -705,31 +722,94 @@ export const moveMessage = (messageID: number, newFolderID: number, currentFolde
 /**
  * Redux action that moves a message to the delete folder
  */
-export const deleteMessage = (messageID: number, currentFolderID: number, currentPage: number, messagesLeft: number): AsyncReduxAction => {
+export const deleteMessage = (
+  messageID: number,
+  currentFolderID: number,
+  folderToRefresh: number,
+  currentPage: number,
+  messagesLeft: number,
+  isUndo: boolean,
+  folders: SecureMessagingFolderList,
+  withNavBar: boolean,
+): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteMessage(messageID, currentFolderID, currentPage, messagesLeft))))
-    dispatch(dispatchStartMoveMessage())
+    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchStartMoveMessage(isUndo))
+
     try {
       await api.del(`/v0/messaging/health/messages/${messageID}`)
-      refreshFoldersAfterMove(dispatch, currentFolderID, currentPage, messagesLeft)
+      refreshFoldersAfterMove(
+        dispatch,
+        messageID,
+        SecureMessagingSystemFolderIdConstants.DELETED,
+        currentFolderID,
+        folderToRefresh,
+        currentPage,
+        messagesLeft,
+        isUndo,
+        folders,
+        withNavBar,
+      )
     } catch (error) {
       if (isErrorObject(error)) {
-        dispatch(dispatchFinishMoveMessage(error))
+        dispatch(dispatchFinishMoveMessage(undefined, error))
+        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), dispatch, retryFunction, false, true, withNavBar)
       }
     }
   }
 }
 
-const refreshFoldersAfterMove = (dispatch: ThunkDispatch<StoreState, undefined, ReduxAction>, currentFolderID: number, currentPage: number, messagesLeft: number) => {
-  const page = currentPage === 1 ? currentPage : messagesLeft === 1 ? currentPage - 1 : currentPage
+// method to refresh the folders after move and handle the undo
+const refreshFoldersAfterMove = (
+  dispatch: ThunkDispatch<StoreState, undefined, ReduxAction>,
+  messageID: number,
+  newFolderID: number,
+  currentFolderID: number,
+  folderToRefresh: number,
+  currentPage: number,
+  messagesLeft: number,
+  isUndo: boolean,
+  folders: SecureMessagingFolderList,
+  withNavBar: boolean,
+) => {
+  const page = currentPage === 1 ? currentPage : messagesLeft === 1 && isUndo === false ? currentPage - 1 : currentPage
   const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
 
-  if (currentFolderID === SecureMessagingSystemFolderIdConstants.INBOX) {
+  if (folderToRefresh === SecureMessagingSystemFolderIdConstants.INBOX) {
     dispatch(fetchInboxMessages(page, folderScreenID))
   } else {
-    dispatch(listFolderMessages(currentFolderID, page, folderScreenID))
+    dispatch(listFolderMessages(folderToRefresh, page, folderScreenID))
   }
 
   dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
-  dispatch(dispatchFinishMoveMessage())
+  dispatch(dispatchFinishMoveMessage(false))
+
+  const message = getSnackBarMessage(newFolderID, folders, isUndo, false)
+
+  showSnackBar(
+    message,
+    dispatch,
+    () => {
+      if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
+        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
+      } else {
+        dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
+      }
+    },
+    isUndo,
+    false,
+    withNavBar,
+  )
+}
+
+// method to create the snackbar message for the move message
+const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean) => {
+  const folderName = getfolderName(folderID.toString(), folders)
+  const folderString =
+    folderID !== SecureMessagingSystemFolderIdConstants.INBOX && folderID !== SecureMessagingSystemFolderIdConstants.DELETED ? `${folderName} folder` : folderName
+
+  const messageString = !isUndo ? `${isError ? 'Failed to move message' : 'Message moved'}` : `${isError ? 'Failed to move message back' : 'Message moved back'}`
+
+  return `${messageString} to ${folderString}`
 }
