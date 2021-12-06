@@ -20,11 +20,12 @@ import {
   TextViewProps,
   VAScrollView,
 } from 'components'
-import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
+import { DisabilityRatingState, ErrorsState, StoreState, getDisabilityRating } from 'store'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
+import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
@@ -38,6 +39,7 @@ const DisabilityRatingsScreen: FC = () => {
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
@@ -45,10 +47,10 @@ const DisabilityRatingsScreen: FC = () => {
 
   useEffect(() => {
     // Get the disability rating data if not loaded already
-    if (needsDataLoad) {
+    if (needsDataLoad && !isInDowntime(DowntimeFeatureTypeConstants.disabilityRating, downtimeWindowsByFeature)) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad])
+  }, [dispatch, needsDataLoad, downtimeWindowsByFeature])
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating

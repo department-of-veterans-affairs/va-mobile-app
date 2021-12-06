@@ -66,18 +66,7 @@ export const checkForDowntimeErrors = (): AsyncReduxAction => {
     }
 
     // filtering out any maintenance windows we haven't mapped to a screen in the app
-    // const maintWindows = response.data.filter((w) => !!DowntimeFeatureToScreenID[w.attributes.service])
-    const maintWindows: MaintenanceWindowsEntry[] = [
-      {
-        attributes: {
-          service: DowntimeFeatureTypeConstants.secureMessaging,
-          startTime: '2021-12-03T00:00:00.000Z',
-          endTime: '2021-12-04T00:00:00.000Z',
-        },
-        id: '1',
-        type: 'maintenance_window',
-      },
-    ]
+    const maintWindows = response.data.filter((w) => !!DowntimeFeatureToScreenID[w.attributes.service])
     let downtimeWindows = {} as DowntimeWindowsByFeatureType
     for (const m of maintWindows) {
       const maintWindow = m.attributes
@@ -91,15 +80,6 @@ export const checkForDowntimeErrors = (): AsyncReduxAction => {
         [maintWindow.service]: metadata,
       }
     }
-    console.log('============ TEST ==============')
-    console.log(downtimeWindows)
     dispatch(dispatchSetDowntime(downtimeWindows))
-  }
-}
-
-export const startDowntime = (feature: DowntimeFeatureType): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors(DowntimeFeatureToScreenID[feature]))
-    dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, DowntimeFeatureToScreenID[feature]))
   }
 }

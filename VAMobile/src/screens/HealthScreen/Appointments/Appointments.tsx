@@ -7,10 +7,12 @@ import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
-import { AppointmentsState, AuthorizedServicesState, StoreState } from 'store/reducers'
+import { AppointmentsState, AuthorizedServicesState, ErrorsState, StoreState } from 'store/reducers'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from '../CernerAlert'
@@ -41,6 +43,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     (state) => state.appointments,
   )
   const { appointments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const hasCernerFacilities = useHasCernerFacilities()
 
   // Resets scroll position to top whenever current page appointment list changes:
@@ -64,8 +67,10 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     }
 
     // fetch upcoming and default past appointments ranges
-    dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
-  }, [dispatch])
+    if (!isInDowntime(DowntimeFeatureTypeConstants.appointments, downtimeWindowsByFeature)) {
+      dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
+    }
+  }, [dispatch, downtimeWindowsByFeature])
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />

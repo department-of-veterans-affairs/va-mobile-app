@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
-import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, ClaimsAndAppealsState, ErrorsState, PersonalInformationState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getProfileInfo, prefetchClaimsAndAppeals } from 'store/actions'
+import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -20,6 +21,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
@@ -32,18 +34,22 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate) {
+    if (personalInformationNeedsUpdate && !isInDowntime(DowntimeFeatureTypeConstants.userProfileUpdate, downtimeWindowsByFeature)) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate])
+  }, [dispatch, personalInformationNeedsUpdate, downtimeWindowsByFeature])
 
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
   useEffect(() => {
-    if (claimsAndAppealsAccess) {
+    if (
+      claimsAndAppealsAccess &&
+      !isInDowntime(DowntimeFeatureTypeConstants.claims, downtimeWindowsByFeature) &&
+      !isInDowntime(DowntimeFeatureTypeConstants.appeals, downtimeWindowsByFeature)
+    ) {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
-  }, [dispatch, claimsAndAppealsAccess])
+  }, [dispatch, claimsAndAppealsAccess, downtimeWindowsByFeature])
 
   useEffect(() => {
     navigation.setOptions({

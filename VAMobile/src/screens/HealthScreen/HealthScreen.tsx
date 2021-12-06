@@ -26,7 +26,6 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
 
-  const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
@@ -42,7 +41,7 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       // fetch inbox metadata to display unread messages count tag
       dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
-  }, [dispatch])
+  }, [dispatch, downtimeWindowsByFeature])
 
   useEffect(() => {
     navigation.setOptions({

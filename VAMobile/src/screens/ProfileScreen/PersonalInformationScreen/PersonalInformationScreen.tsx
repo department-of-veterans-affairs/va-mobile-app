@@ -5,16 +5,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useState } from 'react'
 
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { ErrorsState, PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
+import { isInDowntime } from 'utils/errors'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -113,6 +114,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const { profile, loading, needsDataLoad } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginTop, contentMarginBottom, gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
@@ -121,10 +123,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      if (needsDataLoad) {
+      if (needsDataLoad && !isInDowntime(DowntimeFeatureTypeConstants.userProfileUpdate, downtimeWindowsByFeature)) {
         dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
-    }, [dispatch, needsDataLoad]),
+    }, [dispatch, needsDataLoad, downtimeWindowsByFeature]),
   )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/

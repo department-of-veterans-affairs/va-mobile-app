@@ -3,7 +3,6 @@ import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { DateTime } from 'luxon'
 import { DowntimeWindowsByFeatureType } from 'store'
 import { flatten, includes, map, some } from 'lodash'
-import { startDowntime } from 'store/actions/errors'
 
 export const getErrorKeys = (error: APIError): (string | undefined)[] => {
   if (!error) {
@@ -53,9 +52,7 @@ export const isInDowntime = (feature: DowntimeFeatureType, downtimeWindows: Down
   if (!mw) {
     return false
   }
-  console.log(mw.startTime.toFormat('fff'), DateTime.now().toFormat('fff'), mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime)
   if (mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
-    startDowntime(feature)
     return true
   }
   return false

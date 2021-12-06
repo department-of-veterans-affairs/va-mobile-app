@@ -2,10 +2,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
-import { DirectDepositState, StoreState } from 'store/reducers'
+import { DirectDepositState, ErrorsState, StoreState } from 'store/reducers'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getBankData } from 'store/actions'
+import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
 import { useCallback } from 'react'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -17,6 +19,7 @@ import ProfileBanner from '../ProfileBanner'
  */
 const DirectDepositScreen: FC = () => {
   const { paymentAccount: bankData, loading } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
@@ -26,8 +29,10 @@ const DirectDepositScreen: FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
-    }, [dispatch]),
+      if (!isInDowntime(DowntimeFeatureTypeConstants.directDepositBenefits, downtimeWindowsByFeature)) {
+        dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
+      }
+    }, [dispatch, downtimeWindowsByFeature]),
   )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {
