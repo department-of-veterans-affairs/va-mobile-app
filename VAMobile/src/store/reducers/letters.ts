@@ -2,6 +2,7 @@ import _ from 'underscore'
 
 import { LetterBeneficiaryData, LetterMilitaryService, LettersList } from 'store/api'
 import { sortByDate } from 'utils/common'
+import { getSubstringBeforeChar } from 'utils/formattingUtils'
 import createReducer from './createReducer'
 
 export type LettersState = {
@@ -52,10 +53,18 @@ export default createReducer<LettersState>(initialLettersState, {
   },
   LETTER_FINISH_GET_BENEFICIARY_DATA: (state, payload) => {
     const { letterBeneficiaryData, error } = payload
-    const mostRecentServices: Array<LetterMilitaryService> = [...(letterBeneficiaryData?.militaryService || [])]
+    let mostRecentServices: Array<LetterMilitaryService> = [...(letterBeneficiaryData?.militaryService || [])]
 
     if (letterBeneficiaryData) {
       sortByDate(mostRecentServices, 'enteredDate')
+
+      // Strip off timezone info so dates won't be incorrectly time shifted in certain timezones
+      letterBeneficiaryData.benefitInformation.awardEffectiveDate = getSubstringBeforeChar(letterBeneficiaryData?.benefitInformation?.awardEffectiveDate || '', 'T')
+      mostRecentServices = mostRecentServices.map((periodOfService) => {
+        periodOfService.enteredDate = getSubstringBeforeChar(periodOfService.enteredDate, 'T')
+        periodOfService.releasedDate = getSubstringBeforeChar(periodOfService.releasedDate, 'T')
+        return periodOfService
+      })
     }
 
     return {
