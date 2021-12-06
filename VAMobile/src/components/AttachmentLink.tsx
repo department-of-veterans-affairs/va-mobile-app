@@ -22,6 +22,9 @@ export type AttachmentLinkProps = {
   load?: boolean
 }
 
+/**
+ * A common component for an attachment link display. Can be used to show file attachments in a message thread.
+ */
 const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, onPress, a11yHint, a11yValue, load }) => {
   const theme = useTheme()
 

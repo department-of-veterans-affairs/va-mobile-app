@@ -31,3 +31,11 @@ export const MockUsersEmail: {
   user_226: 'vets.gov.user+226@gmail.com',
   user_366: 'vets.gov.user+366@gmail.com',
 }
+
+export const SnackBarConstants: {
+  animationDuration: number
+  duration: number
+} = {
+  animationDuration: 100,
+  duration: 900000,
+}

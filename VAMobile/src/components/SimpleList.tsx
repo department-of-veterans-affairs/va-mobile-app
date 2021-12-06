@@ -17,13 +17,10 @@ export type SimpleListItemObj = {
  * Props for {@link SimpleList}
  */
 export type SimpleListProps = {
-  /** list of items of which a button will be rendered per item */
   items: Array<SimpleListItemObj>
 } & Partial<ListProps>
 
-/**
- * Display a list of buttons with text and optional actions
- */
+/**Component to show a list with one line of text per item*/
 const SimpleList: FC<SimpleListProps> = ({ items, title, titleA11yLabel }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item: SimpleListItemObj) => {
     // Move all of the properties except text lines to the standard list item object

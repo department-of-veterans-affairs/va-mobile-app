@@ -1,0 +1,3057 @@
+{
+  "/v0/claims-and-appeals-overview": {
+    "open": {
+      "data": [
+        {
+          "id": "600246732",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-07-20",
+            "updatedAt": "2021-07-20",
+            "displayTitle": "Compensation"
+          }
+        },
+        {
+          "id": "600236068",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-01-01",
+            "updatedAt": "2021-05-05",
+            "displayTitle": "Compensation"
+          }
+        },
+        {
+          "id": "600080331",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Dependency",
+            "completed": false,
+            "dateFiled": "2016-01-01",
+            "updatedAt": "2016-07-30",
+            "displayTitle": "Dependency"
+          }
+        },
+        {
+          "id": "2221530",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-12",
+            "updatedAt": "2011-11-22",
+            "displayTitle": "disability compensation appeal"
+          }
+        }
+      ],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 1
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",
+        "first": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false"
+      }
+    },
+    "closed": {
+      "data": [
+        {
+          "id": "600232852",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": true,
+            "dateFiled": "2021-01-01",
+            "updatedAt": "2021-04-09",
+            "displayTitle": "Compensation"
+          }
+        }
+      ],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 1
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true",
+        "first": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true"
+      }
+    }
+  },
+  "/v0/claim/600236068": {
+    "data": {
+      "id": "600236068",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2021-01-01",
+        "minEstDate": "2021-09-04",
+        "maxEstDate": "2021-11-14",
+        "phaseChangeDate": "2021-05-05",
+        "open": true,
+        "waiverSubmitted": false,
+        "documentsNeeded": true,
+        "developmentLetterSent": true,
+        "decisionLetterSent": false,
+        "phase": 3,
+        "everPhaseBack": false,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": [
+          "Low back strain (New)"
+        ],
+        "vaRepresentative": null,
+        "eventsTimeline": [
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293440,
+            "description": "21-4142a",
+            "displayName": "Request 10",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": false,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [],
+            "uploadDate": null,
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293441,
+            "description": "21-4142/21-4142a",
+            "displayName": "Request 9",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293441,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-21"
+              },
+              {
+                "trackedItemId": 293441,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293443,
+            "description": "Employment info needed",
+            "displayName": "Request 8",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293443,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "Screenshot_20210519-120209_VAMobile.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293444,
+            "description": "Accidental injury - 21-4176 needed",
+            "displayName": "Request 7",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293444,
+                "fileType": "Correspondence",
+                "documentType": "L023",
+                "filename": "fs-V3800_QSG-IB_r2.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293445,
+            "description": "21-4142",
+            "displayName": "Request 6",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293445,
+                "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+                "documentType": "L029",
+                "filename": "Get_Started_With_Smallpdf.pdf",
+                "uploadDate": "2021-05-18"
+              }
+            ],
+            "uploadDate": "2021-05-18",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293446,
+            "description": "Buddy mentioned - No complete address",
+            "displayName": "Request 5",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293446,
+                "fileType": "VA 21-4142a General Release for Medical Provider Information",
+                "documentType": "L827",
+                "filename": "sample.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293448,
+            "description": "Combat not verified",
+            "displayName": "Request 4",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293448,
+                "fileType": "Military Personnel Record",
+                "documentType": "L034",
+                "filename": "dog-puppy-on-garden-royalty-free-image-1586966191.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-06-04"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "5103 Notice Acknowledgement",
+            "documentType": "L705",
+            "filename": "ClaimDecisionRequest.pdf",
+            "uploadDate": "2021-06-02",
+            "type": "other_documents_list",
+            "date": "2021-06-02"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293442,
+            "description": "Tell us the specific dental disability you are claiming and describe the circumstances of your dental injury.",
+            "displayName": "Request 2",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": "2021-07-05",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": []
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293439,
+            "description": "You may be able to furnish documents that can substitute for service treatment records.  Submit any  copies of the following documents you have that relate to your disability during service:\r*  Statements from military medical personnel (nurses, medics, corpsmen, doctors)\r\r*  \"Buddy\" certificates or affidavits - (A \"buddy\" certificate or affidavit is a statement by a person who knew you when you were in service and knows of any disability you had while on active duty.  The statement should state the dates and places they saw the condition(s) and should describe what they saw.  If the person making the statement was on active duty at the time, they should show their service number and unit of assignment.)\r\r*  State or local accident and police reports\r\r*  Employment physical examinations\r\r*  Medical evidence from hospitals, clinics and private physicians by which or by whom you may have been treated after separation\r\r*  Letters written during service\r\r*  Photographs taken during service\r\r*  Pharmacy prescription records\r\r*  Insurance examinations",
+            "displayName": "Request 1",
+            "overdue": true,
+            "status": "SUBMITTED_AWAITING_REVIEW",
+            "uploaded": true,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": null,
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": [
+              {
+                "trackedItemId": 293439,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-25"
+              }
+            ],
+            "uploadDate": "2021-05-25",
+            "date": "2021-05-25"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293447,
+            "description": "You may also submit statements from individuals having knowledge of your claimed condition.  These individuals should tell us what they observed of your condition, including the approximate dates, places and circumstances.  They should clearly state whether they actually witnessed the event leading to your condition.  If they were in service with you, they should include name, rank, and unit of assignment.  All statements must have the following certification:  \"I hereby certify that this information is true and correct to the best of my knowledge and belief.\"\r",
+            "displayName": "Request 3",
+            "overdue": true,
+            "status": "SUBMITTED_AWAITING_REVIEW",
+            "uploaded": true,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": null,
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": [
+              {
+                "trackedItemId": 293447,
+                "fileType": "VA 21-4142a General Release for Medical Provider Information",
+                "documentType": "L827",
+                "filename": "sample.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-05-13"
+          },
+          {
+            "type": "phase2",
+            "date": "2021-05-05"
+          },
+          {
+            "type": "phase1",
+            "date": "2021-05-05"
+          },
+          {
+            "type": "filed",
+            "date": "2021-01-01"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          }
+        ],
+        "updatedAt": {
+          "type": "c",
+          "name": "mobile.claims_and_appeals.claim.type",
+          "value": 1,
+          "sampleRate": 1,
+          "tags": [
+            "type:Compensation"
+          ],
+          "metadata": null
+        }
+      }
+    }
+  },
+  "/v0/claim/600232852": {
+    "data": {
+      "id": "600232852",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2021-01-01",
+        "minEstDate": null,
+        "maxEstDate": null,
+        "phaseChangeDate": "2021-04-09",
+        "open": false,
+        "waiverSubmitted": false,
+        "documentsNeeded": false,
+        "developmentLetterSent": false,
+        "decisionLetterSent": true,
+        "phase": 8,
+        "everPhaseBack": false,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": [
+          "Hearing loss (New)",
+          " ringing in ears (New)"
+        ],
+        "vaRepresentative": null,
+        "eventsTimeline": [
+          {
+            "type": "phase7",
+            "date": "2021-04-09"
+          },
+          {
+            "type": "completed",
+            "date": "2021-04-09"
+          },
+          {
+            "type": "filed",
+            "date": "2021-01-01"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Military Personnel Record",
+            "documentType": "L034",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-4142a General Release for Medical Provider Information",
+            "documentType": "L827",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-4142a General Release for Medical Provider Information",
+            "documentType": "L827",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0779 Request for Nursing Home Info In Connection with Claim for Aid and Attendance",
+            "documentType": "L222",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "5103 Notice Acknowledgement",
+            "documentType": "L705",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          }
+        ],
+        "updatedAt": {
+          "type": "c",
+          "name": "mobile.claims_and_appeals.claim.type",
+          "value": 1,
+          "sampleRate": 1,
+          "tags": [
+            "type:Compensation"
+          ],
+          "metadata": null
+        }
+      }
+    }
+  },
+  "/v0/claim/600246732": {
+    "data": {
+      "id": "600246732",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2021-07-20",
+        "minEstDate": "2021-11-05",
+        "maxEstDate": "2022-01-23",
+        "phaseChangeDate": "2021-07-20",
+        "open": true,
+        "waiverSubmitted": false,
+        "documentsNeeded": false,
+        "developmentLetterSent": false,
+        "decisionLetterSent": false,
+        "phase": 2,
+        "everPhaseBack": false,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": [
+          "hearing loss (Increase)",
+          " kidney removal of (New)"
+        ],
+        "vaRepresentative": "PATRICIA E ROBERTS",
+        "eventsTimeline": [
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": "JESSE_GRAY_600246732_526.pdf",
+            "uploadDate": "2021-07-20",
+            "type": "other_documents_list",
+            "date": "2021-07-20"
+          },
+          {
+            "type": "phase1",
+            "date": "2021-07-20"
+          },
+          {
+            "type": "filed",
+            "date": "2021-07-20"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Appeal Substitution Review",
+            "documentType": "L590",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Appeal Substitution Review",
+            "documentType": "L590",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 28-1900 Disabled Veterans Application for Vocational Rehabilitation",
+            "documentType": "L162",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "5103 Notice Acknowledgement",
+            "documentType": "L705",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Medical Treatment Record - Government Facility",
+            "documentType": "L048",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Birth Certificate",
+            "documentType": "L014",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-4502 Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904",
+            "documentType": "L117",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Medical Treatment Record - Non-Government Facility",
+            "documentType": "L049",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-4192 Request for Employment Information in Connection with Claim for Disability",
+            "documentType": "L115",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781a, Statement in Support of Claim for PTSD Secondary to Personal Assault",
+            "documentType": "L229",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781, Statement in Support of Claim for PTSD",
+            "documentType": "L228",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-8940 Veterans Application for Increased Compensation Based on Unemployability",
+            "documentType": "L149",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Adoption Decree",
+            "documentType": "L002",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Medical Opinion",
+            "documentType": "L663",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "SSA Profile and Benefit Data",
+            "documentType": "L873",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-674 Report of School Attendance",
+            "documentType": "L133",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Goldmann Perimetry Chart/Field Of Vision Chart",
+            "documentType": "L703",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Medical Treatment Record - Government Facility",
+            "documentType": "L048",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Birth Certificate",
+            "documentType": "L014",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 28-1900 Disabled Veterans Application for Vocational Rehabilitation",
+            "documentType": "L162",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781a, Statement in Support of Claim for PTSD Secondary to Personal Assault",
+            "documentType": "L229",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781, Statement in Support of Claim for PTSD",
+            "documentType": "L228",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-8940 Veterans Application for Increased Compensation Based on Unemployability",
+            "documentType": "L149",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781, Statement in Support of Claim for PTSD",
+            "documentType": "L228",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          }
+        ],
+        "updatedAt": {}
+      }
+    }
+  },
+  "/v0/claim/600080331": {
+    "data": {
+      "id": "600080331",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2016-01-01",
+        "minEstDate": "2016-08-01",
+        "maxEstDate": "2016-08-03",
+        "phaseChangeDate": "2016-07-30",
+        "open": true,
+        "waiverSubmitted": false,
+        "documentsNeeded": false,
+        "developmentLetterSent": false,
+        "decisionLetterSent": false,
+        "phase": 7,
+        "everPhaseBack": false,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Dependency",
+        "contentionList": [],
+        "vaRepresentative": "PATRICIA E ROBERTS",
+        "eventsTimeline": [
+          {
+            "type": "phase1",
+            "date": "2016-07-30"
+          },
+          {
+            "type": "filed",
+            "date": "2016-01-01"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Appeal Substitution Review",
+            "documentType": "L590",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Appeal Substitution Review",
+            "documentType": "L590",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 28-1900 Disabled Veterans Application for Vocational Rehabilitation",
+            "documentType": "L162",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "5103 Notice Acknowledgement",
+            "documentType": "L705",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Medical Treatment Record - Government Facility",
+            "documentType": "L048",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Birth Certificate",
+            "documentType": "L014",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-4502 Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904",
+            "documentType": "L117",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Medical Treatment Record - Non-Government Facility",
+            "documentType": "L049",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-4192 Request for Employment Information in Connection with Claim for Disability",
+            "documentType": "L115",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781a, Statement in Support of Claim for PTSD Secondary to Personal Assault",
+            "documentType": "L229",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781, Statement in Support of Claim for PTSD",
+            "documentType": "L228",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-8940 Veterans Application for Increased Compensation Based on Unemployability",
+            "documentType": "L149",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Adoption Decree",
+            "documentType": "L002",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Medical Opinion",
+            "documentType": "L663",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "SSA Profile and Benefit Data",
+            "documentType": "L873",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-674 Report of School Attendance",
+            "documentType": "L133",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Goldmann Perimetry Chart/Field Of Vision Chart",
+            "documentType": "L703",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Medical Treatment Record - Government Facility",
+            "documentType": "L048",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Birth Certificate",
+            "documentType": "L014",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 28-1900 Disabled Veterans Application for Vocational Rehabilitation",
+            "documentType": "L162",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Medical - Photocopy",
+            "documentType": "L451",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781a, Statement in Support of Claim for PTSD Secondary to Personal Assault",
+            "documentType": "L229",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781, Statement in Support of Claim for PTSD",
+            "documentType": "L228",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-8940 Veterans Application for Increased Compensation Based on Unemployability",
+            "documentType": "L149",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0781, Statement in Support of Claim for PTSD",
+            "documentType": "L228",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "STR - Dental - Photocopy",
+            "documentType": "L450",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-686c Application Request To Add And/Or Remove Dependents",
+            "documentType": "L139",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": "L533",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          }
+        ],
+        "updatedAt": {}
+      }
+    }
+  },
+  "/v0/appeal/2221530": {
+    "data": {
+      "id": "2221530",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": [
+          "2221530"
+        ],
+        "active": true,
+        "alerts": [
+          {
+            "type": "scheduled_hearing",
+            "details": {
+              "date": "2021-02-24",
+              "type": "video",
+              "location": "Louisville regional office"
+            }
+          }
+        ],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {
+          "front": true,
+          "total": 140135,
+          "ahead": 23446,
+          "ready": 2428,
+          "month": "2009-03-01",
+          "docketMonth": "2011-01-01",
+          "eta": null
+        },
+        "events": [
+          {
+            "type": "claim_decision",
+            "date": "2008-04-11"
+          },
+          {
+            "type": "nod",
+            "date": "2008-06-12"
+          },
+          {
+            "type": "soc",
+            "date": "2009-03-11"
+          },
+          {
+            "type": "form9",
+            "date": "2009-03-23"
+          },
+          {
+            "type": "ssoc",
+            "date": "2010-01-26"
+          },
+          {
+            "type": "ssoc",
+            "date": "2010-07-22"
+          },
+          {
+            "type": "ssoc",
+            "date": "2011-09-26"
+          },
+          {
+            "type": "certified",
+            "date": "2011-11-22"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          },
+          {
+            "description": "Service connection, varicose veins",
+            "diagnosticCode": "7120",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          },
+          {
+            "description": "Service connection, generalized anxiety disorder",
+            "diagnosticCode": "9400",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "scheduled_hearing",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  }
+}

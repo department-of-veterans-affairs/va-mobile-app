@@ -1,0 +1,24 @@
+import CodeBlock from '@theme/CodeBlock'
+import SimpleListString from '!!raw-loader!@componentsDocs/SimpleList'
+
+import ComponentTopInfo from '../../../src/components/ComponentInfo'
+
+export const exampleString = `const exampleList: Array<SimpleListItemObj> = 
+[
+    {
+      text: 'the button',
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 1 pressed') },
+      testId: 'line-1-on-the-button',
+    },
+    {
+      text: 'the second button',
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 2 pressed') },
+      testId: 'line-1-on-the-second-button',
+    },
+]\n
+<SimpleList items={exampleList} />`
+
+
+<ComponentTopInfo componentName="SimpleList" example={exampleString} codeString={SimpleListString} />

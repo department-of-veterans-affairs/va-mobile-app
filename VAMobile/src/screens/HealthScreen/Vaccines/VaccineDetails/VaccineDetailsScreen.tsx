@@ -8,7 +8,7 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StoreState, VaccineState } from 'store/reducers'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getVaccineLocation } from 'store/actions'
+import { getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -28,13 +28,17 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const vaccine = vaccinesById[vaccineId]
   const location = vaccineLocationsById[vaccineId]
 
-  const placeHolder = t('vaccines.details.unavailable')
+  const placeHolder = t('vaccines.details.noneNoted')
 
   useEffect(() => {
     if (vaccine && !vaccineLocationsById[vaccineId]) {
       dispatch(getVaccineLocation(vaccineId, vaccine.relationships?.location?.data?.id || ''))
     }
   }, [dispatch, vaccineLocationsById, vaccineId, vaccine])
+
+  useEffect(() => {
+    dispatch(sendVaccineDetailsAnalytics(vaccine?.attributes?.groupName || ''))
+  }, [dispatch, vaccineId, vaccine])
 
   if (!vaccine) {
     return <></>

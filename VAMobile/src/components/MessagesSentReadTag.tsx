@@ -5,9 +5,11 @@ import React, { FC } from 'react'
 import TextView from './TextView'
 
 export type MessagesSentTagProps = {
+  /**Message to be shown on the tag*/
   text: string
 }
 
+/**Common component to show a text inside of a tag*/
 const MessagesSentReadTag: FC<MessagesSentTagProps> = ({ text }) => {
   const theme = useTheme()
   return (

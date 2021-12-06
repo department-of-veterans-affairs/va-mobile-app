@@ -9,9 +9,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
+  /**The screen id for the screen that has the errors*/
   screenID: ScreenIDTypes
 }
 
+/**Common component to show an alert when the service is down*/
 const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

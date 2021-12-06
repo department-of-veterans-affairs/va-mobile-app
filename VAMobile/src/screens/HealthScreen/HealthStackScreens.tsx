@@ -54,6 +54,9 @@ export type HealthStackParamList = {
   }
   ViewMessageScreen: {
     messageID: number
+    folderID?: number
+    currentPage?: number
+    messagesLeft?: number
   }
   ComposeMessage: {
     attachmentFileToAdd?: ImagePickerResponse | DocumentPickerResponse

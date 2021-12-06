@@ -1,0 +1,8 @@
+import HooksInfo from '../../../src/components/HooksInfo'
+
+export const exampleString = `const MyComponent: FC = () => {
+    const navigateTo = useRouteNavigation()
+    return <WideButton onPress={navigateTo('Home')} />
+}`
+
+<HooksInfo componentName="useRouteNavigation" example={exampleString}/>

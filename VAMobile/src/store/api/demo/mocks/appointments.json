@@ -1,0 +1,388 @@
+{
+  "/v0/appointments": {
+    "past": {
+      "data": [
+        {
+          "type": "appointment",
+          "id": "4",
+          "attributes": {
+            "appointmentType": "VA",
+            "status": "BOOKED",
+            "phoneOnly": false,
+            "statusDetail": null,
+            "isCovidVaccine": true,
+            "startDateLocal": "2021-09-06T19:53:14.000+00:00",
+            "startDateUtc": "2021-09-06T19:53:14.000+00:00",
+            "minutesDuration": 60,
+            "comment": "Please arrive 20 minutes before the start of your appointment",
+            "timeZone": "America/Los_Angeles",
+            "healthcareService": "Blind Rehabilitation Center",
+            "healthcareProvider": null,
+            "reason": null,
+            "location": {
+              "name": "VA Long Beach Healthcare System",
+              "address": {
+                "street": "5901 East 7th Street",
+                "city": "Long Beach",
+                "state": "CA",
+                "zipCode": "90822"
+              },
+              "phone": {
+                "number": "456-7890",
+                "extension": "",
+                "areaCode": "123"
+              },
+              "url": "",
+              "code": ""
+            },
+            "practitioner": {
+              "prefix": "Dr.",
+              "firstName": "Larry",
+              "middleName": "",
+              "lastName": "TestDoctor"
+            }
+          }
+        },
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": "Routine Check up. Reminder to bring your ID card",
+            "healthcareProvider": null,
+            "healthcareService": "Community Clinic Association",
+            "location": {
+              "id": null,
+              "name": "Community Clinic Association",
+              "address": {
+                "street": "1412 East Cesar Ave",
+                "city": "East Lost Angeles",
+                "state": "CA",
+                "zipCode": "93344"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "458-9423",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "2021-06-02T20:00:00.000-04:00",
+            "startDateUtc": "2021-06-03T00:00:00.000Z",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false
+          }
+        },
+        {
+          "id": "8a48dc927956f6030179632426bc001a",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": "Test",
+            "healthcareProvider": null,
+            "healthcareService": "Outpatient Clinic",
+            "location": {
+              "id": null,
+              "name": "Outpatient Clinic",
+              "address": {
+                "street": "2341 North Ave",
+                "city": "Commerce",
+                "state": "CA",
+                "zipCode": "90022"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "723-9322",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "2021-05-13T02:48:00.000-04:00",
+            "startDateUtc": "2021-05-13T06:48:00.000Z",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false
+          }
+        },
+        {
+          "id": "202104211230984000285500000000000000",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareService": "MID SLEEP CLIN A",
+            "location": {
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603012,
+              "long": -84.3164749,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 90,
+            "startDateLocal": "2021-04-21T08:30:00.000-04:00",
+            "startDateUtc": "2021-04-21T12:30:00.000+00:00",
+            "status": "HIDDEN",
+            "timeZone": "America/New_York",
+            "vetextId": "2855;20210421.080030"
+          }
+        },
+        {
+          "id": "202104081200984000118400000000000000",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareService": "C&P OPTOMETRY",
+            "location": {
+              "name": "Dayton VA Medical Center",
+              "address": {
+                "street": "4100 West Third Street",
+                "city": "Dayton",
+                "state": "OH",
+                "zipCode": "45428-9000"
+              },
+              "lat": 39.74935073,
+              "long": -84.25320014,
+              "phone": {
+                "areaCode": "937",
+                "number": "268-6511",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "startDateLocal": "2021-04-08T08:00:00.000-04:00",
+            "startDateUtc": "2021-04-08T12:00:00.000+00:00",
+            "status": "CANCELLED",
+            "timeZone": "America/New_York",
+            "vetextId": "1184;20210408.080000"
+          }
+        },
+        {
+          "id": "202103290000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
+            "cancelId": null,
+            "comment": "Medication Review",
+            "healthcareService": "DAYTON",
+            "location": {
+              "name": "Dayton VA Medical Center",
+              "address": {
+                "street": "4100 West Third Street",
+                "city": "Dayton",
+                "state": "OH",
+                "zipCode": "45428-9000"
+              },
+              "lat": 39.74935073,
+              "long": -84.25320014,
+              "phone": {
+                "areaCode": "937",
+                "number": "268-6511",
+                "extension": null
+              },
+              "url": null,
+              "code": "VJJLWB"
+            },
+            "minutesDuration": 30,
+            "startDateLocal": "2021-03-29T17:30:00.000-04:00",
+            "startDateUtc": "2021-03-29T21:30:00.000+00:00",
+            "status": "BOOKED",
+            "timeZone": "America/New_York",
+            "vetextId": ";20210329.170030"
+          }
+        }
+      ],
+      "meta": {
+        "errors": null,
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 6
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "first": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10"
+      }
+    },
+    "upcoming": {
+      "data": [
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
+            "healthcareProvider": null,
+            "healthcareService": "Outpatient Clinic",
+            "location": {
+              "id": null,
+              "name": "Outpatient Clinic",
+              "address": {
+                "street": "2341 North Ave",
+                "city": "Commerce",
+                "state": "CA",
+                "zipCode": "90022"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "723-9322",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "2022-06-02T20:00:00.000-04:00",
+            "startDateUtc": "2022-06-03T00:00:00.000Z",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false
+          }
+        },
+        {
+          "id": "8a4872aa7883bc4b01788d9788d9003c",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": "Routine Check up. Reminder to bring your ID card",
+            "healthcareProvider": null,
+            "healthcareService": "Community Clinic Association",
+            "location": {
+              "id": null,
+              "name": "Community Clinic Association",
+              "address": {
+                "street": "1412 East Cesar Ave",
+                "city": "East Lost Angeles",
+                "state": "CA",
+                "zipCode": "93344"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "458-9423",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "2022-06-16T16:26:00.000-04:00",
+            "startDateUtc": "2022-06-16T20:26:00.000Z",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false
+          }
+        },
+        {
+          "type": "appointment",
+          "id": "1",
+          "attributes": {
+            "appointmentType": "VA",
+            "status": "CANCELLED",
+            "phoneOnly": false,
+            "statusDetail": null,
+            "isCovidVaccine": true,
+            "startDateLocal": "2022-09-06T19:53:14.000+00:00",
+            "startDateUtc": "2022-09-06T19:53:14.000+00:00",
+            "minutesDuration": 60,
+            "comment": "Please arrive 20 minutes before the start of your appointment",
+            "timeZone": "America/Los_Angeles",
+            "healthcareService": "Blind Rehabilitation Center",
+            "healthcareProvider": null,
+            "reason": null,
+            "location": {
+              "name": "VA Long Beach Healthcare System",
+              "address": {
+                "street": "5901 East 7th Street",
+                "city": "Long Beach",
+                "state": "CA",
+                "zipCode": "90822"
+              },
+              "phone": {
+                "number": "456-7890",
+                "extension": "",
+                "areaCode": "123"
+              },
+              "url": "",
+              "code": ""
+            },
+            "practitioner": {
+              "prefix": "Dr.",
+              "firstName": "Larry",
+              "middleName": "",
+              "lastName": "TestDoctor"
+            }
+          }
+        }
+      ],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 3
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "first": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=0&page[size]=10"
+      }
+    }
+  }
+}
