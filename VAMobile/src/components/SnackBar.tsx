@@ -3,7 +3,6 @@ import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
 import { Box } from 'components'
 import { BoxProps } from './Box'
