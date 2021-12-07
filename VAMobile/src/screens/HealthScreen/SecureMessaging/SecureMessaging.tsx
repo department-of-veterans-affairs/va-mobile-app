@@ -5,7 +5,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import { fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/actions'
 
-import { AuthorizedServicesState, ErrorsState, SecureMessagingState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, SecureMessagingState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
@@ -41,9 +41,10 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    if (secureMessaging && !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)) {
+    if (secureMessaging && smNotInDowntime) {
       dispatch(resetSaveDraftComplete())
       dispatch(resetSaveDraftFailed())
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
@@ -56,7 +57,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
-  }, [dispatch, secureMessaging, navigation, secureMessagingTab])
+  }, [dispatch, secureMessaging, navigation, secureMessagingTab, smNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />

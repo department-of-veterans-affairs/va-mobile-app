@@ -22,15 +22,16 @@ const DirectDepositScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
   const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
 
   useFocusEffect(
     useCallback(() => {
-      if (!useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)) {
+      if (ddNotInDowntime) {
         dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
       }
-    }, [dispatch]),
+    }, [dispatch, ddNotInDowntime]),
   )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {

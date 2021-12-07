@@ -42,13 +42,14 @@ const DisabilityRatingsScreen: FC = () => {
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
+  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
 
   useEffect(() => {
     // Get the disability rating data if not loaded already
-    if (needsDataLoad && !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)) {
+    if (needsDataLoad && drNotInDowntime) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad])
+  }, [dispatch, needsDataLoad, drNotInDowntime])
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating

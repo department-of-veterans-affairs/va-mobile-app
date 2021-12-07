@@ -29,21 +29,24 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
+  const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
+  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate && !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)) {
+    if (personalInformationNeedsUpdate && profileNotInDowntime) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate])
+  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
 
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
   useEffect(() => {
-    if (claimsAndAppealsAccess && !useDowntime(DowntimeFeatureTypeConstants.claims) && !useDowntime(DowntimeFeatureTypeConstants.appeals)) {
+    if (claimsAndAppealsAccess && claimsNotInDowntime && appealsNotInDowntime) {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
-  }, [dispatch, claimsAndAppealsAccess])
+  }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
 
   useEffect(() => {
     navigation.setOptions({

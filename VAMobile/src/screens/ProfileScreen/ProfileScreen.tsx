@@ -26,7 +26,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
+  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
+  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
 
   useEffect(() => {
     navigation.setOptions({
@@ -56,24 +58,24 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate && useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)) {
+    if (personalInformationNeedsUpdate && profileNotInDowntime) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
   }, [dispatch, personalInformationNeedsUpdate])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization && useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)) {
+    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization && mhNotInDowntime) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
+  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, mhNotInDowntime])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (disabilityRatingNeedsUpdate && useDowntime(DowntimeFeatureTypeConstants.disabilityRating)) {
+    if (disabilityRatingNeedsUpdate && drNotInDowntime) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, disabilityRatingNeedsUpdate])
+  }, [dispatch, disabilityRatingNeedsUpdate, drNotInDowntime])
 
   const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
 

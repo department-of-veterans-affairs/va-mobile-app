@@ -25,6 +25,7 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.PROFILE)
   const tCommon = useTranslation(NAMESPACE.COMMON)
+  const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
 
   const letterPressFn = (letterType: LetterTypes, letterName: string): OnPressHandler | undefined => {
     switch (letterType) {
@@ -100,10 +101,10 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   })
 
   useEffect(() => {
-    if (lettersAndDocuments && !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)) {
+    if (lettersAndDocuments && lettersNotInDowntime) {
       dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
     }
-  }, [dispatch, lettersAndDocuments])
+  }, [dispatch, lettersAndDocuments, lettersNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />

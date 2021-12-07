@@ -22,8 +22,9 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
+    const isInDowntime = useDowntime(DowntimeScreenIDToFeature[screenID])
 
-    if (useDowntime(DowntimeScreenIDToFeature[screenID])) {
+    if (isInDowntime) {
       return <DowntimeError screenID={screenID} />
     }
     // check which specific error occurred and return the corresponding error element

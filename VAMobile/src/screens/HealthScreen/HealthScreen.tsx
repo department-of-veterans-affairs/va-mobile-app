@@ -33,13 +33,14 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    if (!useDowntime(DowntimeFeatureTypeConstants.secureMessaging)) {
+    if (smNotInDowntime) {
       // fetch inbox metadata to display unread messages count tag
       dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
-  }, [dispatch])
+  }, [dispatch, smNotInDowntime])
 
   useEffect(() => {
     navigation.setOptions({

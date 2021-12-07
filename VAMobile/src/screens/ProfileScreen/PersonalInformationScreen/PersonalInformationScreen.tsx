@@ -117,15 +117,16 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const { profile, loading, needsDataLoad } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginTop, contentMarginBottom, gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const navigateTo = useRouteNavigation()
 
   useFocusEffect(
     React.useCallback(() => {
-      if (needsDataLoad && !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)) {
+      if (needsDataLoad && profileNotInDowntime) {
         dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
-    }, [dispatch, needsDataLoad]),
+    }, [dispatch, needsDataLoad, profileNotInDowntime]),
   )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/

@@ -22,12 +22,13 @@ const MilitaryInformationScreen: FC = () => {
   const { serviceHistory, loading, needsDataLoad } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
+  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   useEffect(() => {
-    if (needsDataLoad && militaryInfoAuthorization && !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)) {
+    if (needsDataLoad && militaryInfoAuthorization && mhNotInDowntime) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad, militaryInfoAuthorization])
+  }, [dispatch, needsDataLoad, militaryInfoAuthorization, mhNotInDowntime])
 
   const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const branch = t('personalInformation.branch', { branch: service.branchOfService })
