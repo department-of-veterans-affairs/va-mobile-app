@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
@@ -23,12 +23,14 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   useFocusEffect(setFocus)
 
-  const StyledSafeArea = styled(SafeAreaView)`
-    flex: 1;
-    margin-right: ${dimensions.snackBarMargingLeft}px;
-    margin-left: ${dimensions.snackBarMargingRight}px;
-    margin-bottom: ${dimensions.snackBarMargingBottom}px;
-  `
+  const styles = StyleSheet.create({
+    safeView: {
+      flex: 1,
+      marginBottom: dimensions.snackBarMargingBottom,
+      marginLeft: dimensions.snackBarMargingLeft,
+      marginRight: dimensions.snackBarMargingRight,
+    },
+  })
 
   const confirmBtnStlye: StyleProp<ViewStyle> = {
     marginLeft: dimensions.snackBarBetweenSpace,
@@ -83,7 +85,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
   }
 
   return (
-    <StyledSafeArea edges={['left', 'right']}>
+    <SafeAreaView edges={['left', 'right']} style={styles.safeView}>
       <Box {...mainContainerProps}>
         <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
           <Box {...messageContainerProps}>
@@ -115,7 +117,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
           </TouchableOpacity>
         </Box>
       </Box>
-    </StyledSafeArea>
+    </SafeAreaView>
   )
 }
 
