@@ -116,6 +116,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         indexOfDeleted = index
       }
 
+      if (label === FolderNameTypeConstants.inbox) {
+        icon.fill = 'dark'
+        icon.name = 'InboxSolid'
+      }
+
       return {
         label,
         value: folder.id,
