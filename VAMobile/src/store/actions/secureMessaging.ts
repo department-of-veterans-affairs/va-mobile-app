@@ -700,16 +700,16 @@ export const moveMessage = (
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
-  replyExpired: boolean,
+  withNavBar: boolean,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired))
+    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
 
     try {
       await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
-      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, replyExpired)
+      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage(undefined, error))
