@@ -20,7 +20,7 @@ import {
   TextViewProps,
   VAScrollView,
 } from 'components'
-import { DisabilityRatingState, ErrorsState, StoreState, getDisabilityRating } from 'store'
+import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'

@@ -18,11 +18,11 @@ export type ErrorComponentProps = {
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
   const t = useTranslation()
+  const isInDowntime = useDowntime(DowntimeScreenIDToFeature[props.screenID])
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
-    const isInDowntime = useDowntime(DowntimeScreenIDToFeature[screenID])
 
     if (isInDowntime) {
       return <DowntimeError screenID={screenID} />

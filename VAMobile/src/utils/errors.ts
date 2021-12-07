@@ -1,7 +1,5 @@
-import { APIError, DowntimeFeatureType, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
+import { APIError, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
-import { DateTime } from 'luxon'
-import { DowntimeWindowsByFeatureType } from 'store'
 import { flatten, includes, map, some } from 'lodash'
 
 export const getErrorKeys = (error: APIError): (string | undefined)[] => {

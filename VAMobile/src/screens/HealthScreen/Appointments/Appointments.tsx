@@ -7,7 +7,7 @@ import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
-import { AppointmentsState, AuthorizedServicesState, ErrorsState, StoreState } from 'store/reducers'
+import { AppointmentsState, AuthorizedServicesState, StoreState } from 'store/reducers'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'

@@ -2,7 +2,7 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, ErrorsState, MilitaryServiceState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, MilitaryServiceState, StoreState } from 'store/reducers'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
