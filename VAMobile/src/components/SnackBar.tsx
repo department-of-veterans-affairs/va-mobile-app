@@ -25,9 +25,9 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const styles = StyleSheet.create({
     safeView: {
       flex: 1,
-      marginBottom: dimensions.snackBarMargingBottom,
-      marginLeft: dimensions.snackBarMargingLeft,
-      marginRight: dimensions.snackBarMargingRight,
+      marginBottom: dimensions.snackBarMarginBottom,
+      marginLeft: dimensions.snackBarMarginLeft,
+      marginRight: dimensions.snackBarMarginRight,
     },
   })
 
@@ -35,7 +35,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
     marginLeft: dimensions.snackBarBetweenSpace,
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: dimensions.snackBarButtonTopMarging,
+    marginTop: dimensions.snackBarButtonTopMargin,
     marginRight: dimensions.snackBarConfirmBtnMarginRight,
   }
 
@@ -43,7 +43,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
     marginLeft: dimensions.snackBarBetweenSpace,
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: dimensions.snackBarButtonTopMarging,
+    marginTop: dimensions.snackBarButtonTopMargin,
   }
 
   const mainContainerProps: BoxProps = {
@@ -64,7 +64,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const messageContainerProps: BoxProps = {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    mt: dimensions.snackBarButtonTopMarging,
+    mt: dimensions.snackBarButtonTopMargin,
     alignItems: 'center',
   }
 
@@ -86,7 +86,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
       <Box {...mainContainerProps}>
         <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
           <Box {...messageContainerProps}>
-            <Box mr={dimensions.snackBarBetweenSpace} alignSelf="flex-start" mt={dimensions.snackBarIconTopMarging}>
+            <Box mr={dimensions.snackBarBetweenSpace} alignSelf="flex-start" mt={dimensions.snackBarIconTopMargin}>
               <VAIcon
                 name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'}
                 fill={colors.white}
