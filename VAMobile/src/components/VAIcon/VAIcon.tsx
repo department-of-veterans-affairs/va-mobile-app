@@ -66,6 +66,7 @@ import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import FolderSolid from './svgs/folder-solid.svg'
+import InboxSolid from './svgs/inbox-solid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import PaperClip from './svgs/paperClip.svg'
@@ -129,6 +130,7 @@ export const VA_ICON_MAP = {
   PhoneSolid,
   ExclamationTriangleSolid,
   TrashSolid,
+  InboxSolid,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
