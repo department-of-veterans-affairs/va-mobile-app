@@ -783,6 +783,7 @@ const refreshFoldersAfterMove = (
   }
 
   dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
+  dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true))
   dispatch(dispatchFinishMoveMessage(false))
 
   const message = getSnackBarMessage(newFolderID, folders, isUndo, false)
