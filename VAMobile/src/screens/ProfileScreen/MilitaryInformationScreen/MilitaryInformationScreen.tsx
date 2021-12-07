@@ -9,9 +9,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
-import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 import ProfileBanner from '../ProfileBanner'
@@ -22,14 +21,13 @@ const MilitaryInformationScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const { serviceHistory, loading, needsDataLoad } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
 
   useEffect(() => {
-    if (needsDataLoad && militaryInfoAuthorization && !isInDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory, downtimeWindowsByFeature)) {
+    if (needsDataLoad && militaryInfoAuthorization && !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad, militaryInfoAuthorization, downtimeWindowsByFeature])
+  }, [dispatch, needsDataLoad, militaryInfoAuthorization])
 
   const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const branch = t('personalInformation.branch', { branch: service.branchOfService })

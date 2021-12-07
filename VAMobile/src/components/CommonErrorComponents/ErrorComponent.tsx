@@ -4,9 +4,8 @@ import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'component
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, StoreState } from 'store'
-import { isInDowntime } from 'utils/errors'
+import { useDowntime, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'utils/hooks'
 
 export type ErrorComponentProps = {
   /**The screen id for the screen that has the errors*/
@@ -17,14 +16,14 @@ export type ErrorComponentProps = {
 
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
-  const { errorsByScreenID, downtimeWindowsByFeature, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
   const t = useTranslation()
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
 
-    if (isInDowntime(DowntimeScreenIDToFeature[screenID], downtimeWindowsByFeature)) {
+    if (useDowntime(DowntimeScreenIDToFeature[screenID])) {
       return <DowntimeError screenID={screenID} />
     }
     // check which specific error occurred and return the corresponding error element

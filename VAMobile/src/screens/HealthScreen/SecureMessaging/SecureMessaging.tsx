@@ -11,9 +11,8 @@ import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingT
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from '../CernerAlert'
 import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
 import Folders from './Folders/Folders'
@@ -36,7 +35,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
   const { secureMessagingTab, termsAndConditionError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { secureMessaging } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
@@ -45,7 +43,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
   useEffect(() => {
-    if (secureMessaging && !isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, downtimeWindowsByFeature)) {
+    if (secureMessaging && !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)) {
       dispatch(resetSaveDraftComplete())
       dispatch(resetSaveDraftFailed())
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
@@ -58,7 +56,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
-  }, [dispatch, secureMessaging, navigation, secureMessagingTab, downtimeWindowsByFeature])
+  }, [dispatch, secureMessaging, navigation, secureMessagingTab])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />

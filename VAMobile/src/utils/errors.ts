@@ -46,11 +46,3 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_WITH_REFRESH
   }
 }
-
-export const isInDowntime = (feature: DowntimeFeatureType, downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
-  const mw = downtimeWindows[feature]
-  if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
-    return true
-  }
-  return false
-}

@@ -9,9 +9,8 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceType
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from './ProfileStackScreens'
 import { getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/actions'
-import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
+import { useDowntime, useError, useHeaderStyles, useTranslation } from 'utils/hooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 
@@ -57,24 +56,24 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate && isInDowntime(DowntimeFeatureTypeConstants.userProfileUpdate, downtimeWindowsByFeature)) {
+    if (personalInformationNeedsUpdate && useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate, downtimeWindowsByFeature])
+  }, [dispatch, personalInformationNeedsUpdate])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization && isInDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory, downtimeWindowsByFeature)) {
+    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization && useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, downtimeWindowsByFeature])
+  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (disabilityRatingNeedsUpdate && isInDowntime(DowntimeFeatureTypeConstants.disabilityRating, downtimeWindowsByFeature)) {
+    if (disabilityRatingNeedsUpdate && useDowntime(DowntimeFeatureTypeConstants.disabilityRating)) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, disabilityRatingNeedsUpdate, downtimeWindowsByFeature])
+  }, [dispatch, disabilityRatingNeedsUpdate])
 
   const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
 

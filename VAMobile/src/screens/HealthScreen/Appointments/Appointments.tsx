@@ -11,9 +11,8 @@ import { AppointmentsState, AuthorizedServicesState, ErrorsState, StoreState } f
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
@@ -66,10 +65,10 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     }
 
     // fetch upcoming and default past appointments ranges
-    if (!isInDowntime(DowntimeFeatureTypeConstants.appointments, downtimeWindowsByFeature)) {
+    if (!useDowntime(DowntimeFeatureTypeConstants.appointments)) {
       dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
     }
-  }, [dispatch, downtimeWindowsByFeature])
+  }, [dispatch])
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />

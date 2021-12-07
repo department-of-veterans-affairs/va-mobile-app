@@ -15,10 +15,9 @@ import { ProfileStackParamList } from '../ProfileStackScreens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
-import { isInDowntime } from 'utils/errors'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 import _ from 'underscore'
@@ -123,10 +122,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      if (needsDataLoad && !isInDowntime(DowntimeFeatureTypeConstants.userProfileUpdate, downtimeWindowsByFeature)) {
+      if (needsDataLoad && !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)) {
         dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
-    }, [dispatch, needsDataLoad, downtimeWindowsByFeature]),
+    }, [dispatch, needsDataLoad]),
   )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/

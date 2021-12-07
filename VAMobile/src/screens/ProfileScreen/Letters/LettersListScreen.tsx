@@ -9,10 +9,9 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { OnPressHandler, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { OnPressHandler, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getLetters } from 'store/actions/letters'
-import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
 import NoLettersScreen from './NoLettersScreen'
 
@@ -22,7 +21,6 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   const dispatch = useDispatch()
   const { lettersAndDocuments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { letters, loading } = useSelector<StoreState, LettersState>((state) => state.letters)
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.PROFILE)
@@ -102,10 +100,10 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   })
 
   useEffect(() => {
-    if (lettersAndDocuments && !isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, downtimeWindowsByFeature)) {
+    if (lettersAndDocuments && !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)) {
       dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
     }
-  }, [dispatch, lettersAndDocuments, downtimeWindowsByFeature])
+  }, [dispatch, lettersAndDocuments])
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />

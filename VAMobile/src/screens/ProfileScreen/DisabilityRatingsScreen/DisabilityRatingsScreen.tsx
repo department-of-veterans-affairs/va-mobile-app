@@ -25,9 +25,8 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
-import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import ProfileBanner from '../ProfileBanner'
 import getEnv from 'utils/env'
@@ -39,7 +38,6 @@ const DisabilityRatingsScreen: FC = () => {
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
@@ -47,10 +45,10 @@ const DisabilityRatingsScreen: FC = () => {
 
   useEffect(() => {
     // Get the disability rating data if not loaded already
-    if (needsDataLoad && !isInDowntime(DowntimeFeatureTypeConstants.disabilityRating, downtimeWindowsByFeature)) {
+    if (needsDataLoad && !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad, downtimeWindowsByFeature])
+  }, [dispatch, needsDataLoad])
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating

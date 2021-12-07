@@ -9,10 +9,9 @@ import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getInbox } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
-import { isInDowntime } from 'utils/errors'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from './CernerAlert'
 import getEnv from 'utils/env'
 
@@ -26,7 +25,6 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
 
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
 
@@ -37,11 +35,11 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
 
   useEffect(() => {
-    if (!isInDowntime(DowntimeFeatureTypeConstants.secureMessaging, downtimeWindowsByFeature)) {
+    if (!useDowntime(DowntimeFeatureTypeConstants.secureMessaging)) {
       // fetch inbox metadata to display unread messages count tag
       dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
-  }, [dispatch, downtimeWindowsByFeature])
+  }, [dispatch])
 
   useEffect(() => {
     navigation.setOptions({
