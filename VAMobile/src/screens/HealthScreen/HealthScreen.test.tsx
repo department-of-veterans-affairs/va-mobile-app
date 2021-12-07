@@ -4,19 +4,18 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, mockStore, renderWithProviders, findByOnPressFunction, findByTypeWithText } from 'testUtils'
 import { HealthScreen } from '../index'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
-import Inbox from './SecureMessaging/Inbox/Inbox'
-import { LoadingComponent, TextView, MessagesCountTag } from 'components'
+import { LoadingComponent, TextView, MessagesCountTag, LargeNavButton } from 'components'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigateToCrisisLineSpy = jest.fn()
 const mockNavigateToAppointmentSpy = jest.fn()
 const mockNavigateToSecureMessagingSpy = jest.fn()
 const mockNavigateToVAVaccinesSpy = jest.fn()
-const mockNavigateToCovidUpdateSpy = jest.fn()
+const navigateSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
@@ -26,12 +25,11 @@ jest.mock('utils/hooks', () => {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
-          .mockReturnValueOnce(mockNavigateToCrisisLineSpy)
-          .mockReturnValueOnce(mockNavigateToAppointmentSpy)
-          .mockReturnValueOnce(mockNavigateToSecureMessagingSpy)
-          .mockReturnValueOnce(mockNavigateToVAVaccinesSpy)
-          .mockReturnValueOnce(mockNavigateToCovidUpdateSpy)
-          .mockReturnValue(() => {})
+        .mockReturnValueOnce(mockNavigateToCrisisLineSpy)
+        .mockReturnValueOnce(mockNavigateToAppointmentSpy)
+        .mockReturnValueOnce(mockNavigateToSecureMessagingSpy)
+        .mockReturnValueOnce(mockNavigateToVAVaccinesSpy)
+        .mockReturnValue(() => { })
     },
     useTheme: jest.fn(() => {
       return { ...theme }
@@ -47,7 +45,12 @@ context('HealthScreen', () => {
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
   const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true) => {
-    props = mockNavProps()
+    props = mockNavProps(
+      undefined,
+      {
+        navigate: navigateSpy,
+      }
+    )
 
     store = mockStore({
       auth: { ...initialAuthState },
@@ -113,19 +116,6 @@ context('HealthScreen', () => {
       testInstance.findAllByType(Pressable)[2].props.onPress()
       expect(mockNavigateToSpy).toHaveBeenNthCalledWith(4, 'VaccineList')
       expect(mockNavigateToVAVaccinesSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe('on click of the covid-19 updates button', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[3].props.onPress()
-      const expectNavArgs =
-          {
-            url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-            displayTitle: 'va.gov'
-          }
-      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(5, 'Webview', expectNavArgs)
-      expect(mockNavigateToCovidUpdateSpy).toHaveBeenCalled()
     })
   })
 
