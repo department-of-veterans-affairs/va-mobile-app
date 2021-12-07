@@ -274,6 +274,8 @@ jobs:
     executor: default
     steps:
       - checkout
+      - create_keys_directory
+      - decode_android_keys
       - android_fastlane:
           lane: "release"
       - ios_fastlane:

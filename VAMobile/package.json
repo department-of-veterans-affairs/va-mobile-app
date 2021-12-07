@@ -74,6 +74,7 @@
     "react-native-screens": "^3.8.0",
     "react-native-svg": "^12.1.0",
     "react-native-svg-transformer": "^0.14.3",
+    "react-native-toast-notifications": "^3.2.3",
     "react-native-webview": "^11.2.5",
     "react-navigation": "^4.4.4",
     "react-redux": "^7.2.2",
