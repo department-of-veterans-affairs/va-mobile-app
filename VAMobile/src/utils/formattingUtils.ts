@@ -120,6 +120,18 @@ export const formatDateMMMMDDYYYY = (date: string): string => {
 }
 
 /**
+ * Returns the substring of all entries before the provided character
+ *
+ * @param originalStr - string to be formatted
+ * @param stopChar - character to stop at
+ *
+ * @returns string of all characters before the provided character
+ */
+export const getSubstringBeforeChar = (originalStr: string, stopChar: string): string => {
+  return originalStr.substring(0, originalStr.indexOf(stopChar))
+}
+
+/**
  * Returns the word formatted so that the first letter is upper case and the rest is lowercase
  *
  * @param word - word to capitalize
