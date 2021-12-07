@@ -222,12 +222,12 @@ export type VATheme = {
     errorLabelBottomMargin: number
     selectorWidth: number
     selectorHeight: number
-    snackBarWidth: number | string
     snackBarPadding: number
+    snackBarMargingBottom: number
+    snackBarMargingRight: number
+    snackBarMargingLeft: number
     snackBarVerticalMarging: number
     snackBarBorderRadius: number
-    snackBarButtonHeight: number
-    snackBarBtuttonWidth: number
     snackBarBetweenSpace: number
     snackBarShadowX: number
     snackBarShadowY: number
@@ -235,6 +235,8 @@ export type VATheme = {
     snackBarIconSize: number
     snackBarBottomOffset: number
     snackBarBottomOffsetWithNav: number
+    snackBarButtonTopMarging: number
+    snackBarConfirmBtnMarginRight: number
   }
   fontFace: {
     regular: string
