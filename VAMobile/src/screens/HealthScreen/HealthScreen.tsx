@@ -7,7 +7,7 @@ import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { getInbox } from 'store'
+import { getInbox, logCOVIDClickAnalytics } from 'store/actions'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,7 +33,10 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
-  const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  const onCoronaVirusFAQ = () => {
+    dispatch(logCOVIDClickAnalytics('health_screen'))
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  }
 
   useEffect(() => {
     // fetch inbox metadata to display unread messages count tag

@@ -2,11 +2,12 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
+import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import SecureMessaging from '../HealthScreen/SecureMessaging'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 
-export type HomeStackParamList = {
+export type HomeStackParamList = WebviewStackParams & {
   Home: undefined
   ContactVA: undefined
   Claims: undefined
