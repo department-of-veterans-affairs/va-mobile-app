@@ -33,7 +33,7 @@ context('VaccineDetailsScreen', () => {
               doseSeries: 1,
               groupName: "COVID-19",
               reaction: "Fever",
-              manufacturer: null,
+              manufacturer: 'Janssen',
               note: "Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.",
               shortDescription: "COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose"
             }
@@ -113,6 +113,7 @@ context('VaccineDetailsScreen', () => {
       expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Fever')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Janssen')).toBeTruthy()
     })
 
     it('should show show location data', async () => {
