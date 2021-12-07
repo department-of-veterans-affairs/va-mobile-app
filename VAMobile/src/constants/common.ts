@@ -33,3 +33,11 @@ export const MockUsersEmail: {
 }
 
 export const COVID19 = 'COVID-19'
+
+export const SnackBarConstants: {
+  animationDuration: number
+  duration: number
+} = {
+  animationDuration: 100,
+  duration: 900000,
+}
