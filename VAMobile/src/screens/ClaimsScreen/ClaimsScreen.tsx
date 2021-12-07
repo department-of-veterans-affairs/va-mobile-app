@@ -43,7 +43,8 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
   useEffect(() => {
-    if (claimsAndAppealsAccess && claimsNotInDowntime && appealsNotInDowntime) {
+    // only block api call if claims and appeals are both down
+    if (claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime)) {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
   }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
