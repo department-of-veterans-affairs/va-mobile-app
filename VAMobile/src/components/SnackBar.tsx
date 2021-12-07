@@ -63,8 +63,6 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const messageContainerProps: BoxProps = {
     flexDirection: 'row',
-
-    mr: dimensions.snackBarBetweenSpace,
     flexWrap: 'wrap',
     mt: dimensions.snackBarButtonTopMarging,
     alignItems: 'center',
