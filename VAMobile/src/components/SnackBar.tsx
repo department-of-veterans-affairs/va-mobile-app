@@ -63,11 +63,11 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const messageContainerProps: BoxProps = {
     flexDirection: 'row',
-    alignItems: 'center',
     flexGrow: 1,
     mr: dimensions.snackBarBetweenSpace,
     flexWrap: 'wrap',
     mt: dimensions.snackBarButtonTopMarging,
+    alignItems: 'center',
   }
 
   const btnContainerProps: BoxProps = {
@@ -88,7 +88,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
       <Box {...mainContainerProps}>
         <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
           <Box {...messageContainerProps}>
-            <Box mr={dimensions.snackBarBetweenSpace}>
+            <Box mr={dimensions.snackBarBetweenSpace} alignSelf="flex-start">
               <VAIcon
                 name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'}
                 fill={colors.white}
