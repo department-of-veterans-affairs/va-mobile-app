@@ -32,6 +32,8 @@ export const MockUsersEmail: {
   user_366: 'vets.gov.user+366@gmail.com',
 }
 
+export const COVID19 = 'COVID-19'
+
 export const SnackBarConstants: {
   animationDuration: number
   duration: number
