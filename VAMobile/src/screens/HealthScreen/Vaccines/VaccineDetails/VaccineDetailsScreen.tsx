@@ -59,6 +59,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const optionalFields = [hasSeries, vaccine.attributes?.note, location?.attributes, vaccine.attributes?.reaction]
   const isPartialData = !every(optionalFields)
 
+  // Only show the manufacturer label if the vaccine is COVID-19, any other type should not be displayed
   const isCovidVaccine = vaccine.attributes?.groupName?.toUpperCase()?.includes(COVID19)
 
   return (
