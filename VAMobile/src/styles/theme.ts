@@ -237,6 +237,7 @@ export type VATheme = {
     snackBarBottomOffsetWithNav: number
     snackBarButtonTopMarging: number
     snackBarConfirmBtnMarginRight: number
+    snackBarIconTopMarging: number
   }
   fontFace: {
     regular: string
