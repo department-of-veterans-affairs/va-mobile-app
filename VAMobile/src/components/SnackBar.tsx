@@ -3,6 +3,7 @@ import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
+import styled from 'styled-components'
 
 import { Box } from 'components'
 import { BoxProps } from './Box'
@@ -10,7 +11,6 @@ import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
 import colors from '../styles/themes/VAColors'
-import styled from 'styled-components'
 
 /**
  * Common snackbar component. This component is wrapped by the react-native-toast-notification library.
