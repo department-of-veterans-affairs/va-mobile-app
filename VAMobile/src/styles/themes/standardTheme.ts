@@ -266,19 +266,22 @@ const theme: VATheme = {
     errorLabelBottomMargin: 3,
     selectorWidth: 22,
     selectorHeight: 22,
-    snackBarWidth: '90%',
-    snackBarPadding: 12,
-    snackBarVerticalMarging: 10,
+    snackBarPadding: 15,
+    snackBarMarginBottom: 0,
+    snackBarMarginLeft: 10,
+    snackBarMarginRight: 10,
+    snackBarButtonTopMargin: 5,
+    snackBarConfirmBtnMarginRight: 15,
+    snackBarVerticalMargin: 10,
     snackBarBorderRadius: 4,
-    snackBarButtonHeight: 41,
-    snackBarBtuttonWidth: 70,
     snackBarBetweenSpace: 8,
     snackBarShadowX: 0,
     snackBarShadowY: 4,
     snackBarShadowOpacity: 0.6,
+    snackBarIconTopMargin: 2,
     snackBarIconSize: 18,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
-    snackBarBottomOffsetWithNav: isIOS() ? 96 : 66, // this is done due to in android the spacing is higher for the offset
+    snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
   },
 
   fontFace: {
