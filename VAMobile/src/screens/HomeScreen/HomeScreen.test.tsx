@@ -64,7 +64,6 @@ context('HomeScreen', () => {
         url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
         displayTitle: 'va.gov'
       }
-      // expect(mockNavigateToSpy).toHaveBeenNthCalledWith(4, 'Webview', expectNavArgs)
       expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
