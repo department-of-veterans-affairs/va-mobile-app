@@ -9,15 +9,15 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 import _ from 'underscore'
@@ -116,15 +116,16 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const { profile, loading, needsDataLoad } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginTop, contentMarginBottom, gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const navigateTo = useRouteNavigation()
 
   useFocusEffect(
     React.useCallback(() => {
-      if (needsDataLoad) {
+      if (needsDataLoad && profileNotInDowntime) {
         dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
-    }, [dispatch, needsDataLoad]),
+    }, [dispatch, needsDataLoad, profileNotInDowntime]),
   )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
