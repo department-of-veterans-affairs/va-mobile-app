@@ -236,7 +236,7 @@ context('ComposeMessage', () => {
   })
 
   describe('when the subject is general', () => {
-    it('should add the text (*Required) for the subject line field', async () => {
+    it('should add the text (Required) for the subject line field', async () => {
       runAfterTransition(() => {
         act(() => {
           testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
@@ -245,7 +245,7 @@ context('ComposeMessage', () => {
         const textViews = testInstance.findAllByType(TextView)
         expect(textViews[29].props.children).toEqual('Subject Line')
         expect(textViews[30].props.children).toEqual(' ')
-        expect(textViews[31].props.children).toEqual('(*Required)')
+        expect(textViews[31].props.children).toEqual('(Required)')
       })
     })
   })

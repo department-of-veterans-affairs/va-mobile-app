@@ -198,11 +198,11 @@ context('ReplyMessage', () => {
     })
   })
 
-  it('should add the text (*Required) for the message body text field', async () => {
+  it('should add the text (Required) for the message body text field', async () => {
     runAfterTransition(() => {
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews[12].props.children).toEqual('Message')
-      expect(textViews[14].props.children).toEqual('(*Required)')
+      expect(textViews[14].props.children).toEqual('(Required)')
     })
   })
 

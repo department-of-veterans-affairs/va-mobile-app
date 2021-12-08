@@ -103,9 +103,9 @@ context('VATextInput', () => {
   })
 
   describe('when isRequiredField is true', () => {
-    it('should display (*Required)', async () => {
+    it('should display (Required)', async () => {
       initializeTestInstance('email', '', '', '', true)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('(*Required)')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('(Required)')
     })
   })
 
