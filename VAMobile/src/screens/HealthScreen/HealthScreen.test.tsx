@@ -4,18 +4,20 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, mockStore, renderWithProviders, findByOnPressFunction, findByTypeWithText } from 'testUtils'
+import { context, findByOnPressFunction, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import { HealthScreen } from '../index'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
-import { LoadingComponent, TextView, MessagesCountTag, LargeNavButton } from 'components'
+import { TextView, MessagesCountTag, LargeNavButton } from 'components'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigateToCrisisLineSpy = jest.fn()
 const mockNavigateToAppointmentSpy = jest.fn()
 const mockNavigateToSecureMessagingSpy = jest.fn()
 const mockNavigateToVAVaccinesSpy = jest.fn()
-const navigateSpy = jest.fn()
+const mockNavigationSpy = jest.fn(() => {
+  return jest.fn()
+})
 
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
@@ -48,7 +50,7 @@ context('HealthScreen', () => {
     props = mockNavProps(
       undefined,
       {
-        navigate: navigateSpy,
+        navigation: mockNavigationSpy
       }
     )
 
@@ -119,10 +121,15 @@ context('HealthScreen', () => {
     })
   })
 
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(undefined, false)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+  describe('on click of the covid-19 updates button', () => {
+    it('should call useRouteNavigation', async () => {
+      findByOnPressFunction(testInstance, LargeNavButton, 'OnCoronaVirusFAQ')
+      const expectNavArgs =
+      {
+        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
+        displayTitle: 'va.gov'
+      }
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
