@@ -47,7 +47,7 @@ context('HealthScreen', () => {
   const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true) => {
     props = mockNavProps(
       undefined,
-        { setOptions: jest.fn(), navigate: mockNavigationSpy }
+      { setOptions: jest.fn(), navigate: mockNavigationSpy }
     )
 
     store = mockStore({
@@ -118,14 +118,14 @@ context('HealthScreen', () => {
   })
 
   describe('on click of the covid-19 updates button', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
       testInstance.findAllByType(Pressable)[3].props.onPress()
       const expectNavArgs =
       {
         url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
         displayTitle: 'va.gov'
       }
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
 
