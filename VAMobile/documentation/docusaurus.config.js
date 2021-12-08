@@ -6,9 +6,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'VA: Health and Benefits App Documentation',
+  title: 'VA: Health and Benefits app documentation',
   tagline: 'All the documentation for the VA mobile app',
-  url: 'https://department-of-veterans-affairs.github.io/va-mobile-app/',
+  url: 'https://didactic-lamp-12152085.pages.github.io/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -62,7 +62,7 @@ const config = {
       navbar: {
         title: 'VA Mobile Docs',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'VA Mobile logo',
           src: 'img/va-logo.png',
         },
         items: [

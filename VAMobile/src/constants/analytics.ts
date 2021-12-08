@@ -141,6 +141,14 @@ export const Events = {
       name: 'vama_claim_upload_fail',
     }
   },
+  vama_vaccine_details: (groupName: string): Event => {
+    return {
+      name: 'vama_vaccine_details',
+      params: {
+        groupName,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {
@@ -196,6 +204,18 @@ export const UserAnalytics = {
     return {
       name: 'vama_uses_vcl',
       value: 'true',
+    }
+  },
+  vama_uses_large_text: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_uses_large_text',
+      value: value.toString(),
+    }
+  },
+  vama_uses_screen_reader: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_uses_screen_reader',
+      value: value.toString(),
     }
   },
 }
