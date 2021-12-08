@@ -13,9 +13,10 @@ import React from 'react'
 import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
@@ -34,7 +35,16 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   const { errorsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
     return state.errors
   })
-  return !!errorsByScreenID[currentScreenID]
+  return useDowntime(DowntimeScreenIDToFeature[currentScreenID]) || !!errorsByScreenID[currentScreenID]
+}
+
+export const useDowntime = (feature: DowntimeFeatureType): boolean => {
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
+  const mw = downtimeWindowsByFeature[feature]
+  if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
+    return true
+  }
+  return false
 }
 
 /**
