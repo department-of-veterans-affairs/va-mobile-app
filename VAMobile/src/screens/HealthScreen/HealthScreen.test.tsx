@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, findByOnPressFunction, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
-import { HealthScreen } from '../index'
+import { HealthScreen } from './HealthScreen'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
 import { TextView, MessagesCountTag, LargeNavButton } from 'components'
@@ -15,9 +15,7 @@ const mockNavigateToCrisisLineSpy = jest.fn()
 const mockNavigateToAppointmentSpy = jest.fn()
 const mockNavigateToSecureMessagingSpy = jest.fn()
 const mockNavigateToVAVaccinesSpy = jest.fn()
-const mockNavigationSpy = jest.fn(() => {
-  return jest.fn()
-})
+const mockNavigationSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
@@ -49,9 +47,7 @@ context('HealthScreen', () => {
   const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true) => {
     props = mockNavProps(
       undefined,
-      {
-        navigation: mockNavigationSpy
-      }
+        { setOptions: jest.fn(), navigate: mockNavigationSpy }
     )
 
     store = mockStore({
@@ -123,7 +119,7 @@ context('HealthScreen', () => {
 
   describe('on click of the covid-19 updates button', () => {
     it('should call useRouteNavigation', async () => {
-      findByOnPressFunction(testInstance, LargeNavButton, 'OnCoronaVirusFAQ')
+      testInstance.findAllByType(Pressable)[3].props.onPress()
       const expectNavArgs =
       {
         url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
@@ -135,14 +131,14 @@ context('HealthScreen', () => {
 
   it('should render messagesCountTag with the correct count number', async () => {
     expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
-    expect(testInstance.findAllByType(TextView)[8].props.children).toBe(13)
+    expect(testInstance.findAllByType(TextView)[7].props.children).toBe(13)
   })
 
   describe('when there are zero unread inbox messages', () => {
     it('should not render a messagesCountTag', async () => {
       initializeTestInstance(0)
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Messages')
-      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Send and receive secure messages')
+      expect(testInstance.findAllByType(TextView)[6].props.children).toBe('Messages')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Send and receive secure messages')
     })
   })
 })

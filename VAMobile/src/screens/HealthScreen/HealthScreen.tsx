@@ -19,7 +19,7 @@ const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
-const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
+export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
