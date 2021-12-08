@@ -1,8 +1,9 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
+import { CommonErrorTypes } from 'constants/errors'
 import { DateTime } from 'luxon'
 import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, MaintenanceWindowsGetData, ScreenIDTypes } from '../api/types'
+import { DowntimeWindow, DowntimeWindowsByFeatureType } from 'store'
 
 export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: ScreenIDTypes): ReduxAction => {
   return {
@@ -35,49 +36,12 @@ export const dispatchSetTryAgainFunction = (tryAgain: () => Promise<void>): Redu
 /**
  * Sets the error metadata for a given screen ID. Currently only utilized for downtime messages
  * @param metadata - Any key value pair of data
- * @param screenID - ID of the screen with the error
  */
-export const dispatchSetMetadata = (metadata?: { [key: string]: string }, screenID?: ScreenIDTypes): ReduxAction => {
+export const dispatchSetDowntime = (downtimeWindows: DowntimeWindowsByFeatureType): ReduxAction => {
   return {
-    type: 'ERRORS_SET_METADATA',
+    type: 'ERRORS_SET_DOWNTIME',
     payload: {
-      metadata,
-      screenID,
-    },
-  }
-}
-
-/**
- * Clears the error metadata for a given screen ID
- * @param screenID - screen ID of the screen to clear
- */
-export const dispatchClearMetadata = (screenID?: ScreenIDTypes): ReduxAction => {
-  return {
-    type: 'ERRORS_CLEAR_METADATA',
-    payload: {
-      screenID,
-    },
-  }
-}
-
-/**
- * Clears the error metadata for all screen IDs
- */
-export const dispatchClearAllMetadata = (): ReduxAction => {
-  return {
-    type: 'ERRORS_CLEAR_ALL_METADATA',
-    payload: null,
-  }
-}
-
-/**
- * Clears the error type for all screen IDs
- */
-export const dispatchClearErrorType = (errorType: CommonErrorTypes): ReduxAction => {
-  return {
-    type: 'ERRORS_CLEAR_ERROR_TYPE',
-    payload: {
-      errorType,
+      downtimeWindows,
     },
   }
 }
@@ -86,30 +50,28 @@ export const dispatchClearErrorType = (errorType: CommonErrorTypes): ReduxAction
  * checks for downtime by getting a list from the backend API
  * clears all metadata and current downtimes first and sets errors based on which downtime is active from API call
  */
-export const dispatchCheckForDowntimeErrors = (): AsyncReduxAction => {
+export const checkForDowntimeErrors = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     const response = await api.get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
     if (!response) {
       return
     }
-    dispatch(dispatchClearAllMetadata())
-    dispatch(dispatchClearErrorType(CommonErrorTypesConstants.DOWNTIME_ERROR))
-    // filtering out any maintenance windows that haven't started yet and ones we haven't mapped to a screen in the app
-    const maintWindows = response.data.filter((w) => DateTime.fromISO(w.attributes.startTime) <= DateTime.now() && !!DowntimeFeatureToScreenID[w.attributes.service])
+
+    // filtering out any maintenance windows we haven't mapped to a screen in the app
+    const maintWindows = response.data.filter((w) => !!DowntimeFeatureToScreenID[w.attributes.service])
+    let downtimeWindows = {} as DowntimeWindowsByFeatureType
     for (const m of maintWindows) {
       const maintWindow = m.attributes
-      const screenID = DowntimeFeatureToScreenID[maintWindow.service]
-      if (!screenID) {
-        continue
+      const metadata: DowntimeWindow = {
+        featureName: DowntimeFeatureNameConstants[maintWindow.service],
+        startTime: DateTime.fromISO(maintWindow.startTime),
+        endTime: DateTime.fromISO(maintWindow.endTime),
       }
-      const metadata = {
-        featureName: '',
-        endTime: '',
+      downtimeWindows = {
+        ...downtimeWindows,
+        [maintWindow.service]: metadata,
       }
-      metadata.featureName = DowntimeFeatureNameConstants[maintWindow.service]
-      metadata.endTime = DateTime.fromISO(maintWindow.endTime).toFormat('fff')
-      dispatch(dispatchSetMetadata(metadata, screenID))
-      dispatch(dispatchSetError(CommonErrorTypesConstants.DOWNTIME_ERROR, screenID))
     }
+    dispatch(dispatchSetDowntime(downtimeWindows))
   }
 }

@@ -4,9 +4,9 @@ import { DateTime, Settings } from 'luxon'
 
 import { context, realStore } from 'testUtils'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { dispatchClearErrors, dispatchSetError, dispatchCheckForDowntimeErrors } from './errors'
+import { dispatchClearErrors, dispatchSetError, checkForDowntimeErrors } from './errors'
 import { initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
-import { ScreenIDTypesConstants, MaintenanceWindowsGetData } from '../api/types'
+import { ScreenIDTypesConstants, MaintenanceWindowsGetData, DowntimeFeatureTypeConstants } from '../api/types'
 import * as api from '../api'
 
 context('errors', () => {
@@ -90,38 +90,30 @@ context('errors', () => {
         .mockResolvedValue(mockMaintenanceWindows)
 
       const store = realStore()
-      await store.dispatch(dispatchCheckForDowntimeErrors())
+      await store.dispatch(checkForDowntimeErrors())
       return store
     }
 
-    it('should call expected store functions', async () => {
+    it('should call setDowntime function', async () => {
       const store = await initializeMaintenanceWindows()
       const actions = store.getActions()
 
-      const clearMetadata = find(actions, { type: 'ERRORS_CLEAR_ALL_METADATA' })
-      expect(clearMetadata).toBeTruthy()
-      const clearErrors = find(actions, { type: 'ERRORS_CLEAR_ERROR_TYPE' })
-      expect(clearErrors).toBeTruthy()
-      const setErrors = find(actions, { type: 'ERRORS_SET_ERROR' })
-      expect(setErrors).toBeTruthy()
-      const setMetadata = find(actions, { type: 'ERRORS_SET_METADATA' })
+      const setMetadata = find(actions, { type: 'ERRORS_SET_DOWNTIME' })
       expect(setMetadata).toBeTruthy()
     })
 
     it('should mark downtime for active maintenance windows', async () => {
       const store = await initializeMaintenanceWindows()
 
-      expect(store.getState().errors.errorsByScreenID).toMatchObject({
-        [ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID]: CommonErrorTypesConstants.DOWNTIME_ERROR,
-        [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID]: CommonErrorTypesConstants.DOWNTIME_ERROR,
-      })
+      expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(DowntimeFeatureTypeConstants.directDepositBenefits)
+      expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(DowntimeFeatureTypeConstants.militaryServiceHistory)
     })
 
     it('should not mark downtime for future maintenance windows', async () => {
       const store = await initializeMaintenanceWindows()
 
       expect(store.getState().errors.errorsByScreenID).toMatchObject({
-        [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID]: undefined,
+        [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID]: undefined
       })
     })
   })
