@@ -51,6 +51,7 @@ export type VATextColors = {
   inputRequired: string
   brandedPrimaryText: string
   segmentControllerActive: string
+  segmentControllerInactive: string
 }
 
 export type VAIconColors = {
@@ -119,6 +120,7 @@ export type VABackgroundColors = {
   navButton: string
   brandedMainBackground: string
   carouselTab: string
+  contentBox: string
 }
 
 export type VABorderColors = {

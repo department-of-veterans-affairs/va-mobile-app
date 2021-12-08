@@ -36,10 +36,6 @@ const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
   border-radius: 8px;
   padding-vertical: 7px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
-  shadow-opacity: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 0.4 : 0))};
-  shadow-radius: 1px;
-  shadow-offset: 0px 2px;
-  shadow-color: ${themeFn<ButtonContainerProps>((theme) => theme.colors.background.shadow)};
   elevation: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 4 : 0))};
   background-color: ${themeFn<ButtonContainerProps>((theme, props) =>
     props.isSelected ? theme.colors.segmentedControl.buttonActive : theme.colors.segmentedControl.buttonInactive,
@@ -83,7 +79,7 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
             <TextView
               variant={selected === index ? 'MobileBodyBold' : 'MobileBody'}
               textAlign="center"
-              color={isSelected ? 'segmentControllerActive' : 'secondary'}
+              color={isSelected ? 'segmentControllerActive' : 'segmentControllerInactive'}
               allowFontScaling={false}>
               {titles[index]}
             </TextView>
