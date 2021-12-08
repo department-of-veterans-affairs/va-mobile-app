@@ -111,14 +111,14 @@ const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, e
 }
 
 export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))
     dispatch(dispatchStartListFolders())
 
     try {
       let folders
-      const currentStateFolders = _getState().secureMessaging?.folders
+      const currentStateFolders = getState().secureMessaging?.folders
 
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
@@ -281,7 +281,7 @@ export const getMessage = (
   /** Set to true if we want to display the inline activity indicator instead of of the one that takes up the whole screen */
   loadingAttachments = false,
 ): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
 
@@ -292,7 +292,7 @@ export const getMessage = (
     }
 
     try {
-      const { messagesById } = _getState().secureMessaging
+      const { messagesById } = getState().secureMessaging
       let response
       // If no message contents, then this messageID was added during fetch folder/inbox message call and does not contain the full info yet
       // Message content of some kind is required on the reply/compose forms.
@@ -502,7 +502,7 @@ export const resetSaveDraftFailed = (): ReduxAction => {
  * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
  */
 export const saveDraft = (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
     dispatch(dispatchStartSaveDraft())
     try {
@@ -514,7 +514,7 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
         response = await api.post<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
       }
-      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
@@ -573,7 +573,7 @@ export const resetSendMessageFailed = (): ReduxAction => {
  * make an API call to get the latest contents anyway.
  */
 export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     let formData: FormData
     let postData
     if (uploads && uploads.length !== 0) {
@@ -623,7 +623,7 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
 
-      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
