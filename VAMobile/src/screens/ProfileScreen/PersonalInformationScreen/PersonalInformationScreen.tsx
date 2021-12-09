@@ -41,7 +41,7 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   }
 
   return [
-    { textLines: dateOfBirthTextIDs, a11yHintText: '' },
+    { textLines: dateOfBirthTextIDs, a11yHintText: '', testId: getA11yLabelText(dateOfBirthTextIDs) },
     { textLines: genderTextIDs, a11yHintText: '' },
   ]
 }
@@ -207,11 +207,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
       <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.buttonTitle')} />
 
-      <Pressable
-        onPress={navigateTo('HowDoIUpdate')}
-        {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}
-        accessibilityRole="link"
-        accessible={true}>
+      <Pressable onPress={navigateTo('HowDoIUpdate')} {...testIdProps(t('personalInformation.howDoIUpdatePersonalInfo'))} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
       </Pressable>
 
