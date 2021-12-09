@@ -265,6 +265,12 @@ export function showSnackBar(
   })
 }
 
+/**
+ * Returns a string of the textlines concatenated
+ *
+ * @param itemTexts - array of textline to concatenate
+ */
+
 export const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
   return _.map(itemTexts, 'text').join(' ')
 }
