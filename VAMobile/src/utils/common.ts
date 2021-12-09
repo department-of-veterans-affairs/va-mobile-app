@@ -1,11 +1,10 @@
-import { Dimensions, TextInput } from 'react-native'
-import { RefObject } from 'react'
-import { contains, isEmpty } from 'underscore'
-
+import { Action } from 'redux'
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
+import { Dimensions, TextInput } from 'react-native'
+import { RefObject } from 'react'
+import { contains, isEmpty, map } from 'underscore'
 
-import { Action } from 'redux'
 import { ErrorObject } from 'store/api'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { PhoneData } from 'store/api/types/PhoneData'
@@ -264,4 +263,14 @@ export function showSnackBar(
       isError,
     },
   })
+}
+
+/**
+ * Returns a string of the textlines concatenated
+ *
+ * @param itemTexts - array of textline to concatenate
+ */
+
+export const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
+  return map(itemTexts, 'text').join(' ')
 }
