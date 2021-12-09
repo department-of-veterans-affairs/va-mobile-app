@@ -150,10 +150,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     }
 
     if (serviceConnectedPercentage) {
+      const percentText = t('letters.benefitService.combinedServiceConnectingRating', {
+        rating: serviceConnectedPercentage,
+      })
       toggleListItems.push({
-        text: t('letters.benefitService.combinedServiceConnectingRating', {
-          rating: serviceConnectedPercentage,
-        }),
+        text: percentText,
+        testId: percentText,
         onPress: (): void => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
