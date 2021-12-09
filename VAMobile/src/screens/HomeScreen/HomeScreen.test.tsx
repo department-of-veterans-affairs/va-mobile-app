@@ -5,12 +5,12 @@ import { DateTime, Settings } from 'luxon'
 import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
-import { TestProviders, context, findByTypeWithSubstring, findByTestID } from 'testUtils'
-import HomeScreen from './index'
+import { TestProviders, context, findByTypeWithSubstring, findByTestID, mockNavProps, renderWithProviders } from 'testUtils'
+import { HomeScreen } from './HomeScreen'
 import { LargeNavButton, TextView } from 'components'
 
 const mockNavigateToSpy = jest.fn()
-const mockNavigateToCovidUpdateSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   const theme = jest.requireActual('styles/themes/standardTheme').default
@@ -19,11 +19,10 @@ jest.mock('utils/hooks', () => {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
-          .mockReturnValueOnce(() => {})
-          .mockReturnValueOnce(() => {})
-          .mockReturnValueOnce(() => {})
-          .mockReturnValueOnce(mockNavigateToCovidUpdateSpy)
-          .mockReturnValue(() => {})
+        .mockReturnValueOnce(() => { })
+        .mockReturnValueOnce(() => { })
+        .mockReturnValueOnce(() => { })
+        .mockReturnValue(() => { })
     },
     useTheme: jest.fn(() => {
       return { ...theme }
@@ -34,13 +33,17 @@ jest.mock('utils/hooks', () => {
 context('HomeScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
+  let props: any
 
   const initializeTestInstance = () => {
-    component = renderer.create(
-      <TestProviders>
-        <HomeScreen />
-      </TestProviders>,
+    props = mockNavProps(
+      undefined,
+      { setOptions: jest.fn(), navigate: mockNavigationSpy }
     )
+
+    act(() => {
+      component = renderWithProviders(<HomeScreen {...props} />)
+    })
 
     testInstance = component.root
   }
@@ -57,12 +60,11 @@ context('HomeScreen', () => {
     it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
       findByTestID(testInstance, 'v-a-covid-19-updates').props.onPress()
       const expectNavArgs =
-        {
-          url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-          displayTitle: 'va.gov'
-        }
-      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(4, 'Webview', expectNavArgs)
-      expect(mockNavigateToCovidUpdateSpy).toHaveBeenCalled()
+      {
+        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
+        displayTitle: 'va.gov'
+      }
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
 
