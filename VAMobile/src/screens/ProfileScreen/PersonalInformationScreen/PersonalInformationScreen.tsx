@@ -13,7 +13,6 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
