@@ -3,7 +3,7 @@ import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
 import { Dimensions, TextInput } from 'react-native'
 import { RefObject } from 'react'
-import _ from 'underscore'
+import { contains, isEmpty, map } from 'underscore'
 
 import { ErrorObject } from 'store/api'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
@@ -133,7 +133,7 @@ const invalidStrings = ['not_found', 'undefined', 'null']
  * @param val - value to sanitize
  */
 export const sanitizeString = (val: string): string => {
-  return !!val && !_.contains(invalidStrings, val.toLowerCase()) ? val : ''
+  return !!val && !contains(invalidStrings, val.toLowerCase()) ? val : ''
 }
 
 /**
@@ -191,7 +191,7 @@ export type ImageMaxWidthAndHeight = {
 export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
   const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
   const { width, height } = image.assets ? image.assets[0] : ({} as Asset)
-  if (image && !_.isEmpty(image)) {
+  if (image && !isEmpty(image)) {
     if (width && width < Dimensions.get('window').width) {
       result.maxWidth = `${width}px`
     }
@@ -272,5 +272,5 @@ export function showSnackBar(
  */
 
 export const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
-  return _.map(itemTexts, 'text').join(' ')
+  return map(itemTexts, 'text').join(' ')
 }
