@@ -1,11 +1,11 @@
-import { TFunction } from 'i18next'
-
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { TFunction } from 'i18next'
 import DocumentPicker from 'react-native-document-picker'
+import _ from 'underscore'
 
-import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import {
   FolderNameTypeConstants,
@@ -13,6 +13,7 @@ import {
   MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES,
   MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES,
   READ,
+  TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
 import { generateTestIDForTextIconList, isErrorObject } from './common'
@@ -314,4 +315,12 @@ export const onAddFileAttachments = (
       }
     },
   )
+}
+
+export const getfolderName = (id: string, folders: SecureMessagingFolderList): string => {
+  const folderName = _.filter(folders, (folder) => {
+    return folder.id === id
+  })[0].attributes.name
+
+  return folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName
 }

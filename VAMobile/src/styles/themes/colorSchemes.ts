@@ -28,6 +28,7 @@ export const lightTheme = {
     brandedMainBackground: colors.grayLightest,
     carouselTab: colors.white,
     contentBox: colors.grayLightest,
+    snackbar: colors.snackBarBlack,
   },
   alertBox: {
     cardBackground: colors.grayLightest,
@@ -92,6 +93,7 @@ export const lightTheme = {
     brandedPrimaryText: colors.grayDark,
     segmentControllerActive: colors.black,
     segmentControllerInactive: colors.secondary,
+    snackBarBtn: colors.darkmodeLightBlue,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -164,6 +166,7 @@ export const darkTheme = {
     brandedMainBackground: colors.grayLightest,
     carouselTab: colors.white,
     contentBox: colors.darkmodeGrayWarmDark,
+    snackbar: colors.snackBarBlack,
   },
   alertBox: {
     cardBackground: colors.darkmodeGrayWarmDark,
@@ -228,6 +231,7 @@ export const darkTheme = {
     brandedPrimaryText: colors.grayDark,
     segmentControllerActive: colors.grayLightest,
     segmentControllerInactive: colors.grayCoolLight,
+    snackBarBtn: colors.darkmodeLightBlue,
   },
   buttonBackground: {
     buttonPrimary: colors.darkmodeLightBlue,

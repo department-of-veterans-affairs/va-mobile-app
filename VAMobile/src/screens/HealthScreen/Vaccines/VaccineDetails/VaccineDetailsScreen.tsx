@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
+import { COVID19 } from 'constants/common'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StoreState, VaccineState } from 'store/reducers'
@@ -58,6 +59,9 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const optionalFields = [hasSeries, vaccine.attributes?.note, location?.attributes, vaccine.attributes?.reaction]
   const isPartialData = !every(optionalFields)
 
+  // Only show the manufacturer label if the vaccine is COVID-19, any other type should not be displayed
+  const isCovidVaccine = vaccine.attributes?.groupName?.toUpperCase()?.includes(COVID19)
+
   return (
     <VAScrollView {...testIdProps('Vaccine-details-page')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
@@ -71,9 +75,17 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
             </TextView>
           </Box>
           <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-            {t('vaccines.details.manufacturer')}
+            {t('vaccines.details.typeAndDosage')}
           </TextView>
           <TextView variant="MobileBody">{vaccine.attributes?.shortDescription || placeHolder}</TextView>
+          {isCovidVaccine && (
+            <>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                {t('vaccines.details.manufacturer')}
+              </TextView>
+              <TextView variant="MobileBody">{vaccine.attributes?.manufacturer || placeHolder}</TextView>
+            </>
+          )}
           <TextView variant="MobileBodyBold" color={'primaryTitle'}>
             {t('vaccines.details.series')}
           </TextView>

@@ -52,6 +52,7 @@ export type VATextColors = {
   brandedPrimaryText: string
   segmentControllerActive: string
   segmentControllerInactive: string
+  snackBarBtn: string
 }
 
 export type VAIconColors = {
@@ -93,6 +94,7 @@ export type VATypographyThemeVariants = {
   ActionBar: string
   VASelector: string
   HelperText: string
+  SnackBarBtnText: string
 }
 
 export type VABackgroundColors = {
@@ -121,6 +123,7 @@ export type VABackgroundColors = {
   brandedMainBackground: string
   carouselTab: string
   contentBox: string
+  snackbar: string
 }
 
 export type VABorderColors = {
@@ -239,6 +242,22 @@ export type VATheme = {
     errorLabelBottomMargin: number
     selectorWidth: number
     selectorHeight: number
+    snackBarPadding: number
+    snackBarMarginBottom: number
+    snackBarMarginRight: number
+    snackBarMarginLeft: number
+    snackBarVerticalMargin: number
+    snackBarBorderRadius: number
+    snackBarBetweenSpace: number
+    snackBarShadowX: number
+    snackBarShadowY: number
+    snackBarShadowOpacity: number
+    snackBarIconSize: number
+    snackBarBottomOffset: number
+    snackBarBottomOffsetWithNav: number
+    snackBarButtonTopMargin: number
+    snackBarConfirmBtnMarginRight: number
+    snackBarIconTopMargin: number
   }
   fontFace: {
     regular: string

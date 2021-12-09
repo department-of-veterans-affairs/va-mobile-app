@@ -39,7 +39,6 @@ platform :ios do
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
     upload_tf(notes, "Development Team")
     upload_deobfuscation_file
-    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New QA build successfully uploaded to TestFlight Group - Development Team"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
@@ -82,7 +81,6 @@ platform :ios do
     notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
     upload_tf(notes, options[:tfGroup])
     upload_deobfuscation_file
-    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     message = "New On Demand build successfully uploaded to TestFlight Group " + options[:tfGroup]
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS")
   end
@@ -183,6 +181,6 @@ platform :ios do
   end
 
   def upload_deobfuscation_file
-    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip", app_id: ENV['FIREBASE_IOS_APP_ID'])
   end
 end

@@ -1,15 +1,11 @@
 import React, { FC } from 'react'
 
-import {
-  CallHelpCenter,
-  // DowntimeError,
-  NetworkConnectionError,
-} from 'components'
+import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, StoreState } from 'store'
-import { ScreenIDTypes } from 'store/api/types'
+import { useDowntime, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'utils/hooks'
 
 export type ErrorComponentProps = {
   /**The screen id for the screen that has the errors*/
@@ -22,10 +18,15 @@ export type ErrorComponentProps = {
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
   const t = useTranslation()
+  const isInDowntime = useDowntime(DowntimeScreenIDToFeature[props.screenID])
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
+
+    if (isInDowntime) {
+      return <DowntimeError screenID={screenID} />
+    }
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {
       case CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR:
@@ -51,8 +52,6 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             callPhone={t('profile:disabilityRating.errorPhoneNumber')}
           />
         )
-      // case CommonErrorTypesConstants.DOWNTIME_ERROR:
-      //   return <DowntimeError screenID={screenID} />
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
         return <CallHelpCenter onTryAgain={tryAgain} titleText={t('common:errors.callHelpCenter.vaAppNotWorking')} callPhone={t('common:8006982411.displayText')} />
       default:
