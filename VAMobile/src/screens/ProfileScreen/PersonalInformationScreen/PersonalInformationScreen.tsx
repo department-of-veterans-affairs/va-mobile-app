@@ -13,7 +13,6 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
@@ -41,7 +40,7 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   }
 
   return [
-    { textLines: dateOfBirthTextIDs, a11yHintText: '' },
+    { textLines: dateOfBirthTextIDs, a11yHintText: '', testId: getA11yLabelText(dateOfBirthTextIDs) },
     { textLines: genderTextIDs, a11yHintText: '' },
   ]
 }
@@ -207,11 +206,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
       <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.buttonTitle')} />
 
-      <Pressable
-        onPress={navigateTo('HowDoIUpdate')}
-        {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}
-        accessibilityRole="link"
-        accessible={true}>
+      <Pressable onPress={navigateTo('HowDoIUpdate')} {...testIdProps(t('personalInformation.howDoIUpdatePersonalInfo'))} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
       </Pressable>
 
