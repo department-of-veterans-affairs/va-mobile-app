@@ -4,8 +4,14 @@ import React, { FC } from 'react'
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
+import styled from 'styled-components'
+
+const StyledSafeAreaView = styled(SafeAreaView)`
+  background-color: ${themeFn((theme) => theme.colors.background.webviewControls)};
+`
 
 /**
  *  Signifies the props that need to be passed in to {@link WebviewControls}
@@ -40,7 +46,7 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
   }
 
   return (
-    <SafeAreaView edges={['bottom']}>
+    <StyledSafeAreaView edges={['bottom']}>
       <Box {...controlsViewProps}>
         <WebviewControlButton icon={'WebviewBack'} onPress={props.onBackPressed} disabled={!props.canGoBack} a11yHint={t('back.a11yHint')} {...testIdProps(t('back'))} />
         <WebviewControlButton
@@ -52,7 +58,7 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
         />
         <WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} a11yHint={t('openInBrowser.a11yHint')} {...testIdProps(t('openInBrowser'))} />
       </Box>
-    </SafeAreaView>
+    </StyledSafeAreaView>
   )
 }
 

@@ -124,6 +124,7 @@ export type VABackgroundColors = {
   carouselTab: string
   contentBox: string
   snackbar: string
+  webviewControls: string
 }
 
 export type VABorderColors = {
