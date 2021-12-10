@@ -150,7 +150,7 @@ export const darkTheme = {
     listActive: colors.base,
     segmentedController: colors.darkmodeGrayWarmDark,
     shadow: colors.grayMedium,
-    profileBanner: colors.primary,
+    profileBanner: colors.darkmodeLightBlue,
     ctaButton: colors.crisisLineRed,
     covid19Vaccinations: colors.primary,
     completedPhase: colors.greenLight,
