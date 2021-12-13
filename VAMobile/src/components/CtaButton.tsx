@@ -38,7 +38,7 @@ const CtaButton: FC = (props) => {
   return (
     <TouchableWithoutFeedback {...wrapperProps} {...touchableProps} {...testIdProps('talk-to-the-veterans-crisis-line-now')} {...a11yHintProp(t('home:component.crisisLine.hint'))}>
       <Box {...boxProps}>
-        <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+        <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin} importantForAccessibility={'no'}>
           {props.children}
         </TextView>
         <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />

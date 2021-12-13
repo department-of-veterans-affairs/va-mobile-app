@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
+import { View } from 'react-native'
 import { buildNumber, versionName } from 'utils/deviceData'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -22,9 +23,11 @@ const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'primary'
 
   return (
     <Box mb={theme.dimensions.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>
-      <TextView variant={textWeight} flexDirection="row" color={textColor}>
-        {t('versionAndBuild', { versionName, buildNumber })}
-      </TextView>
+      <View accessible={true}>
+        <TextView variant={textWeight} flexDirection="row" color={textColor} importantForAccessibility={'no'}>
+          {t('versionAndBuild', { versionName, buildNumber })}
+        </TextView>
+      </View>
     </Box>
   )
 }

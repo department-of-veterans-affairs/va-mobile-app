@@ -93,7 +93,7 @@ const LoginScreen: FC = () => {
             accessibilityHint={t('home:findLocation.a11yHint')}
             accessibilityRole="button">
             <Box {...findLocationProps}>
-              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin} importantForAccessibility={'no'}>
                 {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />

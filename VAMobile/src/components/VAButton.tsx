@@ -127,7 +127,9 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
                 <VAIcon {...iconProps} />
               </Box>
             )}
-            <TextView {...textViewProps}>{label}</TextView>
+            <TextView {...textViewProps} importantForAccessibility={'no'}>
+              {label}
+            </TextView>
           </Box>
         </Box>
       </Pressable>
