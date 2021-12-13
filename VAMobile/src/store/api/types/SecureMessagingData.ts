@@ -234,10 +234,12 @@ export const SecureMessagingSystemFolderIdConstants: {
   INBOX: number
   SENT: number
   DRAFTS: number
+  DELETED: number
 } = {
   INBOX: 0,
   SENT: -1,
   DRAFTS: -2,
+  DELETED: -3,
 }
 
 export type SecureMessagingSignatureDataAttributes = {

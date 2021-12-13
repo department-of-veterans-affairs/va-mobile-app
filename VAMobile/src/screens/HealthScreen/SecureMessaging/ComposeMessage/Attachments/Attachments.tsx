@@ -152,7 +152,8 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
           {t('secureMessaging.attachments.attachmentsAreNotDrafts')}
         </TextView>
         {image && uri && (
-          <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image">
+          // need to set label has \ufeff so that samsung just says image and not unliable image
+          <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image" accessible={true} accessibilityLabel={'\ufeff'}>
             <StyledImage source={{ uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
           </Box>
         )}

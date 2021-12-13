@@ -64,6 +64,9 @@ import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
 import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
+import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
+import FolderSolid from './svgs/folder-solid.svg'
+import InboxSolid from './svgs/inbox-solid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import PaperClip from './svgs/paperClip.svg'
@@ -71,6 +74,7 @@ import PhoneSolid from './svgs/phoneSolid.svg'
 import QuestionMark from './svgs/questionMark.svg'
 import Remove from './svgs/remove.svg'
 import Reply from './svgs/reply.svg'
+import TrashSolid from './svgs/trash-solid.svg'
 import UnreadIcon from './svgs/unread_icon.svg'
 import VideoCamera from './svgs/videoCamera.svg'
 
@@ -97,6 +101,7 @@ export const VA_ICON_MAP = {
   Directions,
   EmptyCheckBox,
   FilledCheckBox,
+  FolderSolid,
   EmptyRadio,
   FilledRadio,
   DisabledRadio,
@@ -123,6 +128,9 @@ export const VA_ICON_MAP = {
   UnreadIcon,
   VideoCamera,
   PhoneSolid,
+  ExclamationTriangleSolid,
+  TrashSolid,
+  InboxSolid,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

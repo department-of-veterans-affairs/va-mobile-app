@@ -3,7 +3,6 @@ import React, { FC, useState } from 'react'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import { TextArea } from './index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -71,7 +70,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
 
   const touchableRow = (
     <Box minHeight={theme.dimensions.touchableMinHeight}>
-      <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} style={pressableStyles} {...pressableProps}>
+      <Pressable {...testIdProps(text)} {...a11yHintProp(a11yHint || '')} style={pressableStyles} {...pressableProps}>
         <Box {...boxStyles}>
           <TextView variant={'MobileBody'}>{text}</TextView>
         </Box>

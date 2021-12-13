@@ -13,11 +13,8 @@ This ticket is to control for all the requirements for the upcoming release befo
 This ticket should be complete by {{ env.vaDueDate }}
 ## Release Checklist
 
-- [ ] Define version number
-- [ ] Create Release Branch
 - [ ] What's new text
 - [ ] Content updates
-- [ ] Pull request opened for review ***BE SURE TO TITLE THE PR `{{ env.versionNumber }}` WITH NOTHING ELSE***
 
 ## Sign-offs: 
 <!-- All groups should check the box when they approve --> 

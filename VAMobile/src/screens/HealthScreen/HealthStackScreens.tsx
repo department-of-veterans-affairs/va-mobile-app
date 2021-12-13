@@ -6,6 +6,7 @@ import React, { ReactNode } from 'react'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { SecureMessagingFormData } from 'store/api/types'
+import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -25,7 +26,7 @@ import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 
-export type HealthStackParamList = {
+export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
   Appointments: undefined
   UpcomingAppointmentDetails: {
@@ -54,6 +55,9 @@ export type HealthStackParamList = {
   }
   ViewMessageScreen: {
     messageID: number
+    folderID?: number
+    currentPage?: number
+    messagesLeft?: number
   }
   ComposeMessage: {
     attachmentFileToAdd?: ImagePickerResponse | DocumentPickerResponse
