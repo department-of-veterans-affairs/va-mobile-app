@@ -1,1 +1,1 @@
-[OpenAPI Docs](pathname:///api.html)
+[OpenAPI Docs](/api/)
