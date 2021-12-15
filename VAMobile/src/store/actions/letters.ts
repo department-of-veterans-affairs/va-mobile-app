@@ -5,9 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { registerReviewEvent } from 'utils/inAppReviews'
 import FileViewer from 'react-native-file-viewer'
 import getEnv from 'utils/env'
 
@@ -46,10 +44,8 @@ export const getLetters = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
       dispatch(dispatchFinishGetLetters(letters?.data.attributes.letters))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetLetters(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishGetLetters(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -84,10 +80,8 @@ export const getLetterBeneficiaryData = (screenID?: ScreenIDTypes): AsyncReduxAc
       const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
       dispatch(dispatchFinishGetLetterBeneficiaryData(letterBeneficiaryData?.data.attributes))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -133,8 +127,7 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
         ...lettersOption,
       }
 
-      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, body as unknown as Params, DOWNLOAD_LETTER_RETRIES)
-      await registerReviewEvent()
+      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, (body as unknown) as Params, DOWNLOAD_LETTER_RETRIES)
       dispatch(dispatchFinishDownloadLetter())
 
       if (filePath) {
@@ -144,13 +137,11 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
       await logAnalyticsEvent(Events.vama_letter_download(letterType))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
     } catch (error) {
-      if (isErrorObject(error)) {
-        /**
-         * For letters we show a special screen regardless of the error. All download errors will be caught
-         * here so there is no special path for network connection errors
-         */
-        dispatch(dispatchFinishDownloadLetter(error))
-      }
+      /**
+       * For letters we show a special screen regardless of the error. All download errors will be caught
+       * here so there is no special path for network connection errors
+       */
+      dispatch(dispatchFinishDownloadLetter(error))
     }
   }
 }
