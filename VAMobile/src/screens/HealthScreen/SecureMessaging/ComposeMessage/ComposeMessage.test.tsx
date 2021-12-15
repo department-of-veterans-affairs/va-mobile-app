@@ -7,7 +7,7 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 
 import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import ComposeMessage from './ComposeMessage'
-import { InteractionManager, Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
+import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
@@ -29,13 +29,6 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-const runAfterTransition = (testToRun: () => void) => {
-  InteractionManager.runAfterInteractions(() => {
-    testToRun()
-  })
-  jest.runAllTimers()
-}
-
 jest.mock('store/actions', () => {
   let actual = jest.requireActual('store/actions')
   return {
@@ -52,16 +45,6 @@ jest.mock('store/actions', () => {
         payload: '',
       }
     }),
-  }
-})
-
-let mockUseComposeCancelConfirmationSpy = jest.fn()
-jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
-  let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
-  return {
-    ...original,
-    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
   }
 })
 
@@ -114,7 +97,6 @@ context('ComposeMessage', () => {
                   triageTeamId: 0,
                   name: 'Doctor 1',
                   relationType: 'PATIENT',
-                  preferredTeam: true,
                 },
               },
               {
@@ -124,7 +106,6 @@ context('ComposeMessage', () => {
                   triageTeamId: 1,
                   name: 'Doctor 2',
                   relationType: 'PATIENT',
-                  preferredTeam: true,
                 },
               },
             ],
@@ -158,18 +139,14 @@ context('ComposeMessage', () => {
     })
 
     it('should display an AlertBox', async () => {
-      runAfterTransition(() => {
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      })
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
     })
 
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
-        runAfterTransition(() => {
-          testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
-          expect(mockNavigationSpy).toHaveBeenCalled()
-          expect(updateSecureMessagingTab).toHaveBeenCalled()
-        })
+        testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(updateSecureMessagingTab).toHaveBeenCalled()
       })
     })
   })
@@ -177,138 +154,104 @@ context('ComposeMessage', () => {
   describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', () => {
       initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
-      runAfterTransition(() => {
-        expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
-      })
+      expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
     })
   })
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
       initializeTestInstance(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
-      runAfterTransition(() => {
-        expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
-      })
+      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
     })
   })
 
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
-      })
+      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('when returning from confirmation screen', () => {
-    beforeEach(() => {
-      initializeTestInstance(undefined, undefined, undefined, undefined, { saveDraftConfirmFailed: true })
-      runAfterTransition(() => {
-        act(() => {
-          navHeaderSpy.save.props.onSave()
-        })
-      })
-    })
     it('should show Recheck Info if validation had failed', async () => {
-      runAfterTransition(() => {
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-      })
+      initializeTestInstance(undefined, undefined, undefined, undefined, { saveDraftConfirmFailed: true })
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
     })
   })
 
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findAllByType(Pressable)[0].props.onPress()
-        })
-        expect(
-          findByTypeWithText(
-            testInstance,
-            TextView,
-            'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-          ),
-        ).toBeTruthy()
+      act(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
       })
+      expect(
+        findByTypeWithText(
+          testInstance,
+          TextView,
+          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
+        ),
+      ).toBeTruthy()
     })
   })
 
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
-        })
-
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[29].props.children).toEqual('Subject Line')
-        expect(textViews[30].props.children).toEqual(' ')
-        expect(textViews[31].props.children).toEqual('(*Required)')
+      act(() => {
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
       })
+
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews[29].props.children).toEqual('Subject Line')
+      expect(textViews[30].props.children).toEqual(' ')
+      expect(textViews[31].props.children).toEqual('(*Required)')
     })
   })
 
   describe('when pressing the back button', () => {
     it('should go to inbox if all fields empty', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findAllByType(VATextInput)[0].props.onChange('')
-        })
-        navHeaderSpy.back.props.onPress()
-        expect(goBack).toHaveBeenCalled()
-      })
+      navHeaderSpy.back.props.onPress()
+      expect(goBack).toHaveBeenCalled()
     })
 
     it('should ask for confirmation if any field filled in', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
-        })
-        navHeaderSpy.back.props.onPress()
-        expect(goBack).not.toHaveBeenCalled()
-        expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
+      act(() => {
+        testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
       })
+      navHeaderSpy.back.props.onPress()
+      expect(goBack).not.toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of save (draft)', () => {
     describe('when a required field is not filled', () => {
       beforeEach(() => {
-        runAfterTransition(() => {
-          act(() => {
-            navHeaderSpy.save.props.onSave()
-          })
+        act(() => {
+          navHeaderSpy.save.props.onSave()
         })
       })
 
       it('should display a field error for that field', async () => {
-        runAfterTransition(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
-        })
+        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
       })
 
       it('should display an AlertBox', async () => {
-        runAfterTransition(() => {
-          expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
-        })
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+        expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
       })
     })
 
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
-        runAfterTransition(() => {
-          act(() => {
-            navHeaderSpy.save.props.onSave()
-          })
-          testInstance.findByType(FormWrapper).props.onSave(true)
-          expect(saveDraft).toHaveBeenCalled()
+        act(() => {
+          navHeaderSpy.save.props.onSave()
         })
+        testInstance.findByType(FormWrapper).props.onSave(true)
+        expect(saveDraft).toHaveBeenCalled()
       })
     })
   })
@@ -316,81 +259,67 @@ context('ComposeMessage', () => {
   describe('on click of send', () => {
     describe('when a required field is not filled', () => {
       beforeEach(() => {
-        runAfterTransition(() => {
-          act(() => {
-            testInstance.findByProps({ label: 'Send' }).props.onPress()
-          })
+        act(() => {
+          testInstance.findByProps({ label: 'Send' }).props.onPress()
         })
       })
 
       it('should display a field error for that field', async () => {
-        runAfterTransition(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
-        })
+        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
       })
 
       it('should display an AlertBox', async () => {
-        runAfterTransition(() => {
-          expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
-        })
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+        expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
       })
     })
   })
 
   describe('when form fields are filled out correctly and saved', () => {
     it('should call mockNavigationSpy', async () => {
-      runAfterTransition(() => {
-        testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(mockNavigationSpy).toHaveBeenCalled()
-      })
+      testInstance.findByType(FormWrapper).props.onSave(true)
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('when the subject changes from general to another option', () => {
     it('should clear all field errors', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findByProps({ label: 'Send' }).props.onPress()
-        })
-
-        let textViews = testInstance.findAllByType(TextView)
-        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
-
-        act(() => {
-          testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
-        })
-
-        act(() => {
-          testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
-        })
-
-        textViews = testInstance.findAllByType(TextView)
-        expect(textViews[14].props.children).toEqual('')
-        expect(textViews[31].props.children).toEqual('Attachments')
+      act(() => {
+        testInstance.findByProps({ label: 'Send' }).props.onPress()
       })
+
+      let textViews = testInstance.findAllByType(TextView)
+      expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+
+      act(() => {
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
+      })
+
+      act(() => {
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
+      })
+
+      textViews = testInstance.findAllByType(TextView)
+      expect(textViews[14].props.children).toEqual('')
+      expect(textViews[31].props.children).toEqual('Attachments')
     })
   })
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
-        testInstance.findByProps({ label: 'Add Files' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
-      })
+      testInstance.findByProps({ label: 'Add Files' }).props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the "How to attach a file" link', () => {
     it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
-        testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
-      })
+      testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
@@ -401,24 +330,18 @@ context('ComposeMessage', () => {
     })
 
     it('should display error alert', async () => {
-      runAfterTransition(() => {
-        expect(testInstance.findByType(AlertBox)).toBeTruthy()
-      })
+      expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })
     describe('when the My HealtheVet phone number link is clicked', () => {
       it('should call Linking open url with the parameter tel:8773270022', async () => {
-        runAfterTransition(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-        })
+        testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+        expect(Linking.openURL).toBeCalledWith('tel:8773270022')
       })
     })
     describe('when the call TTY phone link is clicked', () => {
       it('should call Linking open url with the parameter tel:711', async () => {
-        runAfterTransition(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:711')
-        })
+        testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
+        expect(Linking.openURL).toBeCalledWith('tel:711')
       })
     })
   })
