@@ -58,6 +58,9 @@ export type SecureMessagingState = {
   messageIDsOfError?: Array<number>
   signature?: SecureMessagingSignatureDataAttributes
   loadingSignature: boolean
+  movingMessage: boolean
+  isUndo?: boolean
+  moveMessageFailed: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -93,6 +96,9 @@ export const initialSecureMessagingState: SecureMessagingState = {
   termsAndConditionError: false,
   messageIDsOfError: undefined,
   loadingSignature: false,
+  movingMessage: false,
+  isUndo: false,
+  moveMessageFailed: false,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -430,6 +436,23 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       signature,
       error,
       loadingSignature: false,
+    }
+  },
+  SECURE_MESSAGING_START_MOVE_MESSAGE: (state, { isUndo }) => {
+    return {
+      ...state,
+      movingMessage: true,
+      isUndo,
+      moveMessageFailed: false,
+    }
+  },
+  SECURE_MESSAGING_FINISH_MOVE_MESSAGE: (state, { isUndo, error }) => {
+    return {
+      ...state,
+      movingMessage: false,
+      isUndo: isUndo,
+      error,
+      moveMessageFailed: !!error,
     }
   },
 })

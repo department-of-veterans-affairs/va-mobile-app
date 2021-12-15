@@ -190,6 +190,19 @@ export type SecureMessagingResetReplyTriageError = Record<string, unknown>
 export type SecureMessagingResetHasLoadedRecipients = Record<string, unknown>
 
 /**
+ * Redux payload for the SECURE_MESSAGING_START_MOVE_MESSAGE action
+ */
+export type SecureMessagingStartMoveMessage = { isUndo?: boolean }
+
+/**
+ * Redux payload for the SECURE_MESSAGING_FINISH_MOVE_MESSAGE action
+ */
+export type SecureMessagingFinishMoveMessage = {
+  isUndo?: boolean
+  error?: api.APIError
+}
+
+/**
  *  All secure messaging actions
  */
 export interface SecureMessagingActions {
@@ -251,4 +264,6 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS: ActionDef<'SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS', SecureMessagingResetHasLoadedRecipients>
   SECURE_MESSAGING_FINISH_GET_SIGNATURE: ActionDef<'SECURE_MESSAGING_FINISH_GET_SIGNATURE', SecureMessagingFinishGetSignature>
   SECURE_MESSAGING_START_GET_SIGNATURE: ActionDef<'SECURE_MESSAGING_START_GET_SIGNATURE', SecureMessagingStartGetSignature>
+  SECURE_MESSAGING_START_MOVE_MESSAGE: ActionDef<'SECURE_MESSAGING_START_MOVE_MESSAGE', SecureMessagingStartMoveMessage>
+  SECURE_MESSAGING_FINISH_MOVE_MESSAGE: ActionDef<'SECURE_MESSAGING_FINISH_MOVE_MESSAGE', SecureMessagingFinishMoveMessage>
 }

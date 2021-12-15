@@ -4,7 +4,8 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
-import { ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
+import { ScreenIDTypesConstants, SecureMessagingFolderList, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
+import FileViewer from 'react-native-file-viewer'
 
 import { MockUsersEmail } from 'constants/common'
 import {
@@ -24,15 +25,17 @@ import {
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
+import { StoreState } from 'store'
+import { ThunkDispatch } from 'redux-thunk'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
+import { getfolderName } from 'utils/secureMessaging'
+import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
-import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
   return {
@@ -108,14 +111,14 @@ const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, e
 }
 
 export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))
     dispatch(dispatchStartListFolders())
 
     try {
       let folders
-      const currentStateFolders = _getState().secureMessaging?.folders
+      const currentStateFolders = getState().secureMessaging?.folders
 
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
@@ -278,7 +281,7 @@ export const getMessage = (
   /** Set to true if we want to display the inline activity indicator instead of of the one that takes up the whole screen */
   loadingAttachments = false,
 ): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
 
@@ -289,7 +292,7 @@ export const getMessage = (
     }
 
     try {
-      const { messagesById } = _getState().secureMessaging
+      const { messagesById } = getState().secureMessaging
       let response
       // If no message contents, then this messageID was added during fetch folder/inbox message call and does not contain the full info yet
       // Message content of some kind is required on the reply/compose forms.
@@ -499,7 +502,7 @@ export const resetSaveDraftFailed = (): ReduxAction => {
  * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
  */
 export const saveDraft = (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
     dispatch(dispatchStartSaveDraft())
     try {
@@ -511,7 +514,7 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
         response = await api.post<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
       }
-      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
@@ -570,7 +573,7 @@ export const resetSendMessageFailed = (): ReduxAction => {
  * make an API call to get the latest contents anyway.
  */
 export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     let formData: FormData
     let postData
     if (uploads && uploads.length !== 0) {
@@ -620,7 +623,7 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
 
-      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
@@ -658,4 +661,156 @@ export const resetHasLoadedRecipients = (): ReduxAction => {
     type: 'SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS',
     payload: {},
   }
+}
+
+/**
+ * Redux action to start the move of a message to another folder
+ */
+const dispatchStartMoveMessage = (isUndo?: boolean): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_MOVE_MESSAGE',
+    payload: {
+      isUndo,
+    },
+  }
+}
+
+/**
+ * Redux action to finish the move of a message to another folder
+ */
+const dispatchFinishMoveMessage = (isUndo?: boolean, error?: api.APIError): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_MOVE_MESSAGE',
+    payload: {
+      error,
+      isUndo,
+    },
+  }
+}
+
+/**
+ * Redux action that moves a message to another folder
+ */
+export const moveMessage = (
+  messageID: number,
+  newFolderID: number,
+  currentFolderID: number,
+  folderToRefresh: number,
+  currentPage: number,
+  messagesLeft: number,
+  isUndo: boolean,
+  folders: SecureMessagingFolderList,
+  withNavBar: boolean,
+): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchStartMoveMessage(isUndo))
+
+    try {
+      await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
+      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishMoveMessage(undefined, error))
+        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), dispatch, retryFunction, false, true)
+      }
+    }
+  }
+}
+
+/**
+ * Redux action that moves a message to the delete folder
+ */
+export const deleteMessage = (
+  messageID: number,
+  currentFolderID: number,
+  folderToRefresh: number,
+  currentPage: number,
+  messagesLeft: number,
+  isUndo: boolean,
+  folders: SecureMessagingFolderList,
+  withNavBar: boolean,
+): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchStartMoveMessage(isUndo))
+
+    try {
+      await api.del(`/v0/messaging/health/messages/${messageID}`)
+      refreshFoldersAfterMove(
+        dispatch,
+        messageID,
+        SecureMessagingSystemFolderIdConstants.DELETED,
+        currentFolderID,
+        folderToRefresh,
+        currentPage,
+        messagesLeft,
+        isUndo,
+        folders,
+        withNavBar,
+      )
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishMoveMessage(undefined, error))
+        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), dispatch, retryFunction, false, true, withNavBar)
+      }
+    }
+  }
+}
+
+// method to refresh the folders after move and handle the undo
+const refreshFoldersAfterMove = (
+  dispatch: ThunkDispatch<StoreState, undefined, ReduxAction>,
+  messageID: number,
+  newFolderID: number,
+  currentFolderID: number,
+  folderToRefresh: number,
+  currentPage: number,
+  messagesLeft: number,
+  isUndo: boolean,
+  folders: SecureMessagingFolderList,
+  withNavBar: boolean,
+) => {
+  const page = currentPage === 1 ? currentPage : messagesLeft === 1 && isUndo === false ? currentPage - 1 : currentPage
+  const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
+
+  if (folderToRefresh === SecureMessagingSystemFolderIdConstants.INBOX) {
+    dispatch(fetchInboxMessages(page, folderScreenID))
+  } else {
+    dispatch(listFolderMessages(folderToRefresh, page, folderScreenID))
+  }
+
+  dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
+  dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true))
+  dispatch(dispatchFinishMoveMessage(false))
+
+  const message = getSnackBarMessage(newFolderID, folders, isUndo, false)
+
+  showSnackBar(
+    message,
+    dispatch,
+    () => {
+      if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
+        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
+      } else {
+        dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
+      }
+    },
+    isUndo,
+    false,
+    withNavBar,
+  )
+}
+
+// method to create the snackbar message for the move message
+const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean) => {
+  const folderName = getfolderName(folderID.toString(), folders)
+  const folderString =
+    folderID !== SecureMessagingSystemFolderIdConstants.INBOX && folderID !== SecureMessagingSystemFolderIdConstants.DELETED ? `${folderName} folder` : folderName
+
+  const messageString = !isUndo ? `${isError ? 'Failed to move message' : 'Message moved'}` : `${isError ? 'Failed to move message back' : 'Message moved back'}`
+
+  return `${messageString} to ${folderString}`
 }

@@ -88,7 +88,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
             subText={t('claimsAndAppeals.subText')}
-            a11yHint={t('claimsAndAppeals.a11yHint')}
             onPress={onClaimsAndAppeals}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -98,7 +97,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           <LargeNavButton
             title={t('healthCare.title')}
             subText={t('healthCare.subText')}
-            a11yHint={t('healthCare.a11yHint')}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -108,7 +106,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           <LargeNavButton
             title={t('letters.title')}
             subText={t('letters.subText')}
-            a11yHint={t('letters.a11yHint')}
             onPress={onLetters}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}

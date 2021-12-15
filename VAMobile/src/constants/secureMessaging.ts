@@ -8,16 +8,20 @@ export const MAX_IMAGE_DIMENSION = 1375
 
 export const READ = 'READ'
 
-export type FolderNameType = 'Drafts' | 'Deleted' | 'Sent'
+export const TRASH_FOLDER_NAME = 'Trash'
+
+export type FolderNameType = 'Drafts' | 'Deleted' | 'Sent' | 'Inbox'
 
 export const FolderNameTypeConstants: {
   drafts: FolderNameType
   deleted: FolderNameType
   sent: FolderNameType
+  inbox: FolderNameType
 } = {
   drafts: 'Drafts',
   deleted: 'Deleted',
   sent: 'Sent',
+  inbox: 'Inbox',
 }
 
 export type FormHeaderType = 'Reply' | 'Compose' | 'Draft'

@@ -16,6 +16,7 @@ import { NotificationsActions } from './notifications'
 import { PatientActions } from './patient'
 import { PersonalInformationActions } from './personalInformation'
 import { SecureMessagingActions } from './secureMessaging'
+import { SnackBarActions } from './snackBar'
 import { StoreState } from 'store'
 import { VaccineActions } from './vaccine'
 
@@ -36,6 +37,7 @@ export * from './analytics'
 export * from './disabilityRating'
 export * from './vaccine'
 export * from './patient'
+export * from './snackBar'
 
 type ActObjs<T extends keyof AllActionDefs> = AllActionDefs[T]
 type ActObjsPayload<T extends keyof AllActionDefs> = AllActionDefs[T]['payload']
@@ -65,7 +67,8 @@ export type AllActionDefs = AuthActions &
   AnalyticsActions &
   DisabilityRatingActions &
   VaccineActions &
-  PatientActions
+  PatientActions &
+  SnackBarActions
 
 type AllActionTypes = keyof AllActionDefs
 

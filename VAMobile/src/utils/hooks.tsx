@@ -13,9 +13,10 @@ import React from 'react'
 import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
@@ -34,7 +35,16 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   const { errorsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
     return state.errors
   })
-  return !!errorsByScreenID[currentScreenID]
+  return useDowntime(DowntimeScreenIDToFeature[currentScreenID]) || !!errorsByScreenID[currentScreenID]
+}
+
+export const useDowntime = (feature: DowntimeFeatureType): boolean => {
+  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
+  const mw = downtimeWindowsByFeature[feature]
+  if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
+    return true
+  }
+  return false
 }
 
 /**
@@ -294,9 +304,10 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
  * Hook to autoscroll to an element
  * @returns ref to the scrollView and the elemnt to scroll to and the function to call the manual scroll
  */
-export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void] {
+export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void, React.Dispatch<React.SetStateAction<boolean>>] {
   const scrollRef = useRef<ScrollView>(null)
   const [messageRef, setFocus] = useAccessibilityFocus<View>()
+  const [shouldFocus, setShouldFocus] = useState(true)
   const scrollToElement = useCallback(() => {
     const timeOut = setTimeout(() => {
       requestAnimationFrame(() => {
@@ -316,12 +327,14 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
           }
         }
       })
-      setFocus()
+      if (shouldFocus) {
+        setFocus()
+      }
     }, 200)
     return () => clearTimeout(timeOut)
-  }, [messageRef, setFocus])
+  }, [messageRef, setFocus, shouldFocus])
 
-  return [scrollRef, messageRef, scrollToElement]
+  return [scrollRef, messageRef, scrollToElement, setShouldFocus]
 }
 
 /**

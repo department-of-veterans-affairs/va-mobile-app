@@ -2,16 +2,16 @@ import React, { FC, useEffect } from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
+import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, StoreState } from 'store/reducers'
+import { StoreState } from 'store/reducers'
 import { getInbox } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from './CernerAlert'
 import getEnv from 'utils/env'
 
@@ -25,7 +25,6 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
 
-  const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
 
@@ -34,21 +33,20 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    // fetch inbox metadata to display unread messages count tag
-    dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-  }, [dispatch])
+    if (smNotInDowntime) {
+      // fetch inbox metadata to display unread messages count tag
+      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
+    }
+  }, [dispatch, smNotInDowntime])
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   }, [navigation])
-
-  if (!hasLoadedInbox) {
-    return <LoadingComponent text={t('healthScreen.loading')} />
-  }
 
   return (
     <VAScrollView {...testIdProps('Health-care-page')}>
