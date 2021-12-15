@@ -48,15 +48,14 @@ jest.mock('store/actions', () => {
   }
 })
 
+
 let mockUseComposeCancelConfirmationSpy = jest.fn()
-let mockUseGoToDraftSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
-    useGoToDrafts: () => mockUseGoToDraftSpy,
+    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy
   }
 })
 
@@ -170,7 +169,6 @@ context('EditDraft', () => {
                   triageTeamId: 0,
                   name: 'Doctor 1',
                   relationType: 'PATIENT',
-                  preferredTeam: true,
                 },
               },
               {
@@ -180,7 +178,6 @@ context('EditDraft', () => {
                   triageTeamId: 1,
                   name: 'Doctor 2',
                   relationType: 'PATIENT',
-                  preferredTeam: true,
                 },
               },
             ],
