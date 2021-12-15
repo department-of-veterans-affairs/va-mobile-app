@@ -4,13 +4,12 @@ import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState, MilitaryServiceState, StoreState } from 'store/reducers'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { ServiceData } from 'store/api/types'
-import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 import ProfileBanner from '../ProfileBanner'
@@ -22,12 +21,13 @@ const MilitaryInformationScreen: FC = () => {
   const { serviceHistory, loading, needsDataLoad } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
+  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   useEffect(() => {
-    if (needsDataLoad && militaryInfoAuthorization) {
+    if (needsDataLoad && militaryInfoAuthorization && mhNotInDowntime) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad, militaryInfoAuthorization])
+  }, [dispatch, needsDataLoad, militaryInfoAuthorization, mhNotInDowntime])
 
   const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const branch = t('personalInformation.branch', { branch: service.branchOfService })
@@ -58,7 +58,7 @@ const MilitaryInformationScreen: FC = () => {
     mx: theme.dimensions.gutter,
     mb: theme.dimensions.contentMarginBottom,
     accessibilityRole: 'link',
-    ...testIdProps(generateTestID(t('militaryInformation.incorrectServiceInfo'), '')),
+    ...testIdProps(t('militaryInformation.incorrectServiceInfo')),
     onPress: navigateTo('IncorrectServiceInfo'),
     textDecoration: 'underline',
     textDecorationColor: 'link',

@@ -1,10 +1,10 @@
 import 'react-native'
 import React from 'react'
-import {Linking, Pressable, Share} from 'react-native'
-import {BIOMETRY_TYPE} from 'react-native-keychain'
+import { Linking, Pressable, Share } from 'react-native'
+import { BIOMETRY_TYPE } from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, findByOnPressFunction, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import SettingsScreen from './index'
 import { InitialState } from 'store/reducers'

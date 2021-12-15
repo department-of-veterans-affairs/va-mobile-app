@@ -130,3 +130,14 @@ export const sendVaccineDetailsAnalytics = (groupName: string): AsyncReduxAction
     await logAnalyticsEvent(Events.vama_vaccine_details(groupName))
   }
 }
+
+/**
+ * Redux Action to log covid button click analytics
+ *
+ * @returns AsyncReduxAction
+ */
+export const logCOVIDClickAnalytics = (referringScreen: string): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_covid_links(referringScreen))
+  }
+}

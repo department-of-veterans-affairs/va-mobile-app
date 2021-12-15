@@ -3,16 +3,30 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, ErrorComponent, FieldType, FocusedNavHeaderText, FormFieldType, FormWrapper, LoadingComponent, SaveButton, VAScrollView } from 'components'
+import {
+  AlertBox,
+  BackButton,
+  Box,
+  ButtonTypesConstants,
+  ErrorComponent,
+  FieldType,
+  FocusedNavHeaderText,
+  FormFieldType,
+  FormWrapper,
+  LoadingComponent,
+  SaveButton,
+  VAButton,
+  VAScrollView,
+} from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { deleteEmail, finishEditEmail, updateEmail } from 'store/actions'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
-import RemoveData from '../../RemoveData'
+import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 
@@ -25,6 +39,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const { profile, emailSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
+  const deleteEmailAlert = useDestructiveAlert()
 
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -104,12 +119,37 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     },
   ]
 
+  const emailTitle = t('personalInformation.emailAddress').toLowerCase()
+
+  const onDeletePressed = (): void => {
+    deleteEmailAlert({
+      title: t('personalInformation.areYouSureYouWantToDelete', { alertText: emailTitle }),
+      message: t('personalInformation.deleteDataInfo', { alertText: emailTitle }),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('common:remove'),
+          onPress: onDelete,
+        },
+      ],
+    })
+  }
+
   return (
     <VAScrollView {...testIdProps('Email: Edit-email-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={t('personalInformation.emailAddress').toLowerCase()} alertText={t('personalInformation.emailAddress').toLowerCase()} confirmFn={onDelete} />
+            <VAButton
+              onPress={onDeletePressed}
+              label={t('personalInformation.removeData', { pageName: stringToTitleCase(emailTitle) })}
+              buttonType={ButtonTypesConstants.buttonImportant}
+              a11yHint={t('personalInformation.removeData.a11yHint', { pageName: emailTitle })}
+            />
           </Box>
         )}
         {formContainsError && (
