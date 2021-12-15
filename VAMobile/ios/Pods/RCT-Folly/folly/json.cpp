@@ -19,7 +19,6 @@
 #include <algorithm>
 #include <functional>
 #include <iterator>
-#include <sstream>
 #include <type_traits>
 
 #include <boost/algorithm/string.hpp>
@@ -55,66 +54,21 @@ parse_error make_parse_error(
 }
 
 struct Printer {
-  // Context class is allows to restore the path to element that we are about to
-  // print so that if error happens we can throw meaningful exception.
-  class Context {
-   public:
-    Context(const Context* parent_context, const dynamic& key)
-        : parent_context_(parent_context), key_(key), is_key_(false) {}
-    Context(const Context* parent_context, const dynamic& key, bool is_key)
-        : parent_context_(parent_context), key_(key), is_key_(is_key) {}
-
-    // Return location description of a context as a chain of keys
-    // ex., '"outherKey"->"innerKey"'.
-    std::string locationDescription() const {
-      std::vector<std::string> keys;
-      const Context* ptr = parent_context_;
-      while (ptr) {
-        keys.push_back(ptr->getName());
-        ptr = ptr->parent_context_;
-      }
-      keys.push_back(getName());
-      std::ostringstream stream;
-      std::reverse_copy(
-          keys.begin(),
-          keys.end() - 1,
-          std::ostream_iterator<std::string>(stream, "->"));
-
-      // Add current key.
-      stream << keys.back();
-      return stream.str();
-    }
-    std::string getName() const {
-      return Printer::toStringOr(key_, "<unprintable>");
-    }
-    std::string typeDescription() const { return is_key_ ? "key" : "value"; }
-
-   private:
-    const Context* const parent_context_;
-    const dynamic& key_;
-    bool is_key_;
-  };
-
   explicit Printer(
       std::string& out, unsigned* indentLevel, serialization_opts const* opts)
       : out_(out), indentLevel_(indentLevel), opts_(*opts) {}
 
-  void operator()(dynamic const& v, const Context& context) const {
-    (*this)(v, &context);
-  }
-  void operator()(dynamic const& v, const Context* context) const {
+  void operator()(dynamic const& v) const {
     switch (v.type()) {
       case dynamic::DOUBLE:
         if (!opts_.allow_nan_inf) {
           if (std::isnan(v.asDouble())) {
             throw json::print_error(
-                "folly::toJson: JSON object value was a NaN when serializing " +
-                contextDescription(context));
+                "folly::toJson: JSON object value was a NaN");
           }
           if (std::isinf(v.asDouble())) {
             throw json::print_error(
-                "folly::toJson: JSON object value was an INF when serializing " +
-                contextDescription(context));
+                "folly::toJson: JSON object value was an INF");
           }
         }
         toAppend(
@@ -140,10 +94,10 @@ struct Printer {
         escapeString(v.asString(), out_, opts_);
         break;
       case dynamic::OBJECT:
-        printObject(v, context);
+        printObject(v);
         break;
       case dynamic::ARRAY:
-        printArray(v, context);
+        printArray(v);
         break;
       default:
         CHECK(0) << "Bad type " << v.type();
@@ -151,33 +105,28 @@ struct Printer {
   }
 
  private:
-  void printKV(
-      const std::pair<const dynamic, dynamic>& p,
-      const Context* context) const {
+  void printKV(const std::pair<const dynamic, dynamic>& p) const {
     if (!opts_.allow_non_string_keys && !p.first.isString()) {
       throw json::print_error(
-          "folly::toJson: JSON object key " +
-          toStringOr(p.first, "<unprintable key>") +
-          " was not a string when serializing key at " +
-          Context(context, p.first, true).locationDescription());
+          "folly::toJson: JSON object key was not a "
+          "string");
     }
-    (*this)(p.first, Context(context, p.first, true)); // Key
+    (*this)(p.first);
     mapColon();
-    (*this)(p.second, Context(context, p.first, false)); // Value
+    (*this)(p.second);
   }
 
   template <typename Iterator>
-  void printKVPairs(
-      Iterator begin, Iterator end, const Context* context) const {
-    printKV(*begin, context);
+  void printKVPairs(Iterator begin, Iterator end) const {
+    printKV(*begin);
     for (++begin; begin != end; ++begin) {
       out_ += ',';
       newline();
-      printKV(*begin, context);
+      printKV(*begin);
     }
   }
 
-  void printObject(dynamic const& o, const Context* context) const {
+  void printObject(dynamic const& o) const {
     if (o.empty()) {
       out_ += "{}";
       return;
@@ -200,38 +149,16 @@ struct Printer {
       } else {
         sort_keys_by(refs.begin(), refs.end(), std::less<>());
       }
-      printKVPairs(refs.cbegin(), refs.cend(), context);
+      printKVPairs(refs.cbegin(), refs.cend());
     } else {
-      printKVPairs(o.items().begin(), o.items().end(), context);
+      printKVPairs(o.items().begin(), o.items().end());
     }
     outdent();
     newline();
     out_ += '}';
   }
 
-  static std::string toStringOr(dynamic const& v, const char* placeholder) {
-    try {
-      std::string result;
-      unsigned indentLevel = 0;
-      serialization_opts opts;
-      opts.allow_nan_inf = true;
-      opts.allow_non_string_keys = true;
-      Printer printer(result, &indentLevel, &opts);
-      printer(v, nullptr);
-      return result;
-    } catch (...) {
-      return placeholder;
-    }
-  }
-
-  static std::string contextDescription(const Context* context) {
-    if (!context) {
-      return "<undefined location>";
-    }
-    return context->typeDescription() + " at " + context->locationDescription();
-  }
-
-  void printArray(dynamic const& a, const Context* context) const {
+  void printArray(dynamic const& a) const {
     if (a.empty()) {
       out_ += "[]";
       return;
@@ -240,11 +167,11 @@ struct Printer {
     out_ += '[';
     indent();
     newline();
-    (*this)(a[0], Context(context, dynamic(0)));
-    for (auto it = std::next(a.begin()); it != a.end(); ++it) {
+    (*this)(a[0]);
+    for (auto& val : range(std::next(a.begin()), a.end())) {
       out_ += ',';
       newline();
-      (*this)(*it, Context(context, dynamic(std::distance(a.begin(), it))));
+      (*this)(val);
     }
     outdent();
     newline();
@@ -732,7 +659,7 @@ std::string serialize(dynamic const& dyn, serialization_opts const& opts) {
   std::string ret;
   unsigned indentLevel = 0;
   Printer p(ret, opts.pretty_formatting ? &indentLevel : nullptr, &opts);
-  p(dyn, nullptr);
+  p(dyn);
   return ret;
 }
 

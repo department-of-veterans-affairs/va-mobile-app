@@ -255,6 +255,8 @@ makeTryWithNoUnwrap(F&& f) {
   using ResultType = invoke_result_t<F>;
   try {
     return Try<ResultType>(f());
+  } catch (std::exception& e) {
+    return Try<ResultType>(exception_wrapper(std::current_exception(), e));
   } catch (...) {
     return Try<ResultType>(exception_wrapper(std::current_exception()));
   }
@@ -267,6 +269,8 @@ typename std::
   try {
     f();
     return Try<void>();
+  } catch (std::exception& e) {
+    return Try<void>(exception_wrapper(std::current_exception(), e));
   } catch (...) {
     return Try<void>(exception_wrapper(std::current_exception()));
   }
@@ -286,6 +290,8 @@ typename std::enable_if<isTry<invoke_result_t<F>>::value, invoke_result_t<F>>::
   using ResultType = invoke_result_t<F>;
   try {
     return f();
+  } catch (std::exception& e) {
+    return ResultType(exception_wrapper(std::current_exception(), e));
   } catch (...) {
     return ResultType(exception_wrapper(std::current_exception()));
   }
@@ -295,6 +301,9 @@ template <typename T, typename... Args>
 T* tryEmplace(Try<T>& t, Args&&... args) noexcept {
   try {
     return std::addressof(t.emplace(static_cast<Args&&>(args)...));
+  } catch (const std::exception& ex) {
+    t.emplaceException(std::current_exception(), ex);
+    return nullptr;
   } catch (...) {
     t.emplaceException(std::current_exception());
     return nullptr;
@@ -312,6 +321,9 @@ T* tryEmplaceWith(Try<T>& t, Func&& func) noexcept {
       "Unable to initialise a value of type T with the result of 'func'");
   try {
     return std::addressof(t.emplace(static_cast<Func&&>(func)()));
+  } catch (const std::exception& ex) {
+    t.emplaceException(std::current_exception(), ex);
+    return nullptr;
   } catch (...) {
     t.emplaceException(std::current_exception());
     return nullptr;
@@ -327,6 +339,9 @@ bool tryEmplaceWith(Try<void>& t, Func&& func) noexcept {
     static_cast<Func&&>(func)();
     t.emplace();
     return true;
+  } catch (const std::exception& ex) {
+    t.emplaceException(std::current_exception(), ex);
+    return false;
   } catch (...) {
     t.emplaceException(std::current_exception());
     return false;
@@ -364,6 +379,8 @@ template <typename T>
 void tryAssign(Try<T>& t, Try<T>&& other) noexcept {
   try {
     t = std::move(other);
+  } catch (const std::exception& ex) {
+    t.emplaceException(std::current_exception(), ex);
   } catch (...) {
     t.emplaceException(std::current_exception());
   }

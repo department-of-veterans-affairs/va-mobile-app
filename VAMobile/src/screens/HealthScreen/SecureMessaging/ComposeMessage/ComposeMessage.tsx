@@ -1,7 +1,8 @@
-import { InteractionManager } from 'react-native'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
+
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
 import {
@@ -33,15 +34,15 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypesConstants,
 } from 'store/api/types'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useAttachments, useError, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
-import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
@@ -51,43 +52,31 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
-    StoreState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
-  const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
+  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
+  const { attachmentFileToAdd, attachmentFileToRemove, saveDraftConfirmFailed } = route.params
 
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
   const [subjectLine, setSubjectLine] = useState('')
-  const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
-  const [message, setMessage] = useMessageWithSignature()
-  const validateMessage = useValidateMessageWithSignature()
+  const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
+  const [message, setMessage] = useState('')
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
-
-  const composeCancelConfirmation = useComposeCancelConfirmation()
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-
-    if (!signature) {
-      dispatch(getMessageSignature())
-    }
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
-  }, [dispatch, signature])
+  }, [dispatch])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = () => {
     const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
-    composeCancelConfirmation({ origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
+    navigation.navigate('ComposeCancelConfirmation', { origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
   }
   useEffect(() => {
     if (!saveDraftConfirmFailed) {
@@ -127,10 +116,21 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
-      addAttachment(attachmentFileToAdd)
+      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
       navigation.setParams({ attachmentFileToAdd: {} })
     }
-  }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
+  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
+
+  useEffect(() => {
+    if (attachmentFileToRemove === undefined) {
+      return
+    }
+    // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
+    if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
+      setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
+      navigation.setParams({ attachmentFileToRemove: {} })
+    }
+  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
 
   useEffect(() => {
     if (saveDraftComplete) {
@@ -148,13 +148,17 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature) {
-    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.formMessage.composeMessage.loading')
+  if (!hasLoadedRecipients || savingDraft) {
+    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : undefined
     return <LoadingComponent text={text} />
   }
 
-  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
-  const isFormValid = !!(to && subject && validateMessage(message) && (subject !== CategoryTypeFields.other || subjectLine))
+  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || message)
+  const isFormValid = !!(to && subject && message && (subject !== CategoryTypeFields.other || subjectLine))
+
+  const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
+    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })
+  }
 
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
@@ -246,7 +250,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         labelKey: 'health:secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
-        setInputCursorToBeginning: true,
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },

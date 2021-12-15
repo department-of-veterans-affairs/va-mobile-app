@@ -1,0 +1,17 @@
+diff --git a/node_modules/@react-navigation/bottom-tabs/lib/typescript/src/navigators/createBottomTabNavigator.d.ts b/node_modules/@react-navigation/bottom-tabs/lib/typescript/src/navigators/createBottomTabNavigator.d.ts
+index 96dfa56..2b63bda 100644
+--- a/node_modules/@react-navigation/bottom-tabs/lib/typescript/src/navigators/createBottomTabNavigator.d.ts
++++ b/node_modules/@react-navigation/bottom-tabs/lib/typescript/src/navigators/createBottomTabNavigator.d.ts
+@@ -2,6 +2,11 @@
+ import { DefaultNavigatorOptions, ParamListBase, TabNavigationState, TabRouterOptions } from '@react-navigation/native';
+ import type { BottomTabNavigationConfig, BottomTabNavigationEventMap, BottomTabNavigationOptions } from '../types';
+ declare type Props = DefaultNavigatorOptions<ParamListBase, TabNavigationState<ParamListBase>, BottomTabNavigationOptions, BottomTabNavigationEventMap> & TabRouterOptions & BottomTabNavigationConfig;
+-declare function BottomTabNavigator({ initialRouteName, backBehavior, children, screenListeners, screenOptions, sceneContainerStyle, lazy, tabBarOptions, ...rest }: Props): JSX.Element;
++declare function BottomTabNavigator({ initialRouteName, backBehavior, children, screenListeners, screenOptions, sceneContainerStyle,
++    // @ts-expect-error: lazy is deprecated 
++    lazy, 
++    // @ts-expect-error: tabBarOptions is deprecated
++    tabBarOptions, 
++    ...rest }: Props): JSX.Element;
+ declare const _default: <ParamList extends ParamListBase>() => import("@react-navigation/native").TypedNavigator<ParamList, TabNavigationState<ParamListBase>, BottomTabNavigationOptions, BottomTabNavigationEventMap, typeof BottomTabNavigator>;
+ export default _default;

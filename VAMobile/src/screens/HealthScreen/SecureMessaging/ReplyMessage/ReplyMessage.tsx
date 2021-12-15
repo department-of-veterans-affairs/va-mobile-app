@@ -1,9 +1,4 @@
-import { DateTime } from 'luxon'
-import { InteractionManager } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
-import _ from 'underscore'
 
 import {
   BackButton,
@@ -23,17 +18,22 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DateTime } from 'luxon'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SecureMessagingState, StoreState, dispatchSetActionStart, resetSendMessageFailed } from 'store'
+import { StackScreenProps } from '@react-navigation/stack'
 import { formatSubject } from 'utils/secureMessaging'
-import { getMessageSignature, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
+import { saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useAttachments, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
-import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import _ from 'underscore'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
@@ -45,18 +45,14 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
-  const [messageReply, setMessageReply] = useMessageWithSignature()
-  const validateMessage = useValidateMessageWithSignature()
+  const [messageReply, setMessageReply] = useState('')
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
-  const { messageID, attachmentFileToAdd } = route.params
-  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
-    StoreState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
-  const replyCancelConfirmation = useComposeCancelConfirmation()
+  const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
+  const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
+  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -67,34 +63,21 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
-  const goToCancel = () => {
-    replyCancelConfirmation({
-      origin: FormHeaderTypeConstants.reply,
-      replyToID: messageID,
-      messageData: { body: messageReply },
-      isFormValid: true,
-    })
-  }
+  const goToCancel = navigateTo('ComposeCancelConfirmation', {
+    origin: FormHeaderTypeConstants.reply,
+    replyToID: messageID,
+    messageData: { body: messageReply },
+    isFormValid: true,
+  })
 
   useEffect(() => {
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
-    if (!signature) {
-      dispatch(getMessageSignature())
-    }
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
-  }, [dispatch, signature])
+  }, [dispatch])
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.cancel}
-          showCarat={false}
-        />
+        <BackButton onPress={messageReply ? goToCancel : navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => (
         <SaveButton
@@ -112,10 +95,18 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
-      addAttachment(attachmentFileToAdd)
+      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
       navigation.setParams({ attachmentFileToAdd: {} })
     }
-  }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
+  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
+
+  useEffect(() => {
+    // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
+    if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
+      setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
+      navigation.setParams({ attachmentFileToRemove: {} })
+    }
+  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
 
   useEffect(() => {
     if (saveDraftComplete) {
@@ -131,12 +122,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  if (loading || savingDraft || loadingSignature || !isTransitionComplete) {
+  if (loading || savingDraft) {
     const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.viewMessage.loading')
     return <LoadingComponent text={text} />
   }
 
   const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
+
+  const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
+    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.reply, attachmentFileToRemove: attachmentFile })()
+  }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -165,7 +160,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         labelKey: 'health:secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
-        setInputCursorToBeginning: true,
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
 import { DateTime } from 'luxon'
-import { HeaderTitleType } from '../../styles/common'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -39,7 +38,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   }, [navigation])
 
@@ -48,13 +47,13 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const onCovid = navigateTo('Webview', { url: LINK_URL_COVID_FORM, displayTitle: t('common:webview.vagov') })
-  const onClaimsAndAppeals = navigateTo('Claims')
+  const onClaimsAndAppeals = navigateTo('ClaimsTab')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
-  const onHealthCare = navigateTo('Health')
+  const onHealthCare = navigateTo('HealthTab')
 
   const buttonDataList: Array<SimpleListItemObj> = [
     {
