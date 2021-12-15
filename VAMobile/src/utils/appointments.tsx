@@ -1,8 +1,3 @@
-import { DateTime } from 'luxon'
-import { TFunction } from 'i18next'
-import React, { ReactNode } from 'react'
-import _ from 'underscore'
-
 import {
   AppointmentStatusConstants,
   AppointmentType,
@@ -13,9 +8,13 @@ import {
   AppointmentsMetaPagination,
 } from 'store/api'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
+import { DateTime } from 'luxon'
+import { TFunction } from 'i18next'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
 import { getTestIDFromTextLines } from './accessibility'
+import React, { ReactNode } from 'react'
+import _ from 'underscore'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -25,16 +24,13 @@ export type YearsToSortedMonths = { [key: string]: Array<string> }
  * @param appointmentType - type AppointmentType, to describe the type of appointment
  * @param locationName - string name of the location of the appointment
  * @param translate - function the translate function
- * @param phoneOnly - boolean tells if the appointment is a phone call
- * @param isCovidVaccine - boolean or undefined tells if the appointment is a covid
+ * @param phoneOnly - boolean or undefined tells if the appointment is a phone call
  *
  * @returns string of the location name
  */
-export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean, isCovidVaccine?: boolean): string => {
+export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean | undefined): string => {
   if (phoneOnly) {
     return translate('upcomingAppointments.phoneOnly')
-  } else if (isCovidVaccine) {
-    return translate('upcomingAppointments.covidVaccine')
   } else if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE || appointmentType === AppointmentTypeConstants.VA) {
     return locationName
   }
@@ -51,7 +47,7 @@ export const getAppointmentLocation = (appointmentType: AppointmentType, locatio
  *
  * @returns VAIconProps or undefoned
  */
-export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
+export const getAppointmentTypeIcon = (appointmentType: string, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
   const iconProp = { fill: theme.colors.icon.dark, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
 
   if (appointmentType.includes('VIDEO')) {
@@ -138,21 +134,20 @@ const getListItemsForAppointments = (
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
-    const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine } = attributes
-    const textLines: Array<TextLineWithIconProps> = []
+    const { startDateUtc, timeZone, appointmentType, location, phoneOnly } = attributes
 
-    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      textLines.push({ text: t('appointments.canceled'), isTextTag: true })
-    }
-
-    textLines.push(
+    const textLines: Array<TextLineWithIconProps> = [
       { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       {
-        text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
+        text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
       },
-    )
+    ]
+
+    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
+      textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
+    }
 
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = tc('common:listPosition', { position, total: totalEntries })
