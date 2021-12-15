@@ -93,7 +93,7 @@ export const lightTheme = {
     inputRequired: primaryTextColor,
     brandedPrimaryText: colors.grayDark,
     segmentControllerActive: colors.black,
-    segmentControllerInactive: colors.secondary,
+    segmentControllerInactive: colors.black,
     snackBarBtn: colors.darkmodeLightBlue,
   },
   buttonBackground: {

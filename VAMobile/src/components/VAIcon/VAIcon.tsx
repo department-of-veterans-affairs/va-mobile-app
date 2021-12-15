@@ -3,7 +3,7 @@ import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
-import { VAIconColors } from 'styles/theme'
+import { VAIconColors, VATextColors } from 'styles/theme'
 import { useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
@@ -140,7 +140,7 @@ export type VAIconProps = BoxProps & {
   name: keyof typeof VA_ICON_MAP
 
   /** Fill color for the icon */
-  fill?: keyof VAIconColors | string
+  fill?: keyof VAIconColors | keyof VATextColors | string
 
   /** Stroke color of the icon */
   stroke?: keyof VAIconColors | string
@@ -175,7 +175,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   }, [dispatch, fontScale])
 
   if (fill) {
-    domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })
+    domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || theme.colors.text[fill as keyof VATextColors] || fill })
   }
 
   if (stroke) {

@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import _ from 'underscore'
 
-import { VAIconColors, VATextColors } from 'styles/theme'
+import { VATextColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import Box from './Box'
@@ -38,15 +38,12 @@ export type VABulletListText = {
 export type VABulletListProps = {
   /** list of text to display in a bulleted list*/
   listOfText: Array<string | VABulletListText>
-
-  /** optional bullet color */
-  bulletColor?: keyof VAIconColors
 }
 
 /**
  * Displays the list of text as a bulleted list
  */
-const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' }) => {
+const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
@@ -82,15 +79,11 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' 
         return (
           <Box display="flex" flexDirection="row" alignItems="flex-start" key={index}>
             <Box mr={theme.dimensions.textXPadding} mt={theme.dimensions.bulletMargin}>
-              <VAIcon name="Bullet" fill={bulletColor} />
+              <VAIcon name="Bullet" fill={color || 'primary'} />
             </Box>
             <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
               {text.trim()}
-              {!!boldedText && (
-                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                  {boldedText}
-                </TextView>
-              )}
+              {!!boldedText && <TextView variant="MobileBodyBold">{boldedText}</TextView>}
             </TextView>
           </Box>
         )
