@@ -1,4 +1,5 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
+import _ from 'underscore'
 
 import * as api from '../api'
 import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
@@ -18,15 +19,14 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
-import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { getItemsInRange, isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { getItemsInRange } from 'utils/common'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 // Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
@@ -180,11 +180,11 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
 
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       // simulate common error try again
-      if (signInEmail === MockUsersEmail.user_1414) {
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
         throw {
           status: 503,
         }
-      } else if (signInEmail === MockUsersEmail.user_1402) {
+      } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
         // appeals unavailable with no claims
         activeClaimsAndAppeals.meta = {
           dataFromStore: false,
@@ -202,7 +202,7 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
         closedClaimsAndAppeals.meta = activeClaimsAndAppeals.meta
         activeClaimsAndAppeals.data = []
         closedClaimsAndAppeals.data = []
-      } else if (signInEmail === MockUsersEmail.user_1401) {
+      } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
         // claims unavailable with appeals
         activeClaimsAndAppeals.meta = {
           dataFromStore: false,
@@ -223,7 +223,7 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
         closedClaimsAndAppeals.data = closedClaimsAndAppeals.data.filter((item) => {
           return item.type === 'appeal'
         })
-      } else if (signInEmail !== MockUsersEmail.user_366) {
+      } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
         const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
         const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
         const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
@@ -251,10 +251,8 @@ export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAc
 
       dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(activeClaimsAndAppeals, closedClaimsAndAppeals))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(undefined, undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(undefined, undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -303,10 +301,8 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimType, claimsAndAppeals))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishAllClaimsAndAppeals(claimType, undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishAllClaimsAndAppeals(claimType, undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -342,7 +338,7 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
 
       // TODO: remove once file upload flow checked
       let singleClaim
-      if (signInEmail === MockUsersEmail.user_366) {
+      if (signInEmail === 'vets.gov.user+366@gmail.com') {
         singleClaim = {
           data: Claim,
         }
@@ -355,13 +351,10 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
       await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
-      await registerReviewEvent()
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetClaim(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishGetClaim(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -394,7 +387,7 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
     try {
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       let appeal
-      if (signInEmail === MockUsersEmail.user_226) {
+      if (signInEmail === 'vets.gov.user+226@gmail.com') {
         appeal = {
           data: Appeal,
         }
@@ -402,18 +395,11 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
         appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
       }
 
-      const [totalTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
-      await registerReviewEvent()
       dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetAppeal(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishGetAppeal(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -448,10 +434,8 @@ export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): 
 
       dispatch(dispatchFinishSubmitClaimDecision())
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishSubmitClaimDecision(error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishSubmitClaimDecision(error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -479,70 +463,37 @@ const dispatchFinishFileUpload = (error?: Error, eventDescription?: string): Red
 export const uploadFileToClaim = (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartFileUpload())
-    await logAnalyticsEvent(Events.vama_claim_upload_start())
+
     try {
       if (files.length > 1) {
-        const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse) => {
-          if ('assets' in file) {
-            return file.assets ? file.assets[0].base64 : undefined
-          } else if ('size' in file) {
-            return file.base64
-          }
-        })
+        const fileStrings = _.compact(_.pluck(files, 'base64'))
 
-        const payload = JSON.parse(
-          JSON.stringify({
-            files: fileStrings,
-            tracked_item_id: request.trackedItemId,
-            document_type: request.documentType,
-          }),
-        )
+        const payload = {
+          files: fileStrings,
+          tracked_item_id: request.trackedItemId,
+          document_type: request.documentType,
+        }
 
-        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, payload as unknown as api.Params)
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
       } else {
         const formData = new FormData()
         const fileToUpload = files[0]
-        let nameOfFile: string | undefined
-        let typeOfFile: string | undefined
-        let uriOfFile: string | undefined
 
-        if ('assets' in fileToUpload) {
-          if (fileToUpload.assets && fileToUpload.assets.length > 0) {
-            const { fileName, type, uri } = fileToUpload.assets[0]
-            nameOfFile = fileName
-            typeOfFile = type
-            uriOfFile = uri
-          }
-        } else if ('size' in fileToUpload) {
-          const { name, uri, type } = fileToUpload
-          nameOfFile = name
-          typeOfFile = type
-          uriOfFile = uri
-        }
-        // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
-        formData.append(
-          'file',
-          JSON.parse(
-            JSON.stringify({
-              name: nameOfFile || '',
-              uri: uriOfFile || '',
-              type: typeOfFile || '',
-            }),
-          ),
-        )
+        formData.append('file', {
+          name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',
+          uri: fileToUpload.uri || '',
+          type: fileToUpload.type || '',
+        })
 
-        formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
-        formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
+        formData.append('trackedItemId', request.trackedItemId)
+        formData.append('documentType', request.documentType)
 
-        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
       }
-      await logAnalyticsEvent(Events.vama_claim_upload_compl())
+
       dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
-      if (isErrorObject(error)) {
-        await logAnalyticsEvent(Events.vama_claim_upload_fail())
-        dispatch(dispatchFinishFileUpload(error))
-      }
+      dispatch(dispatchFinishFileUpload(error))
     }
   }
 }
@@ -567,23 +518,5 @@ export const dispatchClearLoadedClaimsAndAppeals = (): ReduxAction => {
   return {
     type: 'CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS',
     payload: {},
-  }
-}
-
-/**
- * Redux action to track when a user is on step 3 of claims
- */
-export const sendClaimStep3Analytics = (): AsyncReduxAction => {
-  return async (): Promise<void> => {
-    await logAnalyticsEvent(Events.vama_claim_step_three())
-  }
-}
-
-/**
- * Redux action to track when a user is on step 3 of claims and has a file request
- */
-export const sendClaimStep3FileRequestAnalytics = (): AsyncReduxAction => {
-  return async (): Promise<void> => {
-    await logAnalyticsEvent(Events.vama_claim_file_request())
   }
 }

@@ -1,7 +1,7 @@
 import * as Keychain from 'react-native-keychain'
 import { Action } from 'redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import CookieManager from '@react-native-cookies/cookies'
+import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
@@ -11,15 +11,12 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
 import { dispatchClearAuthorizedServices, dispatchProfileLogout } from './personalInformation'
-import { dispatchClearCerner } from './patient'
 import { dispatchClearLoadedAppointments } from './appointments'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
 import { dispatchClearLoadedMessages } from './secureMessaging'
-import { dispatchDisabilityRatingLogout } from './disabilityRating'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { dispatchSetAnalyticsLogin } from './analytics'
 import { isAndroid } from 'utils/platform'
-import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { utils } from '@react-native-firebase/app'
@@ -225,7 +222,7 @@ export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge
 
 export const loginStart = (syncing: true): AsyncReduxAction => {
   return async (dispatch) => {
-    dispatch(sendLoginStartAnalytics())
+    await logAnalyticsEvent(Events.vama_login_start())
     dispatch(dispatchStartAuthLogin(syncing))
   }
 }
@@ -432,6 +429,7 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, r
       }),
     })
     const authCredentials = await processAuthResponse(response)
+    await logAnalyticsEvent(Events.vama_auth_completed())
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
   } catch (err) {
@@ -499,10 +497,8 @@ export const logout = (): AsyncReduxAction => {
       dispatch(dispatchClearLoadedMessages())
       dispatch(dispatchClearLoadedClaimsAndAppeals())
       dispatch(dispatchClearAuthorizedServices())
-      dispatch(dispatchClearCerner())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
-      dispatch(dispatchDisabilityRatingLogout())
       dispatch(dispatchFinishLogout())
     }
   }
@@ -532,8 +528,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
     try {
       const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
       refreshToken = result ? result.password : undefined
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    } catch (err) {
       if (isAndroid()) {
         if (err?.message?.indexOf('Cancel') > -1) {
           // cancel
@@ -637,10 +632,8 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
-      if (isErrorObject(err)) {
-        await logAnalyticsEvent(Events.vama_exchange_failed())
-        dispatch(dispatchFinishAuthLogin(undefined, err))
-      }
+      await logAnalyticsEvent(Events.vama_exchange_failed())
+      dispatch(dispatchFinishAuthLogin(undefined, err))
     }
   }
 }
@@ -665,17 +658,6 @@ export const cancelWebLogin = (): AsyncReduxAction => {
 export const sendLoginFailedAnalytics = (error: Error): AsyncReduxAction => {
   return async (): Promise<void> => {
     await logAnalyticsEvent(Events.vama_login_fail(error))
-  }
-}
-
-/**
- * Redux Action to send login start analytics
- *
- * @returns AsyncReduxAction
- */
-export const sendLoginStartAnalytics = (): AsyncReduxAction => {
-  return async (): Promise<void> => {
-    await logAnalyticsEvent(Events.vama_login_start())
   }
 }
 
