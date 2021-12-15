@@ -4,9 +4,8 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
-import { ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'store/api/types'
+import { ScreenIDTypesConstants, SecureMessagingFormData } from 'store/api/types'
 
-import { MockUsersEmail } from 'constants/common'
 import {
   Params,
   ScreenIDTypes,
@@ -29,7 +28,6 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
@@ -63,7 +61,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
     try {
       // TODO story #25035, remove once ready
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      if (signInEmail === MockUsersEmail.user_1414) {
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
         throw {
           json: {
             errors: [
@@ -82,10 +80,8 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
       dispatch(getInbox())
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishFetchInboxMessages(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
-      }
+      dispatch(dispatchFinishFetchInboxMessages(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
     }
   }
 }
@@ -124,10 +120,8 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       }
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishListFolders(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
-      }
+      dispatch(dispatchFinishListFolders(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
     }
   }
 }
@@ -162,10 +156,8 @@ export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
       dispatch(dispatchFinishGetInbox(inbox, undefined))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetInbox(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishGetInbox(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -200,10 +192,8 @@ export const listFolderMessages = (folderID: number, page: number, screenID?: Sc
       } as Params)
       dispatch(dispatchFinishListFolderMessages(folderID, messages, undefined))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishListFolderMessages(folderID, undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishListFolderMessages(folderID, undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -237,10 +227,8 @@ export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncRed
       dispatch(dispatchFinishGetThread(response, messageID))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetThread(undefined, messageID, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishGetThread(undefined, messageID, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -304,9 +292,7 @@ export const getMessage = (
       await registerReviewEvent()
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetMessage(undefined, error, messageID))
-      }
+      dispatch(dispatchFinishGetMessage(undefined, error, messageID))
     }
   }
 }
@@ -366,12 +352,10 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
         })
       }
     } catch (error) {
-      if (isErrorObject(error)) {
-        /** All download errors will be caught here so there is no special path
-         *  for network connection errors
-         */
-        dispatch(dispatchFinishDownloadFileAttachment(error))
-      }
+      /** All download errors will be caught here so there is no special path
+       *  for network connection errors
+       */
+      dispatch(dispatchFinishDownloadFileAttachment(error))
     }
   }
 }
@@ -387,7 +371,7 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_RECIPIENTS',
     payload: {
-      recipients: recipients || [],
+      recipients,
       error,
     },
   }
@@ -404,58 +388,10 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
 
     try {
       const recipientsData = await api.get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
-      const preferredList = recipientsData?.data.filter((recipient) => recipient.attributes.preferredTeam)
-      dispatch(dispatchFinishGetMessageRecipients(preferredList))
+      dispatch(dispatchFinishGetMessageRecipients(recipientsData?.data))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetMessageRecipients(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
-    }
-  }
-}
-
-/**
- * Redux action to start the get message signature
- */
-const dispatchStartGetMessageSignature = (): ReduxAction => {
-  return {
-    type: 'SECURE_MESSAGING_START_GET_SIGNATURE',
-    payload: {},
-  }
-}
-
-/**
- * Redux action to finish the get message signature
- */
-const dispatchFinishGetMessageSignature = (signature?: SecureMessagingSignatureDataAttributes, error?: api.APIError): ReduxAction => {
-  return {
-    type: 'SECURE_MESSAGING_FINISH_GET_SIGNATURE',
-    payload: {
-      signature,
-      error,
-    },
-  }
-}
-
-/**
- * Redux action to get message signature
- */
-export const getMessageSignature = (screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageSignature(screenID))))
-    dispatch(dispatchStartGetMessageSignature())
-
-    try {
-      const signatureData = await api.get<SecureMessagingSignatureData>('/v0/messaging/health/messages/signature')
-      const signature = signatureData?.data.attributes
-      dispatch(dispatchFinishGetMessageSignature(signature))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetMessageSignature(undefined, error))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
-      }
+      dispatch(dispatchFinishGetMessageRecipients(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -506,10 +442,10 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
       let response
       if (messageID) {
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
-        response = await api.put<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
+        response = await api.put<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
       } else {
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
-        response = await api.post<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
+        response = await api.post<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
       }
       const [totalTime, actionTime] = getAnalyticsTimers(_getState())
       await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime))
@@ -524,9 +460,7 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
       }
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishSaveDraft(undefined, error))
-      }
+      dispatch(dispatchFinishSaveDraft(undefined, error))
     }
   }
 }
@@ -578,34 +512,12 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
       formData.append('message', JSON.stringify(messageData))
 
       uploads.forEach((attachment) => {
-        let nameOfFile: string | undefined
-        let typeOfFile: string | undefined
-        let uriOfFile: string | undefined
-
-        if ('assets' in attachment) {
-          if (attachment.assets && attachment.assets.length > 0) {
-            const { fileName, type, uri } = attachment.assets[0]
-            nameOfFile = fileName
-            typeOfFile = type
-            uriOfFile = uri
-          }
-        } else if ('size' in attachment) {
-          const { name, uri, type } = attachment
-          nameOfFile = name
-          typeOfFile = type
-          uriOfFile = uri
-        }
         // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
-        formData.append(
-          'uploads[]',
-          JSON.parse(
-            JSON.stringify({
-              name: nameOfFile || '',
-              uri: uriOfFile || '',
-              type: typeOfFile || '',
-            }),
-          ),
-        )
+        formData.append('uploads[]', {
+          name: (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name || '',
+          uri: attachment.uri || '',
+          type: attachment.type || '',
+        })
       })
       postData = formData
     } else {
@@ -616,7 +528,7 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
     try {
       await api.post<SecureMessagingMessageData>(
         replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
-        postData as unknown as api.Params,
+        (postData as unknown) as api.Params,
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
 
@@ -629,9 +541,7 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishSendMessage(error))
-      }
+      dispatch(dispatchFinishSendMessage(error))
     }
   }
 }
