@@ -21,8 +21,8 @@ situations that could not be tested during development. -->
 - [ ] PR is connected to issue
 - [ ] Tests are included to cover this change (when possible)
 - [ ] No magic strings (All string unions follow the [Union -> Constant](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/src/constants/common.ts) type pattern)
-- [ ] All button and screen title text is title cased
+- [ ] All button text is title cased
 - [ ] No secrets or API keys are checked in
 - [ ] All imports are absolute (no relative imports)
-- [ ] New functions and Redux work have proper TSDoc annotations
-- [ ] Branch name is prefixed with `feature/` or `bugfix/` (`hotfix/` is reserved for emergency PRs to `master`)
+- [ ] New functions and Redux work have proper JSDoc annotations
+- [ ] Branch name is prefixed with `feature/` or `hotfix/`
