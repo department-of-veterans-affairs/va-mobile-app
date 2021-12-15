@@ -1,35 +1,14 @@
 import 'react-native'
+import { Linking } from 'react-native'
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
-import { TestProviders, context, findByTypeWithSubstring, findByTestID } from 'testUtils'
+import { TestProviders, context, findByTestID, findByTypeWithSubstring } from 'testUtils'
 import HomeScreen from './index'
-import { LargeNavButton, TextView } from 'components'
-
-const mockNavigateToSpy = jest.fn()
-const mockNavigateToCovidUpdateSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useRouteNavigation: () => {
-      return mockNavigateToSpy
-          .mockReturnValueOnce(() => {})
-          .mockReturnValueOnce(() => {})
-          .mockReturnValueOnce(() => {})
-          .mockReturnValueOnce(mockNavigateToCovidUpdateSpy)
-          .mockReturnValue(() => {})
-    },
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
+import {LargeNavButton, TextView} from 'components'
 
 context('HomeScreen', () => {
   let component: any
@@ -46,23 +25,19 @@ context('HomeScreen', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    initializeTestInstance()  
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await act(async () => {
+      expect(component).toBeTruthy()
+    })
   })
 
-  describe('when VA COVID-19 updates is pressed', () => {
-    it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
-      findByTestID(testInstance, 'v-a-covid-19-updates').props.onPress()
-      const expectNavArgs =
-        {
-          url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-          displayTitle: 'va.gov'
-        }
-      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(4, 'Webview', expectNavArgs)
-      expect(mockNavigateToCovidUpdateSpy).toHaveBeenCalled()
+  describe('when the covid 19 screening tool button is clicked', () => {
+    it('should call Linking openUrl with the parameter https://www.va.gov/covid19screen/', async () => {
+      expect(findByTestID(testInstance, 'covid-19-screening-tool').props.onPress())
+      expect(Linking.openURL).toHaveBeenCalledWith('https://www.va.gov/covid19screen/')
     })
   })
 
@@ -90,14 +65,17 @@ context('HomeScreen', () => {
   })
 
   describe('when rendering the home nav buttons', () => {
+    it('should render the covid form button', async () => {
+      expect(testInstance.findAllByType(LargeNavButton)[0].props.title).toEqual('COVID-19 vaccines')
+    })
     it('should render the claims button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[0].props.title).toEqual('Claims and appeals')
+      expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Claims and appeals')
     })
     it('should render the health button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Health care')
+      expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Health care')
     })
     it('should render the letters button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Letters')
+      expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Letters')
     })
   })
 })
