@@ -32,14 +32,13 @@ context('VaccineDetailsScreen', () => {
               doseNumber: "Series 1",
               doseSeries: 1,
               groupName: "COVID-19",
-              reaction: "Fever",
               manufacturer: null,
               note: "Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.",
               shortDescription: "COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose"
             }
           },
-          NONOTE: {
-            id: "NONOTE",
+          NOSERIES: {
+            id: "NOSERIES",
             type: "immunization",
             attributes: {
               cvxCode: 207,
@@ -48,47 +47,10 @@ context('VaccineDetailsScreen', () => {
               doseSeries: null,
               groupName: "COVID-19",
               manufacturer: null,
-              note: null,
+              note: "Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.",
               shortDescription: "COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose"
             }
           },
-          HASLOCATION: {
-            id: "HASLOCATION",
-            type: "immunization",
-            attributes: {
-              cvxCode: 207,
-              date: "2020-12-18T12:24:55Z",
-              doseNumber: null,
-              doseSeries: null,
-              groupName: "COVID-19",
-              manufacturer: null,
-              note: null,
-              shortDescription: "COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose"
-            },
-            relationships: {
-              location: {
-                data: {
-                  id: "location1",
-                  type: "location"
-                },
-              }
-            }
-          },
-        },
-        vaccineLocationsById: {
-          HASLOCATION: {
-            id: "location1",
-            type: "location",
-            attributes: {
-              name: "facility 1",
-              address: {
-                street: "123 abc street",
-                city: "Tiburon",
-                state: "CA",
-                zipCode: "94920"
-              }
-            }
-          }
         },
         loading: !loaded,
       },
@@ -101,9 +63,11 @@ context('VaccineDetailsScreen', () => {
 
     testInstance = component.root
   }
+  beforeEach(() => {
+    initializeTestInstance()
+  })
 
   it('initializes correctly', async () => {
-    initializeTestInstance()
     expect(component).toBeTruthy()
   })
 
@@ -112,14 +76,12 @@ context('VaccineDetailsScreen', () => {
       initializeTestInstance()
       expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Fever')).toBeTruthy()
     })
 
-    it('should show show location data', async () => {
-      initializeTestInstance('HASLOCATION')
-      expect(findByTypeWithText(testInstance, TextView, 'facility 1')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, '123 abc street')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Tiburon, CA 94920')).toBeTruthy()
+    it('should show a placeholder if there is no series info', async () => {
+      initializeTestInstance('NOSERIES')
+      expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Unavailable')).toBeTruthy()
     })
   })
 })
