@@ -9,7 +9,6 @@ let _token: string | undefined
 let _refresh_token: string | undefined
 let refreshPromise: Promise<boolean> | undefined
 let _demoMode = false
-const DEMO_MODE_DELAY = 300
 
 export const setAccessToken = (token?: string): void => {
   _token = token
@@ -126,11 +125,7 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
     return await response.json()
   } else {
     // we are in demo and need to transform the request from the demo store
-    return new Promise((resolve) => {
-      setTimeout(async () => {
-        resolve(transform(method, endpoint, params) as unknown as T)
-      }, DEMO_MODE_DELAY)
-    })
+    return (await transform(method, endpoint, params)) as unknown as T
   }
 }
 
