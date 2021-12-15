@@ -1,14 +1,11 @@
-import  Logo from '@componentsDocs/VAIcon/svgs/vaParentLogo/logo.svg';
-import { useIconPathDescriptionText } from '@site/utils/common'
-import IconsPathSection from '@site/src/components/IconsPathSection'
-
+import { ReactComponent as Logo} from '@componentsDocs/VAIcon/svgs/vaParentLogo/logo.svg';
 
 # Logo
 
 :::info
-<IconsPathSection folder={"vaParentLogo"} />
+These icons are loacted under `VaMobile/src/components/VAIcon/svgs/vaParentLogo`.
 :::
 
 Name | Icon | File Name 
 :---: | :---: | :---: 
-VA Logo | <img src={Logo} className="logoIcon"/> | logo.svg 
+VA Logo | <Logo className="logoIcon"/> | logo.svg 

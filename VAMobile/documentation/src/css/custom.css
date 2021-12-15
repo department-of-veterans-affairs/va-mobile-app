@@ -18,10 +18,8 @@
   --navyBlue : #112e51;
   --ifm-table-head-background: var(--pre-background);
   --icon-colors : rgb(0, 113, 188);
-}
+ 
 
-.footer {
-  text-align: center;
 }
 
 .docusaurus-highlight-code-line {

@@ -13,6 +13,9 @@ export type AppVersionAndBuildProps = {
   textWeight?: keyof VATypographyThemeVariants
 }
 
+/**
+ * Common component to display the apps version and build number
+ */
 const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'primary', textWeight = 'MobileBody' }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

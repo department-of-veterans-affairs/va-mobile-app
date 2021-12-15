@@ -3,12 +3,11 @@ import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/webvi
 import { ReactComponent as ExternalLink} from '@componentsDocs/VAIcon/svgs/webview/external-link-alt-solid.svg';
 import { ReactComponent as Lock} from '@componentsDocs/VAIcon/svgs/webview/lock-solid.svg';
 import { ReactComponent as Redo} from '@componentsDocs/VAIcon/svgs/webview/redo-solid.svg';
-import IconsPathSection from '@site/src/components/IconsPathSection'
 
 # Webview
 
 :::info
-<IconsPathSection folder={"webView"}/>
+These icons are loacted under `VaMobile/src/components/VAIcon/svgs/webview`.
 :::
 
 Name | Icon | File Name 

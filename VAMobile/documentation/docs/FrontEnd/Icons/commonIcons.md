@@ -12,12 +12,11 @@ import { ReactComponent as Remove} from '@componentsDocs/VAIcon/svgs/remove.svg'
 import { ReactComponent as Reply} from '@componentsDocs/VAIcon/svgs/reply.svg';
 import { ReactComponent as Unread} from '@componentsDocs/VAIcon/svgs/unread_icon.svg';
 import { ReactComponent as VideoCamera} from '@componentsDocs/VAIcon/svgs/videoCamera.svg';
-import IconsPathSection from '@site/src/components/IconsPathSection'
 
 # Common
 
 :::info
-<IconsPathSection />
+These icons are loacted under `VaMobile/src/components/VAIcon/svgs`.
 :::
 
 Name | Icon | File Location 
