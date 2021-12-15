@@ -84,8 +84,8 @@ context('MilitaryInformationScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
-        ...initialErrorsState,
         errorsByScreenID,
+        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(true, errorState)
@@ -97,8 +97,8 @@ context('MilitaryInformationScreen', () => {
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
-        ...initialErrorsState,
         errorsByScreenID,
+        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(true, errorState)
