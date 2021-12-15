@@ -38,7 +38,7 @@ export type ListProps = {
 }
 
 /**
- * A common component for showing a list of <ListItem>.
+ * Display a list of buttons with text and optional actions
  */
 const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   const theme = useTheme()
@@ -66,7 +66,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   return (
     <Box>
       {title && (
-        <Box accessible={true} accessibilityRole={'header'}>
+        <Box accessible={true}>
           <TextView {...titleProps} {...testIdProps(generateTestID(titleA11yLabel ? titleA11yLabel : title, ''))}>
             {title}
           </TextView>

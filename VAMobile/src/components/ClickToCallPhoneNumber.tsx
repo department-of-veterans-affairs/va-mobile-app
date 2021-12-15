@@ -8,15 +8,11 @@ import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'uti
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type ClickToCallPhoneNumberProps = {
-  /**sets the phone information */
   phone?: AppointmentPhone | string
-  /**sets the text that will be displayed */
   displayedText?: string
-  /** boolean to align items to the center */
   center?: boolean
 }
 
-/**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
 const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center }) => {
   const t = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
@@ -57,7 +53,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
       </Box>
       <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
       <Box accessible={true}>
-        <TextView textAlign={center ? 'center' : undefined} color="primary" variant="HelperText" mt={theme.dimensions.condensedMarginBetween}>
+        <TextView textAlign={center ? 'center' : undefined} color="primary" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {t('contactVA.tty.hintText')}
         </TextView>
       </Box>

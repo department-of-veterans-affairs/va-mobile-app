@@ -3,7 +3,8 @@ import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
@@ -35,16 +36,16 @@ import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import LoaGate from './screens/auth/LoaGate'
-import NotificationManger from './components/NotificationManger'
 import OnboardingCarousel from './screens/OnboardingCarousel'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store'
+import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import theme from 'styles/themes/standardTheme'
-enableScreens(true)
+
 const store = configureStore()
+enableScreens()
 const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
@@ -66,17 +67,17 @@ export type RootNavStackParamList = WebviewStackParams & {
 }
 
 type RootTabNavParamList = {
-  HomeTab: undefined
-  HealthTab: undefined
-  ClaimsTab: undefined
-  ProfileTab: undefined
+  Home: undefined
+  Health: undefined
+  Claims: undefined
+  Profile: undefined
 }
 ;`
   background-color: ${theme.colors.icon.active};
 `
 
 const MainApp: FC = () => {
-  const navigationRef = useNavigationContainerRef()
+  const navigationRef = useRef<NavigationContainerRef>(null)
   const routeNameRef = useRef('')
 
   /**
@@ -110,12 +111,10 @@ const MainApp: FC = () => {
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
-              <NotificationManger>
-                <SafeAreaProvider>
-                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
-                  <AuthGuard />
-                </SafeAreaProvider>
-              </NotificationManger>
+              <SafeAreaProvider>
+                <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                <AuthGuard />
+              </SafeAreaProvider>
             </NavigationContainer>
           </I18nextProvider>
         </Provider>
@@ -132,11 +131,13 @@ export const AuthGuard: FC = () => {
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
+
   const [currNewState, setCurrNewState] = useState('active')
+
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
-    const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
-    return (): void => sub.remove()
+    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
   }, [dispatch, fontScale])
 
   useEffect(() => {
@@ -148,16 +149,11 @@ export const AuthGuard: FC = () => {
   }, [isVoiceOverTalkBackRunning, dispatch, currNewState])
 
   useEffect(() => {
-    // only run on app load
-    dispatch(sendUsesLargeTextAnalytics())
-    dispatch(sendUsesScreenReaderAnalytics())
-  }, [dispatch])
-
-  useEffect(() => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
     // was turned on or off
-    const sub = AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
-    return (): void => sub.remove()
+    AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
+    return (): void =>
+      AppState.removeEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
   }, [dispatch, isVoiceOverTalkBackRunning])
 
   useEffect(() => {
@@ -168,9 +164,9 @@ export const AuthGuard: FC = () => {
         dispatch(handleTokenCallbackUrl(event.url))
       }
     }
-    const sub = Linking.addEventListener('url', listener)
+    Linking.addEventListener('url', listener)
     return (): void => {
-      sub.remove()
+      Linking.removeEventListener('url', listener)
     }
   }, [dispatch])
 
@@ -217,11 +213,11 @@ export const AppTabs: FC = () => {
 
   return (
     <>
-      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
-        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="ClaimsTab" component={ClaimsScreen} options={{ title: t('claims:title') }} />
-        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} />
+      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home" detachInactiveScreens={true}>
+        <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
+        <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
+        <TabNav.Screen name="Health" component={HealthScreen} options={{ title: t('health:title') }} />
+        <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
       </TabNav.Navigator>
     </>
   )
@@ -238,7 +234,7 @@ export const AuthedApp: FC = () => {
 
   return (
     <>
-      <RootNavStack.Navigator screenOptions={{ ...headerStyles, detachPreviousScreen: false }} initialRouteName="Tabs">
+      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Tabs" detachInactiveScreens={true}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />
