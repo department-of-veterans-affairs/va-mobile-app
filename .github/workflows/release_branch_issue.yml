@@ -2,9 +2,10 @@ name: "Create Release Branch Ticket"
 
 on:
   create:
+    branches:
+      - release/v[0-9]+.[0-9]+.[0-9]+
 jobs:
   release_ticket:
-    if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -13,18 +14,6 @@ jobs:
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - uses: actions/checkout@v2
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      - run: gh auth login --with-token < token.txt
-      - run: |
-          sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-          sev2=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-          header='| Issue | Title | Notes |
-          |-------|-------|-------|
-          '
-          table="${header}${sev1}${sev2}"
-          echo 'TABLE<<EOF' >> $GITHUB_ENV
-          echo "${table}" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
       - uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/release_ticket.md
@@ -34,5 +23,4 @@ jobs:
           prodDueDate: ${{env.PROD_DUE_DATE}}
           vaDueDate: ${{env.VA_DUE_DATE}}
           releaseDate: ${{ env.RELEASE_DATE }}
-          issues: ${{ env.TABLE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
