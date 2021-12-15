@@ -5,7 +5,6 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import {
   context,
   findByTypeWithSubstring,
-  findByTypeWithText,
   mockStore,
   renderWithProviders
 } from 'testUtils'
@@ -92,44 +91,5 @@ context('CernerAlert', () => {
       testInstance.findByType(TouchableWithoutFeedback).props.onPress()
     })
     expect(mockExternalLinkSpy).toBeCalledWith('https://patientportal.myhealth.va.gov/')
-  })
-
-  describe('when some facilities are cerner', () => {
-    it('should show proper header text', () => {
-      expect(findByTypeWithText(testInstance, TextView,  "Some of your V\uFEFFA health care team may be using the My V\uFEFFA Health portal")).toBeTruthy()
-    })
-  })
-
-  describe('when all facilities are cerner', () => {
-    it('should show proper header text', () => {
-      initializeTestInstance({
-        isCernerPatient: true,
-        cernerFacilities: [
-          {
-            isCerner: true,
-            facilityId: '1',
-            facilityName: 'FacilityOne'
-          },
-          {
-            isCerner: true,
-            facilityId: '2',
-            facilityName: 'FacilityTwo'
-          }
-        ],
-        facilities: [
-          {
-            isCerner: true,
-            facilityId: '1',
-            facilityName: 'FacilityOne'
-          },
-          {
-            isCerner: true,
-            facilityId: '2',
-            facilityName: 'FacilityTwo'
-          }
-        ]
-      })
-      expect(findByTypeWithText(testInstance, TextView,  "Your V\uFEFFA health care team may be using the My V\uFEFFA Health portal")).toBeTruthy()
-    })
   })
 })
