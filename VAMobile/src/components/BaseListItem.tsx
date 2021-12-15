@@ -37,7 +37,7 @@ export type BaseListItemProps = {
   /** optional accessibility role. By default it will be button */
   a11yRole?: AccessibilityRole
 
-  /** optional accessibility state */
+  /** optional accessibility state **/
   a11yState?: AccessibilityState
 
   /** onPress callback */
@@ -52,10 +52,10 @@ export type BaseListItemProps = {
   /** Optional child elements to use instead of listOfText if you need to do special styling */
   children?: React.ReactNode
 
-  /** Optional background color for an individual item */
+  /** Optional background color for an individual item **/
   backgroundColor?: BackgroundVariant
 
-  /** Optional active background color for an individual item */
+  /** Optional active background color for an individual item **/
   activeBackgroundColor?: BackgroundVariant
 }
 
