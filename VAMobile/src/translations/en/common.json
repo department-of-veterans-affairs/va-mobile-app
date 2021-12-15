@@ -1,10 +1,4 @@
 {
-  "8006982411": "8006982411",
-  "8006982411.displayText": "800-698-2411",
-  "8008271000": "8008271000",
-  "8008271000.displayText": "800-827-1000",
-  "8773270022": "8773270022",
-  "8773270022.displayText": "877-327-0022",
   "accountType.checking": "Checking",
   "accountType.savings": "Savings",
   "and": "and",
@@ -24,8 +18,6 @@
   "done": "Done",
   "done.a11yHint": "Exits out of the web view and navigates to the previous page",
   "done.picker.a11yHint": "confirms selection and closes the menu",
-  "downtime.title": "Some online tools or services aren’t working right now",
-  "downtime.message": "{{featureName}} on V\ufeffA mobile app is currently unavailable. We’re working to fix this. We intend to restore this by {{endTime}}. Please check back soon.",
   "editing": "Editing: {{ text }}",
   "editingNoValue": "Editing value",
   "empty": "Empty",
@@ -38,11 +30,10 @@
   "howToAttachAFile": "How to attach a file",
   "isRequired": "{{ label }} is required",
   "leavingApp.title": "You are leaving",
-  "leavingApp.body": "You are being directed to a website outside of the V\ufeffA: Health and Benefits App.",
+  "leavingApp.body": "You are being directed to a website outside of the VA: Health and Benefits App.",
   "leavingApp.ok": "Ok",
   "listPosition": "{{position}} of {{total}}",
   "mobileBodyLink.a11yHint": "This page will open in your device's browser",
-  "next": "Next",
   "noItemSelected": "No item currently selected. Select an item from the dropdown.",
   "photoGallery": "Photo gallery",
   "picker": "picker",
@@ -66,7 +57,6 @@
   "errors.callHelpCenter.informationLine.numberDisplayed": "800-698-2411, select 0",
   "errors.callHelpCenter.notWorking": "The app isn't working right now",
   "errors.callHelpCenter.notWorking.a11yLabel": "The app isn't working right now",
-  "errors.callHelpCenter.vaAppNotWorking": "The V\ufeffA mobile app isn't working right now",
   "errors.callHelpCenter.sorry": "We're sorry. Something went wrong on our end. Try again later.",
   "errors.callHelpCenter.sorryWithRefresh": "We're sorry. Something went wrong on our end. Please refresh this screen or try again later.",
   "errors.callHelpCenter.tty": "If you have hearing loss, call TTY:",
@@ -88,6 +78,5 @@
   "note": "Note:",
   "MB": "MB",
   "KB": "KB",
-  "Bytes": "Bytes",
-  "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})"
+  "Bytes": "Bytes"
 }
