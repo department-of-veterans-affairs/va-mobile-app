@@ -47,40 +47,28 @@ context('errors', () => {
       const mockMaintenanceWindows: MaintenanceWindowsGetData = {
         data: [
           {
-            attributes: {
-              service: 'direct_deposit_benefits',
-              startTime: '2021-06-01T12:00:00.000Z',
-              endTime: '2021-06-01T18:00:00.000Z',
-            },
-            id: '1',
-            type: 'maintenance_window',
+            service: 'direct_deposit_benefits',
+            startTime: '2021-06-01T12:00:00.000Z',
+            endTime: '2021-06-01T18:00:00.000Z',
+            description: 'active maintenance window',
           },
           {
-            attributes: {
-              service: 'military_service_history',
-              startTime: '2021-06-01T12:00:00.000Z',
-              endTime: '2021-06-01T18:00:00.000Z',
-            },
-            id: '2',
-            type: 'maintenance_window',
+            service: 'military_service_history',
+            startTime: '2021-06-01T12:00:00.000Z',
+            endTime: '2021-06-01T18:00:00.000Z',
+            description: 'active maintenance window',
           },
           {
-            attributes: {
-              service: 'secure_messaging',
-              startTime: '2021-06-01T20:00:00.000Z',
-              endTime: '2021-06-01T23:00:00.000Z',
-            },
-            id: '3',
-            type: 'maintenance_window',
+            service: 'secure_messaging',
+            startTime: '2021-06-01T20:00:00.000Z',
+            endTime: '2021-06-01T23:00:00.000Z',
+            description: 'future maintenance window',
           },
           {
-            attributes: {
-              service: 'auth_idme',
-              startTime: '2021-06-01T12:00:00.000Z',
-              endTime: '2021-06-01T18:00:00.000Z',
-            },
-            id: '4',
-            type: 'maintenance_window',
+            service: 'auth_idme',
+            startTime: '2021-06-01T12:00:00.000Z',
+            endTime: '2021-06-01T18:00:00.000Z',
+            description: 'active maintenance window but unmapped service',
           },
         ]
       }
