@@ -32,7 +32,11 @@
     "env:test": "./env/env.sh -e staging -d true -t true",
     "env:uat": "./env/env.sh -d true -t false",
     "env:production": "./env/env.sh -e production -d false -t false",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "e2e:ios-build": "yarn run bundle:ios && detox build -c ios",
+    "e2e:ios-test": "detox test -c ios",
+    "e2e:android-build": " yarn run bundle:android && detox build -c android",
+    "e2e:android-test": "detox test -c android"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.12.0",
@@ -92,6 +96,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@babel/runtime": "^7.15.4",
     "@react-native-community/eslint-config": "^3.0.1",
+    "@types/detox": "^18.1.0",
     "@types/jest": "^27.0.2",
     "@types/jest-when": "^2.7.3",
     "@types/luxon": "^2.0.4",
@@ -118,6 +123,7 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "chromedriver": "^93.0.1",
     "concurrently": "^6.0.0",
+    "detox": "^19.3.1",
     "eslint": "^7.22.0",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-native": "^3.9.1",

@@ -48,6 +48,7 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
     accessible: true,
     accessibilityRole: 'button',
     onPress: onDemo,
+    testID: 'demo-btn',
   }
 
   const inputProps: TextInputProps = {
@@ -56,6 +57,7 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
     keyboardType: 'default',
     autoFocus: true,
     style: { fontSize: 20, color: theme.colors.text.primary },
+    testID: 'demo-mode-password',
   }
 
   return (

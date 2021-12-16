@@ -107,7 +107,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const testId = `${title} ${tagCountA11y || ''} ${subText}`.trim()
+  const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subText}`.trim()
 
   return (
     <Box {...boxProps}>
@@ -118,8 +118,9 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         onPressOut={_onPressOut}
         accessible={true}
         accessibilityRole={'menuitem'}
-        {...a11yHintProp(a11yHint || '')}
-        {...testIdProps(testId)}>
+        testID={title}
+        accessibilityLabel={accessibilityLabel}
+        {...a11yHintProp(a11yHint || '')}>
         <Box flex={1}>
           <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>

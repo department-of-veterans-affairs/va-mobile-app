@@ -60,7 +60,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       testId: t('findLocation.titleA11yLabel'),
     },
     { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
-    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
+    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: t('coronavirusFaqs.title') },
   ]
 
   let greeting
@@ -83,7 +83,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
-          <TextView variant="MobileBodyBold" accessibilityRole={'header'}>
+          <TextView variant="MobileBodyBold" accessibilityRole={'header'} testID={'greeting-text'}>
             {heading}
           </TextView>
         </Box>

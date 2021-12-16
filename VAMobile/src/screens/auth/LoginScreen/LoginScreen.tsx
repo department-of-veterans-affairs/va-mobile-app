@@ -75,7 +75,7 @@ const LoginScreen: FC = () => {
         </Box>
       )}
       <Box flex={1}>
-        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween}>
+        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.loginContentMarginBottom}>
