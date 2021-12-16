@@ -19,10 +19,10 @@ jest.mock('utils/hooks', () => {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
-        .mockReturnValueOnce(() => { })
-        .mockReturnValueOnce(() => { })
-        .mockReturnValueOnce(() => { })
-        .mockReturnValue(() => { })
+        .mockReturnValueOnce(() => {})
+        .mockReturnValueOnce(() => {})
+        .mockReturnValueOnce(() => {})
+        .mockReturnValue(() => {})
     },
     useTheme: jest.fn(() => {
       return { ...theme }
@@ -36,10 +36,7 @@ context('HomeScreen', () => {
   let props: any
 
   const initializeTestInstance = () => {
-    props = mockNavProps(
-      undefined,
-      { setOptions: jest.fn(), navigate: mockNavigationSpy }
-    )
+    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     act(() => {
       component = renderWithProviders(<HomeScreen {...props} />)
@@ -58,11 +55,10 @@ context('HomeScreen', () => {
 
   describe('when VA COVID-19 updates is pressed', () => {
     it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
-      findByTestID(testInstance, 'v-a-covid-19-updates').props.onPress()
-      const expectNavArgs =
-      {
+      findByTestID(testInstance, 'V\ufeffA COVID-19 updates').props.onPress()
+      const expectNavArgs = {
         url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-        displayTitle: 'va.gov'
+        displayTitle: 'va.gov',
       }
       expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
