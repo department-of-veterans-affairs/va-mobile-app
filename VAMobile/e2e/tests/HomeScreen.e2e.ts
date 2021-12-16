@@ -1,4 +1,4 @@
-import { expect, device, by, element, cleanup, waitFor } from 'detox'
+import { expect, device, by, element, waitFor } from 'detox'
 import { CommonE2eIdConstants, loginToDemoMode } from './utils'
 
 export const HomeE2eIdConstants = {
@@ -11,7 +11,6 @@ export const HomeE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await device.reloadReactNative()
   await loginToDemoMode()
 })
 
