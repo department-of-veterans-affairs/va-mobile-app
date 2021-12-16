@@ -6,7 +6,6 @@ import _ from 'underscore'
 import { Action } from 'redux'
 import { StoreState } from 'store/reducers'
 import { TextLine } from 'components/types'
-import { isIOS } from './platform'
 import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/actions'
 import getEnv from 'utils/env'
 

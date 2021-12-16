@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react'
 
 import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, VAIcon } from 'components'
 import { VAIconColors, VATextColors } from 'styles/theme'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import MessagesCountTag from './MessagesCountTag'
 
