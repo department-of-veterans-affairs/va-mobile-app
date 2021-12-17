@@ -6,7 +6,7 @@
     "ios": {
       "type": "ios.app",
       "binaryPath": "ios/output/Build/Products/Release-iphonesimulator/VAMobile.app",
-      "build": "cd ios && xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -destination 'platform=iOS Simulator,name=iPhone 13' -derivedDataPath ./output -sdk iphonesimulator BUILD_LIBRARIES_FOR_DISTRIBUTION=YES build && cd .."
+      "build": "cd ios && xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -derivedDataPath ./output -sdk iphonesimulator BUILD_LIBRARIES_FOR_DISTRIBUTION=YES build && cd .."
     },
     "android": {
       "type": "android.apk",
