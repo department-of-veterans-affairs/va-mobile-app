@@ -74,7 +74,7 @@ const DirectDepositScreen: FC = () => {
     return (
       <React.Fragment>
         <ProfileBanner />
-        <LoadingComponent />
+        <LoadingComponent text={t('directDeposit.loading')} />
       </React.Fragment>
     )
   }

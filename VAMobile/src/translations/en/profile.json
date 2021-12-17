@@ -37,6 +37,7 @@
   "directDeposit.hearingLoss": "If you have hearing loss, call TTY:",
   "directDeposit.hearingLossNumber": "711",
   "directDeposit.information": "Direct deposit information",
+  "directDeposit.loading": "We're loading your direct deposit information",
   "directDeposit.savingInformation": "We're saving your direct deposit information",
   "directDeposit.title": "Direct Deposit",
   "directDeposit.viewAndEditText": "Add, review, or change your direct deposit information for disability compensation and pension benefits. Any updates you make here will also update on VA.gov.",

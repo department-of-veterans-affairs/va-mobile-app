@@ -149,6 +149,14 @@ export const Events = {
       },
     }
   },
+  vama_covid_links: (referringScreen: string): Event => {
+    return {
+      name: 'vama_covid_links',
+      params: {
+        referringScreen,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {
