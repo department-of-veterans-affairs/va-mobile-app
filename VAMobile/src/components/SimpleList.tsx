@@ -26,7 +26,7 @@ const SimpleList: FC<SimpleListProps> = ({ items, title, titleA11yLabel }) => {
     // Move all of the properties except text lines to the standard list item object
     const { text, testId, ...listItemObj } = { ...item }
 
-    const textLine: Array<TextLine> = [{ text } as TextLine]
+    const textLine: Array<TextLine> = [{ text, color: 'primaryTitle' } as TextLine]
 
     const testIdToUse = testId ? testId : generateTestIDForTextList(textLine)
     const content = <TextLines listOfText={textLine} />

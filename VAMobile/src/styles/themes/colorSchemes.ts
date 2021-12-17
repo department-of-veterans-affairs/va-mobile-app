@@ -216,7 +216,7 @@ export const darkTheme = {
     footerButton: colors.grayLight,
     footerButtonActive: colors.white,
     navBar: colors.grayLightest,
-    primary: colors.grayLight,
+    primary: colors.grayLighter,
     primaryTitle: colors.grayLightest,
     primaryContrast: colors.grayLightest,
     primaryContrastDisabled: colors.grayLight,
