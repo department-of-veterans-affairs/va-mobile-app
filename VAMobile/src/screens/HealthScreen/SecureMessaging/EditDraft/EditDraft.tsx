@@ -17,7 +17,6 @@ import {
   LoadingComponent,
   MessageAlert,
   PickerItem,
-  SaveButton,
   TextArea,
   TextView,
   VAButton,
@@ -43,6 +42,7 @@ import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useAttachments, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
+import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -136,6 +136,19 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     })
   }
 
+  const MenViewActions: MenuViewActionsType = [
+    {
+      actionText: 'Save',
+      addDivider: true,
+      iconName: 'FolderSolid',
+    },
+    {
+      actionText: 'Delete',
+      addDivider: false,
+      iconName: 'TrashSolid',
+    },
+  ]
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
@@ -146,17 +159,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           showCarat={false}
         />
       ),
-      headerRight: () =>
-        (!noRecipientsReceived || isReplyDraft) && (
-          <SaveButton
-            onSave={() => {
-              setOnSaveDraftClicked(true)
-              setOnSendClicked(true)
-            }}
-            disabled={false}
-            a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-          />
-        ),
+      headerRight: () => (!noRecipientsReceived || isReplyDraft) && <MenuView actions={MenViewActions} />,
     })
   })
 
