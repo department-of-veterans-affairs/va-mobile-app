@@ -357,10 +357,10 @@ const Menu: React.FC<Props> = (props) => {
         accessible={true}>
         <>
           <View style={[StyleSheet.absoluteFill]}>
+            <Pressable accessible={true} style={[StyleSheet.absoluteFill]} onPress={hide} accessibilityLabel={'Close Menu Area'} />
             <Animated.View {...(!animationStarted ? { onLayout: _onMenuLayout } : {})} style={[styles.shadowMenuContainer, shadowMenuContainerStyle, style]}>
               <Animated.View style={[styles.menuContainer, animationStarted && menuSize]}>{children}</Animated.View>
             </Animated.View>
-            <Pressable accessible={true} style={[StyleSheet.absoluteFill]} onPress={hide} accessibilityLabel={'Close Menu Area'} />
           </View>
         </>
       </Modal>

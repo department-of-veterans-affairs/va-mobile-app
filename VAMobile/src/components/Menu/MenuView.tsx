@@ -10,10 +10,12 @@ interface ElementToStickProps {
   style?: StyleProp<ViewStyle>
 }
 
+// element where the popup will anchor to
 const ElementToStick = React.forwardRef<View, ElementToStickProps>(({ style }, ref) => {
   return <View ref={ref} style={style} collapsable={false} />
 })
 
+// the actions type.
 export type MenuItemActionsType = {
   actionText: string
   addDivider: boolean
@@ -21,6 +23,7 @@ export type MenuItemActionsType = {
   onPress?: () => void
 }
 
+// array of menu items actions type
 export type MenuViewActionsType = Array<MenuItemActionsType>
 
 export type MenuViewProps = {
@@ -32,17 +35,6 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   const showButtonRef = useRef<ShowBtnType>()
   const hideButtonRef = useRef<() => void>()
 
-  const hideMenu = () => {
-    if (hideButtonRef.current) {
-      hideButtonRef.current()
-    }
-  }
-  const showMenu = () => {
-    if (showButtonRef.current) {
-      showButtonRef.current(elementRef.current, Position.TOP_CENTER)
-    }
-  }
-
   const mainContainerStyle: StyleProp<ViewStyle> = {
     width: '100%',
     height: '100%',
@@ -51,6 +43,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     marginRight: 10,
     flex: 1,
   }
+
   const elementToStickStyle: StyleProp<ViewStyle> = {
     padding: 22,
     justifyContent: 'center',
@@ -61,14 +54,26 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     position: 'absolute',
   }
 
-  const getActionsForMenu = () => {
-    const menuStyle: StyleProp<ViewStyle> = {
-      flexDirection: 'row',
+  const menuStyle: StyleProp<ViewStyle> = {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+  }
 
-      justifyContent: 'space-between',
-      padding: 10,
+  const hideMenu = () => {
+    if (hideButtonRef.current) {
+      hideButtonRef.current()
     }
+  }
 
+  const showMenu = () => {
+    if (showButtonRef.current) {
+      showButtonRef.current(elementRef.current, Position.TOP_CENTER)
+    }
+  }
+
+  // gets the action passed down to the menu and creates the menu actions
+  const getActionsForMenu = () => {
     return actions.map((item, index) => {
       const onPressMenu = () => {
         hideMenu()
@@ -78,7 +83,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       }
       return (
         <View key={index}>
-          <MenuItemView onPress={onPressMenu} viewStyle={menuStyle}>
+          <MenuItemView onPress={onPressMenu} viewStyle={menuStyle} focusOnButton={index === 0 ? true : false}>
             <Text>{item.actionText}</Text>
             {item.iconName && <VAIcon name={item.iconName} fill={'black'} height={16} width={16} />}
           </MenuItemView>
@@ -89,18 +94,16 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   }
 
   return (
-    <>
-      <View style={mainContainerStyle}>
-        <ElementToStick ref={elementRef} style={elementToStickStyle} />
-        <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'open context menu'}>
-          <VAIcon name="EllipsisSolid" fill={'white'} height={35} width={35} />
-        </Pressable>
+    <View style={mainContainerStyle}>
+      <ElementToStick ref={elementRef} style={elementToStickStyle} />
+      <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'open context menu'}>
+        <VAIcon name="EllipsisSolid" fill={'white'} height={35} width={35} />
+      </Pressable>
 
-        <Menu show={showButtonRef} hide={hideButtonRef}>
-          {getActionsForMenu()}
-        </Menu>
-      </View>
-    </>
+      <Menu show={showButtonRef} hide={hideButtonRef}>
+        {getActionsForMenu()}
+      </Menu>
+    </View>
   )
 }
 

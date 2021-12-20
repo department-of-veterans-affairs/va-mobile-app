@@ -141,6 +141,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       actionText: 'Save',
       addDivider: true,
       iconName: 'FolderSolid',
+      onPress: () => {
+        setOnSaveDraftClicked(true)
+        setOnSendClicked(true)
+      },
     },
     {
       actionText: 'Delete',

@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { PropsWithChildren } from 'react'
-
 import { Platform, StyleSheet, Text, TextProps, TouchableHighlight, TouchableHighlightProps, View, ViewProps } from 'react-native'
+import { useAccessibilityFocus } from 'utils/hooks'
+import { useFocusEffect } from '@react-navigation/native'
+import React, { PropsWithChildren } from 'react'
 
 interface TouchableProps {
   disabled: boolean
@@ -25,6 +25,7 @@ interface MenuItemTextProps {
   touchableStyle?: TouchableHighlightProps['style']
   textStyle?: TextProps['style']
   onPress: TouchableHighlightProps['onPress']
+  focusOnButton?: boolean
 }
 
 export const MenuItemText = ({
@@ -35,13 +36,19 @@ export const MenuItemText = ({
   textStyle,
   children,
   onPress,
+  focusOnButton = false,
 }: PropsWithChildren<MenuItemTextProps>): JSX.Element => {
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  useFocusEffect(focusOnButton ? setFocus : () => {})
+
   return (
-    <Touchable disabled={disabled} underlayColor={underlayColor} style={touchableStyle} onPress={onPress}>
-      <Text ellipsizeMode={Platform.OS === 'ios' ? 'clip' : 'tail'} numberOfLines={1} style={[styles.title, disabled && { color: disabledTextColor }, textStyle]}>
-        {children}
-      </Text>
-    </Touchable>
+    <View ref={focusRef} accessible={true}>
+      <Touchable disabled={disabled} underlayColor={underlayColor} style={touchableStyle} onPress={onPress}>
+        <Text ellipsizeMode={Platform.OS === 'ios' ? 'clip' : 'tail'} numberOfLines={1} style={[styles.title, disabled && { color: disabledTextColor }, textStyle]}>
+          {children}
+        </Text>
+      </Touchable>
+    </View>
   )
 }
 
@@ -52,6 +59,7 @@ interface MenuItemViewProps {
   touchableStyle?: TouchableHighlightProps['style']
   viewStyle?: ViewProps['style']
   onPress: TouchableHighlightProps['onPress']
+  focusOnButton?: boolean
 }
 
 export const MenuItemView = ({
@@ -62,16 +70,19 @@ export const MenuItemView = ({
   disabledStyle,
   children,
   onPress,
+  focusOnButton = false,
 }: PropsWithChildren<MenuItemViewProps>): JSX.Element => {
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  useFocusEffect(focusOnButton ? setFocus : () => {})
+
   return (
-    <Touchable disabled={disabled} underlayColor={underlayColor} style={touchableStyle} onPress={onPress}>
-      <View style={[viewStyle, disabled && disabledStyle]}>{children}</View>
-    </Touchable>
+    <View ref={focusRef} accessible={true}>
+      <Touchable disabled={disabled} underlayColor={underlayColor} style={touchableStyle} onPress={onPress}>
+        <View style={[viewStyle, disabled && disabledStyle]}>{children}</View>
+      </Touchable>
+    </View>
   )
 }
-
-const MenuItem = MenuItemText
-export { MenuItem }
 
 const styles = StyleSheet.create({
   container: {
