@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
-import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
+import { Box, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
@@ -109,10 +109,12 @@ const Folders: FC<FoldersProps> = () => {
   }
 
   return (
-    <Box {...testIdProps('', false, 'Folders-page')}>
-      {getSystemFolders(folders || [], theme, t, onFolderPress)}
-      {getUserFolders(folders || [], theme, t, onFolderPress)}
-    </Box>
+    <VAScrollView {...testIdProps('', false, 'Folders-page')}>
+      <Box>
+        {getSystemFolders(folders || [], theme, t, onFolderPress)}
+        {getUserFolders(folders || [], theme, t, onFolderPress)}
+      </Box>
+    </VAScrollView>
   )
 }
 

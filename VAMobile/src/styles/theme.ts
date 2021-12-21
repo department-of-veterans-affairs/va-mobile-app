@@ -144,6 +144,7 @@ export type VABorderColors = {
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string
+  footerButton: string
 }
 
 export type VAFontSizes = {
