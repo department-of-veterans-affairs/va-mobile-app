@@ -106,6 +106,7 @@ export type VABackgroundColors = {
   pickerSelectedItem: string
   navButton: string
   snackbar: string
+  menu: string
 }
 
 export type VABorderColors = {
@@ -121,6 +122,7 @@ export type VABorderColors = {
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string
+  menuDivider: string
 }
 
 export type VAFontSizes = {
@@ -238,6 +240,12 @@ export type VATheme = {
     snackBarButtonTopMargin: number
     snackBarConfirmBtnMarginRight: number
     snackBarIconTopMargin: number
+    menuShadowX: number
+    menuShadowY: number
+    menuShadowOpacity: number
+    menuShadowRadius: number
+    menuOpacity: number
+    menuBorderRadius: number
   }
   fontFace: {
     regular: string

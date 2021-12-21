@@ -17,6 +17,7 @@ import {
   LoadingComponent,
   MessageAlert,
   PickerItem,
+  SaveButton,
   TextArea,
   TextView,
   VAButton,
@@ -33,6 +34,7 @@ import {
 } from 'store/api/types'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
@@ -42,7 +44,6 @@ import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useAttachments, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -52,6 +53,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
   const goToDrafts = useGoToDrafts()
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
     StoreState,
@@ -91,6 +93,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
     }
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
   }, [messageID, dispatch])
 
   useEffect(() => {
@@ -136,23 +141,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     })
   }
 
-  const MenViewActions: MenuViewActionsType = [
-    {
-      actionText: 'Save',
-      addDivider: true,
-      iconName: 'FolderSolid',
-      onPress: () => {
-        setOnSaveDraftClicked(true)
-        setOnSendClicked(true)
-      },
-    },
-    {
-      actionText: 'Delete',
-      addDivider: false,
-      iconName: 'TrashSolid',
-    },
-  ]
-
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
@@ -163,7 +151,17 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           showCarat={false}
         />
       ),
-      headerRight: () => (!noRecipientsReceived || isReplyDraft) && <MenuView actions={MenViewActions} />,
+      headerRight: () =>
+        (!noRecipientsReceived || isReplyDraft) && (
+          <SaveButton
+            onSave={() => {
+              setOnSaveDraftClicked(true)
+              setOnSendClicked(true)
+            }}
+            disabled={false}
+            a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+          />
+        ),
     })
   })
 
@@ -179,7 +177,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete) {
     const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : undefined
     return <LoadingComponent text={text} />
   }

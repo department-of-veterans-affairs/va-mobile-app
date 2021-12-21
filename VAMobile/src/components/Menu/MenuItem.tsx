@@ -1,99 +1,43 @@
-import { Platform, StyleSheet, Text, TextProps, TouchableHighlight, TouchableHighlightProps, View, ViewProps } from 'react-native'
-import { useAccessibilityFocus } from 'utils/hooks'
-import { useFocusEffect } from '@react-navigation/native'
+// This component code is from the original code in https://github.com/breeffy/react-native-popup-menu with some modification made to make it work for us.
+import { StyleProp, TouchableHighlight, TouchableHighlightProps, View, ViewProps, ViewStyle } from 'react-native'
 import React, { PropsWithChildren } from 'react'
 
-interface TouchableProps {
-  disabled: boolean
-  underlayColor: TouchableHighlightProps['underlayColor']
-  style: TouchableHighlightProps['style']
-  onPress: TouchableHighlightProps['onPress']
-}
-
-const Touchable = ({ disabled, underlayColor, style, children, onPress, ...props }: PropsWithChildren<TouchableProps>) => {
-  return (
-    <TouchableHighlight disabled={disabled} onPress={onPress} style={[styles.container, style]} underlayColor={underlayColor} {...props}>
-      {children}
-    </TouchableHighlight>
-  )
-}
-
-interface MenuItemTextProps {
-  disabled?: boolean
-  disabledTextColor?: string
-  underlayColor?: TouchableHighlightProps['underlayColor']
-  touchableStyle?: TouchableHighlightProps['style']
-  textStyle?: TextProps['style']
-  onPress: TouchableHighlightProps['onPress']
-  focusOnButton?: boolean
-}
-
-export const MenuItemText = ({
-  disabled = false,
-  disabledTextColor = '#BDBDBD',
-  underlayColor = '#E0E0E0',
-  touchableStyle,
-  textStyle,
-  children,
-  onPress,
-  focusOnButton = false,
-}: PropsWithChildren<MenuItemTextProps>): JSX.Element => {
-  const [focusRef, setFocus] = useAccessibilityFocus<View>()
-  useFocusEffect(focusOnButton ? setFocus : () => {})
-
-  return (
-    <View ref={focusRef} accessible={true}>
-      <Touchable disabled={disabled} underlayColor={underlayColor} style={touchableStyle} onPress={onPress}>
-        <Text ellipsizeMode={Platform.OS === 'ios' ? 'clip' : 'tail'} numberOfLines={1} style={[styles.title, disabled && { color: disabledTextColor }, textStyle]}>
-          {children}
-        </Text>
-      </Touchable>
-    </View>
-  )
-}
+import colors from '../../styles/themes/VAColors'
 
 interface MenuItemViewProps {
+  /** disables the menu item */
   disabled?: boolean
+  /** sets the underlay color */
   underlayColor?: TouchableHighlightProps['underlayColor']
+  /** sets the disable style */
   disabledStyle?: ViewProps['style']
+  /** sets the menu button style */
   touchableStyle?: TouchableHighlightProps['style']
+  /** sets the menu container style*/
   viewStyle?: ViewProps['style']
+  /** sets the method to execute on press */
   onPress: TouchableHighlightProps['onPress']
-  focusOnButton?: boolean
 }
 
-export const MenuItemView = ({
+/** This is the menu item common component. This component will be the actions shown inside the menu.
+ */
+export const MenuItem = ({
   disabled = false,
-  underlayColor = '#E0E0E0',
+  underlayColor = colors.crisisLineRed,
   viewStyle,
   touchableStyle,
   disabledStyle,
   children,
   onPress,
-  focusOnButton = false,
 }: PropsWithChildren<MenuItemViewProps>): JSX.Element => {
-  const [focusRef, setFocus] = useAccessibilityFocus<View>()
-  useFocusEffect(focusOnButton ? setFocus : () => {})
-
+  const touchableInitialStyle: StyleProp<ViewStyle> = {
+    justifyContent: 'center',
+    minWidth: 191,
+    flexWrap: 'wrap',
+  }
   return (
-    <View ref={focusRef} accessible={true}>
-      <Touchable disabled={disabled} underlayColor={underlayColor} style={touchableStyle} onPress={onPress}>
-        <View style={[viewStyle, disabled && disabledStyle]}>{children}</View>
-      </Touchable>
-    </View>
+    <TouchableHighlight disabled={disabled} onPress={onPress} style={[touchableInitialStyle, touchableStyle]} underlayColor={underlayColor}>
+      <View style={[viewStyle, disabled && disabledStyle]}>{children}</View>
+    </TouchableHighlight>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: 48,
-    justifyContent: 'center',
-    maxWidth: 248,
-    minWidth: 124,
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: '400',
-    paddingHorizontal: 16,
-  },
-})
