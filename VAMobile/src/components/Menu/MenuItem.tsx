@@ -2,7 +2,7 @@
 import { StyleProp, TouchableHighlight, TouchableHighlightProps, View, ViewProps, ViewStyle } from 'react-native'
 import React, { PropsWithChildren } from 'react'
 
-import colors from '../../styles/themes/VAColors'
+import colors from 'styles/themes/VAColors'
 
 interface MenuItemViewProps {
   /** disables the menu item */
