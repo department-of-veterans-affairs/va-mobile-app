@@ -1,6 +1,7 @@
 //  This component code is from the original code in https://github.com/breeffy/react-native-popup-menu.
 import * as React from 'react'
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+
 import theme from 'styles/themes/standardTheme'
 
 export interface MenuDividerProps {
