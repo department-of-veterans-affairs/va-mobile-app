@@ -34,7 +34,6 @@ import {
 } from 'store/api/types'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
@@ -53,7 +52,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
   const goToDrafts = useGoToDrafts()
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
     StoreState,
@@ -93,9 +91,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
     }
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [messageID, dispatch])
 
   useEffect(() => {
@@ -177,7 +172,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null) {
     const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : undefined
     return <LoadingComponent text={text} />
   }
