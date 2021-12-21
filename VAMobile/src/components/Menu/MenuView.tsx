@@ -32,6 +32,8 @@ export type MenuItemActionsType = {
   iconColor?: keyof VAIconColors
   /** color for the menu text */
   textColor?: keyof VATextColors
+  /** action accessibility label */
+  accessibilityLabel?: string
 }
 
 export type MenuViewActionsType = Array<MenuItemActionsType>
@@ -96,6 +98,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   // gets the action passed down to the menu and creates the menu actions
   const getActionsForMenu = () => {
     return actions.map((item, index) => {
+      const { iconName, actionText, accessibilityLabel, iconColor, textColor } = item
       const onPressMenu = () => {
         hideMenu()
         if (item.onPress) {
@@ -104,11 +107,11 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       }
       return (
         <View key={index}>
-          <View accessibilityLabel={item.actionText} accessibilityRole={'button'}>
+          <View accessibilityLabel={accessibilityLabel ? accessibilityLabel : actionText} accessibilityRole={'button'}>
             <MenuItem onPress={onPressMenu} viewStyle={menuStyle}>
-              {item.iconName && <VAIcon name={item.iconName} fill={item.iconColor ? item.iconColor : 'dark'} height={24} width={24} />}
-              <TextView ml={10} color={item.textColor ? item.textColor : undefined}>
-                {item.actionText}
+              {iconName && <VAIcon name={iconName} fill={iconColor ? iconColor : 'dark'} height={24} width={24} />}
+              <TextView ml={10} color={textColor ? textColor : undefined}>
+                {actionText}
               </TextView>
             </MenuItem>
           </View>

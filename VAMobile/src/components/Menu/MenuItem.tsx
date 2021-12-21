@@ -23,7 +23,7 @@ interface MenuItemViewProps {
  */
 export const MenuItem = ({
   disabled = false,
-  underlayColor = colors.crisisLineRed,
+  underlayColor = colors.grayLight,
   viewStyle,
   touchableStyle,
   disabledStyle,

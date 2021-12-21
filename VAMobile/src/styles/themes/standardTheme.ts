@@ -285,9 +285,9 @@ const theme: VATheme = {
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
     menuShadowX: 0,
-    menuShadowY: 10,
+    menuShadowY: 4,
     menuShadowOpacity: 0.6,
-    menuShadowRadius: 14,
+    menuShadowRadius: 4,
     menuOpacity: 0,
     menuBorderRadius: 4,
   },
