@@ -28,7 +28,9 @@ export type MenuItemActionsType = {
   iconName?: keyof typeof VA_ICON_MAP
   /** method to  */
   onPress?: () => void
+  /** color for the menu icon */
   iconColor?: keyof VAIconColors
+  /** color for the menu text */
   textColor?: keyof VATextColors
 }
 

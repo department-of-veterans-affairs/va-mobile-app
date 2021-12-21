@@ -185,7 +185,7 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
             AccessibilityInfo.setAccessibilityFocus(focusPoint)
           }
         }
-      }, 600)
+      }, 300)
 
       return () => clearTimeout(timeOutPageFocus)
     }
