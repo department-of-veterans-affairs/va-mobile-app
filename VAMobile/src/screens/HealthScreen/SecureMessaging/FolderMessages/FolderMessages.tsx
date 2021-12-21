@@ -10,7 +10,8 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { listFolderMessages, resetSaveDraftComplete } from 'store/actions'
+import { listFolderMessages, resetDeleteDraftComplete, resetSaveDraftComplete } from 'store/actions'
+import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
@@ -24,7 +25,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
   const theme = useTheme()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<StoreState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
   const paginationMetaData = paginationMetaByFolderId?.[folderID]
 
@@ -33,7 +36,12 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
     // If draft saved message showing, clear status so it doesn't show again
     dispatch(resetSaveDraftComplete())
-  }, [dispatch, folderID, route])
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      snackBar.hideAll()
+    })
+
+    return unsubscribe
+  }, [dispatch, folderID, route, navigation])
 
   useEffect(() => {
     if (saveDraftComplete) {
@@ -41,6 +49,13 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
       dispatch(resetSaveDraftComplete())
     }
   }, [dispatch, saveDraftComplete])
+
+  useEffect(() => {
+    if (deleteDraftComplete) {
+      showSnackBar(t('secureMessaging.deleteDraft.snackBarMessage'), dispatch, undefined, true, false, true)
+      dispatch(resetDeleteDraftComplete())
+    }
+  }, [deleteDraftComplete, dispatch, t])
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
     const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'

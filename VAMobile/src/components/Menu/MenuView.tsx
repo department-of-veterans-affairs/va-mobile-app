@@ -101,10 +101,16 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       const { iconName, actionText, accessibilityLabel, iconColor, textColor } = item
       const onPressMenu = () => {
         hideMenu()
-        if (item.onPress) {
-          item.onPress()
-        }
+
+        //Timeout needs to be added so that the actionsheet does not close when the popup menu does.
+        const timeoutInMS = isIOS() ? 350 : 0
+        setTimeout(() => {
+          if (item.onPress) {
+            item.onPress()
+          }
+        }, timeoutInMS)
       }
+
       return (
         <View key={index}>
           <View accessibilityLabel={accessibilityLabel ? accessibilityLabel : actionText} accessibilityRole={'button'}>

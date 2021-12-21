@@ -33,7 +33,7 @@ type ToastType = import('react-native-toast-notifications').ToastType
 
 type modifyToastOptions = Omit<ToastOptions, 'data'> & {
   data?: {
-    onConfirmAction?: () => void
+    onActionPressed?: () => void
     isError?: boolean
     actionBtnText?: string
     isUndo?: boolean

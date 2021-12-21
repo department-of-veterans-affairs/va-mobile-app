@@ -24,7 +24,7 @@ interface MenuItemViewProps {
  */
 export const MenuItem = ({
   disabled = false,
-  underlayColor = colors.grayLight,
+  underlayColor = colors.primaryAltLightest,
   viewStyle,
   touchableStyle,
   disabledStyle,
