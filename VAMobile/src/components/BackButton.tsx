@@ -43,7 +43,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
     return null
   }
 
-  const chevron = showCarat ? <VAIcon mt={1} name={'ArrowLeft'} fill="contrast" /> : <></>
+  const chevron = showCarat ? <VAIcon mt={1} name={'ArrowLeft'} fill="backButton" /> : <></>
 
   const a11yHintPropParam = a11yHint ? a11yHint : t(`${label}.a11yHint`)
 
@@ -51,7 +51,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
       <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} alignItems={'center'}>
         {chevron}
-        <TextView variant="ActionBar" color="primaryContrast" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
+        <TextView variant="ActionBar" color="backButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {t(label)}
         </TextView>
       </Box>

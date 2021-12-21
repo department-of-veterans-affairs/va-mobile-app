@@ -195,7 +195,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const actionsBarBoxProps: BoxProps = {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'main',
+    backgroundColor: 'pickerControls',
     minHeight: theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.gutter,

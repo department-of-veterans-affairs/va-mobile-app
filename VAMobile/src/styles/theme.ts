@@ -53,6 +53,7 @@ export type VATextColors = {
   segmentControllerActive: string
   segmentControllerInactive: string
   snackBarBtn: string
+  backButton: string
 }
 
 export type VAIconColors = {
@@ -78,6 +79,8 @@ export type VAIconColors = {
   pagination: string
   chevronCollapsible: string
   chevronListItem: string
+  webviewReload: string
+  backButton: string
 }
 
 export type VATypographyThemeVariants = {
@@ -125,6 +128,7 @@ export type VABackgroundColors = {
   contentBox: string
   snackbar: string
   webviewControls: string
+  pickerControls: string
 }
 
 export type VABorderColors = {
