@@ -3,6 +3,7 @@ import { StyleProp, TouchableHighlight, TouchableHighlightProps, View, ViewProps
 import React, { PropsWithChildren } from 'react'
 
 import colors from 'styles/themes/VAColors'
+import theme from 'styles/themes/standardTheme'
 
 interface MenuItemViewProps {
   /** disables the menu item */
@@ -32,7 +33,7 @@ export const MenuItem = ({
 }: PropsWithChildren<MenuItemViewProps>): JSX.Element => {
   const touchableInitialStyle: StyleProp<ViewStyle> = {
     justifyContent: 'center',
-    minWidth: 191,
+    minWidth: theme.dimensions.menuItemMinWidth,
     flexWrap: 'wrap',
   }
   return (

@@ -246,6 +246,8 @@ export type VATheme = {
     menuShadowRadius: number
     menuOpacity: number
     menuBorderRadius: number
+    menuItemMinWidth: number
+    menuElevation: number
   }
   fontFace: {
     regular: string

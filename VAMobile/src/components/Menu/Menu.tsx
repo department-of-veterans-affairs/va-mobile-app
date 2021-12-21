@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
         shadowRadius: theme.dimensions.menuShadowRadius,
       },
       android: {
-        elevation: 20,
+        elevation: theme.dimensions.menuElevation,
         shadowColor: colors.black,
       },
     }),

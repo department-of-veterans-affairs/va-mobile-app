@@ -290,6 +290,8 @@ const theme: VATheme = {
     menuShadowRadius: 4,
     menuOpacity: 0,
     menuBorderRadius: 4,
+    menuItemMinWidth: 191,
+    menuElevation: 20,
   },
 
   fontFace: {
