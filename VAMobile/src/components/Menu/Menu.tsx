@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Animated, Dimensions, Easing, LayoutChangeEvent, Modal, NativeMethods, Platform, Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
 import colors from '../../styles/themes/VAColors'
