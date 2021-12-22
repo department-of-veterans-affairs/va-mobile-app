@@ -105,6 +105,7 @@ const theme: VATheme = {
       pickerSelectedItem: colors.primaryAltLightest,
       navButton: colors.toolbarBackgroundGray,
       snackbar: colors.snackBarBlack,
+      menu: colors.white,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -123,6 +124,7 @@ const theme: VATheme = {
       pickerAndInput: colors.gray,
       focusedPickerAndInput: colors.primaryDarker,
       confirmation: colors.goldLight,
+      menuDivider: colors.grayLight,
     },
     icon: {
       footerButton: colors.primary,
@@ -282,6 +284,14 @@ const theme: VATheme = {
     snackBarIconSize: 18,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
+    menuShadowX: 0,
+    menuShadowY: 4,
+    menuShadowOpacity: 0.6,
+    menuShadowRadius: 4,
+    menuOpacity: 0,
+    menuBorderRadius: 4,
+    menuItemMinWidth: 191,
+    menuElevation: 20,
   },
 
   fontFace: {
