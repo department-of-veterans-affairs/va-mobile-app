@@ -203,7 +203,7 @@ export const darkTheme = {
     largeNav: colors.darkmodeLightBlue,
     disclosure: colors.grayLight,
     success: colors.green,
-    error: colors.secondaryDark,
+    error: colors.darkmodeRed,
     active: colors.darkmodeLightBlue,
     inactive: colors.grayLight,
     contrast: colors.grayLightest,
