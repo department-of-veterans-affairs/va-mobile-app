@@ -16,6 +16,7 @@ import { listFolderMessages } from 'store/actions'
 import { findByTypeWithText, findByTypeWithSubstring, findByTypeWithName } from '../../../../testUtils'
 
 const mockNavigationSpy = jest.fn()
+const mockNavigationAddListenerSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
   const original = jest.requireActual('/utils/hooks')
   const theme = jest.requireActual('/styles/themes/standardTheme').default
@@ -54,7 +55,11 @@ context('FolderMessages', () => {
     if (folderID > 0) folderName = 'Custom'
     else if (folderID === -1) folderName = FolderNameTypeConstants.sent
     else if (folderID === -2) folderName = FolderNameTypeConstants.drafts
-    props = mockNavProps(undefined, { navigate: mockNavigationSpy }, { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved } })
+    props = mockNavProps(
+      undefined,
+      { navigate: mockNavigationSpy, addListener: mockNavigationAddListenerSpy },
+      { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved } },
+    )
 
     const messages = {
       [folderID]: {
