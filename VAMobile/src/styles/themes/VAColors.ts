@@ -70,6 +70,6 @@ export default {
   darkmodeGrayDark: '#121212',
   darkmodeBorder: '#4C4C4C',
   darkmodeLightBlue: '#409CFF',
-  darkmodeRed: '#C4232E',
+  darkmodeRed: '#FF4F5B',
   darkmodeGrayWarmDark: '#292929',
 }
