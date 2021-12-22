@@ -75,7 +75,7 @@ export type VAIconColors = {
   spinner: string
   dark: string
   covid19Vaccinations: string
-  grayDark: string
+  pickerIcon: string
   pagination: string
   chevronCollapsible: string
   chevronListItem: string
