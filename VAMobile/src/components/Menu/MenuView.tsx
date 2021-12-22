@@ -117,7 +117,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
           <View accessibilityLabel={accessibilityLabel ? accessibilityLabel : actionText} accessibilityRole={'button'}>
             <MenuItem onPress={onPressMenu} viewStyle={menuStyle}>
               {iconName && <VAIcon name={iconName} fill={iconColor ? iconColor : 'dark'} height={24} width={24} />}
-              <TextView ml={10} color={textColor ? textColor : undefined}>
+              <TextView ml={10} color={textColor ? textColor : undefined} accessible={false}>
                 {actionText}
               </TextView>
             </MenuItem>

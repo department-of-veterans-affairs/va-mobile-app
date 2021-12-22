@@ -37,7 +37,7 @@ export const MenuItem = ({
     flexWrap: 'wrap',
   }
   return (
-    <TouchableHighlight disabled={disabled} onPress={onPress} style={[touchableInitialStyle, touchableStyle]} underlayColor={underlayColor}>
+    <TouchableHighlight disabled={disabled} onPress={onPress} style={[touchableInitialStyle, touchableStyle]} underlayColor={underlayColor} importantForAccessibility={'no'}>
       <View style={[viewStyle, disabled && disabledStyle]}>{children}</View>
     </TouchableHighlight>
   )

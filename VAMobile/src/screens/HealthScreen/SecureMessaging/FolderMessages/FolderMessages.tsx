@@ -2,7 +2,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { BackButton, Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -36,12 +37,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
     // If draft saved message showing, clear status so it doesn't show again
     dispatch(resetSaveDraftComplete())
-    const unsubscribe = navigation.addListener('beforeRemove', () => {
-      snackBar.hideAll()
-    })
-
-    return unsubscribe
-  }, [dispatch, folderID, route, navigation])
+  }, [dispatch, folderID])
 
   useEffect(() => {
     if (saveDraftComplete) {
@@ -64,6 +60,23 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
       : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
     navigation.navigate(screen, args)
   }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props): ReactNode => (
+        <BackButton
+          onPress={() => {
+            navigation.goBack()
+            snackBar.hideAll()
+          }}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.back}
+          focusOnButton={deleteDraftComplete ? false : true}
+          showCarat={true}
+        />
+      ),
+    })
+  })
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
