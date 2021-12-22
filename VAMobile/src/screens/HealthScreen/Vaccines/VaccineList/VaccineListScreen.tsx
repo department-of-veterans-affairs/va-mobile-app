@@ -1,9 +1,9 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, VAScrollView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -23,13 +23,13 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
  */
 const VaccineListScreen: FC<VaccineListScreenProps> = () => {
   const dispatch = useDispatch()
-  const { vaccines, loading } = useSelector<StoreState, VaccineState>((state) => state.vaccine)
+  const { vaccines, loading, vaccinePagination } = useSelector<StoreState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
   useEffect(() => {
-    dispatch(getVaccines(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID))
+    requestPage(1)
   }, [dispatch])
 
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
@@ -49,6 +49,33 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
     return vaccineButton
   })
 
+  const requestPage = (requestedPage: number) => {
+    // request the next page
+    dispatch(getVaccines(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID, requestedPage))
+  }
+
+  // Render pagination for sent and drafts folderMessages only
+  const renderPagination = (): ReactNode => {
+    const page = vaccinePagination?.currentPage || 1
+    const paginationProps: PaginationProps = {
+      onNext: () => {
+        requestPage(page + 1)
+      },
+      onPrev: () => {
+        requestPage(page - 1)
+      },
+      totalEntries: vaccinePagination?.totalEntries || 0,
+      pageSize: vaccinePagination?.perPage || 0,
+      page,
+    }
+
+    return (
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
+      </Box>
+    )
+  }
+
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
   }
@@ -66,6 +93,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>
+      {renderPagination()}
     </VAScrollView>
   )
 }

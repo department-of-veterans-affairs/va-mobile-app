@@ -2,6 +2,7 @@ import { AsyncReduxAction, ReduxAction } from '../types'
 
 import * as api from '../api'
 import { APIError, ScreenIDTypes, VaccineList, VaccineListData, VaccineLocation, VaccineLocationData } from '../api'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -23,11 +24,11 @@ const dispatchStartGetVaccines = (): ReduxAction => {
  * @param vaccines - list of vaccines if the api call was successful
  * @param error - error to parse if api call failed
  */
-const dispatchFinishGetVaccines = (vaccines?: VaccineList, error?: APIError): ReduxAction => {
+const dispatchFinishGetVaccines = (vaccinesData?: VaccineListData, error?: APIError): ReduxAction => {
   return {
     type: 'VACCINE_FINISH_GET_VACCINES',
     payload: {
-      vaccines,
+      vaccinesData,
       error,
     },
   }
@@ -64,7 +65,7 @@ const dispatchFinishGetLocation = (vaccineId?: string, location?: VaccineLocatio
  * Get's the list of vaccines for the given user
  * @param screenID - screen that is waiting for vaccines to load
  */
-export const getVaccines = (screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const getVaccines = (screenID?: ScreenIDTypes, page = 1): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getVaccines(screenID))))
@@ -72,7 +73,11 @@ export const getVaccines = (screenID?: ScreenIDTypes): AsyncReduxAction => {
     try {
       dispatch(dispatchStartGetVaccines())
 
-      const vaccineData = await api.get<VaccineListData>('/v0/health/immunizations')
+      const vaccineData = await api.get<VaccineListData>('/v1/health/immunizations', {
+        'page[number]': page.toString(),
+        'page[size]': DEFAULT_PAGE_SIZE.toString(),
+        sort: 'date',
+      })
 
       const hasRequiredFields = vaccineData?.data.every((v) => {
         return !!v.attributes?.date && !!v.attributes?.groupName && !!v.attributes?.shortDescription
@@ -83,7 +88,7 @@ export const getVaccines = (screenID?: ScreenIDTypes): AsyncReduxAction => {
         throw { status: 500, json: { errors: [] } } as APIError
       }
 
-      dispatch(dispatchFinishGetVaccines(vaccineData?.data))
+      dispatch(dispatchFinishGetVaccines(vaccineData))
     } catch (err) {
       if (isErrorObject(err)) {
         dispatch(dispatchFinishGetVaccines(undefined, err))
