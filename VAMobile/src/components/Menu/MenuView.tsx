@@ -54,6 +54,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   const hideMenu = () => menuRef?.hide()
 
   const showMenu = () => {
+    // negative values are to position the menu from the right edge and move the it up a little. The two different values for platform is that android shows higher than IOS
     menuRef?.show(elementRef.current, Position.BOTTOM_LEFT, { left: -55, top: isIOS() ? -10 : -5 })
   }
 
