@@ -170,8 +170,6 @@ context('AddressValidation', () => {
         testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
       })
 
-      testInstance.findAllByType(VASelector)[0].findByType(TouchableWithoutFeedback).props.onPress()
-
       const useThisAddressButton = findByTestID(testInstance, 'Use This Address')
       expect(useThisAddressButton).toBeTruthy()
 
