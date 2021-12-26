@@ -13,8 +13,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { deleteMessage, getMessage, getThread, moveMessage } from 'store/actions'
 import { formatSubject, getfolderName } from 'utils/secureMessaging'
+import { getMessage, getThread, moveMessage, moveMessageToTrash } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -138,7 +138,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
-        <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} focusOnButton={false} showCarat={true} />
+        <BackButton
+          onPress={() => {
+            navigation.goBack()
+            snackBar.hideAll()
+          }}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.back}
+          focusOnButton={false}
+          showCarat={true}
+        />
       ),
       headerRight: () =>
         currentFolderIdParam !== SecureMessagingSystemFolderIdConstants.SENT ? (
@@ -195,7 +204,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
       if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(deleteMessage(messageID, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
+        dispatch(moveMessageToTrash(messageID, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
       } else {
         dispatch(moveMessage(messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
       }
