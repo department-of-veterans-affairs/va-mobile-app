@@ -1,0 +1,41 @@
+name: Sync develop and documentation branches
+
+# Adapted from https://github.com/marketplace/actions/sync-branches
+
+on:
+  schedule:
+    # Run every monday morning
+    - cron:  '0 9 * * MON'
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+    name: Syncing develop <-> documentation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Opening PR develop -> documentation
+        id: pull
+        uses: tretuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: "develop"
+          TO_BRANCH: "documentation"
+          PULL_REQUEST_TITLE: 'Docs Sync: develop -> documentation'
+          PULL_REQUEST_BODY: Weekly PR to keep `develop` and `documentation` branches in sync
+          REVIEWERS: '["narin"]'
+      - name: Opening PR documentation -> develop
+        id: pull
+        uses: tretuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          FROM_BRANCH: "documentation"
+          TO_BRANCH: "develop"
+          PULL_REQUEST_TITLE: 'Docs Sync: documentation -> develop'
+          PULL_REQUEST_BODY: Weekly PR to keep `develop` and `documentation` branches in sync
+          CONTENT_COMPARISON: true
+          REVIEWERS: '["narin"]'
