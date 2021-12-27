@@ -5,11 +5,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [documentation]
-    # paths: [VAMobile/**]
+    paths: [VAMobile/**]
 
 jobs:
   deploy:
-    name: Deploy to Docusaurus documentation site to GitHub Pages
+    name: Deploy to documentation site to GitHub Pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

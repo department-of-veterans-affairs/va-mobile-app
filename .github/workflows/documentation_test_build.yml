@@ -1,4 +1,4 @@
-name: Test deployment
+name: Test documentation site build
 
 # Adapted from https://docusaurus.io/docs/deployment
 
@@ -17,8 +17,11 @@ jobs:
         with:
           node-version: 14.x
           cache: yarn
+          cache-dependency-path: VAMobile/yarn.lock
       - name: Test build
-        working-directory: ./VAMobile/documentation
+        working-directory: VAMobile
         run: |
+          yarn install --frozen-lockfile
+          cd documentation
           yarn install --frozen-lockfile
           yarn build
