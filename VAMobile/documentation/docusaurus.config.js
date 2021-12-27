@@ -16,7 +16,6 @@ const config = {
   organizationName: 'department-of-veterans-affairs', // Usually your GitHub org/user name.
   projectName: 'va-mobile-app', // Usually your repo name.
   plugins: [
-    // 'docusaurus-plugin-relative-paths',
     './docusaurus-plugin-react-native-web',
     [
       'docusaurus-plugin-react-docgen-typescript',
