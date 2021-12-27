@@ -19,8 +19,10 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Build website
-        working-directory: VAMobile/documentation
+        working-directory: VAMobile
         run: |
+          yarn install --frozen-lockfile
+          cd documentation
           yarn install --frozen-lockfile
           yarn build
 
