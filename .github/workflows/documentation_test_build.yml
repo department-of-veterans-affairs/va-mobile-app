@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [documentation]
     paths: [VAMobile/**]
+  push:
+    branches: 
+      - 'documentation/**'
 
 jobs:
   test-deploy:
