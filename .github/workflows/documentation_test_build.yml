@@ -18,7 +18,7 @@ jobs:
           node-version: 14.x
           cache: yarn
       - name: Test build
-        working-directory: VAMobile/documentation
+        working-directory: ./VAMobile/documentation
         run: |
           yarn install --frozen-lockfile
           yarn build
