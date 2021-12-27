@@ -35,6 +35,7 @@
     "redocusaurus": "^0.5.0",
     "styled-components": "^5.3.3",
     "svg-react-loader": "^0.4.6",
+    "underscore": "^1.12.1",
     "url-loader": "^4.1.1"
   },
   "devDependencies": {
