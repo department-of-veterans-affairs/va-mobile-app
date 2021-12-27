@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Documentation Deploy
 
 # Adapted from https://docusaurus.io/docs/deployment
 
@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to documentation site to GitHub Pages
+    name: Deploy documentation site to GitHub Pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,7 +18,7 @@ jobs:
           node-version: 14.x
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock
-      - name: Build website
+      - name: Build
         working-directory: VAMobile
         run: |
           yarn install --frozen-lockfile
@@ -28,7 +28,7 @@ jobs:
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

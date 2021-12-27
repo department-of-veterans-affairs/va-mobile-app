@@ -1,4 +1,4 @@
-name: Test documentation site build
+name: Documentation Test Build
 
 # Adapted from https://docusaurus.io/docs/deployment
 
@@ -9,7 +9,7 @@ on:
 
 jobs:
   test-deploy:
-    name: Test deployment
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
