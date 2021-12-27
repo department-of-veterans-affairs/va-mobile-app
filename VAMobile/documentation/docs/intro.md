@@ -35,9 +35,9 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 
 ### Engineering
 - Patrick Saxton - Engineer Leadership
-- Alastair Dawson - Engineer
+- Alastair Dawson - BE Lead
+- Narin Ratana - FE Lead
 - Chika Adibemma - Engineer
-- Narin Ratana - Engineer
 - Jayson Perkins - Engineer
 - Teesh Shahi, Engineer
 - Ken Harrison - QA Support
