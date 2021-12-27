@@ -8,7 +8,6 @@ import { testIdProps } from 'utils/accessibility'
 import { useDestructiveAlert, useTranslation } from 'utils/hooks'
 import { useDispatch } from 'react-redux'
 
-/**Common component for the sign out button */
 const SignoutButton: FC = ({}) => {
   const t = useTranslation(NAMESPACE.SETTINGS)
   const dispatch = useDispatch()
@@ -18,20 +17,7 @@ const SignoutButton: FC = ({}) => {
   }
 
   const onShowConfirm = (): void => {
-    signOutAlert({
-      title: t('logout.confirm.text'),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('common:cancel'),
-        },
-        {
-          text: t('logout.title'),
-          onPress: _logout,
-        },
-      ],
-    })
+    signOutAlert('logout.confirm.text', '', 'logout.title', _logout, t)
   }
 
   return (
