@@ -8,15 +8,15 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 const config = {
   title: 'VA: Health and Benefits app documentation',
   tagline: 'All the documentation for the VA mobile app',
-  url: 'https://didactic-lamp-12152085.pages.github.io/',
-  baseUrl: '/',
+  url: 'https://department-of-veterans-affairs.github.io/',
+  baseUrl: '/va-mobile-app/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'department-of-veterans-affairs', // Usually your GitHub org/user name.
   projectName: 'va-mobile-app', // Usually your repo name.
   plugins: [
-    'docusaurus-plugin-relative-paths',
+    // 'docusaurus-plugin-relative-paths',
     './docusaurus-plugin-react-native-web',
     [
       'docusaurus-plugin-react-docgen-typescript',

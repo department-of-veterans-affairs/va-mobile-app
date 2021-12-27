@@ -22,7 +22,7 @@ function HomepageHeader() {
             </div>
           </div>
           <div className={clsx('col col--6', styles.heroImage)}>
-            <img src="/img/va-mobile-iphone-ss.svg" alt="Screenshot of VA Health and Benefits app" />
+            <img src={require('@site/static/img/va-mobile-iphone-ss.svg').default} alt="Screenshot of VA Health and Benefits app" />
           </div>
         </div>
       </div>
