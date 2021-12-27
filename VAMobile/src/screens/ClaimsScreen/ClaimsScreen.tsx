@@ -6,11 +6,12 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
 import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getProfileInfo, prefetchClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
@@ -29,29 +30,25 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
-  const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
-  const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate && profileNotInDowntime) {
+    if (personalInformationNeedsUpdate) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
+  }, [dispatch, personalInformationNeedsUpdate])
 
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
   useEffect(() => {
-    // only block api call if claims and appeals are both down
-    if (claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime)) {
+    if (claimsAndAppealsAccess) {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
-  }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
+  }, [dispatch, claimsAndAppealsAccess])
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
     })
   }, [navigation])
 
@@ -143,7 +140,7 @@ const ClaimsStackScreen: FC<ClaimsStackScreenProps> = () => {
 
   return (
     <ClaimsScreenStack.Navigator screenOptions={headerStyles}>
-      <ClaimsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('title') }} />
+      <ClaimsScreenStack.Screen name="Appointment" component={ClaimsScreen} options={{ title: t('title') }} />
     </ClaimsScreenStack.Navigator>
   )
 }
