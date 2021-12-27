@@ -15,11 +15,11 @@ export default function ComponentInfo(props) {
 
   return (
     <>
+      {description}
+      <br />
+      <br />
       <Tabs>
-        <TabItem value="description" label="Description">
-          <pre className={'preText'}>{description}</pre>
-        </TabItem>
-        <TabItem value="props" label="Props">
+        <TabItem value="props" label="Properties">
           <PropTable props={ComponentProps} />
         </TabItem>
         <TabItem value="example" label="Example">
@@ -29,7 +29,7 @@ export default function ComponentInfo(props) {
             </CodeBlock>
           )}
         </TabItem>
-        <TabItem value="code" label="Full Code Source">
+        <TabItem value="code" label="Source Code">
           {props.codeString && (
             <CodeBlock title={fullCodeString} className="language-tsx">
               {props.codeString}

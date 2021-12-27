@@ -1,11 +1,10 @@
-import { Dimensions, TextInput } from 'react-native'
-import { RefObject } from 'react'
-import { contains, isEmpty } from 'underscore'
-
+import { Action } from 'redux'
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
+import { Dimensions, TextInput } from 'react-native'
+import { RefObject } from 'react'
+import { contains, isEmpty, map } from 'underscore'
 
-import { Action } from 'redux'
 import { ErrorObject } from 'store/api'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { PhoneData } from 'store/api/types/PhoneData'
@@ -237,7 +236,7 @@ export const isErrorObject = (error: any): error is ErrorObject => {
  * Function to show snackbar
  * @param message - snackbar message
  * @param dispatch - dispatch function to change the bottom offset
- * @param confirmAction - action to perform on undo
+ * @param actionPressed - action to perform on undo
  * @param isUndo - if user pressed undo it will not show undo again
  * @param isError - if it is an error will show the error icon
  * @param withNav - offset snackbar to be over the bottom nav
@@ -246,7 +245,7 @@ export const isErrorObject = (error: any): error is ErrorObject => {
 export function showSnackBar(
   message: string,
   dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
-  confirmAction?: () => void,
+  actionPressed?: () => void,
   isUndo?: boolean,
   isError?: boolean,
   withNavBar = false,
@@ -255,13 +254,23 @@ export function showSnackBar(
   snackBar.show(message, {
     type: 'custom_snackbar',
     data: {
-      onConfirmAction: () => {
-        if (confirmAction) {
-          confirmAction()
+      onActionPressed: () => {
+        if (actionPressed) {
+          actionPressed()
         }
       },
       isUndo,
       isError,
     },
   })
+}
+
+/**
+ * Returns a string of the textlines concatenated
+ *
+ * @param itemTexts - array of textline to concatenate
+ */
+
+export const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
+  return map(itemTexts, 'text').join(' ')
 }

@@ -5,22 +5,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useState } from 'react'
 
-import { PersonalInformationState, StoreState } from 'store/reducers'
-import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
-
 import { DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { generateTestID } from 'utils/common'
+import { getA11yLabelText } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
-import _ from 'underscore'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
@@ -41,7 +39,7 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   }
 
   return [
-    { textLines: dateOfBirthTextIDs, a11yHintText: '' },
+    { textLines: dateOfBirthTextIDs, a11yHintText: '', testId: getA11yLabelText(dateOfBirthTextIDs) },
     { textLines: genderTextIDs, a11yHintText: '' },
   ]
 }
@@ -89,10 +87,6 @@ const getPhoneNumberData = (
     { textLines: cellText, a11yHintText: t('personalInformation.editOrAddCellNumber'), onPress: onCellPhone, testId: getA11yLabelText(cellText) },
     { textLines: faxText, a11yHintText: t('personalInformation.editOrAddFaxNumber'), onPress: onFax, testId: getA11yLabelText(faxText) },
   ]
-}
-
-const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
-  return _.map(itemTexts, 'text').join(' ')
 }
 
 const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
@@ -207,11 +201,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
       <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.buttonTitle')} />
 
-      <Pressable
-        onPress={navigateTo('HowDoIUpdate')}
-        {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}
-        accessibilityRole="link"
-        accessible={true}>
+      <Pressable onPress={navigateTo('HowDoIUpdate')} {...testIdProps(t('personalInformation.howDoIUpdatePersonalInfo'))} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
       </Pressable>
 

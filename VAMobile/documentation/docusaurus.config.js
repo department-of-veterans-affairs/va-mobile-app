@@ -54,6 +54,17 @@ const config = {
         },
       },
     ],
+    [
+      'redocusaurus',
+      {
+        specs: [
+          {
+            routePath: '/api/',
+            specUrl: 'https://raw.githubusercontent.com/department-of-veterans-affairs/vets-api/master/modules/mobile/docs/openapi.yaml',
+          },
+        ],
+      },
+    ],
   ],
 
   themeConfig:
