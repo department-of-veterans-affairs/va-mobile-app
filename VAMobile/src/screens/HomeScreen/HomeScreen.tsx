@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -14,7 +13,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo } from 'store/actions'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
 
@@ -25,6 +24,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.HOME)
+  const launchExternalLink = useExternalLink()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
@@ -44,7 +44,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   const onScreeningTool = (): void => {
-    Linking.openURL(LINK_URL_COVID19_SCREENING)
+    launchExternalLink(LINK_URL_COVID19_SCREENING)
   }
 
   const onCovid = navigateTo('Webview', { url: LINK_URL_COVID_FORM, displayTitle: t('common:webview.vagov') })
