@@ -1,12 +1,10 @@
-version: 2.1
- 
-# Fake circleci config to prevent errors on gh-pages branch
+# CircleCI 2.0 Config File
+# This config file will prevent tests from being run on the gh-pages branch.
+version: 2
 jobs:
-  fake-job:
-    docker:
-      - image: cimg/ruby:3.0.2-node
+  build:
+    machine: true
+    branches:
+      ignore: gh-pages
     steps:
-      - run: echo "fake gh-pages job"
-    filter:
-      branches:
-        ignore: gh-pages
+      - run: echo "Skipping tests on gh-pages branch"
