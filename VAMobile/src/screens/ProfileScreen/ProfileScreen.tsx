@@ -5,34 +5,29 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { AuthorizedServicesState, DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
+import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from './ProfileStackScreens'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useHeaderStyles, useTranslation } from 'utils/hooks'
+import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
-  const {
-    directDepositBenefits,
-    userProfileUpdate,
-    militaryServiceHistory: militaryInfoAuthorization,
-  } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>(
+    (state) => state.authorizedServices,
+  )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
-  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
     })
   }, [navigation])
 
@@ -58,32 +53,30 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate && profileNotInDowntime) {
+    if (personalInformationNeedsUpdate) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
+  }, [dispatch, personalInformationNeedsUpdate])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization && mhNotInDowntime) {
+    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, mhNotInDowntime])
+  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (disabilityRatingNeedsUpdate && drNotInDowntime) {
+    if (disabilityRatingNeedsUpdate) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, disabilityRatingNeedsUpdate, drNotInDowntime])
-
-  const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
+  }, [dispatch, disabilityRatingNeedsUpdate])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
   const onMilitaryInformation = navigateTo('MilitaryInformation')
 
-  const onDirectDeposit = isIDMESignin ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+  const onDirectDeposit = navigateTo('DirectDeposit')
 
   const onLettersAndDocs = navigateTo('LettersOverview')
 
@@ -99,10 +92,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
   }
 
-  buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
+  buttonDataList.push({ text: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
 
-  // Show if user has permission or if user did not signed in through IDME
-  if (directDepositBenefits || !isIDMESignin) {
+  // hide button if user does not have permission
+  if (directDepositBenefits) {
     buttonDataList.push({ text: t('directDeposit.information'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
   }
 

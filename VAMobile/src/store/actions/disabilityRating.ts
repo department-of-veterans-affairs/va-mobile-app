@@ -3,7 +3,6 @@ import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { RatingData, ScreenIDTypes } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
 
 /**
  * Redux action to start disability ratings fetch
@@ -60,10 +59,8 @@ export const getDisabilityRating = (screenID?: ScreenIDTypes): AsyncReduxAction 
 
       dispatch(dispatchFinishGetRating(ratingData?.data.attributes))
     } catch (err) {
-      if (isErrorObject(err)) {
-        dispatch(dispatchFinishGetRating(undefined, err))
-        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
-      }
+      dispatch(dispatchFinishGetRating(undefined, err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }
