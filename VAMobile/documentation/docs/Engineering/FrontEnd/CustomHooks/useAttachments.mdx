@@ -1,0 +1,28 @@
+import HooksInfo from '../../../../src/components/HooksInfo'
+
+export const exampleString = `const [attachmentsList, addAttachment, removeAttachment] = useAttachments()\n
+ useEffect(() => {
+    // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
+    if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
+      addAttachment(attachmentFileToAdd)
+      navigation.setParams({ attachmentFileToAdd: {} })
+    }
+  }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])\n
+{
+    fieldType: FieldType.FormAttachmentsList,
+    fieldProps: {
+    originHeader: t('secureMessaging.drafts.edit'),
+    removeOnPress: removeAttachment,
+    largeButtonProps:
+        attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+        ? {
+            label: t('secureMessaging.formMessage.addFiles'),
+            a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
+            onPress: onAddFiles,
+            }
+        : undefined,
+    attachmentsList,
+    a11yHint: t('secureMessaging.attachments.howToAttachAFile.a11y'),
+},`
+
+<HooksInfo componentName="useAttachments" example={exampleString}/>

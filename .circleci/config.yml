@@ -275,6 +275,7 @@ jobs:
     steps:
       - checkout
       - create_keys_directory
+      - decode_ios_keys
       - decode_android_keys
       - android_fastlane:
           lane: "release"
