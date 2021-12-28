@@ -2,31 +2,24 @@ import React, { FC } from 'react'
 
 import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, StoreState } from 'store'
-import { useDowntime, useTranslation } from 'utils/hooks'
+import { ScreenIDTypes } from 'store/api/types'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'utils/hooks'
 
 export type ErrorComponentProps = {
-  /**The screen id for the screen that has the errors*/
   screenID: ScreenIDTypes
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
 }
 
-/**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
   const t = useTranslation()
-  const isInDowntime = useDowntime(DowntimeScreenIDToFeature[props.screenID])
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
-
-    if (isInDowntime) {
-      return <DowntimeError screenID={screenID} />
-    }
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {
       case CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR:
@@ -41,7 +34,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             onTryAgain={tryAgain}
             errorText={t('health:secureMessaging.sendError.ifTheAppStill')}
             errorA11y={t('health:secureMessaging.sendError.ifTheAppStill.a11y')}
-            callPhone={t('common:8773270022.displayText')}
+            callPhone={t('health:secureMessaging.attachments.FAQ.ifYourProblem.phone')}
           />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
@@ -52,8 +45,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             callPhone={t('profile:disabilityRating.errorPhoneNumber')}
           />
         )
-      case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
-        return <CallHelpCenter onTryAgain={tryAgain} titleText={t('common:errors.callHelpCenter.vaAppNotWorking')} callPhone={t('common:8006982411.displayText')} />
+      case CommonErrorTypesConstants.DOWNTIME_ERROR:
+        return <DowntimeError screenID={screenID} />
       default:
         return <CallHelpCenter onTryAgain={tryAgain} />
     }
