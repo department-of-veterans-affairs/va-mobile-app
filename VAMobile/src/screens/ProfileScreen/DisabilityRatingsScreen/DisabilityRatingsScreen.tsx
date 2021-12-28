@@ -5,11 +5,11 @@ import React, { FC, useEffect } from 'react'
 
 import {
   Box,
+  CallHelpCenter,
   ClickForActionLink,
   ClickToCallPhoneNumber,
   DefaultList,
   DefaultListItemObj,
-  ErrorComponent,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -21,12 +21,12 @@ import {
   VAScrollView,
 } from 'components'
 import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import ProfileBanner from '../ProfileBanner'
 import getEnv from 'utils/env'
@@ -42,14 +42,13 @@ const DisabilityRatingsScreen: FC = () => {
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
-  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
 
   useEffect(() => {
     // Get the disability rating data if not loaded already
-    if (needsDataLoad && drNotInDowntime) {
+    if (needsDataLoad) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad, drNotInDowntime])
+  }, [dispatch, needsDataLoad])
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
@@ -161,7 +160,7 @@ const DisabilityRatingsScreen: FC = () => {
   }
 
   if (useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
+    return <CallHelpCenter titleText={t('disabilityRating.errorTitle')} titleA11yHint={t('disabilityRating.errorTitleA11y')} callPhone={t('disabilityRating.errorPhoneNumber')} />
   }
 
   if (loading) {
