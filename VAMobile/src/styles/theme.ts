@@ -39,7 +39,6 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
-  snackBarBtn: string
 }
 
 export type VAIconColors = {
@@ -80,7 +79,6 @@ export type VATypographyThemeVariants = {
   ActionBar: string
   VASelector: string
   HelperText: string
-  SnackBarBtnText: string
 }
 
 export type VABackgroundColors = {
@@ -105,7 +103,6 @@ export type VABackgroundColors = {
   modalOverlay: string
   pickerSelectedItem: string
   navButton: string
-  snackbar: string
 }
 
 export type VABorderColors = {
@@ -216,28 +213,6 @@ export type VATheme = {
     collapsibleIconMargin: number
     loginContentMarginBottom: number
     webviewReloadButtonHeight: number
-    webviewReloadButtonSize: number
-    webviewButtonSize: number
-    webviewButtona11ySize: number
-    errorLabelBottomMargin: number
-    selectorWidth: number
-    selectorHeight: number
-    snackBarPadding: number
-    snackBarMarginBottom: number
-    snackBarMarginRight: number
-    snackBarMarginLeft: number
-    snackBarVerticalMargin: number
-    snackBarBorderRadius: number
-    snackBarBetweenSpace: number
-    snackBarShadowX: number
-    snackBarShadowY: number
-    snackBarShadowOpacity: number
-    snackBarIconSize: number
-    snackBarBottomOffset: number
-    snackBarBottomOffsetWithNav: number
-    snackBarButtonTopMargin: number
-    snackBarConfirmBtnMarginRight: number
-    snackBarIconTopMargin: number
   }
   fontFace: {
     regular: string

@@ -61,10 +61,6 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
-  SnackBarBtnText: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -104,7 +100,6 @@ const theme: VATheme = {
       modalOverlay: colors.base,
       pickerSelectedItem: colors.primaryAltLightest,
       navButton: colors.toolbarBackgroundGray,
-      snackbar: colors.snackBarBlack,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -161,13 +156,12 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
       claimPhase: colors.white,
-      snackBarBtn: colors.lightBlue,
     },
     buttonBackground: {
       buttonPrimary: colors.primary,
       buttonPrimaryActive: colors.primaryDarkest,
       buttonSecondary: colors.white,
-      buttonSecondaryActive: colors.primaryAltLightest,
+      buttonSecondaryActive: colors.white,
       buttonImportant: colors.white,
       buttonImportantActive: colors.white,
       buttonDisabled: colors.grayMedium,
@@ -222,7 +216,7 @@ const theme: VATheme = {
     listItemDecoratorMarginLeft: 20,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
-    pickerLabelMargin: 9,
+    pickerLabelMargin: 5,
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
     navBarHeight: 56,
@@ -260,28 +254,6 @@ const theme: VATheme = {
     collapsibleIconMargin: 7,
     loginContentMarginBottom: 80,
     webviewReloadButtonHeight: isIOS() ? 64 : 45,
-    webviewReloadButtonSize: 17,
-    webviewButtonSize: 16,
-    webviewButtona11ySize: 44,
-    errorLabelBottomMargin: 3,
-    selectorWidth: 22,
-    selectorHeight: 22,
-    snackBarPadding: 15,
-    snackBarMarginBottom: 0,
-    snackBarMarginLeft: 10,
-    snackBarMarginRight: 10,
-    snackBarButtonTopMargin: 5,
-    snackBarConfirmBtnMarginRight: 15,
-    snackBarVerticalMargin: 10,
-    snackBarBorderRadius: 4,
-    snackBarBetweenSpace: 8,
-    snackBarShadowX: 0,
-    snackBarShadowY: 4,
-    snackBarShadowOpacity: 0.6,
-    snackBarIconTopMargin: 2,
-    snackBarIconSize: 18,
-    snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
-    snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
   },
 
   fontFace: {
@@ -318,7 +290,6 @@ const theme: VATheme = {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
-    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
   },
 }
 
