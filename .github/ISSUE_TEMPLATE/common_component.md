@@ -2,10 +2,9 @@
 name: Common Component
 about: Template for new common component for VA mobile app
 title: Common Component Ticket:[Insert name of component here]
-labels: common-component, ux
+labels: ux, common-component
 assignees:
 ---
-<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 # Common Component Ticket
 <!-- Goal of these tickets: Add new common components to the VA mobile app design system. -->
 
