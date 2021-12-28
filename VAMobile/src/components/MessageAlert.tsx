@@ -7,21 +7,14 @@ import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type MessageAlertProps = {
-  /**sets if there is validation errors */
   hasValidationError?: boolean
-  /**sets if attempted to save a draft */
   saveDraftAttempted?: boolean
-  /**sets if saving the drft was complete*/
   saveDraftComplete?: boolean
-  /**sets if saving the draft failed */
   saveDraftFailed?: boolean
-  /**sets that the draft is being saved*/
   savingDraft?: boolean
-  /**sets that the message failed on send*/
   sendMessageFailed?: boolean
 }
 
-/**Common component to show a message alert when saving or sending a secure message */
 const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
@@ -52,7 +45,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   return (
     <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
       <AlertBox border={saveDraftComplete ? 'success' : 'error'} background="noCardBackground" title={title} text={text} textA11yLabel={textA11yLabel} titleRole={'header'}>
-        {sendMessageFailed && <ClickToCallPhoneNumber phone={t('common:8773270022.displayText')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
+        {sendMessageFailed && <ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
       </AlertBox>
     </Box>
   )
