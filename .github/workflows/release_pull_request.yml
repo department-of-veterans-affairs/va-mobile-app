@@ -19,10 +19,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: 'Set branch name'
+        run: echo "DEV_PR_BRANCH=$(echo "merge-release-${{github.event.inputs.version}}-to-develop")" >> $GITHUB_ENV
       - name: 'Create PR to merge changes back to develop'
         run: |
           git checkout release/${{github.event.inputs.version}}
-          echo "DEV_PR_BRANCH=$(echo "merge-release-${{github.event.inputs.version}}-to-develop")" >> $GITHUB_ENV
           git checkout -b ${{env.DEV_PR_BRANCH}}
           git push -u origin ${{env.DEV_PR_BRANCH}}
           gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} changes into develop")
