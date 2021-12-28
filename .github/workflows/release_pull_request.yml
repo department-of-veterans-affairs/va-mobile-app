@@ -11,6 +11,10 @@ jobs:
   create_prs:
     runs-on: ubuntu-latest
     steps:
+      - name: 'Set up GH CLI secret'
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - name: 'Log into GH CLI'
+      - run: gh auth login --with-token < token.txt
       - name: 'Checkout repo'
         uses: actions/checkout@v2
         with:
@@ -22,4 +26,4 @@ jobs:
           git push -u origin merge-release-${{github.event.inputs.version}}-to-develop
           echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} changes into develop")" >> GITHUB_ENV
       - name: 'TEST'
-        run: echo $DEV_PR
+        run: echo ${{DEV_PR}}
