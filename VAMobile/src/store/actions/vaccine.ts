@@ -1,12 +1,10 @@
 import { AsyncReduxAction, ReduxAction } from '../types'
 
 import * as api from '../api'
-import { APIError, ScreenIDTypes, VaccineList, VaccineListData, VaccineLocation, VaccineLocationData } from '../api'
-import { Events } from 'constants/analytics'
+import { APIError, ScreenIDTypes, VaccineList, VaccineListData } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from '../../utils/common'
-import { logAnalyticsEvent } from 'utils/analytics'
 
 /**
  * Action to signify the beginning of the vaccine list loading.
@@ -28,33 +26,6 @@ const dispatchFinishGetVaccines = (vaccines?: VaccineList, error?: APIError): Re
     type: 'VACCINE_FINISH_GET_VACCINES',
     payload: {
       vaccines,
-      error,
-    },
-  }
-}
-
-/**
- * Action to signify the beginning of the vaccine location loading.
- */
-const dispatchStartGetLocation = (): ReduxAction => {
-  return {
-    type: 'VACCINE_START_GET_LOCATION',
-    payload: {},
-  }
-}
-
-/**
- * Action to complete loading of a vaccine location
- * @param vaccineId - ID of the vaccine associated with the location
- * @param location - location data to display
- * @param error - error if the call failed
- */
-const dispatchFinishGetLocation = (vaccineId?: string, location?: VaccineLocation, error?: APIError): ReduxAction => {
-  return {
-    type: 'VACCINE_FINISH_GET_LOCATION',
-    payload: {
-      vaccineId,
-      location,
       error,
     },
   }
@@ -90,43 +61,5 @@ export const getVaccines = (screenID?: ScreenIDTypes): AsyncReduxAction => {
         dispatch(dispatchSetError(getCommonErrorFromAPIError(err, screenID), screenID))
       }
     }
-  }
-}
-
-/**
- * Gets the location data for a given vaccine. Does not use the standard error path because in the case of a failure
- * we still want to show the details screen with a placeholder for the location data
- * @param vaccineId - Id of the vaccine to get location data for
- * @param locationId - Id of the location to to get data for
- */
-export const getVaccineLocation = (vaccineId: string, locationId: string): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    if (!locationId) {
-      dispatch(dispatchFinishGetLocation())
-      return
-    }
-
-    try {
-      dispatch(dispatchStartGetLocation())
-
-      const locationData = await api.get<VaccineLocationData>(`/v0/health/locations/${locationId}`)
-
-      dispatch(dispatchFinishGetLocation(vaccineId, locationData?.data))
-    } catch (err) {
-      if (isErrorObject(err)) {
-        dispatch(dispatchFinishGetLocation(undefined, undefined, err))
-      }
-    }
-  }
-}
-
-/**
- * Redux Action to send va vaccine details analytics
- *
- * @returns AsyncReduxAction
- */
-export const sendVaccineDetailsAnalytics = (groupName: string): AsyncReduxAction => {
-  return async (): Promise<void> => {
-    await logAnalyticsEvent(Events.vama_vaccine_details(groupName))
   }
 }
