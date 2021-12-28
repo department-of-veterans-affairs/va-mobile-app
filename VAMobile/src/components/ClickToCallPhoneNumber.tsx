@@ -8,11 +8,15 @@ import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'uti
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type ClickToCallPhoneNumberProps = {
+  /**sets the phone information */
   phone?: AppointmentPhone | string
+  /**sets the text that will be displayed */
   displayedText?: string
+  /** boolean to align items to the center */
   center?: boolean
 }
 
+/**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
 const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center }) => {
   const t = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()

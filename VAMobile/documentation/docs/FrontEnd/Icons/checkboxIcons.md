@@ -1,12 +1,11 @@
 import { ReactComponent as CheckBoxEmpty} from '@componentsDocs/VAIcon/svgs/checkbox/checkBoxEmpty.svg';
 import { ReactComponent as CheckBoxError} from '@componentsDocs/VAIcon/svgs/checkbox/checkBoxError.svg';
 import { ReactComponent as CheckBoxFilled} from '@componentsDocs/VAIcon/svgs/checkbox/checkBoxFilled.svg';
-import IconsPathSection from '@site/src/components/IconsPathSection'
 
 # Checkbox
 
 :::info
-<IconsPathSection folder={"checkBox"} />
+These icons are loacted under `VaMobile/src/components/VAIcon/svgs/checkbox`.
 :::
 
 Name | Icon | File Name 

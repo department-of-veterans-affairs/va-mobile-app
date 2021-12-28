@@ -5,14 +5,12 @@ import { ReactComponent as PhoneTTY} from '@componentsDocs/VAIcon/svgs/links/pho
 import { ReactComponent as Phone} from '@componentsDocs/VAIcon/svgs/links/phone.svg';
 import { ReactComponent as RightArrowBlueCircle} from '@componentsDocs/VAIcon/svgs/links/right-arrow-blue-circle.svg';
 import { ReactComponent as Text} from '@componentsDocs/VAIcon/svgs/links/text.svg';
-import IconsPathSection from '@site/src/components/IconsPathSection'
 
 # Links
 
 :::info
-<IconsPathSection folder={"links"} />
+These icons are loacted under `VaMobile/src/components/VAIcon/svgs/links`.
 :::
-
 
 Name | Icon | File Name 
 :---: | :---: | :---: 
