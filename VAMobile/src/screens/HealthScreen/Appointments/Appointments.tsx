@@ -8,11 +8,11 @@ import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { AppointmentsState, AuthorizedServicesState, StoreState } from 'store/reducers'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
@@ -42,7 +42,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   )
   const { appointments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const hasCernerFacilities = useHasCernerFacilities()
-  const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -65,10 +64,8 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     }
 
     // fetch upcoming and default past appointments ranges
-    if (apptsNotInDowntime) {
-      dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
-    }
-  }, [dispatch, apptsNotInDowntime])
+    dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
+  }, [dispatch])
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
