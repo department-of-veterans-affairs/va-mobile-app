@@ -22,8 +22,9 @@ jobs:
       - name: 'Create PR to merge changes back to develop'
         run: |
           git checkout release/${{github.event.inputs.version}}
-          git checkout -b merge-release-${{github.event.inputs.version}}-to-develop
-          git push -u origin merge-release-${{github.event.inputs.version}}-to-develop
-          echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} changes into develop")" >> GITHUB_ENV
+          echo "DEV_PR_BRANCH=$(echo "merge-release-${{github.event.inputs.version}}-to-develop")" >> $GITHUB_ENV
+          git checkout -b ${{env.DEV_PR_BRANCH}}
+          git push -u origin ${{env.DEV_PR_BRANCH}}
+          gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} changes into develop")
       - name: 'TEST'
-        run: echo "${{env.DEV_PR}}"
+        run: echo ${{env.DEV_PR_BRANCH}}
