@@ -2,20 +2,16 @@ import React, { FC, useEffect } from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { StoreState } from 'store/reducers'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getInbox } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import CernerAlert from './CernerAlert'
-import getEnv from 'utils/env'
-
-const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -25,22 +21,17 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
 
+  const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
-  const hasCernerFacilities = useHasCernerFacilities()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
-  const onVaVaccines = navigateTo('VaccineList')
-  const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    if (smNotInDowntime) {
-      // fetch inbox metadata to display unread messages count tag
-      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
-  }, [dispatch, smNotInDowntime])
+    // fetch inbox metadata to display unread messages count tag
+    dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
+  }, [dispatch])
 
   useEffect(() => {
     navigation.setOptions({
@@ -48,10 +39,14 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
     })
   }, [navigation])
 
+  if (!hasLoadedInbox) {
+    return <LoadingComponent text={t('healthScreen.loading')} />
+  }
+
   return (
     <VAScrollView {...testIdProps('Health-care-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments.title')}
           subText={t('appointments.subText')}
@@ -74,29 +69,6 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           tagCount={unreadCount}
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
-        <LargeNavButton
-          title={t('vaVaccines.buttonTitle')}
-          subText={t('vaVaccines.subText')}
-          a11yHint={t('vaVaccines.a11yHint')}
-          onPress={onVaVaccines}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
-        <LargeNavButton
-          title={t('covid19Updates.title')}
-          subText={t('covid19Updates.subText')}
-          a11yHint={t('covid19Updates.a11yHint')}
-          onPress={onCoronaVirusFAQ}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
-      </Box>
-      <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>
-        <CernerAlert />
       </Box>
     </VAScrollView>
   )

@@ -115,12 +115,7 @@ struct BenchmarkSuspender {
   using TimePoint = Clock::time_point;
   using Duration = Clock::duration;
 
-  struct DismissedTag {};
-  static inline constexpr DismissedTag Dismissed{};
-
-  BenchmarkSuspender() : start(Clock::now()) {}
-
-  explicit BenchmarkSuspender(DismissedTag) : start(TimePoint{}) {}
+  BenchmarkSuspender() { start = Clock::now(); }
 
   BenchmarkSuspender(const BenchmarkSuspender&) = delete;
   BenchmarkSuspender(BenchmarkSuspender&& rhs) noexcept {

@@ -5,17 +5,13 @@ import { contains, isEmpty } from 'underscore'
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
 
-import { Action } from 'redux'
 import { ErrorObject } from 'store/api'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { PhoneData } from 'store/api/types/PhoneData'
-import { StoreState, updatBottomOffset } from 'store'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
-import { ThunkDispatch } from 'redux-thunk'
 import { formatPhoneNumber } from './formattingUtils'
-import theme from 'styles/themes/standardTheme'
 
 /**
  * Generates testID string for reusable components
@@ -110,22 +106,12 @@ export const sortByDate = (dataList: Array<{ [key: string]: string }>, dateField
     const aDateField = a[dateField]
     const bDateField = b[dateField]
 
-    return compareDateStrings(aDateField, bDateField, isDescending)
+    const infiniteNum = isDescending ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
+
+    const d1 = aDateField && aDateField !== '' ? DateTime.fromISO(aDateField).toMillis() : infiniteNum
+    const d2 = bDateField && bDateField !== '' ? DateTime.fromISO(bDateField).toMillis() : infiniteNum
+    return isDescending ? d2 - d1 : d1 - d2
   })
-}
-
-/**
- * Compare function to use on dates represented as string. Can be used by sort functions
- * @param a - first date to compare
- * @param b - second date to compare
- * @param isDescending - optional param for whether to favor most recent
- */
-export const compareDateStrings = (a: string, b: string, isDescending?: boolean): number => {
-  const infiniteNum = isDescending ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
-
-  const d1 = a && a !== '' ? DateTime.fromISO(a).toMillis() : infiniteNum
-  const d2 = b && b !== '' ? DateTime.fromISO(b).toMillis() : infiniteNum
-  return isDescending ? d2 - d1 : d1 - d2
 }
 
 const invalidStrings = ['not_found', 'undefined', 'null']
@@ -231,37 +217,4 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export const isErrorObject = (error: any): error is ErrorObject => {
   return ['json', 'stack', 'networkError'].some((item) => item in error)
-}
-
-/**
- * Function to show snackbar
- * @param message - snackbar message
- * @param dispatch - dispatch function to change the bottom offset
- * @param confirmAction - action to perform on undo
- * @param isUndo - if user pressed undo it will not show undo again
- * @param isError - if it is an error will show the error icon
- * @param withNav - offset snackbar to be over the bottom nav
- * @returns snackbar
- */
-export function showSnackBar(
-  message: string,
-  dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
-  confirmAction?: () => void,
-  isUndo?: boolean,
-  isError?: boolean,
-  withNavBar = false,
-): void {
-  dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
-  snackBar.show(message, {
-    type: 'custom_snackbar',
-    data: {
-      onConfirmAction: () => {
-        if (confirmAction) {
-          confirmAction()
-        }
-      },
-      isUndo,
-      isError,
-    },
-  })
 }

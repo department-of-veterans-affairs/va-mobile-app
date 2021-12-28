@@ -2,7 +2,6 @@ package gov.va.mobileapp;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Bundle;
 import android.webkit.WebView;
 
 import com.facebook.react.PackageList;
@@ -11,26 +10,18 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.wix.reactnativenotifications.core.AppLaunchHelper;
-import com.wix.reactnativenotifications.core.AppLifecycleFacade;
-import com.wix.reactnativenotifications.core.JsIOHelper;
-import com.wix.reactnativenotifications.core.notification.INotificationsApplication;
-import com.wix.reactnativenotifications.core.notification.IPushNotification;
+import gov.va.mobileapp.native_modules.DeviceDataPackage;
+import gov.va.mobileapp.native_modules.RNCalendarPackage;
+import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
+import gov.va.mobileapp.native_modules.RNReviewPackage;
+import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
+import com.facebook.react.bridge.JSIModulePackage;
+import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import gov.va.mobileapp.native_modules.DeviceDataPackage;
-import gov.va.mobileapp.native_modules.RNCalendarPackage;
-import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
-import gov.va.mobileapp.native_modules.RNNotificationPrefsPackage;
-import gov.va.mobileapp.native_modules.RNReviewPackage;
-import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
-import gov.va.mobileapp.notifications.VAPushNotifications;
-import com.facebook.react.bridge.JSIModulePackage;
-import com.swmansion.reanimated.ReanimatedJSIModulePackage;
-
-public class MainApplication extends Application implements ReactApplication, INotificationsApplication {
+public class MainApplication extends Application implements ReactApplication {
 
     private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
         @Override
@@ -48,7 +39,6 @@ public class MainApplication extends Application implements ReactApplication, IN
             packages.add(new DeviceDataPackage());
             packages.add(new RNCalendarPackage());
             packages.add(new RNCheckVoiceOverPackage());
-            packages.add(new RNNotificationPrefsPackage());
             packages.add(new RNSecureRandomPackage());
             packages.add(new RNReviewPackage());
 
@@ -110,15 +100,5 @@ public class MainApplication extends Application implements ReactApplication, IN
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * Sets the overridden notifications class for the react-native-notifications lib
-     *
-     */
-
-    @Override
-    public IPushNotification getPushNotification(Context context, Bundle bundle, AppLifecycleFacade facade, AppLaunchHelper defaultAppLaunchHelper) {
-        return new VAPushNotifications(context, bundle, facade, defaultAppLaunchHelper, new JsIOHelper());
     }
 }
