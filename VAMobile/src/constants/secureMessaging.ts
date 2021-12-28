@@ -10,18 +10,16 @@ export const READ = 'READ'
 
 export const TRASH_FOLDER_NAME = 'Trash'
 
-export type FolderNameType = 'Drafts' | 'Deleted' | 'Sent' | 'Inbox'
+export type FolderNameType = 'Drafts' | 'Deleted' | 'Sent'
 
 export const FolderNameTypeConstants: {
   drafts: FolderNameType
   deleted: FolderNameType
   sent: FolderNameType
-  inbox: FolderNameType
 } = {
   drafts: 'Drafts',
   deleted: 'Deleted',
   sent: 'Sent',
-  inbox: 'Inbox',
 }
 
 export type FormHeaderType = 'Reply' | 'Compose' | 'Draft'
