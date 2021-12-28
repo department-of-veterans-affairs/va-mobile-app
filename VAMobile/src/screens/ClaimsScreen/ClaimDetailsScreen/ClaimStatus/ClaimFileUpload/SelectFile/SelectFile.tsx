@@ -6,7 +6,7 @@ import DocumentPicker from 'react-native-document-picker'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
+import { ClaimsStackParamList, DocumentPickerResponse } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
@@ -38,9 +38,9 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
     } = DocumentPicker
 
     try {
-      const document = await pickSingle({
+      const document = (await pickSingle({
         type: [images, plainText, pdf],
-      })
+      })) as DocumentPickerResponse
 
       if (document.size > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
         setError(t('fileUpload.fileSizeError'))
