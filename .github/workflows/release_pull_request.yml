@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Set up GH CLI secret'
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+        run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - name: 'Log into GH CLI'
-      - run: gh auth login --with-token < token.txt
+        run: gh auth login --with-token < token.txt
       - name: 'Checkout repo'
         uses: actions/checkout@v2
         with:
