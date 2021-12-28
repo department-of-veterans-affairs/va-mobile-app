@@ -1,39 +1,35 @@
-The official VA mobile app helps you manage your VA health care and benefits on your mobile device. Use the app to manage common tasks like checking your claim status, communicating with your VA health care team, and accessing your VA benefit letters.
+Try the initial version of the official VA app from the US Department of Veterans Affairs (VA) to manage existing VA claims and appointments and message with your VA health care providers.
 
-Features include:
+You can also access common VA letters and update your VA.gov profile information.
 
-Biometric Sign-in
-- Use your phone’s built-in security features — like fingerprint and face recognition — to securely access your information.
+Initial release features:
 
-Claims and Appeals
-- Check your claim or appeal status.
-- Submit additional evidence from your mobile device.
+Biometric sign-in
+• Take advantage of your phone’s built-in security features like fingerprint and face recognition to securely access the app.
+
+Claims and appeals
+• View claim status and submit additional evidence using your phone’s camera or by uploading documents.
 
 Appointments
-- Check or cancel your VA health appointments.
-- Easily add existing appointments to your calendar.
+• View or cancel your VA medical appointments and easily add existing appointments to your phone’s calendar.
 
-Secure Messaging
-- Communicate privately with your VA health care team.
+Secure messaging
+• Send and receive messages from your VA health providers.
 
 Letters
-Download common VA letters and documents like:
+• Download common VA letters and documents.
 - Benefit Summary and Service Verification Letter
 - Proof of Service Card
 - Commissary Letter
+- And more
 
 Profile
-- Check your disability rating.
-- Update your contact information.
-- Update your direct deposit information for disability compensation and pension benefits.
+• View and update your VA.gov profile, including your contact information and direct deposit information for disability compensation and pension benefits.
 
-VA Vaccine Records
-- Review your COVID-19 and other VA vaccine records
-
-Facility Locator
-- Find VA facilities and services near you.
+Facility locator
+• Find VA facilities nearest to you.
 
 Veterans Crisis Line
-- Quickly access the VA Crisis Line.
+• Quick access to the VA crisis line. 
 
-Need help with this app? Call us at @800-698-2411 (TTY: 711). We’re here 24/7.
+If you need assistance with the official VA app, call 800-698-2411 (TTY: 711). We’re here 24/7.
