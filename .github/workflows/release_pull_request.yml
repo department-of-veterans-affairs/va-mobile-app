@@ -1,3 +1,5 @@
+name: "Create Release PRs"
+
 on:
   workflow_dispatch:
     inputs:
