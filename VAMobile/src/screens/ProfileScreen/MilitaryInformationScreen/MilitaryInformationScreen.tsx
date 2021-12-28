@@ -7,7 +7,6 @@ import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent,
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -59,7 +58,7 @@ const MilitaryInformationScreen: FC = () => {
     mx: theme.dimensions.gutter,
     mb: theme.dimensions.contentMarginBottom,
     accessibilityRole: 'link',
-    ...testIdProps(generateTestID(t('militaryInformation.incorrectServiceInfo'), '')),
+    ...testIdProps(t('militaryInformation.incorrectServiceInfo')),
     onPress: navigateTo('IncorrectServiceInfo'),
     textDecoration: 'underline',
     textDecorationColor: 'link',

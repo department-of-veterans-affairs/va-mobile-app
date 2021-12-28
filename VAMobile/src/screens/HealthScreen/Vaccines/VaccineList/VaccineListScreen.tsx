@@ -10,6 +10,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StoreState, VaccineState } from 'store/reducers'
 import { Vaccine } from 'store/api/types'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { getA11yLabelText } from 'utils/common'
 import { getVaccines } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -42,6 +43,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
       onPress: navigateTo('VaccineDetails', { vaccineId: vaccine.id }),
       a11yHintText: t('vaccines.list.a11y'),
       a11yValue: t('common:listPosition', { position: index + 1, total: vaccines.length }),
+      testId: getA11yLabelText(textLines),
     }
 
     return vaccineButton

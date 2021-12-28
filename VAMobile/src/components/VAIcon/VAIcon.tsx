@@ -64,6 +64,7 @@ import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
 import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
+import EllipsisSolid from './svgs/ellipsisSolid.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import FolderSolid from './svgs/folder-solid.svg'
 import InboxSolid from './svgs/inbox-solid.svg'
@@ -103,6 +104,7 @@ export const VA_ICON_MAP = {
   FilledCheckBox,
   FolderSolid,
   EmptyRadio,
+  EllipsisSolid,
   FilledRadio,
   DisabledRadio,
   Marines,

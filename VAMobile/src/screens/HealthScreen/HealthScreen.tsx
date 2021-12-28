@@ -7,7 +7,7 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StoreState } from 'store/reducers'
-import { getInbox } from 'store'
+import { getInbox, logCOVIDClickAnalytics } from 'store/actions'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,7 +19,7 @@ const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
-const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
+export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
@@ -32,7 +32,10 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
-  const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  const onCoronaVirusFAQ = () => {
+    dispatch(logCOVIDClickAnalytics('health_screen'))
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  }
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
