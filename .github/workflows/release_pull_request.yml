@@ -26,6 +26,6 @@ jobs:
           git checkout release/${{github.event.inputs.version}}
           git checkout -b ${{env.DEV_PR_BRANCH}}
           git push -u origin ${{env.DEV_PR_BRANCH}}
-          gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} changes into develop")
+          gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} changes into develop"
       - name: 'TEST'
         run: echo ${{env.DEV_PR_BRANCH}}
