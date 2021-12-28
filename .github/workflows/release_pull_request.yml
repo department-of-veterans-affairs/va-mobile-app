@@ -1,0 +1,20 @@
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        required: true
+
+jobs:
+  create_prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repo'
+        uses: actions/checkout@v2
+      - name: 'Create PR to merge changes back to develop'
+        run: |
+          git checkout release/${{github.event.inputs.version}}
+          git checkout -b merge-release-${{github.event.inputs.version}}-to-develop
+          echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} changes into develop")" >> GITHUB_ENV
+      - name: 'TEST'
+        run: echo $DEV_PR
