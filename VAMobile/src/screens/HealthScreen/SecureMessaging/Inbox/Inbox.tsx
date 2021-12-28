@@ -20,15 +20,9 @@ const Inbox: FC<InboxProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
-  const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]
 
   const onInboxMessagePress = (messageID: number): void => {
-    navigateTo('ViewMessageScreen', {
-      messageID,
-      folderID: SecureMessagingSystemFolderIdConstants.INBOX,
-      currentPage: paginationMetaData?.currentPage || 1,
-      messagesLeft: inboxMessages.length,
-    })()
+    navigateTo('ViewMessageScreen', { messageID })()
   }
 
   if (loadingInbox) {
@@ -43,6 +37,7 @@ const Inbox: FC<InboxProps> = () => {
     dispatch(fetchInboxMessages(requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }
 
+  const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]
   const page = paginationMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
     onNext: () => {
