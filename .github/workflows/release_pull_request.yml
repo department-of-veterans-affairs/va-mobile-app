@@ -33,10 +33,11 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
+          git checkout release/${{github.event.inputs.version}}
           git checkout master
           git checkout -b ${{env.MASTER_PR_BRANCH}}
           git fetch --all
-          git merge -X theirs origin/release/${{github.event.inputs.version}} --squash
+          git merge -X theirs release/${{github.event.inputs.version}} --squash
           git commit -m "Merge release/${{github.event.inputs.version}} into PR branch"
           git push -u origin ${{env.MASTER_PR_BRANCH}}
           gh pr create -B master -t ${{github.event.inputs.version}} -b "PR to merge ${{github.event.inputs.version}} changes into master and build for the stores" -a lexicalninja
