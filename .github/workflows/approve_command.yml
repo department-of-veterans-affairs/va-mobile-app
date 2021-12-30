@@ -26,6 +26,6 @@ jobs:
     steps:
       - name: 'test reuse envs come through'
         run: |
-          echo ${run_prs.outputs.dev}}
-          echo ${run_prs.outputs.release}}
+          echo ${{run_prs.outputs.dev}}
+          echo ${{run_prs.outputs.release}}
 
