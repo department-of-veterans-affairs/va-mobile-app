@@ -2,6 +2,10 @@ name: 'reuse tester'
 
 on:
   workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
     outputs:
       devPrUrl:
         value: ${{jobs.reuse.outputs.devPrUrl}}
