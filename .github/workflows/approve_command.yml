@@ -19,6 +19,6 @@ jobs:
 #          comment-id: '1000442945' #${{ github.event.client_payload.github.payload.comment.id }}
 #          reaction-type: rocket
       - name: 'Test reuse'
-        uses: ./.github/actions/test.yml
+        uses: ./.github/workflows/test.yml
       - name: 'test reuse envs come through'
         run: echo ${{env.REUSE_TEST}}
