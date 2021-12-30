@@ -23,7 +23,7 @@ jobs:
     if: ${{ github.event.inputs.version }} =~ /^v\d+\.\d+\.\d+/
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/test.yml@slash-command
     with:
-      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+      version: ${{github.event.inputs.version}} #${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
   comment_complete:
     if: ${{ github.event.inputs.version }} =~ /^v\d+\.\d+\.\d+/
     runs-on: ubuntu-latest
