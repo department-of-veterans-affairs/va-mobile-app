@@ -3,8 +3,10 @@ name: 'reuse tester'
 on:
   workflow_call:
     outputs:
-      devPrUrl: ${{jobs.reuse.outputs.devPrUrl}}
-      releasePrUrl: ${{jobs.reuse.outputs.releasePrUrl}}
+      devPrUrl:
+        value: ${{jobs.reuse.outputs.devPrUrl}}
+      releasePrUrl:
+        value: ${{jobs.reuse.outputs.releasePrUrl}}
 
 jobs:
   reuse:
