@@ -16,7 +16,7 @@ jobs:
         with:
           token: ${{ secrets.GH_ACTIONS_PAT }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-          comment-id: '999131093' #${{ github.event.client_payload.github.payload.comment.id }}
+          comment-id: '1003145956' #${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
   run_prs:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/test.yml@slash-command
@@ -26,6 +26,5 @@ jobs:
     steps:
       - name: 'test reuse envs come through'
         run: |
-          echo ${{needs.run_prs.outputs.devPrUrl}}
-          echo ${{needs.run_prs.outputs.releasePrUrl}}
-
+          ISSUE_NUM="2255"
+          gh issue comment $ISSUE_NUM -b "PRs Successfully Created! :raised-hands:\n[PR to develop](${{needs.run_prs.outputs.devPrUrl}})\n[PR to master](${{needs.run_prs.outputs.releasePrUrl}})"

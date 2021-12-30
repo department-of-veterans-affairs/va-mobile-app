@@ -2,14 +2,20 @@ name: "Create Release PRs"
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version Number (eg. v1.1.0)'
-        required: true
+  workflow_call:
+    outputs:
+      devPrUrl:
+        value: ${{jobs.reuse.outputs.devPrUrl}}
+      releasePrUrl:
+        value: ${{jobs.reuse.outputs.releasePrUrl}}
+
 
 jobs:
   create_prs:
     runs-on: ubuntu-latest
+    outputs:
+      devPrUrl: ${{steps.urls.outputs.dev}}
+      releasePrUrl: ${{steps.urls.outputs.release}}
     steps:
       - name: 'Set up GH CLI secret'
         run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
@@ -31,7 +37,8 @@ jobs:
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout release/${{github.event.inputs.version}}
           echo "RELEASE_PR=$(gh pr create -B master -t ${{github.event.inputs.version}} -b "PR to merge ${{github.event.inputs.version}} changes into master and build for the stores" -a travis-newby)" >> $GITHUB_ENV
-      - name: 'Log PR Links'
+      - name: 'Set Outputs'
+        id: urls
         run: |
-          echo ${{env.DEV_PR}}
-          echo ${{env.RELEASE_PR}}
+          echo "::set-output name=dev::${{env.DEV_PR}}"
+          echo "::set-output name=release::${{env.RELEASE_PR}}"

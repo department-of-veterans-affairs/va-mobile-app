@@ -19,6 +19,6 @@ jobs:
       - run: echo "REUSE_TEST2=$(echo "reuse test 2")" >> $GITHUB_ENV
       - id: urls
         run: |
-          echo "::set-output name=dev::${{env.REUSE_TEST1}}"
-          echo "::set-output name=release::${{env.REUSE_TEST2}}"
+          echo "::set-output name=dev::www.google.com}"
+          echo "::set-output name=release::www.adhocteam.us"
 
