@@ -18,9 +18,9 @@ jobs:
 #          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
 #          comment-id: '1000442945' #${{ github.event.client_payload.github.payload.comment.id }}
 #          reaction-type: rocket
-      - name: 'Checkout repo'
-        uses: actions/checkout@v2
+#      - name: 'Checkout repo'
+#        uses: actions/checkout@v2
       - name: 'Test reuse'
-        uses: ./.github/workflows/test.yml
+        uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/test.yml
       - name: 'test reuse envs come through'
         run: echo ${{env.REUSE_TEST}}
