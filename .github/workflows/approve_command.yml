@@ -4,6 +4,10 @@ on:
   repository_dispatch:
     types: [approve-command]
   workflow_dispatch:
+    inputs:
+      notes:
+        description: 'Notes'
+        required: false
 
 jobs:
   run_approval:

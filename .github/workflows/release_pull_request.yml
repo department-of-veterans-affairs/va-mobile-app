@@ -34,4 +34,4 @@ jobs:
       - name: 'Log PR Links'
         run: |
         echo ${{env.DEV_PR}}
-        echo ${{env.DEV_PR}}
+        echo ${{env.RELEASE_PR}}
