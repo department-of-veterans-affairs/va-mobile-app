@@ -3,12 +3,13 @@ name: 'Approve Slash Command'
 on:
   workflow_dispatch:
     inputs:
-      notes:
-        description: 'Notes'
-        required: false
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        required: true
 
 jobs:
   indicate_start:
+    if: ${{ github.event.inputs.version }} =~ /^v\d+\.\d+\.\d+/
     runs-on: ubuntu-latest
     steps:
       - name: 'Add reaction to approve command'
@@ -16,11 +17,15 @@ jobs:
         with:
           token: ${{ secrets.GH_ACTIONS_PAT }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-          comment-id: '1003145956' #${{ github.event.client_payload.github.payload.comment.id }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
   run_prs:
+    if: ${{ github.event.inputs.version }} =~ /^v\d+\.\d+\.\d+/
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/test.yml@slash-command
+    with:
+      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
   comment_complete:
+    if: ${{ github.event.inputs.version }} =~ /^v\d+\.\d+\.\d+/
     runs-on: ubuntu-latest
     needs: run_prs
     steps:
@@ -32,6 +37,6 @@ jobs:
         run: gh auth login --with-token < token.txt
       - name: 'test reuse envs come through'
         run: |
-          gh issue comment 2255 -b "PRs Successfully Created! :raised_hands:
+          gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
           [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
           [PR to master](${{needs.run_prs.outputs.releasePrUrl}})"
