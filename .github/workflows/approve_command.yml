@@ -1,8 +1,8 @@
 name: 'Approve Slash Command'
 
 on:
-  repository_dispatch:
-    types: [approve-command]
+#  repository_dispatch:
+#    types: [approve-command]
   workflow_dispatch:
     inputs:
       notes:
