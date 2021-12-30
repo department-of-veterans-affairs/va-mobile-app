@@ -113,7 +113,7 @@ const MainApp: FC = () => {
         screen_class: currentRouteName,
       })
     }
-
+    // TEST
     // Save the current route name for later comparison
     routeNameRef.current = currentRouteName || ''
   }
