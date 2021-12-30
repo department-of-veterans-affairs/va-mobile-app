@@ -33,5 +33,5 @@ jobs:
           echo "RELEASE_PR=$(gh pr create -B master -t ${{github.event.inputs.version}} -b "PR to merge ${{github.event.inputs.version}} changes into master and build for the stores" -a travis-newby)" >> $GITHUB_ENV
       - name: 'Log PR Links'
         run: |
-        echo ${{env.DEV_PR}}
-        echo ${{env.RELEASE_PR}}
+          echo ${{env.DEV_PR}}
+          echo ${{env.RELEASE_PR}}
