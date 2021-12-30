@@ -5,6 +5,14 @@ on: workflow_call
 jobs:
   reuse:
     runs-on: ubuntu-latest
+    outputs:
+      devPrUrl: ${{steps.urls.outputs.dev}}
+      releasePrUrl: ${{steps.urls.outputs.release}}
     steps:
-      - run: echo "This worked"
-      - run: echo "REUSE_TEST=$(echo "reuse test")" >> $GITHUB_ENV
+      - run: echo "REUSE_TEST1=$(echo "reuse test 1")" >> $GITHUB_ENV
+      - run: echo "REUSE_TEST2=$(echo "reuse test 2")" >> $GITHUB_ENV
+      - name: 'set outputs'
+        id: urls
+        run: |
+          echo "::set-output name=dev::${{env.REUSE_TEST1}}"
+          echo "::set-output name=release::${{env.REUSE_TEST2}}"
