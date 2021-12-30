@@ -11,8 +11,7 @@ jobs:
     steps:
       - run: echo "REUSE_TEST1=$(echo "reuse test 1")" >> $GITHUB_ENV
       - run: echo "REUSE_TEST2=$(echo "reuse test 2")" >> $GITHUB_ENV
-      - name: 'set outputs'
-        id: urls
+      - id: urls
         run: |
           echo ${{env.REUSE_TEST1}}
           echo "::set-output name=dev::${{env.REUSE_TEST1}}"

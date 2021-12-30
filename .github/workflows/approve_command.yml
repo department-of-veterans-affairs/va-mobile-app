@@ -27,5 +27,5 @@ jobs:
       - name: 'test reuse envs come through'
         run: |
           echo ${{needs.run_prs.outputs.devPrUrl}}
-          echo ${{needs.run_prs.outputs.devPrUrl}}
+          echo ${{needs.run_prs.outputs.releasePrUrl}}
 
