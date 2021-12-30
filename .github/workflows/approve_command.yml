@@ -24,6 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: run_prs
     steps:
+      - name: 'Set up GH CLI secret'
+        run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - name: 'Log into GH CLI'
+        run: gh auth login --with-token < token.txt
       - name: 'test reuse envs come through'
         run: |
           ISSUE_NUM="2255"
