@@ -13,6 +13,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         with:
           token: ${{ secrets.PAT }}
+          reaction-token: ${{ github.event.client_payload.github.payload.repository.full_name }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: '1000442945' #${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
