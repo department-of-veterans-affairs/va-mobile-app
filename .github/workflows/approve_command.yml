@@ -1,15 +1,11 @@
 name: 'Approve Slash Command'
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version Number (eg. v1.1.0)'
-        required: true
+  repository_dispatch:
+    types: [ approve-command ]
 
 jobs:
   indicate_start:
-    if: ${{ github.event.inputs.version }} == /^v\d+\.\d+\.\d+/
     runs-on: ubuntu-latest
     steps:
       - name: 'Add reaction to approve command'
@@ -20,12 +16,10 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
   run_prs:
-    if: ${{ github.event.inputs.version }} == /^v\d+\.\d+\.\d+/
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/test.yml@slash-command
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
     with:
-      version: ${{github.event.inputs.version}} #${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
   comment_complete:
-    if: ${{ github.event.inputs.version }} == /^v\d+\.\d+\.\d+/
     runs-on: ubuntu-latest
     needs: run_prs
     steps:
@@ -35,8 +29,10 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - name: 'Log into GH CLI'
         run: gh auth login --with-token < token.txt
-      - name: 'test reuse envs come through'
+      - name: 'Comment on original issue with PR info'
         run: |
           gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
           [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
           [PR to master](${{needs.run_prs.outputs.releasePrUrl}})"
+      - name: 'Close original issue'
+        run: gh issue close ${{ github.event.client_payload.github.payload.issue.number }}

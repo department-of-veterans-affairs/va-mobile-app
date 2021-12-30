@@ -11,5 +11,6 @@ jobs:
         with:
           token: ${{ secrets.GH_ACTIONS_PAT }}
           reaction-token: ${{ secrets.GH_ACTIONS_PAT }}
+          permission: admin
           commands: |
             approve
