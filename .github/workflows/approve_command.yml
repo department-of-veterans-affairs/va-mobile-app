@@ -31,4 +31,4 @@ jobs:
       - name: 'test reuse envs come through'
         run: |
           ISSUE_NUM="2255"
-          gh issue comment $ISSUE_NUM -b "PRs Successfully Created! :raised-hands:\n[PR to develop](${{needs.run_prs.outputs.devPrUrl}})\n[PR to master](${{needs.run_prs.outputs.releasePrUrl}})"
+          gh issue comment ${{ISSUE_NUM}} -b "PRs Successfully Created! :raised-hands:\n[PR to develop](${{needs.run_prs.outputs.devPrUrl}})\n[PR to master](${{needs.run_prs.outputs.releasePrUrl}})"
