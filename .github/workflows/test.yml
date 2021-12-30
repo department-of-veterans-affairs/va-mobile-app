@@ -14,5 +14,6 @@ jobs:
       - name: 'set outputs'
         id: urls
         run: |
+          echo ${{env.REUSE_TEST1}}
           echo "::set-output name=dev::${{env.REUSE_TEST1}}"
           echo "::set-output name=release::${{env.REUSE_TEST2}}"
