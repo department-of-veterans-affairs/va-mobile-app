@@ -1,0 +1,10 @@
+name: 'reuse tester'
+
+on: workflow_call
+
+jobs:
+  reuse:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This worked"
+      - run: echo "REUSE_TEST=$(echo "reuse test")" >> $GITHUB_ENV
