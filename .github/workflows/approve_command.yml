@@ -9,7 +9,7 @@ on:
 
 jobs:
   indicate_start:
-    if: ${{ github.event.inputs.version }} =~ /^v\d+\.\d+\.\d+/
+    if: ${{ github.event.inputs.version }} == /^v\d+\.\d+\.\d+/
     runs-on: ubuntu-latest
     steps:
       - name: 'Add reaction to approve command'
@@ -20,12 +20,12 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
   run_prs:
-    if: ${{ github.event.inputs.version }} =~ /^v\d+\.\d+\.\d+/
+    if: ${{ github.event.inputs.version }} == /^v\d+\.\d+\.\d+/
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/test.yml@slash-command
     with:
       version: ${{github.event.inputs.version}} #${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
   comment_complete:
-    if: ${{ github.event.inputs.version }} =~ /^v\d+\.\d+\.\d+/
+    if: ${{ github.event.inputs.version }} == /^v\d+\.\d+\.\d+/
     runs-on: ubuntu-latest
     needs: run_prs
     steps:
