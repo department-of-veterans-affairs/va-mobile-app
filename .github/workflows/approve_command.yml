@@ -38,3 +38,4 @@ jobs:
         run: |
           gh issue close ${{ github.event.client_payload.github.payload.issue.number }}
           gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "Issue Successfully Closed"
+
