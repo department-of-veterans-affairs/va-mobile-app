@@ -13,9 +13,9 @@ on:
         required: true
     outputs:
       devPrUrl:
-        value: ${{jobs.reuse.outputs.devPrUrl}}
+        value: ${{jobs.create_prs.outputs.devPrUrl}}
       releasePrUrl:
-        value: ${{jobs.reuse.outputs.releasePrUrl}}
+        value: ${{jobs.create_prs.outputs.releasePrUrl}}
 
 
 jobs:
