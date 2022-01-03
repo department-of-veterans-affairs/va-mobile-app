@@ -1,0 +1,40 @@
+name: 'Approve Slash Command'
+
+on:
+  repository_dispatch:
+    types: [ approve-command ]
+
+jobs:
+  indicate_start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Add reaction to approve command'
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GH_ACTIONS_PAT }}
+          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+          reaction-type: rocket
+  run_prs:
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
+    with:
+      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+  comment_complete:
+    runs-on: ubuntu-latest
+    needs: run_prs
+    steps:
+      - name: 'Checkout repo'
+        uses: actions/checkout@v2
+      - name: 'Set up GH CLI secret'
+        run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - name: 'Log into GH CLI'
+        run: gh auth login --with-token < token.txt
+      - name: 'Comment on original issue with PR info'
+        run: |
+          gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
+          [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
+          [PR to master](${{needs.run_prs.outputs.releasePrUrl}})"
+      - name: 'Close original issue'
+        run: |
+          gh issue close ${{ github.event.client_payload.github.payload.issue.number }}
+          gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "Issue Successfully Closed"
