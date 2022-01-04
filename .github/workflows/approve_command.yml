@@ -8,6 +8,10 @@ jobs:
   indicate_start:
     runs-on: ubuntu-latest
     steps:
+      - name: Dump the client payload context
+        env:
+          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
+        run: echo "$PAYLOAD_CONTEXT"
       - name: 'Add reaction to approve command'
         uses: peter-evans/create-or-update-comment@v1
         with:
