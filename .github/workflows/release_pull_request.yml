@@ -38,14 +38,14 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git checkout release/${{github.event.inputs.version}}
-          echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
+          git checkout release/${{inputs.version}}
+          echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
       - name: 'Create PR to merge changes back to master'
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout release/${{github.event.inputs.version}}
-          echo "RELEASE_PR=$(gh pr create -B master -t ${{github.event.inputs.version}} -b "PR to merge ${{github.event.inputs.version}} changes into master and build for the stores" -a travis-newby)" >> $GITHUB_ENV
+          echo "RELEASE_PR=$(gh pr create -B master -t ${{inputs.version}} -b "PR to merge ${{inputs.version}} changes into master and build for the stores" -a travis-newby)" >> $GITHUB_ENV
       - name: 'Set Outputs'
         id: urls
         run: |
