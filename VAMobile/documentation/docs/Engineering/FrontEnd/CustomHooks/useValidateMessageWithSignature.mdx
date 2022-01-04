@@ -1,0 +1,27 @@
+import HooksInfo from '../../../../src/components/HooksInfo'
+
+export const exampleString = `const validateMessage = useValidateMessageWithSignature()\n
+ useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props): ReactNode => (
+        <BackButton
+          onPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.cancel}
+          showCarat={false}
+        />
+      ),
+      headerRight: () => (
+        <SaveButton
+          onSave={() => {
+            setOnSaveDraftClicked(true)
+            setOnSendClicked(true)
+          }}
+          disabled={false}
+          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+        />
+      ),
+    })
+  })`
+
+<HooksInfo componentName="useValidateMessageWithSignature" example={exampleString}/>

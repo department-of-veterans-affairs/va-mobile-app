@@ -1,0 +1,37 @@
+name: "Create Release PRs"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        required: true
+
+jobs:
+  create_prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Set up GH CLI secret'
+        run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - name: 'Log into GH CLI'
+        run: gh auth login --with-token < token.txt
+      - name: 'Checkout repo'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: 'Create PR to merge changes back to develop'
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git checkout release/${{github.event.inputs.version}}
+          echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
+      - name: 'Create PR to merge changes back to master'
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git checkout release/${{github.event.inputs.version}}
+          echo "RELEASE_PR=$(gh pr create -B master -t ${{github.event.inputs.version}} -b "PR to merge ${{github.event.inputs.version}} changes into master and build for the stores" -a travis-newby)" >> $GITHUB_ENV
+      - name: 'Log PR Links'
+        run: |
+          echo ${{env.DEV_PR}}
+          echo ${{env.DEV_PR}}

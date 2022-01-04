@@ -31,6 +31,7 @@ export const lightTheme = {
     snackbar: colors.snackBarBlack,
     webviewControls: colors.grayLightest,
     pickerControls: colors.grayLightest,
+    menu: colors.white,
   },
   alertBox: {
     cardBackground: colors.grayLightest,
@@ -50,6 +51,7 @@ export const lightTheme = {
     focusedPickerAndInput: colors.primaryDarker,
     confirmation: colors.goldLight,
     footerButton: colors.grayLight,
+    menuDivider: colors.grayLight,
   },
   icon: {
     footerButton: colors.primary,
@@ -175,6 +177,7 @@ export const darkTheme = {
     snackbar: colors.snackBarBlack,
     webviewControls: colors.base,
     pickerControls: colors.darkmodeGrayWarmDark,
+    menu: colors.white,
   },
   alertBox: {
     cardBackground: colors.darkmodeGrayWarmDark,
@@ -194,6 +197,7 @@ export const darkTheme = {
     focusedPickerAndInput: colors.gold,
     confirmation: colors.gold,
     footerButton: colors.base,
+    menuDivider: colors.grayLight,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,

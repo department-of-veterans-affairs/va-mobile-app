@@ -129,6 +129,7 @@ export type VABackgroundColors = {
   snackbar: string
   webviewControls: string
   pickerControls: string
+  menu: string
 }
 
 export type VABorderColors = {
@@ -145,6 +146,7 @@ export type VABorderColors = {
   focusedPickerAndInput: string
   confirmation: string
   footerButton: string
+  menuDivider: string
 }
 
 export type VAFontSizes = {
@@ -264,6 +266,14 @@ export type VATheme = {
     snackBarButtonTopMargin: number
     snackBarConfirmBtnMarginRight: number
     snackBarIconTopMargin: number
+    menuShadowX: number
+    menuShadowY: number
+    menuShadowOpacity: number
+    menuShadowRadius: number
+    menuOpacity: number
+    menuBorderRadius: number
+    menuItemMinWidth: number
+    menuElevation: number
   }
   fontFace: {
     regular: string
