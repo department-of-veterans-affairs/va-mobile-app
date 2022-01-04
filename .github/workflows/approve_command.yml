@@ -11,7 +11,9 @@ jobs:
       - name: Dump the client payload context
         env:
           PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
-        run: echo "$PAYLOAD_CONTEXT"
+        run: |
+          echo "$PAYLOAD_CONTEXT"
+          echo ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
       - name: 'Add reaction to approve command'
         uses: peter-evans/create-or-update-comment@v1
         with:

@@ -6,9 +6,11 @@ on:
       version:
         description: 'Version Number (eg. v1.1.0)'
         required: true
+        type: string
   workflow_call:
     inputs:
       version:
+        description: 'Version Number (eg. v1.1.0)'
         type: string
         required: true
     outputs:
