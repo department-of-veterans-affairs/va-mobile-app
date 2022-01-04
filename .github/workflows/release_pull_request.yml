@@ -44,7 +44,7 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git checkout release/${{github.event.inputs.version}}
+          git checkout release/inputs.version}}
           echo "RELEASE_PR=$(gh pr create -B master -t ${{inputs.version}} -b "PR to merge ${{inputs.version}} changes into master and build for the stores" -a travis-newby)" >> $GITHUB_ENV
       - name: 'Set Outputs'
         id: urls
