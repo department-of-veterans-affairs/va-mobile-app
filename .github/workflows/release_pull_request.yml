@@ -1,7 +1,6 @@
 name: "Create Release PRs"
 
 on:
-  workflow_dispatch:
   workflow_call:
     inputs:
       version:
@@ -13,6 +12,12 @@ on:
         value: ${{jobs.create_prs.outputs.devPrUrl}}
       releasePrUrl:
         value: ${{jobs.create_prs.outputs.releasePrUrl}}
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        required: true
+        type: string
 
 jobs:
   create_prs:

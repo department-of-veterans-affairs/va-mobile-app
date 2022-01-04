@@ -24,7 +24,7 @@ jobs:
   run_prs:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
     with:
-      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+      version: v0.0.0
   comment_complete:
     runs-on: ubuntu-latest
     needs: run_prs
