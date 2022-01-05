@@ -28,7 +28,7 @@ import { isAndroid, isIOS } from './platform'
 import { updateAccessibilityFocus } from 'store/actions'
 import HeaderTitle from 'components/HeaderTitle'
 
-const SCHEME_DEBOUNCE = 250
+// const SCHEME_DEBOUNCE = 500
 
 /**
  * Listen for changes to the system dark mode settings. Uses a timeout as a workaround for an issue discussed
@@ -39,35 +39,59 @@ const SCHEME_DEBOUNCE = 250
 export const useColorScheme = (setCurrentTheme: (value: ((prevState: VATheme) => VATheme) | VATheme) => void): NonNullable<ColorSchemeName> => {
   const [scheme, setScheme] = useState(Appearance.getColorScheme())
 
-  let timeout = useRef<NodeJS.Timeout | null>(null).current
-
   useEffect(() => {
     const evt = Appearance.addChangeListener(onColorSchemeChange)
 
     return () => {
-      resetCurrentTimeout()
       evt.remove()
     }
   })
 
   function onColorSchemeChange(preferences: Appearance.AppearancePreferences) {
-    resetCurrentTimeout()
-
-    timeout = setTimeout(() => {
-      setScheme(preferences.colorScheme)
-      setColorScheme(preferences.colorScheme)
-      setCurrentTheme(getTheme())
-    }, SCHEME_DEBOUNCE)
-  }
-
-  function resetCurrentTimeout() {
-    if (timeout) {
-      clearTimeout(timeout)
-    }
+    setScheme(preferences.colorScheme)
+    setColorScheme(preferences.colorScheme)
+    setCurrentTheme(getTheme())
   }
 
   return scheme as NonNullable<ColorSchemeName>
 }
+
+// TODO: if the color switching works correctly remove this, we do not need the debounce workaround and it may be causing issues
+// export const useColorScheme = (setCurrentTheme: (value: ((prevState: VATheme) => VATheme) | VATheme) => void): NonNullable<ColorSchemeName> => {
+//   const [scheme, setScheme] = useState(Appearance.getColorScheme())
+//
+//   let timeout = useRef<NodeJS.Timeout | null>(null).current
+//
+//   useEffect(() => {
+//     const evt = Appearance.addChangeListener(onColorSchemeChange)
+//
+//     return () => {
+//       resetCurrentTimeout()
+//       evt.remove()
+//     }
+//   })
+//
+//   function onColorSchemeChange(preferences: Appearance.AppearancePreferences) {
+//     console.log('scheme changed ' + preferences.colorScheme)
+//     resetCurrentTimeout()
+//
+//     timeout = setTimeout(() => {
+//       console.log('setting scheme to ' + preferences.colorScheme)
+//       setScheme(preferences.colorScheme)
+//       setColorScheme(preferences.colorScheme)
+//       setCurrentTheme(getTheme())
+//     }, SCHEME_DEBOUNCE)
+//   }
+//
+//   function resetCurrentTimeout() {
+//     if (timeout) {
+//       console.log('resetting timeout')
+//       clearTimeout(timeout)
+//     }
+//   }
+//
+//   return scheme as NonNullable<ColorSchemeName>
+// }
 
 /**
  * Hook to determine if an error should be shown for a given screen id
