@@ -57,7 +57,11 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
  * @returns the date string based on format specified below
  */
 export const getFormattedDateTimeYear = (dateTime: string): string => {
-  return DateTime.fromISO(dateTime).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
+  const date = DateTime.fromISO(dateTime)
+  let output = date.toFormat('DDD, h:mm')
+  const meridiem = date.toFormat('a').toLowerCase()
+  output += ` ${meridiem[0]}.${meridiem[1]}.`
+  return output
 }
 
 /**
