@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar, useColorScheme } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
@@ -31,7 +31,7 @@ import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useColorScheme, useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -55,7 +55,7 @@ import configureStore, {
   sendUsesLargeTextAnalytics,
   sendUsesScreenReaderAnalytics,
 } from 'store'
-import theme, { getTheme } from 'styles/themes/standardTheme'
+import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 
 enableScreens(true)
 
@@ -94,9 +94,10 @@ const MainApp: FC = () => {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
 
-  const [currentTheme, setCurrentTheme] = useState(getTheme())
+  const scheme = useColorScheme()
+  setColorScheme(scheme)
 
-  useColorScheme(setCurrentTheme)
+  const currentTheme = getTheme()
 
   /**
    * Used by the navigation container to initialize the first route.
