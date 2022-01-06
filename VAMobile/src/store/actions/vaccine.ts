@@ -1,7 +1,7 @@
 import { AsyncReduxAction, ReduxAction } from '../types'
 
 import * as api from '../api'
-import { APIError, ScreenIDTypes, VaccineList, VaccineListData, VaccineLocation, VaccineLocationData } from '../api'
+import { APIError, ScreenIDTypes, VaccineListData, VaccineLocation, VaccineLocationData } from '../api'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'

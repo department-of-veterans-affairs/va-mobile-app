@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode, useCallback, useEffect } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -27,11 +27,6 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-
-  useEffect(() => {
-    requestPage(1)
-  }, [dispatch])
-
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
     const textLines: Array<TextLine> = [
       { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
@@ -49,10 +44,13 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
     return vaccineButton
   })
 
-  const requestPage = (requestedPage: number) => {
-    // request the next page
-    dispatch(getVaccines(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID, requestedPage))
-  }
+  const requestPage = useCallback(
+    (requestedPage: number) => {
+      // request the next page
+      dispatch(getVaccines(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID, requestedPage))
+    },
+    [dispatch],
+  )
 
   // Render pagination for sent and drafts folderMessages only
   const renderPagination = (): ReactNode => {
@@ -75,6 +73,10 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
       </Box>
     )
   }
+
+  useEffect(() => {
+    requestPage(1)
+  }, [dispatch, requestPage])
 
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />

@@ -2,7 +2,6 @@ import { indexBy } from 'underscore'
 
 import * as api from '../api'
 import { VaccineListData, VaccinePaginationMeta } from '../api'
-import { compareDateStrings } from 'utils/common'
 import createReducer from './createReducer'
 
 export type VaccineState = {
@@ -37,16 +36,12 @@ export default createReducer<VaccineState>(initialVaccineState, {
 
     const vaccineList = vaccines || []
 
-    // vaccineList.sort((a, b) => {
-    //   return compareDateStrings(a.attributes?.date || '', b.attributes?.date || '', true)
-    // })
-
     return {
       ...state,
       loading: false,
       vaccines: vaccineList,
       vaccinesById,
-      vaccinePagination: { ...meta.pagination },
+      vaccinePagination: { ...meta?.pagination },
       error,
     }
   },
