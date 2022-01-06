@@ -1,0 +1,19 @@
+import CodeBlock from '@theme/CodeBlock'
+import ConfirmationAlertString from '!!raw-loader!@componentsDocs/ConfirmationAlert'
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<ConfirmationAlert
+title={'question'}
+text={'areYouSure'}
+background="noCardBackground"
+border="warning"
+confirmLabel={'sendButton'}
+cancelLabel={'secureMessaging.sendConfirmation.editingButton'}
+confirmA11y={'secureMessaging.sendConfirmation.sendButton.a11y'}
+cancelA11y={'secureMessaging.sendConfirmation.editingButton.a11y'}
+confirmOnPress={onSend}
+cancelOnPress={navigation.goBack}
+/>`
+
+
+<ComponentTopInfo componentName="ConfirmationAlert" example={exampleString} codeString={ConfirmationAlertString} />

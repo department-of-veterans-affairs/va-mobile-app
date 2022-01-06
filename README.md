@@ -135,7 +135,7 @@ Examples:
 - `<MessagesCountTag unread={3} />`
 
 #### `<VAImage>`
-A common component to display static images. New images need to be placed in `VAImge/image` and in Xcode under `VAMobile/Images.xcassets`. Examples/details can be found in VAImage component.
+A common component to display static images. New images need to be placed in Android under `res/drawable'` and in Xcode under `VAMobile/Images.xcassets`. Examples/details can be found in VAImage component.
 
 Examples: 
 - `<VAImage name={'PaperCheck'} a11yLabel={'label'} marginX={10} />`

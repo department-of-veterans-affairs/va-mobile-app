@@ -1,0 +1,13 @@
+import CodeBlock from '@theme/CodeBlock'
+import FocusedNavHeaderTextString from '!!raw-loader!@componentsDocs/FocusedNavHeaderText'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `useEffect(() => {
+    navigation.setOptions({
+        headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
+    })
+}, [navigation])`
+
+
+<ComponentTopInfo componentName="FocusedNavHeaderText" example={exampleString} codeString={FocusedNavHeaderTextString} />
