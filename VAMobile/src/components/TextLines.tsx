@@ -9,10 +9,11 @@ import TextView from './TextView'
 type TextLinesProps = {
   /** List of text for the button */
   listOfText?: Array<TextLine | TextLineWithIconProps>
+  selectable?: boolean
 }
 
 /**Component to render individual lines of text. Each text line will wrap as needed and subsequent lines will be on the next line*/
-export const TextLines: FC<TextLinesProps> = ({ listOfText }) => {
+export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
   return (
     <Box flex={1}>
       <Box flexDirection="column">
@@ -25,7 +26,7 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText }) => {
               return <MessagesSentReadTag text={text} key={index} />
             }
             return (
-              <TextView variant={variant} textAlign={textAlign} color={color} key={index}>
+              <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable}>
                 {text}
               </TextView>
             )

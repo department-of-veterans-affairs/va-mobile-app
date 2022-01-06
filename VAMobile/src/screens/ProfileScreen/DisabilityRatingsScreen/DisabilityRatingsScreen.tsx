@@ -199,7 +199,7 @@ const DisabilityRatingsScreen: FC = () => {
       <ProfileBanner showRating={false} />
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
-        <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} />
+        <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
       </Box>
       <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
       <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
