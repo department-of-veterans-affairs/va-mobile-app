@@ -1,4 +1,4 @@
-import { Dimensions, Pressable, StyleProp, View, ViewStyle } from 'react-native'
+import { Dimensions, Pressable, StyleProp, View, ViewStyle, useColorScheme } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { FC, useEffect, useRef } from 'react'
 
@@ -6,6 +6,7 @@ import { Menu, Position } from './Menu'
 import { MenuDivider } from './MenuDivider'
 import { MenuItem } from './MenuItem'
 import { VAIconColors, VATextColors } from 'styles/theme'
+import { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import { isIOS } from 'utils/platform'
 import TextView from 'components/TextView'
 import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
@@ -50,6 +51,11 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   const elementRef = useRef<View>(null)
   let menuRef: Menu | null = null
   const setMenuRef: (instance: Menu | null) => void = (ref) => (menuRef = ref)
+
+  const scheme = useColorScheme()
+  setColorScheme(scheme)
+
+  const currentTheme = getTheme()
 
   const hideMenu = () => menuRef?.hide()
 
@@ -115,14 +121,14 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       return (
         <View key={index}>
           <View accessibilityLabel={accessibilityLabel ? accessibilityLabel : actionText} accessibilityRole={'button'} accessible={true}>
-            <MenuItem onPress={onPressMenu} viewStyle={menuStyle}>
-              {iconName && <VAIcon name={iconName} fill={iconColor ? iconColor : 'dark'} height={24} width={24} />}
+            <MenuItem onPress={onPressMenu} viewStyle={menuStyle} underlayColor={currentTheme.colors.buttonBackground.overFlowMenuButton}>
+              {iconName && <VAIcon name={iconName} fill={iconColor ? iconColor : 'overflowMenuDefault'} height={24} width={24} />}
               <TextView ml={10} color={textColor ? textColor : undefined} accessible={false}>
                 {actionText}
               </TextView>
             </MenuItem>
           </View>
-          {item.addDivider && <MenuDivider />}
+          {item.addDivider && <MenuDivider color={currentTheme.colors.border.menuDivider} />}
         </View>
       )
     })
@@ -136,7 +142,9 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
           <VAIcon name="EllipsisSolid" fill={'white'} height={18} width={18} />
         </Pressable>
 
-        <Menu ref={setMenuRef}>{getActionsForMenu()}</Menu>
+        <Menu ref={setMenuRef} style={{ backgroundColor: currentTheme.colors.background.menu }}>
+          {getActionsForMenu()}
+        </Menu>
       </SafeAreaView>
     </>
   )

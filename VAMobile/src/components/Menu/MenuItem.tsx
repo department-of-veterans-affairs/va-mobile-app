@@ -2,7 +2,6 @@
 import { StyleProp, TouchableHighlight, TouchableHighlightProps, View, ViewProps, ViewStyle } from 'react-native'
 import React, { PropsWithChildren } from 'react'
 
-import colors from 'styles/themes/VAColors'
 import theme from 'styles/themes/standardTheme'
 
 interface MenuItemViewProps {
@@ -24,7 +23,7 @@ interface MenuItemViewProps {
  */
 export const MenuItem = ({
   disabled = false,
-  underlayColor = colors.primaryAltLightest,
+  underlayColor = theme.colors.buttonBackground.overFlowMenuButton,
   viewStyle,
   touchableStyle,
   disabledStyle,
