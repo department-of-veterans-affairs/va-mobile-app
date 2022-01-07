@@ -21,6 +21,7 @@ export type VaccinePaginationLinks = {
 
 export type VaccineGetDataMeta = {
   pagination: VaccinePaginationMeta
+  dataFromStore: boolean
 }
 
 export type VaccinesMap = {

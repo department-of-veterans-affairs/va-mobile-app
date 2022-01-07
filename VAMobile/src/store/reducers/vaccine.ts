@@ -4,6 +4,10 @@ import * as api from '../api'
 import { VaccineListData, VaccinePaginationMeta } from '../api'
 import createReducer from './createReducer'
 
+export type VaccineListType = {
+  [key in string]: VaccineListData
+}
+
 export type VaccineState = {
   loading: boolean
   vaccines: api.VaccineList
@@ -11,6 +15,7 @@ export type VaccineState = {
   vaccineLocationsById: api.VaccineLocationsMap
   detailsLoading: boolean
   vaccinePagination: VaccinePaginationMeta
+  loadedVaccines: VaccineListType
 }
 
 export const initialVaccineState = {
@@ -20,6 +25,7 @@ export const initialVaccineState = {
   vaccinesById: {},
   vaccineLocationsById: {},
   vaccinePagination: {} as VaccinePaginationMeta,
+  loadedVaccines: {} as VaccineListType,
 }
 
 export default createReducer<VaccineState>(initialVaccineState, {
@@ -30,10 +36,11 @@ export default createReducer<VaccineState>(initialVaccineState, {
       loading: true,
     }
   },
-  VACCINE_FINISH_GET_VACCINES: (state, { vaccinesData, error }) => {
+  VACCINE_FINISH_GET_VACCINES: (state, { page, vaccinesData, error }) => {
     const { data: vaccines, meta } = vaccinesData || ({} as VaccineListData)
     const vaccinesById = indexBy(vaccines || [], 'id')
 
+    const curLoadedVaccines = state.loadedVaccines[page.toString()]
     const vaccineList = vaccines || []
 
     return {
@@ -43,6 +50,10 @@ export default createReducer<VaccineState>(initialVaccineState, {
       vaccinesById,
       vaccinePagination: { ...meta?.pagination },
       error,
+      loadedVaccines: {
+        ...state.loadedVaccines,
+        [page]: meta?.dataFromStore ? curLoadedVaccines : vaccinesData,
+      },
     }
   },
   VACCINE_START_GET_LOCATION: (state) => {

@@ -11,6 +11,7 @@ export type VaccineStartGetVaccinesPayload = Record<string, unknown>
  */
 export type VaccineFinishGetVaccinesPayload = {
   vaccinesData?: api.VaccineListData
+  page: number
   error?: api.APIError
 }
 
