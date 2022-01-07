@@ -170,12 +170,12 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
           <Box mt={contentMarginTop} mb={contentMarginBottom}>
             {formContainsError && (
               <Box mx={gutter} mb={standardMarginBetween}>
-                <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
+                <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" />
               </Box>
             )}
             {invalidRoutingNumberError && (
               <Box mx={gutter} mb={standardMarginBetween}>
-                <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" background="noCardBackground" />
+                <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" />
               </Box>
             )}
             <Box mx={gutter} accessible={true}>

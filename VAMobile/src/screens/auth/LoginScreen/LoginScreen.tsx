@@ -72,11 +72,11 @@ const LoginScreen: FC = () => {
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && (
         <Box mx={theme.dimensions.gutter}>
-          <AlertBox border={'informational'} background={'cardBackground'} title={'DEMO MODE'} />
+          <AlertBox border={'informational'} title={'DEMO MODE'} />
         </Box>
       )}
       <Box mx={theme.dimensions.gutter}>
-        <AlertBox border={'informational'} background={'cardBackground'} title={'Dark Mode version, not for regular QA'} />
+        <AlertBox border={'informational'} title={'Dark Mode version, not for regular QA'} />
       </Box>
       <Box flex={1}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween}>

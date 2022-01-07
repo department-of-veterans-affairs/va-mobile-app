@@ -31,7 +31,7 @@ const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
     <Box>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
-          <AlertBox border={'warning'} background={'noCardBackground'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
+          <AlertBox border={'warning'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
         </Box>
       )}
       <Box borderColor={'primary'} borderTopWidth={theme.dimensions.borderWidth} mt={mt} mb={theme.dimensions.condensedMarginBetween}>

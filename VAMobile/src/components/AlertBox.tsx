@@ -2,15 +2,13 @@ import { AccessibilityRole } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
-import { VAAlertBoxColors, VABorderColors } from 'styles/theme'
+import { VABorderColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 export type AlertBoxProps = {
   /** color of the border */
   border: keyof VABorderColors
-  /** color of the background */
-  background: keyof VAAlertBoxColors
   /** body of the alert */
   text?: string
   /** optional bolded title text */
@@ -26,11 +24,11 @@ export type AlertBoxProps = {
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
+const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
 
   const boxProps: BoxProps = {
-    backgroundColor: background,
+    backgroundColor: 'alertBox',
     borderLeftWidth: theme.dimensions.alertBorderWidth,
     borderLeftColor: border,
     py: theme.dimensions.alertPaddingY,

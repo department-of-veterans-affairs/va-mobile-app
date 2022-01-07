@@ -27,19 +27,16 @@ export const lightTheme = {
     navButton: colors.toolbarBackgroundGray,
     brandedMainBackground: colors.grayLightest,
     carouselTab: colors.white,
-    contentBox: colors.grayLightest,
+    contentBox: colors.white,
     snackbar: colors.snackBarBlack,
     webviewControls: colors.grayLightest,
     pickerControls: colors.grayLightest,
     menu: colors.white,
-  },
-  alertBox: {
-    cardBackground: colors.grayLightest,
-    noCardBackground: colors.white,
+    alertBox: colors.white,
   },
   border: {
     primary: colors.grayLight,
-    secondary: colors.primary,
+    secondary: colors.gray,
     informational: colors.primaryAltDark,
     error: colors.secondaryDark,
     warning: colors.warningMessage,
@@ -178,10 +175,7 @@ export const darkTheme = {
     webviewControls: colors.base,
     pickerControls: colors.darkmodeGrayWarmDark,
     menu: colors.white,
-  },
-  alertBox: {
-    cardBackground: colors.darkmodeGrayWarmDark,
-    noCardBackground: colors.darkmodeGrayWarmDark,
+    alertBox: colors.base,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -196,7 +190,7 @@ export const darkTheme = {
     pickerAndInput: colors.grayLight,
     focusedPickerAndInput: colors.gold,
     confirmation: colors.gold,
-    footerButton: colors.base,
+    footerButton: colors.darkmodeBorder,
     menuDivider: colors.grayLight,
   },
   icon: {

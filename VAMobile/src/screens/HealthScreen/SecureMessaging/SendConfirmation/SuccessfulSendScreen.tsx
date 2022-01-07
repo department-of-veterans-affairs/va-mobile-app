@@ -37,7 +37,6 @@ const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => 
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <AlertBox
           border={'success'}
-          background={'noCardBackground'}
           title={t('secureMessaging.sent.messageSent')}
           text={t('secureMessaging.sent.threeBusinessDays')}
           textA11yLabel={t('secureMessaging.sent.threeBusinessDays.a11y')}>

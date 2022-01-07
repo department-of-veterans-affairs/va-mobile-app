@@ -58,7 +58,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   return (
     <VAScrollView {...testIdProps('Your-claim: Claim-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
+        <Box mx={theme.dimensions.gutter}>
           <TextView variant="BitterBoldHeading" color={'primaryTitle'} mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
           </TextView>
@@ -72,7 +72,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
               accessibilityHints={a11yHints}
             />
           </Box>
-        </TextArea>
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
           {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}

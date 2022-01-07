@@ -88,7 +88,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   return (
     <VAScrollView {...testIdProps('Your-appeal: Appeal-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
+        <Box mx={theme.dimensions.gutter}>
           <TextView variant="BitterBoldHeading" color={'primaryTitle'} mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
           </TextView>
@@ -103,7 +103,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
               accessibilityHints={segmentedControlA11yHints}
             />
           </Box>
-        </TextArea>
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           {appeal && selectedTab === t('claimDetails.status') && (
             <AppealStatus

@@ -63,7 +63,7 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
       <Modal animationType="fade" transparent={true} visible={visible} supportedOrientations={['portrait', 'landscape']} onRequestClose={onCancel}>
         <Box flex={1} width={'100%'} flexDirection="column" accessibilityViewIsModal={true} justifyContent={'center'}>
           <Box width={'100%'} height={'100%'} backgroundColor="modalOverlay" opacity={0.8} position={'absolute'} />
-          <Box backgroundColor={'cardBackground'} borderRadius={3} p={20} ml={insets.left} mr={insets.right} mx={theme.dimensions.gutter}>
+          <Box backgroundColor={'alertBox'} borderRadius={3} p={20} ml={insets.left} mr={insets.right} mx={theme.dimensions.gutter}>
             <Box alignItems={'flex-start'}>
               <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
                 {'Enter Password'}
