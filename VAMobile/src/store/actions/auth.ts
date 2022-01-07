@@ -22,6 +22,7 @@ import { isAndroid } from 'utils/platform'
 import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
+import { updateDemoMode } from 'store'
 import { utils } from '@react-native-firebase/app'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -471,6 +472,7 @@ export const logout = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     console.debug('logout: logging out')
     dispatch(dispatchStartLogout())
+    dispatch(updateDemoMode(false, true))
     try {
       await CookieManager.clearAll()
       const response = await fetch(AUTH_REVOKE_URL, {
