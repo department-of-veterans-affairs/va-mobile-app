@@ -469,10 +469,16 @@ export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
  * @returns AsyncReduxAction
  */
 export const logout = (): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     console.debug('logout: logging out')
     dispatch(dispatchStartLogout())
-    dispatch(updateDemoMode(false, true))
+
+    const { demoMode } = getState().demo
+
+    if (demoMode) {
+      dispatch(updateDemoMode(false, true))
+    }
+
     try {
       await CookieManager.clearAll()
       const response = await fetch(AUTH_REVOKE_URL, {
