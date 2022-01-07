@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, TextView, TextViewProps, VABulletList, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATextColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation } from 'utils/hooks'
 import { useTheme, useTranslation } from 'utils/hooks'
