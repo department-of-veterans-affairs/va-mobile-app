@@ -8,7 +8,7 @@
           "folderId": 0,
           "name": "Inbox",
           "count": 12,
-          "unreadCount": 0,
+          "unreadCount": 3,
           "systemFolder": true
         },
         "links": {
@@ -110,7 +110,7 @@
         "folderId": 0,
         "name": "Inbox",
         "count": 12,
-        "unreadCount": 0,
+        "unreadCount": 3,
         "systemFolder": false
       },
       "links": {
@@ -135,7 +135,7 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "UNREAD"
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
@@ -155,7 +155,7 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "UNREAD"
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
@@ -175,7 +175,7 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "UNREAD"
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092789"
