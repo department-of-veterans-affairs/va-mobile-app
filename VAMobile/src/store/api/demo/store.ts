@@ -15,7 +15,7 @@ import {
   validateAddress,
 } from './profile'
 import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getFolderMessages } from './secureMessaging'
-import { VaccineDemoReturnTypes, VaccineDemoStore } from './vaccine'
+import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from './vaccine'
 
 /**
  * Intersection type denoting the demo data store
@@ -108,6 +108,9 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     case `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`:
     case `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`: {
       return getFolderMessages(store, params, endpoint)
+    }
+    case '/v1/health/immunizations': {
+      return getVaccineList(store, params, endpoint)
     }
     default: {
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns

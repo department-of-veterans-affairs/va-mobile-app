@@ -1,5 +1,27 @@
 export type VaccineListData = {
   data: VaccineList
+  links: VaccinePaginationLinks
+  meta: VaccineGetDataMeta
+}
+
+export type VaccinePaginationMeta = {
+  currentPage: number
+  perPage: number
+  totalPages: number
+  totalEntries: number
+}
+
+export type VaccinePaginationLinks = {
+  self: string
+  first: string
+  prev: string
+  next: string
+  last: string
+}
+
+export type VaccineGetDataMeta = {
+  pagination: VaccinePaginationMeta
+  dataFromStore: boolean
 }
 
 export type VaccinesMap = {
