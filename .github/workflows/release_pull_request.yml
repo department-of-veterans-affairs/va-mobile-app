@@ -1,15 +1,30 @@
 name: "Create Release PRs"
 
 on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        type: string
+        required: true
+    outputs:
+      devPrUrl:
+        value: ${{jobs.create_prs.outputs.devPrUrl}}
+      releasePrUrl:
+        value: ${{jobs.create_prs.outputs.releasePrUrl}}
   workflow_dispatch:
     inputs:
       version:
         description: 'Version Number (eg. v1.1.0)'
         required: true
+        type: string
 
 jobs:
   create_prs:
     runs-on: ubuntu-latest
+    outputs:
+      devPrUrl: ${{steps.urls.outputs.dev}}
+      releasePrUrl: ${{steps.urls.outputs.release}}
     steps:
       - name: 'Set up GH CLI secret'
         run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
@@ -23,15 +38,17 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git checkout release/${{github.event.inputs.version}}
-          echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{github.event.inputs.version}} to develop" -b "PR to merge ${{github.event.inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
+          git checkout release/${{inputs.version}}
+          echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
       - name: 'Create PR to merge changes back to master'
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git checkout release/${{github.event.inputs.version}}
-          echo "RELEASE_PR=$(gh pr create -B master -t ${{github.event.inputs.version}} -b "PR to merge ${{github.event.inputs.version}} changes into master and build for the stores" -a travis-newby)" >> $GITHUB_ENV
-      - name: 'Log PR Links'
+          git checkout release/${{inputs.version}}
+          echo "RELEASE_PR=$(gh pr create -B master -t ${{inputs.version}} -b "PR to merge ${{inputs.version}} changes into master and build for the stores" -a travis-newby)" >> $GITHUB_ENV
+      - name: 'Set Outputs'
+        id: urls
         run: |
-          echo ${{env.DEV_PR}}
-          echo ${{env.DEV_PR}}
+          echo "::set-output name=dev::${{env.DEV_PR}}"
+          echo "::set-output name=release::${{env.RELEASE_PR}}"
+
