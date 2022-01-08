@@ -1,4 +1,4 @@
-import { Dimensions, Pressable, StyleProp, View, ViewStyle, useColorScheme } from 'react-native'
+import { Dimensions, Pressable, StyleProp, View, ViewStyle } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { FC, useEffect, useRef } from 'react'
 
@@ -6,8 +6,8 @@ import { Menu, Position } from './Menu'
 import { MenuDivider } from './MenuDivider'
 import { MenuItem } from './MenuItem'
 import { VAIconColors, VATextColors } from 'styles/theme'
-import { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import { isIOS } from 'utils/platform'
+import { useTheme } from 'utils/hooks'
 import TextView from 'components/TextView'
 import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
 
@@ -52,10 +52,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   let menuRef: Menu | null = null
   const setMenuRef: (instance: Menu | null) => void = (ref) => (menuRef = ref)
 
-  const scheme = useColorScheme()
-  setColorScheme(scheme)
-
-  const currentTheme = getTheme()
+  const currentTheme = useTheme()
 
   const hideMenu = () => menuRef?.hide()
 
