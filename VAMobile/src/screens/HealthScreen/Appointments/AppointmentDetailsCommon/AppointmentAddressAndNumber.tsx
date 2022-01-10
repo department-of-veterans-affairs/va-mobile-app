@@ -61,9 +61,21 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
     <Box>
       {getHealthServiceHeaderSection()}
       <Box {...testIdProps(testId)} accessible={true}>
-        {!appointmentIsAtlas && <TextView variant="MobileBody">{location.name}</TextView>}
-        {!!address && <TextView variant="MobileBody">{address.street}</TextView>}
-        {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
+        {!appointmentIsAtlas && (
+          <TextView variant="MobileBody" selectable={true}>
+            {location.name}
+          </TextView>
+        )}
+        {!!address && (
+          <TextView variant="MobileBody" selectable={true}>
+            {address.street}
+          </TextView>
+        )}
+        {!!cityStateZip && (
+          <TextView variant="MobileBody" selectable={true}>
+            {cityStateZip}
+          </TextView>
+        )}
       </Box>
       <Box>
         <ClickForActionLink
