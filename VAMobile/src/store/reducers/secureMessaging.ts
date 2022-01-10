@@ -14,7 +14,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
-import { READ } from 'constants/secureMessaging'
+import { READ, UNREAD } from 'constants/secureMessaging'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { SecureMessagingSignatureDataAttributes, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { hasErrorCode } from 'utils/errors'
@@ -250,10 +250,10 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
 
       // Change message's readReceipt to read
       if (inboxMessage) {
-        inboxMessage.attributes.readReceipt = READ
-        if (isDemoMode) {
+        if (isDemoMode && inboxMessage.attributes.readReceipt === UNREAD) {
           inbox.attributes.unreadCount -= 1
         }
+        inboxMessage.attributes.readReceipt = READ
       }
     }
 
