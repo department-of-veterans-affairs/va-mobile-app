@@ -24,7 +24,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
 
   return (
     <VAScrollView>
-      <Box backgroundColor={'noCardBackground'} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box backgroundColor={'alertBox'} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <Box accessible={true} accessibilityRole={'header'}>
             <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>

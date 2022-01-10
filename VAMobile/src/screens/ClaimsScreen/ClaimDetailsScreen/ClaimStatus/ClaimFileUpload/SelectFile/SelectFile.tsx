@@ -96,7 +96,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox text={error} border="error" background="noCardBackground" />
+            <AlertBox text={error} border="error" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">

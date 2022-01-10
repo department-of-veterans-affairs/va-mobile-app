@@ -68,7 +68,6 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
         <ConfirmationAlert
           title={t('secureMessaging.sendConfirmation.question')}
           text={t('secureMessaging.sendConfirmation.areYouSure')}
-          background="noCardBackground"
           border="warning"
           confirmLabel={t('secureMessaging.sendConfirmation.sendButton')}
           cancelLabel={t('secureMessaging.sendConfirmation.editingButton')}

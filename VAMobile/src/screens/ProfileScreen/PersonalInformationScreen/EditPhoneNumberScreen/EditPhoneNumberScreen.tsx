@@ -189,10 +189,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
             />
           </Box>
         )}
-        <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} background="noCardBackground" border="informational" />
+        <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
         {formContainsError && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editPhoneNumber.checkPhoneNumber')} border="error" background="noCardBackground" />
+            <AlertBox title={t('editPhoneNumber.checkPhoneNumber')} border="error" />
           </Box>
         )}
         <Box mt={theme.dimensions.formMarginBetween}>

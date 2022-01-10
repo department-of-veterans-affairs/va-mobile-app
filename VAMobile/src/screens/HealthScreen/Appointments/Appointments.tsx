@@ -88,7 +88,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
             title={t('appointments.appointmentsStatusSomeUnavailable')}
             text={t('appointments.troubleLoadingSomeAppointments')}
             border="error"
-            background="noCardBackground"
             titleA11yLabel={t('appointments.appointmentsStatusSomeUnavailable.a11yLabel')}
             textA11yLabel={t('appointments.troubleLoadingSomeAppointments.a11yLabel')}
           />
