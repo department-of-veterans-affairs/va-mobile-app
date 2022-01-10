@@ -285,6 +285,8 @@ export const getMessage = (
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
 
+    const { demoMode } = getState().demo
+
     if (loadingAttachments) {
       dispatch(dispatchStartGetAttachmentList())
     } else {
@@ -302,7 +304,12 @@ export const getMessage = (
 
       // If message is unread, refresh inbox to get up to date unreadCount
       if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
-        dispatch(getInbox())
+        if (demoMode) {
+          const { inbox } = getState().secureMessaging
+          inbox.attributes.unreadCount -= 1
+        } else {
+          dispatch(getInbox())
+        }
       }
       await registerReviewEvent()
       dispatch(dispatchFinishGetMessage(response))
