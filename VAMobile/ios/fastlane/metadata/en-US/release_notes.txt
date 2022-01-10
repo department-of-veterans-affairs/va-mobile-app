@@ -1,1 +1,1 @@
-You can now delete drafts from your drafts folder in the Messages tool.
+You can now delete Message Drafts.
