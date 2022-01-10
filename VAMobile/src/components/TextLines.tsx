@@ -9,6 +9,7 @@ import TextView from './TextView'
 type TextLinesProps = {
   /** List of text for the button */
   listOfText?: Array<TextLine | TextLineWithIconProps>
+  /** if true the text will be selectable */
   selectable?: boolean
 }
 

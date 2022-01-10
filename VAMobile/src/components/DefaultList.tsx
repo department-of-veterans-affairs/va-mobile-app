@@ -19,6 +19,7 @@ export type DefaultListItemObj = {
 export type DefaultListProps = {
   /** list of items of which a button will be rendered per item */
   items: Array<DefaultListItemObj>
+  /** if true the text will be selectable */
   selectable?: boolean
 } & Partial<ListProps>
 
