@@ -11,6 +11,7 @@ export type VAButtonBackgroundColors = {
   buttonWhiteActive: string
   brandedPrimary: string
   brandedPrimaryActive: string
+  overFlowMenuButton: string
 }
 
 export type VAButtonBorderColors = {
