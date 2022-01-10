@@ -253,13 +253,14 @@ const dispatchStartGetMessage = (): ReduxAction => ({
   payload: {},
 })
 
-const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: api.APIError, messageId?: number): ReduxAction => {
+const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: api.APIError, messageId?: number, isDemoMode?: boolean): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE',
     payload: {
       messageData,
       error,
       messageId,
+      isDemoMode,
     },
   }
 }
@@ -304,15 +305,10 @@ export const getMessage = (
 
       // If message is unread, refresh inbox to get up to date unreadCount
       if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
-        if (demoMode) {
-          const { inbox } = getState().secureMessaging
-          inbox.attributes.unreadCount -= 1
-        } else {
-          dispatch(getInbox())
-        }
+        dispatch(getInbox())
       }
       await registerReviewEvent()
-      dispatch(dispatchFinishGetMessage(response))
+      dispatch(dispatchFinishGetMessage(response, undefined, undefined, demoMode))
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishGetMessage(undefined, error, messageID))
