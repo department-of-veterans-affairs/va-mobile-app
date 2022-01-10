@@ -78,6 +78,7 @@ export const lightTheme = {
     chevronListItem: colors.primary,
     webviewReload: colors.white,
     backButton: colors.white,
+    overflowMenuDefault: colors.black,
   },
   text: {
     footerButton: colors.primary,
@@ -116,6 +117,7 @@ export const lightTheme = {
     buttonWhiteActive: colors.whiteWith70PercentOpacity,
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
+    overFlowMenuButton: colors.primaryAltLightest,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -177,7 +179,7 @@ export const darkTheme = {
     snackbar: colors.snackBarBlack,
     webviewControls: colors.base,
     pickerControls: colors.darkmodeGrayWarmDark,
-    menu: colors.white,
+    menu: colors.darkmodeGrayWarmDark,
   },
   alertBox: {
     cardBackground: colors.darkmodeGrayWarmDark,
@@ -197,7 +199,7 @@ export const darkTheme = {
     focusedPickerAndInput: colors.gold,
     confirmation: colors.gold,
     footerButton: colors.base,
-    menuDivider: colors.grayLight,
+    menuDivider: colors.darkmodeBorder,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
@@ -224,6 +226,7 @@ export const darkTheme = {
     chevronListItem: colors.darkmodeLightBlue,
     webviewReload: colors.darkmodeLightBlue,
     backButton: colors.darkmodeLightBlue,
+    overflowMenuDefault: colors.grayLightest,
   },
   text: {
     footerButton: colors.grayLight,
@@ -262,6 +265,7 @@ export const darkTheme = {
     buttonWhiteActive: colors.whiteWith70PercentOpacity,
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
+    overFlowMenuButton: colors.darkmodeBorder,
   },
   buttonText: {
     buttonPrimary: colors.grayLightest,
