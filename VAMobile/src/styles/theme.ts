@@ -55,6 +55,7 @@ export type VATextColors = {
   segmentControllerInactive: string
   snackBarBtn: string
   backButton: string
+  snackBarText: string
 }
 
 export type VAIconColors = {
