@@ -253,13 +253,14 @@ const dispatchStartGetMessage = (): ReduxAction => ({
   payload: {},
 })
 
-const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: api.APIError, messageId?: number): ReduxAction => {
+const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: api.APIError, messageId?: number, isDemoMode?: boolean): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE',
     payload: {
       messageData,
       error,
       messageId,
+      isDemoMode,
     },
   }
 }
@@ -285,6 +286,8 @@ export const getMessage = (
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
 
+    const { demoMode } = getState().demo
+
     if (loadingAttachments) {
       dispatch(dispatchStartGetAttachmentList())
     } else {
@@ -305,7 +308,7 @@ export const getMessage = (
         dispatch(getInbox())
       }
       await registerReviewEvent()
-      dispatch(dispatchFinishGetMessage(response))
+      dispatch(dispatchFinishGetMessage(response, undefined, undefined, demoMode))
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishGetMessage(undefined, error, messageID))

@@ -66,6 +66,7 @@ export type SecureMessagingFinishGetMessagePayload = {
   messageData?: api.SecureMessagingMessageGetData
   error?: api.APIError
   messageId?: number
+  isDemoMode?: boolean
 }
 
 /**

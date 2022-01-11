@@ -13,10 +13,12 @@ export const dispatchUpdateDemoMode = (demoMode: boolean): ReduxAction => {
  * sets the demo mode on or off
  * @param demoMode- boolean to set as state.demo.demoMode
  */
-export const updateDemoMode = (demoMode: boolean): AsyncReduxAction => {
+export const updateDemoMode = (demoMode: boolean, loginOut = false): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     api.setDemoMode(demoMode)
     dispatch(dispatchUpdateDemoMode(demoMode))
-    await initDemoStore()
+    if (!loginOut) {
+      await initDemoStore()
+    }
   }
 }
