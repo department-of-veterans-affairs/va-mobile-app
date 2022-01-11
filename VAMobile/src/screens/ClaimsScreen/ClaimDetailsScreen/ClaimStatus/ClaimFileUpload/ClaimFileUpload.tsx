@@ -148,7 +148,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
         </TextView>
         {getUploadRequests()}
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
+          <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational">
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton
                 onPress={navigateTo('AskForClaimDecision', { claimID })}

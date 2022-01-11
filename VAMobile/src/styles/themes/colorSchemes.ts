@@ -27,19 +27,16 @@ export const lightTheme = {
     navButton: colors.toolbarBackgroundGray,
     brandedMainBackground: colors.grayLightest,
     carouselTab: colors.white,
-    contentBox: colors.grayLightest,
+    contentBox: colors.white,
     snackbar: colors.snackBarBlack,
     webviewControls: colors.grayLightest,
     pickerControls: colors.grayLightest,
     menu: colors.white,
-  },
-  alertBox: {
-    cardBackground: colors.grayLightest,
-    noCardBackground: colors.white,
+    alertBox: colors.white,
   },
   border: {
     primary: colors.grayLight,
-    secondary: colors.primary,
+    secondary: colors.gray,
     informational: colors.primaryAltDark,
     error: colors.secondaryDark,
     warning: colors.warningMessage,
@@ -78,6 +75,7 @@ export const lightTheme = {
     chevronListItem: colors.primary,
     webviewReload: colors.white,
     backButton: colors.white,
+    overflowMenuDefault: colors.black,
   },
   text: {
     footerButton: colors.primary,
@@ -116,6 +114,7 @@ export const lightTheme = {
     buttonWhiteActive: colors.whiteWith70PercentOpacity,
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
+    overFlowMenuButton: colors.primaryAltLightest,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -177,11 +176,8 @@ export const darkTheme = {
     snackbar: colors.snackBarBlack,
     webviewControls: colors.base,
     pickerControls: colors.darkmodeGrayWarmDark,
-    menu: colors.white,
-  },
-  alertBox: {
-    cardBackground: colors.darkmodeGrayWarmDark,
-    noCardBackground: colors.darkmodeGrayWarmDark,
+    alertBox: colors.base,
+    menu: colors.darkmodeGrayWarmDark,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -196,8 +192,8 @@ export const darkTheme = {
     pickerAndInput: colors.grayLight,
     focusedPickerAndInput: colors.gold,
     confirmation: colors.gold,
-    footerButton: colors.base,
-    menuDivider: colors.grayLight,
+    footerButton: colors.darkmodeBorder,
+    menuDivider: colors.darkmodeBorder,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
@@ -224,6 +220,7 @@ export const darkTheme = {
     chevronListItem: colors.darkmodeLightBlue,
     webviewReload: colors.darkmodeLightBlue,
     backButton: colors.darkmodeLightBlue,
+    overflowMenuDefault: colors.grayLightest,
   },
   text: {
     footerButton: colors.grayLight,
@@ -262,6 +259,7 @@ export const darkTheme = {
     buttonWhiteActive: colors.whiteWith70PercentOpacity,
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
+    overFlowMenuButton: colors.darkmodeBorder,
   },
   buttonText: {
     buttonPrimary: colors.grayLightest,

@@ -44,8 +44,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
           title={titleText ? titleText : t('errors.callHelpCenter.notWorking')}
           titleA11yLabel={titleA11yHint ? titleA11yHint : t('errors.callHelpCenter.notWorking.a11yLabel')}
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
-          border="error"
-          background="noCardBackground">
+          border="error">
           <Box>
             <TextView
               color="primary"

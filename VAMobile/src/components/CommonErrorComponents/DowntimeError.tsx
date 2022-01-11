@@ -41,7 +41,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
           text={t('downtime.message', { featureName, endTime })}
           textA11yLabel={t('downtime.message', { featureName, endTime })}
           border="warning"
-          background="noCardBackground"
         />
       </Box>
     </VAScrollView>

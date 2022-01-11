@@ -11,6 +11,7 @@ export type VAButtonBackgroundColors = {
   buttonWhiteActive: string
   brandedPrimary: string
   brandedPrimaryActive: string
+  overFlowMenuButton: string
 }
 
 export type VAButtonBorderColors = {
@@ -130,6 +131,7 @@ export type VABackgroundColors = {
   webviewControls: string
   pickerControls: string
   menu: string
+  alertBox: string
 }
 
 export type VABorderColors = {
@@ -154,11 +156,6 @@ export type VAFontSizes = {
   lineHeight: number
 }
 
-export type VAAlertBoxColors = {
-  cardBackground: string
-  noCardBackground: string
-}
-
 export type VAColorScheme = {
   background: VABackgroundColors
   border: VABorderColors
@@ -180,7 +177,6 @@ export type VAColorScheme = {
     buttonActive: string
     buttonInactive: string
   }
-  alertBox: VAAlertBoxColors
 }
 
 export type VATheme = {

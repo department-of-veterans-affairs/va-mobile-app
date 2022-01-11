@@ -101,7 +101,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!errorMessage && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox text={errorMessage} border="error" background="noCardBackground" />
+            <AlertBox text={errorMessage} border="error" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">

@@ -248,12 +248,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.SUCCESS) {
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox
-            title={t('upcomingAppointmentDetails.cancelAppointmentSuccess.title')}
-            text={t('upcomingAppointmentDetails.cancelAppointmentSuccess.body')}
-            border="success"
-            background="noCardBackground"
-          />
+          <AlertBox title={t('upcomingAppointmentDetails.cancelAppointmentSuccess.title')} text={t('upcomingAppointmentDetails.cancelAppointmentSuccess.body')} border="success" />
         </Box>
       )
     } else if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
@@ -270,11 +265,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox
-            title={t('upcomingAppointmentDetails.cancelAppointmentFail.title')}
-            text={t('upcomingAppointmentDetails.cancelAppointmentFail.body')}
-            border="error"
-            background="noCardBackground">
+          <AlertBox title={t('upcomingAppointmentDetails.cancelAppointmentFail.title')} text={t('upcomingAppointmentDetails.cancelAppointmentFail.body')} border="error">
             <Box my={theme.dimensions.standardMarginBetween}>
               <TextView color="primary" variant="MobileBodyBold" {...testIdProps(location.name)}>
                 {location.name}

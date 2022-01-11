@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, TextView, TextViewProps, VABulletList, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATextColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation } from 'utils/hooks'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -20,28 +19,25 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   const bulletOne = {
     text: t('loaGate.readMore.bulletOne'),
     boldedText: ' ' + t('loaGate.readMore.or'),
-    color: 'brandedPrimaryText' as keyof VATextColors,
   }
 
   const bodyTextProps: TextViewProps = {
     variant: 'MobileBody',
-    color: 'brandedPrimaryText',
   }
 
   const titleTextProps: TextViewProps = {
     variant: 'MobileBodyBold',
-    color: 'brandedPrimaryText',
   }
 
   return (
-    <VAScrollView {...testIdProps('Sign-in: L-o-a-gate-page')} backgroundColor={'brandedMainBackground'}>
+    <VAScrollView {...testIdProps('Sign-in: L-o-a-gate-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView {...bodyTextProps}>{t('loaGate.p1')}</TextView>
         <TextView {...bodyTextProps} my={theme.dimensions.standardMarginBetween}>
           {t('loaGate.p2')}
         </TextView>
-        <CollapsibleView text={t('loaGate.expandMsg')} textColor={'brandedPrimaryText'} showInTextArea={false} a11yHint={t('loaGate.expandMsg.a11yHint')}>
+        <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false} a11yHint={t('loaGate.expandMsg.a11yHint')}>
           <TextView {...bodyTextProps}>{t('loaGate.readMore.p1')}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView {...titleTextProps}>{t('loaGate.readMore.p2')}</TextView>
@@ -62,7 +58,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
             <VABulletList listOfText={[bulletOne]} />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={[{ text: t('loaGate.readMore.bulletTwo'), color: 'brandedPrimaryText' as keyof VATextColors }]} />
+            <VABulletList listOfText={[{ text: t('loaGate.readMore.bulletTwo') }]} />
           </Box>
         </CollapsibleView>
 
@@ -70,7 +66,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           <VAButton
             onPress={onConfirm}
             label={t('continueToSignin')}
-            buttonType={ButtonTypesConstants.brandedPrimary}
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('continueToSignin.a11yHint')}
             testID={t('continueToSignin')}
           />
