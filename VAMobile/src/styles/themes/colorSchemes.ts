@@ -100,6 +100,7 @@ export const lightTheme = {
     segmentControllerInactive: colors.black,
     snackBarBtn: colors.darkmodeLightBlue,
     backButton: colors.white,
+    snackBarText: colors.white,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -173,7 +174,7 @@ export const darkTheme = {
     brandedMainBackground: colors.grayLightest,
     carouselTab: colors.white,
     contentBox: colors.base,
-    snackbar: colors.snackBarBlack,
+    snackbar: colors.grayLightest,
     webviewControls: colors.base,
     pickerControls: colors.darkmodeGrayWarmDark,
     alertBox: colors.base,
@@ -243,8 +244,9 @@ export const darkTheme = {
     brandedPrimaryText: colors.grayDark,
     segmentControllerActive: colors.grayLightest,
     segmentControllerInactive: colors.grayLighter,
-    snackBarBtn: colors.darkmodeLightBlue,
+    snackBarBtn: colors.primary,
     backButton: colors.darkmodeLightBlue,
+    snackBarText: colors.grayDark,
   },
   buttonBackground: {
     buttonPrimary: colors.darkmodeLightBlue,
