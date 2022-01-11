@@ -165,23 +165,32 @@ platform :android do
   end
 
   def promote_pre_prod
-    prod = google_play_track_version_codes(track:"production")
-    stash =  google_play_track_version_codes(track:"Pre-Prod Stash")
-    # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
-    if stash.max > prod.max
-      supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
+    begin
+      prod = google_play_track_version_codes(track:"production")
+      stash =  google_play_track_version_codes(track:"Pre-Prod Stash")
+      # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
+      if stash.max > prod.max
+        supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
+        version = google_play_track_release_names(track:"production")
+        slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
+      end
+    rescue => e
       version = google_play_track_release_names(track:"production")
-      slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
+      slack_release_error(version.max_by{ |s| Gem::Version.new(s) }, "Android", e)
     end
   end
 
   def distribute_to_firebase(notes, groups)
-    firebase_app_distribution(
-        app: ENV["FIREBASE_ANDROID_APP_ID"],
-        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
-        release_notes: notes,
-        groups: groups,
-        android_artifact_type: "AAB"
-    )
+    begin
+      firebase_app_distribution(
+          app: ENV["FIREBASE_ANDROID_APP_ID"],
+          service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+          release_notes: notes,
+          groups: groups,
+          android_artifact_type: "AAB"
+      )
+    rescue => e
+      slack_firebase_dist_error("Android", e)
+    end
   end
 end

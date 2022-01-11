@@ -57,3 +57,34 @@ def slack_release_success(version, os)
      default_payloads: [],
   )
 end
+
+def slack_release_error(version, os, e)
+  puts "Send slack message to indicate release promotion had errors"
+  slack(
+     message: "Version #{version} release failed for #{os}",
+     success: true,
+     default_payloads: [],
+     attachment_properties: {
+      fields: [
+        {title: "OS", value: os},
+        {title: "Version", value: version},
+        {title: "Exception", value: e}
+      ]
+    }
+  )
+end
+
+def slack_firebase_dist_error(os, e)
+  puts "Send slack message to indicate Firebase Distribution error"
+  slack(
+     message: "Firebase Distribution failed for #{os}",
+     success: true,
+     default_payloads: [],
+     attachment_properties: {
+      fields: [
+        {title: "OS", value: os},
+        {title: "Exception", value: e}
+      ]
+    }
+  )
+end
