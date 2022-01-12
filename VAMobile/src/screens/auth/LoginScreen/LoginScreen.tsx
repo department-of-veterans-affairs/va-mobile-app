@@ -5,11 +5,11 @@ import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView,
 import { NAMESPACE } from 'constants/namespaces'
 import { loginStart } from 'store/slices/authSlice'
 import { testIdProps } from 'utils/accessibility'
+import { updateDemoMode } from 'store/slices/demoSlice'
 import { useAppDispatch, useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
-import { updateDemoMode } from 'store/slices/demoSlice'
 
 const LoginScreen: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)

@@ -1,5 +1,5 @@
-import React, { FC, useEffect } from 'react'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import React, { FC, useEffect } from 'react'
 
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'

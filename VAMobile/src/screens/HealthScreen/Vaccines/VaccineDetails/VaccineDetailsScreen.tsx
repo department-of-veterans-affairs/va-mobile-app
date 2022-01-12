@@ -1,17 +1,15 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { every } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { COVID19 } from 'constants/common'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { StoreState, VaccineState } from 'store/reducers'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/actions'
+import { getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
 
@@ -20,11 +18,11 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
  */
 const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const { vaccineId } = route.params
-  const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<StoreState, VaccineState>((state) => state.vaccine)
+  const { vaccinesById, vaccineLocationsById, detailsLoading } = useAppSelector((state) => state.vaccine)
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const vaccine = vaccinesById[vaccineId]
   const location = vaccineLocationsById[vaccineId]

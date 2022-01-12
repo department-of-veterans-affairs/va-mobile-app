@@ -9,11 +9,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo } from 'store/slices/personalInformationSlice'
+import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAppSelector, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 

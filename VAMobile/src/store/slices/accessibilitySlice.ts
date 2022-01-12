@@ -1,6 +1,6 @@
+import { NativeModules, PixelRatio } from 'react-native'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { UserAnalytics } from 'constants/analytics'
-import { NativeModules, PixelRatio } from 'react-native'
 
 import { AppThunk } from 'store'
 import { setAnalyticsUserProperty } from 'utils/analytics'

@@ -18,9 +18,9 @@ import {
 } from '../api'
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { MockUsersEmail } from 'constants/common'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
-import { MockUsersEmail } from 'constants/common'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,

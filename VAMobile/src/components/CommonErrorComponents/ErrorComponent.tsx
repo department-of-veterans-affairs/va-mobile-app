@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 
 import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { useAppSelector, useDowntime, useTranslation } from 'utils/hooks'
 import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
+import { useAppSelector, useDowntime, useTranslation } from 'utils/hooks'
 
 export type ErrorComponentProps = {
   /**The screen id for the screen that has the errors*/

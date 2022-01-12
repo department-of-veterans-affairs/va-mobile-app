@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { AppThunk } from 'store'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import theme from 'styles/themes/standardTheme'
 

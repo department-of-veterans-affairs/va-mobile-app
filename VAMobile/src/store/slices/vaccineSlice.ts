@@ -2,14 +2,14 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from '../api'
 import { APIError, ScreenIDTypes, VaccineList, VaccineListData, VaccineLocation, VaccineLocationData, VaccineLocationsMap, VaccinePaginationMeta, VaccinesMap } from '../api'
+import { AppThunk } from 'store'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Events } from 'constants/analytics'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { indexBy } from 'underscore'
 import { isErrorObject } from '../../utils/common'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { indexBy } from 'underscore'
-import { AppThunk } from 'store'
-import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
 export type VaccineListType = {
   [key in string]: VaccineListData

@@ -34,8 +34,6 @@ import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secu
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { formatSubject } from 'utils/secureMessaging'
-import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import {
   deleteDraft,
   dispatchResetDeleteDraftFailed,
@@ -47,6 +45,8 @@ import {
   saveDraft,
   updateSecureMessagingTab,
 } from 'store/slices/secureMessagingSlice'
+import { formatSubject } from 'utils/secureMessaging'
+import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAppSelector, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'

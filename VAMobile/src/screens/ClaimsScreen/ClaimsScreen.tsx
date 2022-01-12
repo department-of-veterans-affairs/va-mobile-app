@@ -6,12 +6,12 @@ import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, 
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
-import { useAppDispatch, useAppSelector, useDowntime, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import { getProfileInfo } from 'store/slices/personalInformationSlice'
 import { prefetchClaimsAndAppeals } from 'store/slices/claimsAndAppealsSlice'
 import { testIdProps } from 'utils/accessibility'
+import { useAppDispatch, useAppSelector, useDowntime, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 

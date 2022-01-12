@@ -1,19 +1,17 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useCallback, useEffect } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { StoreState, VaccineState } from 'store/reducers'
 import { Vaccine } from 'store/api/types'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
-import { getVaccines } from 'store/actions'
+import { getVaccines } from 'store/slices/vaccineSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
@@ -22,8 +20,8 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
  * Screen containing a list of vaccines on record and a link to their details view
  */
 const VaccineListScreen: FC<VaccineListScreenProps> = () => {
-  const dispatch = useDispatch()
-  const { vaccines, loading, vaccinePagination } = useSelector<StoreState, VaccineState>((state) => state.vaccine)
+  const dispatch = useAppDispatch()
+  const { vaccines, loading, vaccinePagination } = useAppSelector((state) => state.vaccine)
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()

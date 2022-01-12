@@ -21,9 +21,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { deleteEmail, finishEditEmail, updateEmail } from 'store/slices/personalInformationSlice'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAppSelector, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
-import { stringToTitleCase } from 'utils/formattingUtils'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 

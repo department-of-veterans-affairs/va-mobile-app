@@ -18,11 +18,11 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getSubstringBeforeChar } from 'utils/formattingUtils'
 import { isErrorObject, sortByDate } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import getEnv from 'utils/env'
-import { getSubstringBeforeChar } from 'utils/formattingUtils'
 
 const { API_ROOT } = getEnv()
 

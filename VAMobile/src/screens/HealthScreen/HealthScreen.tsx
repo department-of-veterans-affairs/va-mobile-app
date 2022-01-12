@@ -7,11 +7,11 @@ import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
+import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAppSelector, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import getEnv from 'utils/env'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import CernerAlert from './CernerAlert'
+import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
@@ -23,7 +23,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
 
-  const { hasLoadedInbox } = useAppSelector((state) => state.secureMessaging)
   const unreadCount = useAppSelector(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
 

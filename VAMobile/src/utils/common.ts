@@ -1,19 +1,19 @@
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
 import { Dimensions, TextInput } from 'react-native'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { RefObject } from 'react'
 import { contains, isEmpty, map } from 'underscore'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
-import theme from 'styles/themes/standardTheme'
 import { updatBottomOffset } from 'store/slices/snackBarSlice'
-import { AppDispatch } from 'store'
+import theme from 'styles/themes/standardTheme'
 
 /**
  * Generates testID string for reusable components
