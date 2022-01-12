@@ -144,7 +144,8 @@ yarn env:$ENV &&
 # build iOS if the os flag is all or ios
 if [[ $OS == "ios" ]]
 then
-  # install pods
+  # bundle for ios
+  yarn bundle:ios &&
   cd "$BASE_DIR"/ios &&
   # run fastlane
   fastlane on_demand version:"qa" tfGroup:"$TF_GROUP";
