@@ -17,6 +17,8 @@ import notificationReducer from './slices/notificationSlice'
 import patientReducer from './slices/patientSlice'
 import personalInformationReducer from './slices/personalInformationSlice'
 import secureMessagingReducer from './slices/secureMessagingSlice'
+import snackbarReducer from './slices/snackBarSlice'
+import vaccineReducer from './slices/vaccineSlice'
 
 // Creates the store
 const store = configureStore({
@@ -37,6 +39,8 @@ const store = configureStore({
     notifications: notificationReducer,
     patient: patientReducer,
     secureMessaging: secureMessagingReducer,
+    snackBar: snackbarReducer,
+    vaccine: vaccineReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }).concat(logger),
   devTools: process.env.NODE_ENV !== 'production',

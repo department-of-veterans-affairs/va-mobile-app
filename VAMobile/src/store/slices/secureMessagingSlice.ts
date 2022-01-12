@@ -31,20 +31,21 @@ import {
   SecureMessagingThreadGetData,
   SecureMessagingThreads,
 } from 'store/api/types'
-import { AppThunk } from 'store'
+import { AppDispatch, AppThunk } from 'store'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Params, contentTypes } from '../api'
-import { READ } from 'constants/secureMessaging'
+import { READ, UNREAD } from 'constants/secureMessaging'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError, hasErrorCode } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
+import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
+import { getfolderName } from 'utils/secureMessaging'
 
 const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
 
@@ -83,6 +84,12 @@ export type SecureMessagingState = {
   messageIDsOfError?: Array<number>
   signature?: SecureMessagingSignatureDataAttributes
   loadingSignature: boolean
+  movingMessage: boolean
+  isUndo?: boolean
+  moveMessageFailed: boolean
+  deleteDraftComplete: boolean
+  deleteDraftFailed: boolean
+  deletingDraft: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -118,6 +125,12 @@ export const initialSecureMessagingState: SecureMessagingState = {
   termsAndConditionError: false,
   messageIDsOfError: undefined,
   loadingSignature: false,
+  movingMessage: false,
+  isUndo: false,
+  moveMessageFailed: false,
+  deleteDraftComplete: false,
+  deleteDraftFailed: false,
+  deletingDraft: false,
 }
 
 export const fetchInboxMessages =
@@ -257,6 +270,8 @@ export const getMessage =
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
 
+    const { demoMode } = getState().demo
+
     if (loadingAttachments) {
       dispatch(dispatchStartGetAttachmentList())
     } else {
@@ -277,7 +292,7 @@ export const getMessage =
         dispatch(getInbox())
       }
       await registerReviewEvent()
-      dispatch(dispatchFinishGetMessage({ messageData: response }))
+      dispatch(dispatchFinishGetMessage({ messageData: response, isDemoMode: demoMode }))
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishGetMessage({ error, messageId: messageID }))
@@ -455,6 +470,155 @@ export const sendMessage =
     }
   }
 
+const refreshFoldersAfterMove = (
+  dispatch: AppDispatch,
+  messageID: number,
+  newFolderID: number,
+  currentFolderID: number,
+  folderToRefresh: number,
+  currentPage: number,
+  messagesLeft: number,
+  isUndo: boolean,
+  folders: SecureMessagingFolderList,
+  withNavBar: boolean,
+) => {
+  const page = currentPage === 1 ? currentPage : messagesLeft === 1 && isUndo === false ? currentPage - 1 : currentPage
+  const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
+
+  if (folderToRefresh === SecureMessagingSystemFolderIdConstants.INBOX) {
+    dispatch(fetchInboxMessages(page, folderScreenID))
+  } else {
+    dispatch(listFolderMessages(folderToRefresh, page, folderScreenID))
+  }
+
+  dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
+  dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true))
+  dispatch(dispatchFinishMoveMessage({ isUndo }))
+
+  const message = getSnackBarMessage(newFolderID, folders, isUndo, false)
+
+  showSnackBar(
+    message,
+    dispatch,
+    () => {
+      if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
+        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
+      } else {
+        dispatch(moveMessageToTrash(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
+      }
+    },
+    isUndo,
+    false,
+    withNavBar,
+  )
+}
+
+// method to create the snackbar message for the move message
+const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean) => {
+  const folderName = getfolderName(folderID.toString(), folders)
+  const folderString =
+    folderID !== SecureMessagingSystemFolderIdConstants.INBOX && folderID !== SecureMessagingSystemFolderIdConstants.DELETED ? `${folderName} folder` : folderName
+
+  const messageString = !isUndo ? `${isError ? 'Failed to move message' : 'Message moved'}` : `${isError ? 'Failed to move message back' : 'Message moved back'}`
+
+  return `${messageString} to ${folderString}`
+}
+
+export const moveMessage =
+  (
+    messageID: number,
+    newFolderID: number,
+    currentFolderID: number,
+    folderToRefresh: number,
+    currentPage: number,
+    messagesLeft: number,
+    isUndo: boolean,
+    folders: SecureMessagingFolderList,
+    withNavBar: boolean,
+  ): AppThunk =>
+  async (dispatch) => {
+    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchStartMoveMessage(isUndo))
+
+    try {
+      await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
+      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishMoveMessage({ error }))
+        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), dispatch, retryFunction, false, true)
+      }
+    }
+  }
+
+export const moveMessageToTrash =
+  (
+    messageID: number,
+    currentFolderID: number,
+    folderToRefresh: number,
+    currentPage: number,
+    messagesLeft: number,
+    isUndo: boolean,
+    folders: SecureMessagingFolderList,
+    withNavBar: boolean,
+  ): AppThunk =>
+  async (dispatch) => {
+    const retryFunction = () => dispatch(moveMessageToTrash(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchStartMoveMessage(isUndo))
+
+    try {
+      await deleteMessage(messageID)
+      refreshFoldersAfterMove(
+        dispatch,
+        messageID,
+        SecureMessagingSystemFolderIdConstants.DELETED,
+        currentFolderID,
+        folderToRefresh,
+        currentPage,
+        messagesLeft,
+        isUndo,
+        folders,
+        withNavBar,
+      )
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishMoveMessage({ error }))
+        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), dispatch, retryFunction, false, true, withNavBar)
+      }
+    }
+  }
+
+export const deleteDraft =
+  (messageID: number): AppThunk =>
+  async (dispatch) => {
+    const retryFunction = () => dispatch(deleteDraft(messageID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchStartDeleteDraft())
+
+    try {
+      await deleteMessage(messageID)
+
+      dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
+
+      dispatch(dispatchFinishDeleteDraft())
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishDeleteDraft(error))
+        showSnackBar('Error deleting draft', dispatch, retryFunction, false, true)
+      }
+    }
+  }
+
+/**
+ * Delete a message
+ */
+export const deleteMessage = async (messageID: number): Promise<void> => {
+  await api.del(`/v0/messaging/health/messages/${messageID}`)
+}
+
 const secureMessagingSlice = createSlice({
   name: 'secureMessaging',
   initialState: initialSecureMessagingState,
@@ -533,6 +697,38 @@ const secureMessagingSlice = createSlice({
 
     resetHasLoadedRecipients: (state) => {
       state.hasLoadedRecipients = false
+    },
+
+    dispatchStartMoveMessage: (state, action: PayloadAction<boolean>) => {
+      state.isUndo = action.payload
+      state.movingMessage = true
+      state.moveMessageFailed = false
+    },
+
+    dispatchFinishMoveMessage: (state, action: PayloadAction<{ isUndo?: boolean; error?: api.APIError }>) => {
+      const { isUndo, error } = action.payload
+      state.movingMessage = false
+      state.isUndo = isUndo
+      state.moveMessageFailed = !!error
+    },
+    dispatchStartDeleteDraft: (state) => {
+      state.deletingDraft = true
+    },
+
+    dispatchFinishDeleteDraft: (state, action: PayloadAction<api.APIError | undefined>) => {
+      const error = action.payload
+      state.deletingDraft = false
+      state.deleteDraftComplete = !error
+      state.deleteDraftFailed = !!error
+    },
+
+    dispatchResetDeleteDraftComplete: (state) => {
+      state.deleteDraftComplete = false
+    },
+
+    dispatchResetDeleteDraftFailed: (state) => {
+      state.deleteDraftComplete = false
+      state.deleteDraftFailed = false
     },
 
     dispatchFinishFetchInboxMessages: (state, action: PayloadAction<{ inboxMessages?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>) => {
@@ -649,10 +845,11 @@ const secureMessagingSlice = createSlice({
       state.paginationMetaByFolderId = updatedPaginationMeta
     },
 
-    dispatchFinishGetMessage: (state, action: PayloadAction<{ messageData?: SecureMessagingMessageGetData; error?: api.APIError; messageId?: number }>) => {
-      const { messageId, messageData, error } = action.payload
+    dispatchFinishGetMessage: (state, action: PayloadAction<{ messageData?: SecureMessagingMessageGetData; error?: api.APIError; messageId?: number; isDemoMode?: boolean }>) => {
+      const { messageId, messageData, error, isDemoMode } = action.payload
       let messagesById = state.messagesById
       const updatedInboxMessages = [...(state.inboxMessages || [])]
+      const inbox = state.inbox
 
       if (!error && messageData?.data) {
         const messageID = messageData.data.id
@@ -679,6 +876,9 @@ const secureMessagingSlice = createSlice({
 
         // Change message's readReceipt to read
         if (inboxMessage) {
+          if (isDemoMode && inboxMessage.attributes.readReceipt === UNREAD) {
+            inbox.attributes.unreadCount -= 1
+          }
           inboxMessage.attributes.readReceipt = READ
         }
       }
@@ -686,12 +886,16 @@ const secureMessagingSlice = createSlice({
       const stateMessageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
       error && messageId && stateMessageIDsOfError.push(messageId)
 
-      state.messagesById = messagesById
-      state.loading = false
-      state.loadingAttachments = false
-      state.inboxMessages = updatedInboxMessages
-      state.messageIDsOfError = stateMessageIDsOfError
-      state.error = error
+      return {
+        ...state,
+        messagesById,
+        loading: false,
+        loadingAttachments: false,
+        inboxMessages: updatedInboxMessages,
+        messageIDsOfError: stateMessageIDsOfError,
+        error,
+        inbox,
+      }
     },
 
     dispatchUpdateSecureMessagingTab: (state, action: PayloadAction<SecureMessagingTabTypes>) => {
@@ -796,6 +1000,12 @@ export const {
   dispatchClearLoadedMessages,
   resetHasLoadedRecipients,
   resetReplyTriageError,
+  dispatchFinishDeleteDraft,
+  dispatchFinishMoveMessage,
+  dispatchResetDeleteDraftComplete,
+  dispatchResetDeleteDraftFailed,
+  dispatchStartDeleteDraft,
+  dispatchStartMoveMessage,
 } = secureMessagingSlice.actions
 
 export default secureMessagingSlice.reducer

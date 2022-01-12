@@ -18,7 +18,7 @@ import {
   ScreenIDTypes,
 } from 'store/api'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
@@ -226,7 +226,7 @@ export const prefetchAppointments =
       //All mock data should be removed after backend implementation
       // TODO: delete in story #19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         pastAppointments = {
           data: [
             {
@@ -321,7 +321,7 @@ export const prefetchAppointments =
         }
       }
 
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         upcomingAppointments = {
           data: [
             {

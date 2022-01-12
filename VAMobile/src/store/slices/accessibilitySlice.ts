@@ -1,6 +1,11 @@
-import { AppThunk } from 'store'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { PixelRatio } from 'react-native'
+import { UserAnalytics } from 'constants/analytics'
+import { NativeModules, PixelRatio } from 'react-native'
+
+import { AppThunk } from 'store'
+import { setAnalyticsUserProperty } from 'utils/analytics'
+
+const { RNCheckVoiceOver } = NativeModules
 
 export type AccessibilityState = {
   fontScale: number
@@ -41,6 +46,22 @@ export const updateAccessibilityFocus =
   async (dispatch) => {
     dispatch(dispatchUpdateAccessibilityFocus(isFocus))
   }
+
+/**
+ * Redux action to send to analytics if the users is using large text
+ */
+export const sendUsesLargeTextAnalytics = (): AppThunk => async () => {
+  const islargeText = PixelRatio.getFontScale() > 1
+  await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(islargeText))
+}
+
+/**
+ * Redux action to send to analytics if the users is using screen reader
+ */
+export const sendUsesScreenReaderAnalytics = (): AppThunk => async () => {
+  const isRunning = await RNCheckVoiceOver.isVoiceOverRunning()
+  await setAnalyticsUserProperty(UserAnalytics.vama_uses_screen_reader(isRunning))
+}
 
 /**
  * Redux slice that will create the actions and reducers

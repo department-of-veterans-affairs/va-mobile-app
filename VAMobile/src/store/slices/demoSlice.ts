@@ -12,11 +12,13 @@ export const initialDemoState: DemoState = {
 }
 
 export const updateDemoMode =
-  (demoMode: boolean): AppThunk =>
+  (demoMode: boolean, loginOut = false): AppThunk =>
   async (dispatch) => {
     api.setDemoMode(demoMode)
     dispatch(dispatchUpdateDemoMode(demoMode))
-    await initDemoStore()
+    if (!loginOut) {
+      await initDemoStore()
+    }
   }
 
 const demoSlice = createSlice({

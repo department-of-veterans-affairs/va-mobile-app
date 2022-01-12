@@ -22,6 +22,7 @@ import { isErrorObject, sortByDate } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import getEnv from 'utils/env'
+import { getSubstringBeforeChar } from 'utils/formattingUtils'
 
 const { API_ROOT } = getEnv()
 
@@ -152,10 +153,18 @@ const lettersSlice = createSlice({
 
     dispatchFinishGetLetterBeneficiaryData: (state, action: PayloadAction<{ letterBeneficiaryData?: LetterBeneficiaryData; error?: Error }>) => {
       const { letterBeneficiaryData, error } = action.payload
-      const mostRecentServices: Array<LetterMilitaryService> = [...(letterBeneficiaryData?.militaryService || [])]
+      let mostRecentServices: Array<LetterMilitaryService> = [...(letterBeneficiaryData?.militaryService || [])]
 
       if (letterBeneficiaryData) {
         sortByDate(mostRecentServices, 'enteredDate')
+
+        // Strip off timezone info so dates won't be incorrectly time shifted in certain timezones
+        letterBeneficiaryData.benefitInformation.awardEffectiveDate = getSubstringBeforeChar(letterBeneficiaryData?.benefitInformation?.awardEffectiveDate || '', 'T')
+        mostRecentServices = mostRecentServices.map((periodOfService) => {
+          periodOfService.enteredDate = getSubstringBeforeChar(periodOfService.enteredDate, 'T')
+          periodOfService.releasedDate = getSubstringBeforeChar(periodOfService.releasedDate, 'T')
+          return periodOfService
+        })
       }
 
       return {
