@@ -289,7 +289,9 @@ export const getMessage =
 
       // If message is unread, refresh inbox to get up to date unreadCount
       if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
-        dispatch(getInbox())
+        if (!demoMode) {
+          dispatch(getInbox())
+        }
       }
       await registerReviewEvent()
       dispatch(dispatchFinishGetMessage({ messageData: response, isDemoMode: demoMode }))
@@ -847,9 +849,6 @@ const secureMessagingSlice = createSlice({
 
     dispatchFinishGetMessage: (state, action: PayloadAction<{ messageData?: SecureMessagingMessageGetData; error?: api.APIError; messageId?: number; isDemoMode?: boolean }>) => {
       const { messageId, messageData, error, isDemoMode } = action.payload
-      let messagesById = state.messagesById
-      const updatedInboxMessages = [...(state.inboxMessages || [])]
-      const inbox = state.inbox
 
       if (!error && messageData?.data) {
         const messageID = messageData.data.id
@@ -866,10 +865,13 @@ const secureMessagingSlice = createSlice({
 
           message.attachments = attachments
         }
-        messagesById && messagesById[messageID] ? (messagesById[messageID] = message) : (messagesById = { ...state.messagesById, [messageID]: message })
+
+        if (state.messagesById && state.messagesById[messageID]) {
+          state.messagesById[messageID] = message
+        }
 
         // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
-        const inboxMessage = updatedInboxMessages.find((m) => {
+        const inboxMessage = state.inboxMessages.find((m) => {
           // TODO: Figure out why the comparison fails without toString() even though they're both numbers
           return m.attributes.messageId.toString() === messageID.toString()
         })
@@ -877,25 +879,19 @@ const secureMessagingSlice = createSlice({
         // Change message's readReceipt to read
         if (inboxMessage) {
           if (isDemoMode && inboxMessage.attributes.readReceipt === UNREAD) {
-            inbox.attributes.unreadCount -= 1
+            state.inbox.attributes.unreadCount -= 1
           }
+
           inboxMessage.attributes.readReceipt = READ
         }
       }
 
-      const stateMessageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
-      error && messageId && stateMessageIDsOfError.push(messageId)
+      state.messageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
+      error && messageId && state.messageIDsOfError.push(messageId)
 
-      return {
-        ...state,
-        messagesById,
-        loading: false,
-        loadingAttachments: false,
-        inboxMessages: updatedInboxMessages,
-        messageIDsOfError: stateMessageIDsOfError,
-        error,
-        inbox,
-      }
+      state.loading = false
+      state.loadingAttachments = false
+      state.error = error
     },
 
     dispatchUpdateSecureMessagingTab: (state, action: PayloadAction<SecureMessagingTabTypes>) => {
