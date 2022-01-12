@@ -66,7 +66,7 @@ export const updateAccessibilityFocus = (isFocus: boolean): AsyncReduxAction => 
 export const sendUsesLargeTextAnalytics = (): AsyncReduxAction => {
   return async (): Promise<void> => {
     const islargeText = PixelRatio.getFontScale() > 1
-    await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(islargeText))
+    await setAnalyticsUserProperty(UserAnalytics.vama_uses_large_text(islargeText))
   }
 }
 
