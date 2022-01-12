@@ -529,10 +529,10 @@ context('personalInformation', () => {
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+      expect(startAction?.state.personalInformation.savingAddress).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
@@ -564,10 +564,10 @@ context('personalInformation', () => {
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+      expect(startAction?.state.personalInformation.savingAddress).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
@@ -602,11 +602,11 @@ context('personalInformation', () => {
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+      expect(startAction?.state.personalInformation.savingAddress).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
 
       expect(api.put as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
@@ -640,10 +640,10 @@ context('personalInformation', () => {
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+      expect(startAction?.state.personalInformation.savingAddress).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
