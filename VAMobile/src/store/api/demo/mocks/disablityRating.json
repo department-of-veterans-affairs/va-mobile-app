@@ -1,0 +1,61 @@
+{
+    "/v0/disability-rating": {
+        "data": {
+            "id": "0",
+            "type": "disabilityRating",
+            "attributes": {
+                "combinedDisabilityRating": 100,
+                "individualRatings": [
+                    {
+                        "decision": "Service Connected",
+                        "effectiveDate": "2017-06-06T05:00:00.000+00:00",
+                        "ratingPercentage": 20,
+                        "diagnosticText": "Dr Diagnosis (claimed as Heart disease"
+                    },
+                    {
+                        "decision": "Service Connected",
+                        "effectiveDate": "2016-11-01T05:00:00.000+00:00",
+                        "ratingPercentage": 60,
+                        "diagnosticText": "Arterial hypertension"
+                    },
+                    {
+                        "decision": "Service Connected",
+                        "effectiveDate": "2016-04-20T05:00:00.000+00:00",
+                        "ratingPercentage": 0,
+                        "diagnosticText": "hearing loss"
+                    },
+                    {
+                        "decision": "Not Service Connected",
+                        "effectiveDate": null,
+                        "ratingPercentage": null,
+                        "diagnosticText": "abnormal weight loss"
+                    },
+                    {
+                        "decision": "Service Connected",
+                        "effectiveDate": "2015-09-01T05:00:00.000+00:00",
+                        "ratingPercentage": 100,
+                        "diagnosticText": "Heart disease, arteriosclerotic"
+                    },
+                    {
+                        "decision": "Service Connected",
+                        "effectiveDate": "2016-11-01T05:00:00.000+00:00",
+                        "ratingPercentage": 10,
+                        "diagnosticText": "Neurogenic bladder"
+                    },
+                    {
+                        "decision": "Service Connected",
+                        "effectiveDate": "2016-11-01T05:00:00.000+00:00",
+                        "ratingPercentage": 10,
+                        "diagnosticText": "Neuropathy, lower extremity"
+                    },
+                    {
+                        "decision": "Service Connected",
+                        "effectiveDate": "2016-11-01T05:00:00.000+00:00",
+                        "ratingPercentage": 0,
+                        "diagnosticText": "Tinnitus"
+                    }
+                ]
+            }
+        }
+    }
+}

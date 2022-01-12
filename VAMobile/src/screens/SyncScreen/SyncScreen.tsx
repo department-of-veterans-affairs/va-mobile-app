@@ -4,12 +4,12 @@ import React, { FC, useEffect, useState } from 'react'
 import { Box, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { completeSync, logInDemoMode } from 'store/slices/authSlice'
-import { dispatchCheckForDowntimeErrors } from 'store/slices/errorSlice'
 import { getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { getProfileInfo } from 'store/slices/personalInformationSlice'
 import { getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
+import { checkForDowntimeErrors } from 'store/slices/errorSlice'
 
 export type SyncScreenProps = Record<string, unknown>
 const SyncScreen: FC<SyncScreenProps> = () => {
@@ -32,7 +32,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const [displayMessage, setDisplayMessage] = useState()
 
   useEffect(() => {
-    dispatch(dispatchCheckForDowntimeErrors())
+    dispatch(checkForDowntimeErrors())
   }, [dispatch])
 
   useEffect(() => {

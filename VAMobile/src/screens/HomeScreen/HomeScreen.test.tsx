@@ -5,19 +5,25 @@ import { DateTime, Settings } from 'luxon'
 import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
-import { TestProviders, context, findByTestID, findByTypeWithSubstring } from 'testUtils'
-import HomeScreen from './index'
+import { TestProviders, context, findByTypeWithSubstring, findByTestID, mockNavProps, renderWithProviders } from 'testUtils'
+import { HomeScreen } from './HomeScreen'
 import { LargeNavButton, TextView } from 'components'
 
-const mockExternalLinkSpy = jest.fn()
-
+const mockNavigateToSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   const theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
-    useExternalLink: () => mockExternalLinkSpy,
+    useRouteNavigation: () => {
+      return mockNavigateToSpy
+        .mockReturnValueOnce(() => { })
+        .mockReturnValueOnce(() => { })
+        .mockReturnValueOnce(() => { })
+        .mockReturnValue(() => { })
+    },
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
@@ -27,13 +33,17 @@ jest.mock('utils/hooks', () => {
 context('HomeScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
+  let props: any
 
   const initializeTestInstance = () => {
-    component = renderer.create(
-      <TestProviders>
-        <HomeScreen />
-      </TestProviders>,
+    props = mockNavProps(
+      undefined,
+      { setOptions: jest.fn(), navigate: mockNavigationSpy }
     )
+
+    act(() => {
+      component = renderWithProviders(<HomeScreen {...props} />)
+    })
 
     testInstance = component.root
   }
@@ -46,10 +56,15 @@ context('HomeScreen', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the covid 19 screening tool button is clicked', () => {
-    it('should launch external link with the parameter https://www.va.gov/covid19screen/', async () => {
-      expect(findByTestID(testInstance, 'covid-19-screening-tool').props.onPress())
-      expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://www.va.gov/covid19screen/')
+  describe('when VA COVID-19 updates is pressed', () => {
+    it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
+      findByTestID(testInstance, 'v-a-covid-19-updates').props.onPress()
+      const expectNavArgs =
+      {
+        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
+        displayTitle: 'va.gov'
+      }
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
 
@@ -77,17 +92,14 @@ context('HomeScreen', () => {
   })
 
   describe('when rendering the home nav buttons', () => {
-    it('should render the covid form button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[0].props.title).toEqual('COVID-19 vaccines')
-    })
     it('should render the claims button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Claims and appeals')
+      expect(testInstance.findAllByType(LargeNavButton)[0].props.title).toEqual('Claims and appeals')
     })
     it('should render the health button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Health care')
+      expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Health care')
     })
     it('should render the letters button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Letters')
+      expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Letters')
     })
   })
 })

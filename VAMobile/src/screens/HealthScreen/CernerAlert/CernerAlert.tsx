@@ -39,6 +39,7 @@ const CernerAlert: FC = () => {
           variant="MobileBodyBold"
           key={facility.facilityId}
           mt={theme.dimensions.standardMarginBetween}
+          selectable={true}
           {...testIdProps(`${facility.facilityName} (${t('cernerAlert.nowUsing')})`)}>
           {facility.facilityName}
           <TextView variant="MobileBody">{` (${t('cernerAlert.nowUsing')})`}</TextView>

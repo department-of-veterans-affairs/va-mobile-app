@@ -96,23 +96,24 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
   ///   - location: Address or name of place where the event is taking place
   /// - Returns: Void
   @objc func addToCalendar(_ title: String, beginTime: NSNumber, endTime: NSNumber, location: String)-> Void {
-    let store = EKEventStore()
-    // create a new event object to save
-    let event = EKEvent(eventStore: store)
-    event.title = title
-    event.startDate = Date(timeIntervalSince1970: TimeInterval(beginTime.doubleValue))
-    event.endDate = Date(timeIntervalSince1970: TimeInterval(endTime.doubleValue))
-    event.location = location
-    event.calendar = store.defaultCalendarForNewEvents
-    // get an instance of the ViewController that deals with events
-    let eventVC = EKEventEditViewController()
-    eventVC.event = event
-    eventVC.eventStore = store
-    eventVC.editViewDelegate = self
+   
     // get the current application window and present the event viewcontroller
     if let window: UIWindow = UIApplication.shared.keyWindow, let vc = window.rootViewController {
-      DispatchQueue.main.async {
-          vc.present(eventVC, animated: true, completion: nil)
+      DispatchQueue.main.async  {
+         let store = EKEventStore()
+        // create a new event object to save
+        let event = EKEvent(eventStore: store)
+        event.title = title
+        event.startDate = Date(timeIntervalSince1970: TimeInterval(beginTime.doubleValue))
+        event.endDate = Date(timeIntervalSince1970: TimeInterval(endTime.doubleValue))
+        event.location = location
+        event.calendar = store.defaultCalendarForNewEvents
+        // get an instance of the ViewController that deals with events
+        let eventVC = EKEventEditViewController()
+        eventVC.event = event
+        eventVC.eventStore = store
+        eventVC.editViewDelegate = self
+              vc.present(eventVC, animated: true, completion: nil)
       }
     }
   }

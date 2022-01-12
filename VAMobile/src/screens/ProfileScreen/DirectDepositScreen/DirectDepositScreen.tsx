@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getBankData } from 'store/slices/directDepositSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import ProfileBanner from '../ProfileBanner'
@@ -19,13 +20,16 @@ const DirectDepositScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
   const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
-    }, [dispatch]),
+      if (ddNotInDowntime) {
+        dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
+      }
+    }, [dispatch, ddNotInDowntime]),
   )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {
@@ -68,7 +72,7 @@ const DirectDepositScreen: FC = () => {
     return (
       <React.Fragment>
         <ProfileBanner />
-        <LoadingComponent />
+        <LoadingComponent text={t('directDeposit.loading')} />
       </React.Fragment>
     )
   }

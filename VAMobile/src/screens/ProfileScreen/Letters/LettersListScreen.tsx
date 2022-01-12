@@ -3,12 +3,12 @@ import { map } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { OnPressHandler, useAppDispatch, useAppSelector, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { OnPressHandler, useAppDispatch, useAppSelector, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { ProfileStackParamList } from '../ProfileStackScreens'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getLetters } from 'store/slices/lettersSlice'
 import { testIdProps } from 'utils/accessibility'
 import NoLettersScreen from './NoLettersScreen'
@@ -23,6 +23,7 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.PROFILE)
   const tCommon = useTranslation(NAMESPACE.COMMON)
+  const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
 
   const letterPressFn = (letterType: LetterTypes, letterName: string): OnPressHandler | undefined => {
     switch (letterType) {
@@ -98,10 +99,10 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   })
 
   useEffect(() => {
-    if (lettersAndDocuments) {
+    if (lettersAndDocuments && lettersNotInDowntime) {
       dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
     }
-  }, [dispatch, lettersAndDocuments])
+  }, [dispatch, lettersAndDocuments, lettersNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />

@@ -19,13 +19,13 @@ import {
   TextViewProps,
   VAScrollView,
 } from 'components'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import ProfileBanner from '../ProfileBanner'
 import getEnv from 'utils/env'
@@ -41,13 +41,14 @@ const DisabilityRatingsScreen: FC = () => {
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
+  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
 
   useEffect(() => {
     // Get the disability rating data if not loaded already
-    if (needsDataLoad) {
+    if (needsDataLoad && drNotInDowntime) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad])
+  }, [dispatch, needsDataLoad, drNotInDowntime])
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
@@ -197,7 +198,7 @@ const DisabilityRatingsScreen: FC = () => {
       <ProfileBanner showRating={false} />
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
-        <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} />
+        <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
       </Box>
       <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
       <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>

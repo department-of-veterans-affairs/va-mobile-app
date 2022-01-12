@@ -1,21 +1,22 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { demoAlert } from 'utils/demoAlert'
 import { loginStart } from 'store/slices/authSlice'
 import { testIdProps } from 'utils/accessibility'
-import { updateDemoMode } from 'store/slices/demoSlice'
 import { useAppDispatch, useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
+import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
+import { updateDemoMode } from 'store/slices/demoSlice'
 
 const LoginScreen: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   const { firstTimeLogin } = useAppSelector((state) => state.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 20
   let demoTaps = 0
 
@@ -45,13 +46,14 @@ const LoginScreen: FC = () => {
   }
 
   const dispatch = useAppDispatch()
+  const handleUpdateDemoMode = () => {
+    dispatch(updateDemoMode(true))
+  }
   const tapForDemo = () => {
     demoTaps++
     if (demoTaps > TAPS_FOR_DEMO) {
       demoTaps = 0
-      demoAlert(() => {
-        dispatch(updateDemoMode(true))
-      })
+      setDemoPromptVisible(true)
     }
   }
 
@@ -65,6 +67,7 @@ const LoginScreen: FC = () => {
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+      <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && (
         <Box mx={theme.dimensions.gutter}>

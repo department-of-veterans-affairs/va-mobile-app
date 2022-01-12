@@ -45,7 +45,7 @@ const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
     props.isSelected ? theme.colors.segmentedControl.buttonActive : theme.colors.segmentedControl.buttonInactive,
   )};
 `
-
+/**A common component for filtering UI views by segments or lanes. Used for things like toggling between Active/Completed claims and Future/Past Appointments */
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected, accessibilityHints }) => {
   const t = useTranslation(NAMESPACE.COMMON)
 

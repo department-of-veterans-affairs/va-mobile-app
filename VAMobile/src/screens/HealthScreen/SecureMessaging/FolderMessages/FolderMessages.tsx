@@ -1,15 +1,17 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
-
+import { BackButton, Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { listFolderMessages, resetSaveDraftComplete } from 'store/slices/secureMessagingSlice'
+import { dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices/secureMessagingSlice'
+import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
@@ -22,15 +24,16 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete } = useAppSelector((state) => state.secureMessaging)
+  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useAppSelector((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
+  const paginationMetaData = paginationMetaByFolderId?.[folderID]
 
   useEffect(() => {
     // Load first page messages
     dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
     // If draft saved message showing, clear status so it doesn't show again
     dispatch(resetSaveDraftComplete())
-  }, [dispatch, folderID, route])
+  }, [dispatch, folderID])
 
   useEffect(() => {
     if (saveDraftComplete) {
@@ -39,11 +42,37 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     }
   }, [dispatch, saveDraftComplete])
 
+  useEffect(() => {
+    if (deleteDraftComplete) {
+      showSnackBar(t('secureMessaging.deleteDraft.snackBarMessage'), dispatch, undefined, true, false, true)
+      dispatch(dispatchResetDeleteDraftComplete())
+    }
+  }, [deleteDraftComplete, dispatch, t])
+
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
     const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
-    const args = isDraft ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} } : { messageID }
+    const args = isDraft
+      ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
+      : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
     navigation.navigate(screen, args)
   }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props): ReactNode => (
+        <BackButton
+          onPress={() => {
+            navigation.goBack()
+            snackBar.hideAll()
+          }}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.back}
+          focusOnButton={deleteDraftComplete ? false : true}
+          showCarat={true}
+        />
+      ),
+    })
+  })
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
@@ -72,7 +101,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
       return <></>
     }
 
-    const paginationMetaData = paginationMetaByFolderId?.[folderID]
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -101,7 +129,10 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
             <MessageAlert saveDraftComplete={draftSaved} />
           </Box>
         )}
-        <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName} />
+        <MessageList
+          items={getMessagesListItems(messages, t, onMessagePress, folderName)}
+          title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}
+        />
         {renderPagination()}
       </VAScrollView>
       <ComposeMessageFooter />

@@ -19,7 +19,7 @@ import {
 } from '../api'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
@@ -90,6 +90,19 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   },
 }
 
+const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
+  data: [],
+  meta: {
+    dataFromStore: false,
+    errors: [],
+    pagination: {
+      totalEntries: 0,
+      currentPage: 1,
+      perPage: DEFAULT_PAGE_SIZE,
+    },
+  },
+}
+
 export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): ClaimsAndAppealsList => {
   return _.sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
     return new Date(claimAndAppeal.attributes.updatedAt)
@@ -121,19 +134,6 @@ const getLoadedClaimsAndAppeals = (
   }
   return null
 }
-
-// const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
-//   data: [],
-//   meta: {
-//     dataFromStore: false,
-//     errors: [],
-//     pagination: {
-//       totalEntries: 0,
-//       currentPage: 1,
-//       perPage: DEFAULT_PAGE_SIZE,
-//     },
-//   },
-// }
 
 export const prefetchClaimsAndAppeals =
   (screenID?: ScreenIDTypes): AppThunk =>
@@ -227,11 +227,11 @@ export const prefetchClaimsAndAppeals =
 
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       // simulate common error try again
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_1414) {
         throw {
           status: 503,
         }
-      } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
+      } else if (signInEmail === MockUsersEmail.user_1402) {
         // appeals unavailable with no claims
         activeClaimsAndAppeals.meta = {
           dataFromStore: false,
@@ -249,7 +249,7 @@ export const prefetchClaimsAndAppeals =
         closedClaimsAndAppeals.meta = activeClaimsAndAppeals.meta
         activeClaimsAndAppeals.data = []
         closedClaimsAndAppeals.data = []
-      } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
+      } else if (signInEmail === MockUsersEmail.user_1401) {
         // claims unavailable with appeals
         activeClaimsAndAppeals.meta = {
           dataFromStore: false,
@@ -270,7 +270,7 @@ export const prefetchClaimsAndAppeals =
         closedClaimsAndAppeals.data = closedClaimsAndAppeals.data.filter((item) => {
           return item.type === 'appeal'
         })
-      } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
+      } else if (signInEmail !== MockUsersEmail.user_366) {
         const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
         const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
         const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
@@ -299,7 +299,7 @@ export const prefetchClaimsAndAppeals =
       dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
-        dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ error }))
+        dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: undefined, closed: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
@@ -330,7 +330,7 @@ export const getClaimsAndAppeals =
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
-        dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, error }))
+        dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
@@ -348,7 +348,7 @@ export const getClaim =
 
       // TODO: remove once file upload flow checked
       let singleClaim
-      if (signInEmail === 'vets.gov.user+366@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_366) {
         singleClaim = {
           data: Claim,
         }
@@ -365,7 +365,7 @@ export const getClaim =
       dispatch(dispatchFinishGetClaim({ claim: singleClaim?.data }))
     } catch (error) {
       if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetClaim({ error }))
+        dispatch(dispatchFinishGetClaim({ claim: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
@@ -380,7 +380,7 @@ export const getAppeal =
     try {
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       let appeal
-      if (signInEmail === 'vets.gov.user+226@gmail.com') {
+      if (signInEmail === MockUsersEmail.user_226) {
         appeal = {
           data: Appeal,
         }
@@ -397,7 +397,7 @@ export const getAppeal =
       dispatch(dispatchFinishGetAppeal({ appeal: appeal?.data }))
     } catch (error) {
       if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetAppeal({ error }))
+        dispatch(dispatchFinishGetAppeal({ appeal: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
@@ -426,7 +426,7 @@ export const uploadFileToClaim =
   (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchStartFileUpload())
-
+    await logAnalyticsEvent(Events.vama_claim_upload_start())
     try {
       if (files.length > 1) {
         const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse) => {
@@ -468,7 +468,7 @@ export const uploadFileToClaim =
         }
         // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
         formData.append(
-          'uploads[]',
+          'file',
           JSON.parse(
             JSON.stringify({
               name: nameOfFile || '',
@@ -483,10 +483,11 @@ export const uploadFileToClaim =
 
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
       }
-
-      dispatch(dispatchFinishFileUpload({ eventDescription: request.description }))
+      await logAnalyticsEvent(Events.vama_claim_upload_compl())
+      dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description }))
     } catch (error) {
       if (isErrorObject(error)) {
+        await logAnalyticsEvent(Events.vama_claim_upload_fail())
         dispatch(dispatchFinishFileUpload({ error }))
       }
     }
@@ -494,6 +495,20 @@ export const uploadFileToClaim =
 
 export const fileUploadSuccess = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFileUploadSuccess())
+}
+
+/**
+ * Redux action to track when a user is on step 3 of claims
+ */
+export const sendClaimStep3Analytics = (): AppThunk => async () => {
+  await logAnalyticsEvent(Events.vama_claim_step_three())
+}
+
+/**
+ * Redux action to track when a user is on step 3 of claims and has a file request
+ */
+export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {
+  await logAnalyticsEvent(Events.vama_claim_file_request())
 }
 
 const claimsAndAppealsSlice = createSlice({
@@ -506,15 +521,17 @@ const claimsAndAppealsSlice = createSlice({
 
     dispatchFinishPrefetchGetClaimsAndAppeals: (state, action: PayloadAction<{ active?: ClaimsAndAppealsGetData; closed?: ClaimsAndAppealsGetData; error?: Error }>) => {
       const { active, closed, error } = action.payload
-      const activeMetaErrors = active?.meta?.errors || []
-      const closedMetaErrors = closed?.meta?.errors || []
+      const activeData = active || emptyClaimsAndAppealsGetData
+      const closedData = closed || emptyClaimsAndAppealsGetData
+      const activeMetaErrors = activeData?.meta?.errors || []
+      const closedMetaErrors = closedData?.meta?.errors || []
       const activeAndClosedMetaErrors = [...activeMetaErrors, ...closedMetaErrors]
       const claimsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
       const appealsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
       const curLoadedActive = state.loadedClaimsAndAppeals.ACTIVE
       const curLoadedClosed = state.loadedClaimsAndAppeals.CLOSED
-      const activeList = active?.data || []
-      const closedList = closed?.data || []
+      const activeList = activeData?.data || []
+      const closedList = closedData?.data || []
 
       return {
         ...state,
@@ -529,13 +546,13 @@ const claimsAndAppealsSlice = createSlice({
         },
         claimsAndAppealsMetaPagination: {
           ...state.claimsAndAppealsMetaPagination,
-          ACTIVE: active?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE,
-          CLOSED: closed?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED,
+          ACTIVE: activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE,
+          CLOSED: closedData?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED,
         },
         loadedClaimsAndAppeals: {
           ...state.loadedClaimsAndAppeals,
-          ACTIVE: active?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList),
-          CLOSED: closed?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList),
+          ACTIVE: activeData?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList),
+          CLOSED: closedData?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList),
         },
       }
     },

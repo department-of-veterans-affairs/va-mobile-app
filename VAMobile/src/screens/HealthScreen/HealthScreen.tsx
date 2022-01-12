@@ -1,19 +1,23 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
+import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import CernerAlert from './CernerAlert'
+
+const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
-const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
+export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
@@ -26,21 +30,25 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
+  const onVaVaccines = navigateTo('VaccineList')
+  const onCoronaVirusFAQ = () => {
+    dispatch(logCOVIDClickAnalytics('health_screen'))
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  }
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    // fetch inbox metadata to display unread messages count tag
-    dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-  }, [dispatch])
+    if (smNotInDowntime) {
+      // fetch inbox metadata to display unread messages count tag
+      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
+    }
+  }, [dispatch, smNotInDowntime])
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   }, [navigation])
-
-  if (!hasLoadedInbox) {
-    return <LoadingComponent text={t('healthScreen.loading')} />
-  }
 
   return (
     <VAScrollView {...testIdProps('Health-care-page')}>
@@ -67,6 +75,26 @@ const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           borderStyle={'solid'}
           tagCount={unreadCount}
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
+        />
+        <LargeNavButton
+          title={t('vaVaccines.buttonTitle')}
+          subText={t('vaVaccines.subText')}
+          a11yHint={t('vaVaccines.a11yHint')}
+          onPress={onVaVaccines}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+        />
+        <LargeNavButton
+          title={t('covid19Updates.title')}
+          subText={t('covid19Updates.subText')}
+          a11yHint={t('covid19Updates.a11yHint')}
+          onPress={onCoronaVirusFAQ}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
         />
       </Box>
       <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>

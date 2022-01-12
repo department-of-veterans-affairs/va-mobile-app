@@ -1,8 +1,9 @@
 import React, { FC } from 'react'
 
-import { ButtonDecoratorType, List, ListItemObj, ListProps } from 'components'
+import { ButtonDecoratorType, List, ListItemObj, VAIconProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextLine } from 'components/types'
+import { TextLineWithIconProps } from 'components/TextLineWithIcon'
 import { TextLines } from 'components/TextLines'
 import { useTranslation } from 'utils/hooks'
 
@@ -14,6 +15,8 @@ export type PickerListItemObj = {
   text: string
   /** whether this item is the selected value **/
   isSelected: boolean
+  /** icon to show */
+  icon?: VAIconProps
 } & Partial<ListItemObj>
 
 /**
@@ -22,7 +25,11 @@ export type PickerListItemObj = {
 export type PickerListProps = {
   /** list of items of which a button will be rendered per item */
   items: Array<PickerListItemObj>
-} & Partial<ListProps>
+  /** optional title to use for the list */
+  title?: string
+  /**optional a11y hint for the title */
+  titleA11yLabel?: string
+}
 
 /**
  * Display a list of buttons with text and optional actions
@@ -32,9 +39,9 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
 
   const listItemObjs: Array<ListItemObj> = items.map((item: PickerListItemObj, index) => {
     // Move all of the properties except text lines to the standard list item object
-    const { text, testId, isSelected, ...listItemObj } = item
+    const { text, icon, testId, isSelected, ...listItemObj } = item
 
-    const textLine: Array<TextLine> = [{ text } as TextLine]
+    const textLine = icon ? [{ text, iconProps: icon, color: icon.fill } as TextLineWithIconProps] : [{ text } as TextLine]
     const content = <TextLines listOfText={textLine} />
 
     const backgroundColor = isSelected ? 'pickerSelectedItem' : 'list'

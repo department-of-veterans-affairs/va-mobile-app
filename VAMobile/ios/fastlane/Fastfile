@@ -39,7 +39,6 @@ platform :ios do
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
     upload_tf(notes, "Development Team")
     upload_deobfuscation_file
-    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New QA build successfully uploaded to TestFlight Group - Development Team"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
@@ -65,11 +64,15 @@ platform :ios do
 
   desc "Promote the release Awaiting Developer Release to App Store"
   lane :release do
-    app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
-    version = app.get_pending_release_app_store_version
-    unless version.nil?
-      Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
-      slack_release_success(version.version_string, "iOS")
+    begin
+      app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
+      version = app.get_pending_release_app_store_version
+      unless version.nil?
+        Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
+        slack_release_success(version.version_string, "iOS")
+      end
+    rescue => e
+      slack_release_error(version, e)
     end
   end
 
@@ -82,7 +85,6 @@ platform :ios do
     notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
     upload_tf(notes, options[:tfGroup])
     upload_deobfuscation_file
-    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     message = "New On Demand build successfully uploaded to TestFlight Group " + options[:tfGroup]
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS")
   end
@@ -183,6 +185,6 @@ platform :ios do
   end
 
   def upload_deobfuscation_file
-    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
+    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip", app_id: ENV['FIREBASE_IOS_APP_ID'])
   end
 end

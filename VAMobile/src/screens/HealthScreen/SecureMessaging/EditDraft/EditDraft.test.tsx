@@ -5,9 +5,9 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTestID, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditDraft from './EditDraft'
-import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
+import { InteractionManager, Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
@@ -28,6 +28,13 @@ jest.mock('utils/hooks', () => {
     },
   }
 })
+
+const runAfterTransition = (testToRun: () => void) => {
+  InteractionManager.runAfterInteractions(() => {
+    testToRun()
+  })
+  jest.runAllTimers()
+}
 
 jest.mock('store/actions', () => {
   let actual = jest.requireActual('store/actions')
@@ -148,7 +155,6 @@ context('EditDraft', () => {
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined,
           }
         },
       },
@@ -220,92 +226,92 @@ context('EditDraft', () => {
     })
 
     it('should display an AlertBox', async () => {
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      runAfterTransition(() => {
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
     })
 
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
-        testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
-        expect(updateSecureMessagingTab).toHaveBeenCalled()
+        runAfterTransition(() => {
+          testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+          expect(mockNavigationSpy).toHaveBeenCalled()
+          expect(updateSecureMessagingTab).toHaveBeenCalled()
+        })
       })
     })
   })
 
   describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', () => {
-      initializeTestInstance({ loading: true })
-      expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
+      runAfterTransition(() => {
+        initializeTestInstance({ loading: true })
+        expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
+      })
     })
   })
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
-      initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
-      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      runAfterTransition(() => {
+        initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
+        expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      })
     })
   })
 
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      runAfterTransition(() => {
+        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(
-        findByTypeWithText(
-          testInstance,
-          TextView,
-          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-        ),
-      ).toBeTruthy()
+      runAfterTransition(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(
+          findByTypeWithText(
+            testInstance,
+            TextView,
+            'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
+          ),
+        ).toBeTruthy()
+      })
     })
   })
 
   describe('when pressing the back button', () => {
     it('should ask for confirmation if any field filled in', async () => {
-      act(() => {
-        testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
+      runAfterTransition(() => {
+        act(() => {
+          testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
+        })
+        navHeaderSpy.back.props.onPress()
+        expect(goBack).not.toHaveBeenCalled()
+        expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
       })
-      navHeaderSpy.back.props.onPress()
-      expect(goBack).not.toHaveBeenCalled()
-      expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe('on click of save (draft)', () => {
-    describe('when form fields are filled out correctly and saved', () => {
-      it('should call saveDraft', async () => {
-        navHeaderSpy.save.props.onSave()
-        testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(saveDraft).toHaveBeenCalledWith(expect.objectContaining({ draft_id: 2, body: 'test 2' }), 2, true, 1)
-      })
-    })
-  })
-
-  describe('when form fields are filled out correctly and saved', () => {
-    it('should call mockNavigationSpy', async () => {
-      navHeaderSpy.save.props.onSave()
-      testInstance.findByType(FormWrapper).props.onSave(true)
-      expect(saveDraft).toHaveBeenCalled()
     })
   })
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findByProps({ label: 'Add Files' }).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      runAfterTransition(() => {
+        testInstance.findByProps({ label: 'Add Files' }).props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('on click of the "How to attach a file" link', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      runAfterTransition(() => {
+        testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+      })
     })
   })
 
@@ -316,18 +322,24 @@ context('EditDraft', () => {
     })
 
     it('should display error alert', async () => {
-      expect(testInstance.findByType(AlertBox)).toBeTruthy()
+      runAfterTransition(() => {
+        expect(testInstance.findByType(AlertBox)).toBeTruthy()
+      })
     })
     describe('when the My HealtheVet phone number link is clicked', () => {
       it('should call Linking open url with the parameter tel:8773270022', async () => {
-        testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-        expect(Linking.openURL).toBeCalledWith('tel:8773270022')
+        runAfterTransition(() => {
+          testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+          expect(Linking.openURL).toBeCalledWith('tel:8773270022')
+        })
       })
     })
     describe('when the call TTY phone link is clicked', () => {
       it('should call Linking open url with the parameter tel:711', async () => {
-        testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-        expect(Linking.openURL).toBeCalledWith('tel:711')
+        runAfterTransition(() => {
+          testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
+          expect(Linking.openURL).toBeCalledWith('tel:711')
+        })
       })
     })
   })

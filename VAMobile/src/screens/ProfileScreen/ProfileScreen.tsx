@@ -1,28 +1,29 @@
 import React, { FC, useEffect } from 'react'
-
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from './ProfileStackScreens'
-import { ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
 import { getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { getProfileInfo } from 'store/slices/personalInformationSlice'
 import { getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useError, useHeaderStyles, useTranslation } from 'utils/hooks'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useAppSelector((state) => state.authorizedServices)
-
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useAppSelector((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useAppSelector((s) => s.personalInformation)
   const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useAppSelector((s) => s.disabilityRating)
   const { profile } = useAppSelector((state) => state.personalInformation)
+
+  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
+  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
 
   useEffect(() => {
     navigation.setOptions({
@@ -52,24 +53,24 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate) {
+    if (personalInformationNeedsUpdate && profileNotInDowntime) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate])
+  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization) {
+    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization && mhNotInDowntime) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
+  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, mhNotInDowntime])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (disabilityRatingNeedsUpdate) {
+    if (disabilityRatingNeedsUpdate && drNotInDowntime) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, disabilityRatingNeedsUpdate])
+  }, [dispatch, disabilityRatingNeedsUpdate, drNotInDowntime])
 
   const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
 

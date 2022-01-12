@@ -66,11 +66,11 @@ const StyledText = styled(Text)`
 `
 
 /**
- * Text is an element to quickly style text
+ * A common component for styling text in the application. It also conforms to the Box properties so you don't need to wrap it with a Box view for margins / paddings
  *
  * @returns TextView component
  */
-const TextView: FC<TextViewProps> = (props) => {
+const TextView: FC<TextViewProps> = ({ selectable = false, ...props }) => {
   const { isVoiceOverTalkBackRunning } = useAppSelector((state) => state.accessability)
   const theme = useTheme()
   const wrapperProps = { ...props }
@@ -84,7 +84,7 @@ const TextView: FC<TextViewProps> = (props) => {
     )
   }
 
-  const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable: true, selectionColor: theme.colors.selectCopyText }
+  const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable, selectionColor: theme.colors.selectCopyText }
 
   return <StyledText {...selectToCopyProps} {...wrapperProps} />
 }

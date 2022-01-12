@@ -1,0 +1,17 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureSvg {
+  height: auto;
+  width: 8em;
+}
+
+.mobilePhoneSvg {
+  height: auto;
+  max-width: 8em;
+  padding: 1em;
+}

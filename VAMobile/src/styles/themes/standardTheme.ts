@@ -61,6 +61,10 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
+  SnackBarBtnText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -100,6 +104,8 @@ const theme: VATheme = {
       modalOverlay: colors.base,
       pickerSelectedItem: colors.primaryAltLightest,
       navButton: colors.toolbarBackgroundGray,
+      snackbar: colors.snackBarBlack,
+      menu: colors.white,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -118,6 +124,7 @@ const theme: VATheme = {
       pickerAndInput: colors.gray,
       focusedPickerAndInput: colors.primaryDarker,
       confirmation: colors.goldLight,
+      menuDivider: colors.grayLight,
     },
     icon: {
       footerButton: colors.primary,
@@ -156,6 +163,7 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
       claimPhase: colors.white,
+      snackBarBtn: colors.lightBlue,
     },
     buttonBackground: {
       buttonPrimary: colors.primary,
@@ -260,6 +268,30 @@ const theme: VATheme = {
     errorLabelBottomMargin: 3,
     selectorWidth: 22,
     selectorHeight: 22,
+    snackBarPadding: 15,
+    snackBarMarginBottom: 0,
+    snackBarMarginLeft: 10,
+    snackBarMarginRight: 10,
+    snackBarButtonTopMargin: 5,
+    snackBarConfirmBtnMarginRight: 15,
+    snackBarVerticalMargin: 10,
+    snackBarBorderRadius: 4,
+    snackBarBetweenSpace: 8,
+    snackBarShadowX: 0,
+    snackBarShadowY: 4,
+    snackBarShadowOpacity: 0.6,
+    snackBarIconTopMargin: 2,
+    snackBarIconSize: 18,
+    snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
+    snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
+    menuShadowX: 0,
+    menuShadowY: 4,
+    menuShadowOpacity: 0.6,
+    menuShadowRadius: 4,
+    menuOpacity: 0,
+    menuBorderRadius: 4,
+    menuItemMinWidth: 191,
+    menuElevation: 20,
   },
 
   fontFace: {
@@ -296,6 +328,7 @@ const theme: VATheme = {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
+    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
   },
 }
 

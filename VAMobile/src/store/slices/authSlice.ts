@@ -35,6 +35,7 @@ import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import getEnv from 'utils/env'
+import { updateDemoMode } from './demoSlice'
 
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, ENVIRONMENT, IS_TEST } = getEnv()
 
@@ -385,9 +386,16 @@ export const setBiometricsPreference =
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(value))
   }
 
-export const logout = createAsyncThunk('logout', async (_, { dispatch }) => {
+export const logout = (): AppThunk => async (dispatch, getState) => {
   console.debug('logout: logging out')
   dispatch(dispatchStartLogout())
+
+  const { demoMode } = getState().demo
+
+  if (demoMode) {
+    dispatch(updateDemoMode(false, true))
+  }
+
   try {
     await CookieManager.clearAll()
     const response = await fetch(AUTH_REVOKE_URL, {
@@ -422,7 +430,7 @@ export const logout = createAsyncThunk('logout', async (_, { dispatch }) => {
     dispatch(dispatchDisabilityRatingLogout())
     dispatch(dispatchFinishLogout())
   }
-})
+}
 
 export const debugResetFirstTimeLogin = (): AppThunk => async (dispatch) => {
   await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, '')

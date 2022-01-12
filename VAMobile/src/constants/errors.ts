@@ -10,6 +10,7 @@ export type CommonErrorTypes =
   | 'appLevelErrorHealthLoad'
   | 'appLevelErrorDisabilityRating'
   | 'downtimeError'
+  | 'appLevelErrorVaccine'
 
 export const CommonErrorTypesConstants: {
   NETWORK_CONNECTION_ERROR: CommonErrorTypes
@@ -18,6 +19,7 @@ export const CommonErrorTypesConstants: {
   APP_LEVEL_ERROR_HEALTH_LOAD: CommonErrorTypes
   APP_LEVEL_ERROR_DISABILITY_RATING: CommonErrorTypes
   DOWNTIME_ERROR: CommonErrorTypes
+  APP_LEVEL_ERROR_VACCINE: CommonErrorTypes
 } = {
   NETWORK_CONNECTION_ERROR: 'networkConnectionError',
   APP_LEVEL_ERROR: 'appLevelError',
@@ -25,6 +27,7 @@ export const CommonErrorTypesConstants: {
   APP_LEVEL_ERROR_HEALTH_LOAD: 'appLevelErrorHealthLoad',
   APP_LEVEL_ERROR_DISABILITY_RATING: 'appLevelErrorDisabilityRating',
   DOWNTIME_ERROR: 'downtimeError',
+  APP_LEVEL_ERROR_VACCINE: 'appLevelErrorVaccine',
 }
 
 export type SecureMessagingErrorCodesType = 'SM135' | 'SM129'

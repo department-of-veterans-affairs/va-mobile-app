@@ -19,18 +19,20 @@ export type DefaultListItemObj = {
 export type DefaultListProps = {
   /** list of items of which a button will be rendered per item */
   items: Array<DefaultListItemObj>
+  /** if true the text will be selectable */
+  selectable?: boolean
 } & Partial<ListProps>
 
 /**
- * Display a list of buttons with text and optional actions
+ *Component to show a list composed of lines of display text built using TextLines
  */
-const DefaultList: FC<DefaultListProps> = ({ items, title, titleA11yLabel }) => {
+const DefaultList: FC<DefaultListProps> = ({ items, title, titleA11yLabel, selectable }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { textLines, testId, ...listItemObj } = { ...item }
     const testIdToUse = testId ? testId : generateTestIDForTextList(textLines)
 
-    const content = <TextLines listOfText={textLines} />
+    const content = <TextLines listOfText={textLines} selectable={selectable} />
 
     return { ...listItemObj, content, testId: testIdToUse }
   })

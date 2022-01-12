@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler'
-
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
@@ -7,10 +6,14 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { Provider } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
+import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import { enableScreens } from 'react-native-screens'
 import KeyboardManager from 'react-native-keyboard-manager'
 import React, { FC, useEffect, useRef, useState } from 'react'
+import Toast from 'react-native-toast-notifications'
+import ToastContainer from 'react-native-toast-notifications'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 
@@ -18,9 +21,9 @@ import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } fr
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
+import { SnackBarConstants } from 'constants/common'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { enableScreens } from 'react-native-screens'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
@@ -37,14 +40,16 @@ import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationSc
 import LoaGate from './screens/auth/LoaGate'
 import NotificationManger from './components/NotificationManger'
 import OnboardingCarousel from './screens/OnboardingCarousel'
+import SnackBar from 'components/SnackBar'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-
 import { handleTokenCallbackUrl, initializeAuth } from 'store/slices/authSlice'
 import store from 'store'
 import theme from 'styles/themes/standardTheme'
+import { sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
+
 enableScreens(true)
 
 const Stack = createStackNavigator()
@@ -107,22 +112,24 @@ const MainApp: FC = () => {
   }
 
   return (
-    <ActionSheetProvider>
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18n}>
-            <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
-              <NotificationManger>
-                <SafeAreaProvider>
-                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
-                  <AuthGuard />
-                </SafeAreaProvider>
-              </NotificationManger>
-            </NavigationContainer>
-          </I18nextProvider>
-        </Provider>
-      </ThemeProvider>
-    </ActionSheetProvider>
+    <>
+      <ActionSheetProvider>
+        <ThemeProvider theme={theme}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
+                <NotificationManger>
+                  <SafeAreaProvider>
+                    <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                    <AuthGuard />
+                  </SafeAreaProvider>
+                </NotificationManger>
+              </NavigationContainer>
+            </I18nextProvider>
+          </Provider>
+        </ThemeProvider>
+      </ActionSheetProvider>
+    </>
   )
 }
 
@@ -130,13 +137,21 @@ export const AuthGuard: FC = () => {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useAppSelector((state) => state.auth)
   const { fontScale, isVoiceOverTalkBackRunning } = useAppSelector((state) => state.accessability)
+  const { bottomOffset } = useAppSelector((state) => state.snackBar)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
-
   const [currNewState, setCurrNewState] = useState('active')
 
+  const snackBarProps: Partial<ToastProps> = {
+    duration: SnackBarConstants.duration,
+    animationDuration: SnackBarConstants.animationDuration,
+    renderType: {
+      custom_snackbar: (toast) => <SnackBar {...toast} />,
+    },
+    swipeEnabled: false,
+  }
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
@@ -150,6 +165,12 @@ export const AuthGuard: FC = () => {
       setCurrNewState('inactive')
     }
   }, [isVoiceOverTalkBackRunning, dispatch, currNewState])
+
+  useEffect(() => {
+    // only run on app load
+    dispatch(sendUsesLargeTextAnalytics())
+    dispatch(sendUsesScreenReaderAnalytics())
+  }, [dispatch])
 
   useEffect(() => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
@@ -194,7 +215,12 @@ export const AuthGuard: FC = () => {
   } else if (firstTimeLogin && loggedIn) {
     content = <OnboardingCarousel />
   } else if (loggedIn) {
-    content = <AuthedApp />
+    content = (
+      <>
+        <AuthedApp />
+        <Toast {...snackBarProps} ref={(ref) => ((global.snackBar as ToastContainer | null) = ref)} offsetBottom={bottomOffset} />
+      </>
+    )
   } else {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">

@@ -20,6 +20,7 @@ import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
+import { MockUsersEmail } from 'constants/common'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
@@ -94,9 +95,9 @@ export const getProfileInfo =
 
       // TODO: delete in story #19175
       const userEmail = user?.data.attributes.profile.signinEmail
-      if (userEmail === 'vets.gov.user+1401@gmail.com') {
+      if (userEmail === MockUsersEmail.user_1401) {
         throw { status: 408 }
-      } else if (userEmail === 'vets.gov.user+1414@gmail.com') {
+      } else if (userEmail === MockUsersEmail.user_1414) {
         // TODO mock user to have SM for story #25035
         user?.data.attributes.authorizedServices.push(VAServicesConstants.SecureMessaging)
       }

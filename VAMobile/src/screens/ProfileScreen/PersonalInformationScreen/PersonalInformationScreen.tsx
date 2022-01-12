@@ -5,20 +5,18 @@ import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useState } from 'react'
 
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
-
 import { DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/slices/personalInformationSlice'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAppSelector, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { getA11yLabelText } from 'utils/common'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
-import _ from 'underscore'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
@@ -39,7 +37,7 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   }
 
   return [
-    { textLines: dateOfBirthTextIDs, a11yHintText: '' },
+    { textLines: dateOfBirthTextIDs, a11yHintText: '', testId: getA11yLabelText(dateOfBirthTextIDs) },
     { textLines: genderTextIDs, a11yHintText: '' },
   ]
 }
@@ -89,10 +87,6 @@ const getPhoneNumberData = (
   ]
 }
 
-const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
-  return _.map(itemTexts, 'text').join(' ')
-}
-
 const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
   const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold' }]
 
@@ -114,15 +108,16 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const { profile, loading, needsDataLoad } = useAppSelector((state) => state.personalInformation)
 
   const { contentMarginTop, contentMarginBottom, gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const navigateTo = useRouteNavigation()
 
   useFocusEffect(
     React.useCallback(() => {
-      if (needsDataLoad) {
+      if (needsDataLoad && profileNotInDowntime) {
         dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
-    }, [dispatch, needsDataLoad]),
+    }, [dispatch, needsDataLoad, profileNotInDowntime]),
   )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
@@ -204,11 +199,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
       <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.buttonTitle')} />
 
-      <Pressable
-        onPress={navigateTo('HowDoIUpdate')}
-        {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}
-        accessibilityRole="link"
-        accessible={true}>
+      <Pressable onPress={navigateTo('HowDoIUpdate')} {...testIdProps(t('personalInformation.howDoIUpdatePersonalInfo'))} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
       </Pressable>
 

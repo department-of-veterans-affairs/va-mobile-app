@@ -26,8 +26,9 @@ platform :android do
   desc "Deploy a QA new version to the Google Play"
   lane :qa do |options|
     update_version_and_build(options[:version ])
-    bundle
+    bundle("Release")
     upload("Development Team")
+    bundle("Debug")
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
     distribute_to_firebase(notes, "qa")
     tag_build
@@ -40,10 +41,10 @@ platform :android do
   lane :review do |options|
     puts 'Run the review lane'
     update_version_and_build(options[:version ])
-    bundle
+    bundle("Release")
     upload("Pre-Prod Stash")
     tag_build
-    message = "New Production build successfully uploaded to Beta Track on Google Play"
+    message = "New Production build successfully uploaded to Pre=Prod Stash Track on Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
 
@@ -56,9 +57,10 @@ platform :android do
   lane :on_demand do |options|
     puts "on demand run"
     update_version_and_build(options[:version ])
-    bundle
+    bundle("Release")
     puts options[:psTrack]
     upload(options[:psTrack])
+    bundle("Debug")
     notes = "New On Demand version for " + Time.new.strftime("%m.%d.%Y")
     distribute_to_firebase(notes, "qa")
     tag_build
@@ -153,9 +155,9 @@ platform :android do
     end
   end
 
-  def bundle
+  def bundle(type)
     gradle(task: "clean")
-    gradle(task: "bundle", build_type: "Release")
+    gradle(task: "bundle", build_type: type)
   end
 
   def upload(track)
@@ -163,23 +165,32 @@ platform :android do
   end
 
   def promote_pre_prod
-    prod = google_play_track_version_codes(track:"production")
-    stash =  google_play_track_version_codes(track:"Pre-Prod Stash")
-    # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
-    if stash.max > prod.max
-      supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
+    begin
+      prod = google_play_track_version_codes(track:"production")
+      stash =  google_play_track_version_codes(track:"Pre-Prod Stash")
+      # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
+      if stash.max > prod.max
+        supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
+        version = google_play_track_release_names(track:"production")
+        slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
+      end
+    rescue => e
       version = google_play_track_release_names(track:"production")
-      slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
+      slack_release_error(version.max_by{ |s| Gem::Version.new(s) }, "Android", e)
     end
   end
 
   def distribute_to_firebase(notes, groups)
-    firebase_app_distribution(
-        app: ENV["FIREBASE_ANDROID_APP_ID"],
-        service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
-        release_notes: notes,
-        groups: groups,
-        android_artifact_type: "AAB"
-    )
+    begin
+      firebase_app_distribution(
+          app: ENV["FIREBASE_ANDROID_APP_ID"],
+          service_credentials_file: ENV["FIREBASE_DIST_KEY_FILEPATH"],
+          release_notes: notes,
+          groups: groups,
+          android_artifact_type: "AAB"
+      )
+    rescue => e
+      slack_firebase_dist_error("Android", e)
+    end
   end
 end

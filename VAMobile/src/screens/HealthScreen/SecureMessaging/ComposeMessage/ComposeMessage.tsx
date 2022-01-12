@@ -318,10 +318,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           sendMessageFailed={sendMessageFailed}
         />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <CollapsibleView
-            text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
-            showInTextArea={false}
-            a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
+          <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
               <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
             </Box>
