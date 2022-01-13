@@ -83,6 +83,7 @@ export type VAIconColors = {
   chevronListItem: string
   webviewReload: string
   backButton: string
+  unreadMessage: string
 }
 
 export type VATypographyThemeVariants = {
