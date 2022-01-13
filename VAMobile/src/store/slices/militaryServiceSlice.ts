@@ -25,6 +25,9 @@ export const initialMilitaryServiceState: MilitaryServiceState = {
   preloadComplete: false,
 }
 
+/**
+ * Redux action to get service history for user
+ */
 export const getServiceHistory =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -44,6 +47,9 @@ export const getServiceHistory =
     }
   }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const militaryServiceSlice = createSlice({
   name: 'militaryService',
   initialState: initialMilitaryServiceState,

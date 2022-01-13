@@ -13,6 +13,9 @@ export const initialPatientState: PatientState = {
   cernerFacilities: [],
 }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const patientSlice = createSlice({
   name: 'patient',
   initialState: initialPatientState,

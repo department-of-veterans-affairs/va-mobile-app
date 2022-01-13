@@ -45,6 +45,9 @@ export const initialLettersState: LettersState = {
   downloading: false,
 }
 
+/**
+ * Redux action to get the list of letters for the user
+ */
 export const getLetters =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -64,6 +67,9 @@ export const getLetters =
     }
   }
 
+/**
+ * Redux action to get the letter beneficiary data
+ */
 export const getLetterBeneficiaryData =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -82,6 +88,9 @@ export const getLetterBeneficiaryData =
     }
   }
 
+/**
+ * Redux action to download a letter
+ */
 export const downloadLetter =
   (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions): AppThunk =>
   async (dispatch, getState) => {

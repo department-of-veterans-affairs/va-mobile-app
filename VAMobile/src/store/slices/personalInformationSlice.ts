@@ -83,6 +83,9 @@ const AddressPouToProfileAddressFieldType: {
   CORRESPONDENCE: 'mailingAddress',
 }
 
+/**
+ * Redux action to get user profile
+ */
 export const getProfileInfo =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -117,6 +120,15 @@ export const getProfileInfo =
     }
   }
 
+/**
+ * Redux action to update the users phone number
+ *
+ * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE, or FAX)
+ * @param phoneNumber - string of numbers signifying area code and phone number
+ * @param extension - string of numbers signifying extension number
+ * @param numberId - number indicating the id of the phone number
+ * @param screenID - ID used to compare within the component to see if an error component needs to be rendered
+ */
 export const editUsersNumber =
   (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -171,6 +183,9 @@ export const editUsersNumber =
     }
   }
 
+/**
+ * Redux action for deleting number
+ */
 export const deleteUsersNumber =
   (phoneType: PhoneType, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -225,10 +240,16 @@ export const deleteUsersNumber =
     }
   }
 
+/**
+ * Redux action for leaving the phone number edit mode
+ */
 export const finishEditPhoneNumber = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishEditPhoneNumber())
 }
 
+/**
+ * Redux action to make the API call to update a users email
+ */
 export const updateEmail =
   (email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -265,6 +286,9 @@ export const updateEmail =
     }
   }
 
+/**
+ * Redux action to make the API call to delete a users email
+ */
 export const deleteEmail =
   (email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -292,10 +316,16 @@ export const deleteEmail =
     }
   }
 
+/**
+ * Redux action for exiting the email edit mode
+ */
 export const finishEditEmail = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishEditEmail())
 }
 
+/**
+ * Redux action to make the API call to update a users address
+ */
 export const updateAddress =
   (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -334,6 +364,9 @@ export const updateAddress =
     }
   }
 
+/**
+ * Remove a users address
+ */
 export const deleteAddress =
   (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -357,6 +390,9 @@ export const deleteAddress =
     }
   }
 
+/**
+ * Redux action to make the API call to validate a users address
+ */
 export const validateAddress =
   (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -390,14 +426,23 @@ export const validateAddress =
     }
   }
 
+/**
+ * Redux action for finishing validating address
+ */
 export const finishValidateAddress = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishValidateAddress(undefined))
 }
 
+/**
+ * Redux action for exiting the address edit mode
+ */
 export const finishEditAddress = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishEditAddress())
 }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const peronalInformationSlice = createSlice({
   name: 'personalInformation',
   initialState: initialPersonalInformationState,

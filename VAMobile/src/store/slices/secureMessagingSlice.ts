@@ -133,6 +133,9 @@ export const initialSecureMessagingState: SecureMessagingState = {
   deletingDraft: false,
 }
 
+/**
+ * Redux action to fetch inbox messages
+ */
 export const fetchInboxMessages =
   (page: number, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -169,6 +172,9 @@ export const fetchInboxMessages =
     }
   }
 
+/**
+ * Redux action to get inbox data
+ */
 export const getInbox =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -190,6 +196,9 @@ export const getInbox =
     }
   }
 
+/**
+ * Redux action to fetch the folders
+ */
 export const listFolders =
   (screenID?: ScreenIDTypes, forceRefresh = false): AppThunk =>
   async (dispatch, getState) => {
@@ -215,6 +224,9 @@ export const listFolders =
     }
   }
 
+/**
+ * Redux action to fetch folder's messages
+ */
 export const listFolderMessages =
   (folderID: number, page: number, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -235,6 +247,9 @@ export const listFolderMessages =
     }
   }
 
+/**
+ * Redux action to fetch the messages thread
+ */
 export const getThread =
   (messageID: number, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -254,6 +269,9 @@ export const getThread =
     }
   }
 
+/**
+ * Redux action to fetch single message
+ */
 export const getMessage =
   (
     /** ID of the message we want to fetch */
@@ -302,6 +320,9 @@ export const getMessage =
     }
   }
 
+/**
+ * Redux action to update the messaging tab
+ */
 export const updateSecureMessagingTab =
   (secureMessagingTab: SecureMessagingTabTypes): AppThunk =>
   async (dispatch) => {
@@ -334,6 +355,9 @@ export const downloadFileAttachment =
     }
   }
 
+/**
+ * Redux action to fetch recipients
+ */
 export const getMessageRecipients =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -353,6 +377,9 @@ export const getMessageRecipients =
     }
   }
 
+/**
+ * Redux action to fetch user signature
+ */
 export const getMessageSignature =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -372,6 +399,9 @@ export const getMessageSignature =
     }
   }
 
+/**
+ * Redux action to save draft
+ */
 export const saveDraft =
   (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AppThunk =>
   async (dispatch, getState) => {
@@ -405,6 +435,9 @@ export const saveDraft =
     }
   }
 
+/**
+ * Redux action to send message
+ */
 export const sendMessage =
   (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AppThunk =>
   async (dispatch, getState) => {
@@ -526,6 +559,9 @@ const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList
   return `${messageString} to ${folderString}`
 }
 
+/**
+ * Redux action to move message to another folder
+ */
 export const moveMessage =
   (
     messageID: number,
@@ -554,6 +590,9 @@ export const moveMessage =
     }
   }
 
+/**
+ * Redux action to move message to trash
+ */
 export const moveMessageToTrash =
   (
     messageID: number,
@@ -592,6 +631,9 @@ export const moveMessageToTrash =
     }
   }
 
+/**
+ * Redux action to delete a saved draft
+ */
 export const deleteDraft =
   (messageID: number): AppThunk =>
   async (dispatch) => {
@@ -621,6 +663,9 @@ export const deleteMessage = async (messageID: number): Promise<void> => {
   await api.del(`/v0/messaging/health/messages/${messageID}`)
 }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const secureMessagingSlice = createSlice({
   name: 'secureMessaging',
   initialState: initialSecureMessagingState,
@@ -763,23 +808,16 @@ const secureMessagingSlice = createSlice({
 
     dispatchFinishListFolders: (state, action: PayloadAction<{ folderData?: SecureMessagingFoldersGetData; error?: api.APIError }>) => {
       const { folderData, error } = action.payload
-      return {
-        ...state,
-        folders: folderData?.data || state.folders,
-        // TODO map to foldersbyId
-        loadingFolders: false,
-        error,
-      }
+      state.folders = folderData?.data || state.folders
+      state.loadingFolders = false
+      state.error = error
     },
 
     dispatchFinishGetInbox: (state, action: PayloadAction<{ inboxData?: SecureMessagingFolderGetData; error?: api.APIError }>) => {
       const { inboxData, error } = action.payload
-      return {
-        ...state,
-        inbox: inboxData ? inboxData.data : ({} as SecureMessagingFolderData),
-        hasLoadedInbox: true,
-        error,
-      }
+      state.inbox = inboxData ? inboxData.data : ({} as SecureMessagingFolderData)
+      state.hasLoadedInbox = true
+      state.error = error
     },
 
     dispatchFinishGetThread: (state, action: PayloadAction<{ threadData?: SecureMessagingThreadGetData; messageID?: number; error?: api.APIError }>) => {
@@ -886,7 +924,6 @@ const secureMessagingSlice = createSlice({
 
       state.messageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
       error && messageId && state.messageIDsOfError.push(messageId)
-
       state.loading = false
       state.loadingAttachments = false
       state.error = error
