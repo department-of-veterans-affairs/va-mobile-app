@@ -80,7 +80,7 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressSaved, loading, showValidation } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressSaved, savingAddress, showValidation } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -248,7 +248,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
   }
 
-  if (loading || addressSaved) {
+  if (savingAddress || addressSaved) {
     const loadingText = deleting ? t('personalInformation.delete.address') : t('personalInformation.savingAddress')
 
     return <LoadingComponent text={loadingText} />
