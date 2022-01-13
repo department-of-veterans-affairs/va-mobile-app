@@ -32,7 +32,9 @@
     "env:test": "./env/env.sh -e staging -d true -t true",
     "env:uat": "./env/env.sh -d true -t false",
     "env:production": "./env/env.sh -e production -d false -t false",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "docs": "yarn && cd documentation && yarn && yarn start"
+
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.12.0",
