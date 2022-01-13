@@ -146,7 +146,7 @@ export const logCOVIDClickAnalytics =
   }
 
 const vaccineSlice = createSlice({
-  name: 'disabilityRating',
+  name: 'vaccines',
   initialState: initialVaccineState,
   reducers: {
     dispatchStartGetVaccines: (state) => {
