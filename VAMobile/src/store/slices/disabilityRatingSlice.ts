@@ -21,6 +21,9 @@ export const initialDisabilityRatingState: DisabilityRatingState = {
   preloadComplete: false,
 }
 
+/**
+ * Redux action to get the users disability ratings
+ */
 export const getDisabilityRating =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -40,6 +43,9 @@ export const getDisabilityRating =
     }
   }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const disabilitRatingSlice = createSlice({
   name: 'disabilityRating',
   initialState: initialDisabilityRatingState,

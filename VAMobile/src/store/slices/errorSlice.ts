@@ -83,6 +83,9 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   dispatch(dispatchSetDowntime(downtimeWindows))
 }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const errorSlice = createSlice({
   name: 'error',
   initialState: initialErrorsState,
@@ -107,10 +110,8 @@ const errorSlice = createSlice({
             ...state.errorsByScreenID,
             [screenID as ScreenIDTypes]: undefined,
           }
-      return {
-        ...state,
-        errorsByScreenID,
-      }
+
+      state.errorsByScreenID = errorsByScreenID
     },
 
     dispatchSetTryAgainFunction: (state, action: PayloadAction<() => Promise<void>>) => {

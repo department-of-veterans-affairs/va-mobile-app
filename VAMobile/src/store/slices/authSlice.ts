@@ -83,26 +83,41 @@ export const initialAuthState: AuthState = {
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
 }
 
+/**
+ * Sets the flag used to determine if the biometrics preference screen should be displayed
+ */
 export const setDisplayBiometricsPreferenceScreen =
   (value: boolean): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchSetDisplayBiometricsPreferenceScreen(value))
   }
 
+/**
+ * Signal the sync process is completed
+ */
 export const completeSync = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishSync())
 }
 
+/**
+ * Sets the flag used to determine if this is the first time a user has logged into the app
+ */
 export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
   await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
   dispatch(dispatchSetFirstLogin(false))
 }
 
+/**
+ * Clears auth credentials
+ */
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
   inMemoryRefreshToken = undefined
 }
 
+/**
+ * Action to check if this is the first time a user has logged in
+ */
 export const checkFirstTimeLogin = async (dispatch: AppDispatch): Promise<void> => {
   if (IS_TEST) {
     // In integration tests this will change the behavior and make it inconsistent across runs
@@ -123,12 +138,18 @@ export const checkFirstTimeLogin = async (dispatch: AppDispatch): Promise<void> 
   dispatch(dispatchSetFirstLogin(isFirstLogin))
 }
 
+/**
+ * Gets the device supported biometrics
+ */
 const deviceSupportedBiometrics = async (): Promise<string> => {
   const supportedBiometric = await Keychain.getSupportedBiometryType()
   console.debug(`deviceSupportedBiometrics:${supportedBiometric}`)
   return supportedBiometric || ''
 }
 
+/**
+ * Checks if biometric is preferred
+ */
 const isBiometricsPreferred = async (): Promise<boolean> => {
   try {
     const value = await AsyncStorage.getItem(BIOMETRICS_STORE_PREF_KEY)
@@ -531,7 +552,7 @@ export const handleTokenCallbackUrl =
       })
       const authCredentials = await processAuthResponse(response)
       await logAnalyticsEvent(Events.vama_login_success())
-      // await dispatch(dispatchSetAnalyticsLogin())
+      await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -579,6 +600,9 @@ export const logInDemoMode = (): AppThunk => async (dispatch) => {
   dispatch(dispatchDemoLogin())
 }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const authSlice = createSlice({
   name: 'auth',
   initialState: initialAuthState,

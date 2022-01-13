@@ -23,9 +23,10 @@ export type VaccineState = {
   detailsLoading: boolean
   vaccinePagination: VaccinePaginationMeta
   loadedVaccines: VaccineListType
+  error?: api.APIError
 }
 
-export const initialVaccineState = {
+export const initialVaccineState: VaccineState = {
   loading: false,
   detailsLoading: false,
   vaccines: [] as VaccineList,
@@ -164,33 +165,22 @@ const vaccineSlice = createSlice({
       const curLoadedVaccines = state.loadedVaccines[page.toString()]
       const vaccineList = vaccines || []
 
-      return {
-        ...state,
-        loading: false,
-        vaccines: vaccineList,
-        vaccinesById,
-        vaccinePagination: { ...meta?.pagination },
-        error,
-        loadedVaccines: {
-          ...state.loadedVaccines,
-          [page]: meta?.dataFromStore ? curLoadedVaccines : vaccinesData,
-        },
-      }
+      state.error = error
+      state.loading = false
+      state.vaccines = vaccineList
+      state.vaccinesById = vaccinesById
+      state.vaccinePagination = { ...meta?.pagination }
+      state.loadedVaccines[page] = meta?.dataFromStore ? curLoadedVaccines : vaccinesData ? vaccinesData : ({} as VaccineListData)
     },
 
     dispatchFinishGetLocation: (state, action: PayloadAction<{ vaccineId?: string; location?: VaccineLocation; error?: APIError }>) => {
       const { vaccineId, location, error } = action.payload
-      const locationMap = state.vaccineLocationsById
 
       if (!error && vaccineId && location) {
-        locationMap[vaccineId] = location
+        state.vaccineLocationsById[vaccineId] = location
       }
 
-      return {
-        ...state,
-        detailsLoading: false,
-        vaccineLocationsById: locationMap,
-      }
+      state.detailsLoading = false
     },
   },
 })

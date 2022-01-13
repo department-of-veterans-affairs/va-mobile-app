@@ -1,10 +1,9 @@
 import { NativeModules, PixelRatio } from 'react-native'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { UserAnalytics } from 'constants/analytics'
 
 import { AppThunk } from 'store'
+import { UserAnalytics } from 'constants/analytics'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-
 const { RNCheckVoiceOver } = NativeModules
 
 export type AccessibilityState = {
@@ -13,7 +12,7 @@ export type AccessibilityState = {
   isFocus: boolean
 }
 
-export const initialAccessibilityState = {
+export const initialAccessibilityState: AccessibilityState = {
   fontScale: PixelRatio.getFontScale(),
   isVoiceOverTalkBackRunning: false,
   isFocus: true,
@@ -70,24 +69,21 @@ const accessibilitySlice = createSlice({
   name: 'accessibility',
   initialState: initialAccessibilityState,
   reducers: {
-    // The disptach font scale reducer
     dispatchUpdateFontScale: (state, action: PayloadAction<number>) => {
       state.fontScale = action.payload
     },
 
-    // The disptach update is voice over reducer
     dispatchUpdateIsVoiceOverTalkBackRunning: (state, action: PayloadAction<boolean>) => {
       state.isVoiceOverTalkBackRunning = action.payload
     },
 
-    // The disptach update is focus reducer
     dispatchUpdateAccessibilityFocus: (state, action: PayloadAction<boolean>) => {
       state.isFocus = action.payload
     },
   },
 })
 
-// Actions method created by the slice
+// Actions creators created by the slice
 export const { dispatchUpdateFontScale, dispatchUpdateIsVoiceOverTalkBackRunning, dispatchUpdateAccessibilityFocus } = accessibilitySlice.actions
 
 export default accessibilitySlice.reducer

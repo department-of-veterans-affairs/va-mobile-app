@@ -31,18 +31,18 @@ import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 import _ from 'underscore'
 
-// const emptyAppointmentsInDateRange: AppointmentsGetData = {
-//   data: [],
-//   meta: {
-//     dataFromStore: false,
-//     errors: [],
-//     pagination: {
-//       totalEntries: 0,
-//       currentPage: 1,
-//       perPage: DEFAULT_PAGE_SIZE,
-//     },
-//   },
-// }
+const emptyAppointmentsInDateRange: AppointmentsGetData = {
+  data: [],
+  meta: {
+    dataFromStore: false,
+    errors: [],
+    pagination: {
+      totalEntries: 0,
+      currentPage: 1,
+      perPage: DEFAULT_PAGE_SIZE,
+    },
+  },
+}
 
 export type AppointmentsDateRange = {
   startDate: string
@@ -208,6 +208,9 @@ const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationD
   return null
 }
 
+/**
+ * Redux action to prefetch appointments for upcoming and past the given their date ranges
+ */
 export const prefetchAppointments =
   (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -466,6 +469,9 @@ export const prefetchAppointments =
     }
   }
 
+/**
+ * Redux action to get all appointments in the given date range
+ */
 export const getAppointmentsInDateRange =
   (startDate: string, endDate: string, timeFrame: TimeFrameType, page: number, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -502,6 +508,9 @@ export const getAppointmentsInDateRange =
     }
   }
 
+/**
+ * Redux action to cancel appointment associated with the given cancelID
+ */
 export const cancelAppointment =
   (cancelID?: string, appointmentID?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -521,6 +530,9 @@ export const cancelAppointment =
     }
   }
 
+/**
+ * Redux action to get a single appointment
+ */
 export const getAppointment =
   (appointmentID: string): AppThunk =>
   async (dispatch, getState) => {
@@ -533,46 +545,46 @@ export const getAppointment =
     dispatch(dispatchGetAppointment(appointmentID))
   }
 
+/**
+ * Redux action to reset appointment cancellation state
+ */
 export const clearAppointmentCancellation = (): AppThunk => async (dispatch) => {
   dispatch(dispatchClearAppointmentCancellation())
 }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const appointmentsSlice = createSlice({
   name: 'appointments',
   initialState: initialAppointmentsState,
   reducers: {
     dispatchFinishGetAppointmentsInDateRange: (state, action: PayloadAction<{ timeFrame: TimeFrameType; appointments?: AppointmentsGetData; error?: Error }>) => {
       const { appointments, timeFrame, error } = action.payload
-      const appointmentData = appointments?.data || []
-      const appointmentsMetaErrors = appointments?.meta?.errors
+      const appointmentInfo = appointments || emptyAppointmentsInDateRange
+      const appointmentData = appointmentInfo?.data || []
+      const appointmentsMetaErrors = appointmentInfo?.meta?.errors
       const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointmentData)
       const appointmentsMap: AppointmentsMap = mapAppointmentsById(appointmentData)
       const { vaServiceError, ccServiceError } = findAppointmentErrors(appointmentsMetaErrors)
-
-      const timeFrameString = timeFrame === TimeFrameTypeConstants.UPCOMING ? 'upcoming' : 'past'
       const currAppointmentList = state.loadedAppointmentsByTimeFrame[timeFrame]
 
-      return {
-        ...state,
-        [`${timeFrameString}AppointmentsById`]: appointmentsMap,
-        [`${timeFrameString}VaServiceError`]: vaServiceError,
-        [`${timeFrameString}CcServiceError`]: ccServiceError,
-        error,
-        loading: false,
-        currentPageAppointmentsByYear: {
-          ...state.currentPageAppointmentsByYear,
-          [timeFrame]: appointmentsByYear,
-        },
-        loadedAppointmentsByTimeFrame: {
-          ...state.loadedAppointmentsByTimeFrame,
-          // only added appointments if the api was called
-          [timeFrame]: appointments?.meta?.dataFromStore ? currAppointmentList : currAppointmentList?.concat(appointmentData),
-        },
-        paginationByTimeFrame: {
-          ...state.paginationByTimeFrame,
-          [timeFrame]: appointments?.meta?.pagination,
-        },
+      if (timeFrame === TimeFrameTypeConstants.UPCOMING) {
+        state.upcomingAppointmentsById = appointmentsMap
+        state.upcomingCcServiceError = ccServiceError
+        state.upcomingVaServiceError = vaServiceError
+      } else {
+        state.pastAppointmentsById = appointmentsMap
+        state.pastCcServiceError = ccServiceError
+        state.pastVaServiceError = vaServiceError
       }
+
+      state.error = error
+      state.loading = false
+      state.currentPageAppointmentsByYear[timeFrame] = appointmentsByYear
+      // only added appointments if the api was called
+      state.loadedAppointmentsByTimeFrame[timeFrame] = appointmentInfo?.meta?.dataFromStore ? currAppointmentList : currAppointmentList?.concat(appointmentData)
+      state.paginationByTimeFrame[timeFrame] = appointmentInfo?.meta?.pagination || initialPaginationState
     },
 
     dispatchStartGetAppointmentsInDateRange: (state) => {
@@ -593,32 +605,28 @@ const appointmentsSlice = createSlice({
       const upcomingAppointmentsPagination = upcoming?.meta?.pagination || state.paginationByTimeFrame.upcoming
       const pastAppointmentsPagination = past?.meta?.pagination || state.paginationByTimeFrame.pastThreeMonths
 
-      return {
-        ...state,
-        upcomingAppointmentsById: mapAppointmentsById(upcomingAppointments),
-        pastAppointmentsById: mapAppointmentsById(pastAppointments),
-        upcomingVaServiceError,
-        upcomingCcServiceError,
-        pastVaServiceError,
-        pastCcServiceError,
-        error,
-        loading: false,
-        currentPageAppointmentsByYear: {
-          ...state.currentPageAppointmentsByYear,
-          upcoming: groupAppointmentsByYear(upcomingAppointments),
-          pastThreeMonths: groupAppointmentsByYear(pastAppointments),
-        },
-        loadedAppointmentsByTimeFrame: {
-          ...state.loadedAppointmentsByTimeFrame,
-          upcoming: upcoming?.meta?.dataFromStore ? loadedAppointmentsByTimeFrame.upcoming : loadedAppointmentsByTimeFrame.upcoming.concat(upcomingAppointments),
-          pastThreeMonths: past?.meta?.dataFromStore ? loadedAppointmentsByTimeFrame.pastThreeMonths : loadedAppointmentsByTimeFrame.pastThreeMonths.concat(pastAppointments),
-        },
-        paginationByTimeFrame: {
-          ...state.paginationByTimeFrame,
-          upcoming: upcomingAppointmentsPagination,
-          pastThreeMonths: pastAppointmentsPagination,
-        },
-      }
+      state.upcomingAppointmentsById = mapAppointmentsById(upcomingAppointments)
+      state.pastAppointmentsById = mapAppointmentsById(pastAppointments)
+      state.upcomingCcServiceError = upcomingCcServiceError
+      state.upcomingVaServiceError = upcomingVaServiceError
+      state.pastCcServiceError = pastCcServiceError
+      state.pastVaServiceError = pastVaServiceError
+      state.error = error
+      state.loading = false
+
+      state.currentPageAppointmentsByYear.upcoming = groupAppointmentsByYear(upcomingAppointments)
+      state.currentPageAppointmentsByYear.pastThreeMonths = groupAppointmentsByYear(pastAppointments)
+
+      state.loadedAppointmentsByTimeFrame.upcoming = upcoming?.meta?.dataFromStore
+        ? loadedAppointmentsByTimeFrame.upcoming
+        : loadedAppointmentsByTimeFrame.upcoming.concat(upcomingAppointments)
+
+      state.loadedAppointmentsByTimeFrame.pastThreeMonths = past?.meta?.dataFromStore
+        ? loadedAppointmentsByTimeFrame.pastThreeMonths
+        : loadedAppointmentsByTimeFrame.pastThreeMonths.concat(pastAppointments)
+
+      state.paginationByTimeFrame.upcoming = upcomingAppointmentsPagination
+      state.paginationByTimeFrame.pastThreeMonths = pastAppointmentsPagination
     },
 
     dispatchGetAppointment: (state, action: PayloadAction<string>) => {
@@ -626,10 +634,7 @@ const appointmentsSlice = createSlice({
       const { upcomingAppointmentsById = {}, pastAppointmentsById = {} } = state
       const appointment: AppointmentData = upcomingAppointmentsById[appointmentID] || pastAppointmentsById[appointmentID]
 
-      return {
-        ...state,
-        appointment,
-      }
+      state.appointment = appointment
     },
 
     dispatchStartCancelAppointment: (state) => {
@@ -682,16 +687,8 @@ const appointmentsSlice = createSlice({
 
       state.error = error
       state.upcomingAppointmentsById = updatedUpcomingAppointmentsById || state.upcomingAppointmentsById
-
-      state.currentPageAppointmentsByYear = {
-        ...state.currentPageAppointmentsByYear,
-        upcoming: updatedCurrentPageUpcomingAppointmentsByYear || state.currentPageAppointmentsByYear.upcoming,
-      }
-      state.loadedAppointmentsByTimeFrame = {
-        ...state.loadedAppointmentsByTimeFrame,
-        upcoming: updatedUpcomingAppointmentsList || state.loadedAppointmentsByTimeFrame.upcoming,
-      }
-
+      state.currentPageAppointmentsByYear.upcoming = updatedCurrentPageUpcomingAppointmentsByYear || state.currentPageAppointmentsByYear.upcoming
+      state.loadedAppointmentsByTimeFrame.upcoming = updatedUpcomingAppointmentsList || state.loadedAppointmentsByTimeFrame.upcoming
       state.loadingAppointmentCancellation = false
       state.appointmentCancellationStatus = error ? AppointmentCancellationStatusConstants.FAIL : AppointmentCancellationStatusConstants.SUCCESS
     },
@@ -717,4 +714,5 @@ export const {
   dispatchClearLoadedAppointments,
   dispatchFinishCancelAppointment,
 } = appointmentsSlice.actions
+
 export default appointmentsSlice.reducer

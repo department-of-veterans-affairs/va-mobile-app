@@ -29,6 +29,9 @@ export const initialDirectDepositState: DirectDepositState = {
   bankInfoUpdated: false,
 }
 
+/**
+ * Redux action for getting direct deposit information
+ */
 export const getBankData =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -47,6 +50,14 @@ export const getBankData =
     }
   }
 
+/**
+ * Redux action for updating direct deposit information
+ *
+ * @param accountNumber - string specifying the new account number to use
+ * @param routingNumber - string specifying the new routing number to use
+ * @param accountType - string specifying the new accountType to use (can be Checking or Savings)
+ * @param screenID - string specifying the screen that a common error would display on
+ */
 export const updateBankInfo =
   (accountNumber: string, routingNumber: string, accountType: AccountTypes, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -83,6 +94,9 @@ export const updateBankInfo =
     }
   }
 
+/**
+ * Redux action for exiting the direct deposit edit mode
+ */
 export const finishEditBankInfo =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -99,6 +113,9 @@ const checkIfRoutingNumberIsInvalid = (error: APIError): boolean => {
   return includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER) || includes(error?.text, DirectDepositErrors.INVALID_ROUTING_NUMBER_TEXT)
 }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const directDepositSlice = createSlice({
   name: 'directDeposit',
   initialState: initialDirectDepositState,

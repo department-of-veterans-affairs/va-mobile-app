@@ -11,6 +11,11 @@ export const initialDemoState: DemoState = {
   demoMode: false,
 }
 
+/**
+ * sets the demo mode on or off
+ * @param demoMode- boolean to set as state.demo.demoMode
+ * @param loginOut- boolean to set if user is login out
+ */
 export const updateDemoMode =
   (demoMode: boolean, loginOut = false): AppThunk =>
   async (dispatch) => {
@@ -21,6 +26,9 @@ export const updateDemoMode =
     }
   }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const demoSlice = createSlice({
   name: 'demo',
   initialState: initialDemoState,

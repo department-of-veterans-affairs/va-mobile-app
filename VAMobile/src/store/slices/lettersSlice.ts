@@ -137,16 +137,14 @@ const lettersSlice = createSlice({
     dispatchFinishGetLetters: (state, action: PayloadAction<{ letters?: LettersList; error?: Error }>) => {
       const { letters, error } = action.payload
       const newLetters = letters || []
+      state.letters = _.sortBy(newLetters, (letter) => {
+        return letter.name
+      })
 
-      return {
-        ...state,
-        letters: _.sortBy(newLetters, (letter) => {
-          return letter.name
-        }),
-        error,
-        loading: false,
-      }
+      state.error = error
+      state.loading = false
     },
+
     dispatchStartGetLetterBeneficiaryData: (state) => {
       state.loading = true
     },
@@ -167,13 +165,10 @@ const lettersSlice = createSlice({
         })
       }
 
-      return {
-        ...state,
-        letterBeneficiaryData,
-        mostRecentServices,
-        error,
-        loading: false,
-      }
+      state.letterBeneficiaryData = letterBeneficiaryData
+      state.mostRecentServices = mostRecentServices
+      state.error = error
+      state.loading = false
     },
 
     dispatchStartDownloadLetter: (state) => {

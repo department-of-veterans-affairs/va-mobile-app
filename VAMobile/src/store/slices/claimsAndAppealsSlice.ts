@@ -135,6 +135,9 @@ const getLoadedClaimsAndAppeals = (
   return null
 }
 
+/**
+ * Redux action to prefetch claims and appeals
+ */
 export const prefetchClaimsAndAppeals =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -305,6 +308,9 @@ export const prefetchClaimsAndAppeals =
     }
   }
 
+/**
+ * Redux action to get all claims and appeals
+ */
 export const getClaimsAndAppeals =
   (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AppThunk =>
   async (dispatch, getState) => {
@@ -336,6 +342,9 @@ export const getClaimsAndAppeals =
     }
   }
 
+/**
+ * Redux action to get single claim
+ */
 export const getClaim =
   (id: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -371,6 +380,9 @@ export const getClaim =
     }
   }
 
+/**
+ * Redux action to get single appeal
+ */
 export const getAppeal =
   (id: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
@@ -403,6 +415,9 @@ export const getAppeal =
     }
   }
 
+/**
+ * Redux action to notify VA to make a claim decision
+ */
 export const submitClaimDecision =
   (claimID: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -422,6 +437,9 @@ export const submitClaimDecision =
     }
   }
 
+/**
+ * Redux action to upload a file to a claim
+ */
 export const uploadFileToClaim =
   (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AppThunk =>
   async (dispatch) => {
@@ -493,6 +511,9 @@ export const uploadFileToClaim =
     }
   }
 
+/**
+ * Redux action to signify the upload a file request was successful
+ */
 export const fileUploadSuccess = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFileUploadSuccess())
 }
@@ -511,6 +532,9 @@ export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {
   await logAnalyticsEvent(Events.vama_claim_file_request())
 }
 
+/**
+ * Redux slice that will create the actions and reducers
+ */
 const claimsAndAppealsSlice = createSlice({
   name: 'claimsAndAppeals',
   initialState: initialClaimsAndAppealsState,
@@ -533,28 +557,16 @@ const claimsAndAppealsSlice = createSlice({
       const activeList = activeData?.data || []
       const closedList = closedData?.data || []
 
-      return {
-        ...state,
-        claimsServiceError,
-        appealsServiceError,
-        error,
-        loadingClaimsAndAppeals: false,
-        claimsAndAppealsByClaimType: {
-          ...state.claimsAndAppealsByClaimType,
-          ACTIVE: activeList,
-          CLOSED: closedList,
-        },
-        claimsAndAppealsMetaPagination: {
-          ...state.claimsAndAppealsMetaPagination,
-          ACTIVE: activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE,
-          CLOSED: closedData?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED,
-        },
-        loadedClaimsAndAppeals: {
-          ...state.loadedClaimsAndAppeals,
-          ACTIVE: activeData?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList),
-          CLOSED: closedData?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList),
-        },
-      }
+      state.claimsServiceError = claimsServiceError
+      state.appealsServiceError = appealsServiceError
+      state.error = error
+      state.loadingClaimsAndAppeals = false
+      state.claimsAndAppealsByClaimType.ACTIVE = activeList
+      state.claimsAndAppealsByClaimType.CLOSED = closedList
+      state.claimsAndAppealsMetaPagination.ACTIVE = activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE
+      state.claimsAndAppealsMetaPagination.CLOSED = closedData?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED
+      state.loadedClaimsAndAppeals.ACTIVE = activeData?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList)
+      state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList)
     },
 
     dispatchStartGetAllClaimsAndAppeals: (state) => {
@@ -570,25 +582,13 @@ const claimsAndAppealsSlice = createSlice({
       const curLoadedClaimsAndAppeals = state.loadedClaimsAndAppeals[claimType]
       const claimsAndAppealsList = claimsAndAppeals?.data || []
 
-      return {
-        ...state,
-        claimsServiceError,
-        appealsServiceError,
-        error,
-        loadingClaimsAndAppeals: false,
-        claimsAndAppealsByClaimType: {
-          ...state.claimsAndAppealsByClaimType,
-          [claimType]: claimsAndAppealsList,
-        },
-        claimsAndAppealsMetaPagination: {
-          ...state.claimsAndAppealsMetaPagination,
-          [claimType]: claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType],
-        },
-        loadedClaimsAndAppeals: {
-          ...state.loadedClaimsAndAppeals,
-          [claimType]: claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList),
-        },
-      }
+      state.claimsServiceError = claimsServiceError
+      state.appealsServiceError = appealsServiceError
+      state.error = error
+      state.loadingClaimsAndAppeals = false
+      state.claimsAndAppealsByClaimType[claimType] = claimsAndAppealsList
+      state.claimsAndAppealsMetaPagination[claimType] = claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType]
+      state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
     },
 
     dispatchStartGetClaim: (state) => {
@@ -626,13 +626,10 @@ const claimsAndAppealsSlice = createSlice({
         claim.attributes.waiverSubmitted = true
       }
 
-      return {
-        ...state,
-        error: action.payload,
-        claim,
-        loadingSubmitClaimDecision: false,
-        submittedDecision: true,
-      }
+      state.error = action.payload
+      state.claim = claim
+      state.loadingSubmitClaimDecision = false
+      state.submittedDecision = true
     },
 
     dispatchStartFileUpload: (state) => {
@@ -641,22 +638,17 @@ const claimsAndAppealsSlice = createSlice({
 
     dispatchFinishFileUpload: (state, action: PayloadAction<{ error?: Error; eventDescription?: string }>) => {
       const { error, eventDescription } = action.payload
-      const claim = state.claim
 
-      if (claim && !error) {
-        const indexOfRequest = claim.attributes.eventsTimeline.findIndex((el) => el.description === eventDescription)
-        claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
-        claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
+      if (state.claim && !error) {
+        const indexOfRequest = state.claim.attributes.eventsTimeline.findIndex((el) => el.description === eventDescription)
+        state.claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
+        state.claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
       }
 
-      return {
-        ...state,
-        error,
-        claim,
-        loadingFileUpload: false,
-        fileUploadedFailure: !!error,
-        filesUploadedSuccess: !error,
-      }
+      state.loadingFileUpload = false
+      state.error = error
+      state.fileUploadedFailure = !!error
+      state.filesUploadedSuccess = !error
     },
 
     dispatchFileUploadSuccess: (state) => {
