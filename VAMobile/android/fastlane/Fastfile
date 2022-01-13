@@ -136,7 +136,7 @@ platform :android do
       allLanes.each do |track|
         versions = google_play_track_release_names(track:track.to_s)
         max = versions.max_by{ |s| Gem::Version.new(s) }
-        if  max > highest
+        if Gem::Version.new(max) > Gem::Version.new(highest)
           highest = max
         end
       end
