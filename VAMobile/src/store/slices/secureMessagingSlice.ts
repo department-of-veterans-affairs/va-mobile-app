@@ -866,9 +866,7 @@ const secureMessagingSlice = createSlice({
           message.attachments = attachments
         }
 
-        if (state.messagesById && state.messagesById[messageID]) {
-          state.messagesById[messageID] = message
-        }
+        state.messagesById[messageID] = message
 
         // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
         const inboxMessage = state.inboxMessages.find((m) => {
