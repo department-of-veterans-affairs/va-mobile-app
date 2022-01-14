@@ -223,7 +223,7 @@ export const darkTheme = {
     webviewReload: colors.darkmodeLightBlue,
     backButton: colors.darkmodeLightBlue,
     overflowMenuDefault: colors.grayLightest,
-    unreadMessage: colors.primary,
+    unreadMessage: colors.darkmodeLightBlue,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,
