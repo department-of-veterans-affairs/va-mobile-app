@@ -61,6 +61,9 @@ export type SecureMessagingState = {
   movingMessage: boolean
   isUndo?: boolean
   moveMessageFailed: boolean
+  deleteDraftComplete: boolean
+  deleteDraftFailed: boolean
+  deletingDraft: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -99,6 +102,9 @@ export const initialSecureMessagingState: SecureMessagingState = {
   movingMessage: false,
   isUndo: false,
   moveMessageFailed: false,
+  deleteDraftComplete: false,
+  deleteDraftFailed: false,
+  deletingDraft: false,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -453,6 +459,33 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       isUndo: isUndo,
       error,
       moveMessageFailed: !!error,
+    }
+  },
+  SECURE_MESSAGING_START_DELETE_DRAFT: (state) => {
+    return {
+      ...state,
+      deletingDraft: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_DELETE_DRAFT: (state, { error }) => {
+    return {
+      ...state,
+      deletingDraft: false,
+      deleteDraftComplete: !error,
+      deleteDraftFailed: !!error,
+    }
+  },
+  SECURE_MESSAGING_RESET_DELETE_DRAFT_COMPLETE: (state) => {
+    return {
+      ...state,
+      deleteDraftComplete: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_DELETE_DRAFT_FAILED: (state) => {
+    return {
+      ...state,
+      deleteDraftComplete: false,
+      deleteDraftFailed: false,
     }
   },
 })

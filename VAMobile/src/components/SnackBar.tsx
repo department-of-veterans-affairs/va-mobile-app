@@ -16,7 +16,7 @@ import colors from '../styles/themes/VAColors'
  */
 const SnackBar: FC<ToastProps> = (toast) => {
   const { message, data } = toast
-  const { onConfirmAction, isError, actionBtnText, isUndo } = data || {}
+  const { onActionPressed, isError, actionBtnText, isUndo } = data || {}
   const { dimensions } = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
@@ -75,8 +75,8 @@ const SnackBar: FC<ToastProps> = (toast) => {
   }
 
   const onActionPress = () => {
-    if (onConfirmAction && typeof onConfirmAction === 'function') {
-      onConfirmAction()
+    if (onActionPressed && typeof onActionPressed === 'function') {
+      onActionPressed()
     }
     toast.onHide()
   }

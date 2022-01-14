@@ -102,16 +102,22 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       const { iconName, actionText, accessibilityLabel, iconColor, textColor } = item
       const onPressMenu = () => {
         hideMenu()
-        if (item.onPress) {
-          item.onPress()
-        }
+
+        //Timeout needs to be added so that the actionsheet does not close when the popup menu does.
+        const timeoutInMS = isIOS() ? 350 : 0
+        setTimeout(() => {
+          if (item.onPress) {
+            item.onPress()
+          }
+        }, timeoutInMS)
       }
+
       return (
         <View key={index}>
           <View accessibilityLabel={accessibilityLabel ? accessibilityLabel : actionText} accessibilityRole={'button'}>
             <MenuItem onPress={onPressMenu} viewStyle={menuStyle}>
               {iconName && <VAIcon name={iconName} fill={iconColor ? iconColor : 'dark'} height={24} width={24} />}
-              <TextView ml={10} color={textColor ? textColor : undefined}>
+              <TextView ml={10} color={textColor ? textColor : undefined} accessible={false}>
                 {actionText}
               </TextView>
             </MenuItem>

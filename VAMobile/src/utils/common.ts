@@ -236,7 +236,7 @@ export const isErrorObject = (error: any): error is ErrorObject => {
  * Function to show snackbar
  * @param message - snackbar message
  * @param dispatch - dispatch function to change the bottom offset
- * @param confirmAction - action to perform on undo
+ * @param actionPressed - action to perform on undo
  * @param isUndo - if user pressed undo it will not show undo again
  * @param isError - if it is an error will show the error icon
  * @param withNav - offset snackbar to be over the bottom nav
@@ -245,7 +245,7 @@ export const isErrorObject = (error: any): error is ErrorObject => {
 export function showSnackBar(
   message: string,
   dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
-  confirmAction?: () => void,
+  actionPressed?: () => void,
   isUndo?: boolean,
   isError?: boolean,
   withNavBar = false,
@@ -254,9 +254,9 @@ export function showSnackBar(
   snackBar.show(message, {
     type: 'custom_snackbar',
     data: {
-      onConfirmAction: () => {
-        if (confirmAction) {
-          confirmAction()
+      onActionPressed: () => {
+        if (actionPressed) {
+          actionPressed()
         }
       },
       isUndo,

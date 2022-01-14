@@ -18,6 +18,12 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
+    title: 'VA: Health and Benefits App',
+    image: '/img/va-logo.png',
+    useMobileImageCss: true,
+    description: <>The mobile app allows Veterans to more easily complete key transactions across VA health and benefits services.</>,
+  },
+  {
     title: 'React Native',
     image: '/img/react-native-logo.png',
     description: (
@@ -29,12 +35,6 @@ const FeatureList: FeatureItem[] = [
         .
       </>
     ),
-  },
-  {
-    title: 'VA: Health and Benefits App',
-    image: '/img/mobile-app.png',
-    useMobileImageCss: true,
-    description: <>The mobile app allows Veterans to more easily complete key transactions across VA Health and Benefits services..</>,
   },
   {
     title: 'Ruby on Rails',

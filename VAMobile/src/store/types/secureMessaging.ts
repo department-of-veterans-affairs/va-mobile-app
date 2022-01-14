@@ -202,6 +202,25 @@ export type SecureMessagingFinishMoveMessage = {
   error?: api.APIError
 }
 
+export type SecureMessagingStartDeleteDraft = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_FINISH_MOVE_MESSAGE action
+ */
+export type SecureMessagingFinishDeleteDraft = {
+  error?: api.APIError
+}
+
+/**
+ * Redux payload for the SECURE_MESSAGING_RESET_DELETE_DRAFT_COMPLETE action
+ */
+export type SecureMessagingResetDeleteDraftComplete = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_RESET_DELETE_DRAFT_FAILED action
+ */
+export type SecureMessagingResetDeleteDraftFailed = Record<string, unknown>
+
 /**
  *  All secure messaging actions
  */
@@ -266,4 +285,8 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_GET_SIGNATURE: ActionDef<'SECURE_MESSAGING_START_GET_SIGNATURE', SecureMessagingStartGetSignature>
   SECURE_MESSAGING_START_MOVE_MESSAGE: ActionDef<'SECURE_MESSAGING_START_MOVE_MESSAGE', SecureMessagingStartMoveMessage>
   SECURE_MESSAGING_FINISH_MOVE_MESSAGE: ActionDef<'SECURE_MESSAGING_FINISH_MOVE_MESSAGE', SecureMessagingFinishMoveMessage>
+  SECURE_MESSAGING_START_DELETE_DRAFT: ActionDef<'SECURE_MESSAGING_START_DELETE_DRAFT', SecureMessagingStartDeleteDraft>
+  SECURE_MESSAGING_FINISH_DELETE_DRAFT: ActionDef<'SECURE_MESSAGING_FINISH_DELETE_DRAFT', SecureMessagingFinishDeleteDraft>
+  SECURE_MESSAGING_RESET_DELETE_DRAFT_COMPLETE: ActionDef<'SECURE_MESSAGING_RESET_DELETE_DRAFT_COMPLETE', SecureMessagingResetDeleteDraftComplete>
+  SECURE_MESSAGING_RESET_DELETE_DRAFT_FAILED: ActionDef<'SECURE_MESSAGING_RESET_DELETE_DRAFT_FAILED', SecureMessagingResetDeleteDraftFailed>
 }

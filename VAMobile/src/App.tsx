@@ -113,7 +113,6 @@ const MainApp: FC = () => {
         screen_class: currentRouteName,
       })
     }
-    snackBar.hideAll()
 
     // Save the current route name for later comparison
     routeNameRef.current = currentRouteName || ''

@@ -14,6 +14,7 @@ import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'stor
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { listFolderMessages } from 'store/actions'
 import { findByTypeWithText, findByTypeWithSubstring, findByTypeWithName } from '../../../../testUtils'
+import { StackNavigationOptions } from '@react-navigation/stack'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
@@ -48,13 +49,25 @@ context('FolderMessages', () => {
   let testInstance: ReactTestInstance
   let props: any
   let store: any
+  let navHeaderSpy: any
 
   const initializeTestInstance = (loading = false, noMessages = false, folderID = SecureMessagingSystemFolderIdConstants.SENT, draftSaved = false) => {
     let folderName
     if (folderID > 0) folderName = 'Custom'
     else if (folderID === -1) folderName = FolderNameTypeConstants.sent
     else if (folderID === -2) folderName = FolderNameTypeConstants.drafts
-    props = mockNavProps(undefined, { navigate: mockNavigationSpy }, { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved } })
+    props = mockNavProps(
+      undefined,
+      {
+        navigate: mockNavigationSpy,
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+          }
+        },
+      },
+      { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved } },
+    )
 
     const messages = {
       [folderID]: {

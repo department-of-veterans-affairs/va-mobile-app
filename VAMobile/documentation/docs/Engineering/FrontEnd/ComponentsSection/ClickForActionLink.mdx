@@ -1,0 +1,17 @@
+import CodeBlock from '@theme/CodeBlock'
+import ClickForActionLinkString from '!!raw-loader!@componentsDocs/ClickForActionLink'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<ClickForActionLink 
+displayedText={'text displayed'} 
+numberOrUrlLink={'https://www.google.com'} 
+linkType={LinkTypeOptionsConstants.url} />\n
+<ClickForActionLink 
+displayedText={'text displayed'} 
+numberOrUrlLink={'https://www.google.com'} 
+linkType={LinkTypeOptionsConstants.url} 
+linkUrlIconType={LinkUrlIconType.Arrow} />`
+
+
+<ComponentTopInfo componentName="ClickForActionLink" example={exampleString} codeString={ClickForActionLinkString} />

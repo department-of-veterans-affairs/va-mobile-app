@@ -722,7 +722,7 @@ export const moveMessage = (
 /**
  * Redux action that moves a message to the delete folder
  */
-export const deleteMessage = (
+export const moveMessageToTrash = (
   messageID: number,
   currentFolderID: number,
   folderToRefresh: number,
@@ -733,12 +733,12 @@ export const deleteMessage = (
   withNavBar: boolean,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    const retryFunction = () => dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    const retryFunction = () => dispatch(moveMessageToTrash(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
 
     try {
-      await api.del(`/v0/messaging/health/messages/${messageID}`)
+      await deleteMessage(messageID)
       refreshFoldersAfterMove(
         dispatch,
         messageID,
@@ -795,7 +795,7 @@ const refreshFoldersAfterMove = (
       if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
         dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
       } else {
-        dispatch(deleteMessage(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
+        dispatch(moveMessageToTrash(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
       }
     },
     isUndo,
@@ -813,4 +813,75 @@ const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList
   const messageString = !isUndo ? `${isError ? 'Failed to move message' : 'Message moved'}` : `${isError ? 'Failed to move message back' : 'Message moved back'}`
 
   return `${messageString} to ${folderString}`
+}
+
+/**
+ * Redux action to start to delete draft
+ */
+const dispatchStartDeleteDraft = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_DELETE_DRAFT',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to finish the delete draft
+ */
+const dispatchFinishDeleteDraft = (error?: api.APIError): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_DELETE_DRAFT',
+    payload: {
+      error,
+    },
+  }
+}
+
+export const deleteDraft = (messageID: number): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    const retryFunction = () => dispatch(deleteDraft(messageID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchStartDeleteDraft())
+
+    try {
+      await deleteMessage(messageID)
+
+      dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
+
+      dispatch(dispatchFinishDeleteDraft())
+    } catch (error) {
+      if (isErrorObject(error)) {
+        dispatch(dispatchFinishDeleteDraft(error))
+        showSnackBar('Error deleting draft', dispatch, retryFunction, false, true)
+      }
+    }
+  }
+}
+
+/**
+ * Delete a message
+ */
+export const deleteMessage = async (messageID: number): Promise<void> => {
+  await api.del(`/v0/messaging/health/messages/${messageID}`)
+}
+
+/**
+ * Redux action to reset deleteDraftCompleted attribute to false
+ */
+export const resetDeleteDraftComplete = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_DELETE_DRAFT_COMPLETE',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to reset deleteDraftFailed attribute to false
+ */
+export const resetDeleteDraftFailed = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_DELETE_DRAFT_FAILED',
+    payload: {},
+  }
 }

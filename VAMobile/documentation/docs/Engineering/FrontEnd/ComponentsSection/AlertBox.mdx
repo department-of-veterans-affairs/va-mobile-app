@@ -1,0 +1,18 @@
+import CodeBlock from '@theme/CodeBlock'
+import AlertBoxString from '!!raw-loader!@componentsDocs/AlertBox'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+import Screenshot from '@site/static/img/components/AlertBox.png'
+
+
+export const exampleString = `<AlertBox 
+  title="Alert header text here" 
+  text="Alert body text here"
+  textA11yLabel="Alert text a11y label here"
+  border="warning"
+  background="noCardBackground"
+/>`
+
+![Docusaurus](/img/components/AlertBox.png)
+
+<ComponentTopInfo componentName="AlertBox" example={exampleString} codeString={AlertBoxString} />
