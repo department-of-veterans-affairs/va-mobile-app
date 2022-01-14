@@ -14,12 +14,12 @@ import {
   AppointmentsMap,
   AppointmentsMetaError,
   AppointmentsMetaPagination,
-  Params,
   ScreenIDTypes,
-} from 'store/api'
+} from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { Params } from 'store/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'

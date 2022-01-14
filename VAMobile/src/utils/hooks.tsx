@@ -52,7 +52,7 @@ export const useDowntime = (feature: DowntimeFeatureType): boolean => {
  * @returns a function to calculate 'value' based on fontScale
  */
 export const useFontScale = (): ((val: number) => number) => {
-  const { fontScale } = useAppSelector((state) => state.accessability)
+  const { fontScale } = useAppSelector((state) => state.accessibility)
 
   return (value: number): number => {
     const pixelRatio = PixelRatio.getFontScale()

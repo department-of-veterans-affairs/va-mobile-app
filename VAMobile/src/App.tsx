@@ -136,7 +136,7 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useAppSelector((state) => state.auth)
-  const { fontScale, isVoiceOverTalkBackRunning } = useAppSelector((state) => state.accessability)
+  const { fontScale, isVoiceOverTalkBackRunning } = useAppSelector((state) => state.accessibility)
   const { bottomOffset } = useAppSelector((state) => state.snackBar)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()

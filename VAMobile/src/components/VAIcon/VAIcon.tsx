@@ -167,7 +167,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   let domProps = Object.create(props)
   const fs: (val: number) => number = useFontScale()
   const dispatch = useDispatch()
-  const { fontScale } = useAppSelector((state) => state.accessability)
+  const { fontScale } = useAppSelector((state) => state.accessibility)
   const { name, width, height, fill, stroke, preventScaling } = props
 
   useEffect(() => {

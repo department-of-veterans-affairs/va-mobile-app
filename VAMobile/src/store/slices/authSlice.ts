@@ -118,7 +118,8 @@ const clearStoredAuthCreds = async (): Promise<void> => {
 /**
  * Action to check if this is the first time a user has logged in
  */
-export const checkFirstTimeLogin = async (dispatch: AppDispatch): Promise<void> => {
+
+export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
   if (IS_TEST) {
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetFirstLogin(false))
@@ -134,7 +135,7 @@ export const checkFirstTimeLogin = async (dispatch: AppDispatch): Promise<void> 
   if (isFirstLogin) {
     await clearStoredAuthCreds()
   }
-
+  console.debug('Rafael')
   dispatch(dispatchSetFirstLogin(isFirstLogin))
 }
 
@@ -494,7 +495,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
 
 export const initializeAuth = (): AppThunk => async (dispatch) => {
   let refreshToken: string | undefined
-  await checkFirstTimeLogin(dispatch)
+  await dispatch(checkFirstTimeLogin())
   const pType = await getAuthLoginPromptType()
 
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
@@ -690,7 +691,7 @@ const authSlice = createSlice({
   },
 })
 
-const {
+export const {
   dispatchInitializeAction,
   dispatchSetDisplayBiometricsPreferenceScreen,
   dispatchSetFirstLogin,

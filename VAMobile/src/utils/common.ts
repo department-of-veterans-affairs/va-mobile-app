@@ -236,7 +236,7 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
     return JSON.parse(JSON.stringify(item))
   }
 
-  return item
+  return item as T
 }
 
 /**

@@ -1,121 +1,59 @@
-import React, { ElementType, FC, ReactElement } from 'react'
-
-import { Store } from 'redux'
 import { I18nextProvider } from 'react-i18next'
-import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
-import { ReactTestInstance } from 'react-test-renderer'
-import { SuiteFunction } from 'mocha'
+import { RenderAPI, RenderOptions, render } from '@testing-library/react-native'
 import { ThemeProvider } from 'styled-components'
-import configureMockStore from 'redux-mock-store'
+import React, { FC, ReactElement } from 'react'
+import i18n from 'utils/i18n'
+import store, { RootState } from 'store'
+import { SuiteFunction } from 'mocha'
 import path from 'path'
-import renderer from 'react-test-renderer'
-import thunk from 'redux-thunk'
-
-import configureStore, { ReduxAction, InitialState, StoreState } from './store'
-import i18nReal from 'utils/i18n'
-import theme from 'styles/themes/standardTheme'
+import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
 export * from 'jest-when'
-const createMockStore = configureMockStore([thunk])
+import { allReducers, InitialState } from 'store/slices'
 
-export const renderWithProviders = (element: ReactElement, store?: any) => {
-  return renderer.create(<TestProviders store={store}>{element}</TestProviders>)
-}
-
-export const TestProviders: FC<{ store?: any; i18n?: any; navContainerProvided?: boolean }> = ({
-  store = mockStore(),
-  i18n = i18nReal,
-  children,
-  navContainerProvided,
-}) => {
-  if (navContainerProvided) {
-    return (
-      <Provider store={store}>
-        <I18nextProvider i18n={i18n}>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </I18nextProvider>
-      </Provider>
-    )
-  }
+const AllTheProviders: FC = ({ children }) => {
   return (
-    <Provider store={store}>
-      <I18nextProvider i18n={i18n}>
-        <NavigationContainer>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </NavigationContainer>
-      </I18nextProvider>
-    </Provider>
+    <ThemeProvider theme="light">
+      <Provider store={store}>
+        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+      </Provider>
+    </ThemeProvider>
   )
 }
 
-export const findByTestID = (testInstance: ReactTestInstance, testID: string): ReactTestInstance => {
-  return testInstance.findByProps({ testID })
-}
-
-export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.name === name || el.props.label === name || el.props.children === name)
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByTypeWithSubstring = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.title?.includes(text) || el.props.children?.includes(text))
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByTypeWithText = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.title === text || el.props.children === text)
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByOnPressFunction = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && el.props.onPress.name === text
-    })
-  } catch {
-    return null
-  }
-}
+const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>): RenderAPI => render(ui, { wrapper: AllTheProviders, ...options })
+export * from '@testing-library/react-native'
+export { customRender as render }
 
 type fn = () => any
-
-type ActionState = ReduxAction & {
-  state: StoreState
+type ActionState = AnyAction & {
+  state: RootState
   payload: any
 }
 
 export class TrackedStore {
-  constructor(state?: StoreState) {
+  constructor(state?: RootState) {
     this.actions = []
-    this.realStore = configureStore(state)
+    this.realStore = configureStore({
+      reducer: {
+        ...allReducers,
+      },
+      middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
+      preloadedState: { ...state },
+    })
     this.subscribe = this.realStore.subscribe
   }
 
   subscribe: (listener: any) => void
   actions: Array<ActionState>
-  realStore: Store<StoreState, ReduxAction>
+  realStore: Store<RootState, AnyAction>
 
   //&ts-ignore
-  dispatch(action: ReduxAction | fn | any): Promise<ReduxAction> | ReduxAction {
-    if ((action as ReduxAction).type) {
-      const result = this.realStore.dispatch(action as ReduxAction)
+  dispatch(action: AnyAction | fn | any): Promise<AnyAction> | AnyAction {
+    if ((action as AnyAction).type) {
+      const result = this.realStore.dispatch(action as AnyAction)
       //@ts-ignore
-      this.actions.push({ ...(action as ReduxAction), state: this.realStore.getState() })
+      this.actions.push({ ...(action as AnyAction), state: this.realStore.getState() })
       return result
     } else {
       //@ts-ignore
@@ -133,7 +71,38 @@ export class TrackedStore {
   getActions() {
     return this.actions
   }
+
+  getStateField = <T extends keyof RootState, P extends keyof RootState[T]>(stateType: T, field: P) => {
+    let state = this.realStore.getState()[stateType]
+    return state[field]
+  }
 }
+
+export const realStore = (state?: Partial<RootState>) => {
+  return new TrackedStore({ ...InitialState, ...state })
+}
+
+//@ts-ignore
+const realFetch = global.fetch
+
+export const fetch: jest.Mock = realFetch as jest.Mock
+
+export const generateRandomString = (): string => {
+  // generate a random number between 0 and 1
+  // convert to base 36 (a-z,0-9)
+  // drop the leading "0."
+  // these are generally 11 chars long
+  const gen = (): string => {
+    return Math.random().toString(36).substring(2)
+  }
+  return gen() + gen()
+}
+
+export const mockNavProps = (props?: any, navigationMock?: any, routeMock?: any) => ({
+  navigation: navigationMock || { navigate: jest.fn() },
+  route: routeMock || {},
+  ...props,
+})
 
 const { describe: origDescribe } = global
 
@@ -176,44 +145,3 @@ ctxFn.skip = (name: string, fn: () => void) => {
 }
 
 export const context: SuiteFunction = ctxFn
-
-export const mockStore = (state?: Partial<StoreState>) => {
-  return createMockStore({
-    ...InitialState,
-    ...state,
-  })
-}
-
-export const realStore = (state?: Partial<StoreState>): TrackedStore => {
-  //	const store = configureStore(state)
-  return new TrackedStore({
-    ...InitialState,
-    ...state,
-  })
-}
-
-//@ts-ignore
-const realFetch = global.fetch
-
-export const fetch: jest.Mock = realFetch as jest.Mock
-/*	Promise.reject({
-		status: 999,
-		text: () => Promise.resolve("NOT MOCKED"),
-		json: () => Promise.resolve({ error: "NOT MOCKED" }),
-	})
-)*/
-
-export const generateRandomString = (): string => {
-  // generate a random number between 0 and 1
-  // convert to base 36 (a-z,0-9)
-  // drop the leading "0."
-  // these are generally 11 chars long
-  const gen = (): string => {
-    return Math.random().toString(36).substring(2)
-  }
-  return gen() + gen()
-}
-
-export const mockNavProps = (props?: any, navigationMock?: any, routeMock?: any) => ({
-  navigation: navigationMock || { navigate: jest.fn() },
-  route: routeMock || {}, ...props })

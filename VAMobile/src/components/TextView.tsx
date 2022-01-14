@@ -71,7 +71,7 @@ const StyledText = styled(Text)`
  * @returns TextView component
  */
 const TextView: FC<TextViewProps> = ({ selectable = false, ...props }) => {
-  const { isVoiceOverTalkBackRunning } = useAppSelector((state) => state.accessability)
+  const { isVoiceOverTalkBackRunning } = useAppSelector((state) => state.accessibility)
   const theme = useTheme()
   const wrapperProps = { ...props }
 

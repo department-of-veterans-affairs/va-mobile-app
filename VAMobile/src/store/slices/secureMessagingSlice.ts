@@ -647,7 +647,7 @@ export const deleteDraft =
       dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
 
-      dispatch(dispatchFinishDeleteDraft())
+      dispatch(dispatchFinishDeleteDraft(undefined))
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishDeleteDraft(error))

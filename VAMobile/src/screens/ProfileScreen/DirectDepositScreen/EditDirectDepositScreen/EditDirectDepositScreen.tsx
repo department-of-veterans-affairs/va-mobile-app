@@ -43,7 +43,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useAppSelector((state) => state.directDeposit)
-  const { isFocus: isAccessibilityFocused } = useAppSelector((state) => state.accessability)
+  const { isFocus: isAccessibilityFocused } = useAppSelector((state) => state.accessibility)
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')
