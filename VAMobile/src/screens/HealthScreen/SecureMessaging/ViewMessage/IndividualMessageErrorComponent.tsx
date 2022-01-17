@@ -7,7 +7,7 @@ const IndividualMessageErrorComponent: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { tryAgain } = useAppSelector((state) => state.error)
+  const { tryAgain } = useAppSelector((state) => state.errors)
 
   const { standardMarginBetween } = theme.dimensions
 

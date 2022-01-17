@@ -21,6 +21,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { MockUsersEmail } from 'constants/common'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
+import { dispatchUpdateCerner } from './patientSlice'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
@@ -44,6 +45,7 @@ export type PersonalInformationState = {
   loading: boolean
   emailSaved: boolean
   phoneNumberSaved: boolean
+  savingAddress: boolean
   addressSaved: boolean
   profile?: UserDataProfile
   error?: Error
@@ -61,6 +63,7 @@ export const initialPersonalInformationState: PersonalInformationState = {
   loading: false,
   needsDataLoad: true,
   emailSaved: false,
+  savingAddress: false,
   addressSaved: false,
   showValidation: false,
   preloadComplete: false,
@@ -109,7 +112,7 @@ export const getProfileInfo =
       const authorizedServices = user?.data.attributes.authorizedServices
       dispatch(dispatchFinishGetProfileInfo({ profile }))
       dispatch(dispatchUpdateAuthorizedServices({ authorizedServices }))
-      // dispatch(dispatchUpdateCerner(user?.data.attributes.health))
+      dispatch(dispatchUpdateCerner({ cerner: user?.data.attributes.health }))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -497,7 +500,7 @@ const peronalInformationSlice = createSlice({
     },
     dispatchFinishSaveEmail: (state, action: PayloadAction<Error | undefined>) => {
       const emailSaved = !action.payload
-
+      state.error = action.payload
       state.loading = false
       state.needsDataLoad = emailSaved
       state.emailSaved = emailSaved
@@ -508,12 +511,12 @@ const peronalInformationSlice = createSlice({
     },
 
     dispatchStartSaveAddress: (state) => {
-      state.loading = true
+      state.savingAddress = true
     },
     dispatchFinishSaveAddress: (state, action: PayloadAction<Error | undefined>) => {
       const error = action.payload
       state.error = error
-      state.loading = false
+      state.savingAddress = false
       state.needsDataLoad = !error
       state.addressSaved = !error
       state.showValidation = false
@@ -522,7 +525,7 @@ const peronalInformationSlice = createSlice({
       state.addressSaved = false
     },
     dispatchStartValidateAddress: (state) => {
-      state.loading = true
+      state.savingAddress = true
     },
     dispatchFinishValidateAddress: (
       state,
@@ -538,7 +541,7 @@ const peronalInformationSlice = createSlice({
       >,
     ) => {
       const { addressData, suggestedAddresses, confirmedSuggestedAddresses, addressValidationScenario, validationKey } = action.payload || {}
-      state.loading = false
+      state.savingAddress = false
       state.addressData = addressData
       state.suggestedAddresses = suggestedAddresses
       state.confirmedSuggestedAddresses = confirmedSuggestedAddresses

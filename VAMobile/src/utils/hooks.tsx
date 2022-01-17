@@ -32,12 +32,12 @@ import HeaderTitle from 'components/HeaderTitle'
  * @returns boolean to show the error
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
-  const { errorsByScreenID } = useAppSelector((state) => state.error)
+  const { errorsByScreenID } = useAppSelector((state) => state.errors)
   return useDowntime(DowntimeScreenIDToFeature[currentScreenID]) || !!errorsByScreenID[currentScreenID]
 }
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
-  const { downtimeWindowsByFeature } = useAppSelector((state) => state.error)
+  const { downtimeWindowsByFeature } = useAppSelector((state) => state.errors)
   const mw = downtimeWindowsByFeature[feature]
   if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
     return true

@@ -153,10 +153,6 @@ const vaccineSlice = createSlice({
       state.loading = true
     },
 
-    dispatchStartGetLocation: (state) => {
-      state.detailsLoading = true
-    },
-
     dispatchFinishGetVaccines: (state, action: PayloadAction<{ page: number; vaccinesData?: VaccineListData; error?: APIError }>) => {
       const { page, vaccinesData, error } = action.payload
       const { data: vaccines, meta } = vaccinesData || ({} as VaccineListData)
@@ -171,6 +167,10 @@ const vaccineSlice = createSlice({
       state.vaccinesById = vaccinesById
       state.vaccinePagination = { ...meta?.pagination }
       state.loadedVaccines[page] = meta?.dataFromStore ? curLoadedVaccines : vaccinesData ? vaccinesData : ({} as VaccineListData)
+    },
+
+    dispatchStartGetLocation: (state) => {
+      state.detailsLoading = true
     },
 
     dispatchFinishGetLocation: (state, action: PayloadAction<{ vaccineId?: string; location?: VaccineLocation; error?: APIError }>) => {

@@ -4,8 +4,16 @@ import { reduce } from 'underscore'
 
 import { AppThunk } from 'store'
 import { CommonErrorTypes } from 'constants/errors'
-import { DowntimeFeatureNameConstants, DowntimeFeatureToScreenID, DowntimeFeatureType, DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, ScreenIDTypes, get } from '../api'
+import {
+  DowntimeFeatureNameConstants,
+  DowntimeFeatureToScreenID,
+  DowntimeFeatureType,
+  DowntimeFeatureTypeConstants,
+  MaintenanceWindowsGetData,
+  ScreenIDTypes,
+} from 'store/api/types'
 import { ScreenIDTypesConstants } from '../api/types/Screens'
+import { get } from 'store/api'
 
 export type ErrorsByScreenIDType = {
   [key in ScreenIDTypes]?: CommonErrorTypes

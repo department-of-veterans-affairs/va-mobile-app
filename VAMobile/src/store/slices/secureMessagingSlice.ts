@@ -35,7 +35,7 @@ import { AppDispatch, AppThunk } from 'store'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { Params, contentTypes } from '../api'
+import { Params, contentTypes } from 'store/api/api'
 import { READ, UNREAD } from 'constants/secureMessaging'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
@@ -674,20 +674,127 @@ const secureMessagingSlice = createSlice({
       state.loadingInbox = true
     },
 
+    dispatchFinishFetchInboxMessages: (state, action: PayloadAction<{ inboxMessages?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>) => {
+      const { inboxMessages, error } = action.payload
+      const messages = inboxMessages ? inboxMessages.data : []
+      const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
+      const messagesById = messages?.reduce(
+        (obj, m) => {
+          obj[m.attributes.messageId] = m.attributes
+          return obj
+        },
+        { ...state.messagesById },
+      )
+
+      return {
+        ...state,
+        inboxMessages: messages,
+        // TODO add to folderMessagesById(0)
+        // TODO inject folderId?
+        messagesById,
+        loadingInbox: false,
+        error,
+        paginationMetaByFolderId: {
+          ...state.paginationMetaByFolderId,
+          [SecureMessagingSystemFolderIdConstants.INBOX]: inboxMessages?.meta?.pagination,
+        },
+        termsAndConditionError,
+      }
+    },
+
     dispatchStartListFolders: (state) => {
       state.loadingFolders = true
+    },
+
+    dispatchFinishListFolders: (state, action: PayloadAction<{ folderData?: SecureMessagingFoldersGetData; error?: api.APIError }>) => {
+      const { folderData, error } = action.payload
+      state.folders = folderData?.data || state.folders
+      state.loadingFolders = false
+      state.error = error
     },
 
     dispatchStartGetInbox: (state) => {
       state.hasLoadedInbox = false
     },
 
+    dispatchFinishGetInbox: (state, action: PayloadAction<{ inboxData?: SecureMessagingFolderGetData; error?: api.APIError }>) => {
+      const { inboxData, error } = action.payload
+      state.inbox = inboxData ? inboxData.data : ({} as SecureMessagingFolderData)
+      state.hasLoadedInbox = true
+      state.error = error
+    },
+
     dispatchStartListFolderMessages: (state) => {
       state.loading = true
     },
 
+    dispatchFinishListFolderMessages: (state, action: PayloadAction<{ folderID: number; messageData?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>) => {
+      const { folderID, messageData, error } = action.payload
+      const messageMap = {
+        ...state.messagesByFolderId,
+        [folderID]: messageData,
+      }
+      let updatedPaginationMeta = {
+        ...state.paginationMetaByFolderId,
+      }
+
+      // only track sent and drafts messages for now
+      if (trackedPagination.includes(folderID)) {
+        updatedPaginationMeta = {
+          ...state.paginationMetaByFolderId,
+          [folderID]: messageData?.meta?.pagination,
+        }
+      }
+
+      const messagesById = messageData
+        ? messageData.data.reduce(
+            (obj, m) => {
+              obj[m.attributes.messageId] = m.attributes
+              return obj
+            },
+            { ...state.messagesById },
+          )
+        : ({} as SecureMessagingMessageMap)
+
+      state.messagesByFolderId = messageMap
+      state.messagesById = messagesById
+      state.loading = false
+      state.error = error
+      state.paginationMetaByFolderId = updatedPaginationMeta
+    },
+
     dispatchStartGetThread: (state) => {
       state.loading = true
+    },
+
+    dispatchFinishGetThread: (state, action: PayloadAction<{ threadData?: SecureMessagingThreadGetData; messageID?: number; error?: api.APIError }>) => {
+      const { threadData, messageID, error } = action.payload
+
+      let messagesById = state.messagesById
+      const threads = state.threads || []
+
+      if (!error && threadData?.data && messageID) {
+        const threadIDs = [messageID]
+        const threadMap = threadData.data.reduce((map: SecureMessagingMessageMap, message: SecureMessagingMessageData) => {
+          map[message.id] = message.attributes
+          threadIDs.push(message.attributes.messageId)
+          return map
+        }, {})
+
+        messagesById = { ...messagesById, ...threadMap }
+        const existingThreadIndex: number = threads.findIndex((t) => t.includes(messageID))
+        if (existingThreadIndex !== -1) {
+          threads[existingThreadIndex] = threadIDs
+        } else {
+          threads.push(threadIDs)
+        }
+      }
+
+      state.messagesById = messagesById
+      state.threads = threads
+      state.loading = false
+      state.loadingAttachments = false
+      state.error = error
     },
 
     dispatchStartGetMessage: (state, action: PayloadAction<Record<string, unknown> | undefined>) => {
@@ -695,20 +802,115 @@ const secureMessagingSlice = createSlice({
       state.loading = setLoading ? true : state.loading
     },
 
+    dispatchFinishGetMessage: (state, action: PayloadAction<{ messageData?: SecureMessagingMessageGetData; error?: api.APIError; messageId?: number; isDemoMode?: boolean }>) => {
+      const { messageId, messageData, error, isDemoMode } = action.payload
+
+      if (!error && messageData?.data) {
+        const messageID = messageData.data.id
+        const message: SecureMessagingMessageAttributes = messageData.data.attributes
+        const includedAttachments = messageData.included?.filter((included) => included.type === 'attachments')
+
+        if (includedAttachments?.length) {
+          const attachments: Array<SecureMessagingAttachment> = includedAttachments.map((attachment) => ({
+            id: attachment.id,
+            filename: attachment.attributes.name,
+            link: attachment.links.download,
+            size: attachment.attributes.attachmentSize,
+          }))
+
+          message.attachments = attachments
+        }
+
+        state.messagesById[messageID] = message
+
+        // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
+        const inboxMessage = state.inboxMessages.find((m) => {
+          // TODO: Figure out why the comparison fails without toString() even though they're both numbers
+          return m.attributes.messageId.toString() === messageID.toString()
+        })
+
+        // Change message's readReceipt to read
+        if (inboxMessage) {
+          if (isDemoMode && inboxMessage.attributes.readReceipt === UNREAD) {
+            state.inbox.attributes.unreadCount -= 1
+          }
+
+          inboxMessage.attributes.readReceipt = READ
+        }
+      }
+
+      state.messageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
+      error && messageId && state.messageIDsOfError.push(messageId)
+      state.loading = false
+      state.loadingAttachments = false
+      state.error = error
+    },
+
     dispatchStartGetAttachmentList: (state) => {
       state.loadingAttachments = true
+    },
+
+    dispatchStartDownloadFileAttachment: (state, action: PayloadAction<string>) => {
+      const fileKey = action.payload
+
+      state.fileDownloadError = undefined
+      state.loadingFile = true
+      state.loadingFileKey = fileKey //payload is the attachment list id of the file that is being downloaded
+    },
+
+    dispatchFinishDownloadFileAttachment: (state, action: PayloadAction<Error | undefined>) => {
+      const error = action.payload
+
+      return {
+        ...state,
+        fileDownloadError: error,
+        loadingFile: false,
+        loadingFileKey: undefined,
+      }
     },
 
     dispatchStartGetMessageRecipients: (state) => {
       state.hasLoadedRecipients = false
     },
 
+    dispatchFinishGetMessageRecipients: (state, action: PayloadAction<{ recipients?: SecureMessagingRecipientDataList; error?: api.APIError }>) => {
+      const { recipients, error } = action.payload
+      return {
+        ...state,
+        recipients: recipients || [],
+        error,
+        hasLoadedRecipients: true,
+      }
+    },
+
     dispatchStartGetMessageSignature: (state) => {
       state.loadingSignature = true
     },
 
+    dispatchFinishGetMessageSignature: (state, action: PayloadAction<{ signature?: SecureMessagingSignatureDataAttributes; error?: api.APIError }>) => {
+      const { signature, error } = action.payload
+      return {
+        ...state,
+        signature,
+        error,
+        loadingSignature: false,
+      }
+    },
+
     dispatchStartSaveDraft: (state) => {
       state.savingDraft = true
+    },
+
+    dispatchFinishSaveDraft: (state, action: PayloadAction<{ messageID?: number; error?: api.APIError }>) => {
+      const { messageID, error } = action.payload
+      return {
+        ...state,
+        savedDraftID: messageID,
+        error,
+        saveDraftFailed: !!error,
+        saveDraftComplete: !error,
+        savingDraft: false,
+      }
     },
 
     resetSaveDraftComplete: (state) => {
@@ -723,6 +925,19 @@ const secureMessagingSlice = createSlice({
 
     dispatchStartSendMessage: (state) => {
       state.sendingMessage = true
+    },
+
+    dispatchFinishSendMessage: (state, action: PayloadAction<api.APIError | undefined>) => {
+      const error = action?.payload
+      const replyTriageError = hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, error)
+      return {
+        ...state,
+        error,
+        sendMessageFailed: !!error,
+        sendMessageComplete: !error,
+        sendingMessage: false,
+        replyTriageError,
+      }
     },
 
     resetSendMessageComplete: (state) => {
@@ -778,223 +993,8 @@ const secureMessagingSlice = createSlice({
       state.deleteDraftFailed = false
     },
 
-    dispatchFinishFetchInboxMessages: (state, action: PayloadAction<{ inboxMessages?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>) => {
-      const { inboxMessages, error } = action.payload
-      const messages = inboxMessages ? inboxMessages.data : []
-      const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
-      const messagesById = messages?.reduce(
-        (obj, m) => {
-          obj[m.attributes.messageId] = m.attributes
-          return obj
-        },
-        { ...state.messagesById },
-      )
-
-      return {
-        ...state,
-        inboxMessages: messages,
-        // TODO add to folderMessagesById(0)
-        // TODO inject folderId?
-        messagesById,
-        loadingInbox: false,
-        error,
-        paginationMetaByFolderId: {
-          ...state.paginationMetaByFolderId,
-          [SecureMessagingSystemFolderIdConstants.INBOX]: inboxMessages?.meta?.pagination,
-        },
-        termsAndConditionError,
-      }
-    },
-
-    dispatchFinishListFolders: (state, action: PayloadAction<{ folderData?: SecureMessagingFoldersGetData; error?: api.APIError }>) => {
-      const { folderData, error } = action.payload
-      state.folders = folderData?.data || state.folders
-      state.loadingFolders = false
-      state.error = error
-    },
-
-    dispatchFinishGetInbox: (state, action: PayloadAction<{ inboxData?: SecureMessagingFolderGetData; error?: api.APIError }>) => {
-      const { inboxData, error } = action.payload
-      state.inbox = inboxData ? inboxData.data : ({} as SecureMessagingFolderData)
-      state.hasLoadedInbox = true
-      state.error = error
-    },
-
-    dispatchFinishGetThread: (state, action: PayloadAction<{ threadData?: SecureMessagingThreadGetData; messageID?: number; error?: api.APIError }>) => {
-      const { threadData, messageID, error } = action.payload
-
-      let messagesById = state.messagesById
-      const threads = state.threads || []
-
-      if (!error && threadData?.data && messageID) {
-        const threadIDs = [messageID]
-        const threadMap = threadData.data.reduce((map: SecureMessagingMessageMap, message: SecureMessagingMessageData) => {
-          map[message.id] = message.attributes
-          threadIDs.push(message.attributes.messageId)
-          return map
-        }, {})
-
-        messagesById = { ...messagesById, ...threadMap }
-        const existingThreadIndex: number = threads.findIndex((t) => t.includes(messageID))
-        if (existingThreadIndex !== -1) {
-          threads[existingThreadIndex] = threadIDs
-        } else {
-          threads.push(threadIDs)
-        }
-      }
-
-      state.messagesById = messagesById
-      state.threads = threads
-      state.loading = false
-      state.loadingAttachments = false
-      state.error = error
-    },
-
-    dispatchFinishListFolderMessages: (state, action: PayloadAction<{ folderID: number; messageData?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>) => {
-      const { folderID, messageData, error } = action.payload
-      const messageMap = {
-        ...state.messagesByFolderId,
-        [folderID]: messageData,
-      }
-      let updatedPaginationMeta = {
-        ...state.paginationMetaByFolderId,
-      }
-
-      // only track sent and drafts messages for now
-      if (trackedPagination.includes(folderID)) {
-        updatedPaginationMeta = {
-          ...state.paginationMetaByFolderId,
-          [folderID]: messageData?.meta?.pagination,
-        }
-      }
-
-      const messagesById = messageData
-        ? messageData.data.reduce(
-            (obj, m) => {
-              obj[m.attributes.messageId] = m.attributes
-              return obj
-            },
-            { ...state.messagesById },
-          )
-        : ({} as SecureMessagingMessageMap)
-
-      state.messagesByFolderId = messageMap
-      state.messagesById = messagesById
-      state.loading = false
-      state.error = error
-      state.paginationMetaByFolderId = updatedPaginationMeta
-    },
-
-    dispatchFinishGetMessage: (state, action: PayloadAction<{ messageData?: SecureMessagingMessageGetData; error?: api.APIError; messageId?: number; isDemoMode?: boolean }>) => {
-      const { messageId, messageData, error, isDemoMode } = action.payload
-
-      if (!error && messageData?.data) {
-        const messageID = messageData.data.id
-        const message: SecureMessagingMessageAttributes = messageData.data.attributes
-        const includedAttachments = messageData.included?.filter((included) => included.type === 'attachments')
-
-        if (includedAttachments?.length) {
-          const attachments: Array<SecureMessagingAttachment> = includedAttachments.map((attachment) => ({
-            id: attachment.id,
-            filename: attachment.attributes.name,
-            link: attachment.links.download,
-            size: attachment.attributes.attachmentSize,
-          }))
-
-          message.attachments = attachments
-        }
-
-        state.messagesById[messageID] = message
-
-        // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
-        const inboxMessage = state.inboxMessages.find((m) => {
-          // TODO: Figure out why the comparison fails without toString() even though they're both numbers
-          return m.attributes.messageId.toString() === messageID.toString()
-        })
-
-        // Change message's readReceipt to read
-        if (inboxMessage) {
-          if (isDemoMode && inboxMessage.attributes.readReceipt === UNREAD) {
-            state.inbox.attributes.unreadCount -= 1
-          }
-
-          inboxMessage.attributes.readReceipt = READ
-        }
-      }
-
-      state.messageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
-      error && messageId && state.messageIDsOfError.push(messageId)
-      state.loading = false
-      state.loadingAttachments = false
-      state.error = error
-    },
-
     dispatchUpdateSecureMessagingTab: (state, action: PayloadAction<SecureMessagingTabTypes>) => {
       state.secureMessagingTab = action.payload
-    },
-
-    dispatchStartDownloadFileAttachment: (state, action: PayloadAction<string>) => {
-      const fileKey = action.payload
-
-      state.fileDownloadError = undefined
-      state.loadingFile = true
-      state.loadingFileKey = fileKey //payload is the attachment list id of the file that is being downloaded
-    },
-
-    dispatchFinishDownloadFileAttachment: (state, action: PayloadAction<Error | undefined>) => {
-      const error = action.payload
-
-      return {
-        ...state,
-        fileDownloadError: error,
-        loadingFile: false,
-        loadingFileKey: undefined,
-      }
-    },
-
-    dispatchFinishGetMessageRecipients: (state, action: PayloadAction<{ recipients?: SecureMessagingRecipientDataList; error?: api.APIError }>) => {
-      const { recipients, error } = action.payload
-      return {
-        ...state,
-        recipients: recipients || [],
-        error,
-        hasLoadedRecipients: true,
-      }
-    },
-
-    dispatchFinishGetMessageSignature: (state, action: PayloadAction<{ signature?: SecureMessagingSignatureDataAttributes; error?: api.APIError }>) => {
-      const { signature, error } = action.payload
-      return {
-        ...state,
-        signature,
-        error,
-        loadingSignature: false,
-      }
-    },
-
-    dispatchFinishSaveDraft: (state, action: PayloadAction<{ messageID?: number; error?: api.APIError }>) => {
-      const { messageID, error } = action.payload
-      return {
-        ...state,
-        savedDraftID: messageID,
-        error,
-        saveDraftFailed: !!error,
-        saveDraftComplete: !error,
-        savingDraft: false,
-      }
-    },
-
-    dispatchFinishSendMessage: (state, action: PayloadAction<api.APIError | undefined>) => {
-      const error = action?.payload
-      const replyTriageError = hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, error)
-      return {
-        ...state,
-        error,
-        sendMessageFailed: !!error,
-        sendMessageComplete: !error,
-        sendingMessage: false,
-        replyTriageError,
-      }
     },
   },
 })
