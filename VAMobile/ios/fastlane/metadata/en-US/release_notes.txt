@@ -1,1 +1,1 @@
-We added general improvements and fixed a few bugs.
+You can now delete Message Drafts.
