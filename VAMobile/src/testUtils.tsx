@@ -3,27 +3,59 @@ import { Provider } from 'react-redux'
 import { RenderAPI, RenderOptions, render } from '@testing-library/react-native'
 import { ThemeProvider } from 'styled-components'
 import React, { FC, ReactElement } from 'react'
-import i18n from 'utils/i18n'
+import i18nReal from 'utils/i18n'
 import store, { RootState } from 'store'
 import { SuiteFunction } from 'mocha'
 import path from 'path'
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
 export * from 'jest-when'
-import { allReducers, InitialState } from 'store/slices'
+import accessabilityReducer from 'store/slices/accessibilitySlice'
+import analyticsReducer from 'store/slices/analyticsSlice'
+import appointmentsReducer from 'store/slices/appointmentsSlice'
+import authReducer from 'store/slices/authSlice'
+import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
+import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
+import demoReducer from 'store/slices/demoSlice'
+import directDepositReducer from 'store/slices/directDepositSlice'
+import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
+import errorReducer from 'store/slices/errorSlice'
+import lettersReducer from 'store/slices/lettersSlice'
+import militaryServiceReducer from 'store/slices/militaryServiceSlice'
+import notificationReducer from 'store/slices/notificationSlice'
+import patientReducer from 'store/slices/patientSlice'
+import personalInformationReducer from 'store/slices/personalInformationSlice'
+import secureMessagingReducer from 'store/slices/secureMessagingSlice'
+import snackbarReducer from 'store/slices/snackBarSlice'
+import vaccineReducer from 'store/slices/vaccineSlice'
+import { InitialState } from 'store/slices'
+import theme from 'styles/themes/standardTheme'
+import { NavigationContainer } from '@react-navigation/native'
+import renderer from 'react-test-renderer'
 
-const AllTheProviders: FC = ({ children }) => {
-  return (
-    <ThemeProvider theme="light">
-      <Provider store={store}>
-        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
-      </Provider>
-    </ThemeProvider>
-  )
+export const renderWithProviders = (element: ReactElement, store?: any) => {
+  return renderer.create(<TestProviders store={store}>{element}</TestProviders>)
 }
 
-const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>): RenderAPI => render(ui, { wrapper: AllTheProviders, ...options })
-export * from '@testing-library/react-native'
-export { customRender as render }
+export const TestProviders: FC<{ store?: any; i18n?: any; navContainerProvided?: boolean }> = ({ store = mockStore(), i18n = i18nReal, children, navContainerProvided }) => {
+  if (navContainerProvided) {
+    return (
+      <Provider store={store}>
+        <I18nextProvider i18n={i18n}>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </I18nextProvider>
+      </Provider>
+    )
+  }
+  return (
+    <Provider store={store}>
+      <I18nextProvider i18n={i18n}>
+        <NavigationContainer>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </NavigationContainer>
+      </I18nextProvider>
+    </Provider>
+  )
+}
 
 type fn = () => any
 type ActionState = AnyAction & {
@@ -36,7 +68,24 @@ export class TrackedStore {
     this.actions = []
     this.realStore = configureStore({
       reducer: {
-        ...allReducers,
+        auth: authReducer,
+        accessibility: accessabilityReducer,
+        demo: demoReducer,
+        personalInformation: personalInformationReducer,
+        authorizedServices: authorizedServicesReducer,
+        errors: errorReducer,
+        analytics: analyticsReducer,
+        appointments: appointmentsReducer,
+        claimsAndAppeals: claimsAndAppealsReducer,
+        directDeposit: directDepositReducer,
+        disabilityRating: disabilityRatingReducer,
+        letters: lettersReducer,
+        militaryService: militaryServiceReducer,
+        notifications: notificationReducer,
+        patient: patientReducer,
+        secureMessaging: secureMessagingReducer,
+        snackBar: snackbarReducer,
+        vaccine: vaccineReducer,
       },
       middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
       preloadedState: { ...state },
@@ -80,6 +129,33 @@ export class TrackedStore {
 
 export const realStore = (state?: Partial<RootState>) => {
   return new TrackedStore({ ...InitialState, ...state })
+}
+
+export const mockStore = (state?: Partial<RootState>) => {
+  return configureStore({
+    reducer: {
+      auth: authReducer,
+      accessibility: accessabilityReducer,
+      demo: demoReducer,
+      personalInformation: personalInformationReducer,
+      authorizedServices: authorizedServicesReducer,
+      errors: errorReducer,
+      analytics: analyticsReducer,
+      appointments: appointmentsReducer,
+      claimsAndAppeals: claimsAndAppealsReducer,
+      directDeposit: directDepositReducer,
+      disabilityRating: disabilityRatingReducer,
+      letters: lettersReducer,
+      militaryService: militaryServiceReducer,
+      notifications: notificationReducer,
+      patient: patientReducer,
+      secureMessaging: secureMessagingReducer,
+      snackBar: snackbarReducer,
+      vaccine: vaccineReducer,
+    },
+    middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
+    preloadedState: { ...InitialState, ...state },
+  })
 }
 
 //@ts-ignore

@@ -57,23 +57,4 @@ export const InitialState: RootState = {
   snackBar: initialSnackBarState,
 }
 
-export const allReducers = {
-  auth: authReducer,
-  accessibility: accessabilityReducer,
-  demo: demoReducer,
-  personalInformation: personalInformationReducer,
-  authorizedServices: authorizedServicesReducer,
-  errors: errorReducer,
-  analytics: analyticsReducer,
-  appointments: appointmentsReducer,
-  claimsAndAppeals: claimsAndAppealsReducer,
-  directDeposit: directDepositReducer,
-  disabilityRating: disabilityRatingReducer,
-  letters: lettersReducer,
-  militaryService: militaryServiceReducer,
-  notifications: notificationReducer,
-  patient: patientReducer,
-  secureMessaging: secureMessagingReducer,
-  snackBar: snackbarReducer,
-  vaccine: vaccineReducer,
-}
+export const allReducers = {}

@@ -1,11 +1,45 @@
 import { AnyAction, ThunkAction, configureStore } from '@reduxjs/toolkit'
-import { allReducers } from './slices'
+import accessabilityReducer from 'store/slices/accessibilitySlice'
+import analyticsReducer from 'store/slices/analyticsSlice'
+import appointmentsReducer from 'store/slices/appointmentsSlice'
+import authReducer from 'store/slices/authSlice'
+import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
+import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
+import demoReducer from 'store/slices/demoSlice'
+import directDepositReducer from 'store/slices/directDepositSlice'
+import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
+import errorReducer from 'store/slices/errorSlice'
+import lettersReducer from 'store/slices/lettersSlice'
 import logger from 'redux-logger'
+import militaryServiceReducer from 'store/slices/militaryServiceSlice'
+import notificationReducer from 'store/slices/notificationSlice'
+import patientReducer from 'store/slices/patientSlice'
+import personalInformationReducer from 'store/slices/personalInformationSlice'
+import secureMessagingReducer from 'store/slices/secureMessagingSlice'
+import snackbarReducer from 'store/slices/snackBarSlice'
+import vaccineReducer from 'store/slices/vaccineSlice'
 
 // Creates the store
 const store = configureStore({
   reducer: {
-    ...allReducers,
+    auth: authReducer,
+    accessibility: accessabilityReducer,
+    demo: demoReducer,
+    personalInformation: personalInformationReducer,
+    authorizedServices: authorizedServicesReducer,
+    errors: errorReducer,
+    analytics: analyticsReducer,
+    appointments: appointmentsReducer,
+    claimsAndAppeals: claimsAndAppealsReducer,
+    directDeposit: directDepositReducer,
+    disabilityRating: disabilityRatingReducer,
+    letters: lettersReducer,
+    militaryService: militaryServiceReducer,
+    notifications: notificationReducer,
+    patient: patientReducer,
+    secureMessaging: secureMessagingReducer,
+    snackBar: snackbarReducer,
+    vaccine: vaccineReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }).concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
