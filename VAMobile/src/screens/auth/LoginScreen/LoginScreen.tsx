@@ -75,9 +75,6 @@ const LoginScreen: FC = () => {
           <AlertBox border={'informational'} title={'DEMO MODE'} />
         </Box>
       )}
-      <Box mx={theme.dimensions.gutter}>
-        <AlertBox border={'informational'} title={'Dark Mode version, not for regular QA'} />
-      </Box>
       <Box flex={1}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween}>
           <VAIcon name={'Logo'} />
