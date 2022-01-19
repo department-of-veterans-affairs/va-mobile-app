@@ -4,21 +4,17 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import AlertBox from './AlertBox'
 
 context('AlertBox', () => {
   let component: any
-  let testInstance: ReactTestInstance
+  let testInstance: RenderAPI
 
   beforeEach(() => {
+    component = render(<AlertBox border="warning" background="cardBackground" text={'My warning'} title={'Warning title'} />)
 
-    act(() => {
-      component = renderWithProviders(
-        <AlertBox border="warning" background="cardBackground" text={'My warning'} title={'Warning title'} />
-      )
-    })
-    testInstance = component.root
+    testInstance = component
   })
 
   it('initializes correctly', async () => {

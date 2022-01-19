@@ -7,9 +7,12 @@ import { Countries } from 'constants/countries'
 import { DefaultList, DefaultListItemObj, ListProps, TextLine } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState } from 'store/slices'
+import { RootState } from 'store'
 import { TFunction } from 'i18next'
 import { generateTestID, getAllFieldsThatExist } from 'utils/common'
-import { useAppSelector, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -116,7 +119,7 @@ export type AddressSummaryProps = {
 } & Partial<ListProps>
 
 const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
-  const { profile } = useAppSelector((state) => state.personalInformation)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const data = getAddressData(profile, t, addressData)

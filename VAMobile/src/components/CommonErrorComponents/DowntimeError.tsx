@@ -3,8 +3,11 @@ import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
 import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
+import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
-import { useAppSelector, useTheme, useTranslation } from 'utils/hooks'
+import { RootState } from 'store'
+import { useSelector } from 'react-redux'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
@@ -26,7 +29,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
-  const { downtimeWindowsByFeature } = useAppSelector((state) => state.errors)
+  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const feature = DowntimeScreenIDToFeature[screenID]
   const featureName = downtimeWindowsByFeature[feature]?.featureName
   const endTime = downtimeWindowsByFeature[feature]?.endTime.toFormat('fff')

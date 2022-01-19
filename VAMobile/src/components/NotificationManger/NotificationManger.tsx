@@ -1,16 +1,18 @@
+import { AuthState } from 'store/slices'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
+import { RootState } from 'store'
 import { View } from 'react-native'
 import { registerDevice } from 'store/slices/notificationSlice'
-import { useAppSelector } from 'utils/hooks'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 /**
  * notification manager component to handle all push logic
  */
 const NotificationManger: FC = ({ children }) => {
-  const { loggedIn } = useAppSelector((state) => state.auth)
-  const dispatch = useDispatch()
+  const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
+  const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
     const register = () => {

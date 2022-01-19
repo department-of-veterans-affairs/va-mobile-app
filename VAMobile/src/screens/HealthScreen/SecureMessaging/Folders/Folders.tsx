@@ -5,10 +5,13 @@ import _ from 'underscore'
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
 import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { SecureMessagingFolderList } from 'store/api/types'
+import { SecureMessagingState } from 'store/slices'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,
@@ -96,7 +99,7 @@ const Folders: FC<FoldersProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { folders, loadingFolders } = useAppSelector((state) => state.secureMessaging)
+  const { folders, loadingFolders } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   const onFolderPress = (folderID: number, folderName: string): void => {
     navigateTo('FolderMessages', { folderID, folderName })()

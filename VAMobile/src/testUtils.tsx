@@ -1,14 +1,16 @@
 import { I18nextProvider } from 'react-i18next'
 import { Provider } from 'react-redux'
-import { RenderAPI, RenderOptions, render } from '@testing-library/react-native'
+import { render as rtlRender } from '@testing-library/react-native'
 import { ThemeProvider } from 'styled-components'
-import React, { FC, ReactElement } from 'react'
+import React, { ElementType } from 'react'
 import i18nReal from 'utils/i18n'
-import store, { RootState } from 'store'
+import { RootState } from 'store'
 import { SuiteFunction } from 'mocha'
 import path from 'path'
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
-export * from 'jest-when'
+import { NavigationContainer } from '@react-navigation/native'
+import { ReactTestInstance } from 'react-test-renderer'
+
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
@@ -29,32 +31,74 @@ import snackbarReducer from 'store/slices/snackBarSlice'
 import vaccineReducer from 'store/slices/vaccineSlice'
 import { InitialState } from 'store/slices'
 import theme from 'styles/themes/standardTheme'
-import { NavigationContainer } from '@react-navigation/native'
-import renderer from 'react-test-renderer'
 
-export const renderWithProviders = (element: ReactElement, store?: any) => {
-  return renderer.create(<TestProviders store={store}>{element}</TestProviders>)
+// export const renderWithProviders = (element: ReactElement, store?: any) => {
+//   return renderer.create(<TestProviders store={store}>{element}</TestProviders>)
+// }
+
+// export const TestProviders: FC<{ store?: any; i18n?: any; navContainerProvided?: boolean }> = ({ store = mockStore(), i18n = i18nReal, children, navContainerProvided }) => {
+//   if (navContainerProvided) {
+//     return (
+//       <Provider store={store}>
+//         <I18nextProvider i18n={i18n}>
+//           <ThemeProvider theme={theme}>{children}</ThemeProvider>
+//         </I18nextProvider>
+//       </Provider>
+//     )
+//   }
+//   return (
+//     <Provider store={store}>
+//       <I18nextProvider i18n={i18n}>
+//         <NavigationContainer>
+//           <ThemeProvider theme={theme}>{children}</ThemeProvider>
+//         </NavigationContainer>
+//       </I18nextProvider>
+//     </Provider>
+//   )
+// }
+
+export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
+  try {
+    return testInstance.find((el) => {
+      return el.type === type && (el.props.name === name || el.props.label === name || el.props.children === name)
+    })
+  } catch {
+    return null
+  }
 }
 
-export const TestProviders: FC<{ store?: any; i18n?: any; navContainerProvided?: boolean }> = ({ store = mockStore(), i18n = i18nReal, children, navContainerProvided }) => {
-  if (navContainerProvided) {
-    return (
-      <Provider store={store}>
-        <I18nextProvider i18n={i18n}>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </I18nextProvider>
-      </Provider>
-    )
+export const findByTypeWithSubstring = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
+  try {
+    return testInstance.find((el) => {
+      return el.type === type && (el.props.title?.includes(text) || el.props.children?.includes(text))
+    })
+  } catch {
+    return null
   }
-  return (
-    <Provider store={store}>
-      <I18nextProvider i18n={i18n}>
-        <NavigationContainer>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </NavigationContainer>
-      </I18nextProvider>
-    </Provider>
-  )
+}
+
+export const findByTestID = (testInstance: ReactTestInstance, testID: string): ReactTestInstance => {
+  return testInstance.findByProps({ testID })
+}
+
+export const findByTypeWithText = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
+  try {
+    return testInstance.find((el) => {
+      return el.type === type && (el.props.title === text || el.props.children === text)
+    })
+  } catch {
+    return null
+  }
+}
+
+export const findByOnPressFunction = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
+  try {
+    return testInstance.find((el) => {
+      return el.type === type && el.props.onPress.name === text
+    })
+  } catch {
+    return null
+  }
 }
 
 type fn = () => any
@@ -66,30 +110,7 @@ type ActionState = AnyAction & {
 export class TrackedStore {
   constructor(state?: RootState) {
     this.actions = []
-    this.realStore = configureStore({
-      reducer: {
-        auth: authReducer,
-        accessibility: accessabilityReducer,
-        demo: demoReducer,
-        personalInformation: personalInformationReducer,
-        authorizedServices: authorizedServicesReducer,
-        errors: errorReducer,
-        analytics: analyticsReducer,
-        appointments: appointmentsReducer,
-        claimsAndAppeals: claimsAndAppealsReducer,
-        directDeposit: directDepositReducer,
-        disabilityRating: disabilityRatingReducer,
-        letters: lettersReducer,
-        militaryService: militaryServiceReducer,
-        notifications: notificationReducer,
-        patient: patientReducer,
-        secureMessaging: secureMessagingReducer,
-        snackBar: snackbarReducer,
-        vaccine: vaccineReducer,
-      },
-      middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
-      preloadedState: { ...state },
-    })
+    this.realStore = getConfiguredStore(state)
     this.subscribe = this.realStore.subscribe
   }
 
@@ -127,11 +148,7 @@ export class TrackedStore {
   }
 }
 
-export const realStore = (state?: Partial<RootState>) => {
-  return new TrackedStore({ ...InitialState, ...state })
-}
-
-export const mockStore = (state?: Partial<RootState>) => {
+const getConfiguredStore = (state?: Partial<RootState>) => {
   return configureStore({
     reducer: {
       auth: authReducer,
@@ -154,8 +171,16 @@ export const mockStore = (state?: Partial<RootState>) => {
       vaccine: vaccineReducer,
     },
     middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
-    preloadedState: { ...InitialState, ...state },
+    preloadedState: { ...state },
   })
+}
+
+export const realStore = (state?: Partial<RootState>) => {
+  return new TrackedStore({ ...InitialState, ...state })
+}
+
+export const mockStore = (state?: Partial<RootState>) => {
+  return getConfiguredStore({ ...InitialState, ...state })
 }
 
 //@ts-ignore
@@ -221,3 +246,35 @@ ctxFn.skip = (name: string, fn: () => void) => {
 }
 
 export const context: SuiteFunction = ctxFn
+
+//@ts-ignore
+function render(ui, { preloadedState, store = mockStore(preloadedState), navigationProvided = false, ...renderOptions } = {}) {
+  //@ts-ignore
+  function Wrapper({ children }) {
+    if (navigationProvided) {
+      return (
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nReal}>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </I18nextProvider>
+        </Provider>
+      )
+    }
+    return (
+      <Provider store={store}>
+        <I18nextProvider i18n={i18nReal}>
+          <NavigationContainer>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </NavigationContainer>
+        </I18nextProvider>
+      </Provider>
+    )
+  }
+  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
+}
+
+// re-export everything
+export * from '@testing-library/react-native'
+// override render method
+export { render }
+export * from 'jest-when'

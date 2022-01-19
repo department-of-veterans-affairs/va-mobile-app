@@ -4,14 +4,16 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView, VAScrollView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
+import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -30,7 +32,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType } = route.params
-  const { claim, loadingClaim } = useAppSelector((state) => state.claimsAndAppeals)
+  const { claim, loadingClaim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)

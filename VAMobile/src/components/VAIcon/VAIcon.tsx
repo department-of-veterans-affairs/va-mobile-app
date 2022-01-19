@@ -4,7 +4,7 @@ import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
 import { VAIconColors } from 'styles/theme'
-import { useAppSelector, useFontScale, useTheme } from 'utils/hooks'
+import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
 // New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
@@ -57,8 +57,10 @@ import FilledRadio from './svgs/radio/radioFilled.svg'
 
 // Misc
 
+import { AccessibilityState } from 'store/slices'
+import { RootState } from 'store'
 import { updateFontScale } from 'utils/accessibility'
-import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
@@ -166,8 +168,8 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
   let domProps = Object.create(props)
   const fs: (val: number) => number = useFontScale()
-  const dispatch = useDispatch()
-  const { fontScale } = useAppSelector((state) => state.accessibility)
+  const dispatch = useAppDispatch()
+  const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { name, width, height, fill, stroke, preventScaling } = props
 
   useEffect(() => {

@@ -5,28 +5,21 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders, mockStore } from 'testUtils'
-import BasicError from "./BasicError";
-import Mock = jest.Mock;
-import {Pressable} from "react-native";
+import { context, render, RenderAPI } from 'testUtils'
+import BasicError from './BasicError'
+import Mock = jest.Mock
+import { Pressable } from 'react-native'
 
 context('BasicError', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onTryAgainSpy: Mock
-
   beforeEach(() => {
-    store = mockStore({})
     onTryAgainSpy = jest.fn(() => {})
 
-    act(() => {
-      component = renderWithProviders(
-        <BasicError onTryAgain={onTryAgainSpy} messageText={'message body'} />,
-        store
-      )
-    })
-    testInstance = component.root
+    component = render(<BasicError onTryAgain={onTryAgainSpy} messageText={'message body'} />)
+
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

@@ -5,11 +5,13 @@ import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView 
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import CernerAlert from './CernerAlert'
 import getEnv from 'utils/env'
 
@@ -23,7 +25,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
 
-  const unreadCount = useAppSelector(getInboxUnreadCount)
+  const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')

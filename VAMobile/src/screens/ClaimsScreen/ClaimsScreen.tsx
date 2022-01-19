@@ -3,13 +3,16 @@ import { ViewStyle } from 'react-native'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
+import { AuthorizedServicesState } from 'store/slices'
+import { ClaimsAndAppealsState, prefetchClaimsAndAppeals } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { getProfileInfo } from 'store/slices/personalInformationSlice'
-import { prefetchClaimsAndAppeals } from 'store/slices/claimsAndAppealsSlice'
+import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useDowntime, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
@@ -19,10 +22,12 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useAppSelector((state) => state.claimsAndAppeals)
-  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useAppSelector((state) => state.authorizedServices)
+  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
-  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useAppSelector((state) => state.personalInformation)
+  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>(
+    (state) => state.personalInformation,
+  )
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])

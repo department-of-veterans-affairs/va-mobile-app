@@ -6,13 +6,15 @@ import { CrisisLineCta, LargeNavButton } from 'components'
 import { DateTime } from 'luxon'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
-import { getProfileInfo } from 'store/slices/personalInformationSlice'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -24,7 +26,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { profile } = useAppSelector((state) => state.personalInformation)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.fullName || ''
 
   useEffect(() => {

@@ -29,14 +29,16 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
+import { AppointmentsState, clearAppointmentCancellation, getAppointment } from 'store/slices/appointmentsSlice'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { clearAppointmentCancellation, getAppointment } from 'store/slices/appointmentsSlice'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
-import { useAppDispatch, useAppSelector, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
@@ -58,7 +60,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useAppSelector((state) => state.appointments)
+  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const {

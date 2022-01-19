@@ -3,13 +3,16 @@ import React, { FC } from 'react'
 
 import { Alert } from 'react-native'
 import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { DemoState } from 'store/slices/demoSlice'
 import { LetterTypeConstants } from 'store/api/types'
+import { LettersState, downloadLetter } from 'store/slices/lettersSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
-import { downloadLetter } from 'store/slices/lettersSlice'
+import { RootState } from 'store'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type GenericLetterProps = StackScreenProps<ProfileStackParamList, 'GenericLetter'>
 
@@ -18,9 +21,9 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { header, description, letterType, descriptionA11yLabel } = route.params
-  const { downloading, letterDownloadError } = useAppSelector((state) => state.letters)
+  const { downloading, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
 
-  const { demoMode } = useAppSelector((state) => state.demo)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
     if (demoMode) {
       Alert.alert('Demo Mode', 'Letters are not available to download for demo user')

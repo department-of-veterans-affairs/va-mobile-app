@@ -1,15 +1,17 @@
 import { AlertBox, Box, ButtonDecoratorType, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton, VAScrollView } from 'components'
 import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { loadPushPreferences, setPushPref } from 'store/slices/notificationSlice'
-import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
+import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices/notificationSlice'
+import { RootState } from 'store'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 const NotificationsSettingsScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
-  const { preferences, loadingPreferences, systemNotificationsOn, settingPreference } = useAppSelector((state) => state.notifications)
+  const { preferences, loadingPreferences, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>((state) => state.notifications)
   const goToSettings = () => {
     Linking.openSettings()
   }

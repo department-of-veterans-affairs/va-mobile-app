@@ -4,8 +4,11 @@ import { Carousel } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord } from 'utils/formattingUtils'
 
+import { PersonalInformationState } from 'store/slices'
+import { RootState } from 'store'
 import { completeFirstTimeLogin } from 'store/slices/authSlice'
-import { useAppDispatch, useAppSelector, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
 const OnboardingProfile: FC = () => {
@@ -25,7 +28,7 @@ const OnboardingAppointments: FC = () => {
 
 const OnboardingAppOverview: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  const { profile } = useAppSelector((state) => state.personalInformation)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const firstName = profile?.firstName ? `${capitalizeWord(profile?.firstName)}` : ''
 
   return (

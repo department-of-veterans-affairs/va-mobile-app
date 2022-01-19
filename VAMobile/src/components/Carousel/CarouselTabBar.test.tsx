@@ -2,18 +2,18 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
-import {Pressable} from 'react-native'
+import { ReactTestInstance } from 'react-test-renderer'
+import { Pressable } from 'react-native'
 
-import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
-import {BottomTabNavigationEventMap} from '@react-navigation/bottom-tabs/src/types'
+import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
+import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 
-import { context, findByTypeWithName, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
-import {CarouselScreen, TextView} from '../index'
+import { CarouselScreen, TextView } from '../index'
 
 context('CarouselTabBar', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let t = jest.fn(() => {})
   let onCarouselEndSpy = jest.fn()
@@ -27,20 +27,24 @@ context('CarouselTabBar', () => {
     return <TextView>Test Component2</TextView>
   }
 
-  const listOfScreens: Array<CarouselScreen>  = [
+  const listOfScreens: Array<CarouselScreen> = [
     { name: 'TestComponent', component: TestComponent },
-    { name: 'TestComponent2', component: TestComponent2 }
+    { name: 'TestComponent2', component: TestComponent2 },
   ]
 
-  const singleScreen: Array<CarouselScreen>  = [
-    { name: 'TestComponent', component: TestComponent }
-  ]
+  const singleScreen: Array<CarouselScreen> = [{ name: 'TestComponent', component: TestComponent }]
 
   const initializeTestInstance = (screenList: Array<CarouselScreen>) => {
-    act(() => {
-      component = renderWithProviders(<CarouselTabBar screenList={screenList} onCarouselEnd={onCarouselEndSpy} translation={t} navigation={{ navigate: navigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>} />)
-    })
-    testInstance = component.root
+    component = render(
+      <CarouselTabBar
+        screenList={screenList}
+        onCarouselEnd={onCarouselEndSpy}
+        translation={t}
+        navigation={{ navigate: navigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
+      />,
+    )
+
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -62,7 +66,6 @@ context('CarouselTabBar', () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
       expect(navigationSpy).toHaveBeenCalledWith('TestComponent')
-      
     })
 
     describe('on click of done', () => {

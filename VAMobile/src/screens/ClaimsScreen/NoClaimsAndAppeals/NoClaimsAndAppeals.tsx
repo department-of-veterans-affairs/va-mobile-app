@@ -1,14 +1,17 @@
 import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
+import { ClaimsAndAppealsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppSelector, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 const NoClaimsAndAppeals: FC = () => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const { claimsServiceError, appealsServiceError } = useAppSelector((state) => state.claimsAndAppeals)
+  const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   let header = t('noClaims.youDontHaveAnyClaimsOrAppeals')
   let text = t('noClaims.appOnlyShowsCompletedClaimsAndAppeals')

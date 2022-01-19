@@ -3,11 +3,13 @@ import React, { FC, useEffect } from 'react'
 
 import { BackButton, Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { fileUploadSuccess, uploadFileToClaim } from 'store/slices/claimsAndAppealsSlice'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -18,7 +20,7 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useAppSelector((state) => state.claimsAndAppeals)
+  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { request, filesList } = route.params
 
   useEffect(() => {

@@ -3,12 +3,14 @@ import React, { FC, ReactNode, Ref } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
+import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices/secureMessagingSlice'
 import { bytesToFinalSizeDisplay } from 'utils/common'
-import { downloadFileAttachment, getMessage } from 'store/slices/secureMessagingSlice'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
-import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
@@ -28,7 +30,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useAppSelector((state) => state.secureMessaging)
+  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   const dateTime = getFormattedDateTimeYear(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''

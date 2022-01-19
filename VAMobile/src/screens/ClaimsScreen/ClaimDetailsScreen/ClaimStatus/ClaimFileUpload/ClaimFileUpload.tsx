@@ -16,14 +16,16 @@ import {
   VAIcon,
   VAScrollView,
 } from 'components'
+import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type ClaimFileUploadProps = StackScreenProps<ClaimsStackParamList, 'ClaimFileUpload'>
 
@@ -33,7 +35,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { claim } = useAppSelector((state) => state.claimsAndAppeals)
+  const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
 
   // need to get the claim to keep track of if/when files were uploaded for a request

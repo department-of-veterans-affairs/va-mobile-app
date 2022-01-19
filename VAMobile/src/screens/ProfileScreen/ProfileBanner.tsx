@@ -2,10 +2,13 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
+import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppSelector, useTheme, useTranslation } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
+import { useSelector } from 'react-redux'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
@@ -13,9 +16,9 @@ import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 export type ProfileBannerProps = Record<string, unknown>
 
 const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
-  const { profile } = useAppSelector((state) => state.personalInformation)
-  const { mostRecentBranch } = useAppSelector((s) => s.militaryService)
-  const { ratingData } = useAppSelector((s) => s.disabilityRating)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const t = useTranslation(NAMESPACE.PROFILE)
 

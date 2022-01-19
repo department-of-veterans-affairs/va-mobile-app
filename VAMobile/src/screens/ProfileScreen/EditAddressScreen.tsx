@@ -25,13 +25,15 @@ import { Countries } from 'constants/countries'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/slices/personalInformationSlice'
 import { RootNavStackParamList } from 'App'
+import { RootState } from 'store'
 import { States } from 'constants/states'
-import { deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/slices/personalInformationSlice'
 import { profileAddressOptions } from './AddressSummary'
 import { stringToTitleCase } from '../../utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
 import HeaderTitle from 'components/HeaderTitle'
 
@@ -78,7 +80,7 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressSaved, loading, showValidation } = useAppSelector((state) => state.personalInformation)
+  const { profile, addressSaved, loading, showValidation } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useAppDispatch()

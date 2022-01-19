@@ -3,15 +3,17 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
+import { AuthState, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, sendLoginStartAnalytics, setPKCEParams } from 'store/slices/authSlice'
 import { Box, LoadingComponent } from 'components'
+import { RootState } from 'store'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
-import { cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, sendLoginStartAnalytics, setPKCEParams } from 'store/slices/authSlice'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import crashlytics from '@react-native-firebase/crashlytics'
 import getEnv from 'utils/env'
 import qs from 'querystringify'
@@ -20,7 +22,7 @@ type WebviewLoginProps = StackScreenProps<WebviewStackParams, 'Webview'>
 const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { AUTH_CLIENT_ID, AUTH_REDIRECT_URL, AUTH_SCOPES, AUTH_ENDPOINT } = getEnv()
-  const { codeChallenge, authorizeStateParam, authParamsLoadingState } = useAppSelector((state) => state.auth)
+  const { codeChallenge, authorizeStateParam, authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const params = qs.stringify({
     client_id: AUTH_CLIENT_ID,

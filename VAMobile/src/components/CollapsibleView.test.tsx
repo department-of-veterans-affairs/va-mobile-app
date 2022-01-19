@@ -5,21 +5,19 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders} from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import CollapsibleView from './CollapsibleView'
 import TextView from './TextView'
 import { Pressable } from 'react-native'
 
 context('CollapsibleView', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<CollapsibleView text={'Where can I find these numbers?'} children={<TextView>Revealed text</TextView>}/>)
-    })
+    component = render(<CollapsibleView text={'Where can I find these numbers?'} children={<TextView>Revealed text</TextView>} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

@@ -2,23 +2,26 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
+import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
+import { LettersState, getLetters } from 'store/slices/lettersSlice'
 import { NAMESPACE } from 'constants/namespaces'
-import { OnPressHandler, useAppDispatch, useAppSelector, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { OnPressHandler, useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { ProfileStackParamList } from '../ProfileStackScreens'
-import { getLetters } from 'store/slices/lettersSlice'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
+import { useSelector } from 'react-redux'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<ProfileStackParamList, 'LettersList'>
 
 const LettersListScreen: FC<LettersListScreenProps> = () => {
   const dispatch = useAppDispatch()
-  const { lettersAndDocuments } = useAppSelector((state) => state.authorizedServices)
-  const { letters, loading } = useAppSelector((state) => state.letters)
+  const { lettersAndDocuments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.PROFILE)

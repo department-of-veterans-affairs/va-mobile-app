@@ -5,8 +5,17 @@ import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from '
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store/slices/secureMessagingSlice'
-import { useAppDispatch, useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { RootState } from 'store'
+import {
+  SecureMessagingState,
+  resetHasLoadedRecipients,
+  resetReplyTriageError,
+  resetSendMessageComplete,
+  resetSendMessageFailed,
+  sendMessage,
+} from 'store/slices/secureMessagingSlice'
+import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ConfirmationAlert from 'components/ConfirmationAlert'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -18,7 +27,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const { originHeader, messageData, uploads, replyToID } = route.params
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useAppSelector((state) => state.secureMessaging)
+  const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   useEffect(() => {
     navigation.setOptions({

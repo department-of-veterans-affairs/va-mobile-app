@@ -2,6 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { TextInput } from 'react-native'
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
+import { AccessibilityState } from 'store/slices'
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
 import {
@@ -21,12 +22,14 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices/directDepositSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { finishEditBankInfo, updateBankInfo } from 'store/slices/directDepositSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -42,8 +45,8 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const tc = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
-  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useAppSelector((state) => state.directDeposit)
-  const { isFocus: isAccessibilityFocused } = useAppSelector((state) => state.accessibility)
+  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
+  const { isFocus: isAccessibilityFocused } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')

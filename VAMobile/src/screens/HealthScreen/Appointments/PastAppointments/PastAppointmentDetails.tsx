@@ -9,13 +9,15 @@ import {
   AppointmentStatusDetailTypeConsts,
   AppointmentTypeConstants,
 } from 'store/api/types'
+import { AppointmentsState, getAppointment } from 'store/slices/appointmentsSlice'
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { getAppointment } from 'store/slices/appointmentsSlice'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
@@ -29,7 +31,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
-  const { appointment } = useAppSelector((state) => state.appointments)
+  const { appointment } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail, reason, isCovidVaccine, healthcareProvider } =

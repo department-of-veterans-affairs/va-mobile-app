@@ -3,31 +3,28 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { Pressable } from 'react-native'
-import renderer, { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import Box, { BackgroundVariant } from './Box'
-import { TestProviders, context, findByTestID } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import BaseListItem from './BaseListItem'
 import { TextLines } from './TextLines'
 
 context('BaseListItem', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
   const initializeTestInstance = (backgroundColor?: BackgroundVariant, activeBackgroundColor?: BackgroundVariant): void => {
     onPressSpy = jest.fn(() => {})
-    act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <BaseListItem a11yHint={'a11y'} onPress={onPressSpy} backgroundColor={backgroundColor} activeBackgroundColor={activeBackgroundColor}>
-            <TextLines listOfText={[{ text: 'My Title' }]} />
-          </BaseListItem>
-        </TestProviders>,
-      )
-    })
-    testInstance = component.root
+    component = render(
+      <BaseListItem a11yHint={'a11y'} onPress={onPressSpy} backgroundColor={backgroundColor} activeBackgroundColor={activeBackgroundColor}>
+        <TextLines listOfText={[{ text: 'My Title' }]} />
+      </BaseListItem>,
+    )
+
+    testInstance = component.container
   }
 
   beforeEach(() => {

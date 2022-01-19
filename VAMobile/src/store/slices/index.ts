@@ -1,22 +1,23 @@
 import { RootState } from 'store'
-import accessabilityReducer, { initialAccessibilityState } from 'store/slices/accessibilitySlice'
-import analyticsReducer, { initialAnalyticsState } from 'store/slices/analyticsSlice'
-import appointmentsReducer, { initialAppointmentsState } from 'store/slices/appointmentsSlice'
-import authReducer, { initialAuthState } from 'store/slices/authSlice'
-import authorizedServicesReducer, { initialAuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
-import claimsAndAppealsReducer, { initialClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
-import demoReducer, { initialDemoState } from 'store/slices/demoSlice'
-import directDepositReducer, { initialDirectDepositState } from 'store/slices/directDepositSlice'
-import disabilityRatingReducer, { initialDisabilityRatingState } from 'store/slices/disabilityRatingSlice'
-import errorReducer, { initialErrorsState } from 'store/slices/errorSlice'
-import lettersReducer, { initialLettersState } from 'store/slices/lettersSlice'
-import militaryServiceReducer, { initialMilitaryServiceState } from 'store/slices/militaryServiceSlice'
-import notificationReducer, { initialNotificationsState } from 'store/slices/notificationSlice'
-import patientReducer, { initialPatientState } from 'store/slices/patientSlice'
-import personalInformationReducer, { initialPersonalInformationState } from 'store/slices/personalInformationSlice'
-import secureMessagingReducer, { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
-import snackbarReducer, { initialSnackBarState } from 'store/slices/snackBarSlice'
-import vaccineReducer, { initialVaccineState } from 'store/slices/vaccineSlice'
+
+import { initialAccessibilityState } from 'store/slices/accessibilitySlice'
+import { initialAnalyticsState } from 'store/slices/analyticsSlice'
+import { initialAppointmentsState } from 'store/slices/appointmentsSlice'
+import { initialAuthState } from 'store/slices/authSlice'
+import { initialAuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
+import { initialClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
+import { initialDemoState } from 'store/slices/demoSlice'
+import { initialDirectDepositState } from 'store/slices/directDepositSlice'
+import { initialDisabilityRatingState } from 'store/slices/disabilityRatingSlice'
+import { initialErrorsState } from 'store/slices/errorSlice'
+import { initialLettersState } from 'store/slices/lettersSlice'
+import { initialMilitaryServiceState } from 'store/slices/militaryServiceSlice'
+import { initialNotificationsState } from 'store/slices/notificationSlice'
+import { initialPatientState } from 'store/slices/patientSlice'
+import { initialPersonalInformationState } from 'store/slices/personalInformationSlice'
+import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
+import { initialSnackBarState } from 'store/slices/snackBarSlice'
+import { initialVaccineState } from 'store/slices/vaccineSlice'
 
 export * from './accessibilitySlice'
 export * from './analyticsSlice'
@@ -56,5 +57,3 @@ export const InitialState: RootState = {
   patient: initialPatientState,
   snackBar: initialSnackBarState,
 }
-
-export const allReducers = {}

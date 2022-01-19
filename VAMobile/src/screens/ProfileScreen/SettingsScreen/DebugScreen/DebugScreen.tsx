@@ -4,18 +4,20 @@ import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 
+import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
-import { DEVICE_ENDPOINT_SID } from 'store/slices/notificationSlice'
-import { debugResetFirstTimeLogin } from 'store/slices/authSlice'
+import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
+import { RootState } from 'store'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
-  const { authCredentials } = useAppSelector((state) => state.auth)
-  const authorizedServices = useAppSelector((state) => state.authorizedServices)
+  const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
+  const authorizedServices = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -27,7 +29,7 @@ const DebugScreen: FC = ({}) => {
   }
 
   // push data
-  const { deviceToken } = useAppSelector((state) => state.notifications)
+  const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 

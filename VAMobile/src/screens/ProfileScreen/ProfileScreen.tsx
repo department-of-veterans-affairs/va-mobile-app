@@ -1,25 +1,35 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useEffect } from 'react'
 
+import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
+import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { ProfileStackParamList } from './ProfileStackScreens'
-import { getDisabilityRating } from 'store/slices/disabilityRatingSlice'
-import { getProfileInfo } from 'store/slices/personalInformationSlice'
-import { getServiceHistory } from 'store/slices/militaryServiceSlice'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
-  const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useAppSelector((state) => state.authorizedServices)
-  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useAppSelector((s) => s.militaryService)
-  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useAppSelector((s) => s.personalInformation)
-  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useAppSelector((s) => s.disabilityRating)
-  const { profile } = useAppSelector((state) => state.personalInformation)
+  const {
+    directDepositBenefits,
+    userProfileUpdate,
+    militaryServiceHistory: militaryInfoAuthorization,
+  } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const {
+    loading: personalInformationLoading,
+    needsDataLoad: personalInformationNeedsUpdate,
+    profile,
+  } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
+  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
 
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)

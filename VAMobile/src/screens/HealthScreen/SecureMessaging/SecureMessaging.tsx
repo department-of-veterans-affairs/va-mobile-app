@@ -2,15 +2,17 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { ViewStyle } from 'react-native'
 import React, { FC, ReactElement, useEffect } from 'react'
 
+import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices/secureMessagingSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAppSelector, useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
 import Folders from './Folders/Folders'
@@ -30,9 +32,9 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
-  const inboxUnreadCount = useAppSelector(getInboxUnreadCount)
-  const { secureMessagingTab, termsAndConditionError } = useAppSelector((state) => state.secureMessaging)
-  const { secureMessaging } = useAppSelector((state) => state.authorizedServices)
+  const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
+  const { secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { secureMessaging } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 

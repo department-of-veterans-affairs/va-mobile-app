@@ -3,10 +3,13 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimsAndAppealsState } from 'store/slices'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppSelector, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type UploadSuccessProps = StackScreenProps<ClaimsStackParamList, 'UploadSuccess'>
 
@@ -14,7 +17,7 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
-  const { claim } = useAppSelector((state) => state.claimsAndAppeals)
+  const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const navigateToFileRequests = navigateTo('ClaimFileUpload', { claimID: claim?.id })
 
