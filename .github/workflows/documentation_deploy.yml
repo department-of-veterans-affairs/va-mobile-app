@@ -8,7 +8,7 @@ on:
       - develop
     paths: 
       - VAMobile/src/components/**
-      - VAMobile/src/documentation/**
+      - VAMobile/documentation/**
       - VAMobile/src/utils/hooks.tsx
 
 jobs:
