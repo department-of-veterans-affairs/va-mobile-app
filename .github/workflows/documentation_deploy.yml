@@ -4,8 +4,12 @@ name: Documentation Deploy
 
 on:
   push:
-    branches: [documentation]
-    paths: [VAMobile/**]
+    branches: 
+      - develop
+    paths: 
+      - VAMobile/src/components/**
+      - VAMobile/documentation/**
+      - VAMobile/src/utils/hooks.tsx
 
 jobs:
   deploy:
