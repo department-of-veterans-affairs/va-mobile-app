@@ -48,7 +48,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
           <TextView variant={'BitterBoldHeading'} selectable={true} color={'primaryTitle'}>
             {date}
           </TextView>
-          <TextView variant={'BitterBoldHeading'} selectable={true}>
+          <TextView variant={'BitterBoldHeading'} selectable={true} color={'primaryTitle'}>
             {time}
           </TextView>
         </Box>
