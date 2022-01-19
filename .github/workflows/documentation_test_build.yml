@@ -4,11 +4,16 @@ name: Documentation Test Build
 
 on:
   pull_request:
-    branches: [documentation]
-    paths: [VAMobile/**]
+    branches: [develop]
+    paths: 
+      - VAMobile/src/components/**
+      - VAMobile/src/documentation/**
+      - VAMobile/src/utils/hooks.tsx
   push:
-    branches: 
-      - 'documentation/**'
+    paths: 
+      - VAMobile/src/components/**
+      - VAMobile/src/documentation/**
+      - VAMobile/src/utils/hooks.tsx
 
 jobs:
   test-deploy:
