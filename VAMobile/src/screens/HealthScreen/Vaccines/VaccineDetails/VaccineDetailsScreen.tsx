@@ -82,13 +82,17 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           </TextView>
           {isCovidVaccine && (
             <>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'}>{t('vaccines.details.manufacturer')}</TextView>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                {t('vaccines.details.manufacturer')}
+              </TextView>
               <TextView variant="MobileBody" selectable={true}>
                 {vaccine.attributes?.manufacturer || placeHolder}
               </TextView>
             </>
           )}
-          <TextView variant="MobileBodyBold" color={'primaryTitle'}>{t('vaccines.details.series')}</TextView>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+            {t('vaccines.details.series')}
+          </TextView>
           <TextView variant="MobileBody" selectable={true}>
             {displaySeries}
           </TextView>
@@ -121,12 +125,16 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Box>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'}>{t('vaccines.details.reaction')}</TextView>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                {t('vaccines.details.reaction')}
+              </TextView>
               <TextView variant="MobileBody" selectable={true}>
                 {vaccine.attributes?.reaction || placeHolder}
               </TextView>
             </Box>
-            <TextView variant="MobileBodyBold" color={'primaryTitle'}>{t('vaccines.details.notes')}</TextView>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+              {t('vaccines.details.notes')}
+            </TextView>
             <TextView variant="MobileBody" selectable={true}>
               {vaccine.attributes?.note || placeHolder}
             </TextView>
