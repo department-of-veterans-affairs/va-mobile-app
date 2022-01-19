@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import BackButton from './BackButton'
 import VAIcon from './VAIcon'
 import { BackButtonLabel, BackButtonLabelConstants } from 'constants/backButtonLabels'
@@ -43,8 +43,10 @@ context('BackButton', () => {
 
   describe('when the onPress is clicked', () => {
     it('should call the onPress function', async () => {
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-      expect(onPressSpy).toBeCalled()
+      await waitFor(() => {
+        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        expect(onPressSpy).toBeCalled()
+      })
     })
   })
 

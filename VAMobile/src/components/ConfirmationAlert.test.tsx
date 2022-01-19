@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 import ConfirmationAlert from './ConfirmationAlert'
 import { Pressable } from 'react-native'
 import TextView from './TextView'
@@ -53,15 +53,19 @@ context('ConfirmationAlert', () => {
 
   describe('on click of first button', () => {
     it('should call route navigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('on click of second button', () => {
     it('should call goBack', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(goBack).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[1].props.onPress()
+        expect(goBack).toHaveBeenCalled()
+      })
     })
   })
 })

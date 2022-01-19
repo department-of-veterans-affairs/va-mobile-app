@@ -6,22 +6,19 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import Switch from './Switch'
 
 context('Switch', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    act(() => {
-      component = renderWithProviders(<Switch onPress={onPressSpy}/>)
-    })
-
-    testInstance = component.root
+    component = render(<Switch onPress={onPressSpy} />)
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -30,8 +27,10 @@ context('Switch', () => {
 
   describe('when the switch is clicked', () => {
     it('should call the onPress function', async () => {
-      testInstance.findByType(RNSwitch).props.onValueChange()
-      expect(onPressSpy).toBeCalled()
+      await waitFor(() => {
+        testInstance.findByType(RNSwitch).props.onValueChange()
+        expect(onPressSpy).toBeCalled()
+      })
     })
   })
 })

@@ -5,7 +5,7 @@ import React from 'react'
 import 'jest-styled-components'
 import Mock = jest.Mock
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import { TextView } from './index'
 import AttachmentLink from './AttachmentLink'
 import { ReactTestInstance } from 'react-test-renderer'
@@ -30,8 +30,10 @@ context('AttachmentLink', () => {
   })
 
   it('should call onPress', async () => {
-    testInstance.findByType(Pressable).props.onPress()
-    expect(onPressSpy).toBeCalled()
+    await waitFor(() => {
+      testInstance.findByType(Pressable).props.onPress()
+      expect(onPressSpy).toBeCalled()
+    })
   })
 
   it('should render text as "Test.png (234 KB)"', async () => {

@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 import Mock = jest.Mock
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
 import DefaultList from './DefaultList'
 
 context('DefaultList', () => {
@@ -30,7 +30,9 @@ context('DefaultList', () => {
   })
 
   it('should call onPress when one of the buttons has been clicked', async () => {
-    expect(findByTestID(testInstance, 'another-line').props.onPress())
-    expect(onPressSpy).toBeCalled()
+    await waitFor(() => {
+      expect(findByTestID(testInstance, 'another-line').props.onPress())
+      expect(onPressSpy).toBeCalled()
+    })
   })
 })

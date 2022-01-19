@@ -7,7 +7,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import Box, { BackgroundVariant } from './Box'
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI, fireEvent, waitFor } from 'testUtils'
 import BaseListItem from './BaseListItem'
 import { TextLines } from './TextLines'
 
@@ -36,21 +36,28 @@ context('BaseListItem', () => {
   })
 
   it('should call onPress', async () => {
-    testInstance.findByType(BaseListItem).props.onPress()
+    await waitFor(() => {
+      fireEvent.press(testInstance.findByType(BaseListItem))
+    })
     expect(onPressSpy).toBeCalled()
   })
 
   describe('styling', () => {
     it('should set default background colors', async () => {
       expect(testInstance.findByType(Box).props.backgroundColor).toEqual('list')
-      testInstance.findByType(Pressable).props.onPressIn()
+      await waitFor(() => {
+        testInstance.findByType(Pressable).props.onPressIn()
+      })
       expect(testInstance.findByType(Box).props.backgroundColor).toEqual('listActive')
     })
 
     it('should set custom background colors', async () => {
       initializeTestInstance('completedPhase', 'currentPhase')
       expect(testInstance.findByType(Box).props.backgroundColor).toEqual('completedPhase')
-      testInstance.findByType(Pressable).props.onPressIn()
+      await waitFor(() => {
+        testInstance.findByType(Pressable).props.onPressIn()
+      })
+
       expect(testInstance.findByType(Box).props.backgroundColor).toEqual('currentPhase')
     })
   })

@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
 import ClickForActionLink, { LinkUrlIconType, LinkTypeOptionsConstants } from './ClickForActionLink'
 import VAIcon from './VAIcon'
 import Mock = jest.Mock
@@ -47,8 +47,10 @@ context('ClickForActionLink', () => {
 
   describe('when linkType is call', () => {
     it('should launch external link with the parameter tel:number', async () => {
-      findByTestID(testInstance, '111-453-3234').props.onPress()
-      expect(mockExternalLinkSpy).toBeCalledWith('tel:1114533234')
+      await waitFor(() => {
+        findByTestID(testInstance, '111-453-3234').props.onPress()
+        expect(mockExternalLinkSpy).toBeCalledWith('tel:1114533234')
+      })
     })
 
     it('should render the VAIcon with name Phone', async () => {
@@ -61,8 +63,10 @@ context('ClickForActionLink', () => {
       initializeTestInstance('111-453-3234', '1114533234', LinkTypeOptionsConstants.text)
     })
     it('should call mockExternalLinkSpy with the parameter sms:number', async () => {
-      findByTestID(testInstance, '111-453-3234').props.onPress()
-      expect(mockExternalLinkSpy).toBeCalledWith('sms:1114533234')
+      await waitFor(() => {
+        findByTestID(testInstance, '111-453-3234').props.onPress()
+        expect(mockExternalLinkSpy).toBeCalledWith('sms:1114533234')
+      })
     })
 
     it('should render the VAIcon with name Text', async () => {
@@ -75,8 +79,10 @@ context('ClickForActionLink', () => {
       initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url)
     })
     it('should call mockExternalLinkSpy with the parameter given to urlLink, https://google.com', async () => {
-      findByTestID(testInstance, 'click-me-to-go-to-google').props.onPress()
-      expect(mockExternalLinkSpy).toBeCalledWith('https://google.com')
+      await waitFor(() => {
+        findByTestID(testInstance, 'click-me-to-go-to-google').props.onPress()
+        expect(mockExternalLinkSpy).toBeCalledWith('https://google.com')
+      })
     })
 
     describe('when there is no linkIconType or it is set to Chat', () => {
@@ -106,8 +112,10 @@ context('ClickForActionLink', () => {
   describe('analytic function', () => {
     it('should be fired on press', async () => {
       initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url)
-      findByTestID(testInstance, 'click-me-to-go-to-google').props.onPress()
-      expect(analyticFn).toBeCalled()
+      await waitFor(() => {
+        findByTestID(testInstance, 'click-me-to-go-to-google').props.onPress()
+        expect(analyticFn).toBeCalled()
+      })
     })
   })
 })

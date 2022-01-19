@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import Carousel from './Carousel'
 import { TextView } from '../index'
 
@@ -17,8 +17,10 @@ context('Carousel', () => {
     return <TextView>Test Component</TextView>
   }
 
-  beforeEach(() => {
-    component = render(<Carousel screenList={[{ name: 'TestComponent', component: TestComponent }]} onCarouselEnd={() => {}} translation={t} />)
+  beforeEach(async () => {
+    await waitFor(() => {
+      component = render(<Carousel screenList={[{ name: 'TestComponent', component: TestComponent }]} onCarouselEnd={() => {}} translation={t} />)
+    })
 
     testInstance = component.container
   })

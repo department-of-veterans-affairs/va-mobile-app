@@ -8,7 +8,7 @@ import { Pressable } from 'react-native'
 import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
 import { CarouselScreen, TextView } from '../index'
 
@@ -43,7 +43,6 @@ context('CarouselTabBar', () => {
         navigation={{ navigate: navigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
       />,
     )
-
     testInstance = component.container
   }
 
@@ -58,12 +57,16 @@ context('CarouselTabBar', () => {
   describe('the user should be able to navigate forward and backward', () => {
     it('should navigate to the next screen and back to the previous screen', async () => {
       // clicking the next button
-      testInstance.findAllByType(Pressable)[1].props.onPress()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[1].props.onPress()
+      })
       expect(navigationSpy).toHaveBeenCalled()
       expect(navigationSpy).toHaveBeenCalledWith('TestComponent2')
 
       //clicking the back button
-      testInstance.findAllByType(Pressable)[0].props.onPress()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+      })
       expect(navigationSpy).toHaveBeenCalled()
       expect(navigationSpy).toHaveBeenCalledWith('TestComponent')
     })
@@ -71,7 +74,9 @@ context('CarouselTabBar', () => {
     describe('on click of done', () => {
       it('should call onCarouselEnd', async () => {
         initializeTestInstance(singleScreen)
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        await waitFor(() => {
+          testInstance.findAllByType(Pressable)[0].props.onPress()
+        })
         expect(onCarouselEndSpy).toHaveBeenCalled()
       })
     })
@@ -79,7 +84,9 @@ context('CarouselTabBar', () => {
 
   describe('on click of skip', () => {
     it('should call onCarouselEnd', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+      })
       expect(onCarouselEndSpy).toHaveBeenCalled()
     })
   })

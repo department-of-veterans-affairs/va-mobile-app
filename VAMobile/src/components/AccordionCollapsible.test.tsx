@@ -2,7 +2,7 @@ import 'react-native'
 import { Pressable } from 'react-native'
 import React from 'react'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import AccordionCollapsible from './AccordionCollapsible'
 import TextView from './TextView'
 import { VABorderColors } from 'styles/theme'
@@ -50,9 +50,11 @@ context('AccordionCollapsible', () => {
 
   describe('when expanded is true', () => {
     it('should render the expandedContent', async () => {
-      testInstance.container.findByType(Pressable).props.onPress()
+      await waitFor(() => {
+        testInstance.container.findByType(Pressable).props.onPress()
 
-      expect(testInstance.container.findAllByType(TextView)[1].props.children).toEqual('EXPANDED')
+        expect(testInstance.container.findAllByType(TextView)[1].props.children).toEqual('EXPANDED')
+      })
     })
   })
 

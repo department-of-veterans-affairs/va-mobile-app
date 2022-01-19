@@ -1,50 +1,56 @@
 import 'react-native'
 import React from 'react'
-import {Pressable, TextInput} from 'react-native'
+import { Pressable, TextInput } from 'react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import {context, mockStore, renderWithProviders} from 'testUtils'
-import VATextInput, {VATextInputTypes} from './VATextInput'
-import {Box, TextView} from '../../index'
-import {isIOS} from 'utils/platform'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
+import VATextInput, { VATextInputTypes } from './VATextInput'
+import { Box, TextView } from '../../index'
+import { isIOS } from 'utils/platform'
 
 let mockIsIOS = jest.fn()
 jest.mock('utils/platform', () => ({
   isIOS: jest.fn(() => mockIsIOS),
 }))
 
-
 context('VATextInput', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onChangeSpy: Mock
-  let store: any
   let isIOSMock = isIOS as jest.Mock
 
-  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isTextArea = false) => {
+  const initializeTestInstance = (
+    inputType = 'email' as VATextInputTypes,
+    value = '',
+    helperTextKey = '',
+    error = '',
+    isRequiredField = false,
+    testID = '',
+    labelKey = 'profile:personalInformation.emailAddress',
+    isTextArea = false,
+  ) => {
     onChangeSpy = jest.fn(() => {})
 
     isIOSMock.mockReturnValue(false)
 
-    store = mockStore()
+    component = render(
+      <VATextInput
+        inputType={inputType}
+        onChange={onChangeSpy}
+        labelKey={labelKey}
+        value={value}
+        helperTextKey={helperTextKey}
+        isRequiredField={isRequiredField}
+        testID={testID}
+        isTextArea={isTextArea}
+        error={error}
+      />,
+    )
 
-    act(() => {
-      component = renderWithProviders(<VATextInput
-                                        inputType={inputType}
-                                        onChange={onChangeSpy}
-                                        labelKey={labelKey}
-                                        value={value}
-                                        helperTextKey={helperTextKey}
-                                        isRequiredField={isRequiredField}
-                                        testID={testID}
-                                        isTextArea={isTextArea}
-                                        error={error} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -56,8 +62,10 @@ context('VATextInput', () => {
   })
 
   it('should call onChange', async () => {
-    testInstance.findByType(VATextInput).props.onChange()
-    expect(onChangeSpy).toBeCalled()
+    await waitFor(() => {
+      testInstance.findByType(VATextInput).props.onChange()
+      expect(onChangeSpy).toBeCalled()
+    })
   })
 
   describe('when isTextArea is true', () => {
@@ -121,17 +129,21 @@ context('VATextInput', () => {
     describe('when the text input is focused', () => {
       describe('when there is a value', () => {
         it('should set the a11yValue to Editing: {{ text }}', async () => {
-          initializeTestInstance('email', 'MY VALUE')
-          testInstance.findByType(TextInput).props.onFocus()
-          expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing: MY VALUE' })
+          await waitFor(() => {
+            initializeTestInstance('email', 'MY VALUE')
+            testInstance.findByType(TextInput).props.onFocus()
+            expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing: MY VALUE' })
+          })
         })
       })
 
       describe('when there is no value', () => {
         it('should set the a11yValue to Editing value', async () => {
-          initializeTestInstance('email', '')
-          testInstance.findByType(TextInput).props.onFocus()
-          expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing value' })
+          await waitFor(() => {
+            initializeTestInstance('email', '')
+            testInstance.findByType(TextInput).props.onFocus()
+            expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing value' })
+          })
         })
       })
     })

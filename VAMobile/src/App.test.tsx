@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { context, render, act, RenderAPI } from 'testUtils'
+import { context, render, act, RenderAPI, waitFor } from 'testUtils'
 
 import { Linking } from 'react-native'
 import App, { AuthGuard, AuthedApp } from './App'
@@ -24,7 +24,7 @@ jest.mock('react-native-keyboard-manager', () => ({
 
 context('App', () => {
   it('initializes correctly', async () => {
-    let component: RenderAPI
+    let component: any
     jest.mock('./store', () => ({
       ...(jest.requireActual('./store') as any),
       configureStore: () => ({
@@ -34,30 +34,36 @@ context('App', () => {
       }),
     }))
 
-    component = render(<App />, { preloadedState: { auth: initialAuthState }, navigationProvided: true })
+    await waitFor(() => {
+      component = render(<App />, { preloadedState: { auth: initialAuthState }, navigationProvided: true })
+    })
 
     expect(component).toBeTruthy()
   })
 
   describe('AuthGuard', () => {
     it('should render loading spinner while initializing', async () => {
-      const { container } = await render(<AuthGuard />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-        },
+      await waitFor(() => {
+        const { container } = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState },
+          },
+        })
+        expect(container).toBeTruthy()
+        expect(() => container.findByType(LoginScreen)).toThrow()
+        expect(() => container.findByType(AuthedApp)).toThrow()
       })
-
-      expect(container).toBeTruthy()
-      expect(() => container.findByType(LoginScreen)).toThrow()
-      expect(() => container.findByType(AuthedApp)).toThrow()
     })
 
     it('should initilize by registering for linking', async () => {
       let component: any
-      component = render(<AuthGuard />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-        },
+
+      await waitFor(() => {
+        component = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState },
+          },
+        })
       })
       expect(component).toBeTruthy()
       expect(Linking.addEventListener).toHaveBeenCalled()
@@ -66,42 +72,43 @@ context('App', () => {
     it('should dispatch handleTokenCallbackUrl when auth token result comes back', async () => {
       let component: any
 
-      component = await render(<AuthGuard />, {
-        preloadedState: {
-          auth: { ...initialAuthState, initializing: false },
-        },
+      await waitFor(() => {
+        component = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState, initializing: false },
+          },
+        })
       })
 
       const spy = Linking.addEventListener as jest.Mock
       const listeners = spy.mock.calls
 
-      await act(() => {
+      await waitFor(() => {
         listeners.forEach((k) => {
           const listener = k[1]
           listener({ url: 'vamobile://login-success?code=123&state=5434' })
         })
       })
-      console.log('NEK')
-      console.log(listeners)
-
       expect(Linking.addEventListener).toHaveBeenCalled()
-
       expect(handleTokenCallbackUrl).toHaveBeenCalled()
     })
 
     it('should not dispatch handleTokenCallbackUrl when not an auth result url', async () => {
       let component: any
 
-      component = await render(<AuthGuard />, {
-        preloadedState: {
-          auth: { ...initialAuthState, initializing: false },
-        },
+      await waitFor(() => {
+        component = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState, initializing: false },
+          },
+        })
       })
+
       expect(Linking.addEventListener).toHaveBeenCalled()
       const spy = Linking.addEventListener as jest.Mock
       const listeners = spy.mock.calls
 
-      act(() => {
+      await waitFor(() => {
         listeners.forEach((k) => {
           const listener = k[1]
           listener({ url: 'vamobile://foo?code=123&state=5434' })
@@ -112,30 +119,34 @@ context('App', () => {
     })
 
     it('should render Login when not authorized', async () => {
-      let { container } = await render(<AuthGuard />, {
-        preloadedState: {
-          auth: { ...initialAuthState, initializing: false },
-        },
+      await waitFor(() => {
+        let { container } = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState, initializing: false },
+          },
+        })
+        expect(container).toBeTruthy()
+        expect(container.findByType(LoginScreen)).toBeTruthy()
       })
-      expect(container).toBeTruthy()
-      expect(container.findByType(LoginScreen)).toBeTruthy()
     })
 
     it('should render AuthedApp when authorized', async () => {
-      let { container } = await render(<AuthGuard />, {
-        preloadedState: {
-          auth: {
-            ...initialAuthState,
-            initializing: false,
-            loggedIn: true,
+      await waitFor(() => {
+        let { container } = render(<AuthGuard />, {
+          preloadedState: {
+            auth: {
+              ...initialAuthState,
+              initializing: false,
+              loggedIn: true,
+            },
+            snackBar: {
+              ...initialSnackBarState,
+            },
           },
-          snackBar: {
-            ...initialSnackBarState,
-          },
-        },
-      })
+        })
 
-      expect(container.findByType(AuthedApp)).toBeTruthy()
+        expect(container.findByType(AuthedApp)).toBeTruthy()
+      })
     })
   })
 })

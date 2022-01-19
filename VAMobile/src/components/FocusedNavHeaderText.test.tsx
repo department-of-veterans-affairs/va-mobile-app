@@ -5,26 +5,20 @@ import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import FocusedNavHeaderText from './FocusedNavHeaderText'
 
 context('FocusedNavHeaderText', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onSaveSpy: Mock
 
   beforeEach(() => {
     onSaveSpy = jest.fn(() => {})
 
-    act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <FocusedNavHeaderText headerTitle={''} />
-        </TestProviders>,
-      )
-    })
+    component = render(<FocusedNavHeaderText headerTitle={''} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
