@@ -222,6 +222,7 @@ const theme: VATheme = {
     alertPaddingY: 20,
     alertPaddingX: 10,
     listItemDecoratorMarginLeft: 20,
+    messagesDecoratorMarginLeft: 16,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
     pickerLabelMargin: 9,

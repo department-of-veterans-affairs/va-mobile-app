@@ -178,6 +178,7 @@ export type VATheme = {
     alertPaddingY: number
     alertPaddingX: number
     listItemDecoratorMarginLeft: number
+    messagesDecoratorMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
     pickerLabelMargin: number
