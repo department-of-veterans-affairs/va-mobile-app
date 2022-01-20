@@ -28,12 +28,18 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({ inlineIcon, 
       {inlineIcon && leftIconProps ? (
         <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} />
       ) : (
-        <TextView flex={3} variant={leftTextProps.variant} textAlign={leftTextProps.textAlign} color={leftTextProps.color} numberOfLines={1}>
+        <TextView
+          mr={themes.dimensions.condensedMarginBetween}
+          flex={1}
+          variant={leftTextProps.variant}
+          textAlign={leftTextProps.textAlign}
+          color={leftTextProps.color}
+          numberOfLines={1}>
           {leftTextProps.text}
         </TextView>
       )}
       {rightTextProps && (
-        <TextView flex={1} variant={rightTextProps.variant} textAlign={rightTextProps.textAlign} color={rightTextProps.color} numberOfLines={1}>
+        <TextView variant={rightTextProps.variant} textAlign={rightTextProps.textAlign} color={rightTextProps.color}>
           {rightTextProps.text}
         </TextView>
       )}

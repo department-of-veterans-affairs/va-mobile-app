@@ -59,11 +59,11 @@ const LoginScreen: FC = () => {
 
   const onLoginInit = demoMode
     ? () => {
-      dispatch(loginStart(true))
-    }
+        dispatch(loginStart(true))
+      }
     : firstTimeLogin
-      ? navigateTo('LoaGate')
-      : navigateTo('WebviewLogin')
+    ? navigateTo('LoaGate')
+    : navigateTo('WebviewLogin')
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
