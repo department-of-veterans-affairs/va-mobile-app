@@ -17,7 +17,7 @@ const LoginScreen: FC = () => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
-  const TAPS_FOR_DEMO = 2
+  const TAPS_FOR_DEMO = 20
   let demoTaps = 0
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -59,11 +59,11 @@ const LoginScreen: FC = () => {
 
   const onLoginInit = demoMode
     ? () => {
-        dispatch(loginStart(true))
-      }
+      dispatch(loginStart(true))
+    }
     : firstTimeLogin
-    ? navigateTo('LoaGate')
-    : navigateTo('WebviewLogin')
+      ? navigateTo('LoaGate')
+      : navigateTo('WebviewLogin')
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
