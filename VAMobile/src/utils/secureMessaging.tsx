@@ -18,6 +18,7 @@ import {
 import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
+import theme from 'styles/themes/standardTheme'
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
@@ -32,8 +33,13 @@ export const getMessagesListItems = (
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
-    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps =
+      readReceipt !== READ && !isOutbound
+        ? ({ name: 'UnreadIcon', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight } as VAIconProps)
+        : undefined
+    const paperClipProps = attachment
+      ? ({ name: 'PaperClip', fill: 'spinner', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight } as VAIconProps)
+      : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {
@@ -61,7 +67,7 @@ export const getMessagesListItems = (
           color: 'primary',
         },
         leftIconProps: paperClipProps,
-        rightIconProps: { name: 'ArrowRight', width: 16, height: 16, fill: 'spinner' } as VAIconProps,
+        rightIconProps: { name: 'ArrowRight', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight, fill: 'spinner' } as VAIconProps,
       },
     ]
 

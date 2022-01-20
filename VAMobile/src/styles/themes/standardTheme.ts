@@ -252,6 +252,8 @@ const theme: VATheme = {
     tagCountTopPadding: 3,
     messagePhotoAttachmentMaxHeight: 300,
     messageIconLeftMargin: 16,
+    messageIconWidth: 16,
+    messageIconHeight: 16,
     maxNumMessageAttachments: 4,
     paginationButtonPadding: 15,
     pickerModalTopPadding: 60,

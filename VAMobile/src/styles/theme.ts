@@ -207,6 +207,8 @@ export type VATheme = {
     tagCountTopPadding: number
     messagePhotoAttachmentMaxHeight: number
     messageIconLeftMargin: number
+    messageIconWidth: number
+    messageIconHeight: number
     maxNumMessageAttachments: number
     paginationButtonPadding: number
     pickerModalTopPadding: number
