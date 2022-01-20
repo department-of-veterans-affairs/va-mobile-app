@@ -1,5 +1,4 @@
 import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
-import { Appearance, ColorSchemeName } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
@@ -22,40 +21,10 @@ import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { getHeaderStyles } from 'styles/common'
-import { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
 import { updateAccessibilityFocus } from 'store/actions'
 import HeaderTitle from 'components/HeaderTitle'
-
-// const SCHEME_DEBOUNCE = 500
-
-/**
- * Listen for changes to the system dark mode settings. Uses a timeout as a workaround for an issue discussed
- * https://github.com/facebook/react-native/issues/28525 where the listener is sometimes returning the wrong mode
- * before switching back to the correct one causing the screen to flash between light and dark modes.
- * @param setCurrentTheme - function to set the scheme so changes are reflected at the App level
- */
-export const useColorScheme = (setCurrentTheme: (value: ((prevState: VATheme) => VATheme) | VATheme) => void): NonNullable<ColorSchemeName> => {
-  const [scheme, setScheme] = useState(Appearance.getColorScheme())
-
-  useEffect(() => {
-    const evt = Appearance.addChangeListener(onColorSchemeChange)
-
-    return () => {
-      evt.remove()
-    }
-  })
-
-  function onColorSchemeChange(_preferences: Appearance.AppearancePreferences) {
-    const newScheme = Appearance.getColorScheme()
-    setScheme(newScheme)
-    setColorScheme(newScheme)
-    setCurrentTheme(getTheme())
-  }
-
-  return scheme as NonNullable<ColorSchemeName>
-}
 
 /**
  * Hook to determine if an error should be shown for a given screen id
