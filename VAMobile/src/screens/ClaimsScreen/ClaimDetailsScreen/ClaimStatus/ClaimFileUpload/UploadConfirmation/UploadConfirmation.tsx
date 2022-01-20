@@ -58,7 +58,7 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   return (
     <VAScrollView {...testIdProps('File-upload: Upload-confirmation-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('fileUpload.pleaseConfirmUpload', { requestTitle: request.displayName || t('fileUpload.request') })}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>

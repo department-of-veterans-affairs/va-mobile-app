@@ -33,7 +33,6 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
   return (
     <AlertBox
       border="confirmation"
-      background="noCardBackground"
       title={t('personalInformation.areYouSureYouWantToDelete', { alertText })}
       text={t('personalInformation.deleteDataInfo', { alertText })}
       textA11yLabel={t('personalInformation.deleteDataInfoA11yLabel', { alertText })}>

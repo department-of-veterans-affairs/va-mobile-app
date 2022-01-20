@@ -51,6 +51,7 @@ const LoginScreen: FC = () => {
   }
   const tapForDemo = () => {
     demoTaps++
+    console.log(`demotaps: ${demoTaps}`)
     if (demoTaps > TAPS_FOR_DEMO) {
       demoTaps = 0
       setDemoPromptVisible(true)
@@ -71,7 +72,7 @@ const LoginScreen: FC = () => {
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && (
         <Box mx={theme.dimensions.gutter}>
-          <AlertBox border={'informational'} background={'cardBackground'} title={'DEMO MODE'} />
+          <AlertBox border={'informational'} title={'DEMO MODE'} />
         </Box>
       )}
       <Box flex={1}>

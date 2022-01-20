@@ -51,7 +51,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   return (
     <VAScrollView {...testIdProps('File-upload: Upload-file-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {request.displayName}
         </TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>

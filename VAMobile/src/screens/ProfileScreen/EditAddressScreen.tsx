@@ -503,7 +503,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+            <AlertBox title={t('editAddress.alertError')} border="error" />
           </Box>
         )}
         <FormWrapper

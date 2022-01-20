@@ -211,7 +211,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           </Box>
           <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
             <TextView>
-              <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                {t('secureMessaging.composeMessage.important')}
+              </TextView>
               <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
             </TextView>
           </Box>
@@ -219,13 +221,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       </Box>
       <TextArea>
         <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
-        <TextView variant="MobileBodyBold" accessible={true}>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
           {receiverName}
         </TextView>
         <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
           {t('secureMessaging.formMessage.subject')}
         </TextView>
-        <TextView variant="MobileBodyBold" accessible={true}>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
           {subjectHeader}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -258,14 +260,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
+          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'} color={'primaryTitle'}>
             {t('secureMessaging.reply.messageThread')}
           </TextView>
         </Box>
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
+              <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
+                {subjectHeader}
+              </TextView>
             </Box>
             {renderMessages(message, messagesById, thread)}
           </Box>

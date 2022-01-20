@@ -26,7 +26,7 @@ const NoClaimsAndAppeals: FC = () => {
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Claims: No-claims-page')} alignItems="center">
       <Box {...testIdProps(header)} accessible={true}>
-        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign="center" accessibilityRole="header">
           {header}
         </TextView>
       </Box>

@@ -216,7 +216,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       <VAScrollView {...testIdProps('ViewMessage-page')} scrollViewRef={scrollRef}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-            <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
+            <TextView variant="BitterBoldHeading" color={'primaryTitle'} accessibilityRole={'header'}>
               {formatSubject(category, subject, t)}
             </TextView>
           </Box>
@@ -224,7 +224,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         </Box>
         {replyExpired && (
           <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-            <AlertBox background={'noCardBackground'} border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
+            <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
               <Box mt={theme.dimensions.standardMarginBetween}>
                 <VAButton
                   label={t('secureMessaging.composeMessage.new')}

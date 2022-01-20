@@ -37,7 +37,7 @@ const UploadFailure: FC<UploadFailureProps> = ({ navigation }) => {
   return (
     <VAScrollView {...testIdProps('File-Upload: Upload-success-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <AlertBox title={t('fileUpload.yourFileNotUploaded')} text={t('fileUpload.sorry')} border="error" background="noCardBackground">
+        <AlertBox title={t('fileUpload.yourFileNotUploaded')} text={t('fileUpload.sorry')} border="error">
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={navigateToFileRequests}

@@ -20,8 +20,7 @@ const IndividualMessageErrorComponent: FC = () => {
           title={t('secureMessaging.viewMessage.errorTitle')}
           titleA11yLabel={t('secureMessaging.viewMessage.errorTitle')}
           text={tc('errors.callHelpCenter.sorryWithRefresh')}
-          border="error"
-          background={'cardBackground'}>
+          border="error">
           <Box>
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}
