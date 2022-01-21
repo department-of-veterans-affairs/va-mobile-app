@@ -4,10 +4,10 @@ import {TextInput} from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { PhoneData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -26,7 +26,7 @@ jest.mock("../../../../utils/hooks", ()=> {
 
 context('EditPhoneNumberScreen', () => {
   let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
   let navHeaderSpy: any
@@ -53,16 +53,14 @@ context('EditPhoneNumberScreen', () => {
       },
     )
 
-    store = mockStore({
+    store = {
       ...InitialState,
       errors: errorsState
-    })
+    }
 
-    act(() => {
-      component = renderWithProviders(<EditPhoneNumberScreen {...props} />, store)
-    })
+    component = render(<EditPhoneNumberScreen {...props} />, { preloadedState: store })
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -136,16 +134,16 @@ context('EditPhoneNumberScreen', () => {
 
   describe('when phoneNumberSaved is true', () => {
     it('should call navigations go back function', async () => {
-      store = mockStore({
+      store = {
         ...InitialState,
         personalInformation: { ...InitialState.personalInformation, phoneNumberSaved: true }
+      }
+
+      await waitFor(() => {
+        component = render(<EditPhoneNumberScreen {...props} />, { preloadedState: store })
       })
 
-      act(() => {
-        component = renderWithProviders(<EditPhoneNumberScreen {...props} />, store)
-      })
-
-      testInstance = component.root
+      testInstance = component.container
 
       expect(props.navigation.goBack).toBeCalled()
     })
@@ -155,7 +153,7 @@ context('EditPhoneNumberScreen', () => {
     it('should display an error AlertBox and a field error', async () => {
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
 
-      act(() => {
+      await waitFor(() => {
         const numberInput = testInstance.findAllByType(TextInput)[0]
         numberInput.props.onChangeText('123')
         navHeaderSpy.save.props.onSave()
@@ -165,7 +163,7 @@ context('EditPhoneNumberScreen', () => {
       expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
       expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
 
-      act(() => {
+      await waitFor(() => {
         const numberInput = testInstance.findAllByType(TextInput)[0]
         numberInput.props.onChangeText('')
         navHeaderSpy.save.props.onSave()

@@ -18,7 +18,7 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices/personalInformationSlice'
+import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
