@@ -3,12 +3,10 @@ import { ViewStyle } from 'react-native'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
-import { AuthorizedServicesState } from 'store/slices'
-import { ClaimsAndAppealsState, prefetchClaimsAndAppeals } from 'store/slices/claimsAndAppealsSlice'
+import { ClaimsAndAppealsState, prefetchClaimsAndAppeals, AuthorizedServicesState, PersonalInformationState, getProfileInfo } from 'store/slices'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
@@ -64,6 +62,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   }
 
   if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
+    console.log('Hey I am here')
     return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
   }
 

@@ -39,9 +39,10 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
 
   useEffect(() => {
     dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
-    InteractionManager.runAfterInteractions(() => {
+    const interaction = InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
+    return () => interaction.cancel()
   }, [dispatch, claimID])
 
   if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {

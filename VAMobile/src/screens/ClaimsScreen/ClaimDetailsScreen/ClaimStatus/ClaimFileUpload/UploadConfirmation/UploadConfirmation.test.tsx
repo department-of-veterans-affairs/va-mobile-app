@@ -1,30 +1,29 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import UploadConfirmation from './UploadConfirmation'
-import { InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { VAButton } from 'components'
-import {uploadFileToClaim} from 'store/actions'
+import { uploadFileToClaim, InitialState } from 'store/slices'
 
-jest.mock('../../../../../../store/actions', () => {
-  let actual = jest.requireActual('../../../../../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     uploadFileToClaim: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
 context('UploadConfirmation', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
   let store: any
@@ -36,27 +35,25 @@ context('UploadConfirmation', () => {
     date: '2020-07-16',
     status: 'NEEDED',
     uploaded: false,
-    uploadsAllowed: true
+    uploadsAllowed: true,
   }
 
   const initializeTestInstance = (filesUploadedSuccess = false, fileUploadedFailure = false) => {
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy }, { params: { request, filesList: ['file'] } })
 
-    store = mockStore({
-      ...InitialState,
-      claimsAndAppeals: {
-        ...InitialState.claimsAndAppeals,
-        claim: Claim,
-        filesUploadedSuccess,
-        fileUploadedFailure,
-      }
+    component = render(<UploadConfirmation {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        claimsAndAppeals: {
+          ...InitialState.claimsAndAppeals,
+          claim: Claim,
+          filesUploadedSuccess,
+          fileUploadedFailure,
+        },
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<UploadConfirmation {...props}/>, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

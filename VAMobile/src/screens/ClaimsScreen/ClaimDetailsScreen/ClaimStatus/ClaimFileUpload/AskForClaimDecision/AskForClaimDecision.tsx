@@ -18,7 +18,7 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimTypeConstants } from '../../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices/claimsAndAppealsSlice'
+import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'

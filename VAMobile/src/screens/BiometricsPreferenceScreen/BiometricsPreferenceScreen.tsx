@@ -5,7 +5,7 @@ import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'com
 import { NAMESPACE } from 'constants/namespaces'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText, getSupportedBiometricTranslationTag } from 'utils/formattingUtils'
 
-import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices/authSlice'
+import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'

@@ -1,13 +1,14 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render } from 'testUtils'
 
 import AppealCurrentStatus from './AppealCurrentStatus'
-import {AppealAOJTypes, AppealStatusData, AppealTypes, EmailData, PhoneData} from 'store/api/types'
-import {InitialState} from 'store/reducers'
-import {TextView} from 'components'
+import { AppealAOJTypes, AppealStatusData, AppealTypes, EmailData, PhoneData } from 'store/api/types'
+import { TextView } from 'components'
+import { InitialState } from 'store/slices'
+import { RenderAPI } from '@testing-library/react-native'
 
 const mockExternalLinkSpy = jest.fn()
 
@@ -25,14 +26,13 @@ jest.mock('utils/hooks', () => {
 })
 
 context('AppealStatus', () => {
-  let component: any
+  let component: RenderAPI
   let props: any
-  let store: any
   let testInstance: ReactTestInstance
 
   let status: AppealStatusData = {
     details: {},
-    type: 'scheduled_hearing'
+    type: 'scheduled_hearing',
   }
 
   const initializeTestInstance = (status: AppealStatusData, aoj: AppealAOJTypes, appealType: AppealTypes, docketName: string, programArea: string) => {
@@ -41,37 +41,35 @@ context('AppealStatus', () => {
       aoj,
       appealType,
       docketName,
-      programArea
+      programArea,
     })
 
-    store = mockStore({
-      ...InitialState,
-      personalInformation: {
-        ...InitialState.personalInformation,
-        profile: {
-          firstName: '',
-          middleName: '',
-          lastName: '',
-          contactEmail: {} as EmailData,
-          signinEmail: '',
-          birthDate: '',
-          gender: '',
-          addresses: '',
-          homePhoneNumber: {} as PhoneData,
-          mobilePhoneNumber: {} as PhoneData,
-          workPhoneNumber: {} as PhoneData,
-          faxNumber: {} as PhoneData,
-          fullName: 'Larry Brown',
-          signinService: 'IDME',
-        }
-      }
+    component = render(<AppealCurrentStatus {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: {
+          ...InitialState.personalInformation,
+          profile: {
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            contactEmail: {} as EmailData,
+            signinEmail: '',
+            birthDate: '',
+            gender: '',
+            addresses: '',
+            homePhoneNumber: {} as PhoneData,
+            mobilePhoneNumber: {} as PhoneData,
+            workPhoneNumber: {} as PhoneData,
+            faxNumber: {} as PhoneData,
+            fullName: 'Larry Brown',
+            signinService: 'IDME',
+          },
+        },
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<AppealCurrentStatus {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -102,7 +100,7 @@ context('AppealStatus', () => {
 
     it('should display the pending_hearing_scheduling data', async () => {
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('You\'re waiting for your hearing to be scheduled')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("You're waiting for your hearing to be scheduled")
     })
 
     describe('when the appealType is appeal', () => {
@@ -168,7 +166,9 @@ context('AppealStatus', () => {
     describe('when aoj is other', () => {
       it('should display the aoj description as Agency of Original Jurisdiction', async () => {
         initializeTestInstance(status, 'other', 'higherLevelReview', '', 'compensation')
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('The Agency of Original Jurisdiction received your Notice of Disagreement. A Decision Review Officer (DRO) will review all of the evidence related to your appeal, including any new evidence you sent. The DRO may contact you to ask for more evidence or medical exams as needed. When the DRO has completed their review, they’ll determine whether or not they can grant your appeal.')
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
+          'The Agency of Original Jurisdiction received your Notice of Disagreement. A Decision Review Officer (DRO) will review all of the evidence related to your appeal, including any new evidence you sent. The DRO may contact you to ask for more evidence or medical exams as needed. When the DRO has completed their review, they’ll determine whether or not they can grant your appeal.',
+        )
       })
     })
   })
@@ -326,7 +326,9 @@ context('AppealStatus', () => {
       status.type = 'evidentiary_period'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your appeals file is open for new evidence')
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Because you requested the Direct Review appeal option, the Board of Veterans’ Appeals will hold your case open for new evidence for 90 days. You can send new evidence to the Board at:')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
+        'Because you requested the Direct Review appeal option, the Board of Veterans’ Appeals will hold your case open for new evidence for 90 days. You can send new evidence to the Board at:',
+      )
     })
   })
 
@@ -416,7 +418,7 @@ context('AppealStatus', () => {
     it('should display the remand_return data', async () => {
       status.type = 'remand_return'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your appeal was returned to the Board of Veterans\' Appeals')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("Your appeal was returned to the Board of Veterans' Appeals")
     })
   })
 })

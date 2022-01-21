@@ -2,49 +2,51 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import {Pressable} from 'react-native'
-import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { Pressable } from 'react-native'
+import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
 
-import ClaimsAndAppealsListView, {ClaimType, ClaimTypeConstants} from './ClaimsAndAppealsListView'
-import {InitialState} from 'store/reducers'
+import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView'
+import { InitialState } from 'store/slices'
 import { TextView } from 'components'
-import {ClaimsAndAppealsList} from 'store/api/types'
+import { ClaimsAndAppealsList } from 'store/api/types'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
-import { getClaimsAndAppeals } from 'store/actions/claimsAndAppeals'
+import { getClaimsAndAppeals } from 'store/slices'
+import { waitFor } from '@testing-library/react-native'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../utils/hooks")
-  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(()=> {
-      return {...theme}
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
-    useRouteNavigation: () => { return () => mockNavigationSpy},
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
   }
 })
 
-jest.mock('../../../store/actions/claimsAndAppeals', () => {
-  let actual = jest.requireActual('../../../store/actions/claimsAndAppeals')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     getClaimsAndAppeals: jest.fn(() => {
       return {
         type: '',
-        payload: {}
+        payload: {},
       }
-    })
+    }),
   }
 })
 
 context('ClaimsAndAppealsListView', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
+  const initializeTestInstance = async (claimType: ClaimType, isEmpty?: boolean): Promise<void> => {
     props = mockNavProps({ claimType })
 
     const activeClaimsAndAppeals: ClaimsAndAppealsList = [
@@ -56,8 +58,8 @@ context('ClaimsAndAppealsListView', () => {
           completed: false,
           dateFiled: '2020-10-22',
           updatedAt: '2020-10-28',
-          displayTitle: 'supplemental claim for disability compensation'
-        }
+          displayTitle: 'supplemental claim for disability compensation',
+        },
       },
       {
         id: '2',
@@ -67,7 +69,7 @@ context('ClaimsAndAppealsListView', () => {
           completed: false,
           dateFiled: '2020-10-22',
           updatedAt: '2020-10-30',
-          displayTitle: 'Compensation'
+          displayTitle: 'Compensation',
         },
       },
     ]
@@ -81,43 +83,43 @@ context('ClaimsAndAppealsListView', () => {
           completed: true,
           dateFiled: '2020-10-25',
           updatedAt: '2020-10-31',
-          displayTitle: 'Compensation'
+          displayTitle: 'Compensation',
         },
       },
     ]
 
-    store = mockStore({
-      ...InitialState,
-      claimsAndAppeals: {
-        ...InitialState.claimsAndAppeals,
-        claimsAndAppealsByClaimType: {
-          ACTIVE: isEmpty ? [] : activeClaimsAndAppeals,
-          CLOSED: isEmpty ? [] : closedClaimsAndAppeals,
-        },
-        claimsAndAppealsMetaPagination: {
-          ACTIVE: {
-            currentPage: 2,
-            perPage: 1,
-            totalEntries: 5
+    await waitFor(() => {
+      component = render(<ClaimsAndAppealsListView {...props} />, {
+        preloadedState: {
+          ...InitialState,
+          claimsAndAppeals: {
+            ...InitialState.claimsAndAppeals,
+            claimsAndAppealsByClaimType: {
+              ACTIVE: isEmpty ? [] : activeClaimsAndAppeals,
+              CLOSED: isEmpty ? [] : closedClaimsAndAppeals,
+            },
+            claimsAndAppealsMetaPagination: {
+              ACTIVE: {
+                currentPage: 2,
+                perPage: 1,
+                totalEntries: 5,
+              },
+              CLOSED: {
+                currentPage: 2,
+                perPage: 1,
+                totalEntries: 5,
+              },
+            },
           },
-          CLOSED: {
-            currentPage: 2,
-            perPage: 1,
-            totalEntries: 5
-          }
-        }
-      }
+        },
+      })
     })
 
-    act(() => {
-      component = renderWithProviders(<ClaimsAndAppealsListView {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
-  beforeEach(() => {
-    initializeTestInstance('ACTIVE')
+  beforeEach(async () => {
+    await initializeTestInstance('ACTIVE')
   })
 
   it('initializes correctly', async () => {
@@ -132,31 +134,30 @@ context('ClaimsAndAppealsListView', () => {
 
   describe('when the claimType is CLOSED', () => {
     it('should display the header as "Your closed claims and appeals"', async () => {
-      initializeTestInstance('CLOSED')
+      await initializeTestInstance('CLOSED')
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your closed claims and appeals')
     })
   })
 
   describe('when an item is type claim', () => {
-    it('should display the first line with the format "Claim for {{subtype}} updated on MMMM, dd yyyy"', async () =>{
+    it('should display the first line with the format "Claim for {{subtype}} updated on MMMM, dd yyyy"', async () => {
       expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Claim for compensation updated on October 30, 2020')
     })
 
-    it('should display the second line as "Submitted on MMMM dd, yyyy', async () =>{
+    it('should display the second line as "Submitted on MMMM dd, yyyy', async () => {
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Submitted October 22, 2020')
     })
   })
 
   describe('when an item is type appeal', () => {
-    it('should display the first line with the format "{{subtype}} updated on MMMM, dd yyyy"', async () =>{
+    it('should display the first line with the format "{{subtype}} updated on MMMM, dd yyyy"', async () => {
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Supplemental claim for disability compensation updated on October 28, 2020')
     })
 
-    it('should display the second line as "Submitted on MMMM dd, yyyy', async () =>{
+    it('should display the second line as "Submitted on MMMM dd, yyyy', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted October 22, 2020')
     })
   })
-
 
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', async () => {
@@ -174,7 +175,7 @@ context('ClaimsAndAppealsListView', () => {
 
   describe('where there are no claims or appeals', () => {
     it('should display the NoClaimsAndAppeals components', async () => {
-      initializeTestInstance('ACTIVE', true)
+      await initializeTestInstance('ACTIVE', true)
       expect(testInstance.findAllByType(NoClaimsAndAppeals).length).toEqual(1)
     })
   })

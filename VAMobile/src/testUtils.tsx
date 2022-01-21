@@ -248,9 +248,10 @@ ctxFn.skip = (name: string, fn: () => void) => {
 export const context: SuiteFunction = ctxFn
 
 //@ts-ignore
-function render(ui, { preloadedState, store = mockStore(preloadedState), navigationProvided = false, ...renderOptions } = {}) {
+function render(ui, { preloadedState, navigationProvided = false, ...renderOptions } = {}) {
   //@ts-ignore
   function Wrapper({ children }) {
+    let store = mockStore(preloadedState)
     if (navigationProvided) {
       return (
         <Provider store={store}>

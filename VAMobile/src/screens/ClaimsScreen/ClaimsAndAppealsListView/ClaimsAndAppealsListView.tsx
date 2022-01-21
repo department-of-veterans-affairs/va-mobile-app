@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices/claimsAndAppealsSlice'
+import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'

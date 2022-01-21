@@ -2,11 +2,11 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import { Pressable } from 'react-native'
 import Mock = jest.Mock
 
-import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import VAButton, { ButtonTypesConstants } from './VAButton'
 import Box from './Box'
 import TextView from './TextView'

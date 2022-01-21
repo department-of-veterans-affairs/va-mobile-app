@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react'
 
 import { BackButton, Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices/claimsAndAppealsSlice'
+import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
