@@ -32,7 +32,7 @@ export const ActionTypes: {
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: 'appointments/dispatchFinishPrefetchAppointments',
 }
 
-const bookedAppointmentsList: AppointmentsList = [
+export const bookedAppointmentsList: AppointmentsList = [
   { ...defaultAppoinment },
   {
     ...defaultAppoinment,
@@ -97,9 +97,17 @@ const bookedAppointmentsList: AppointmentsList = [
       },
     },
   },
+  {
+    ...defaultAppoinment,
+    id: '6',
+    attributes: {
+      ...defaultAppointmentAttributes,
+      isCovidVaccine: true,
+    },
+  },
 ]
 
-const canceledAppointmentList: AppointmentsList = [
+export const canceledAppointmentList: AppointmentsList = [
   {
     ...defaultAppoinment,
     id: '7',
@@ -167,6 +175,42 @@ const canceledAppointmentList: AppointmentsList = [
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
       status: AppointmentStatusConstants.CANCELLED,
       statusDetail: AppointmentStatusDetailTypeConsts.CLINIC,
+      startDateUtc: '2021-08-11T20:15:14.000+00:00',
+      startDateLocal: '2021-08-11T19:15:14.000-01:00',
+      minutesDuration: 150,
+    },
+  },
+  {
+    ...defaultAppoinment,
+    id: '13',
+    attributes: {
+      ...defaultAppointmentAttributes,
+      status: AppointmentStatusConstants.CANCELLED,
+      statusDetail: AppointmentStatusDetailTypeConsts.PATIENT,
+      startDateUtc: '2021-08-11T20:15:14.000+00:00',
+      startDateLocal: '2021-08-11T19:15:14.000-01:00',
+      minutesDuration: 150,
+    },
+  },
+  {
+    ...defaultAppoinment,
+    id: '14',
+    attributes: {
+      ...defaultAppointmentAttributes,
+      status: AppointmentStatusConstants.CANCELLED,
+      statusDetail: AppointmentStatusDetailTypeConsts.PATIENT_REBOOK,
+      startDateUtc: '2021-08-11T20:15:14.000+00:00',
+      startDateLocal: '2021-08-11T19:15:14.000-01:00',
+      minutesDuration: 150,
+    },
+  },
+  {
+    ...defaultAppoinment,
+    id: '15',
+    attributes: {
+      ...defaultAppointmentAttributes,
+      status: AppointmentStatusConstants.CANCELLED,
+      statusDetail: AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,
       startDateUtc: '2021-08-11T20:15:14.000+00:00',
       startDateLocal: '2021-08-11T19:15:14.000-01:00',
       minutesDuration: 150,
