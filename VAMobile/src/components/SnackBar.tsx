@@ -17,7 +17,7 @@ import colors from '../styles/themes/VAColors'
 const SnackBar: FC<ToastProps> = (toast) => {
   const { message, data } = toast
   const { onActionPressed, isError, actionBtnText, isUndo } = data || {}
-  const { dimensions } = useTheme()
+  const { dimensions, colors: themeColor } = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   useFocusEffect(setFocus)
@@ -89,12 +89,12 @@ const SnackBar: FC<ToastProps> = (toast) => {
             <Box mr={dimensions.snackBarBetweenSpace} alignSelf="flex-start" mt={dimensions.snackBarIconTopMargin}>
               <VAIcon
                 name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'}
-                fill={colors.white}
+                fill={themeColor.text.snackBarText}
                 height={dimensions.snackBarIconSize}
                 width={dimensions.snackBarIconSize}
               />
             </Box>
-            <TextView variant={'HelperText'} color={'primaryContrast'}>
+            <TextView variant={'HelperText'} color={'snackBarText'}>
               {message}
             </TextView>
           </Box>

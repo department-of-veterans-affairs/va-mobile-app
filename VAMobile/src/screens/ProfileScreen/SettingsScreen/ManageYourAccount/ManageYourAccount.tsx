@@ -33,7 +33,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps(generateTestID(t('manageAccount.titlePage'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('manageAccount.title')}
           </TextView>
           <TextView variant="MobileBody">{t('manageAccount.toConfirmOrUpdateEmail')}</TextView>

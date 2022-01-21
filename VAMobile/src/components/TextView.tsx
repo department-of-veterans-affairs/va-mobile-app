@@ -11,7 +11,7 @@ import { useTheme } from 'utils/hooks'
 
 /** TextView font variants */
 export type FontVariant = keyof VATypographyThemeVariants
-type ColorVariant = keyof VATextColors | keyof VAButtonTextColors
+export type ColorVariant = keyof VATextColors | keyof VAButtonTextColors
 
 /**
  * Props for textView

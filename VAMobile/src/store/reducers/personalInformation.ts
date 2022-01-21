@@ -7,6 +7,7 @@ export type PersonalInformationState = {
   loading: boolean
   emailSaved: boolean
   phoneNumberSaved: boolean
+  savingAddress: boolean
   addressSaved: boolean
   profile?: api.UserDataProfile
   error?: Error
@@ -24,6 +25,7 @@ export const initialPersonalInformationState: PersonalInformationState = {
   loading: false,
   needsDataLoad: true,
   emailSaved: false,
+  savingAddress: false,
   addressSaved: false,
   showValidation: false,
   preloadComplete: false,
@@ -113,14 +115,14 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
     return {
       ...state,
       ...payload,
-      loading: true,
+      savingAddress: true,
     }
   },
   PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS: (state, { error }) => {
     return {
       ...state,
       error,
-      loading: false,
+      savingAddress: false,
       needsDataLoad: !error,
       addressSaved: !error,
       showValidation: false,
@@ -130,13 +132,13 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
     return {
       ...state,
       ...payload,
-      loading: true,
+      savingAddress: true,
     }
   },
   PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: (state, { suggestedAddresses, confirmedSuggestedAddresses, addressData, addressValidationScenario, validationKey }) => {
     return {
       ...state,
-      loading: false,
+      savingAddress: false,
       addressData,
       suggestedAddresses,
       confirmedSuggestedAddresses,

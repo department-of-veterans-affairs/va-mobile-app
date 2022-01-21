@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 
+import { ColorVariant, TextArea } from './index'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
-import { TextArea } from './index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
@@ -14,6 +14,8 @@ import VAIcon, { VAIconProps } from './VAIcon'
 export type CollapsibleViewProps = {
   /** text displayed on the touchable */
   text: string
+  /** optional color for the touchable text */
+  textColor?: ColorVariant
   /** optional param that renders the child content outside text area when set to false (defaults to true) */
   contentInTextArea?: boolean
   /** optional a11y hint */
@@ -27,7 +29,7 @@ export type CollapsibleViewProps = {
  *
  * @returns CollapsibleView component
  */
-const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = true, showInTextArea = true, a11yHint, children }) => {
+const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = true, showInTextArea = true, a11yHint, textColor, children }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
 
@@ -72,7 +74,9 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     <Box minHeight={theme.dimensions.touchableMinHeight}>
       <Pressable {...testIdProps(text)} {...a11yHintProp(a11yHint || '')} style={pressableStyles} {...pressableProps}>
         <Box {...boxStyles}>
-          <TextView variant={'MobileBody'}>{text}</TextView>
+          <TextView color={textColor} variant={'MobileBody'}>
+            {text}
+          </TextView>
         </Box>
         {getArrowIcon()}
       </Pressable>

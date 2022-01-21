@@ -125,10 +125,10 @@ context('VAModalPicker', () => {
   })
 
   describe('when isRequiredField is true', () => {
-    it('should display (*Required)', async () => {
+    it('should display (Required)', async () => {
       initializeTestInstance('email', 'label', '', '', true)
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[9].props.children).toEqual('(*Required)')
+      expect(textViews[9].props.children).toEqual('(Required)')
     })
   })
 

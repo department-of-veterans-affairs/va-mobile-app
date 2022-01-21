@@ -71,7 +71,7 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
           name={'CheckMark'}
           height={theme.dimensions.pickerModalSelectedIconHeight}
           width={theme.dimensions.pickerModalSelectedIconWidth}
-          fill={theme.colors.icon.grayDark}
+          fill={theme.colors.icon.pickerIcon}
           {...decoratorProps}
         />
       )

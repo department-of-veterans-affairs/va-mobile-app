@@ -118,6 +118,7 @@ context('EditAddressScreen', () => {
       personalInformation: {
         profile,
         loading: false,
+        savingAddress: false,
         addressSaved,
         showValidation,
         needsDataLoad: false,

@@ -86,7 +86,7 @@ const getAddressData = (profile: UserDataProfile | undefined, translate: TFuncti
   const resultingData: Array<DefaultListItemObj> = []
 
   _.map(addressData, ({ addressType, onPress }) => {
-    let textLines: Array<TextLine> = [{ text: translate(`personalInformation.${addressType}`), variant: 'MobileBodyBold' }]
+    let textLines: Array<TextLine> = [{ text: translate(`personalInformation.${addressType}`), variant: 'MobileBodyBold', color: 'primaryTitle' }]
 
     textLines = textLines.concat(getTextForAddressData(profile, addressType, translate))
     const a11yHintTextSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'

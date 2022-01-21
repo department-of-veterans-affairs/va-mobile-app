@@ -154,7 +154,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editEmail.alertError')} background="noCardBackground" border="error" />
+            <AlertBox title={t('editEmail.alertError')} border="error" />
           </Box>
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />

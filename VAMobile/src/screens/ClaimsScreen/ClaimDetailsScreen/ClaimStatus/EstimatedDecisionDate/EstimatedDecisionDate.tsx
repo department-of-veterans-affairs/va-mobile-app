@@ -27,8 +27,8 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
 
   if (showCovidMessage) {
     return (
-      <TextArea>
-        <AlertBox border="warning" background="cardBackground" text={t('claimDetails.covidMessage')}>
+      <Box mx={theme.dimensions.gutter}>
+        <AlertBox border="warning" text={t('claimDetails.covidMessage')}>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onAlertLinkPress}
@@ -39,7 +39,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
             />
           </Box>
         </AlertBox>
-      </TextArea>
+      </Box>
     )
   }
 
@@ -69,7 +69,9 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
     <TextArea>
       <Box {...testIdProps(`${t('claimDetails.estimatedDecisionDate')} ${displayDate}`)} accessible={true}>
         <TextView variant="MobileBody">{t('claimDetails.estimatedDecisionDate')}</TextView>
-        <TextView variant="MobileBodyBold">{displayDate}</TextView>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+          {displayDate}
+        </TextView>
       </Box>
       {!!maxEstDate && !maxEstDateIsMoreThanTwoYearsOut && (
         <Box {...testIdProps(subText)} accessible={true}>

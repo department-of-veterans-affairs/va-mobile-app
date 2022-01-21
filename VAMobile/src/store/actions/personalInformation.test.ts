@@ -9,15 +9,18 @@ import {
   updateAddress,
   finishEditAddress,
   validateAddress,
-  deleteUsersNumber, deleteAddress, deleteEmail
+  deleteUsersNumber,
+  deleteAddress,
+  deleteEmail,
 } from './personalInformation'
 import { AddressData, AddressValidationScenarioTypesConstants } from 'store/api/types'
-import {StoreState} from "../reducers";
+import { StoreState } from '../reducers'
 
 context('personalInformation', () => {
   const mockStorePersonalInformation: Partial<StoreState> = {
     personalInformation: {
       loading: false,
+      savingAddress: false,
       profile: {
         firstName: 'Ben',
         middleName: 'J',
@@ -96,7 +99,7 @@ context('personalInformation', () => {
       showValidation: false,
       preloadComplete: false,
       phoneNumberSaved: false,
-    }
+    },
   }
 
   describe('deleteUsersNumber', () => {
@@ -109,7 +112,9 @@ context('personalInformation', () => {
         phoneType: 'HOME',
       }
 
-      when(api.del as jest.Mock).calledWith('/v0/user/phones', phoneData).mockResolvedValue({ })
+      when(api.del as jest.Mock)
+        .calledWith('/v0/user/phones', phoneData)
+        .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(deleteUsersNumber('HOME'))
@@ -123,7 +128,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect((api.del as jest.Mock)).toBeCalledWith('/v0/user/phones', phoneData)
+      expect(api.del as jest.Mock).toBeCalledWith('/v0/user/phones', phoneData)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -140,7 +145,9 @@ context('personalInformation', () => {
         phoneType: 'HOME',
       }
 
-      when(api.put as jest.Mock).calledWith('/v0/user/phones', updatedPhoneData).mockResolvedValue({ })
+      when(api.put as jest.Mock)
+        .calledWith('/v0/user/phones', updatedPhoneData)
+        .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
@@ -154,7 +161,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: "HOME", extension: '1111'})
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/phones', { areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -168,7 +175,9 @@ context('personalInformation', () => {
         phoneType: 'HOME',
       }
 
-      when(api.post as jest.Mock).calledWith('/v0/user/phones', updatedPhoneData).mockResolvedValue({ })
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/phones', updatedPhoneData)
+        .mockResolvedValue({})
 
       const store = realStore()
       await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
@@ -182,7 +191,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', phoneNumber: '1234567', phoneType: "HOME", extension: '1111'})
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/phones', { areaCode: '000', countryCode: '1', phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -200,7 +209,9 @@ context('personalInformation', () => {
         extension: '1111',
       }
 
-      when(api.put as jest.Mock).calledWith('/v0/user/phones', updatedPhoneData).mockResolvedValue(Promise.reject(error))
+      when(api.put as jest.Mock)
+        .calledWith('/v0/user/phones', updatedPhoneData)
+        .mockResolvedValue(Promise.reject(error))
 
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
@@ -214,7 +225,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeTruthy()
 
-      expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: 'HOME', extension: '1111'})
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/phones', { areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toEqual(error)
@@ -222,7 +233,7 @@ context('personalInformation', () => {
   })
 
   describe('getProfileInfo', () => {
-    it ('should get the users profile info', async () => {
+    it('should get the users profile info', async () => {
       const mockProfilePayload = {
         data: {
           attributes: {
@@ -269,14 +280,14 @@ context('personalInformation', () => {
               birthDate: '04/01/1970',
               gender: 'M',
               addresses: '1234 Test Ln',
-            }
-          }
-        }
+            },
+          },
+        },
       }
 
       when(api.get as jest.Mock)
-      .calledWith('/v0/user')
-      .mockResolvedValue(mockProfilePayload)
+        .calledWith('/v0/user')
+        .mockResolvedValue(mockProfilePayload)
 
       const store = realStore()
       await store.dispatch(getProfileInfo())
@@ -306,9 +317,9 @@ context('personalInformation', () => {
         data: {
           attributes: {
             profile: {},
-            authorizedServices: ['directDepositBenefits']
-          }
-        }
+            authorizedServices: ['directDepositBenefits'],
+          },
+        },
       }
 
       when(api.get as jest.Mock)
@@ -330,15 +341,15 @@ context('personalInformation', () => {
     it('should get health information', async () => {
       const mockFacilities = [
         {
-          "facilityId": "1",
-          "isCerner": true,
-          "facilityName": "Test Veterans Outpatient Clinic"
+          facilityId: '1',
+          isCerner: true,
+          facilityName: 'Test Veterans Outpatient Clinic',
         },
         {
-          "facilityId": "2",
-          "isCerner": false,
-          "facilityName": ""
-        }
+          facilityId: '2',
+          isCerner: false,
+          facilityName: '',
+        },
       ]
       const mockHealthPayload = {
         data: {
@@ -347,15 +358,15 @@ context('personalInformation', () => {
             authorizedServices: [],
             health: {
               facilities: mockFacilities,
-              isCernerPatient: true
-            }
-          }
-        }
+              isCernerPatient: true,
+            },
+          },
+        },
       }
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/user')
-          .mockResolvedValue(mockHealthPayload)
+        .calledWith('/v0/user')
+        .mockResolvedValue(mockHealthPayload)
 
       const store = realStore()
       await store.dispatch(getProfileInfo())
@@ -405,8 +416,8 @@ context('personalInformation', () => {
   describe('edit email', () => {
     it('should edit the users email', async () => {
       when(api.put as jest.Mock)
-          .calledWith('/v0/user/emails')
-          .mockResolvedValue({})
+        .calledWith('/v0/user/emails')
+        .mockResolvedValue({})
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(updateEmail('newEmail@email.com', '111'))
       const actions = store.getActions()
@@ -418,7 +429,7 @@ context('personalInformation', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.emailSaved).toBe(true)
 
-      expect((api.put as jest.Mock)).toBeCalledWith( "/v0/user/emails", {"emailAddress": "newEmail@email.com", id: '111'})
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/emails', { emailAddress: 'newEmail@email.com', id: '111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -426,8 +437,8 @@ context('personalInformation', () => {
 
     it('should call api.post for a new entry', async () => {
       when(api.post as jest.Mock)
-          .calledWith('/v0/user/emails')
-          .mockResolvedValue({})
+        .calledWith('/v0/user/emails')
+        .mockResolvedValue({})
 
       const store = realStore()
       await store.dispatch(updateEmail('newEmail@email.com', ''))
@@ -440,7 +451,7 @@ context('personalInformation', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.emailSaved).toBe(true)
 
-      expect((api.post as jest.Mock)).toBeCalledWith( "/v0/user/emails", {"emailAddress": "newEmail@email.com"})
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/emails', { emailAddress: 'newEmail@email.com' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -449,8 +460,9 @@ context('personalInformation', () => {
     it('should get error if updateEmail fails', async () => {
       const error = new Error('error from backend')
 
-      when(api.put as jest.Mock).calledWith('/v0/user/emails', { emailAddress: 'test@email.com', id: '1'})
-          .mockRejectedValue(error)
+      when(api.put as jest.Mock)
+        .calledWith('/v0/user/emails', { emailAddress: 'test@email.com', id: '1' })
+        .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(updateEmail('test@email.com', '1'))
@@ -462,7 +474,7 @@ context('personalInformation', () => {
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_EMAIL' })
       expect(endAction).toBeTruthy()
 
-      expect((api.put as jest.Mock)).toBeCalledWith( "/v0/user/emails", {"emailAddress": 'test@email.com', id: '1'})
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/emails', { emailAddress: 'test@email.com', id: '1' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.emailSaved).toBe(false)
@@ -486,7 +498,7 @@ context('personalInformation', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.emailSaved).toBe(true)
 
-      expect((api.del as jest.Mock)).toBeCalledWith( "/v0/user/emails", {"emailAddress": "newEmail@email.com", id: '111'})
+      expect(api.del as jest.Mock).toBeCalledWith('/v0/user/emails', { emailAddress: 'newEmail@email.com', id: '111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -498,8 +510,8 @@ context('personalInformation', () => {
       const addressPayload: AddressData = {
         id: 12314,
         addressLine1: 'addressLine1',
-        addressPou: "RESIDENCE/CHOICE",
-        addressType: "DOMESTIC",
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
         city: 'City',
         countryName: 'countryCode',
         countryCodeIso3: 'countryCodeIso3',
@@ -508,8 +520,8 @@ context('personalInformation', () => {
       }
 
       when(api.put as jest.Mock)
-          .calledWith('/v0/user/addresses', addressPayload)
-          .mockResolvedValue({})
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(updateAddress(addressPayload as AddressData))
@@ -517,25 +529,24 @@ context('personalInformation', () => {
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+      expect(startAction?.state.personalInformation.savingAddress).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
     })
 
-
     it('should call api.post for a new entry', async () => {
       const addressPayload = {
         addressLine1: 'Post addressLine1',
-        addressPou: "RESIDENCE/CHOICE",
-        addressType: "DOMESTIC",
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
         city: 'Post City',
         countryName: 'Post countryCode',
         countryCodeIso3: 'Post countryCodeIso3',
@@ -544,8 +555,8 @@ context('personalInformation', () => {
       }
 
       when(api.post as jest.Mock)
-          .calledWith('/v0/user/addresses', addressPayload)
-          .mockResolvedValue(mockStorePersonalInformation)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue(mockStorePersonalInformation)
 
       const store = realStore()
       await store.dispatch(updateAddress(addressPayload as AddressData))
@@ -553,14 +564,14 @@ context('personalInformation', () => {
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+      expect(startAction?.state.personalInformation.savingAddress).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -572,8 +583,8 @@ context('personalInformation', () => {
       const addressPayload: AddressData = {
         id: 12314,
         addressLine1: 'addressLine1',
-        addressPou: "RESIDENCE/CHOICE",
-        addressType: "DOMESTIC",
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
         city: 'City',
         countryName: 'countryCode',
         countryCodeIso3: 'countryCodeIso3',
@@ -582,8 +593,8 @@ context('personalInformation', () => {
       }
 
       when(api.put as jest.Mock)
-          .calledWith('/v0/user/addresses', addressPayload)
-          .mockRejectedValue(error)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(updateAddress(addressPayload as AddressData))
@@ -591,13 +602,13 @@ context('personalInformation', () => {
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+      expect(startAction?.state.personalInformation.savingAddress).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
 
-      expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.addressSaved).toBe(false)
@@ -629,65 +640,65 @@ context('personalInformation', () => {
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+      expect(startAction?.state.personalInformation.savingAddress).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect((api.del as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
+      expect(api.del as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
     })
   })
 
-  describe('validateAddress',  () => {
+  describe('validateAddress', () => {
     it('should store addressValidationData upon getting suggested address matches', async () => {
-      const addressPayload =   {
-        addressLine1: "1015 Florida St",
-        addressPou: "CORRESPONDENCE",
-        addressType: "DOMESTIC",
-        city: "Washington",
-        countryName: "United States",
-        countryCodeIso3: "USA",
-        stateCode: "DC",
-        type: "DOMESTIC",
-        zipCode: "20002",
-        zipCodeSuffix: "1922"
+      const addressPayload = {
+        addressLine1: '1015 Florida St',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'DOMESTIC',
+        city: 'Washington',
+        countryName: 'United States',
+        countryCodeIso3: 'USA',
+        stateCode: 'DC',
+        type: 'DOMESTIC',
+        zipCode: '20002',
+        zipCodeSuffix: '1922',
       }
 
       const mockSuggestedAddress = {
-        id: "0b189aba-70ce-4a4c-905b-bcfcdce0a2cd",
-        type: "suggested_address",
+        id: '0b189aba-70ce-4a4c-905b-bcfcdce0a2cd',
+        type: 'suggested_address',
         attributes: {
-          addressLine1: "1015 Florida Ave NE",
+          addressLine1: '1015 Florida Ave NE',
           addressLine2: null,
           addressLine3: null,
-          addressPou: "CORRESPONDENCE",
-          addressType: "DOMESTIC",
-          city: "Washington",
-          countryCodeIso3: "USA",
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'DOMESTIC',
+          city: 'Washington',
+          countryCodeIso3: 'USA',
           internationalPostalCode: null,
           province: null,
-          stateCode: "DC",
-          zipCode: "20002",
-          zipCodeSuffix: "3705"
+          stateCode: 'DC',
+          zipCode: '20002',
+          zipCodeSuffix: '3705',
         },
         meta: {
           address: {
             confidenceScore: 88.0,
-            addressType: "Domestic",
-            deliveryPointValidation: "CONFIRMED",
-            residentialDeliveryIndicator: "RESIDENTIAL"
+            addressType: 'Domestic',
+            deliveryPointValidation: 'CONFIRMED',
+            residentialDeliveryIndicator: 'RESIDENTIAL',
           },
-          validationKey: -1889487115
-        }
+          validationKey: -1889487115,
+        },
       }
 
       const mockAddressValidationData = {
-        data: [mockSuggestedAddress]
+        data: [mockSuggestedAddress],
       }
 
       when(api.post as jest.Mock)
@@ -701,7 +712,7 @@ context('personalInformation', () => {
       const store = realStore()
 
       await store.dispatch(validateAddress(addressPayload as AddressData))
-      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
 
@@ -716,48 +727,48 @@ context('personalInformation', () => {
     })
 
     it('should store BAD_UNIT_NUMBER_OVERRIDE as the address validation scenario', async () => {
-      const addressPayload =   {
-        addressLine1: "301 Mission St Unit 1100-B",
-        addressPou: "CORRESPONDENCE",
-        addressType: "DOMESTIC",
-        city: "San Francisco",
-        countryName: "United States",
-        countryCodeIso3: "USA",
-        stateCode: "CA",
-        type: "DOMESTIC",
-        zipCode: "94105",
+      const addressPayload = {
+        addressLine1: '301 Mission St Unit 1100-B',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'DOMESTIC',
+        city: 'San Francisco',
+        countryName: 'United States',
+        countryCodeIso3: 'USA',
+        stateCode: 'CA',
+        type: 'DOMESTIC',
+        zipCode: '94105',
       }
 
       const mockSuggestedAddress = {
-        id: "c0b7c2e0-39ab-440a-bc98-8272f29cef07",
-        type: "suggested_address",
+        id: 'c0b7c2e0-39ab-440a-bc98-8272f29cef07',
+        type: 'suggested_address',
         attributes: {
-          addressLine1: "301 Mission St Unit 1100-B",
+          addressLine1: '301 Mission St Unit 1100-B',
           addressLine2: null,
           addressLine3: null,
-          addressPou: "CORRESPONDENCE",
-          addressType: "DOMESTIC",
-          city: "San Francisco",
-          countryCodeIso3: "USA",
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'DOMESTIC',
+          city: 'San Francisco',
+          countryCodeIso3: 'USA',
           internationalPostalCode: null,
           province: null,
-          stateCode: "CA",
-          zipCode: "94105",
-          zipCodeSuffix: "2243"
+          stateCode: 'CA',
+          zipCode: '94105',
+          zipCodeSuffix: '2243',
         },
         meta: {
           address: {
             confidenceScore: 95.0,
-            addressType: "Domestic",
-            deliveryPointValidation: "STREET_NUMBER_VALIDATED_BUT_BAD_UNIT_NUMBER",
-            residentialDeliveryIndicator: "RESIDENTIAL"
+            addressType: 'Domestic',
+            deliveryPointValidation: 'STREET_NUMBER_VALIDATED_BUT_BAD_UNIT_NUMBER',
+            residentialDeliveryIndicator: 'RESIDENTIAL',
           },
-          validationKey: -2111840200
-        }
+          validationKey: -2111840200,
+        },
       }
 
       const mockAddressValidationData = {
-        data: [mockSuggestedAddress]
+        data: [mockSuggestedAddress],
       }
 
       when(api.post as jest.Mock)
@@ -777,48 +788,48 @@ context('personalInformation', () => {
     })
 
     it('should store MISSING_UNIT_NUMBER_OVERRIDE as the address validation scenario', async () => {
-      const addressPayload =   {
-        addressLine1: "301 Mission St",
-        addressPou: "CORRESPONDENCE",
-        addressType: "DOMESTIC",
-        city: "San Francisco",
-        countryName: "United States",
-        countryCodeIso3: "USA",
-        stateCode: "CA",
-        type: "DOMESTIC",
-        zipCode: "94105",
+      const addressPayload = {
+        addressLine1: '301 Mission St',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'DOMESTIC',
+        city: 'San Francisco',
+        countryName: 'United States',
+        countryCodeIso3: 'USA',
+        stateCode: 'CA',
+        type: 'DOMESTIC',
+        zipCode: '94105',
       }
 
       const mockSuggestedAddress = {
-        id: "c0b7c2e0-39ab-440a-bc98-8272f29cef07",
-        type: "suggested_address",
+        id: 'c0b7c2e0-39ab-440a-bc98-8272f29cef07',
+        type: 'suggested_address',
         attributes: {
-          addressLine1: "301 Mission St",
+          addressLine1: '301 Mission St',
           addressLine2: null,
           addressLine3: null,
-          addressPou: "CORRESPONDENCE",
-          addressType: "DOMESTIC",
-          city: "San Francisco",
-          countryCodeIso3: "USA",
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'DOMESTIC',
+          city: 'San Francisco',
+          countryCodeIso3: 'USA',
           internationalPostalCode: null,
           province: null,
-          stateCode: "CA",
-          zipCode: "94105",
-          zipCodeSuffix: "2243"
+          stateCode: 'CA',
+          zipCode: '94105',
+          zipCodeSuffix: '2243',
         },
         meta: {
           address: {
             confidenceScore: 95.0,
-            addressType: "Domestic",
-            deliveryPointValidation: "STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER",
-            residentialDeliveryIndicator: "RESIDENTIAL"
+            addressType: 'Domestic',
+            deliveryPointValidation: 'STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER',
+            residentialDeliveryIndicator: 'RESIDENTIAL',
           },
-          validationKey: -2111840200
-        }
+          validationKey: -2111840200,
+        },
       }
 
       const mockAddressValidationData = {
-        data: [mockSuggestedAddress]
+        data: [mockSuggestedAddress],
       }
 
       when(api.post as jest.Mock)
@@ -838,49 +849,49 @@ context('personalInformation', () => {
     })
 
     it('should update address when it is a successful validation', async () => {
-      const addressPayload =   {
-        addressLine1: "2246 San Miguel Ave.",
-        addressPou: "CORRESPONDENCE",
-        addressType: "DOMESTIC",
-        city: "Santa Rosa",
-        countryName: "United States",
-        countryCodeIso3: "USA",
-        stateCode: "CA",
-        type: "DOMESTIC",
-        zipCode: "95403",
-        zipCodeSuffix: "1922"
+      const addressPayload = {
+        addressLine1: '2246 San Miguel Ave.',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'DOMESTIC',
+        city: 'Santa Rosa',
+        countryName: 'United States',
+        countryCodeIso3: 'USA',
+        stateCode: 'CA',
+        type: 'DOMESTIC',
+        zipCode: '95403',
+        zipCodeSuffix: '1922',
       }
 
       const mockSuggestedAddress = {
-        id: "2f4031e2-9903-4083-8355-35bf1ac6322b",
-        type: "suggested_address",
+        id: '2f4031e2-9903-4083-8355-35bf1ac6322b',
+        type: 'suggested_address',
         attributes: {
-          addressLine1: "2248 San Miguel Ave",
+          addressLine1: '2248 San Miguel Ave',
           addressLine2: null,
           addressLine3: null,
-          addressPou: "CORRESPONDENCE",
-          addressType: "DOMESTIC",
-          city: "Washington",
-          countryCodeIso3: "USA",
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'DOMESTIC',
+          city: 'Washington',
+          countryCodeIso3: 'USA',
           internationalPostalCode: null,
           province: null,
-          stateCode: "CA",
-          zipCode: "95403",
-          zipCodeSuffix: "1875"
+          stateCode: 'CA',
+          zipCode: '95403',
+          zipCodeSuffix: '1875',
         },
         meta: {
           address: {
             confidenceScore: 100.0,
-            addressType: "Domestic",
-            deliveryPointValidation: "CONFIRMED",
-            residentialDeliveryIndicator: "RESIDENTIAL"
+            addressType: 'Domestic',
+            deliveryPointValidation: 'CONFIRMED',
+            residentialDeliveryIndicator: 'RESIDENTIAL',
           },
-          validationKey: 1261063725
-        }
+          validationKey: 1261063725,
+        },
       }
 
       const mockAddressValidationData = {
-        data: [mockSuggestedAddress]
+        data: [mockSuggestedAddress],
       }
 
       when(api.post as jest.Mock)
@@ -890,7 +901,7 @@ context('personalInformation', () => {
       const store = realStore()
 
       await store.dispatch(validateAddress(addressPayload as AddressData))
-      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
 
@@ -906,7 +917,6 @@ context('personalInformation', () => {
 
       expect(updateAddressEndAction).toBeTruthy()
       expect(updateAddressEndAction?.state.personalInformation.loading).toBeFalsy()
-
     })
   })
 
