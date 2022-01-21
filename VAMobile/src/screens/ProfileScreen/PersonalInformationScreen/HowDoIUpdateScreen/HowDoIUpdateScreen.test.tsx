@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import {context, mockNavProps, mockStore, render, RenderAPI, waitFor} from 'testUtils'
 
 import HowDoIUpdateScreen from './HowDoIUpdateScreen'

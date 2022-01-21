@@ -1,8 +1,8 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, render, RenderAPI, waitFor} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import {
   initialAuthorizedServicesState,
