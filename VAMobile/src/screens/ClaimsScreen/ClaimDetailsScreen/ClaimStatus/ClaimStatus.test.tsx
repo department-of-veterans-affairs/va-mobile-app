@@ -3,8 +3,8 @@ import { Linking, Pressable } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
 
+import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
 import { ClaimType } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'

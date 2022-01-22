@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useState } from 'react'
 import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
-import { AppointmentsState, CurrentPageAppointmentsByYear, getAppointmentsInDateRange } from 'store/slices/appointmentsSlice'
+import { AppointmentsState, CurrentPageAppointmentsByYear, getAppointmentsInDateRange } from 'store/slices'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLineWithIconProps, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'

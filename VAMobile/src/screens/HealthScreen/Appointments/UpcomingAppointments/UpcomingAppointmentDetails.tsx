@@ -29,7 +29,7 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
-import { AppointmentsState, clearAppointmentCancellation, getAppointment } from 'store/slices/appointmentsSlice'
+import { AppointmentsState, clearAppointmentCancellation, getAppointment } from 'store/slices'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import _ from 'underscore'
 
-import { AppointmentsDateRange, AppointmentsState, getAppointmentsInDateRange } from 'store/slices/appointmentsSlice'
+import { AppointmentsDateRange, AppointmentsState, getAppointmentsInDateRange } from 'store/slices'
 import { AppointmentsGroupedByYear, ScreenIDTypesConstants } from 'store/api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'

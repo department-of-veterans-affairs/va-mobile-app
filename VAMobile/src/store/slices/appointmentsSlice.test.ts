@@ -92,17 +92,47 @@ export const bookedAppointmentsList: AppointmentsList = [
       minutesDuration: 150,
       location: {
         ...defaultAppointmentLocation,
-        url: 'https://www.va.gov/health-care/schedule-view-va-appointments/',
+        url: '',
         code: '654321',
       },
     },
   },
   {
     ...defaultAppoinment,
-    id: '6',
+    id: '7',
     attributes: {
       ...defaultAppointmentAttributes,
       isCovidVaccine: true,
+    },
+  },
+  {
+    ...defaultAppoinment,
+    id: '8',
+    attributes: {
+      ...defaultAppointmentAttributes,
+      appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
+      status: AppointmentStatusConstants.BOOKED,
+      statusDetail: AppointmentStatusDetailTypeConsts.CLINIC,
+      startDateUtc: '2021-02-06T19:53:14.000+00:00',
+      startDateLocal: '2021-02-06T18:53:14.000-01:00',
+      comment: 'Please arrive 20 minutes before the start of your appointment',
+    },
+  },
+  {
+    ...defaultAppoinment,
+    id: '9',
+    attributes: {
+      ...defaultAppointmentAttributes,
+      appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
+      status: AppointmentStatusConstants.BOOKED,
+      statusDetail: AppointmentStatusDetailTypeConsts.CLINIC,
+      startDateUtc: '2021-02-06T19:53:14.000+00:00',
+      startDateLocal: '2021-02-06T18:53:14.000-01:00',
+      comment: 'Please arrive 20 minutes before the start of your appointment',
+      location: {
+        ...defaultAppointmentAttributes.location,
+        phone: undefined,
+      },
     },
   },
 ]
