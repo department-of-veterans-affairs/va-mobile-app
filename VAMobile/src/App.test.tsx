@@ -43,16 +43,18 @@ context('App', () => {
 
   describe('AuthGuard', () => {
     it('should render loading spinner while initializing', async () => {
-      await waitFor(() => {
-        const { container } = render(<AuthGuard />, {
+      let component: any
+      await waitFor(async () => {
+        component = render(<AuthGuard />, {
           preloadedState: {
-            auth: { ...initialAuthState },
+            auth: { ...initialAuthState, initializing: true },
           },
         })
-        expect(container).toBeTruthy()
-        expect(() => container.findByType(LoginScreen)).toThrow()
-        expect(() => container.findByType(AuthedApp)).toThrow()
       })
+
+      expect(component).toBeTruthy()
+      expect(() => component.container.findByType(LoginScreen)).toThrow()
+      expect(() => component.container.findByType(AuthedApp)).toThrow()
     })
 
     it('should initilize by registering for linking', async () => {

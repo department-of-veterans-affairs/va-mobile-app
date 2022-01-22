@@ -3,7 +3,7 @@ import { ViewStyle } from 'react-native'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
-import { ClaimsAndAppealsState, prefetchClaimsAndAppeals, AuthorizedServicesState, PersonalInformationState, getProfileInfo } from 'store/slices'
+import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'

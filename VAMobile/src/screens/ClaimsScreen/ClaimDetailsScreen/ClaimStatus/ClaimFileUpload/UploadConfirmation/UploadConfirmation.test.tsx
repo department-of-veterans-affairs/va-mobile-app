@@ -9,11 +9,17 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { VAButton } from 'components'
 import { uploadFileToClaim, InitialState } from 'store/slices'
 
-jest.mock('store/slices', () => {
+jest.mock('store/slices/', () => {
   let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     uploadFileToClaim: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    fileUploadSuccess: jest.fn(() => {
       return {
         type: '',
         payload: '',
