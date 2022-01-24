@@ -12,7 +12,7 @@ context('AlertBox', () => {
   let testInstance: RenderAPI
 
   beforeEach(() => {
-    component = render(<AlertBox border="warning" background="cardBackground" text={'My warning'} title={'Warning title'} />)
+    component = render(<AlertBox border="warning" text={'My warning'} title={'Warning title'} />)
 
     testInstance = component
   })
