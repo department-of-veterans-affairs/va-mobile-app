@@ -57,7 +57,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       const militaryServiceInfoList: Array<DefaultListItemObj> = [
         {
           textLines: [
-            { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold' },
+            { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold', color: 'primaryTitle' },
             {
               text: t('common:text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
             },
@@ -66,7 +66,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
         {
           textLines: [
-            { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold' },
+            { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold', color: 'primaryTitle' },
             {
               text: t('common:text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
             },
@@ -75,7 +75,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
         {
           textLines: [
-            { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold' },
+            { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold', color: 'primaryTitle' },
             {
               text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
             },
@@ -85,7 +85,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
         {
           textLines: [
-            { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold' },
+            { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold', color: 'primaryTitle' },
             {
               text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
             },
@@ -222,7 +222,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     <VAScrollView {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
@@ -230,7 +230,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           </TextView>
         </TextArea>
 
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header">
           {t('letters.benefitService.chooseIncludedInformation')}
         </TextView>
         {getListOfMilitaryService()}

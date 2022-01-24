@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar, useColorScheme } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useSelector } from 'react-redux'
@@ -49,7 +49,7 @@ import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScr
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import store, { RootState } from 'store'
-import theme from 'styles/themes/standardTheme'
+import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 
 enableScreens(true)
 
@@ -87,6 +87,11 @@ const MainApp: FC = () => {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
 
+  const scheme = useColorScheme()
+  setColorScheme(scheme)
+
+  const currentTheme = getTheme()
+
   /**
    * Used by the navigation container to initialize the first route.
    */
@@ -115,13 +120,13 @@ const MainApp: FC = () => {
   return (
     <>
       <ActionSheetProvider>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={currentTheme}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
                 <NotificationManger>
                   <SafeAreaProvider>
-                    <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                    <StatusBar barStyle="light-content" backgroundColor={currentTheme.colors.background.navHeader} />
                     <AuthGuard />
                   </SafeAreaProvider>
                 </NotificationManger>

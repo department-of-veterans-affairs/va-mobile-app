@@ -21,7 +21,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.main,
   }
 
   const containerStyles = {
@@ -43,7 +42,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
           text={t('downtime.message', { featureName, endTime })}
           textA11yLabel={t('downtime.message', { featureName, endTime })}
           border="warning"
-          background="noCardBackground"
         />
       </Box>
     </VAScrollView>

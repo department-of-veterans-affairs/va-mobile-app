@@ -191,7 +191,7 @@ context('ReplyMessage', () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews[12].props.children).toEqual('Message')
-      expect(textViews[14].props.children).toEqual('(*Required)')
+      expect(textViews[14].props.children).toEqual('(Required)')
     })
   })
 

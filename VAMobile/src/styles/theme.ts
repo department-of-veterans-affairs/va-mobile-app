@@ -9,6 +9,9 @@ export type VAButtonBackgroundColors = {
   buttonImportantActive: string
   buttonWhite: string
   buttonWhiteActive: string
+  brandedPrimary: string
+  brandedPrimaryActive: string
+  overFlowMenuButton: string
 }
 
 export type VAButtonBorderColors = {
@@ -16,6 +19,8 @@ export type VAButtonBorderColors = {
   buttonSecondaryActive: string
   buttonImportant: string
   buttonImportantActive: string
+  brandedPrimary: string
+  brandedPrimaryActive: string
 }
 
 export type VAButtonTextColors = {
@@ -23,6 +28,8 @@ export type VAButtonTextColors = {
   buttonSecondary: string
   buttonDisabled: string
   buttonImportant: string
+  buttonWhite: string
+  brandedPrimary: string
 }
 
 export type VATextColors = {
@@ -30,6 +37,7 @@ export type VATextColors = {
   footerButtonActive: string
   navBar: string
   primary: string
+  primaryTitle: string
   primaryContrast: string
   primaryContrastDisabled: string
   secondary: string
@@ -39,7 +47,15 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
+  input: string
+  inputFocused: string
+  inputRequired: string
+  brandedPrimaryText: string
+  segmentControllerActive: string
+  segmentControllerInactive: string
   snackBarBtn: string
+  backButton: string
+  snackBarText: string
 }
 
 export type VAIconColors = {
@@ -47,6 +63,7 @@ export type VAIconColors = {
   footerButtonActive: string
   link: string
   nav: string
+  largeNav: string
   disclosure: string
   success: string
   error: string
@@ -60,10 +77,13 @@ export type VAIconColors = {
   spinner: string
   dark: string
   covid19Vaccinations: string
-  grayDark: string
+  pickerIcon: string
   pagination: string
   chevronCollapsible: string
   chevronListItem: string
+  webviewReload: string
+  backButton: string
+  unreadMessage: string
 }
 
 export type VATypographyThemeVariants = {
@@ -87,6 +107,7 @@ export type VABackgroundColors = {
   main: string
   footerButtonActive: string
   textBox: string
+  textBoxInactive: string
   list: string
   listActive: string
   segmentedController: string
@@ -105,8 +126,14 @@ export type VABackgroundColors = {
   modalOverlay: string
   pickerSelectedItem: string
   navButton: string
+  brandedMainBackground: string
+  carouselTab: string
+  contentBox: string
   snackbar: string
+  webviewControls: string
+  pickerControls: string
   menu: string
+  alertBox: string
 }
 
 export type VABorderColors = {
@@ -122,6 +149,7 @@ export type VABorderColors = {
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string
+  footerButton: string
   menuDivider: string
 }
 
@@ -130,35 +158,31 @@ export type VAFontSizes = {
   lineHeight: number
 }
 
-export type VAAlertBoxColors = {
-  cardBackground: string
-  noCardBackground: string
+export type VAColorScheme = {
+  background: VABackgroundColors
+  border: VABorderColors
+  icon: VAIconColors
+  text: VATextColors
+  buttonBackground: VAButtonBackgroundColors
+  buttonText: VAButtonTextColors
+  buttonBorder: VAButtonBorderColors
+  selectCopyText: string
+
+  control: {
+    tintColor: string
+    switchOnTrack: string
+    switchOffTrack: string
+    switchOnThumb: string
+    switchOffThumb: string
+  }
+  segmentedControl: {
+    buttonActive: string
+    buttonInactive: string
+  }
 }
 
 export type VATheme = {
-  colors: {
-    background: VABackgroundColors
-    border: VABorderColors
-    icon: VAIconColors
-    text: VATextColors
-    buttonBackground: VAButtonBackgroundColors
-    buttonText: VAButtonTextColors
-    buttonBorder: VAButtonBorderColors
-    selectCopyText: string
-
-    control: {
-      tintColor: string
-      switchOnTrack: string
-      switchOffTrack: string
-      switchOnThumb: string
-      switchOffThumb: string
-    }
-    segmentedControl: {
-      buttonActive: string
-      buttonInactive: string
-    }
-    alertBox: VAAlertBoxColors
-  }
+  colors: VAColorScheme
   dimensions: {
     keyboardManagerDistanceFromTextField: number
     borderWidth: number

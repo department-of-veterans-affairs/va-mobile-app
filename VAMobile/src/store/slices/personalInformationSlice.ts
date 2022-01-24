@@ -352,6 +352,8 @@ export const updateAddress =
         await api.put<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
       }
 
+      dispatch(getProfileInfo(screenID))
+
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))

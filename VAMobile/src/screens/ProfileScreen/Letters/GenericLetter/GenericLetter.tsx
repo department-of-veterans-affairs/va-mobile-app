@@ -43,18 +43,18 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   return (
     <VAScrollView {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        {letterType === LetterTypeConstants.serviceVerification && (
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <AlertBox border="informational" text={t('letters.serviceVerificationLetter.informational')} />
+          </Box>
+        )}
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {header}
           </TextView>
           <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {description}
           </TextView>
-          {letterType === LetterTypeConstants.serviceVerification && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox border="informational" background="cardBackground" text={t('letters.serviceVerificationLetter.informational')} />
-            </Box>
-          )}
           <VAButton
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}

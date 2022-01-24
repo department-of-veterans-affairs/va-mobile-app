@@ -4,7 +4,6 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
-  AlertBox,
   BackButton,
   Box,
   ButtonTypesConstants,
@@ -19,6 +18,7 @@ import {
   VAScrollView,
   VATextInputTypes,
   ValidationFunctionItems,
+  AlertBox,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
@@ -80,7 +80,7 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressSaved, loading, showValidation } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressSaved, savingAddress, showValidation } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -248,7 +248,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
   }
 
-  if (loading || addressSaved) {
+  if (savingAddress || addressSaved) {
     const loadingText = deleting ? t('personalInformation.delete.address') : t('personalInformation.savingAddress')
 
     return <LoadingComponent text={loadingText} />
@@ -503,7 +503,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+            <AlertBox title={t('editAddress.alertError')} border="error" />
           </Box>
         )}
         <FormWrapper

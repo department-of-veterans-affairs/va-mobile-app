@@ -46,6 +46,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
+    color: 'primaryTitle',
     mx: gutter,
     mb: condensedMarginBetween,
     mt: standardMarginBetween,

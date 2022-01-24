@@ -246,7 +246,7 @@ context('ComposeMessage', () => {
         const textViews = testInstance.findAllByType(TextView)
         expect(textViews[29].props.children).toEqual('Subject Line')
         expect(textViews[30].props.children).toEqual(' ')
-        expect(textViews[31].props.children).toEqual('(*Required)')
+        expect(textViews[31].props.children).toEqual('(Required)')
       })
     })
   })

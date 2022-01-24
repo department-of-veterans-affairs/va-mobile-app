@@ -291,8 +291,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             title={t('secureMessaging.composeMessage.noMatchWithProvider')}
             text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
             textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
-            border="error"
-            background="noCardBackground">
+            border="error">
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
@@ -317,7 +316,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             </Box>
             <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
               <TextView>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
+                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                  {t('secureMessaging.composeMessage.important')}
+                </TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
             </Box>
