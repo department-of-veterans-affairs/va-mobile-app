@@ -14,6 +14,7 @@ import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
 import { updatBottomOffset } from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
+import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 
 /**
  * Generates testID string for reusable components
@@ -44,6 +45,28 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
   })
 
   return generateTestID(listOfTextID.join(' '), '')
+}
+
+/**
+ * Generate a testID string for the array of text lines passed into TextLineWithIcon for list item - includes accessibility labels for icons
+ */
+export const generateTestIDForInlineTextIconList = (listOfText: Array<InlineTextWithIconsProps>, t: TFunction): string => {
+  const listOfTextID: Array<string> = []
+
+  listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'UnreadIcon') {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
+      listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
+    }
+    listOfTextID.push(listOfTextItem.leftTextProps.text)
+    if (listOfTextItem.rightTextProps) {
+      listOfTextID.push(listOfTextItem.rightTextProps.text)
+    }
+  })
+
+  return listOfTextID.join(' ')
 }
 
 /**

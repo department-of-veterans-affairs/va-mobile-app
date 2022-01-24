@@ -202,6 +202,7 @@ export type VATheme = {
     alertPaddingY: number
     alertPaddingX: number
     listItemDecoratorMarginLeft: number
+    messagesDecoratorMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
     pickerLabelMargin: number
@@ -230,6 +231,8 @@ export type VATheme = {
     tagCountTopPadding: number
     messagePhotoAttachmentMaxHeight: number
     messageIconLeftMargin: number
+    messageIconWidth: number
+    messageIconHeight: number
     maxNumMessageAttachments: number
     paginationButtonPadding: number
     pickerModalTopPadding: number
@@ -272,6 +275,8 @@ export type VATheme = {
     menuBorderRadius: number
     menuItemMinWidth: number
     menuElevation: number
+    chevronListItemWidth: number
+    chevronListItemHeight: number
   }
   fontFace: {
     regular: string
