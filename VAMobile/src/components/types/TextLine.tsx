@@ -1,4 +1,3 @@
-import { VAIconProps } from 'components'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
 
 /**

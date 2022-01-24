@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { InlineText, TextLine } from './types'
+import { InlineText } from './types'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
