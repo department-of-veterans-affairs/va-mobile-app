@@ -1,21 +1,18 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
-import {context, renderWithProviders} from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, render, RenderAPI } from 'testUtils'
 import NoLettersScreen from './NoLettersScreen'
 
 context('NoLettersScreen', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+    component = render(<NoLettersScreen />)
 
-    act(() => {
-      component = renderWithProviders(<NoLettersScreen />)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

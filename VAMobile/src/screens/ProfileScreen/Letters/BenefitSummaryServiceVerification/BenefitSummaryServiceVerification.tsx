@@ -21,7 +21,7 @@ import {
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import { DemoState } from 'store/slices/demoSlice'
-import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices/lettersSlice'
+import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'

@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { TextInput } from 'react-native'
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
-import { AccessibilityState } from 'store/slices'
+import { AccessibilityState, DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
 import {
@@ -22,7 +22,6 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices/directDepositSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'

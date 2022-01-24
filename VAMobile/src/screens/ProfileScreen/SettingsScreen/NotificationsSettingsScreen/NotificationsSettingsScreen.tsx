@@ -1,7 +1,7 @@
 import { AlertBox, Box, ButtonDecoratorType, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton, VAScrollView } from 'components'
 import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices/notificationSlice'
+import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices'
 import { RootState } from 'store'
 import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
