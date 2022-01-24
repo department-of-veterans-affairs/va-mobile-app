@@ -275,6 +275,8 @@ export type VATheme = {
     menuBorderRadius: number
     menuItemMinWidth: number
     menuElevation: number
+    chevronListItemWidth: number
+    chevronListItemHeight: number
   }
   fontFace: {
     regular: string

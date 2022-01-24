@@ -67,7 +67,12 @@ export const getMessagesListItems = (
           color: 'primary',
         },
         leftIconProps: paperClipProps,
-        rightIconProps: { name: 'ArrowRight', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight, fill: 'spinner' } as VAIconProps,
+        rightIconProps: {
+          name: 'ArrowRight',
+          width: theme.dimensions.chevronListItemWidth,
+          height: theme.dimensions.chevronListItemHeight,
+          fill: theme.colors.icon.chevronListItem,
+        } as VAIconProps,
       },
     ]
 

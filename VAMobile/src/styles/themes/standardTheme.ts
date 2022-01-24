@@ -204,6 +204,8 @@ let theme: VATheme = {
     menuBorderRadius: 4,
     menuItemMinWidth: 191,
     menuElevation: 20,
+    chevronListItemWidth: 10,
+    chevronListItemHeight: 15,
   },
 
   fontFace: {
