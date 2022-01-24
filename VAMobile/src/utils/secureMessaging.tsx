@@ -62,7 +62,7 @@ export const getMessagesListItems = (
       {
         leftTextProps: {
           text: t('common:text.raw', { text: formatSubject(category, subject, t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }),
-          variant: 'MobileBodyBold',
+          variant: 'MobileBody',
           textAlign: 'left',
           color: 'primary',
         },
