@@ -10,7 +10,7 @@ import { initialAuthState, initialErrorsState, initialSecureMessagingState } fro
 import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
 import Mock = jest.Mock
-import { InteractionManager, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 import { StackNavigationOptions } from '@react-navigation/stack'

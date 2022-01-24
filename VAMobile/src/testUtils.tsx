@@ -32,31 +32,6 @@ import vaccineReducer from 'store/slices/vaccineSlice'
 import { InitialState } from 'store/slices'
 import theme from 'styles/themes/standardTheme'
 
-// export const renderWithProviders = (element: ReactElement, store?: any) => {
-//   return renderer.create(<TestProviders store={store}>{element}</TestProviders>)
-// }
-
-// export const TestProviders: FC<{ store?: any; i18n?: any; navContainerProvided?: boolean }> = ({ store = mockStore(), i18n = i18nReal, children, navContainerProvided }) => {
-//   if (navContainerProvided) {
-//     return (
-//       <Provider store={store}>
-//         <I18nextProvider i18n={i18n}>
-//           <ThemeProvider theme={theme}>{children}</ThemeProvider>
-//         </I18nextProvider>
-//       </Provider>
-//     )
-//   }
-//   return (
-//     <Provider store={store}>
-//       <I18nextProvider i18n={i18n}>
-//         <NavigationContainer>
-//           <ThemeProvider theme={theme}>{children}</ThemeProvider>
-//         </NavigationContainer>
-//       </I18nextProvider>
-//     </Provider>
-//   )
-// }
-
 export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
   try {
     return testInstance.find((el) => {
@@ -194,9 +169,11 @@ export const generateRandomString = (): string => {
   // drop the leading "0."
   // these are generally 11 chars long
   const gen = (): string => {
-    return Math.random().toString(36).substring(2)
+    const crypto = require('crypto')
+    const buf = crypto.randomBytes(36)
+    return buf.toString('hex')
   }
-  return gen() + gen()
+  return gen()
 }
 
 export const mockNavProps = (props?: any, navigationMock?: any, routeMock?: any) => ({

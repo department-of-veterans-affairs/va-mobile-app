@@ -422,6 +422,8 @@ context('authAction', () => {
       await store.dispatch(initializeAuth())
 
       const actions = store.getActions()
+      console.log('Hello')
+      console.log(testRefreshToken)
 
       // this is one of the differences between init and bio init
       // we should transition to a loading spinner here with AUTH_START_LOGIN
@@ -439,6 +441,7 @@ context('authAction', () => {
         },
         body: `grant_type=refresh_token&client_id=VAMobile&client_secret=TEST_SECRET&redirect_uri=vamobile%3A%2F%2Flogin-success&refresh_token=${testRefreshToken}`,
       })
+
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
       expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', testRefreshToken, expect.anything())
       expect(AsyncStorage.setItem).toHaveBeenCalledWith('@store_creds_bio', 'BIOMETRIC')
