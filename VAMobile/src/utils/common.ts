@@ -7,11 +7,11 @@ import { contains, isEmpty, map } from 'underscore'
 
 import { ErrorObject } from 'store/api'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { InlineTextWithIconsProps, TextLineWithIconProps } from 'components'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { StoreState, updatBottomOffset } from 'store'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
-import { TextLineWithIconProps } from 'components'
 import { ThunkDispatch } from 'redux-thunk'
 import { formatPhoneNumber } from './formattingUtils'
 import theme from 'styles/themes/standardTheme'
@@ -45,6 +45,28 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
   })
 
   return generateTestID(listOfTextID.join(' '), '')
+}
+
+/**
+ * Generate a testID string for the array of text lines passed into TextLineWithIcon for list item - includes accessibility labels for icons
+ */
+export const generateTestIDForInlineTextIconList = (listOfText: Array<InlineTextWithIconsProps>, t: TFunction): string => {
+  const listOfTextID: Array<string> = []
+
+  listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'UnreadIcon') {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
+      listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
+    }
+    listOfTextID.push(listOfTextItem.leftTextProps.text)
+    if (listOfTextItem.rightTextProps) {
+      listOfTextID.push(listOfTextItem.rightTextProps.text)
+    }
+  })
+
+  return listOfTextID.join(' ')
 }
 
 /**

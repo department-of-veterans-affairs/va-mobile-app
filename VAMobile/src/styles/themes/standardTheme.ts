@@ -131,6 +131,7 @@ let theme: VATheme = {
     alertPaddingY: 20,
     alertPaddingX: 10,
     listItemDecoratorMarginLeft: 20,
+    messagesDecoratorMarginLeft: 16,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
     pickerLabelMargin: 9,
@@ -160,6 +161,8 @@ let theme: VATheme = {
     tagCountTopPadding: 3,
     messagePhotoAttachmentMaxHeight: 300,
     messageIconLeftMargin: 16,
+    messageIconWidth: 16,
+    messageIconHeight: 16,
     maxNumMessageAttachments: 4,
     paginationButtonPadding: 15,
     pickerModalTopPadding: 60,
@@ -201,6 +204,8 @@ let theme: VATheme = {
     menuBorderRadius: 4,
     menuItemMinWidth: 191,
     menuElevation: 20,
+    chevronListItemWidth: 10,
+    chevronListItemHeight: 15,
   },
 
   fontFace: {
