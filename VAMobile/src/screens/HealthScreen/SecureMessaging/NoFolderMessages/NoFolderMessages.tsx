@@ -4,10 +4,10 @@ import React, { FC } from 'react'
 import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { ViewStyle } from 'react-native'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
-import { ViewStyle } from 'react-native'
 
 export type NoFolderMessagesProps = {
   folderName: string

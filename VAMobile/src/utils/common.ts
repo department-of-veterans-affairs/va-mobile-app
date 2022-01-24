@@ -7,6 +7,7 @@ import { contains, isEmpty, map } from 'underscore'
 
 import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
+import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
@@ -14,7 +15,6 @@ import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
 import { updatBottomOffset } from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
-import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 
 /**
  * Generates testID string for reusable components

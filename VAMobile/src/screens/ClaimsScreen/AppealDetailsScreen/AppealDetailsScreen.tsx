@@ -3,7 +3,7 @@ import { filter, pluck } from 'underscore'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
-import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'

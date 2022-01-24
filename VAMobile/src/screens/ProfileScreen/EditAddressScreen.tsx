@@ -4,6 +4,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
+  AlertBox,
   BackButton,
   Box,
   ButtonTypesConstants,
@@ -18,7 +19,6 @@ import {
   VAScrollView,
   VATextInputTypes,
   ValidationFunctionItems,
-  AlertBox,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'

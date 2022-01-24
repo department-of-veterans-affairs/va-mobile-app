@@ -149,7 +149,7 @@ context('Inbox', () => {
     it('should show only category with no colon or space after', async () => {
       await waitFor(() => {
         initializeTestInstance(CategoryTypeFields.other, '')
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('General')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('General')
       })
     })
   })
@@ -158,7 +158,7 @@ context('Inbox', () => {
     it('should show correct text', async () => {
       await waitFor(() => {
         initializeTestInstance(CategoryTypeFields.other)
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('General: Default subject line')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('General: Default subject line')
       })
     })
   })
@@ -167,7 +167,7 @@ context('Inbox', () => {
     it('should show correct text', async () => {
       await waitFor(() => {
         initializeTestInstance(CategoryTypeFields.general)
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('General: Default subject line')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('General: Default subject line')
       })
     })
   })
@@ -176,7 +176,7 @@ context('Inbox', () => {
     it('should show correct text', async () => {
       await waitFor(() => {
         initializeTestInstance(CategoryTypeFields.appointment)
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Appointment: Default subject line')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('Appointment: Default subject line')
       })
     })
   })
@@ -185,7 +185,7 @@ context('Inbox', () => {
     it('should show correct text', async () => {
       await waitFor(() => {
         initializeTestInstance(CategoryTypeFields.medication)
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Medication: Default subject line')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('Medication: Default subject line')
       })
     })
   })
@@ -194,7 +194,7 @@ context('Inbox', () => {
     it('should show correct text', async () => {
       await waitFor(() => {
         initializeTestInstance(CategoryTypeFields.test)
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Test: Default subject line')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('Test: Default subject line')
       })
     })
   })
@@ -203,7 +203,7 @@ context('Inbox', () => {
     it('should show correct text', async () => {
       await waitFor(() => {
         initializeTestInstance(CategoryTypeFields.education)
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Education: Default subject line')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('Education: Default subject line')
       })
     })
   })
@@ -212,7 +212,7 @@ context('Inbox', () => {
     it('should show correct text', async () => {
       await waitFor(() => {
         initializeTestInstance(CategoryTypeFields.covid)
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('COVID: Default subject line')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('COVID: Default subject line')
       })
     })
   })
