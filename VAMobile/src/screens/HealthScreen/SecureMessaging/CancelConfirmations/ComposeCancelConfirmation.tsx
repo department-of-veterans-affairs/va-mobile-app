@@ -1,14 +1,7 @@
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
-import {
-  resetHasLoadedRecipients,
-  resetSaveDraftComplete,
-  resetSaveDraftFailed,
-  resetSendMessageFailed,
-  saveDraft,
-  updateSecureMessagingTab,
-} from 'store/slices/secureMessagingSlice'
+import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { useDestructiveAlert, useRouteNavigation, useTranslation } from 'utils/hooks'
 import { useDispatch } from 'react-redux'
 

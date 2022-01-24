@@ -5,7 +5,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
-import { updateSecureMessagingTab } from 'store/slices/secureMessagingSlice'
+import { updateSecureMessagingTab } from 'store/slices'
 import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 

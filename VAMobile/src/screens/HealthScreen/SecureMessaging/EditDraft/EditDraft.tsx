@@ -46,7 +46,7 @@ import {
   resetSendMessageFailed,
   saveDraft,
   updateSecureMessagingTab,
-} from 'store/slices/secureMessagingSlice'
+} from 'store/slices'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'

@@ -4,8 +4,8 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, renderWithProviders } from 'testUtils'
-import { useComposeCancelConfirmation} from './ComposeCancelConfirmation'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
 import { SecureMessagingFormData } from 'store/api'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { UseDestructiveAlertProps } from 'utils/hooks'
@@ -15,7 +15,7 @@ let mockNavigationSpy = jest.fn(() => {
 })
 
 let discardButtonSpy: any
-let saveDraftButtonSpy : any
+let saveDraftButtonSpy: any
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
@@ -32,8 +32,8 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-jest.mock('store/actions', () => {
-  let actual = jest.requireActual('store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
@@ -70,7 +70,7 @@ jest.mock('store/actions', () => {
 })
 
 context('useComposeCancelConfirmation', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (
@@ -87,15 +87,14 @@ context('useComposeCancelConfirmation', () => {
         draftMessageID,
         isFormValid,
         origin,
-        replyToID
+        replyToID,
       })
       return <></>
     }
-    act(() => {
-      component = renderWithProviders(<TestComponent />)
-    })
 
-    testInstance = component.root
+    component = render(<TestComponent />)
+
+    testInstance = component.container
   }
 
   beforeEach(() => {

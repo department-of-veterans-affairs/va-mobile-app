@@ -4,7 +4,7 @@ import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, fetchInboxMessages } from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, fetchInboxMessages } from 'store/slices'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'

@@ -1,21 +1,20 @@
 import 'react-native'
 import React from 'react'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import { act } from 'react-test-renderer'
 
 import NoVaccineRecords from './NoVaccineRecords'
 import { Linking, TouchableWithoutFeedback } from 'react-native'
 
 context('NoVaccineRecords', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: any
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<NoVaccineRecords/>)
-    })
-    testInstance = component.root
+    component = render(<NoVaccineRecords />)
+
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -32,7 +31,7 @@ context('NoVaccineRecords', () => {
   describe('when the call TTY phone link is clicked', () => {
     it('should call Linking open url with the parameter tel:711', async () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-      expect(Linking.openURL).toBeCalledWith( 'tel:711')
+      expect(Linking.openURL).toBeCalledWith('tel:711')
     })
   })
 })

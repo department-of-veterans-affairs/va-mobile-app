@@ -36,7 +36,7 @@ import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secu
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { SecureMessagingState, getMessageRecipients, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, getMessageRecipients, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAttachments, useError, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'

@@ -6,14 +6,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import {
-  SecureMessagingState,
-  resetHasLoadedRecipients,
-  resetReplyTriageError,
-  resetSendMessageComplete,
-  resetSendMessageFailed,
-  sendMessage,
-} from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store/slices'
 import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ConfirmationAlert from 'components/ConfirmationAlert'
