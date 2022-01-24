@@ -7,7 +7,7 @@ import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
 export type InlineTextWithIconsProps = {
-  /** replaces left text with icon hen true */
+  /** replaces left text with icon when true */
   inlineIcon?: boolean
 
   /** Props for icon you want to display in this line of text */
