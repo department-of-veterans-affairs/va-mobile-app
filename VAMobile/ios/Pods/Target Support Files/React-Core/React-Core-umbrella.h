@@ -11,6 +11,7 @@
 #endif
 
 #import "React/CoreModulesPlugins.h"
+#import "React/RCTAccessibilityManager+Internal.h"
 #import "React/RCTAccessibilityManager.h"
 #import "React/RCTActionSheetManager.h"
 #import "React/RCTAlertController.h"
@@ -62,6 +63,7 @@
 #import "React/RCTJavaScriptLoader.h"
 #import "React/RCTJSScriptLoaderModule.h"
 #import "React/RCTJSStackFrame.h"
+#import "React/RCTJSThread.h"
 #import "React/RCTKeyCommands.h"
 #import "React/RCTLog.h"
 #import "React/RCTManagedPointer.h"
