@@ -6,6 +6,7 @@
         <item name="android:windowBackground">@color/primaryDarker</item>
         <item name="android:navigationBarColor" tools:targetApi="27">@color/toolbarBackgroundGray</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
     </style>
 
 </resources>
