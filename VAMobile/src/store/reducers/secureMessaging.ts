@@ -14,7 +14,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
-import { READ } from 'constants/secureMessaging'
+import { READ, UNREAD } from 'constants/secureMessaging'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { SecureMessagingSignatureDataAttributes, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { hasErrorCode } from 'utils/errors'
@@ -220,9 +220,10 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: setLoading ? true : state.loading,
     }
   },
-  SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error, messageId }) => {
+  SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error, messageId, isDemoMode }) => {
     let messagesById = state.messagesById
     const updatedInboxMessages = [...(state.inboxMessages || [])]
+    const inbox = state.inbox
 
     if (!error && messageData?.data) {
       const messageID = messageData.data.id
@@ -249,6 +250,9 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
 
       // Change message's readReceipt to read
       if (inboxMessage) {
+        if (isDemoMode && inboxMessage.attributes.readReceipt === UNREAD) {
+          inbox.attributes.unreadCount -= 1
+        }
         inboxMessage.attributes.readReceipt = READ
       }
     }
@@ -264,6 +268,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       inboxMessages: updatedInboxMessages,
       messageIDsOfError: stateMessageIDsOfError,
       error,
+      inbox,
     }
   },
   SECURE_MESSAGING_START_GET_ATTACHMENT_LIST: (state) => {

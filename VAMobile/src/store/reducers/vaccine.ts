@@ -1,8 +1,12 @@
 import { indexBy } from 'underscore'
 
 import * as api from '../api'
-import { compareDateStrings } from 'utils/common'
+import { VaccineListData, VaccinePaginationMeta } from '../api'
 import createReducer from './createReducer'
+
+export type VaccineListType = {
+  [key in string]: VaccineListData
+}
 
 export type VaccineState = {
   loading: boolean
@@ -10,6 +14,8 @@ export type VaccineState = {
   vaccinesById: api.VaccinesMap
   vaccineLocationsById: api.VaccineLocationsMap
   detailsLoading: boolean
+  vaccinePagination: VaccinePaginationMeta
+  loadedVaccines: VaccineListType
 }
 
 export const initialVaccineState = {
@@ -18,6 +24,8 @@ export const initialVaccineState = {
   vaccines: [],
   vaccinesById: {},
   vaccineLocationsById: {},
+  vaccinePagination: {} as VaccinePaginationMeta,
+  loadedVaccines: {} as VaccineListType,
 }
 
 export default createReducer<VaccineState>(initialVaccineState, {
@@ -28,21 +36,24 @@ export default createReducer<VaccineState>(initialVaccineState, {
       loading: true,
     }
   },
-  VACCINE_FINISH_GET_VACCINES: (state, { vaccines, error }) => {
+  VACCINE_FINISH_GET_VACCINES: (state, { page, vaccinesData, error }) => {
+    const { data: vaccines, meta } = vaccinesData || ({} as VaccineListData)
     const vaccinesById = indexBy(vaccines || [], 'id')
 
+    const curLoadedVaccines = state.loadedVaccines[page.toString()]
     const vaccineList = vaccines || []
-
-    vaccineList.sort((a, b) => {
-      return compareDateStrings(a.attributes?.date || '', b.attributes?.date || '', true)
-    })
 
     return {
       ...state,
       loading: false,
       vaccines: vaccineList,
       vaccinesById,
+      vaccinePagination: { ...meta?.pagination },
       error,
+      loadedVaccines: {
+        ...state.loadedVaccines,
+        [page]: meta?.dataFromStore ? curLoadedVaccines : vaccinesData,
+      },
     }
   },
   VACCINE_START_GET_LOCATION: (state) => {

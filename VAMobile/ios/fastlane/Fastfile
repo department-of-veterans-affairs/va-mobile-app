@@ -64,11 +64,15 @@ platform :ios do
 
   desc "Promote the release Awaiting Developer Release to App Store"
   lane :release do
-    app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
-    version = app.get_pending_release_app_store_version
-    unless version.nil?
-      Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
-      slack_release_success(version.version_string, "iOS")
+    begin
+      app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
+      version = app.get_pending_release_app_store_version
+      unless version.nil?
+        Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
+        slack_release_success(version.version_string, "iOS")
+      end
+    rescue => e
+      slack_release_error(version, e)
     end
   end
 

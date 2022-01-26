@@ -72,23 +72,35 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
             <TextView variant="BitterBoldHeading">{displayName}</TextView>
           </Box>
-          <TextView variant="MobileBodyBold">{t('vaccines.details.typeAndDosage')}</TextView>
-          <TextView variant="MobileBody">{vaccine.attributes?.shortDescription || placeHolder}</TextView>
+          <TextView variant="MobileBodyBold" selectable={true}>
+            {t('vaccines.details.typeAndDosage')}
+          </TextView>
+          <TextView variant="MobileBody" selectable={true}>
+            {vaccine.attributes?.shortDescription || placeHolder}
+          </TextView>
           {isCovidVaccine && (
             <>
               <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-              <TextView variant="MobileBody">{vaccine.attributes?.manufacturer || placeHolder}</TextView>
+              <TextView variant="MobileBody" selectable={true}>
+                {vaccine.attributes?.manufacturer || placeHolder}
+              </TextView>
             </>
           )}
           <TextView variant="MobileBodyBold">{t('vaccines.details.series')}</TextView>
-          <TextView variant="MobileBody">{displaySeries}</TextView>
+          <TextView variant="MobileBody" selectable={true}>
+            {displaySeries}
+          </TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
             {location?.attributes && (
               <>
-                <TextView variant="MobileBody">{location.attributes.name}</TextView>
-                <TextView variant="MobileBody">{location.attributes.address?.street}</TextView>
-                <TextView variant="MobileBody">
+                <TextView variant="MobileBody" selectable={true}>
+                  {location.attributes.name}
+                </TextView>
+                <TextView variant="MobileBody" selectable={true}>
+                  {location.attributes.address?.street}
+                </TextView>
+                <TextView variant="MobileBody" selectable={true}>
                   {t('vaccines.details.address', {
                     city: location.attributes.address?.city,
                     state: location.attributes.address?.state,
@@ -97,15 +109,23 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
                 </TextView>
               </>
             )}
-            {!location?.attributes && <TextView variant="MobileBody">{placeHolder}</TextView>}
+            {!location?.attributes && (
+              <TextView variant="MobileBody" selectable={true}>
+                {placeHolder}
+              </TextView>
+            )}
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Box>
               <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
-              <TextView variant="MobileBody">{vaccine.attributes?.reaction || placeHolder}</TextView>
+              <TextView variant="MobileBody" selectable={true}>
+                {vaccine.attributes?.reaction || placeHolder}
+              </TextView>
             </Box>
             <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
-            <TextView variant="MobileBody">{vaccine.attributes?.note || placeHolder}</TextView>
+            <TextView variant="MobileBody" selectable={true}>
+              {vaccine.attributes?.note || placeHolder}
+            </TextView>
           </Box>
         </TextArea>
         {isPartialData && (

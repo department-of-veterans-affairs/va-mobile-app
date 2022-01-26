@@ -10,7 +10,8 @@ export type VaccineStartGetVaccinesPayload = Record<string, unknown>
  * Redux paylod for finishing loading of vaccines
  */
 export type VaccineFinishGetVaccinesPayload = {
-  vaccines?: api.VaccineList
+  vaccinesData?: api.VaccineListData
+  page: number
   error?: api.APIError
 }
 

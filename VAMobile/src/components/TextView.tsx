@@ -72,7 +72,7 @@ const StyledText = styled(Text)`
  *
  * @returns TextView component
  */
-const TextView: FC<TextViewProps> = (props) => {
+const TextView: FC<TextViewProps> = ({ selectable = false, ...props }) => {
   const { isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const theme = useTheme()
   const wrapperProps = { ...props }
@@ -86,7 +86,7 @@ const TextView: FC<TextViewProps> = (props) => {
     )
   }
 
-  const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable: true, selectionColor: theme.colors.selectCopyText }
+  const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable, selectionColor: theme.colors.selectCopyText }
 
   return <StyledText {...selectToCopyProps} {...wrapperProps} />
 }

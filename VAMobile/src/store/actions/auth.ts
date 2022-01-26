@@ -22,6 +22,7 @@ import { isAndroid } from 'utils/platform'
 import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
+import { updateDemoMode } from 'store'
 import { utils } from '@react-native-firebase/app'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -468,9 +469,16 @@ export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
  * @returns AsyncReduxAction
  */
 export const logout = (): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     console.debug('logout: logging out')
     dispatch(dispatchStartLogout())
+
+    const { demoMode } = getState().demo
+
+    if (demoMode) {
+      dispatch(updateDemoMode(false, true))
+    }
+
     try {
       await CookieManager.clearAll()
       const response = await fetch(AUTH_REVOKE_URL, {
