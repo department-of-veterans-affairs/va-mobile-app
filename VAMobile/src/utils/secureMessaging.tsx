@@ -35,7 +35,7 @@ export const getMessagesListItems = (
 
     const unreadIconProps =
       readReceipt !== READ && !isOutbound
-        ? ({ name: 'UnreadIcon', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight } as VAIconProps)
+        ? ({ name: 'UnreadIcon', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight, fill: theme.colors.icon.unreadMessage } as VAIconProps)
         : undefined
     const paperClipProps = attachment
       ? ({ name: 'PaperClip', fill: 'spinner', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight } as VAIconProps)
