@@ -8,7 +8,7 @@ module.exports = {
 			"moduleName": "@env",
 			"path": process.env.DOT_ENV_FILE || "env/.env",
 			"safe": false,
-			"allowUndefined": true
+			"allowUndefined": false
 		},],
 		[
 			require.resolve('babel-plugin-module-resolver'),
