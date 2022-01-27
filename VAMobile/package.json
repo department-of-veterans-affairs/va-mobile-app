@@ -85,11 +85,11 @@
     "underscore": "^1.12.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.12",
-    "@babel/plugin-transform-runtime": "^7.16.10",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-typescript": "^7.16.7",
-    "@babel/runtime": "^7.16.7",
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-transform-runtime": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-typescript": "^7.15.0",
+    "@babel/runtime": "^7.15.4",
     "@react-native-community/eslint-config": "^3.0.1",
     "@types/jest": "^27.0.2",
     "@types/jest-when": "^2.7.3",
