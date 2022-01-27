@@ -6,7 +6,7 @@ declare namespace WebdriverIO {
   }
 }
 
-declare module '@env' {}
+declare module '@env' {export const API_BASE: string;}
 
 declare var mockStore: any
 
