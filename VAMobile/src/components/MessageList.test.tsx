@@ -17,7 +17,7 @@ context('MessageList', () => {
   let onPressSpy: Mock
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => {})
+    onPressSpy = jest.fn(() => { })
     const items = [
       {
         inlineTextWithIcons: [
@@ -34,16 +34,17 @@ context('MessageList', () => {
         onPress: onPressSpy,
       },
       {
-        inlineTextWithIcons: [
-          {
-            leftTextProps: { text: 'test2-sender' },
-            leftIconProps: { name: 'PaperClip', width: 16, height: 16 },
-          },
-          {
-            leftTextProps: { text: 'test2-subject-line' },
-            leftIconProps: { name: 'UnreadIcon', width: 16, height: 16 },
-          },
-        ],
+        inlineTextWithIcons:
+          [
+            {
+              leftTextProps: { text: 'test2-sender' },
+              leftIconProps: { name: 'UnreadIcon', width: 16, height: 16 }
+            },
+            {
+              leftTextProps: { text: 'test2-subject-line' },
+              leftIconProps: { name: 'PaperClip', width: 16, height: 16 }
+            }
+          ],
         isSentFolder: false,
         a11yHintText: 'hint2',
         onPress: onPressSpy,
@@ -79,7 +80,7 @@ context('MessageList', () => {
   })
 
   it('should generate correct testId with icon accessibility labels if no testId provided in props', async () => {
-    findByTestID(testInstance, 'Has attachment test2-sender Unread: test2-subject-line').props.onPress()
+    findByTestID(testInstance, 'Unread: test2-sender Has attachment test2-subject-line').props.onPress()
     findByTestID(testInstance, 'test3-recipient test3-sent-item-with-read-tag Recipient has read your message').props.onPress()
   })
 
@@ -88,7 +89,7 @@ context('MessageList', () => {
   })
 
   it('should render the VAIcon components for unread item with attachment', async () => {
-    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('PaperClip')
-    expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('UnreadIcon')
+    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('UnreadIcon')
+    expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('PaperClip')
   })
 })
