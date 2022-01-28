@@ -6,7 +6,12 @@ declare namespace WebdriverIO {
   }
 }
 
-declare module '@env' {}
+declare module '@env' {
+  export const API_ROOT: string;
+  export const AUTH_CLIENT_SECRET: string;
+  export const AUTH_CLIENT_ID: string;
+  export const ENVIRONMENT: string;
+}
 
 declare var mockStore: any
 
