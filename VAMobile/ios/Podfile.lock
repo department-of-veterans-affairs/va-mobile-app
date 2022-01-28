@@ -348,7 +348,7 @@ PODS:
     - glog
   - react-native-cookies (6.0.11):
     - React-Core
-  - react-native-document-picker (7.1.1):
+  - react-native-document-picker (8.0.0):
     - React-Core
   - react-native-image-picker (4.1.2):
     - React-Core
@@ -719,7 +719,7 @@ SPEC CHECKSUMS:
   React-jsinspector: ab80bcdb02f28cdfc0dbbaea6db1241565d59002
   React-logger: b08f354e4c928ff794ca477347fea0922aaf11c3
   react-native-cookies: cd92f3824ed1e32a20802e8185101e14bb5b76da
-  react-native-document-picker: f4cc4df2eff8c9015d862a59bdaef11a153f1292
+  react-native-document-picker: 429972f7ece4463aa5bcdd789622b3a674a3c5d1
   react-native-image-picker: 9c8a2687b69300ad9e95cec5d38f35ab9d32467d
   react-native-notifications: 805108822ceff3440644d5701944f0cda35f5b4b
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
