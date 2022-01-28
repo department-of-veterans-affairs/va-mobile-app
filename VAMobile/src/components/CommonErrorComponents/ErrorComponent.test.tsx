@@ -6,11 +6,12 @@ import 'jest-styled-components'
 import Mock = jest.Mock
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders, mockStore } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import ErrorComponent from './ErrorComponent'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { initializeErrorsByScreenID, initialErrorsState } from 'store/reducers'
+
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
 
 context('ErrorComponent', () => {
   let store: any
@@ -22,19 +23,15 @@ context('ErrorComponent', () => {
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-    store = mockStore({
-      errors: {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
+    component = render(<ErrorComponent onTryAgain={onTryAgainPressSpy} screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />, {
+      preloadedState: {
+        errors: {
+          ...initialErrorsState,
+          errorsByScreenID,
+        },
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(
-        <ErrorComponent onTryAgain={onTryAgainPressSpy} screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}/>,
-        store
-      )
-    })
     testInstance = component.root
   })
 

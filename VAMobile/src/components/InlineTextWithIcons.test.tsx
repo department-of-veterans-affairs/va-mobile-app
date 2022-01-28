@@ -5,19 +5,19 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { context, renderWithProviders } from 'testUtils'
-import VAIcon, { VAIconProps } from "./VAIcon";
-import InlineTextWithIcons from "./InlineTextWithIcons";
+import { context, render, RenderAPI } from 'testUtils'
+import VAIcon, { VAIconProps } from './VAIcon'
+import InlineTextWithIcons from './InlineTextWithIcons'
 import { Box, InlineTextWithIconsProps } from 'components'
-import TextView from "./TextView";
+import TextView from './TextView'
 
 context('InlineTextWithIcons', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => { })
+    onPressSpy = jest.fn(() => {})
     const testLine1 = {
       leftTextProps: {
         text: 'Test Email',
@@ -44,16 +44,14 @@ context('InlineTextWithIcons', () => {
       rightIconProps: { name: 'ArrowRight', width: 16, height: 16, fill: 'spinner' } as VAIconProps,
     } as InlineTextWithIconsProps
 
-    act(() => {
-      component = renderWithProviders(
-        <Box>
-          <InlineTextWithIcons {...testLine1} />
-          <InlineTextWithIcons {...testLine2} />
-        </Box>
-      )
-    })
+    component = render(
+      <Box>
+        <InlineTextWithIcons {...testLine1} />
+        <InlineTextWithIcons {...testLine2} />
+      </Box>,
+    )
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

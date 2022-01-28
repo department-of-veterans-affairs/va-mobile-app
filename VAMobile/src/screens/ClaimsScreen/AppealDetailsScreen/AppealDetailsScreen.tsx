@@ -1,18 +1,18 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
-import { getAppeal } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 
@@ -20,7 +20,7 @@ type AppealDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'AppealDe
 
 const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
   const controlValues = [t('claimDetails.status'), t('appealDetails.issuesTab')]
@@ -31,7 +31,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   ]
 
   const { appealID } = route.params
-  const { appeal, loadingAppeal } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { appeal, loadingAppeal } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
 

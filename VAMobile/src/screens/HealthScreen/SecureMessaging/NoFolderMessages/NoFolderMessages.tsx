@@ -5,7 +5,7 @@ import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { ViewStyle } from 'react-native'
-import { updateSecureMessagingTab } from 'store/actions'
+import { updateSecureMessagingTab } from 'store/slices'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 

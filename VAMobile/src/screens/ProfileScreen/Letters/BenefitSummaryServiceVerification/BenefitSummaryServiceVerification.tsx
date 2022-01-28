@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { Alert } from 'react-native'
@@ -21,14 +20,16 @@ import {
   VAScrollView,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
-import { DemoState, LettersState, StoreState } from 'store/reducers'
+import { DemoState } from 'store/slices/demoSlice'
+import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
-import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
 import { map } from 'underscore'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
 const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
@@ -38,8 +39,8 @@ type BenefitSummaryServiceVerificationProps = Record<string, unknown>
 const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const dispatch = useDispatch()
-  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const dispatch = useAppDispatch()
+  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
@@ -192,7 +193,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     return [...toggleListItems, ...nonDataDrivenData]
   }
 
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
     if (demoMode) {
       Alert.alert('Demo Mode', 'Letters are not available to download for demo user')

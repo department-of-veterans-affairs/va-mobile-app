@@ -1,15 +1,15 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { BackButton, Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -19,8 +19,8 @@ type UploadConfirmationProps = StackScreenProps<ClaimsStackParamList, 'UploadCon
 const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const dispatch = useDispatch()
-  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const dispatch = useAppDispatch()
+  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { request, filesList } = route.params
 
   useEffect(() => {

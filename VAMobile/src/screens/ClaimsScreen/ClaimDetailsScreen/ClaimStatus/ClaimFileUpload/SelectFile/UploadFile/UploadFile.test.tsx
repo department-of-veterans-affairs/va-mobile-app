@@ -1,18 +1,19 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, mockStore, render } from 'testUtils'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
 import UploadFile from './UploadFile'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import { TextView, VAButton, VAModalPicker } from 'components'
 import { DocumentPickerResponse } from '../../../../../ClaimsStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker'
+import { RenderAPI } from '@testing-library/react-native'
 
 const mockNavigationSpy = jest.fn()
-jest.mock('../../../../../../../utils/hooks', () => {
+jest.mock('utils/hooks', () => {
   const original = jest.requireActual('../../../../../../../utils/hooks')
   const theme = jest.requireActual('../../../../../../../styles/themes/standardTheme').default
   return {
@@ -27,10 +28,9 @@ jest.mock('../../../../../../../utils/hooks', () => {
 })
 
 context('UploadFile', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
-  let store: any
 
   let request = {
     type: 'still_need_from_you_list',
@@ -43,19 +43,17 @@ context('UploadFile', () => {
   const initializeTestInstance = (fileUploaded?: DocumentPickerResponse, imageUploaded?: ImagePickerResponse) => {
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded, imageUploaded } })
 
-    store = mockStore({
-      ...InitialState,
-      claimsAndAppeals: {
-        ...InitialState.claimsAndAppeals,
-        claim: Claim,
+    component = render(<UploadFile {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        claimsAndAppeals: {
+          ...InitialState.claimsAndAppeals,
+          claim: Claim,
+        },
       },
     })
 
-    act(() => {
-      component = renderWithProviders(<UploadFile {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

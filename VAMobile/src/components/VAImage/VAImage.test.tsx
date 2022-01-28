@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, renderWithProviders} from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import VAImage from './VAImage'
 
 jest.mock('../../utils/platform', () => ({
@@ -12,15 +12,12 @@ jest.mock('../../utils/platform', () => ({
 }))
 
 context('VAIconTests', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<VAImage name={'PaperCheck'} a11yLabel={'testId'} marginX={10} />)
-    })
-
-    testInstance = component.root
+    component = render(<VAImage name={'PaperCheck'} a11yLabel={'testId'} marginX={10} />)
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

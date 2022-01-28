@@ -3,18 +3,21 @@ import React from 'react'
 import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTestID, mockNavProps, mockStore, render } from 'testUtils'
 
 import PastAppointments from './PastAppointments'
-import { ErrorsState, initialAppointmentsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
+import {} from 'store/slices'
 import { AppointmentsGroupedByYear, AppointmentStatus, AppointmentStatusConstants } from 'store/api/types'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getAppointmentsInDateRange } from 'store/actions'
+import { getAppointmentsInDateRange, ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import VAModalPicker from 'components/FormWrapper/FormFields/Picker/VAModalPicker'
 import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
+import { bookedAppointmentsList } from 'store/slices/appointmentsSlice.test'
+import { RenderAPI, waitFor } from '@testing-library/react-native'
+import waitForClickable from 'webdriverio/build/commands/element/waitForClickable'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -41,8 +44,8 @@ jest.mock('../../../../utils/platform', () => {
   }
 })
 
-jest.mock('../../../../store/actions', () => {
-  let actual = jest.requireActual('../../../../store/actions')
+jest.mock('store/slices/', () => {
+  let actual = jest.requireActual('store/slices')
   let appointment = jest.requireActual('../../../../utils/tests/appointments').defaultAppoinment
   return {
     ...actual,
@@ -66,8 +69,7 @@ jest.mock('../../../../store/api', () => {
 })
 
 context('PastAppointments', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
   let appointmentData = (status: AppointmentStatus = AppointmentStatusConstants.BOOKED): AppointmentsGroupedByYear => {
@@ -93,46 +95,79 @@ context('PastAppointments', () => {
   ): void => {
     props = mockNavProps()
 
-    store = mockStore({
-      ...InitialState,
-      appointments: {
-        ...initialAppointmentsState,
-        loading,
-        loadingAppointmentCancellation: false,
-        upcomingVaServiceError: false,
-        upcomingCcServiceError: false,
-        pastVaServiceError: false,
-        pastCcServiceError: false,
-        currentPageAppointmentsByYear: {
-          ...initialAppointmentsState.currentPageAppointmentsByYear,
-          pastThreeMonths: currentPagePastAppointmentsByYear,
-        },
-        loadedAppointmentsByTimeFrame: {
-          upcoming: [],
-          pastThreeMonths: [],
-          pastFiveToThreeMonths: [],
-          pastEightToSixMonths: [],
-          pastElevenToNineMonths: [],
-          pastAllCurrentYear: [],
-          pastAllLastYear: [],
-        },
-        paginationByTimeFrame: {
-          ...initialAppointmentsState.paginationByTimeFrame,
-          pastThreeMonths: {
-            currentPage: 2,
-            totalEntries: 2,
-            perPage: 1,
+    component = render(<PastAppointments {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        appointments: {
+          ...InitialState.appointments,
+          loading,
+          loadingAppointmentCancellation: false,
+          upcomingVaServiceError: false,
+          upcomingCcServiceError: false,
+          pastVaServiceError: false,
+          pastCcServiceError: false,
+          currentPageAppointmentsByYear: {
+            upcoming: {},
+            pastFiveToThreeMonths: {},
+            pastEightToSixMonths: {},
+            pastElevenToNineMonths: {},
+            pastAllCurrentYear: {},
+            pastAllLastYear: {},
+            pastThreeMonths: currentPagePastAppointmentsByYear,
+          },
+          loadedAppointmentsByTimeFrame: {
+            upcoming: [],
+            pastThreeMonths: [],
+            pastFiveToThreeMonths: [],
+            pastEightToSixMonths: [],
+            pastElevenToNineMonths: [],
+            pastAllCurrentYear: [],
+            pastAllLastYear: [],
+          },
+          paginationByTimeFrame: {
+            upcoming: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+
+            pastFiveToThreeMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastEightToSixMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastElevenToNineMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastAllCurrentYear: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastAllLastYear: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastThreeMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
           },
         },
+        errors: errorsState,
       },
-      errors: errorsState,
     })
 
-    act(() => {
-      component = renderWithProviders(<PastAppointments {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -140,35 +175,45 @@ context('PastAppointments', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(undefined, true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      await waitFor(() => {
+        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      })
     })
   })
 
   describe('when a appointment is clicked', () => {
     it('should call useRouteNavigation', async () => {
-      const allPressables = testInstance.findAllByType(Pressable)
-      allPressables[allPressables.length - 3].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        const allPressables = testInstance.findAllByType(Pressable)
+        allPressables[allPressables.length - 3].props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('when the status is CANCELLED', () => {
     it('should render the first line of the appointment item as the text "Canceled"', async () => {
-      initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED))
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('CANCELED')
+      await waitFor(() => {
+        initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED))
+        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('CANCELED')
+      })
     })
   })
 
   describe('when there are no appointments', () => {
     it('should render NoAppointments', async () => {
-      initializeTestInstance()
-      expect(testInstance.findByType(NoAppointments)).toBeTruthy()
+      await waitFor(() => {
+        initializeTestInstance()
+        expect(testInstance.findByType(NoAppointments)).toBeTruthy()
+      })
     })
   })
 
@@ -181,9 +226,10 @@ context('PastAppointments', () => {
         ...initialErrorsState,
         errorsByScreenID,
       }
-
-      initializeTestInstance(undefined, undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+      await waitFor(() => {
+        initializeTestInstance(undefined, undefined, errorState)
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+      })
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async () => {
@@ -194,17 +240,21 @@ context('PastAppointments', () => {
         ...initialErrorsState,
         errorsByScreenID,
       }
-
-      initializeTestInstance(undefined, undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      await waitFor(() => {
+        initializeTestInstance(undefined, undefined, errorState)
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      })
     })
   })
 
   describe('when the dropdown value is updated', () => {
     describe('when the platform is android', () => {
       it('should call getAppointmentsInDateRange', async () => {
-        testInstance.findByType(VAModalPicker).props.onSelectionChange('5 months to 3 months')
-        expect(getAppointmentsInDateRange).toHaveBeenCalled()
+        await waitFor(() => {
+          testInstance.findByType(VAModalPicker).props.onSelectionChange('5 months to 3 months')
+
+          expect(getAppointmentsInDateRange).toHaveBeenCalled()
+        })
       })
     })
   })

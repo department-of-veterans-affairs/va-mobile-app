@@ -2,12 +2,12 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, renderWithProviders } from 'testUtils'
+import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
 
 import WebviewScreen from './WebviewScreen'
 
 context('WebviewScreen', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const mockProps = mockNavProps(
@@ -27,11 +27,9 @@ context('WebviewScreen', () => {
   beforeEach(() => {
     const props = mockProps
 
-    act(() => {
-      component = renderWithProviders(<WebviewScreen {...props} />)
-    })
+    component = render(<WebviewScreen {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

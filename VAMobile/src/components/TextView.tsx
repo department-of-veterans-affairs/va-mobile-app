@@ -1,12 +1,13 @@
 import { AccessibilityProps, Pressable, Text } from 'react-native'
-import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { AccessibilityState, StoreState } from 'store'
+import { AccessibilityState } from 'store/slices/accessibilitySlice'
 import { BoxProps, createBoxStyles } from './Box'
+import { RootState } from 'store'
 import { VAButtonTextColors, VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { themeFn } from 'utils/theme'
+import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 
 /** TextView font variants */
@@ -73,7 +74,7 @@ const StyledText = styled(Text)`
  * @returns TextView component
  */
 const TextView: FC<TextViewProps> = ({ selectable = false, ...props }) => {
-  const { isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const theme = useTheme()
   const wrapperProps = { ...props }
 

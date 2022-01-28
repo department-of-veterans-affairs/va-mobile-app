@@ -5,13 +5,13 @@ import 'jest-styled-components'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 
-import { context, findByTestID, renderWithProviders } from 'testUtils'
+import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
 import VASelector, { SelectorType } from './VASelector'
 import { TextView } from '../../index'
 import Mock = jest.Mock
 
 context('VASelector', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let selected: boolean
   let setSelected: Mock
@@ -31,22 +31,20 @@ context('VASelector', () => {
       }
     })
 
-    act(() => {
-      component = renderWithProviders(
-        <VASelector
-          labelKey={'profile:editAddress.address'}
-          selected={selected}
-          disabled={disabled}
-          onSelectionChange={setSelected}
-          error={errorMessage}
-          setError={setErrorMessage}
-          isRequiredField={isRequiredField}
-          selectorType={selectorType}
-        />,
-      )
-    })
+    component = render(
+      <VASelector
+        labelKey={'profile:editAddress.address'}
+        selected={selected}
+        disabled={disabled}
+        onSelectionChange={setSelected}
+        error={errorMessage}
+        setError={setErrorMessage}
+        isRequiredField={isRequiredField}
+        selectorType={selectorType}
+      />,
+    )
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -59,18 +57,22 @@ context('VASelector', () => {
 
   describe('when the checkbox area is clicked', () => {
     it('should call setSelected', async () => {
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-      expect(setSelected).toBeCalled()
-      expect(selected).toEqual(true)
+      await waitFor(() => {
+        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        expect(setSelected).toBeCalled()
+        expect(selected).toEqual(true)
+      })
     })
 
     describe('when the checkbox is required and is being unchecked', () => {
       it('should set the error message', async () => {
         initializeTestInstance(true, false, '', true)
 
-        expect(errorMessage).toEqual('')
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-        expect(errorMessage).toEqual('This is the default error message')
+        await waitFor(() => {
+          expect(errorMessage).toEqual('')
+          testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+          expect(errorMessage).toEqual('This is the default error message')
+        })
       })
     })
   })
@@ -99,10 +101,11 @@ context('VASelector', () => {
   describe('when disabled is true and checkbox area is clicked', () => {
     it('should not call setSelected', async () => {
       initializeTestInstance(false, true)
-
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-      expect(setSelected).not.toBeCalled()
-      expect(selected).toEqual(false)
+      await waitFor(() => {
+        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        expect(setSelected).not.toBeCalled()
+        expect(selected).toEqual(false)
+      })
     })
   })
 

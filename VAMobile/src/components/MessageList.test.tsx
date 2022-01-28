@@ -5,14 +5,14 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { context, findByTestID, renderWithProviders } from 'testUtils'
-import MessageList from "./MessageList"
-import VAIcon, { VAIconProps } from "./VAIcon"
-import MessagesSentReadTag from "./MessagesSentReadTag"
+import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import MessageList from './MessageList'
+import VAIcon, { VAIconProps } from './VAIcon'
+import MessagesSentReadTag from './MessagesSentReadTag'
 import { MessageListItemObj, InlineTextWithIconsProps, TextLine } from 'components'
 
 context('MessageList', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
@@ -20,19 +20,18 @@ context('MessageList', () => {
     onPressSpy = jest.fn(() => { })
     const items = [
       {
-        inlineTextWithIcons:
-          [
-            {
-              leftTextProps: { text: 'another line' }
-            },
-            {
-              leftTextProps: { text: 'another line 2' }
-            }
-          ],
+        inlineTextWithIcons: [
+          {
+            leftTextProps: { text: 'another line' },
+          },
+          {
+            leftTextProps: { text: 'another line 2' },
+          },
+        ],
         isSentFolder: false,
-        testId: "inbox-item-no-attachment-read",
+        testId: 'inbox-item-no-attachment-read',
         a11yHintText: 'hint2',
-        onPress: onPressSpy
+        onPress: onPressSpy,
       },
       {
         inlineTextWithIcons:
@@ -48,30 +47,27 @@ context('MessageList', () => {
           ],
         isSentFolder: false,
         a11yHintText: 'hint2',
-        onPress: onPressSpy
+        onPress: onPressSpy,
       },
       {
-        inlineTextWithIcons:
-          [
-            {
-              leftTextProps: { text: 'test3-recipient' } as TextLine
-            } as InlineTextWithIconsProps,
-            {
-              leftTextProps: { text: 'test3-sent-item-with-read-tag' } as TextLine
-            } as InlineTextWithIconsProps
-          ],
+        inlineTextWithIcons: [
+          {
+            leftTextProps: { text: 'test3-recipient' } as TextLine,
+          } as InlineTextWithIconsProps,
+          {
+            leftTextProps: { text: 'test3-sent-item-with-read-tag' } as TextLine,
+          } as InlineTextWithIconsProps,
+        ],
         isSentFolder: true,
         readReceipt: 'READ',
         a11yHintText: 'hint2',
-        onPress: onPressSpy
-      }
+        onPress: onPressSpy,
+      },
     ] as Array<MessageListItemObj>
 
-    act(() => {
-      component = renderWithProviders(<MessageList items={items} />)
-    })
+    component = render(<MessageList items={items} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -96,5 +92,4 @@ context('MessageList', () => {
     expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('UnreadIcon')
     expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('PaperClip')
   })
-
 })

@@ -1,16 +1,16 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render } from 'testUtils'
 
-import { InitialState } from 'store/reducers'
 import { AppointmentPhone } from 'store/api/types'
 import { ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
+import { InitialState } from 'store/slices'
+import { RenderAPI } from '@testing-library/react-native'
 
 context('ClickToCallPhoneNumber', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
@@ -22,18 +22,12 @@ context('ClickToCallPhoneNumber', () => {
 
   const initializeTestInstance = (phone?: AppointmentPhone): void => {
     props = mockNavProps({
-      phone
+      phone,
     })
 
-    store = mockStore({
-      ...InitialState,
-    })
+    component = render(<ClickToCallPhoneNumber {...props} />, { preloadedState: { ...InitialState } })
 
-    act(() => {
-      component = renderWithProviders(<ClickToCallPhoneNumber {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -50,7 +44,9 @@ context('ClickToCallPhoneNumber', () => {
     expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('123-456-7890')
     expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('If you have hearing loss, call TTY:')
     expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('711')
-    expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('To make a voice or TTY call, tap the first link. If you’d like help to make a TTY call, tap the second link.')
+    expect(testInstance.findAllByType(TextView)[3].props.children).toEqual(
+      'To make a voice or TTY call, tap the first link. If you’d like help to make a TTY call, tap the second link.',
+    )
   })
 
   describe('when the phone prop does not exist', () => {

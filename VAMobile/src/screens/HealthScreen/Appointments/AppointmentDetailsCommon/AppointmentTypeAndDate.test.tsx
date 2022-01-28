@@ -1,21 +1,20 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders, findByTypeWithSubstring } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, findByTypeWithSubstring, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
 
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import { AppointmentStatusDetailTypeConsts, AppointmentStatusDetailType } from 'store/api/types'
 import AppointmentTypeAndDate from './AppointmentTypeAndDate'
 import { TextView } from 'components'
 
 context('AppointmentTypeAndDate', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (isAppointmentCanceled: boolean = false, whoCanceled: AppointmentStatusDetailType | null = null): void => {
+  const initializeTestInstance = async (isAppointmentCanceled: boolean = false, whoCanceled: AppointmentStatusDetailType | null = null): Promise<void> => {
     props = mockNavProps({
       appointmentType: 'VA',
       startDateUtc: '2021-02-06T19:53:14.000+00:00',
@@ -25,19 +24,19 @@ context('AppointmentTypeAndDate', () => {
       whoCanceled,
     })
 
-    store = mockStore({
-      ...InitialState,
+    await waitFor(() => {
+      component = render(<AppointmentTypeAndDate {...props} />, {
+        preloadedState: {
+          ...InitialState,
+        },
+      })
     })
 
-    act(() => {
-      component = renderWithProviders(<AppointmentTypeAndDate {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
-  beforeEach(() => {
-    initializeTestInstance(false)
+  beforeEach(async () => {
+    await initializeTestInstance(false)
   })
 
   it('initializes correctly', async () => {
@@ -46,7 +45,7 @@ context('AppointmentTypeAndDate', () => {
 
   describe('when isAppointmentCanceled is true', () => {
     it('should render a TextView with the cancellation text', async () => {
-      initializeTestInstance(true)
+      await initializeTestInstance(true)
       expect(findByTypeWithSubstring(testInstance, TextView, 'canceled this appointment')).toBeTruthy()
     })
   })

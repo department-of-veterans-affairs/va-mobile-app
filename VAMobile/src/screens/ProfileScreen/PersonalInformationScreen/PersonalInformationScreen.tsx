@@ -1,22 +1,22 @@
 import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 import { ProfileStackParamList } from '../ProfileStackScreens'
+import { RootState } from 'store'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
-import { getProfileInfo } from 'store/actions'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
@@ -104,10 +104,10 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
 
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { profile, loading, needsDataLoad } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginTop, contentMarginBottom, gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)

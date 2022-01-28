@@ -1,6 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
@@ -20,13 +18,14 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices'
 import { RootNavStackParamList } from 'App'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { deleteEmail, finishEditEmail, updateEmail } from 'store/actions'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 
@@ -34,10 +33,10 @@ type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
  * Screen for editing a users email in the personal info section
  */
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
-  const { profile, emailSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
   const deleteEmailAlert = useDestructiveAlert()
 

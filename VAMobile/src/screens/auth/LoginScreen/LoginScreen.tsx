@@ -1,19 +1,21 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
+import { AuthState, loginStart } from 'store/slices/authSlice'
+import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
@@ -27,7 +29,7 @@ const LoginScreen: FC = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   const onFacilityLocator = navigateTo('Webview', {
     url: WEBVIEW_URL_FACILITY_LOCATOR,
@@ -45,7 +47,7 @@ const LoginScreen: FC = () => {
     py: theme.dimensions.buttonPadding,
   }
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const handleUpdateDemoMode = () => {
     dispatch(updateDemoMode(true))
   }

@@ -5,24 +5,17 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders, mockStore } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import CallHelpCenter from './CallHelpCenter'
 
 context('ErrorComponent', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    store = mockStore({})
+    component = render(<CallHelpCenter />)
 
-    act(() => {
-      component = renderWithProviders(
-        <CallHelpCenter />,
-        store
-      )
-    })
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

@@ -1,24 +1,24 @@
 import 'react-native'
 import React from 'react'
+import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 
-import { context, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockStore, render, waitFor } from 'testUtils'
 import { PickerItem } from './VAModalPicker'
 import Mock = jest.Mock
-import { Pressable } from 'react-native'
-import { InitialState } from 'store/reducers'
 import VAModalPicker from './VAModalPicker'
 import TextView from 'components/TextView'
 import BaseListItem from 'components/BaseListItem'
+import { InitialState } from 'store/slices'
+import { RenderAPI } from '@testing-library/react-native'
 
 context('VAModalPicker', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let selected: string
   let setSelected: Mock
   let pickerOptions: Array<PickerItem>
-  let store: any
   let doneButton: any
   let cancelButton: any
   let selectionButtons: any
@@ -26,13 +26,6 @@ context('VAModalPicker', () => {
   const initializeTestInstance = (selectedValue: string, labelKey?: string, helperTextKey = '', error = '', isRequiredField = false, testID = '', isRunning = false): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
-
-    store = mockStore({
-      accessibility: {
-        ...InitialState.accessibility,
-        isVoiceOverTalkBackRunning: isRunning,
-      },
-    })
 
     const props = {
       selectedValue: selected,
@@ -45,11 +38,16 @@ context('VAModalPicker', () => {
       testID,
     }
 
-    act(() => {
-      component = renderWithProviders(<VAModalPicker {...props} />, store)
+    component = render(<VAModalPicker {...props} />, {
+      preloadedState: {
+        accessibility: {
+          ...InitialState.accessibility,
+          isVoiceOverTalkBackRunning: isRunning,
+        },
+      },
     })
 
-    testInstance = component.root
+    testInstance = component.container
 
     doneButton = testInstance.findByProps({ accessibilityLabel: 'Done' })
     cancelButton = testInstance.findByProps({ accessibilityLabel: 'Cancel' })
@@ -73,23 +71,23 @@ context('VAModalPicker', () => {
 
   describe('when an option is selected', () => {
     it('should update selected to the value of that option and select done', async () => {
-      selectionButtons[0].props.onPress()
+      await waitFor(() => {
+        selectionButtons[0].props.onPress()
 
-      act(() => {
         doneButton.props.onPress()
-      })
 
-      expect(selected).toEqual('java')
+        expect(selected).toEqual('java')
+      })
     })
 
     it('should not update selected to the value of that option and select cancel', async () => {
-      selectionButtons[0].props.onPress()
+      await waitFor(() => {
+        selectionButtons[0].props.onPress()
 
-      act(() => {
         cancelButton.props.onPress()
-      })
 
-      expect(selected).not.toEqual('java')
+        expect(selected).not.toEqual('java')
+      })
     })
   })
 
@@ -154,11 +152,10 @@ context('VAModalPicker', () => {
       })
     })
 
-    describe('when isRequiredField is true', () => {
-      it('should have the word required in the accessibilityLabel', async () => {
-        initializeTestInstance('email', 'common:field', '', '', true)
-        expect(testInstance.findAllByType(Pressable)[6].props.accessibilityLabel).toEqual('Field picker required')
-      })
+    // describe('when isRequiredField is true', () => {
+    it('should have the word required in the accessibilityLabel', async () => {
+      initializeTestInstance('email', 'common:field', '', '', true)
+      expect(testInstance.findAllByType(Pressable)[6].props.accessibilityLabel).toEqual('Field picker required')
     })
 
     describe('when the helperTextKey exists', () => {

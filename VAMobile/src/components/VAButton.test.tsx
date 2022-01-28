@@ -2,18 +2,18 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
-import {Pressable} from 'react-native'
+import { ReactTestInstance } from 'react-test-renderer'
+import { Pressable } from 'react-native'
 import Mock = jest.Mock
 
-import { context, renderWithProviders } from 'testUtils'
-import VAButton, {ButtonTypesConstants} from './VAButton'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
+import VAButton, { ButtonTypesConstants } from './VAButton'
 import Box from './Box'
 import TextView from './TextView'
-import VAIcon, {VAIconProps} from './VAIcon'
+import VAIcon, { VAIconProps } from './VAIcon'
 
 context('VAButton', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
@@ -22,10 +22,18 @@ context('VAButton', () => {
 
     const iconProps: VAIconProps = { name: 'PaperClip', width: 16, height: 18 }
 
-    act(() => {
-      component = renderWithProviders(<VAButton iconProps={displayIcon ? iconProps : undefined} label={'my button'} onPress={onPressSpy} buttonType={buttonType} disabled={disabled} disabledText={'my button instructions'} />)
-    })
-    testInstance = component.root
+    component = render(
+      <VAButton
+        iconProps={displayIcon ? iconProps : undefined}
+        label={'my button'}
+        onPress={onPressSpy}
+        buttonType={buttonType}
+        disabled={disabled}
+        disabledText={'my button instructions'}
+      />,
+    )
+
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -89,11 +97,13 @@ context('VAButton', () => {
 
       describe('when the button is pressed in', () => {
         it('should set the backgroundColor to buttonPrimaryActive', async () => {
-          initializeTestInstance(false)
-          testInstance.findByType(Pressable).props.onPressIn()
-          expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimaryActive')
-          testInstance.findByType(Pressable).props.onPressOut()
-          expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimary')
+          await waitFor(() => {
+            initializeTestInstance(false)
+            testInstance.findByType(Pressable).props.onPressIn()
+            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimaryActive')
+            testInstance.findByType(Pressable).props.onPressOut()
+            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimary')
+          })
         })
       })
     })
@@ -116,11 +126,13 @@ context('VAButton', () => {
 
       describe('when the button is pressed in', () => {
         it('should set the backgroundColor to buttonSecondaryActive', async () => {
-          initializeTestInstance(false, ButtonTypesConstants.buttonSecondary)
-          testInstance.findByType(Pressable).props.onPressIn()
-          expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonSecondaryActive')
-          testInstance.findByType(Pressable).props.onPressOut()
-          expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonSecondary')
+          await waitFor(() => {
+            initializeTestInstance(false, ButtonTypesConstants.buttonSecondary)
+            testInstance.findByType(Pressable).props.onPressIn()
+            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonSecondaryActive')
+            testInstance.findByType(Pressable).props.onPressOut()
+            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonSecondary')
+          })
         })
       })
     })
@@ -143,11 +155,13 @@ context('VAButton', () => {
 
       describe('when the button is pressed in', () => {
         it('should set the backgroundColor to buttonImportantActive', async () => {
-          initializeTestInstance(false, ButtonTypesConstants.buttonImportant)
-          testInstance.findByType(Pressable).props.onPressIn()
-          expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonImportantActive')
-          testInstance.findByType(Pressable).props.onPressOut()
-          expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonImportant')
+          await waitFor(() => {
+            initializeTestInstance(false, ButtonTypesConstants.buttonImportant)
+            testInstance.findByType(Pressable).props.onPressIn()
+            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonImportantActive')
+            testInstance.findByType(Pressable).props.onPressOut()
+            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonImportant')
+          })
         })
       })
     })

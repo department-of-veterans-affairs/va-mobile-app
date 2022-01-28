@@ -4,10 +4,10 @@ import { Linking, Pressable, Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
 
 import SettingsScreen from './index'
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import { BaseListItem, TextView } from 'components'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
@@ -35,32 +35,26 @@ jest.mock('../../../utils/hooks', () => {
 })
 
 context('SettingsScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (canStoreWithBiometric = false, supportedBiometric?: BIOMETRY_TYPE) => {
-    const props = mockNavProps(
-      undefined,
-      {
-        navigate: mockNavigationSpy,
-      }
-    )
+    const props = mockNavProps(undefined, {
+      navigate: mockNavigationSpy,
+    })
 
-    store = mockStore({
-      ...InitialState,
-      auth: {
-        ...InitialState.auth,
-        canStoreWithBiometric,
-        supportedBiometric,
+    component = render(<SettingsScreen {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        auth: {
+          ...InitialState.auth,
+          canStoreWithBiometric,
+          supportedBiometric,
+        },
       },
     })
 
-    act(() => {
-      component = renderWithProviders(<SettingsScreen {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

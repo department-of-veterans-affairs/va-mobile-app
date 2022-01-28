@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 import _ from 'underscore'
 
@@ -35,24 +34,26 @@ import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secu
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState } from 'store/reducers'
+import { RootState } from 'store'
 import {
+  SecureMessagingState,
   deleteDraft,
+  dispatchResetDeleteDraftFailed,
   getMessage,
   getMessageRecipients,
   getThread,
-  resetDeleteDraftFailed,
   resetSaveDraftFailed,
   resetSendMessageFailed,
   saveDraft,
   updateSecureMessagingTab,
-} from 'store/actions'
+} from 'store/slices'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -61,10 +62,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
-  const destructiveAlert = useDestructiveAlert()
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const {
     hasLoadedRecipients,
@@ -78,7 +77,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     threads,
     deleteDraftComplete,
     deletingDraft,
-  } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const destructiveAlert = useDestructiveAlert()
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const { attachmentFileToAdd } = route.params
 
@@ -107,7 +108,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     dispatch(resetSaveDraftFailed())
-    dispatch(resetDeleteDraftFailed())
+    dispatch(dispatchResetDeleteDraftFailed())
 
     if (messageID) {
       dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))

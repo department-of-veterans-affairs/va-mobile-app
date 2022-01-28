@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import { BackButton, Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
@@ -7,14 +6,15 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, StoreState } from 'store/reducers'
+import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { listFolderMessages, resetDeleteDraftComplete, resetSaveDraftComplete } from 'store/actions'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
@@ -24,9 +24,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { folderID, folderName, draftSaved } = route.params
 
   const t = useTranslation(NAMESPACE.HEALTH)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<StoreState, SecureMessagingState>(
+  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
@@ -49,7 +49,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (deleteDraftComplete) {
       showSnackBar(t('secureMessaging.deleteDraft.snackBarMessage'), dispatch, undefined, true, false, true)
-      dispatch(resetDeleteDraftComplete())
+      dispatch(dispatchResetDeleteDraftComplete())
     }
   }, [deleteDraftComplete, dispatch, t])
 

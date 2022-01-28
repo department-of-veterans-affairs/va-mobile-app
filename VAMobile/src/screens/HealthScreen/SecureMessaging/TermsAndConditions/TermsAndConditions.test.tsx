@@ -4,9 +4,9 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, renderWithProviders} from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import TermsAndConditions from './TermsAndConditions'
-import {Linking, TouchableWithoutFeedback} from "react-native";
+import { Linking, TouchableWithoutFeedback } from 'react-native'
 
 const mockExternalLinkSpy = jest.fn()
 
@@ -24,16 +24,13 @@ jest.mock('utils/hooks', () => {
 })
 
 context('TermsAndConditions', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+    component = render(<TermsAndConditions />)
 
-    act(() => {
-      component = renderWithProviders(<TermsAndConditions />)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

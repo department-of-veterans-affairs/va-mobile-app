@@ -1,17 +1,15 @@
-import React, { FC, ReactNode, useEffect } from 'react'
-
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store'
+import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch } from 'react-redux'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */
@@ -93,7 +91,7 @@ export type ClaimPhaseProps = {
 const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { eventsTimeline } = attributes

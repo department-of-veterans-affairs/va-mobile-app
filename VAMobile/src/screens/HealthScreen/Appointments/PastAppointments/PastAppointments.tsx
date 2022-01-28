@@ -1,20 +1,20 @@
 import { DateTime } from 'luxon'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useState } from 'react'
-
 import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
-import { AppointmentsState, StoreState } from 'store/reducers'
+import { AppointmentsState, CurrentPageAppointmentsByYear, getAppointmentsInDateRange } from 'store/slices'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLineWithIconProps, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
+import { deepCopyObject } from 'utils/common'
 import { getAppointmentLocation, getAppointmentTypeIcon, getGroupedAppointments, getYearsToSortedMonths } from 'utils/appointments'
-import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = Record<string, unknown>
@@ -23,9 +23,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const newCurrentPageAppointmentsByYear = deepCopyObject<CurrentPageAppointmentsByYear>(currentPageAppointmentsByYear)
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -117,7 +118,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const pickerOptions = getPickerOptions()
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
   const { timeFrame } = datePickerOption
-  const currentPagePastAppointmentsByYear = currentPageAppointmentsByYear[timeFrame]
+  const currentPagePastAppointmentsByYear = newCurrentPageAppointmentsByYear[timeFrame]
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
   const { currentPage, perPage, totalEntries } = paginationByTimeFrame[timeFrame]

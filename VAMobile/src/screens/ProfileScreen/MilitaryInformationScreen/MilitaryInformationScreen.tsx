@@ -1,25 +1,26 @@
 import { map } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, MilitaryServiceState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState } from 'store/slices'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
+import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
+import { useSelector } from 'react-redux'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 import ProfileBanner from '../ProfileBanner'
 
 const MilitaryInformationScreen: FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
-  const { serviceHistory, loading, needsDataLoad } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
+  const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 

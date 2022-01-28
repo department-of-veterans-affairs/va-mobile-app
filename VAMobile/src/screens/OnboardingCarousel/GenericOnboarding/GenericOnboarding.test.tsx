@@ -1,22 +1,20 @@
 import 'react-native'
 import React from 'react'
 import 'jest-styled-components'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import {context, renderWithProviders} from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import GenericOnboarding from './GenericOnboarding'
-import {VAIcon} from 'components'
+import { VAIcon } from 'components'
 
 context('GenericOnboarding', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (displayLogo: boolean = false) => {
-    act(() => {
-      component = renderWithProviders(<GenericOnboarding header={'header'} text={'text'} testID={'testID'} displayLogo={displayLogo}/>)
-    })
+    component = render(<GenericOnboarding header={'header'} text={'text'} testID={'testID'} displayLogo={displayLogo} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
