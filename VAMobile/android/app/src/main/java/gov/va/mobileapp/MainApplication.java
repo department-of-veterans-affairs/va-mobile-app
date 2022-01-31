@@ -20,7 +20,6 @@ import com.wix.reactnativenotifications.core.notification.IPushNotification;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import gov.va.mobileapp.native_modules.DeviceDataPackage;
 import gov.va.mobileapp.native_modules.RNCalendarPackage;
 import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
 import gov.va.mobileapp.native_modules.RNNotificationPrefsPackage;
@@ -43,8 +42,6 @@ public class MainApplication extends Application implements ReactApplication, IN
             List<ReactPackage> packages = new PackageList(this).getPackages();
             // Packages that cannot be autolinked yet can be added manually here, for
             // example:
-            // Add the DeviceData bridge
-            packages.add(new DeviceDataPackage());
             packages.add(new RNCalendarPackage());
             packages.add(new RNCheckVoiceOverPackage());
             packages.add(new RNNotificationPrefsPackage());
