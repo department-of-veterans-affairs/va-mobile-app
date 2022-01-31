@@ -23,9 +23,15 @@ const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'primary'
   const [buildNumber, setBuildNumber] = useState<number>()
 
   useEffect(() => {
-    getVersionName().then((version) => setVersionName(version))
-    getBuildNumber().then((build) => setBuildNumber(build))
-  })
+    async function getVersionAndBuild() {
+      const version = await getVersionName()
+      const build = await getBuildNumber()
+      setVersionName(version)
+      setBuildNumber(build)
+    }
+
+    getVersionAndBuild()
+  }, [])
 
   return (
     <Box mb={theme.dimensions.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>
