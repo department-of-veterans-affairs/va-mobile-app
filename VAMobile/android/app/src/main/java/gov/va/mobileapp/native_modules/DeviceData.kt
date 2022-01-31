@@ -20,11 +20,6 @@ class DeviceData(reactContext: ReactApplicationContext): ReactContextBaseJavaMod
      * @returns the user-assigned name of the device.
      *
      */
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    fun getDeviceName(): String {
-        return Settings.Global.getString(reactApplicationContext.contentResolver, DEVICE_NAME)
-    }
-
     @ReactMethod
     fun getDeviceName(promise:Promise) {
         val deviceName =  Settings.Global.getString(reactApplicationContext.contentResolver, DEVICE_NAME)
@@ -43,8 +38,8 @@ class DeviceData(reactContext: ReactApplicationContext): ReactContextBaseJavaMod
     }
 
     /**
-     * Exposes the app version name.
-     * @returns version name of the app (ie).
+     * Exposes the app build number.
+     * @returns build number of the app (0).
      *
      */
     @ReactMethod

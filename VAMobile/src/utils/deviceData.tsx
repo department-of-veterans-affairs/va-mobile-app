@@ -3,7 +3,6 @@ import { NativeModules } from 'react-native'
 // DeviceData bridge from iOS and Android
 const DD = NativeModules.DeviceData
 
-
 /**
  * returns the custom name of the device set by the user.
  */

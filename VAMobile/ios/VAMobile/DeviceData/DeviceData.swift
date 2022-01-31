@@ -20,16 +20,25 @@ class DeviceData: NSObject, RCTBridgeModule {
     return true
    }
 
+
+  // Exposes the device name from the global settings.
+  // @returns the user-assigned name of the device.
   @objc(getDeviceName:rejecter:)
   func getDeviceName(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
     resolve(UIDevice.current.name)
   }
   
+  
+  // Exposes the app version name.
+  // @returns version name of the app (1.1.1).  
   @objc(getVersionName:rejecter:)
   func getVersionName(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
     resolve(UIApplication.versionName)
   }
   
+  
+  //Exposes the app build number.
+  // @returns build number of the app (0).
   @objc(getBuildNumber:rejecter:)
   func getBuildNumber(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
     resolve(UIApplication.build)
