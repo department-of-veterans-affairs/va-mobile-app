@@ -9,20 +9,32 @@ import Foundation
 import UIKit
 
 @objc(DeviceData)
-class DeviceData: NSObject {
+class DeviceData: NSObject, RCTBridgeModule {
+
+   static func moduleName() -> String! {
+    return "DeviceData"
+  }
+
   @objc
   static func requiresMainQueueSetup() -> Bool {
     return true
    }
-  
-  @objc
-  func constantsToExport() -> [AnyHashable : Any]! {
-   return [
-    "deviceName" : UIDevice.current.name,
-    "versionName" :   UIApplication.versionName,
-    "buildNumber" : UIApplication.build
-   ]
+
+  @objc(getDeviceName:rejecter:)
+  func getDeviceName(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+    resolve(UIDevice.current.name)
   }
+  
+  @objc(getVersionName:rejecter:)
+  func getVersionName(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+    resolve(UIApplication.versionName)
+  }
+  
+  @objc(getBuildNumber:rejecter:)
+  func getBuildNumber(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+    resolve(UIApplication.build)
+  }
+  
 }
 
 extension UIApplication {

@@ -2,10 +2,12 @@ package gov.va.mobileapp.native_modules
 
 import android.provider.Settings
 import android.provider.Settings.Global.DEVICE_NAME
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import gov.va.mobileapp.BuildConfig
+
 
 /**
  * React Native NativeModule to expose system level information from the Android device
@@ -23,14 +25,21 @@ class DeviceData(reactContext: ReactApplicationContext): ReactContextBaseJavaMod
         return Settings.Global.getString(reactApplicationContext.contentResolver, DEVICE_NAME)
     }
 
+    @ReactMethod
+    fun getDeviceName(promise:Promise) {
+        val deviceName =  Settings.Global.getString(reactApplicationContext.contentResolver, DEVICE_NAME)
+        promise.resolve(deviceName)
+    }
+
     /**
      * Exposes the app version name.
      * @returns version name of the app (1.1.1).
      *
      */
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    fun getVersionName(): String {
-        return BuildConfig.VERSION_NAME
+    @ReactMethod
+    fun getVersionName(promise:Promise) {
+        val versionName = BuildConfig.VERSION_NAME
+         promise.resolve(versionName)
     }
 
     /**
@@ -38,9 +47,10 @@ class DeviceData(reactContext: ReactApplicationContext): ReactContextBaseJavaMod
      * @returns version name of the app (ie).
      *
      */
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    fun getBuildNumber(): Int {
-        return BuildConfig.VERSION_CODE
+    @ReactMethod
+    fun getBuildNumber(promise:Promise) {
+        val buildNumber =  BuildConfig.VERSION_CODE
+        promise.resolve(buildNumber)
     }
 
 
