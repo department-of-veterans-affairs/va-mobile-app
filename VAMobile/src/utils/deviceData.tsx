@@ -3,8 +3,9 @@ import { NativeModules } from 'react-native'
 // DeviceData bridge from iOS and Android
 const DD = NativeModules.DeviceData
 
+
 /**
- * returns the device name
+ * returns the custom name of the device set by the user.
  */
 export const getDeviceName = async (): Promise<string> => {
   return await DD.getDeviceName()
