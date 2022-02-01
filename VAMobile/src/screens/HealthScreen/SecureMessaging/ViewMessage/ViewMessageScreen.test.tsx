@@ -14,6 +14,9 @@ import { Pressable } from 'react-native'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 import { StackNavigationOptions } from '@react-navigation/stack'
+import { when } from 'jest-when'
+import { DateTime, DiffOptions, Duration, DurationUnits } from 'luxon'
+import { LocaleOptions } from 'luxon/src/datetime'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -25,7 +28,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -45,9 +48,9 @@ jest.mock('@react-navigation/native', () => {
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
 
 // Create a date that's always more than 45 days from now
-const d = new Date()
-const fortySixDaysAgo = d.setDate(d.getDate() - 46)
-const fortySixDaysAgoISO = new Date(fortySixDaysAgo).toISOString()
+const nowInMill = 1643402338567
+const mockDateISO = DateTime.fromMillis(nowInMill).toISO()
+const fortySixDaysAgoISO = DateTime.fromMillis(nowInMill).minus({ days: 45}).toISO()
 
 // Contains message attributes mapped to their ids
 const mockMessagesById: SecureMessagingMessageMap = {
@@ -83,7 +86,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     subject: '',
     body: 'Last accordion collapsible should be open, so the body text of this message should display',
     attachment: false,
-    sentDate: new Date().toISOString(), // current date
+    sentDate: mockDateISO,
     senderId: 2,
     senderName: 'mock sender 3',
     recipientId: 3,
@@ -111,6 +114,7 @@ context('ViewMessageScreen', () => {
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
   let navHeaderSpy: any
+  let navigateToSpy: jest.Mock
   onPressSpy = jest.fn(() => {})
 
   const initializeTestInstance = (
@@ -139,6 +143,29 @@ context('ViewMessageScreen', () => {
       { params: { messageID: messageID } },
     )
 
+    const fromISOSpy = jest.spyOn(DateTime, 'fromISO')
+    when(fromISOSpy).calledWith(mockDateISO).mockReturnValue({
+      diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
+        return {
+          days: -14
+        } as Duration
+      },
+      toFormat: (fmt: string, opts?: LocaleOptions) => {
+        return ''
+      },
+    } as DateTime ).calledWith(fortySixDaysAgoISO).mockReturnValue({
+      diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
+        return {
+          days: -46
+        } as Duration
+      },
+      toFormat: (fmt: string, opts?: LocaleOptions) => {
+        return ''
+      },
+    } as DateTime )
+
+    navigateToSpy = jest.fn()
+    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} }).mockReturnValue(navigateToSpy)
     onPressSpy = jest.fn(() => {})
 
     component = render(<ViewMessageScreen {...props} />, {
@@ -182,7 +209,7 @@ context('ViewMessageScreen', () => {
       expect(testInstance.findAllByType(TextView)[3].props.children).toBe('mock sender 2')
       expect(testInstance.findAllByType(TextView)[4].props.children).toBe('Invalid DateTime')
       expect(testInstance.findAllByType(TextView)[5].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateTimeYear(new Date().toISOString()))
+      expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateTimeYear(mockDateISO))
     })
   })
 
@@ -200,7 +227,7 @@ context('ViewMessageScreen', () => {
         expect(testInstance.findAllByType(TextView)[3].props.children).toBe('message 1 body text')
         // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
         expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
-        expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateTimeYear(new Date().toISOString()))
+        expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateTimeYear(mockDateISO))
         // Reply footer displays properly if latest message in thread is not over 45 days old
         expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Reply')
       })
@@ -259,7 +286,7 @@ context('ViewMessageScreen', () => {
     it('should use route navigation when Compose button is clicked', async () => {
       await waitFor(() => {
         testInstance.findByProps({ label: 'Compose a New Message' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToSpy).toHaveBeenCalled()
       })
     })
   })

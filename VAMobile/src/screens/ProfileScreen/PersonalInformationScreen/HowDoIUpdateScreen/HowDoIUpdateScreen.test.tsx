@@ -17,7 +17,7 @@ jest.mock('../../../../utils/hooks', () => {
     useTheme: jest.fn(()=> {
       return {...theme}
     }),
-    useRouteNavigation: () => { return () => mockNavigationSpy},
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -33,9 +33,12 @@ context('HowDoIUpdateScreen', () => {
   let store: any
   let component: RenderAPI
   let testInstance: ReactTestInstance
+  let mockNavigationToSpy: jest.Mock
 
   beforeEach(async () => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
+    mockNavigationToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(mockNavigationToSpy)
 
     store = mockStore({
       auth: {...initialAuthState},
@@ -61,7 +64,8 @@ context('HowDoIUpdateScreen', () => {
   describe('when the find VA location link is clicked', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(TextView)[4].props.onPress()
-      expect(mockNavigationSpy).toBeCalled()
+      expect(mockNavigationSpy).toBeCalledWith('Webview', {'displayTitle': 'va.gov', 'url': 'https://www.va.gov/find-locations/'})
+      expect(mockNavigationToSpy).toBeCalled()
     })
   })
 })

@@ -18,7 +18,6 @@ jest.mock('react-native/Libraries/Share/Share', () => {
   }
 })
 
-let mockNavigationSpy = jest.fn()
 const mockExternalLinkSpy = jest.fn()
 
 jest.mock('../../../utils/hooks', () => {
@@ -29,7 +28,7 @@ jest.mock('../../../utils/hooks', () => {
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => mockNavigationSpy,
+    useRouteNavigation: () => jest.fn(),
     useExternalLink: () => mockExternalLinkSpy,
   }
 })
@@ -37,10 +36,12 @@ jest.mock('../../../utils/hooks', () => {
 context('SettingsScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
+  let navigateSpy: jest.Mock
 
   const initializeTestInstance = (canStoreWithBiometric = false, supportedBiometric?: BIOMETRY_TYPE) => {
+    navigateSpy = jest.fn()
     const props = mockNavProps(undefined, {
-      navigate: mockNavigationSpy,
+      navigate: navigateSpy,
     })
 
     component = render(<SettingsScreen {...props} />, {
@@ -85,7 +86,7 @@ context('SettingsScreen', () => {
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', async () => {
       findByTestID(testInstance, 'manage-your-account').props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
+      expect(navigateSpy).toHaveBeenCalledWith('ManageYourAccount')
     })
   })
 

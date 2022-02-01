@@ -18,17 +18,18 @@ jest.mock('utils/hooks', () => {
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => {
-      return () => mockNavigationSpy
-    },
+    useRouteNavigation: () => { return mockNavigationSpy },
   }
 })
 
 context('ComposeMessageFooter', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
+  let mockNavigateToSpy: jest.Mock
 
   beforeEach(() => {
+    mockNavigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
     component = render(<ComposeMessageFooter />)
 
     testInstance = component.container
@@ -42,7 +43,8 @@ context('ComposeMessageFooter', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByType(FooterButton).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+        expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })
   })

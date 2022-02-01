@@ -12,6 +12,7 @@ import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAMo
 import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -23,7 +24,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -81,6 +82,10 @@ context('ComposeMessage', () => {
   let props: any
   let goBack: jest.Mock
   let navHeaderSpy: any
+  let navigateSpy: jest.Mock
+  let navigateToAddToFilesSpy: jest.Mock
+  let navigateToHowToAttachSpy: jest.Mock
+  let navigateToVeteransCrisisLineSpy: jest.Mock
 
   const initializeTestInstance = (
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -90,13 +95,23 @@ context('ComposeMessage', () => {
     params: Object = { attachmentFileToAdd: {} },
   ) => {
     goBack = jest.fn()
+    navigateSpy = jest.fn()
+    navigateToAddToFilesSpy = jest.fn()
+    navigateToHowToAttachSpy = jest.fn()
+    navigateToVeteransCrisisLineSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('Attachments', { origin: 'Compose', attachmentsList: [] }).mockReturnValue(navigateToAddToFilesSpy)
+        .calledWith( 'AttachmentsFAQ', { originHeader: 'Compose' }).mockReturnValue(navigateToHowToAttachSpy)
+        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteransCrisisLineSpy)
 
     props = mockNavProps(
       undefined,
       {
-        navigate: mockNavigationSpy,
+        navigate: navigateSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -176,7 +191,7 @@ context('ComposeMessage', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
         await waitFor(() => {
           testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
-          expect(mockNavigationSpy).toHaveBeenCalled()
+          expect(navigateSpy).toHaveBeenCalledWith('SecureMessaging')
           expect(updateSecureMessagingTab).toHaveBeenCalled()
         })
       })
@@ -205,7 +220,7 @@ context('ComposeMessage', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
       })
     })
   })
@@ -337,10 +352,10 @@ context('ComposeMessage', () => {
   })
 
   describe('when form fields are filled out correctly and saved', () => {
-    it('should call mockNavigationSpy', async () => {
+    it('should call navigateSpy', async () => {
       await waitFor(() => {
         testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateSpy).toHaveBeenCalledWith( 'SendConfirmation', {'messageData': {'body': '', 'category': '', 'recipient_id': NaN, 'subject': ''}, 'originHeader': 'Compose', 'uploads': []})
       })
     })
   })
@@ -374,7 +389,7 @@ context('ComposeMessage', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToAddToFilesSpy).toHaveBeenCalled()
       })
     })
   })
@@ -383,7 +398,7 @@ context('ComposeMessage', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToHowToAttachSpy).toHaveBeenCalled()
       })
     })
   })

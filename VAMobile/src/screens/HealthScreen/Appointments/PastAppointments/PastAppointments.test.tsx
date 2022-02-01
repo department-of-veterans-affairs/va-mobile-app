@@ -19,7 +19,8 @@ import { bookedAppointmentsList } from 'store/slices/appointmentsSlice.test'
 import { RenderAPI, waitFor } from '@testing-library/react-native'
 import waitForClickable from 'webdriverio/build/commands/element/waitForClickable'
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
+const mockNavigateToSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
   let theme = jest.requireActual('../../../../styles/themes/standardTheme').default
@@ -29,7 +30,7 @@ jest.mock('../../../../utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
     },
   }
 })
@@ -194,7 +195,8 @@ context('PastAppointments', () => {
       await waitFor(() => {
         const allPressables = testInstance.findAllByType(Pressable)
         allPressables[allPressables.length - 3].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', {'appointmentID': '1'})
+        expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })
   })

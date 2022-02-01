@@ -12,6 +12,8 @@ import { initialAuthState, initialErrorsState, initialSecureMessagingState, save
 import { AccordionCollapsible, AlertBox, FormWrapper, LoadingComponent, TextView } from 'components'
 import { InteractionManager, Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { isIOS } from '../../../../utils/platform'
+import { when } from 'jest-when'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -23,7 +25,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -112,6 +114,9 @@ context('ReplyMessage', () => {
   let goBack: jest.Mock
   let isIOSMock = isIOS as jest.Mock
   let navHeaderSpy: any
+  let navigateToVeteranCrisisLineSpy: jest.Mock
+  let navigateToAttachmentsSpy: jest.Mock
+  let navigateToAttachmentsFAQSpy: jest.Mock
 
   const initializeTestInstance = (
     mockMessagesById: SecureMessagingMessageMap,
@@ -120,13 +125,21 @@ context('ReplyMessage', () => {
     sendMessageFailed: boolean = false,
   ) => {
     goBack = jest.fn()
+    navigateToVeteranCrisisLineSpy = jest.fn()
+    navigateToAttachmentsSpy = jest.fn()
+    navigateToAttachmentsFAQSpy = jest.fn()
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteranCrisisLineSpy)
+        .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 }).mockReturnValue(navigateToAttachmentsSpy)
+        .calledWith('AttachmentsFAQ', { originHeader: 'Reply' } ).mockReturnValue(navigateToAttachmentsFAQSpy)
 
     isIOSMock.mockReturnValue(false)
 
     props = mockNavProps(
       undefined,
       {
-        navigate: mockNavigationSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -169,8 +182,7 @@ context('ReplyMessage', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToVeteranCrisisLineSpy).toHaveBeenCalled()
       })
     })
   })
@@ -303,7 +315,7 @@ context('ReplyMessage', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToAttachmentsSpy).toHaveBeenCalled()
       })
     })
   })
@@ -312,7 +324,7 @@ context('ReplyMessage', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToAttachmentsFAQSpy).toHaveBeenCalled()
       })
     })
   })

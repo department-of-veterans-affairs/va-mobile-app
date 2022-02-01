@@ -12,6 +12,7 @@ import { ClaimsAndAppealsList } from 'store/api/types'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 import { getClaimsAndAppeals } from 'store/slices'
 import { waitFor } from '@testing-library/react-native'
+import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -23,7 +24,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -45,8 +46,18 @@ context('ClaimsAndAppealsListView', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
+  let mockNavigateToClaimDetailsScreenSpy: jest.Mock
+  let mockNavigateToAppealDetailsScreenSpy: jest.Mock
+
 
   const initializeTestInstance = async (claimType: ClaimType, isEmpty?: boolean): Promise<void> => {
+    mockNavigateToClaimDetailsScreenSpy = jest.fn()
+    mockNavigateToAppealDetailsScreenSpy = jest.fn()
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('ClaimDetailsScreen', { claimID: '2', claimType:'ACTIVE' }).mockReturnValue(mockNavigateToClaimDetailsScreenSpy)
+        .calledWith('AppealDetailsScreen', { appealID: '0' }).mockReturnValue(mockNavigateToAppealDetailsScreenSpy)
     props = mockNavProps({ claimType })
 
     const activeClaimsAndAppeals: ClaimsAndAppealsList = [
@@ -161,15 +172,15 @@ context('ClaimsAndAppealsListView', () => {
 
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      testInstance.findAllByType(Pressable)[1].props.onPress()
+      expect(mockNavigateToClaimDetailsScreenSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of an appeal', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigateToAppealDetailsScreenSpy).toHaveBeenCalled()
     })
   })
 

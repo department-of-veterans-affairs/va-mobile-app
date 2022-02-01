@@ -21,9 +21,7 @@ jest.mock('utils/hooks', () => {
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => {
-      return () => mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -45,8 +43,13 @@ context('Inbox', () => {
 
   let props: any
   let testInstance: ReactTestInstance
+  let mockNavigateToSpy: jest.Mock
+
 
   const initializeTestInstance = (category: CategoryTypes = CategoryTypeFields.other, subjectLine: string = 'Default subject line', loading: boolean = false) => {
+    mockNavigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
+
     props = mockNavProps()
 
     component = render(<Inbox />, {
@@ -130,7 +133,8 @@ context('Inbox', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessageScreen', {'currentPage': 2, 'folderID': 0, 'messageID': 1, 'messagesLeft': 1})
+        expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })
   })

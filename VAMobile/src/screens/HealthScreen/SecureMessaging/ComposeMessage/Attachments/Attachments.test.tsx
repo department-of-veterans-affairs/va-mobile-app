@@ -11,6 +11,7 @@ import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import Attachments from './Attachments'
 import { AlertBox, TextView, VAButton } from 'components'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { when } from 'jest-when'
 
 let mockShowActionSheetWithOptions = jest.fn()
 jest.mock('@expo/react-native-action-sheet', () => {
@@ -23,7 +24,7 @@ jest.mock('@expo/react-native-action-sheet', () => {
   }
 })
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
@@ -33,7 +34,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -43,9 +44,16 @@ context('Attachments', () => {
   let testInstance: ReactTestInstance
   let props: any
   let goBack: jest.Mock
+  let mockNavigateToEditDraftSpy: jest.Mock
 
   const initializeTestInstance = (attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse> = []) => {
     goBack = jest.fn()
+    mockNavigateToEditDraftSpy = jest.fn()
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('EditDraft', { attachmentFileToAdd: {name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
+        .mockReturnValue(mockNavigateToEditDraftSpy)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentsList } })
 
@@ -132,7 +140,7 @@ context('Attachments', () => {
         })
 
         testInstance.findAllByType(VAButton)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToEditDraftSpy).toHaveBeenCalled()
       })
     })
 

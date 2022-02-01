@@ -20,9 +20,7 @@ jest.mock('utils/hooks', () => {
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => {
-      return () => mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -57,10 +55,13 @@ context('SendConfirmation', () => {
   let props: any
   let goBack: jest.Mock
   let navigate: jest.Mock
+  let navigateTo: jest.Mock
 
   const initializeTestInstance = (loading = false, sendMessageComplete: boolean = false, sendMessageFailed: boolean = false, replyTriageError: boolean = false) => {
     goBack = jest.fn()
     navigate = jest.fn()
+    navigateTo = jest.fn()
+    mockNavigationSpy.mockReturnValue(navigateTo)
 
     const messageData = {
       recipient_id: 1,
@@ -117,7 +118,7 @@ context('SendConfirmation', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
       await waitFor(() => {
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateTo).toHaveBeenCalled()
       })
     })
   })
