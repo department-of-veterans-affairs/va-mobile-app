@@ -19,7 +19,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -29,6 +29,7 @@ context('FormAttachments', () => {
   let testInstance: ReactTestInstance
   let removeOnPressSpy: jest.Mock
   let largeButtonSpy: jest.Mock
+  let mockNavigateToSpy: jest.Mock
 
   const attachmentsList = [
     {
@@ -51,6 +52,8 @@ context('FormAttachments', () => {
   const initializeTestInstance = (attachments = attachmentsList) => {
     removeOnPressSpy = jest.fn()
     largeButtonSpy = jest.fn()
+    mockNavigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
     component = render(
       <FormAttachments
@@ -110,7 +113,8 @@ context('FormAttachments', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('AttachmentsFAQ', { 'originHeader': 'test header' })
+        expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })
   })

@@ -21,7 +21,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -30,10 +30,15 @@ context('ClaimStatus', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
+  let mockNavigateToConsolidatedClaimsNoteSpy: jest.Mock
+  let mockNavigateToWhatDoIDoIfDisagreementSpy: jest.Mock
 
   const maxEstDate = '2019-12-11'
 
   const initializeTestInstance = (maxEstDate: string, claimType: ClaimType): void => {
+    mockNavigateToConsolidatedClaimsNoteSpy = jest.fn()
+    mockNavigateToWhatDoIDoIfDisagreementSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(() => {}).mockReturnValueOnce(mockNavigateToConsolidatedClaimsNoteSpy).mockReturnValueOnce(mockNavigateToWhatDoIDoIfDisagreementSpy)
     props = mockNavProps({
       claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
       claimType,
@@ -59,14 +64,16 @@ context('ClaimStatus', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', async () => {
         testInstance.findAllByType(Pressable)[5].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenNthCalledWith(1, 'ConsolidatedClaimsNote')
+        expect(mockNavigateToConsolidatedClaimsNoteSpy).toHaveBeenCalled()
       })
     })
 
     describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
       it('should call useRouteNavigation', async () => {
         testInstance.findAllByType(Pressable)[6].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenNthCalledWith(2, 'WhatDoIDoIfDisagreement')
+        expect(mockNavigateToWhatDoIDoIfDisagreementSpy).toHaveBeenCalled()
       })
     })
   })

@@ -21,7 +21,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -30,6 +30,7 @@ context('Folder', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
+  let mockNavigateToSpy: jest.Mock
 
   let listOfFolders: SecureMessagingFolderList = [
     {
@@ -91,6 +92,8 @@ context('Folder', () => {
 
   const initializeTestInstance = (foldersList: SecureMessagingFolderList, loading = false, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps()
+    mockNavigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
     component = render(<Folder {...props} />, {
       preloadedState: {
@@ -132,7 +135,8 @@ context('Folder', () => {
   describe('when a folder is clicked', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { folderID: -2, folderName: 'Drafts' })
+      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 })

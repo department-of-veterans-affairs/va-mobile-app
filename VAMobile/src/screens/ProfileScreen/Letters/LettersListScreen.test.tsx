@@ -12,6 +12,7 @@ import NoLettersScreen from './NoLettersScreen'
 import { Pressable } from 'react-native'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 
@@ -39,7 +40,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -83,8 +84,35 @@ context('LettersListScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
+  let mockNavigateToBenefitSummarySpy: jest.Mock
+  let mockNavigateToServiceVerificationLetterSpy: jest.Mock
+  let mockNavigateToCommissaryLetterSpy: jest.Mock
+  let mockNavigateToCivilServiceLetterSpy: jest.Mock
+  let mockNavigateToBenefitVerificationSpy: jest.Mock
+  let mockNavigateToProofOfServiceLetterSpy: jest.Mock
+  let mockNavigateToProofOfPrescriptionLetterSpy: jest.Mock
+  let mockNavigateToProofOfMinimumEssentialLetterSpy: jest.Mock
 
   const initializeTestInstance = (lettersList: LettersList | null, loading = false, errorsState: ErrorsState = initialErrorsState, lettersAndDocuments: boolean = true) => {
+    mockNavigateToBenefitSummarySpy = jest.fn()
+    mockNavigateToServiceVerificationLetterSpy = jest.fn()
+    mockNavigateToCommissaryLetterSpy = jest.fn()
+    mockNavigateToCivilServiceLetterSpy = jest.fn()
+    mockNavigateToBenefitVerificationSpy = jest.fn()
+    mockNavigateToProofOfServiceLetterSpy = jest.fn()
+    mockNavigateToProofOfPrescriptionLetterSpy = jest.fn()
+    mockNavigateToProofOfMinimumEssentialLetterSpy = jest.fn()
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('BenefitSummaryServiceVerificationLetter').mockReturnValue(mockNavigateToBenefitSummarySpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'service_verification' })).mockReturnValue(mockNavigateToServiceVerificationLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'commissary' })).mockReturnValue(mockNavigateToCommissaryLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'civil_service' })).mockReturnValue(mockNavigateToCivilServiceLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'benefit_verification' })).mockReturnValue(mockNavigateToBenefitVerificationSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'proof_of_service' })).mockReturnValue(mockNavigateToProofOfServiceLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'medicare_partd' })).mockReturnValue(mockNavigateToProofOfPrescriptionLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'minimum_essential_coverage' })).mockReturnValue(mockNavigateToProofOfMinimumEssentialLetterSpy)
+
     const storeVals = {
       ...InitialState,
       authorizedServices: {
@@ -148,7 +176,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[6].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToBenefitSummarySpy).toHaveBeenCalled()
       })
     })
 
@@ -156,7 +184,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[4].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToServiceVerificationLetterSpy).toHaveBeenCalled()
       })
     })
 
@@ -164,7 +192,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToCommissaryLetterSpy).toHaveBeenCalled()
       })
     })
 
@@ -172,7 +200,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[5].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToCivilServiceLetterSpy).toHaveBeenCalled()
       })
     })
 
@@ -180,7 +208,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[7].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToBenefitVerificationSpy).toHaveBeenCalled()
       })
     })
 
@@ -188,7 +216,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToProofOfServiceLetterSpy).toHaveBeenCalled()
       })
     })
 
@@ -196,7 +224,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToProofOfPrescriptionLetterSpy).toHaveBeenCalled()
       })
     })
 
@@ -204,7 +232,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[3].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToProofOfMinimumEssentialLetterSpy).toHaveBeenCalled()
       })
     })
   })

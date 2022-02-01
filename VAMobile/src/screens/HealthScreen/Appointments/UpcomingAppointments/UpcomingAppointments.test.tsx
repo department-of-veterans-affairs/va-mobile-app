@@ -22,7 +22,7 @@ jest.mock('../../../../utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -51,6 +51,7 @@ jest.mock('store/api', () => {
 context('UpcomingAppointments', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
+  let navigateToSpy: jest.Mock
 
   let appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
@@ -60,6 +61,8 @@ context('UpcomingAppointments', () => {
 
   const initializeTestInstance = (currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear, loading: boolean = false) => {
     const props = mockNavProps()
+    navigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(navigateToSpy)
 
     component = render(<UpcomingAppointments {...props} />, {
       preloadedState: {
@@ -160,7 +163,8 @@ context('UpcomingAppointments', () => {
   describe('on appointment press', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', {'appointmentID': '1'})
+      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 

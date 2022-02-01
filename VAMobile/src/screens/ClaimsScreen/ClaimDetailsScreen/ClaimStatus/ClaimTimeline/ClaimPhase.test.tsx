@@ -8,6 +8,7 @@ import PhaseIndicator from './PhaseIndicator'
 import { TextView, VAButton, VAIcon } from 'components'
 import { Pressable } from 'react-native'
 import { waitFor } from '@testing-library/react-native'
+import { when } from 'jest-when'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../utils/hooks', () => {
@@ -19,7 +20,7 @@ jest.mock('../../../../../utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -28,8 +29,13 @@ context('ClaimPhase', () => {
   let props: any
   let component: RenderAPI
   let testInstance: ReactTestInstance
+  let mockNavigateToClaimFileUploadSpy: jest.Mock
 
   const initializeTestInstance = (phase: number, current: number) => {
+    mockNavigateToClaimFileUploadSpy = jest.fn()
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('ClaimFileUpload', { 'claimID': undefined }).mockReturnValue(mockNavigateToClaimFileUploadSpy)
     props = {
       phase,
       current,
@@ -149,7 +155,7 @@ context('ClaimPhase', () => {
       describe('on click of the file request button', () => {
         it('should call useRouteNavigation', async () => {
           buttons[0].props.onPress()
-          expect(mockNavigationSpy).toHaveBeenCalled()
+          expect(mockNavigateToClaimFileUploadSpy).toHaveBeenCalled()
         })
       })
 

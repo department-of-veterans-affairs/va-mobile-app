@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { TouchableWithoutFeedback } from 'react-native'
+import { Pressable } from 'react-native'
 import { context, waitFor, render, RenderAPI } from 'testUtils'
 
 import {
@@ -48,6 +48,7 @@ const authorizedMilitaryState = {
 context('DirectDepositScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
+  let mockNavigateToSpy: jest.Mock
 
   const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
     const directDeposit: DirectDepositState = {
@@ -62,6 +63,8 @@ context('DirectDepositScreen', () => {
       bankInfoUpdated: false,
       invalidRoutingNumberError: false,
     }
+    mockNavigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
     component = render(<DirectDepositScreen />, {
       preloadedState: {
@@ -162,9 +165,9 @@ context('DirectDepositScreen', () => {
   describe('when bank info is clicked', () => {
     it('should call navigation navigate', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-        expect(mockNavigationSpy).toBeCalled()
+        testInstance.findAllByType(Pressable)[0].props.onPress()
         expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit')
+        expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })
   })

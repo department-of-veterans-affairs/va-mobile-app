@@ -12,6 +12,7 @@ import { AlertBox, ErrorComponent, LoadingComponent, TextView, VATextInput } fro
 import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -23,7 +24,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -142,6 +143,10 @@ context('EditDraft', () => {
   let props: any
   let goBack: jest.Mock
   let navHeaderSpy: any
+  let navigateSpy: jest.Mock
+  let navigateToVeteransCrisisLineSpy: jest.Mock
+  let navigateToAddToFilesSpy: jest.Mock
+  let navigateToAttachAFileSpy: jest.Mock
 
   const initializeTestInstance = ({
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -153,13 +158,23 @@ context('EditDraft', () => {
     messageID = 2,
   }) => {
     goBack = jest.fn()
+    navigateSpy = jest.fn()
+    navigateToVeteransCrisisLineSpy = jest.fn()
+    navigateToAddToFilesSpy = jest.fn()
+    navigateToAttachAFileSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteransCrisisLineSpy)
+        .calledWith('Attachments', { origin: 'Draft', attachmentsList: [], messageID: 2 }).mockReturnValue(navigateToAddToFilesSpy)
+        .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' }).mockReturnValue(navigateToAttachAFileSpy)
 
     props = mockNavProps(
       undefined,
       {
-        navigate: mockNavigationSpy,
+        navigate: navigateSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -244,7 +259,7 @@ context('EditDraft', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
         await waitFor(() => {
           testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
-          expect(mockNavigationSpy).toHaveBeenCalled()
+          expect(navigateSpy).toHaveBeenCalled()
           expect(updateSecureMessagingTab).toHaveBeenCalled()
         })
       })
@@ -273,8 +288,8 @@ context('EditDraft', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
       })
-      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
@@ -309,8 +324,8 @@ context('EditDraft', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
+        expect(navigateToAddToFilesSpy).toHaveBeenCalled()
       })
-      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
@@ -318,8 +333,8 @@ context('EditDraft', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
+        expect(navigateToAttachAFileSpy).toHaveBeenCalled()
       })
-      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 

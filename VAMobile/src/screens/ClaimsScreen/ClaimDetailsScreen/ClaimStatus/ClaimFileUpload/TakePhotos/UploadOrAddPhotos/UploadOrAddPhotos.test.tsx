@@ -19,7 +19,7 @@ jest.mock('../../../../../../../utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -29,6 +29,7 @@ context('UploadOrAddPhotos', () => {
   let testInstance: ReactTestInstance
   let props: any
   let store: any
+  let navigateToSpy: jest.Mock
 
   let request = {
     type: 'still_need_from_you_list',
@@ -43,6 +44,8 @@ context('UploadOrAddPhotos', () => {
   }
 
   const initializeTestInstance = () => {
+    navigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(navigateToSpy)
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, firstImageResponse } })
 
     component = render(<UploadOrAddPhotos {...props} />, {
@@ -72,8 +75,7 @@ context('UploadOrAddPhotos', () => {
         testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
         testInstance.findAllByType(VAButton)[0].props.onPress()
       })
-
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 })

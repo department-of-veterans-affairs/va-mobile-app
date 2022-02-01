@@ -20,6 +20,7 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants, SigninServiceTypes, SigninServiceTypesConstants } from 'store/api/types'
 import { defaultProfile } from 'utils/tests/profile'
 import { waitFor } from '@testing-library/react-native'
+import { when } from 'jest-when'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -31,7 +32,7 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return mockNavigationSpy.mockReturnValue(jest.fn())
+      return mockNavigationSpy
     },
   }
 })
@@ -39,6 +40,8 @@ jest.mock('utils/hooks', () => {
 context('ProfileScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
+  let navigateToDirectDepositSpy: jest.Mock
+  let navigateToHowToUpdateDirectDepositSpy: jest.Mock
 
   const initializeTestInstance = (
     directDepositBenefits: boolean = false,
@@ -47,6 +50,14 @@ context('ProfileScreen', () => {
     errorState: ErrorsState = initialErrorsState,
     signinService: SigninServiceTypes = SigninServiceTypesConstants.IDME,
   ): void => {
+    navigateToDirectDepositSpy = jest.fn()
+    navigateToHowToUpdateDirectDepositSpy = jest.fn()
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('DirectDeposit').mockReturnValue(navigateToDirectDepositSpy)
+        .calledWith('HowToUpdateDirectDeposit').mockReturnValue(navigateToHowToUpdateDirectDepositSpy)
+
     component = render(<ProfileScreen />, {
       preloadedState: {
         auth: { ...initialAuthState },
@@ -112,7 +123,7 @@ context('ProfileScreen', () => {
           initializeTestInstance(true)
         })
         findByTestID(testInstance, 'direct-deposit-information').props.onPress()
-        expect(mockNavigationSpy).toHaveBeenNthCalledWith(3, 'DirectDeposit')
+        expect(navigateToDirectDepositSpy).toHaveBeenCalled()
       })
     })
 
@@ -122,7 +133,7 @@ context('ProfileScreen', () => {
           initializeTestInstance(false, false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
         })
         findByTestID(testInstance, 'direct-deposit-information').props.onPress()
-        expect(mockNavigationSpy).toHaveBeenNthCalledWith(3, 'HowToUpdateDirectDeposit')
+        expect(navigateToHowToUpdateDirectDepositSpy).toHaveBeenCalled()
       })
     })
   })

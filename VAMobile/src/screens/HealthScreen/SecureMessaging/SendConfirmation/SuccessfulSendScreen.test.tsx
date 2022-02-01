@@ -19,9 +19,7 @@ jest.mock('utils/hooks', () => {
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => {
-      return () => mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -44,9 +42,12 @@ context('SuccessfulSendScreen', () => {
   let props: any
   let navigate: jest.Mock
   let navHeaderSpy: any
+  let navigateToSpy: any
 
   const initializeTestInstance = () => {
     navigate = jest.fn()
+    navigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(navigateToSpy)
 
     props = mockNavProps(
       undefined,
@@ -75,7 +76,7 @@ context('SuccessfulSendScreen', () => {
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 

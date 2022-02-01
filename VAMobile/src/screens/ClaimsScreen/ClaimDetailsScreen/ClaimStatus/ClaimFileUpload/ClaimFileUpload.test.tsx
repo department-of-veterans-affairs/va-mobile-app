@@ -10,6 +10,7 @@ import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialSta
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { when } from 'jest-when'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../utils/hooks', () => {
@@ -21,7 +22,7 @@ jest.mock('../../../../../utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
@@ -30,6 +31,8 @@ context('ClaimFileUpload', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
+  let mockNavigateToTakeOrSelectPhotoSpy: jest.Mock
+  let mockNavigateToSelectFileSpy: jest.Mock
 
   let requests = [
     {
@@ -43,6 +46,12 @@ context('ClaimFileUpload', () => {
 
   const initializeTestInstance = (requests: ClaimEventData[], currentPhase?: number, errorsState: ErrorsState = initialErrorsState): void => {
     props = mockNavProps(undefined, undefined, { params: { requests, currentPhase } })
+    mockNavigateToTakeOrSelectPhotoSpy = jest.fn()
+    mockNavigateToSelectFileSpy = jest.fn()
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('TakePhotos', { request: requests[0]}).mockReturnValue(mockNavigateToTakeOrSelectPhotoSpy)
+        .calledWith('SelectFile', { request: requests[0]}).mockReturnValue(mockNavigateToSelectFileSpy)
 
     component = render(<ClaimFileUpload {...props} />, {
       preloadedState: {
@@ -125,7 +134,7 @@ context('ClaimFileUpload', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         findByTestID(testInstance, 'Take or Select Photos').props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToTakeOrSelectPhotoSpy).toHaveBeenCalled()
       })
     })
   })
@@ -135,6 +144,7 @@ context('ClaimFileUpload', () => {
       await waitFor(() => {
         findByTestID(testInstance, 'Select a File').props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToSelectFileSpy).toHaveBeenCalled()
       })
     })
   })

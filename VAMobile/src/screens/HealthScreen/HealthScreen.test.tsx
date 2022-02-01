@@ -9,12 +9,9 @@ import { HealthScreen } from './HealthScreen'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
 import { TextView, MessagesCountTag } from 'components'
+import { when } from 'jest-when'
 
 const mockNavigateToSpy = jest.fn()
-const mockNavigateToCrisisLineSpy = jest.fn()
-const mockNavigateToAppointmentSpy = jest.fn()
-const mockNavigateToSecureMessagingSpy = jest.fn()
-const mockNavigateToVAVaccinesSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
@@ -25,11 +22,6 @@ jest.mock('utils/hooks', () => {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
-        .mockReturnValueOnce(mockNavigateToCrisisLineSpy)
-        .mockReturnValueOnce(mockNavigateToAppointmentSpy)
-        .mockReturnValueOnce(mockNavigateToSecureMessagingSpy)
-        .mockReturnValueOnce(mockNavigateToVAVaccinesSpy)
-        .mockReturnValue(() => {})
     },
     useTheme: jest.fn(() => {
       return { ...theme }
@@ -42,8 +34,24 @@ context('HealthScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
+  let mockNavigateToCrisisLineSpy: jest.Mock
+  let mockNavigateToAppointmentSpy: jest.Mock
+  let mockNavigateToSecureMessagingSpy: jest.Mock
+  let mockNavigateToVAVaccinesSpy: jest.Mock
+
   //mockList:  SecureMessagingMessageList --> for inboxMessages
   const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true) => {
+    mockNavigateToCrisisLineSpy = jest.fn()
+    mockNavigateToAppointmentSpy = jest.fn()
+    mockNavigateToSecureMessagingSpy = jest.fn()
+    mockNavigateToVAVaccinesSpy = jest.fn()
+    when(mockNavigateToSpy)
+        .mockReturnValue(() => {})
+        .calledWith('VeteransCrisisLine').mockReturnValue(mockNavigateToCrisisLineSpy)
+        .calledWith('Appointments').mockReturnValue(mockNavigateToAppointmentSpy)
+        .calledWith('SecureMessaging').mockReturnValue(mockNavigateToSecureMessagingSpy)
+        .calledWith('VaccineList').mockReturnValue(mockNavigateToVAVaccinesSpy)
+
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     component = render(<HealthScreen {...props} />, {
@@ -85,7 +93,6 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-        expect(mockNavigateToSpy).toHaveBeenNthCalledWith(1, 'VeteransCrisisLine')
         expect(mockNavigateToCrisisLineSpy).toHaveBeenCalled()
       })
     })
@@ -95,7 +102,6 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigateToSpy).toHaveBeenNthCalledWith(2, 'Appointments')
         expect(mockNavigateToAppointmentSpy).toHaveBeenCalled()
       })
     })
@@ -105,7 +111,6 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(mockNavigateToSpy).toHaveBeenNthCalledWith(3, 'SecureMessaging')
         expect(mockNavigateToSecureMessagingSpy).toHaveBeenCalled()
       })
     })
@@ -115,7 +120,6 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(mockNavigateToSpy).toHaveBeenNthCalledWith(4, 'VaccineList')
         expect(mockNavigateToVAVaccinesSpy).toHaveBeenCalled()
       })
     })

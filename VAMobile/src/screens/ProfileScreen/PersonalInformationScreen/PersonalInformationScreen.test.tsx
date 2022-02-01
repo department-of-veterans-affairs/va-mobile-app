@@ -19,10 +19,9 @@ import {
 } from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { when } from 'jest-when'
 
-let mockNavigationSpy = jest.fn(()=> {
-  return jest.fn()
-})
+let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
   let original = jest.requireActual("../../../utils/hooks")
   let theme = jest.requireActual("../../../styles/themes/standardTheme").default
@@ -58,9 +57,17 @@ context('PersonalInformationScreen', () => {
   let testInstance: ReactTestInstance
   let profile: UserDataProfile
   let props: any
+  let navigateToResidentialAddressSpy: jest.Mock
+  let navigateToMailingAddressSpy: jest.Mock
 
   const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
-    props = mockNavProps()
+    navigateToMailingAddressSpy = jest.fn()
+    navigateToResidentialAddressSpy = jest.fn()
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: 'mailingAddress' }).mockReturnValue(navigateToMailingAddressSpy)
+        .calledWith('EditAddress', { displayTitle: 'Home address', addressType: 'residentialAddress' }).mockReturnValue(navigateToResidentialAddressSpy)
     profile = {
       firstName: 'Ben',
       middleName: 'J',
@@ -502,17 +509,15 @@ context('PersonalInformationScreen', () => {
 
   describe('when mailing address is clicked', () => {
     it('should call navigation navigate', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toBeCalled()
-      expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
+      testInstance.findAllByType(Pressable)[1].props.onPress()
+      expect(navigateToMailingAddressSpy).toHaveBeenCalled()
     })
   })
 
   describe('when residential address is clicked', () => {
     it('should call navigation navigate', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(mockNavigationSpy).toBeCalled()
-      expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Home address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
+      testInstance.findAllByType(Pressable)[2].props.onPress()
+      expect(navigateToResidentialAddressSpy).toHaveBeenCalled()
     })
   })
 
