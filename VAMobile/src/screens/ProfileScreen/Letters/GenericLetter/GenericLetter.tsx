@@ -1,9 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC } from 'react'
 
-import { Alert } from 'react-native'
 import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton, VAScrollView } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, downloadLetter } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
@@ -23,13 +21,8 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const { header, description, letterType, descriptionA11yLabel } = route.params
   const { downloading, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
 
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
-    if (demoMode) {
-      Alert.alert('Demo Mode', 'Letters are not available to download for demo user')
-    } else {
-      dispatch(downloadLetter(letterType))
-    }
+    dispatch(downloadLetter(letterType))
   }
 
   if (letterDownloadError) {

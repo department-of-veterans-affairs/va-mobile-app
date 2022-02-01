@@ -62,6 +62,30 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
   }
 }
 
+/**
+ * writes to file local filesystem for each mobile platform, only used for demo mode letters
+ * @param endpoint - string endpoint to retrieve data
+ * @param fileName - string name of the file
+ * @param params - body for the call
+ * @returns Returns the filePath
+ */
+export const downloadDemoFile = async (endpoint: string, fileName: string, params: Params = {}): Promise<string | undefined> => {
+  const filePath = DocumentDirectoryPath + fileName
+
+  const options: RNFetchBlobConfig = {
+    fileCache: true,
+    path: filePath,
+    timeout: FETCH_TIMEOUT_MS,
+  }
+
+  const headers = {}
+
+  const body = JSON.stringify(params)
+  await RNFetchBlob.config(options).fetch('GET', endpoint, headers, body)
+
+  return filePath
+}
+
 // Unlinking is the same as deleting in this case
 export const unlinkFile = async (filePath: string): Promise<void> => {
   await RNFetchBlob.fs.unlink(filePath)

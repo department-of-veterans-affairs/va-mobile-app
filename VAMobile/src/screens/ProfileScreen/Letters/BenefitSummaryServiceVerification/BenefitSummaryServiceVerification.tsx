@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
 
-import { Alert } from 'react-native'
 import {
   BasicError,
   Box,
@@ -20,7 +19,6 @@ import {
   VAScrollView,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
-import { DemoState } from 'store/slices/demoSlice'
 import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -193,21 +191,16 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     return [...toggleListItems, ...nonDataDrivenData]
   }
 
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
-    if (demoMode) {
-      Alert.alert('Demo Mode', 'Letters are not available to download for demo user')
-    } else {
-      const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
-        militaryService: includeMilitaryServiceInfoToggle,
-        monthlyAward: monthlyAwardToggle,
-        serviceConnectedEvaluation: combinedServiceRatingToggle,
-        chapter35Eligibility: disabledDueToServiceToggle,
-        serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
-      }
-
-      dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+    const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
+      militaryService: includeMilitaryServiceInfoToggle,
+      monthlyAward: monthlyAwardToggle,
+      serviceConnectedEvaluation: combinedServiceRatingToggle,
+      chapter35Eligibility: disabledDueToServiceToggle,
+      serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
     }
+
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
   }
 
   if (letterDownloadError) {
