@@ -16,7 +16,7 @@ import {
 } from 'store/api'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { downloadFile } from '../../utils/filesystem'
+import { downloadDemoFile, downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getSubstringBeforeChar } from 'utils/formattingUtils'
 import { isErrorObject, sortByDate } from 'utils/common'
@@ -27,6 +27,9 @@ import getEnv from 'utils/env'
 const { API_ROOT } = getEnv()
 
 const DOWNLOAD_LETTER_RETRIES = 3
+
+const DEMO_MODE_LETTER_ENDPOINT = 'https://department-of-veterans-affairs.github.io/va-mobile-app/demo_mode_benefit_summary.pdf'
+const DEMO_MODE_LETTER_NAME = 'demo_mode_benefit_summary.pdf'
 
 export type LettersState = {
   loading: boolean
@@ -95,6 +98,7 @@ export const downloadLetter =
   (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartDownloadLetter())
+    const { demoMode } = getState().demo
 
     const benefitInformation = getState().letters?.letterBeneficiaryData?.benefitInformation
     try {
@@ -114,7 +118,9 @@ export const downloadLetter =
         ...lettersOption,
       }
 
-      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, body as unknown as Params, DOWNLOAD_LETTER_RETRIES)
+      const filePath = demoMode
+        ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME, body as unknown as Params)
+        : await downloadFile('POST', lettersAPI, `${letterType}.pdf`, body as unknown as Params, DOWNLOAD_LETTER_RETRIES)
       await registerReviewEvent()
       dispatch(dispatchFinishDownloadLetter())
 

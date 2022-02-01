@@ -25,11 +25,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
-    if (demoMode) {
-      Alert.alert('Demo Mode', 'Letters are not available to download for demo user')
-    } else {
-      dispatch(downloadLetter(letterType))
-    }
+    dispatch(downloadLetter(letterType))
   }
 
   if (letterDownloadError) {
