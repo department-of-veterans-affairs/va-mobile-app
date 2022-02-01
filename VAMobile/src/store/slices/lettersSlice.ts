@@ -53,93 +53,94 @@ export const initialLettersState: LettersState = {
  */
 export const getLetters =
   (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetters(screenID))))
-    dispatch(dispatchStartGetLetters())
+    async (dispatch) => {
+      dispatch(dispatchClearErrors(screenID))
+      dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetters(screenID))))
+      dispatch(dispatchStartGetLetters())
 
-    try {
-      const letters = await api.get<api.LettersData>('/v0/letters')
+      try {
+        const letters = await api.get<api.LettersData>('/v0/letters')
 
-      dispatch(dispatchFinishGetLetters({ letters: letters?.data.attributes.letters }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetLetters({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        dispatch(dispatchFinishGetLetters({ letters: letters?.data.attributes.letters }))
+      } catch (error) {
+        if (isErrorObject(error)) {
+          dispatch(dispatchFinishGetLetters({ error }))
+          dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        }
       }
     }
-  }
 
 /**
  * Redux action to get the letter beneficiary data
  */
 export const getLetterBeneficiaryData =
   (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
-    dispatch(dispatchStartGetLetterBeneficiaryData())
+    async (dispatch) => {
+      dispatch(dispatchClearErrors(screenID))
+      dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
+      dispatch(dispatchStartGetLetterBeneficiaryData())
 
-    try {
-      const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
-      dispatch(dispatchFinishGetLetterBeneficiaryData({ letterBeneficiaryData: letterBeneficiaryData?.data.attributes }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetLetterBeneficiaryData({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+      try {
+        const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
+        dispatch(dispatchFinishGetLetterBeneficiaryData({ letterBeneficiaryData: letterBeneficiaryData?.data.attributes }))
+      } catch (error) {
+        if (isErrorObject(error)) {
+          dispatch(dispatchFinishGetLetterBeneficiaryData({ error }))
+          dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        }
       }
     }
-  }
 
 /**
  * Redux action to download a letter
  */
 export const downloadLetter =
   (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchStartDownloadLetter())
-    const { demoMode } = getState().demo
+    async (dispatch, getState) => {
+      dispatch(dispatchStartDownloadLetter())
+      const { demoMode } = getState().demo
 
-    const benefitInformation = getState().letters?.letterBeneficiaryData?.benefitInformation
-    try {
-      const lettersAPI = `${API_ROOT}/v0/letters/${letterType}/download`
-      const body: LettersDownloadParams = {
-        militaryService: false, // overridden by 'lettersOption' if exist
-        monthlyAward: false, // overridden by 'lettersOption' if exist
-        serviceConnectedEvaluation: false, // overridden by 'lettersOption' if exist
-        chapter35Eligibility: false, // overridden by 'lettersOption' if exist
-        serviceConnectedDisabilities: false, // overridden by 'lettersOption' if exist
-        nonServiceConnectedPension: !!benefitInformation?.hasNonServiceConnectedPension,
-        unemployable: !!benefitInformation?.hasIndividualUnemployabilityGranted,
-        specialMonthlyCompensation: !!benefitInformation?.hasSpecialMonthlyCompensation,
-        adaptedHousing: !!benefitInformation?.hasAdaptedHousing,
-        deathResultOfDisability: !!benefitInformation?.hasDeathResultOfDisability,
-        survivorsAward: !!benefitInformation?.hasSurvivorsIndemnityCompensationAward || !!benefitInformation?.hasSurvivorsPensionAward,
-        ...lettersOption,
-      }
+      const benefitInformation = getState().letters?.letterBeneficiaryData?.benefitInformation
+      try {
+        const lettersAPI = `${API_ROOT}/v0/letters/${letterType}/download`
+        const body: LettersDownloadParams = {
+          militaryService: false, // overridden by 'lettersOption' if exist
+          monthlyAward: false, // overridden by 'lettersOption' if exist
+          serviceConnectedEvaluation: false, // overridden by 'lettersOption' if exist
+          chapter35Eligibility: false, // overridden by 'lettersOption' if exist
+          serviceConnectedDisabilities: false, // overridden by 'lettersOption' if exist
+          nonServiceConnectedPension: !!benefitInformation?.hasNonServiceConnectedPension,
+          unemployable: !!benefitInformation?.hasIndividualUnemployabilityGranted,
+          specialMonthlyCompensation: !!benefitInformation?.hasSpecialMonthlyCompensation,
+          adaptedHousing: !!benefitInformation?.hasAdaptedHousing,
+          deathResultOfDisability: !!benefitInformation?.hasDeathResultOfDisability,
+          survivorsAward: !!benefitInformation?.hasSurvivorsIndemnityCompensationAward || !!benefitInformation?.hasSurvivorsPensionAward,
+          ...lettersOption,
+        }
 
-      const filePath = demoMode
-        ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME, body as unknown as Params)
-        : await downloadFile('POST', lettersAPI, `${letterType}.pdf`, body as unknown as Params, DOWNLOAD_LETTER_RETRIES)
-      await registerReviewEvent()
-      dispatch(dispatchFinishDownloadLetter())
+        const filePath = demoMode
+          ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME, body as unknown as Params)
+          : await downloadFile('POST', lettersAPI, `${letterType}.pdf`, body as unknown as Params, DOWNLOAD_LETTER_RETRIES)
 
-      if (filePath) {
-        await FileViewer.open(filePath)
-      }
+        await registerReviewEvent()
+        dispatch(dispatchFinishDownloadLetter())
 
-      await logAnalyticsEvent(Events.vama_letter_download(letterType))
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
-    } catch (error) {
-      if (isErrorObject(error)) {
-        /**
-         * For letters we show a special screen regardless of the error. All download errors will be caught
-         * here so there is no special path for network connection errors
-         */
-        dispatch(dispatchFinishDownloadLetter(error))
+        if (filePath) {
+          await FileViewer.open(filePath)
+        }
+
+        await logAnalyticsEvent(Events.vama_letter_download(letterType))
+        await setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
+      } catch (error) {
+        if (isErrorObject(error)) {
+          /**
+           * For letters we show a special screen regardless of the error. All download errors will be caught
+           * here so there is no special path for network connection errors
+           */
+          dispatch(dispatchFinishDownloadLetter(error))
+        }
       }
     }
-  }
 
 const lettersSlice = createSlice({
   name: 'letters',
