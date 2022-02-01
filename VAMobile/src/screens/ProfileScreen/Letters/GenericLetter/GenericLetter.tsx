@@ -23,7 +23,6 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const { header, description, letterType, descriptionA11yLabel } = route.params
   const { downloading, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
 
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
     dispatch(downloadLetter(letterType))
   }

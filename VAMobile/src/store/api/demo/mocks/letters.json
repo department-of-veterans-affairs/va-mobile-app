@@ -41,5 +41,31 @@
       }
     }
   },
-  "/v0/letters/beneficiary": {}
+  "/v0/letters/beneficiary": {
+    "data": {
+      "type": "",
+      "id": "",
+      "attributes": {
+        "benefitInformation": {
+          "monthlyAwardAmount": 3084.75,
+          "serviceConnectedPercentage": 100,
+          "awardEffectiveDate": "2016-11-01",
+          "hasChapter35Eligibility": true,
+          "hasNonServiceConnectedPension": false,
+          "hasServiceConnectedDisabilities": true,
+          "hasAdaptedHousing": false,
+          "hasIndividualUnemployabilityGranted": false,
+          "hasSpecialMonthlyCompensation": false
+        },
+        "militaryService": [
+          {
+            "branch": "Coast Guard",
+            "characterOfService": "HONORABLE",
+            "enteredDate": "1970-07-13",
+            "releasedDate": "1998-08-31"
+          }
+        ]
+      }
+    }
+  }
 }
