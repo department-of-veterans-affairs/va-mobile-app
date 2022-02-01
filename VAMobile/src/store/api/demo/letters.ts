@@ -1,4 +1,3 @@
-import { FetchBlobResponse } from 'rn-fetch-blob'
 import { LetterBeneficiaryDataPayload, LettersData } from '../types'
 
 /**
@@ -12,4 +11,4 @@ export type LettersDemoStore = {
 /**
  * Type to define the mock returns to keep type safety
  */
-export type LettersDemoApiReturnTypes = LettersData | LetterBeneficiaryDataPayload | FetchBlobResponse
+export type LettersDemoApiReturnTypes = LettersData | LetterBeneficiaryDataPayload
