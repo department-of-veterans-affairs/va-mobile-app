@@ -1,9 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC } from 'react'
 
-import { Alert } from 'react-native'
 import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton, VAScrollView } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, downloadLetter } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'

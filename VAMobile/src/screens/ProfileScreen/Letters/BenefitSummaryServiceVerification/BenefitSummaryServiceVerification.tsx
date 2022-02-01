@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
 
-import { Alert } from 'react-native'
 import {
   BasicError,
   Box,
@@ -20,7 +19,6 @@ import {
   VAScrollView,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
-import { DemoState } from 'store/slices/demoSlice'
 import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
