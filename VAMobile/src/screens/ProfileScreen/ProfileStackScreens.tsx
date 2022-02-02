@@ -17,6 +17,7 @@ import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceIn
 import ManageYourAccount from './SettingsScreen/ManageYourAccount/ManageYourAccount'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import NotificationsSettingsScreen from './SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
+import PaymentScreen from './PaymentScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import SettingsScreen from './SettingsScreen'
 
@@ -44,6 +45,7 @@ export type ProfileStackParamList = {
   }
   DisabilityRatings: undefined
   HowToUpdateDirectDeposit: undefined
+  Payments: undefined
 }
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
@@ -81,5 +83,6 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
       component={HowToUpdateDirectDepositScreen}
       options={{ title: t('directDeposit.title') }}
     />,
+    <ProfileStack.Screen key={'Payments'} name="Payments" component={PaymentScreen} options={{ title: t('home:payments.title') }} />,
   ]
 }
