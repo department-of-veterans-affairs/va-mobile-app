@@ -15,9 +15,10 @@ import {
   READ,
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
-import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
-import { generateTestIDForTextIconList, isErrorObject } from './common'
-import { getFormattedDateTimeYear } from 'utils/formattingUtils'
+import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
+import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
+import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
+import theme from 'styles/themes/standardTheme'
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
@@ -32,34 +33,56 @@ export const getMessagesListItems = (
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
-    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps =
+      readReceipt !== READ && !isOutbound
+        ? ({ name: 'UnreadIcon', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight, fill: theme.colors.icon.unreadMessage } as VAIconProps)
+        : undefined
+    const paperClipProps = attachment
+      ? ({ name: 'PaperClip', fill: 'spinner', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight } as VAIconProps)
+      : undefined
 
-    const textLines: Array<TextLineWithIconProps> = [
+    const textLines: Array<InlineTextWithIconsProps> = [
       {
-        text: t('common:text.raw', { text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? recipientName : senderName}` }),
-        variant: 'MobileBodyBold',
-        textAlign: 'left',
-        color: 'primary',
-        iconProps: unreadIconProps,
+        leftTextProps: {
+          text: t('common:text.raw', {
+            text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? stringToTitleCase(recipientName) : stringToTitleCase(senderName)}`,
+          }),
+          variant: 'MobileBodyBold',
+          textAlign: 'left',
+          color: 'primary',
+        },
+        leftIconProps: unreadIconProps,
+        rightTextProps: {
+          text: t('common:text.raw', { text: getFormattedMessageTime(sentDate) }),
+          variant: 'MobileBody',
+          textAlign: 'right',
+          color: 'primary',
+        },
       },
-      { text: t('common:text.raw', { text: formatSubject(category, subject, t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },
       {
-        text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }),
-        variant: 'MobileBody',
-        textAlign: 'left',
-        color: 'primary',
-        iconProps: paperClipProps,
+        leftTextProps: {
+          text: t('common:text.raw', { text: formatSubject(category, subject, t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }),
+          variant: 'MobileBody',
+          textAlign: 'left',
+          color: 'primary',
+        },
+        leftIconProps: paperClipProps,
+        rightIconProps: {
+          name: 'ArrowRight',
+          width: theme.dimensions.chevronListItemWidth,
+          height: theme.dimensions.chevronListItemHeight,
+          fill: theme.colors.icon.chevronListItem,
+        } as VAIconProps,
       },
     ]
 
     return {
-      textLinesWithIcon: textLines,
+      inlineTextWithIcons: textLines,
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
       onPress: () => onMessagePress(message.id, isDraftsFolder),
       a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
-      testId: generateTestIDForTextIconList(textLines, t),
+      testId: generateTestIDForInlineTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
   })

@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
@@ -17,15 +16,16 @@ import {
   VAIcon,
   VAScrollView,
 } from 'components'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { getClaim } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type ClaimFileUploadProps = StackScreenProps<ClaimsStackParamList, 'ClaimFileUpload'>
 
@@ -33,9 +33,9 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
 
   // need to get the claim to keep track of if/when files were uploaded for a request
@@ -57,7 +57,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     return (
       <Box display="flex" flexDirection="row" alignItems="center">
         <VAIcon name="CircleCheckMark" fill="dark" width={18} height={18} />
-        <TextView variant="MobileBodyBold" accessibilityRole="header" ml={theme.dimensions.textIconMargin}>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" ml={theme.dimensions.textIconMargin}>
           {dateDisplayed}
         </TextView>
       </Box>
@@ -67,7 +67,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const getUploadRequestHeader = (displayName?: string, dateDisplayed?: string): ReactNode => {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {displayName}
         </TextView>
         {!!dateDisplayed && uploadedDateDisplayed(dateDisplayed)}
@@ -125,15 +125,15 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     <VAScrollView {...testIdProps('File-upload-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('fileUpload.uploadFileToClaim')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.toHelpUs')}</TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.50MB')}</TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.acceptedFileTypes')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
@@ -148,7 +148,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
         </TextView>
         {getUploadRequests()}
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
+          <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational">
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton
                 onPress={navigateTo('AskForClaimDecision', { claimID })}

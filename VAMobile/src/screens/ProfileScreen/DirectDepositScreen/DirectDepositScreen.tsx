@@ -1,24 +1,24 @@
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
-import { DirectDepositState, StoreState } from 'store/reducers'
+import { DirectDepositState, getBankData } from 'store/slices/directDepositSlice'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getBankData } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useCallback } from 'react'
-import { useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 import ProfileBanner from '../ProfileBanner'
 
 /**
  * Screen for displaying direct deposit information and help numbers
  */
 const DirectDepositScreen: FC = () => {
-  const { paymentAccount: bankData, loading } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
-  const dispatch = useDispatch()
+  const { paymentAccount: bankData, loading } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
+  const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
@@ -35,7 +35,7 @@ const DirectDepositScreen: FC = () => {
   )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {
-    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
+    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
         textLines.push({ text: t('directDeposit.dynamicField', { field: bankData.financialInstitutionName }) })
@@ -95,7 +95,9 @@ const DirectDepositScreen: FC = () => {
       <Box accessible={true}>
         <Box mx={gutter} mt={condensedMarginBetween}>
           <TextView>
-            <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+              {t('directDeposit.bankFraudNote') + ' '}
+            </TextView>
             <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
           </TextView>
         </Box>

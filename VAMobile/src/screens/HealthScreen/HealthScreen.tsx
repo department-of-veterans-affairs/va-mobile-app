@@ -1,17 +1,17 @@
-import React, { FC, useEffect } from 'react'
-
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import React, { FC, useEffect } from 'react'
 
 import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { StoreState } from 'store/reducers'
-import { getInbox, logCOVIDClickAnalytics } from 'store/actions'
+import { RootState } from 'store'
+import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
+import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
-import { useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import CernerAlert from './CernerAlert'
 import getEnv from 'utils/env'
 
@@ -23,9 +23,9 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
+  const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')

@@ -2,30 +2,26 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 
 import AppealIssues from './AppealIssues'
-import {TextView} from 'components'
+import { TextView } from 'components'
 
 context('AppealIssues', () => {
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  beforeEach(async () => {
     props = mockNavProps()
 
-    const issues = [
-      "Service connection, Post-traumatic stress disorder",
-      "Eligibility for loan guaranty benefits",
-      "Service connected"
-    ]
+    const issues = ['Service connection, Post-traumatic stress disorder', 'Eligibility for loan guaranty benefits', 'Service connected']
 
-    act(() => {
-      component = renderWithProviders(<AppealIssues issues={issues} {...props} />)
+    await waitFor(() => {
+      component = render(<AppealIssues issues={issues} {...props} />)
     })
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('should initialize', async () => {

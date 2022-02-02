@@ -2,11 +2,11 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, findByTypeWithSubstring, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithSubstring, render, RenderAPI } from 'testUtils'
 import TextView from './TextView'
 import AppVersionAndBuild from './AppVersionAndBuild'
+import { ReactTestInstance } from 'react-test-renderer'
 
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
@@ -21,16 +21,14 @@ jest.mock('utils/hooks', () => {
 })
 
 context('AppVersionAndBuild', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<AppVersionAndBuild {...props} />)
-    })
+    component = render(<AppVersionAndBuild {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

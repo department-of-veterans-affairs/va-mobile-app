@@ -2,6 +2,7 @@ import { AddressData, PaymentAccountData, SecureMessagingSystemFolderIdConstants
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
+import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { Params } from '../api'
 import {
   ProfileDemoReturnTypes,
@@ -21,7 +22,7 @@ import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from './vacc
 /**
  * Intersection type denoting the demo data store
  */
-export type DemoStore = AppointmentsDemoStore & ClaimsDemoStore & ProfileDemoStore & SecureMessagingDemoStore & VaccineDemoStore & DisabilityRatingDemoStore
+export type DemoStore = AppointmentsDemoStore & ClaimsDemoStore & ProfileDemoStore & SecureMessagingDemoStore & VaccineDemoStore & DisabilityRatingDemoStore & LettersDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -33,6 +34,7 @@ type DemoApiReturns =
   | SecureMessagingDemoApiReturnTypes
   | VaccineDemoReturnTypes
   | DisabilityRatingDemoApiReturnTypes
+  | LettersDemoApiReturnTypes
 
 let store: DemoStore | undefined
 
@@ -55,6 +57,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/secureMessaging.json'),
     import('./mocks/vaccine.json'),
     import('./mocks/disablityRating.json'),
+    import('./mocks/letters.json'),
   ])
   setDemoStore(data.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }

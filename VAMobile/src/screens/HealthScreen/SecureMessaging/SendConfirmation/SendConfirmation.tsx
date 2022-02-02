@@ -1,12 +1,14 @@
+import { StackScreenProps } from '@react-navigation/stack'
+import { testIdProps } from 'utils/accessibility'
+
 import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
-import { StackScreenProps } from '@react-navigation/stack'
-import { testIdProps } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { RootState } from 'store'
+import { SecureMessagingState, resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store/slices'
+import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ConfirmationAlert from 'components/ConfirmationAlert'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -17,8 +19,8 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const { originHeader, messageData, uploads, replyToID } = route.params
   const navigateTo = useRouteNavigation()
-  const dispatch = useDispatch()
-  const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const dispatch = useAppDispatch()
+  const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   useEffect(() => {
     navigation.setOptions({
@@ -68,7 +70,6 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
         <ConfirmationAlert
           title={t('secureMessaging.sendConfirmation.question')}
           text={t('secureMessaging.sendConfirmation.areYouSure')}
-          background="noCardBackground"
           border="warning"
           confirmLabel={t('secureMessaging.sendConfirmation.sendButton')}
           cancelLabel={t('secureMessaging.sendConfirmation.editingButton')}

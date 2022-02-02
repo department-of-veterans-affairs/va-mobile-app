@@ -3,14 +3,13 @@ import React from 'react'
 import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
 
 import UpcomingAppointments from './UpcomingAppointments'
 import NoAppointments from '../NoAppointments'
-import { initialAppointmentsState, InitialState } from 'store/reducers'
+import { initialAppointmentsState, InitialState, getAppointmentsInDateRange } from 'store/slices'
 import { AppointmentsGroupedByYear } from 'store/api/types'
 import { LoadingComponent, TextView } from 'components'
-import { getAppointmentsInDateRange } from 'store/actions'
 import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation, defaultAppointmentAddress, defaultAppointmentPhone } from 'utils/tests/appointments'
 
 let mockNavigationSpy = jest.fn()
@@ -23,13 +22,13 @@ jest.mock('../../../../utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
-jest.mock('../../../../store/actions', () => {
-  let actual = jest.requireActual('../../../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     getAppointmentsInDateRange: jest.fn(() => {
@@ -41,8 +40,8 @@ jest.mock('../../../../store/actions', () => {
   }
 })
 
-jest.mock('../../../../store/api', () => {
-  let api = jest.requireActual('../../../../store/api')
+jest.mock('store/api', () => {
+  let api = jest.requireActual('store/api')
 
   return {
     ...api,
@@ -50,9 +49,9 @@ jest.mock('../../../../store/api', () => {
 })
 
 context('UpcomingAppointments', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
+  let navigateToSpy: jest.Mock
 
   let appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
@@ -62,46 +61,81 @@ context('UpcomingAppointments', () => {
 
   const initializeTestInstance = (currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear, loading: boolean = false) => {
     const props = mockNavProps()
+    navigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(navigateToSpy)
 
-    store = mockStore({
-      ...InitialState,
-      appointments: {
-        ...initialAppointmentsState,
-        loading,
-        loadingAppointmentCancellation: false,
-        upcomingVaServiceError: false,
-        upcomingCcServiceError: false,
-        pastVaServiceError: false,
-        pastCcServiceError: false,
-        currentPageAppointmentsByYear: {
-          ...initialAppointmentsState.currentPageAppointmentsByYear,
-          upcoming: currentPageUpcomingAppointmentsByYear || {},
-        },
-        loadedAppointmentsByTimeFrame: {
-          upcoming: [],
-          pastThreeMonths: [],
-          pastFiveToThreeMonths: [],
-          pastEightToSixMonths: [],
-          pastElevenToNineMonths: [],
-          pastAllCurrentYear: [],
-          pastAllLastYear: [],
-        },
-        paginationByTimeFrame: {
-          ...initialAppointmentsState.paginationByTimeFrame,
-          upcoming: {
-            currentPage: 2,
-            totalEntries: 2,
-            perPage: 1,
+    component = render(<UpcomingAppointments {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        appointments: {
+          ...initialAppointmentsState,
+          loading,
+          loadingAppointmentCancellation: false,
+          upcomingVaServiceError: false,
+          upcomingCcServiceError: false,
+          pastVaServiceError: false,
+          pastCcServiceError: false,
+          currentPageAppointmentsByYear: {
+            pastFiveToThreeMonths: {},
+            pastEightToSixMonths: {},
+            pastElevenToNineMonths: {},
+            pastAllCurrentYear: {},
+            pastAllLastYear: {},
+            pastThreeMonths: {},
+            upcoming: currentPageUpcomingAppointmentsByYear || {},
+          },
+          loadedAppointmentsByTimeFrame: {
+            upcoming: [],
+            pastThreeMonths: [],
+            pastFiveToThreeMonths: [],
+            pastEightToSixMonths: [],
+            pastElevenToNineMonths: [],
+            pastAllCurrentYear: [],
+            pastAllLastYear: [],
+          },
+          paginationByTimeFrame: {
+            upcoming: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+
+            pastFiveToThreeMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastEightToSixMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastElevenToNineMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastAllCurrentYear: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastAllLastYear: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastThreeMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
           },
         },
       },
     })
 
-    act(() => {
-      component = renderWithProviders(<UpcomingAppointments {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -129,7 +163,8 @@ context('UpcomingAppointments', () => {
   describe('on appointment press', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', {'appointmentID': '1'})
+      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 

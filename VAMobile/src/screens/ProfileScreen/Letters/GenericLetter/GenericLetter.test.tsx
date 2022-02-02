@@ -4,51 +4,46 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { Pressable } from 'react-native'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {LetterTypeConstants, LetterTypes} from 'store/api/types'
-import { initialLettersState, InitialState } from 'store/reducers'
-import {AlertBox, BasicError, LoadingComponent} from 'components'
+import { context, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
+import { LetterTypeConstants, LetterTypes } from 'store/api/types'
+import { initialLettersState, InitialState, downloadLetter } from 'store/slices'
+import { AlertBox, BasicError, LoadingComponent } from 'components'
 import GenericLetter from './GenericLetter'
-import {downloadLetter} from 'store/actions'
 
-jest.mock('../../../../store/actions', () => {
-  let actual = jest.requireActual('../../../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     downloadLetter: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
 context('GenericLetter', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
 
   const initializeTestInstance = (downloading = false, letterType: LetterTypes = LetterTypeConstants.commissary, hasDownloadError = false) => {
-    store = mockStore({
-      ...InitialState,
-      letters: {
-        ...initialLettersState,
-        downloading: downloading,
-        letterDownloadError: hasDownloadError ? new Error('error') : undefined
+    props = mockNavProps(undefined, undefined, { params: { header: 'header', description: 'desc', letterType } })
+
+    component = render(<GenericLetter {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        letters: {
+          ...initialLettersState,
+          downloading: downloading,
+          letterDownloadError: hasDownloadError ? new Error('error') : undefined,
+        },
       },
     })
 
-    props = mockNavProps(undefined, undefined, { params: { header: 'header', description: 'desc', letterType } })
-
-    act(() => {
-      component = renderWithProviders(<GenericLetter {...props}/>, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
-
 
   beforeEach(() => {
     initializeTestInstance()
@@ -66,12 +61,12 @@ context('GenericLetter', () => {
   })
 
   describe('when an error occurs', () => {
-    it('should render error component when there is a letter download error', async() => {
+    it('should render error component when there is a letter download error', async () => {
       initializeTestInstance(false, undefined, true)
       expect(testInstance.findAllByType(BasicError)).toHaveLength(1)
     })
 
-    it('should not render error component when there is no letter download error', async() => {
+    it('should not render error component when there is no letter download error', async () => {
       initializeTestInstance(false, undefined, false)
       expect(testInstance.findAllByType(BasicError)).toHaveLength(0)
     })

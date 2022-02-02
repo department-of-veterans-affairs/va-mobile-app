@@ -50,14 +50,29 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
 }
 
 /**
- *Returns the date formatted in the format DAY OF WEEK, MONTH DAY, YEAR
+ *Returns the date formatted in the format MONTH DAY, YEAR, TIME MERIDIEM TIMEZONE
  *
  * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
  *
  * @returns the date string based on format specified below
  */
 export const getFormattedDateTimeYear = (dateTime: string): string => {
-  return DateTime.fromISO(dateTime).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
+  return DateTime.fromISO(dateTime).toFormat('FF')
+}
+
+/**
+ *Returns the date formatted in the format TIME if today and DATE if earlier
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns the date string based on format specified below
+ */
+export const getFormattedMessageTime = (dateTime: string): string => {
+  const date = DateTime.fromISO(dateTime)
+  if (DateTime.now().minus({ hours: 24 }) < date) {
+    return date.toFormat('t')
+  } else {
+    return date.toFormat('D')
+  }
 }
 
 /**

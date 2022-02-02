@@ -1,19 +1,19 @@
-import { Action } from 'redux'
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
 import { Dimensions, TextInput } from 'react-native'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { RefObject } from 'react'
 import { contains, isEmpty, map } from 'underscore'
 
+import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { PhoneData } from 'store/api/types/PhoneData'
-import { StoreState, updatBottomOffset } from 'store'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
-import { ThunkDispatch } from 'redux-thunk'
 import { formatPhoneNumber } from './formattingUtils'
+import { updatBottomOffset } from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
 
 /**
@@ -45,6 +45,25 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
   })
 
   return generateTestID(listOfTextID.join(' '), '')
+}
+
+/**
+ * Generate a testID string for the array of text lines passed into TextLineWithIcon for list item - includes accessibility labels for icons
+ */
+export const generateTestIDForInlineTextIconList = (listOfText: Array<InlineTextWithIconsProps>, t: TFunction): string => {
+  const listOfTextID: Array<string> = []
+
+  listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'UnreadIcon') {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
+      listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
+    }
+    listOfTextID.push(listOfTextItem.leftTextProps.text)
+  })
+
+  return listOfTextID.join(' ')
 }
 
 /**
@@ -232,6 +251,14 @@ export const isErrorObject = (error: any): error is ErrorObject => {
   return ['json', 'stack', 'networkError'].some((item) => item in error)
 }
 
+export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
+  if (item) {
+    return JSON.parse(JSON.stringify(item))
+  }
+
+  return item as T
+}
+
 /**
  * Function to show snackbar
  * @param message - snackbar message
@@ -242,14 +269,7 @@ export const isErrorObject = (error: any): error is ErrorObject => {
  * @param withNav - offset snackbar to be over the bottom nav
  * @returns snackbar
  */
-export function showSnackBar(
-  message: string,
-  dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
-  actionPressed?: () => void,
-  isUndo?: boolean,
-  isError?: boolean,
-  withNavBar = false,
-): void {
+export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
   dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
   snackBar.show(message, {
     type: 'custom_snackbar',

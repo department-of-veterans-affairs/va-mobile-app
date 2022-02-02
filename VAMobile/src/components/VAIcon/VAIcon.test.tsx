@@ -4,12 +4,12 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockStore, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import HomeSelected from './navIcon/homeSelected.svg'
 import VAIcon from './VAIcon'
-import {InitialState} from 'store/reducers'
+import { InitialState } from 'store/slices'
 
-jest.mock('../../utils/hooks', ()=> {
+jest.mock('../../utils/hooks', () => {
   let original = jest.requireActual('../../utils/hooks')
   return {
     ...original,
@@ -22,23 +22,22 @@ jest.mock('../../utils/hooks', ()=> {
 })
 
 context('VAIconTests', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
-  let store = mockStore({
-    ...InitialState,
-    accessibility: {
-      fontScale: 2,
-      isVoiceOverTalkBackRunning: false,
-      isFocus: true
-    }
-  })
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<VAIcon name={'HomeSelected'} fill="#fff" />, store)
+    component = render(<VAIcon name={'HomeSelected'} fill="#fff" />, {
+      preloadedState: {
+        ...InitialState,
+        accessibility: {
+          fontScale: 2,
+          isVoiceOverTalkBackRunning: false,
+          isFocus: true,
+        },
+      },
     })
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -47,17 +46,29 @@ context('VAIconTests', () => {
 
   describe('optional parameters', () => {
     it('should get passed to svg component', async () => {
-      act(() => {
-        component = renderWithProviders(<VAIcon name={'HomeSelected'} testID={'myId'} height={1} width={2} />, store)
+      component = render(<VAIcon name={'HomeSelected'} testID={'myId'} height={1} width={2} />, {
+        preloadedState: {
+          ...InitialState,
+          accessibility: {
+            fontScale: 2,
+            isVoiceOverTalkBackRunning: false,
+            isFocus: true,
+          },
+        },
       })
 
-      testInstance = component.root
+      testInstance = component.container
       const icon: ReactTestInstance = testInstance.findByType(HomeSelected)
       expect(icon).toBeTruthy()
-      expect(icon.props).toEqual(Object.assign({},{
-        height: 3,
-        width: 6,
-      }))
+      expect(icon.props).toEqual(
+        Object.assign(
+          {},
+          {
+            height: 3,
+            width: 6,
+          },
+        ),
+      )
     })
   })
 })

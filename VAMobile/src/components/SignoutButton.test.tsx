@@ -2,22 +2,22 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import {context, renderWithProviders} from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import SignoutButton from './SignoutButton'
-import {VAButton} from "./index";
+import { VAButton } from './index'
 
-jest.mock('store/actions/auth', () => {
-  let actual = jest.requireActual('store/actions/auth')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     logout: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
@@ -27,24 +27,22 @@ jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
-      ...original,
-      useDestructiveAlert: () => mockAlertSpy,
-      useTheme: jest.fn(()=> {
-        return {...theme}
+    ...original,
+    useDestructiveAlert: () => mockAlertSpy,
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
   }
 })
 
-
 context('SignoutButton', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<SignoutButton />)
-    })
-    testInstance = component.root
+    component = render(<SignoutButton />)
+
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -53,7 +51,7 @@ context('SignoutButton', () => {
 
   describe('when the sign out button is pressed', () => {
     it('should call useDestructiveAlert', async () => {
-      act(() => {
+      await waitFor(() => {
         testInstance.findByType(VAButton).props.onPress()
       })
 

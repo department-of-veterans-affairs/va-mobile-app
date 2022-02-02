@@ -5,41 +5,34 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders, mockStore } from 'testUtils'
-import IndividualMessageErrorComponent from "./IndividualMessageErrorComponent";
-import {Linking, TouchableWithoutFeedback} from "react-native";
+import { context, render, RenderAPI } from 'testUtils'
+import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
+import { Linking, TouchableWithoutFeedback } from 'react-native'
 
-context('ErrorComponent', () => {
-    let store: any
-    let component: any
-    let testInstance: ReactTestInstance
+context('IndividualMessageErrorComponent', () => {
+  let component: RenderAPI
+  let testInstance: ReactTestInstance
 
-    beforeEach(() => {
-        store = mockStore({})
+  beforeEach(() => {
+    component = render(<IndividualMessageErrorComponent />)
 
-        act(() => {
-            component = renderWithProviders(
-                <IndividualMessageErrorComponent />,
-                store
-            )
-        })
-        testInstance = component.root
+    testInstance = component.container
+  })
+
+  it('initializes correctly', async () => {
+    expect(component).toBeTruthy()
+  })
+
+  describe('when the My HealtheVet phone number link is clicked', () => {
+    it('should call Linking open url with the parameter tel:8773270022', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+      expect(Linking.openURL).toBeCalledWith('tel:8773270022')
     })
-
-    it('initializes correctly', async () => {
-        expect(component).toBeTruthy()
+  })
+  describe('when the call TTY phone link is clicked', () => {
+    it('should call Linking open url with the parameter tel:711', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+      expect(Linking.openURL).toBeCalledWith('tel:711')
     })
-
-    describe('when the My HealtheVet phone number link is clicked', () => {
-        it('should call Linking open url with the parameter tel:8773270022', async () => {
-            testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-            expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-        })
-    })
-    describe('when the call TTY phone link is clicked', () => {
-        it('should call Linking open url with the parameter tel:711', async () => {
-            testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-            expect(Linking.openURL).toBeCalledWith( 'tel:711')
-        })
-    })
+  })
 })

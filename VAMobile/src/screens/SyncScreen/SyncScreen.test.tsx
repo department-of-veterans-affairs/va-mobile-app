@@ -1,8 +1,8 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockStore, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import {
   initialAuthorizedServicesState,
@@ -10,13 +10,13 @@ import {
   initialDisabilityRatingState,
   initialMilitaryServiceState,
   initialPersonalInformationState
-} from 'store/reducers'
+} from 'store/slices'
 import {SyncScreen} from './index'
 import TextView from '../../components/TextView'
-import {completeSync, getDisabilityRating, getProfileInfo, getServiceHistory } from '../../store/actions'
+import {completeSync, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
 
-jest.mock('../../store/actions', () => {
-  let actual = jest.requireActual('../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     completeSync: jest.fn(() => {
@@ -48,11 +48,11 @@ jest.mock('../../store/actions', () => {
 
 context('SyncScreen', () => {
   let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (militaryLoading = true, profileLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false, syncing = true): void => {
-    store = mockStore({
+    store = {
       auth: {...initialAuthState, loggedIn, loggingOut, syncing},
       disabilityRating: {...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading},
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
@@ -61,14 +61,12 @@ context('SyncScreen', () => {
         ...initialAuthorizedServicesState,
         militaryServiceHistory: true,
         hasLoaded: true,
-      },   
-    })
+      },
+    }
 
-    act(() => {
-      component = renderWithProviders(<SyncScreen/>, store)
-    })
+    component = render(<SyncScreen/>, { preloadedState: store })
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -106,7 +104,7 @@ context('SyncScreen', () => {
       initializeTestInstance(false, false, false, true, true)
       expect(testInstance.findByType(TextView).props.children).toEqual('Signing out...')
     })
-    
+
     it('should show sign out text even if data is not loaded', async () => {
       initializeTestInstance(true, true, true, true, true)
       expect(testInstance.findByType(TextView).props.children).toEqual('Signing out...')

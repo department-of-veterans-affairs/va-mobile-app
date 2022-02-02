@@ -8,7 +8,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import {context, renderWithProviders} from 'testUtils'
+import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
 import NavigationTabBar from './NavigationTabBar'
 
 context('NavigationTabBar', () => {
@@ -29,18 +29,15 @@ context('NavigationTabBar', () => {
     emitSpy = jest.fn(() => {})
     navigateSpy = jest.fn(() => {})
 
+    component = render(
+      <NavigationTabBar
+        state={{ index, routes: routesList } as unknown as TabNavigationState<ParamListBase>}
+        navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
+        translation={t}
+      />,
+    )
 
-
-    act(() => {
-      component = renderWithProviders(
-        <NavigationTabBar
-          state={({ index, routes: routesList } as unknown) as TabNavigationState<ParamListBase>}
-          navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-          translation={t}
-      />)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -53,30 +50,35 @@ context('NavigationTabBar', () => {
 
   describe('when a tab option is pressed', () => {
     it('should call the navigation emit spy', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-      expect(emitSpy).toBeCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+        expect(emitSpy).toBeCalled()
+      })
     })
 
     describe('when isFocused is false and navigation emit returns false for defaultPrevented', () => {
       it('should call navigation emit and navigate spy', async () => {
-        emitSpy.mockReturnValue({ defaultPrevented: false })
-        testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-        expect(emitSpy).toBeCalled()
-        expect(navigateSpy).toBeCalled()
+        await waitFor(() => {
+          emitSpy.mockReturnValue({ defaultPrevented: false })
+          testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+          expect(emitSpy).toBeCalled()
+          expect(navigateSpy).toBeCalled()
+        })
       })
     })
   })
 
   describe('when a tab option is long pressed', () => {
     it('should call the navigation emit spy', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onLongPress()
-      expect(emitSpy).toBeCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onLongPress()
+        expect(emitSpy).toBeCalled()
+      })
     })
   })
 
   describe('when the focused tab name is Home', () => {
     it('should return the Home Selected component', async () => {
-
       const homeSelected = testInstance.findByProps({ id: 'homeSelected' })
       expect(homeSelected).toBeTruthy()
     })
@@ -116,6 +118,7 @@ context('NavigationTabBar', () => {
       ]
 
       initializeTestInstance(3, updatedRoutes)
+      console.debug(component.toJSON())
       const icon = component.toJSON().children[0].children[3].children[0].children[0]
       expect(icon).toBe('')
     })

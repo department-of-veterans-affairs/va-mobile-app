@@ -38,7 +38,7 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
         onPress={reloadPressed}
         disabled={false}
         icon={'WebviewRefresh'}
-        fill={colors.icon.contrast}
+        fill={colors.icon.webviewReload}
         testID={t('refresh')}
         a11yHint={t('refresh.a11yHint')}
       />

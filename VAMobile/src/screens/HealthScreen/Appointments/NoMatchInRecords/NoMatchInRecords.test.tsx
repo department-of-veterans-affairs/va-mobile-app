@@ -2,22 +2,20 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import {context, renderWithProviders} from 'testUtils'
-import { act } from 'react-test-renderer'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 
 import NoMatchInRecords from './NoMatchInRecords'
 
 context('NoMatchInRecords', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: any
 
-  beforeEach(() => {
-
-    act(() => {
-      component = renderWithProviders(<NoMatchInRecords />)
+  beforeEach(async () => {
+    await waitFor(() => {
+      component = render(<NoMatchInRecords />)
     })
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

@@ -2,17 +2,16 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { context, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
 
 import AppealStatus from './AppealStatus'
-import {InitialState} from 'store/reducers'
-import {UserDataProfile} from 'store/api/types'
-import {TextArea, TextView} from 'components'
+import { UserDataProfile } from 'store/api/types'
+import { TextArea, TextView } from 'components'
+import { InitialState } from 'store/slices'
 
 context('AppealStatus', () => {
-  let component: any
+  let component: RenderAPI
   let props: any
-  let store: any
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (numAppealsAhead: number | undefined, isActiveAppeal?: boolean) => {
@@ -20,32 +19,30 @@ context('AppealStatus', () => {
       events: [
         {
           data: '2020-11-12',
-          type: 'hlr_request'
-        }
+          type: 'hlr_request',
+        },
       ],
       status: {
         details: {},
-        type: 'scheduled_hearing'
+        type: 'scheduled_hearing',
       },
       aoj: 'vba',
       appealType: 'higherLevelReview',
       numAppealsAhead,
-      isActiveAppeal
+      isActiveAppeal,
     })
 
-    store = mockStore({
-      ...InitialState,
-      personalInformation: {
-        ...InitialState.personalInformation,
-        profile: {} as UserDataProfile
+    component = render(<AppealStatus {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: {
+          ...InitialState.personalInformation,
+          profile: {} as UserDataProfile,
+        },
       },
     })
 
-    act(() => {
-      component = renderWithProviders(<AppealStatus {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

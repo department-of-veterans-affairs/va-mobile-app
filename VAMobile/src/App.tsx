@@ -1,9 +1,9 @@
 import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar, useColorScheme } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
-import { Provider, useDispatch, useSelector } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
@@ -17,11 +17,14 @@ import ToastContainer from 'react-native-toast-notifications'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 
+import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
+import { AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SnackBarConstants } from 'constants/common'
+import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
@@ -31,7 +34,7 @@ import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -45,20 +48,11 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, {
-  AccessibilityState,
-  AuthState,
-  SnackBarState,
-  StoreState,
-  handleTokenCallbackUrl,
-  initializeAuth,
-  sendUsesLargeTextAnalytics,
-  sendUsesScreenReaderAnalytics,
-} from 'store'
-import theme from 'styles/themes/standardTheme'
+import store, { RootState } from 'store'
+import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 
 enableScreens(true)
-const store = configureStore()
+
 const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
@@ -93,6 +87,11 @@ const MainApp: FC = () => {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
 
+  const scheme = useColorScheme()
+  setColorScheme(scheme)
+
+  const currentTheme = getTheme()
+
   /**
    * Used by the navigation container to initialize the first route.
    */
@@ -121,13 +120,13 @@ const MainApp: FC = () => {
   return (
     <>
       <ActionSheetProvider>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={currentTheme}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
                 <NotificationManger>
                   <SafeAreaProvider>
-                    <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                    <StatusBar barStyle="light-content" backgroundColor={currentTheme.colors.background.navHeader} />
                     <AuthGuard />
                   </SafeAreaProvider>
                 </NotificationManger>
@@ -141,10 +140,10 @@ const MainApp: FC = () => {
 }
 
 export const AuthGuard: FC = () => {
-  const dispatch = useDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { fontScale, isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
-  const { bottomOffset } = useSelector<StoreState, SnackBarState>((state) => state.snackBar)
+  const dispatch = useAppDispatch()
+  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
+  const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
@@ -189,6 +188,7 @@ export const AuthGuard: FC = () => {
   useEffect(() => {
     console.debug('AuthGuard: initializing')
     dispatch(initializeAuth())
+
     const listener = (event: { url: string }): void => {
       if (event.url?.startsWith('vamobile://login-success?')) {
         dispatch(handleTokenCallbackUrl(event.url))

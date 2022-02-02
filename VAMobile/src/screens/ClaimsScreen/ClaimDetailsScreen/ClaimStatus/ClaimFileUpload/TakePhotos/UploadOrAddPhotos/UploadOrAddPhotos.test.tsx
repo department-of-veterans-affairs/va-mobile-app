@@ -1,13 +1,13 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import UploadOrAddPhotos from './UploadOrAddPhotos'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import {InitialState} from 'store/reducers'
-import {VAButton, VAModalPicker} from 'components'
+import { InitialState } from 'store/slices'
+import { VAButton, VAModalPicker } from 'components'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../../../utils/hooks', () => {
@@ -19,45 +19,46 @@ jest.mock('../../../../../../../utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
 context('UploadOrAddPhotos', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
   let store: any
+  let navigateToSpy: jest.Mock
 
   let request = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
     status: 'NEEDED',
     uploaded: false,
-    uploadsAllowed: true
+    uploadsAllowed: true,
   }
 
   let firstImageResponse = {
-    uri: 'uri'
+    uri: 'uri',
   }
 
   const initializeTestInstance = () => {
+    navigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(navigateToSpy)
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, firstImageResponse } })
 
-    store = mockStore({
-      ...InitialState,
-      claimsAndAppeals: {
-        ...InitialState.claimsAndAppeals,
-        claim: Claim
-      }
+    component = render(<UploadOrAddPhotos {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        claimsAndAppeals: {
+          ...InitialState.claimsAndAppeals,
+          claim: Claim,
+        },
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<UploadOrAddPhotos {...props}/>, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -74,8 +75,7 @@ context('UploadOrAddPhotos', () => {
         testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
         testInstance.findAllByType(VAButton)[0].props.onPress()
       })
-
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 })

@@ -66,5 +66,10 @@ export default {
   toolbarBackgroundGray: '#f9f9f9',
   whiteWith70PercentOpacity: '#ffffffb3',
   snackBarBlack: '#1E1E1E',
-  lightBlue: '#409CFF',
+  // dark mode
+  darkmodeGrayDark: '#121212',
+  darkmodeBorder: '#4C4C4C',
+  darkmodeLightBlue: '#409CFF',
+  darkmodeRed: '#FF4F5B',
+  darkmodeGrayWarmDark: '#292929',
 }

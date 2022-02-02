@@ -81,6 +81,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
         const iconProps = {
           id: `${routeName.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
           name: `${routeName}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
+          fill: `${focused ? 'active' : 'inactive'}`,
         }
         return <VAIcon {...iconProps} />
       default:

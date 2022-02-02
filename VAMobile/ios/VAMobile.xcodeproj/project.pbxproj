@@ -27,6 +27,7 @@
 		46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */; };
 		4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */; };
 		4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */; };
+		4EF6FBFA2727104E009917AA /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6FBF92727104E009917AA /* Colors.xcassets */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */; };
 		CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
@@ -73,6 +74,7 @@
 		40F6C1AE26691F0900852B10 /* RNAuthSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNAuthSession.m; sourceTree = "<group>"; };
 		4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCheckVoiceOver.swift; sourceTree = "<group>"; };
 		4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCheckVoiceOver.m; sourceTree = "<group>"; };
+		4EF6FBF92727104E009917AA /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VAMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Bitter-Bold.ttf"; path = "../assets/fonts/Bitter/Bitter-Bold.ttf"; sourceTree = "<group>"; };
 		8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Italic.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Italic.ttf"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				40F6C1AE26691F0900852B10 /* RNAuthSession.m */,
 				40AAB02A26A088D200BA109B /* RNReviews.swift */,
 				40AAB02C26A088E900BA109B /* RNReviews.m */,
+				4EF6FBF92727104E009917AA /* Colors.xcassets */,
 			);
 			name = VAMobile;
 			sourceTree = "<group>";
@@ -206,7 +209,7 @@
 				2C9F25FEA7DA45CA8AD34801 /* Resources */,
 				46F7B02639B9A5F11BEC7D29 /* Pods */,
 			);
-			indentWidth = 2;
+			indentWidth = 1;
 			sourceTree = "<group>";
 			tabWidth = 2;
 			usesTabs = 0;
@@ -332,6 +335,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */,
 				EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */,
+				4EF6FBFA2727104E009917AA /* Colors.xcassets in Resources */,
 				EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */,
 				381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */,
 				46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */,

@@ -1,26 +1,24 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, render, RenderAPI } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import RemoveData from './RemoveData'
-import {AlertBox, VAButton} from 'components'
-import Mock = jest.Mock;
+import { AlertBox, VAButton } from 'components'
+import Mock = jest.Mock
 
 context('RemoveData', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onConfirmSpy: Mock
 
   beforeEach(() => {
     onConfirmSpy = jest.fn()
 
-    act(() => {
-      component = renderWithProviders(<RemoveData alertText={'text'} pageName={'home phone'} confirmFn={onConfirmSpy}/>)
-    })
+    component = render(<RemoveData alertText={'text'} pageName={'home phone'} confirmFn={onConfirmSpy} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
