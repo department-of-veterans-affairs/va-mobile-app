@@ -46,6 +46,7 @@ const config = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          remarkPlugins: [require('mdx-mermaid')],
           // Please change this to your repo.
         },
         theme: {

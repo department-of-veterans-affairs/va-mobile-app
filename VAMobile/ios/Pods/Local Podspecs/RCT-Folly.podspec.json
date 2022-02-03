@@ -80,10 +80,7 @@
     "folly/net/detail/*.h",
     "folly/portability/*.h"
   ],
-  "libraries": [
-    "stdc++",
-    "c++abi"
-  ],
+  "libraries": "c++abi",
   "pod_target_xcconfig": {
     "USE_HEADERMAP": "NO",
     "CLANG_CXX_LANGUAGE_STANDARD": "c++17",
