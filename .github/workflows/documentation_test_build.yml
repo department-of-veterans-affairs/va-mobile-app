@@ -9,11 +9,6 @@ on:
       - VAMobile/src/components/**
       - VAMobile/documentation/**
       - VAMobile/src/utils/hooks.tsx
-  push:
-    paths: 
-      - VAMobile/src/components/**
-      - VAMobile/documentation/**
-      - VAMobile/src/utils/hooks.tsx
 
 jobs:
   test-deploy:
