@@ -1,20 +1,19 @@
 import { Image, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 /**
- * Add images to './images' and in xcode('Images.xcassets') when new ones are added.
- * IOS does not handle images from local path correctly and needs to be added as an asset resource.
+ * Add images to android('res/drawable') and in xcode('Images.xcassets') when new ones are added.
+ * Android and IOS are not rendering using local path(ex. require('./images/asset.png')) and needs to be added as an asset resource.
  * Width and height should match whatever the image is.
  */
 export const VA_IMAGES_MAP = {
   PaperCheck: {
     width: 922,
     height: 492,
-    source: isIOS() ? { uri: 'paperCheck' } : require('./images/paperCheck.png'),
+    source: { uri: 'paper_check' },
   },
 }
 /**

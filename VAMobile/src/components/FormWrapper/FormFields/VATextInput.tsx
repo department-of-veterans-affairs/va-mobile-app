@@ -132,7 +132,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
       marginRight: theme.dimensions.textInputMargin,
-      color: theme.colors.text.primary,
+      color: isFocused ? theme.colors.text.inputFocused : theme.colors.text.input,
     },
     onFocus,
     onBlur,

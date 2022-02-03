@@ -1,17 +1,16 @@
 import { ActivityIndicator, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, Ref } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
-import { SecureMessagingState, StoreState } from 'store/reducers'
+import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay } from 'utils/common'
-import { downloadFileAttachment } from 'store/actions'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
-import { getMessage } from 'store/actions'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
@@ -28,10 +27,10 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const t = useTranslation(NAMESPACE.HEALTH)
   const tCom = useTranslation(NAMESPACE.COMMON)
   const tFunction = useTranslation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   const dateTime = getFormattedDateTimeYear(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
@@ -52,7 +51,9 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
-          <TextView variant="MobileBody">{body}</TextView>
+          <TextView variant="MobileBody" selectable={true}>
+            {body}
+          </TextView>
           {loadingAttachments && !attachments?.length && attachment && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
               <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
@@ -63,7 +64,9 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           {attachments?.length && (
             <Box mt={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
               <Box accessible={true} accessibilityRole="header">
-                <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
+                <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>
+                  {t('secureMessaging.viewMessage.attachments')}
+                </TextView>
               </Box>
               {attachments?.map((a, index) => (
                 <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
@@ -87,7 +90,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const getHeader = (): ReactNode => {
     return (
       <Box flexDirection={'column'}>
-        <TextView variant="MobileBodyBold" accessible={false}>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={false}>
           {senderName}
         </TextView>
         <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>

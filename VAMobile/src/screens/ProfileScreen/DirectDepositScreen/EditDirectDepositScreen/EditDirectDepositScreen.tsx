@@ -1,9 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
-import { AccessibilityState, DirectDepositState, StoreState } from 'store/reducers'
+import { AccessibilityState, DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
 import {
@@ -25,10 +24,11 @@ import {
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { finishEditBankInfo, updateBankInfo } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -39,13 +39,13 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
  * Screen for displaying editing direct deposit information
  */
 const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const tc = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
-  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
-  const { isFocus: isAccessibilityFocused } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
+  const { isFocus: isAccessibilityFocused } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')
@@ -170,12 +170,12 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
           <Box mt={contentMarginTop} mb={contentMarginBottom}>
             {formContainsError && (
               <Box mx={gutter} mb={standardMarginBetween}>
-                <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
+                <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" />
               </Box>
             )}
             {invalidRoutingNumberError && (
               <Box mx={gutter} mb={standardMarginBetween}>
-                <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" background="noCardBackground" />
+                <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" />
               </Box>
             )}
             <Box mx={gutter} accessible={true}>

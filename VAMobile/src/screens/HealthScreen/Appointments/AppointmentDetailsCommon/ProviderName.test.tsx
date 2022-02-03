@@ -1,17 +1,16 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import { AppointmentPractitioner } from 'store/api/types'
 import { TextView } from 'components'
 import ProviderName from './ProviderName'
 
 context('ProviderName', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
@@ -22,25 +21,25 @@ context('ProviderName', () => {
     lastName: 'Brown',
   }
 
-  const initializeTestInstance = (practitioner?: AppointmentPractitioner): void => {
+  const initializeTestInstance = async (practitioner?: AppointmentPractitioner): Promise<void> => {
     props = mockNavProps({
       practitioner,
-      appointmentType: 'VA_VIDEO_CONNECT_ONSITE'
+      appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
     })
 
-    store = mockStore({
-      ...InitialState,
+    await waitFor(() => {
+      component = render(<ProviderName {...props} />, {
+        preloadedState: {
+          ...InitialState,
+        },
+      })
     })
 
-    act(() => {
-      component = renderWithProviders(<ProviderName {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
-  beforeEach(() => {
-    initializeTestInstance(practitionerData)
+  beforeEach(async () => {
+    await initializeTestInstance(practitionerData)
   })
 
   it('initializes correctly', async () => {
@@ -50,7 +49,7 @@ context('ProviderName', () => {
 
   describe('when the practitioner prop does not exist', () => {
     it('should not render any TextViews', async () => {
-      initializeTestInstance()
+      await initializeTestInstance()
       expect(testInstance.findAllByType(TextView).length).toEqual(0)
     })
   })

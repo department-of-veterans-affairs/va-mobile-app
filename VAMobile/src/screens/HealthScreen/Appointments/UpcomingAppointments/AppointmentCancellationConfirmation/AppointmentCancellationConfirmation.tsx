@@ -5,7 +5,7 @@ import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScroll
 import { HealthStackParamList } from '../../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { cancelAppointment } from 'store/actions'
+import { cancelAppointment } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
@@ -31,7 +31,7 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
   return (
     <VAScrollView {...testIdProps('Cancel-appointment-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('upcomingAppointmentDetails.cancellationConfirmation.doYouWantToCancel')}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>

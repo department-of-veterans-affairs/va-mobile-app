@@ -5,22 +5,18 @@ import 'jest-styled-components'
 import Mock = jest.Mock
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
-import NetworkConnectionError from "./NetworkConnectionError";
+import { context, render, RenderAPI } from 'testUtils'
+import NetworkConnectionError from './NetworkConnectionError'
 
 context('NetworkConnectionError', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onTryAgainPressSpy: Mock
 
   beforeEach(() => {
+    component = render(<NetworkConnectionError onTryAgain={onTryAgainPressSpy} />)
 
-    act(() => {
-      component = renderWithProviders(
-        <NetworkConnectionError onTryAgain={onTryAgainPressSpy} />
-      )
-    })
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

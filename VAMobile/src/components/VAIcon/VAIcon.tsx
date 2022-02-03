@@ -3,8 +3,8 @@ import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
-import { VAIconColors } from 'styles/theme'
-import { useFontScale, useTheme } from 'utils/hooks'
+import { VAIconColors, VATextColors } from 'styles/theme'
+import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
 // New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
@@ -56,9 +56,11 @@ import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 
 // Misc
-import { AccessibilityState, StoreState } from 'store/reducers'
+
+import { AccessibilityState } from 'store/slices'
+import { RootState } from 'store'
 import { updateFontScale } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
@@ -142,7 +144,7 @@ export type VAIconProps = BoxProps & {
   name: keyof typeof VA_ICON_MAP
 
   /** Fill color for the icon */
-  fill?: keyof VAIconColors | string
+  fill?: keyof VAIconColors | keyof VATextColors | string
 
   /** Stroke color of the icon */
   stroke?: keyof VAIconColors | string
@@ -166,8 +168,8 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
   let domProps = Object.create(props)
   const fs: (val: number) => number = useFontScale()
-  const dispatch = useDispatch()
-  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const dispatch = useAppDispatch()
+  const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { name, width, height, fill, stroke, preventScaling } = props
 
   useEffect(() => {
@@ -177,7 +179,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   }, [dispatch, fontScale])
 
   if (fill) {
-    domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })
+    domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || theme.colors.text[fill as keyof VATextColors] || fill })
   }
 
   if (stroke) {

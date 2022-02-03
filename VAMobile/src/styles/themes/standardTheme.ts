@@ -1,11 +1,39 @@
-import { Platform } from 'react-native'
-import { VAFontSizes, VATheme } from 'styles/theme'
+import { Appearance, Platform } from 'react-native'
+
+import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
+import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 import { isIOS } from 'utils/platform'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
+export type ColorSchemeTypes = null | 'light' | 'dark' | undefined
+export const ColorSchemeConstantType: {
+  none: ColorSchemeTypes
+  notDefined: ColorSchemeTypes
+  light: ColorSchemeTypes
+  dark: ColorSchemeTypes
+} = {
+  none: null,
+  notDefined: undefined,
+  light: 'light',
+  dark: 'dark',
+}
 
-const primaryTextColor = colors.grayDark
+let colorScheme: VAColorScheme = Appearance.getColorScheme() === ColorSchemeConstantType.dark ? darkTheme : lightTheme
+
+export const setColorScheme = (scheme: ColorSchemeTypes): void => {
+  console.log(`set theme: ${scheme}`)
+  colorScheme = scheme === ColorSchemeConstantType.dark ? darkTheme : lightTheme
+  theme = {
+    ...theme,
+    colors: { ...colorScheme },
+  }
+}
+
+export const getTheme = (): VATheme => {
+  return theme
+}
+
 const claimPhaseLineHeight = Platform.OS === 'ios' ? 25 : 30
 
 const fontSizes = {
@@ -80,129 +108,10 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
   return styles.join(';\n')
 }
 
-const theme: VATheme = {
+let theme: VATheme = {
   colors: {
-    background: {
-      main: colors.grayLightest,
-      footerButtonActive: colors.primaryDarkest,
-      textBox: colors.white,
-      list: colors.white,
-      listActive: colors.primaryAltLightest,
-      segmentedController: colors.grayLighter,
-      shadow: colors.grayMedium,
-      profileBanner: colors.primary,
-      ctaButton: colors.crisisLineRed,
-      covid19Vaccinations: colors.primary,
-      completedPhase: colors.greenDarker,
-      currentPhase: colors.primary,
-      upcomingPhase: colors.grayLight,
-      splashScreen: colors.primaryDarker,
-      carousel: colors.primaryDark,
-      covid19VaccinationsActive: colors.primaryDarkest,
-      unreadMessagesTag: colors.grayDark,
-      navHeader: colors.primaryDarker,
-      modalOverlay: colors.base,
-      pickerSelectedItem: colors.primaryAltLightest,
-      navButton: colors.toolbarBackgroundGray,
-      snackbar: colors.snackBarBlack,
-      menu: colors.white,
-    },
-    alertBox: {
-      cardBackground: colors.grayLightest,
-      noCardBackground: colors.white,
-    },
-    border: {
-      primary: colors.grayLight,
-      secondary: colors.primary,
-      informational: colors.primaryAltDark,
-      error: colors.secondaryDark,
-      warning: colors.warningMessage,
-      phaseIndicatorCurrent: colors.primaryDarkest,
-      phaseIndicatorUpcoming: colors.grayLight,
-      success: colors.green,
-      primaryDarkest: colors.primaryDarkest,
-      pickerAndInput: colors.gray,
-      focusedPickerAndInput: colors.primaryDarker,
-      confirmation: colors.goldLight,
-      menuDivider: colors.grayLight,
-    },
-    icon: {
-      footerButton: colors.primary,
-      footerButtonActive: colors.white,
-      link: colors.primary, //'#0071bb',
-      nav: colors.linkDefault, //'#004795',
-      disclosure: colors.grayLight,
-      success: colors.green, //'#2E8540',
-      error: colors.secondaryDark, //'#CD2026',
-      active: colors.primaryDarker, //'#003E73',
-      inactive: colors.primary,
-      contrast: colors.white,
-      expandCollapse: colors.black,
-      checkboxEnabledPrimary: colors.primary,
-      checkboxDisabled: colors.grayMedium,
-      checkboxDisabledContrast: colors.white,
-      spinner: colors.grayMedium,
-      dark: colors.black,
-      covid19Vaccinations: colors.white,
-      grayDark: colors.grayDark,
-      pagination: colors.white,
-      chevronCollapsible: colors.primary,
-      chevronListItem: colors.primary,
-    },
-    text: {
-      footerButton: colors.primary,
-      footerButtonActive: colors.white,
-      navBar: colors.white,
-      primary: primaryTextColor,
-      primaryContrast: colors.white,
-      primaryContrastDisabled: colors.grayLight,
-      secondary: colors.black,
-      error: colors.secondaryDark, //'#CD2026',
-      link: colors.linkDefault,
-      placeholder: colors.grayMedium, //#757575
-      checkboxDisabled: colors.grayMedium,
-      covid19Vaccinations: colors.white,
-      claimPhase: colors.white,
-      snackBarBtn: colors.lightBlue,
-    },
-    buttonBackground: {
-      buttonPrimary: colors.primary,
-      buttonPrimaryActive: colors.primaryDarkest,
-      buttonSecondary: colors.white,
-      buttonSecondaryActive: colors.primaryAltLightest,
-      buttonImportant: colors.white,
-      buttonImportantActive: colors.white,
-      buttonDisabled: colors.grayMedium,
-      buttonSecondaryDisabled: colors.grayLight,
-      buttonWhite: colors.white,
-      buttonWhiteActive: colors.whiteWith70PercentOpacity,
-    },
-    buttonText: {
-      buttonPrimary: colors.white,
-      buttonSecondary: colors.primaryDarker,
-      buttonDisabled: colors.white,
-      buttonImportant: colors.secondaryDark,
-    },
-    buttonBorder: {
-      buttonSecondary: colors.primary,
-      buttonSecondaryActive: colors.primaryDarkest,
-      buttonImportant: colors.secondaryDark,
-      buttonImportantActive: colors.secondaryDarkest,
-    },
-    control: {
-      tintColor: colors.primary,
-      switchOnTrack: colors.primary,
-      switchOffTrack: colors.grayLight,
-      switchOnThumb: colors.white,
-      switchOffThumb: colors.grayLightest,
-    },
-    segmentedControl: {
-      buttonActive: colors.white,
-      buttonInactive: colors.grayLighter,
-    },
-    selectCopyText: colors.primaryAltLight,
+    ...colorScheme,
   },
-
   dimensions: {
     keyboardManagerDistanceFromTextField: 45,
     borderWidth: 1,
@@ -222,6 +131,7 @@ const theme: VATheme = {
     alertPaddingY: 20,
     alertPaddingX: 10,
     listItemDecoratorMarginLeft: 20,
+    messagesDecoratorMarginLeft: 16,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
     pickerLabelMargin: 9,
@@ -251,6 +161,8 @@ const theme: VATheme = {
     tagCountTopPadding: 3,
     messagePhotoAttachmentMaxHeight: 300,
     messageIconLeftMargin: 16,
+    messageIconWidth: 16,
+    messageIconHeight: 16,
     maxNumMessageAttachments: 4,
     paginationButtonPadding: 15,
     pickerModalTopPadding: 60,
@@ -292,6 +204,8 @@ const theme: VATheme = {
     menuBorderRadius: 4,
     menuItemMinWidth: 191,
     menuElevation: 20,
+    chevronListItemWidth: 10,
+    chevronListItemHeight: 15,
   },
 
   fontFace: {

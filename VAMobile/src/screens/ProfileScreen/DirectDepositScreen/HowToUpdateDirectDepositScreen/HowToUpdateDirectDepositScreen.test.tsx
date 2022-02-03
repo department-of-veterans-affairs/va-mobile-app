@@ -1,8 +1,8 @@
 import 'react-native'
 import React from 'react'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import HowToUpdateDirectDepositScreen from './HowToUpdateDirectDepositScreen'
 
 const mockExternalLinkSpy = jest.fn()
@@ -21,15 +21,13 @@ jest.mock('utils/hooks', () => {
 })
 
 context('HowToUpdateDirectDepositScreen', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<HowToUpdateDirectDepositScreen />)
-    })
+    component = render(<HowToUpdateDirectDepositScreen />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

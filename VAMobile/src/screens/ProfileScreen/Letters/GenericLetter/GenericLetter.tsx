@@ -1,34 +1,28 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Alert } from 'react-native'
 import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton, VAScrollView } from 'components'
-import { DemoState, LettersState, StoreState } from 'store/reducers'
 import { LetterTypeConstants } from 'store/api/types'
+import { LettersState, downloadLetter } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
-import { downloadLetter } from 'store/actions'
+import { RootState } from 'store'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type GenericLetterProps = StackScreenProps<ProfileStackParamList, 'GenericLetter'>
 
 const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { header, description, letterType, descriptionA11yLabel } = route.params
-  const { downloading, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const { downloading, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
 
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
-    if (demoMode) {
-      Alert.alert('Demo Mode', 'Letters are not available to download for demo user')
-    } else {
-      dispatch(downloadLetter(letterType))
-    }
+    dispatch(downloadLetter(letterType))
   }
 
   if (letterDownloadError) {
@@ -42,18 +36,18 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   return (
     <VAScrollView {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        {letterType === LetterTypeConstants.serviceVerification && (
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <AlertBox border="informational" text={t('letters.serviceVerificationLetter.informational')} />
+          </Box>
+        )}
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {header}
           </TextView>
           <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {description}
           </TextView>
-          {letterType === LetterTypeConstants.serviceVerification && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox border="informational" background="cardBackground" text={t('letters.serviceVerificationLetter.informational')} />
-            </Box>
-          )}
           <VAButton
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}

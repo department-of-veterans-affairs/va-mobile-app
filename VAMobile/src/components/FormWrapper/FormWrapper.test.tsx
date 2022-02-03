@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import FormWrapper, { FieldType, FormFieldType } from './FormWrapper'
 import { VAModalPicker } from 'components'
 import TextView from '../TextView'
@@ -13,7 +13,7 @@ import VASelector, { VASelectorProps } from './FormFields/VASelector'
 import Mock = jest.Mock
 
 context('FormWrapper', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onSaveSpy: any
   let setOnSaveClicked: Mock
@@ -64,20 +64,18 @@ context('FormWrapper', () => {
       onSaveClicked = value
     })
 
-    act(() => {
-      component = renderWithProviders(
-        <FormWrapper
-          fieldsList={fieldsList}
-          onSave={onSaveSpy}
-          setFormContainsError={() => {}}
-          resetErrors={resetErrors}
-          setOnSaveClicked={setOnSaveClicked}
-          onSaveClicked={onSaveClicked}
-        />,
-      )
-    })
+    component = render(
+      <FormWrapper
+        fieldsList={fieldsList}
+        onSave={onSaveSpy}
+        setFormContainsError={() => {}}
+        resetErrors={resetErrors}
+        setOnSaveClicked={setOnSaveClicked}
+        onSaveClicked={onSaveClicked}
+      />,
+    )
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -90,75 +88,89 @@ context('FormWrapper', () => {
 
   describe('when the picker calls setError with an empty string', () => {
     it('should set the error to empty string', async () => {
-      let shortenedFieldsList = formFieldsList[1]
-      initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VAModalPicker).props.setError('')
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 2].props.children).not.toEqual('second error message')
+      await waitFor(() => {
+        let shortenedFieldsList = formFieldsList[1]
+        initializeTestInstance([shortenedFieldsList])
+        testInstance.findByType(VAModalPicker).props.setError('')
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 2].props.children).not.toEqual('second error message')
+      })
     })
   })
 
   describe('when the textinput calls setError with an empty string', () => {
     it('should set the error to empty string', async () => {
-      let shortenedFieldsList = formFieldsList[0]
-      initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VATextInput).props.setError('')
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 2].props.children).not.toEqual('first error message')
+      await waitFor(() => {
+        let shortenedFieldsList = formFieldsList[0]
+        initializeTestInstance([shortenedFieldsList])
+        testInstance.findByType(VATextInput).props.setError('')
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 2].props.children).not.toEqual('first error message')
+      })
     })
   })
 
   describe('when the checkbox calls setError with an empty string', () => {
     it('should set the error to empty string', async () => {
-      let shortenedFieldsList = formFieldsList[2]
-      initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VASelector).props.setError('')
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 1].props.children).not.toEqual('third error message')
+      await waitFor(() => {
+        let shortenedFieldsList = formFieldsList[2]
+        initializeTestInstance([shortenedFieldsList])
+        testInstance.findByType(VASelector).props.setError('')
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 1].props.children).not.toEqual('third error message')
+      })
     })
   })
 
   describe('when the picker calls setError with no parameter', () => {
     it('should set the error to the field error message', async () => {
-      let shortenedFieldsList = formFieldsList[1]
-      initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VAModalPicker).props.setError()
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 2].props.children).toEqual('second error message')
+      await waitFor(() => {
+        let shortenedFieldsList = formFieldsList[1]
+        initializeTestInstance([shortenedFieldsList])
+        testInstance.findByType(VAModalPicker).props.setError()
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 2].props.children).toEqual('second error message')
+      })
     })
   })
 
   describe('when the textinput calls setError with no parameter', () => {
     it('should set the error to the field error message', async () => {
-      let shortenedFieldsList = formFieldsList[0]
-      initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VATextInput).props.setError()
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 1].props.children).toEqual('first error message')
+      await waitFor(() => {
+        let shortenedFieldsList = formFieldsList[0]
+        initializeTestInstance([shortenedFieldsList])
+        testInstance.findByType(VATextInput).props.setError()
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 1].props.children).toEqual('first error message')
+      })
     })
   })
 
   describe('when the checkbox calls setError with no parameter', () => {
     it('should set the error to the field error message', async () => {
-      let shortenedFieldsList = formFieldsList[2]
-      initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VASelector).props.setError()
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 2].props.children).toEqual('third error message')
+      await waitFor(() => {
+        let shortenedFieldsList = formFieldsList[2]
+        initializeTestInstance([shortenedFieldsList])
+        testInstance.findByType(VASelector).props.setError()
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 2].props.children).toEqual('third error message')
+      })
     })
   })
 
   describe('when resetErrors is true', () => {
     it('should clear the errors object', async () => {
-      let shortenedFieldsList = formFieldsList[2]
-      initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VASelector).props.setError()
-      let textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 2].props.children).toEqual('third error message')
+      await waitFor(() => {
+        let shortenedFieldsList = formFieldsList[2]
+        initializeTestInstance([shortenedFieldsList])
+        testInstance.findByType(VASelector).props.setError()
+        let textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 2].props.children).toEqual('third error message')
 
-      initializeTestInstance([shortenedFieldsList], true)
-      textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 1].props.children).toEqual('I confirm that this information is correct')
+        initializeTestInstance([shortenedFieldsList], true)
+        textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 1].props.children).toEqual('I confirm that this information is correct')
+      })
     })
   })
 

@@ -1,17 +1,15 @@
-import React, { FC, ReactNode, useEffect } from 'react'
-
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store'
+import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch } from 'react-redux'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */
@@ -93,7 +91,7 @@ export type ClaimPhaseProps = {
 const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { eventsTimeline } = attributes
@@ -120,7 +118,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
       <Box flexDirection={'row'}>
         <PhaseIndicator phase={phase} current={current} />
         <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
-          <TextView variant={'MobileBodyBold'} selectable={!phaseLessThanEqualToCurrent}>
+          <TextView variant={'MobileBodyBold'} color={'primaryTitle'} selectable={!phaseLessThanEqualToCurrent}>
             {heading}
           </TextView>
           {phaseLessThanEqualToCurrent && <TextView variant={'MobileBody'}>{updatedLastDate}</TextView>}
@@ -150,7 +148,9 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
       {phase === 3 && showClaimFileUploadBtn && (
         <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">
-            <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
+            <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>
+              {youHaveFileRequestsText}
+            </TextView>
           </Box>
           <Box mt={standardMarginBetween}>
             <VAButton

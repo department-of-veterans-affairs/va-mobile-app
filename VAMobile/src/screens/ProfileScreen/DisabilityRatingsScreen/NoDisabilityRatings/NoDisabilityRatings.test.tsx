@@ -4,21 +4,19 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import NoDisabilityRatings from './NoDisabilityRatings'
 import { TextView } from 'components'
 
 context('NoDisabilityRatings', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
+
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = () => {
-    act(() => {
-      component = renderWithProviders(<NoDisabilityRatings />, store)
-    })
+    component = render(<NoDisabilityRatings />, { preloadedState: {} })
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

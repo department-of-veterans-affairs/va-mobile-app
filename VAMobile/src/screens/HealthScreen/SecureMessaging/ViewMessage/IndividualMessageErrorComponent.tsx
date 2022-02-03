@@ -1,6 +1,7 @@
 import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
-import { ErrorsState, StoreState } from 'store'
+import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { useSelector } from 'react-redux'
 import { useTheme, useTranslation } from 'utils/hooks'
 import React, { FC } from 'react'
@@ -9,7 +10,7 @@ const IndividualMessageErrorComponent: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { tryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { tryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
 
   const { standardMarginBetween } = theme.dimensions
 
@@ -20,8 +21,7 @@ const IndividualMessageErrorComponent: FC = () => {
           title={t('secureMessaging.viewMessage.errorTitle')}
           titleA11yLabel={t('secureMessaging.viewMessage.errorTitle')}
           text={tc('errors.callHelpCenter.sorryWithRefresh')}
-          border="error"
-          background={'cardBackground'}>
+          border="error">
           <Box>
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}

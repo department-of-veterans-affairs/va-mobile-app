@@ -6,24 +6,22 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import BackButton from './BackButton'
 import VAIcon from './VAIcon'
-import {BackButtonLabel, BackButtonLabelConstants} from 'constants/backButtonLabels'
+import { BackButtonLabel, BackButtonLabelConstants } from 'constants/backButtonLabels'
 
 context('BackButton', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
   const initializeTestInstance = (canGoBack: boolean, showCarat?: boolean, a11yHint?: string, label?: BackButtonLabel): void => {
     onPressSpy = jest.fn(() => {})
 
-    act(() => {
-      component = renderWithProviders(<BackButton onPress={onPressSpy} label={label || BackButtonLabelConstants.back} canGoBack={canGoBack} showCarat={showCarat} a11yHint={a11yHint}/>)
-    })
+    component = render(<BackButton onPress={onPressSpy} label={label || BackButtonLabelConstants.back} canGoBack={canGoBack} showCarat={showCarat} a11yHint={a11yHint} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -38,15 +36,17 @@ context('BackButton', () => {
     it('should return null', async () => {
       initializeTestInstance(false)
 
-      testInstance = component.root
+      testInstance = component.container
       expect(component.toJSON()).toBeFalsy()
     })
   })
 
   describe('when the onPress is clicked', () => {
     it('should call the onPress function', async () => {
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-      expect(onPressSpy).toBeCalled()
+      await waitFor(() => {
+        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        expect(onPressSpy).toBeCalled()
+      })
     })
   })
 

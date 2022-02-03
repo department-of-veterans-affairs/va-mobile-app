@@ -2,53 +2,50 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import {context, mockStore, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, render, waitFor, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import BiometricsPreferenceScreen from './BiometricsPreferenceScreen'
-import {InitialState} from 'store/reducers'
-import {setBiometricsPreference, setDisplayBiometricsPreferenceScreen} from '../../store/actions'
-import {TextView, VAButton} from 'components'
-import {BIOMETRY_TYPE} from "react-native-keychain";
 
-jest.mock('../../store/actions', () => {
-  let actual = jest.requireActual('../../store/actions')
+import { TextView, VAButton } from 'components'
+import { BIOMETRY_TYPE } from 'react-native-keychain'
+import { InitialState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
+
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     setBiometricsPreference: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
     }),
     setDisplayBiometricsPreferenceScreen: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
 context('BiometricsPreferenceScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (biometric = BIOMETRY_TYPE.TOUCH_ID) => {
-    store = mockStore({
-      ...InitialState,
-      auth:{
-        ...InitialState.auth,
-        supportedBiometric: biometric
-      }
+  const initializeTestInstance = async (biometric = BIOMETRY_TYPE.TOUCH_ID) => {
+    component = render(<BiometricsPreferenceScreen />, {
+      preloadedState: {
+        ...InitialState,
+        auth: {
+          ...InitialState.auth,
+          supportedBiometric: biometric,
+        },
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<BiometricsPreferenceScreen />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

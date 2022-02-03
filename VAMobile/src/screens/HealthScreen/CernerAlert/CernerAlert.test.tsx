@@ -1,18 +1,12 @@
 import 'react-native'
 import React from 'react'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
-import {
-  context,
-  findByTypeWithSubstring,
-  findByTypeWithText,
-  mockStore,
-  renderWithProviders
-} from 'testUtils'
+import { context, findByTypeWithSubstring, findByTypeWithText, render, RenderAPI } from 'testUtils'
 import CernerAlert from './CernerAlert'
-import {initialPatientState, InitialState, PatientState} from 'store/reducers'
+import { initialPatientState, InitialState, PatientState } from 'store/slices'
 import { TextView } from 'components'
-import { Pressable, TouchableWithoutFeedback } from "react-native";
+import { Pressable, TouchableWithoutFeedback } from 'react-native'
 
 const mockExternalLinkSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -37,38 +31,37 @@ context('CernerAlert', () => {
       {
         isCerner: true,
         facilityId: '1',
-        facilityName: 'FacilityOne'
+        facilityName: 'FacilityOne',
       },
     ],
     facilities: [
       {
         isCerner: true,
         facilityId: '1',
-        facilityName: 'FacilityOne'
+        facilityName: 'FacilityOne',
       },
       {
         isCerner: false,
         facilityId: '2',
-        facilityName: 'FacilityTwo'
-      }
-    ]
+        facilityName: 'FacilityTwo',
+      },
+    ],
   }
 
   const initializeTestInstance = (patient?: PatientState): void => {
     const mockPatient = patient || {}
-    const store = mockStore({
-      ...InitialState,
-      patient: {
-        ...initialPatientState,
-        ...mockPatient
-      }
+
+    component = render(<CernerAlert />, {
+      preloadedState: {
+        ...InitialState,
+        patient: {
+          ...initialPatientState,
+          ...mockPatient,
+        },
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<CernerAlert />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -83,8 +76,8 @@ context('CernerAlert', () => {
   })
 
   it('should only show cerner facilities', () => {
-    expect(findByTypeWithSubstring(testInstance,TextView, 'FacilityOne')).toBeTruthy()
-    expect(findByTypeWithSubstring(testInstance,TextView, 'FacilityTwo')).toBeFalsy()
+    expect(findByTypeWithSubstring(testInstance, TextView, 'FacilityOne')).toBeTruthy()
+    expect(findByTypeWithSubstring(testInstance, TextView, 'FacilityTwo')).toBeFalsy()
   })
 
   it('should call mockExternalLinkSpy when link is selected', async () => {
@@ -96,7 +89,7 @@ context('CernerAlert', () => {
 
   describe('when some facilities are cerner', () => {
     it('should show proper header text', () => {
-      expect(findByTypeWithText(testInstance, TextView,  "Some of your V\uFEFFA health care team may be using the My V\uFEFFA Health portal")).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Some of your V\uFEFFA health care team may be using the My V\uFEFFA Health portal')).toBeTruthy()
     })
   })
 
@@ -108,28 +101,28 @@ context('CernerAlert', () => {
           {
             isCerner: true,
             facilityId: '1',
-            facilityName: 'FacilityOne'
+            facilityName: 'FacilityOne',
           },
           {
             isCerner: true,
             facilityId: '2',
-            facilityName: 'FacilityTwo'
-          }
+            facilityName: 'FacilityTwo',
+          },
         ],
         facilities: [
           {
             isCerner: true,
             facilityId: '1',
-            facilityName: 'FacilityOne'
+            facilityName: 'FacilityOne',
           },
           {
             isCerner: true,
             facilityId: '2',
-            facilityName: 'FacilityTwo'
-          }
-        ]
+            facilityName: 'FacilityTwo',
+          },
+        ],
       })
-      expect(findByTypeWithText(testInstance, TextView,  "Your V\uFEFFA health care team may be using the My V\uFEFFA Health portal")).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Your V\uFEFFA health care team may be using the My V\uFEFFA Health portal')).toBeTruthy()
     })
   })
 })

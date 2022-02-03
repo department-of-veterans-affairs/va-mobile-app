@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { StoreState } from 'store'
+import { RootState } from 'store'
 import analytics from '@react-native-firebase/analytics'
 
 export type Event = {
@@ -28,7 +28,7 @@ export const setAnalyticsUserProperties = async (properties: { [key: string]: st
   await analytics().setUserProperties(properties)
 }
 
-export const getAnalyticsTimers = (state: StoreState): [number, number, number] => {
+export const getAnalyticsTimers = (state: RootState): [number, number, number] => {
   const now = DateTime.now().toMillis()
   const { totalTimeStart, actionStart, loginTimestamp } = state.analytics
   const totalTime = now - totalTimeStart

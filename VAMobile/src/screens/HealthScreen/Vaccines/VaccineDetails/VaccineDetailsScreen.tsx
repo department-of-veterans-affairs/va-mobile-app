@@ -1,17 +1,17 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { every } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { COVID19 } from 'constants/common'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { StoreState, VaccineState } from 'store/reducers'
+import { RootState } from 'store'
+import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
 
@@ -20,11 +20,11 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
  */
 const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const { vaccineId } = route.params
-  const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<StoreState, VaccineState>((state) => state.vaccine)
+  const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const vaccine = vaccinesById[vaccineId]
   const location = vaccineLocationsById[vaccineId]
@@ -70,25 +70,45 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
             {displayDate}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-            <TextView variant="BitterBoldHeading">{displayName}</TextView>
+            <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
+              {displayName}
+            </TextView>
           </Box>
-          <TextView variant="MobileBodyBold">{t('vaccines.details.typeAndDosage')}</TextView>
-          <TextView variant="MobileBody">{vaccine.attributes?.shortDescription || placeHolder}</TextView>
+          <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>
+            {t('vaccines.details.typeAndDosage')}
+          </TextView>
+          <TextView variant="MobileBody" selectable={true}>
+            {vaccine.attributes?.shortDescription || placeHolder}
+          </TextView>
           {isCovidVaccine && (
             <>
-              <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-              <TextView variant="MobileBody">{vaccine.attributes?.manufacturer || placeHolder}</TextView>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                {t('vaccines.details.manufacturer')}
+              </TextView>
+              <TextView variant="MobileBody" selectable={true}>
+                {vaccine.attributes?.manufacturer || placeHolder}
+              </TextView>
             </>
           )}
-          <TextView variant="MobileBodyBold">{t('vaccines.details.series')}</TextView>
-          <TextView variant="MobileBody">{displaySeries}</TextView>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+            {t('vaccines.details.series')}
+          </TextView>
+          <TextView variant="MobileBody" selectable={true}>
+            {displaySeries}
+          </TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+              {t('vaccines.details.provider')}
+            </TextView>
             {location?.attributes && (
               <>
-                <TextView variant="MobileBody">{location.attributes.name}</TextView>
-                <TextView variant="MobileBody">{location.attributes.address?.street}</TextView>
-                <TextView variant="MobileBody">
+                <TextView variant="MobileBody" selectable={true}>
+                  {location.attributes.name}
+                </TextView>
+                <TextView variant="MobileBody" selectable={true}>
+                  {location.attributes.address?.street}
+                </TextView>
+                <TextView variant="MobileBody" selectable={true}>
                   {t('vaccines.details.address', {
                     city: location.attributes.address?.city,
                     state: location.attributes.address?.state,
@@ -97,15 +117,27 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
                 </TextView>
               </>
             )}
-            {!location?.attributes && <TextView variant="MobileBody">{placeHolder}</TextView>}
+            {!location?.attributes && (
+              <TextView variant="MobileBody" selectable={true}>
+                {placeHolder}
+              </TextView>
+            )}
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Box>
-              <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
-              <TextView variant="MobileBody">{vaccine.attributes?.reaction || placeHolder}</TextView>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                {t('vaccines.details.reaction')}
+              </TextView>
+              <TextView variant="MobileBody" selectable={true}>
+                {vaccine.attributes?.reaction || placeHolder}
+              </TextView>
             </Box>
-            <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
-            <TextView variant="MobileBody">{vaccine.attributes?.note || placeHolder}</TextView>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+              {t('vaccines.details.notes')}
+            </TextView>
+            <TextView variant="MobileBody" selectable={true}>
+              {vaccine.attributes?.note || placeHolder}
+            </TextView>
           </Box>
         </TextArea>
         {isPartialData && (

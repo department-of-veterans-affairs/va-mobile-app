@@ -1,13 +1,12 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockNavProps, renderWithProviders} from 'testUtils'
-import { act } from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 
 import TakePhotos from './TakePhotos'
 
 context('TakePhotos', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: any
   let props: any
 
@@ -16,18 +15,15 @@ context('TakePhotos', () => {
     date: '2020-07-16',
     status: 'NEEDED',
     uploaded: false,
-    uploadsAllowed: true
+    uploadsAllowed: true,
   }
-
 
   const initializeTestInstance = () => {
     props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
 
-    act(() => {
-      component = renderWithProviders(<TakePhotos {...props}/>)
-    })
+    component = render(<TakePhotos {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

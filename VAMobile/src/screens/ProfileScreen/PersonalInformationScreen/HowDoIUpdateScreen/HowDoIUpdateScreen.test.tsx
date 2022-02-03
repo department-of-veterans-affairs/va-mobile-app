@@ -1,11 +1,11 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import {context, mockNavProps, mockStore, render, RenderAPI, waitFor} from 'testUtils'
 
 import HowDoIUpdateScreen from './HowDoIUpdateScreen'
-import {initialAuthState} from 'store/reducers'
+import {initialAuthState} from 'store/slices'
 import {TextView} from 'components'
 
 let mockNavigationSpy = jest.fn()
@@ -17,7 +17,7 @@ jest.mock('../../../../utils/hooks', () => {
     useTheme: jest.fn(()=> {
       return {...theme}
     }),
-    useRouteNavigation: () => { return () => mockNavigationSpy},
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -31,21 +31,30 @@ jest.mock('@react-navigation/native', () => {
 
 context('HowDoIUpdateScreen', () => {
   let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
+  let mockNavigationToSpy: jest.Mock
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
+    mockNavigationToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(mockNavigationToSpy)
 
     store = mockStore({
       auth: {...initialAuthState},
     })
 
-    act(() => {
-      component = renderWithProviders(<HowDoIUpdateScreen {...props} />, store)
+    await waitFor(() => {
+      component = render(<HowDoIUpdateScreen {...props} />, {
+        preloadedState: {
+          auth: {
+            ...initialAuthState
+          }
+        }
+      })
     })
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -55,7 +64,8 @@ context('HowDoIUpdateScreen', () => {
   describe('when the find VA location link is clicked', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(TextView)[4].props.onPress()
-      expect(mockNavigationSpy).toBeCalled()
+      expect(mockNavigationSpy).toBeCalledWith('Webview', {'displayTitle': 'va.gov', 'url': 'https://www.va.gov/find-locations/'})
+      expect(mockNavigationToSpy).toBeCalled()
     })
   })
 })

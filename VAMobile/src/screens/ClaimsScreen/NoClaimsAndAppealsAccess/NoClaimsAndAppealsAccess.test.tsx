@@ -5,21 +5,18 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess'
 import { ClickToCallPhoneNumber, TextView } from 'components'
 
 context('NoClaimsAndAppealsAccess', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(
-        <NoClaimsAndAppealsAccess />
-      )
-    })
-    testInstance = component.root
+    component = render(<NoClaimsAndAppealsAccess />)
+
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -27,15 +24,16 @@ context('NoClaimsAndAppealsAccess', () => {
   })
 
   it('should render the title', async () => {
-    expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('We can\'t find any claims information for you')
+    expect(testInstance.findAllByType(TextView)[0].props.children).toEqual("We can't find any claims information for you")
   })
 
   it('should render the body', async () => {
-    expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('We\'re sorry. We can\'t find any claims for you in our records. If you think this is an error, call the VA benefits hotline.')
+    expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
+      "We're sorry. We can't find any claims for you in our records. If you think this is an error, call the VA benefits hotline.",
+    )
   })
 
   it('should render ClickToCallPhoneNumber component', async () => {
     expect(testInstance.findAllByType(ClickToCallPhoneNumber).length).toEqual(1)
-
   })
 })

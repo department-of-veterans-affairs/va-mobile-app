@@ -2,25 +2,25 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import renderer, { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import FooterButton from './FooterButton'
 import { TextView, VAIcon } from './index'
 import Compose from 'components/VAIcon/svgs/compose.svg'
 
 context('FooterButton', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
-    act(() => {
-      component = renderWithProviders(<FooterButton text='test' />)
-    })
-    testInstance = component.root
+
+    component = render(<FooterButton text="test" />)
+
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -35,11 +35,9 @@ context('FooterButton', () => {
 
   describe('when the compose icon name is passed in as an icon prop', () => {
     it('should render the compose svg', async () => {
-      act(() => {
-        component = renderWithProviders(<FooterButton text="test" iconProps={{ name: 'Compose' }} />)
-      })
+      component = render(<FooterButton text="test" iconProps={{ name: 'Compose' }} />)
 
-      testInstance = component.root
+      testInstance = component.container
       const icon: ReactTestInstance = testInstance.findByType(Compose)
       expect(icon).toBeTruthy()
     })

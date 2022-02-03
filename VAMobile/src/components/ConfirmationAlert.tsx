@@ -27,7 +27,6 @@ export type ConfirmationAlertProps = {
 const ConfirmationAlert: FC<ConfirmationAlertProps> = ({
   title,
   text,
-  background,
   border,
   confirmLabel,
   cancelLabel,
@@ -41,7 +40,7 @@ const ConfirmationAlert: FC<ConfirmationAlertProps> = ({
   const theme = useTheme()
 
   return (
-    <AlertBox title={title} text={text} background={background} border={border}>
+    <AlertBox title={title} text={text} border={border}>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <VAButton onPress={confirmOnPress} label={confirmLabel} a11yHint={confirmA11y} buttonType={button1type} />
         <Box mt={theme.dimensions.standardMarginBetween}>

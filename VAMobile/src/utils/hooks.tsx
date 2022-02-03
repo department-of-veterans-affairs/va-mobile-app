@@ -10,12 +10,14 @@ import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React from 'react'
 
-import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
+import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
+import { AppDispatch, RootState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
+import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
@@ -23,7 +25,6 @@ import { WebProtocolTypesConstants } from 'constants/common'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
-import { updateAccessibilityFocus } from 'store/actions'
 import HeaderTitle from 'components/HeaderTitle'
 
 /**
@@ -32,14 +33,12 @@ import HeaderTitle from 'components/HeaderTitle'
  * @returns boolean to show the error
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
-  const { errorsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
-    return state.errors
-  })
+  const { errorsByScreenID } = useSelector<RootState, ErrorsState>((state) => state.errors)
   return useDowntime(DowntimeScreenIDToFeature[currentScreenID]) || !!errorsByScreenID[currentScreenID]
 }
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
+  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const mw = downtimeWindowsByFeature[feature]
   if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
     return true
@@ -54,7 +53,7 @@ export const useDowntime = (feature: DowntimeFeatureType): boolean => {
  * @returns a function to calculate 'value' based on fontScale
  */
 export const useFontScale = (): ((val: number) => number) => {
-  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
 
   return (value: number): number => {
     const pixelRatio = PixelRatio.getFontScale()
@@ -154,7 +153,7 @@ type RouteNavParams<T extends ParamListBase> = {
 export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref: MutableRefObject<any> = useRef<T>(null)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const screanReaderEnabled = useIsScreanReaderEnabled()
 
   const setFocus = useCallback(() => {
@@ -246,7 +245,7 @@ export function useExternalLink(): (url: string) => void {
  * @returns boolean showing if the user has cerner facilities
  */
 export const useHasCernerFacilities = (): boolean => {
-  const { cernerFacilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  const { cernerFacilities } = useSelector<RootState, PatientState>((state) => state.patient)
   return cernerFacilities.length > 0
 }
 
@@ -343,7 +342,7 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
  * @returns message state and the setMessage function
  */
 export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const { signature, loadingSignature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { signature, loadingSignature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const [message, setMessage] = useState('')
   useEffect(() => {
     if (signature && signature.includeSignature) {
@@ -360,7 +359,7 @@ export function useMessageWithSignature(): [string, React.Dispatch<React.SetStat
  * @returns boolean if the message is valid
  */
 export function useValidateMessageWithSignature(): (message: string) => boolean {
-  const { signature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { signature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   return (message: string): boolean => {
     let isMessageBlank = !!message
@@ -419,3 +418,5 @@ export function useAttachments(): [
 
   return [attachmentsList, addAttachment, removeAttachment]
 }
+
+export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()

@@ -2,25 +2,19 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, renderWithProviders} from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 import { TextView } from 'components'
 
 context('NoMilitaryInformationAccess', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = () => {
-    act(() => {
-      component = renderWithProviders(
-        <NoMilitaryInformationAccess />, store
-      )
-    })
-
-    testInstance = component.root
+    component = render(<NoMilitaryInformationAccess />)
+    testInstance = component.container
   }
 
   beforeEach(() => {

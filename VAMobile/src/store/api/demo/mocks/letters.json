@@ -1,0 +1,71 @@
+{
+  "/v0/letters": {
+    "data": {
+      "type": "",
+      "id": "",
+      "attributes": {
+        "letters": [
+          {
+            "name": "Benefit Summary and Service Verification Letter",
+            "letterType": "benefit_summary"
+          },
+          {
+            "name": "Benefit Verification Letter",
+            "letterType": "benefit_verification"
+          },
+          {
+            "name": "Civil Service Preference Letter",
+            "letterType": "civil_service"
+          },
+          {
+            "name": "Commissary Letter",
+            "letterType": "commissary"
+          },
+          {
+            "name": "Proof of Creditable Prescription Drug Coverage Letter",
+            "letterType": "medicare_partd"
+          },
+          {
+            "name": "Proof of Minimum Essential Coverage Letter",
+            "letterType": "minimum_essential_coverage"
+          },
+          {
+            "name": "Proof of Service Letter",
+            "letterType": "proof_of_service"
+          },
+          {
+            "name": "Service Verification Letter",
+            "letterType": "service_verification"
+          }
+        ]
+      }
+    }
+  },
+  "/v0/letters/beneficiary": {
+    "data": {
+      "type": "",
+      "id": "",
+      "attributes": {
+        "benefitInformation": {
+          "monthlyAwardAmount": 3084.75,
+          "serviceConnectedPercentage": 100,
+          "awardEffectiveDate": "2016-11-01",
+          "hasChapter35Eligibility": true,
+          "hasNonServiceConnectedPension": false,
+          "hasServiceConnectedDisabilities": true,
+          "hasAdaptedHousing": false,
+          "hasIndividualUnemployabilityGranted": false,
+          "hasSpecialMonthlyCompensation": false
+        },
+        "militaryService": [
+          {
+            "branch": "Coast Guard",
+            "characterOfService": "HONORABLE",
+            "enteredDate": "1970-07-13",
+            "releasedDate": "1998-08-31"
+          }
+        ]
+      }
+    }
+  }
+}

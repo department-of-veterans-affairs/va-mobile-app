@@ -19,3 +19,11 @@ export type TextLine = {
   /** sets the text to be a tag */
   isTextTag?: boolean
 }
+
+export type InlineText = {
+  /** text to be displayed in left column */
+  leftTextProps: TextLine
+
+  /** text to be displayed in right column */
+  rightTextProps?: TextLine
+}

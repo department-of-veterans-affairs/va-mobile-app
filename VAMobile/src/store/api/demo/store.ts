@@ -1,6 +1,8 @@
 import { AddressData, PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
+import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
+import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { Params } from '../api'
 import {
   ProfileDemoReturnTypes,
@@ -15,17 +17,24 @@ import {
   validateAddress,
 } from './profile'
 import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getFolderMessages } from './secureMessaging'
-import { VaccineDemoReturnTypes, VaccineDemoStore } from './vaccine'
+import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from './vaccine'
 
 /**
  * Intersection type denoting the demo data store
  */
-export type DemoStore = AppointmentsDemoStore & ClaimsDemoStore & ProfileDemoStore & SecureMessagingDemoStore & VaccineDemoStore
+export type DemoStore = AppointmentsDemoStore & ClaimsDemoStore & ProfileDemoStore & SecureMessagingDemoStore & VaccineDemoStore & DisabilityRatingDemoStore & LettersDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
  */
-type DemoApiReturns = ClaimsDemoApiReturnTypes | AppointmentDemoReturnTypes | ProfileDemoReturnTypes | SecureMessagingDemoApiReturnTypes | VaccineDemoReturnTypes
+type DemoApiReturns =
+  | ClaimsDemoApiReturnTypes
+  | AppointmentDemoReturnTypes
+  | ProfileDemoReturnTypes
+  | SecureMessagingDemoApiReturnTypes
+  | VaccineDemoReturnTypes
+  | DisabilityRatingDemoApiReturnTypes
+  | LettersDemoApiReturnTypes
 
 let store: DemoStore | undefined
 
@@ -47,6 +56,8 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/profile.json'),
     import('./mocks/secureMessaging.json'),
     import('./mocks/vaccine.json'),
+    import('./mocks/disablityRating.json'),
+    import('./mocks/letters.json'),
   ])
   setDemoStore(data.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
@@ -108,6 +119,9 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     case `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`:
     case `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`: {
       return getFolderMessages(store, params, endpoint)
+    }
+    case '/v1/health/immunizations': {
+      return getVaccineList(store, params, endpoint)
     }
     default: {
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns

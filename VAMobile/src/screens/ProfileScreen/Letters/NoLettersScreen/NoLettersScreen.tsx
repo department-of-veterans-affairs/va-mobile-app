@@ -18,7 +18,7 @@ const NoLettersScreen: FC = () => {
   return (
     <VAScrollView contentContainerStyle={scrollStyles} {...testIdProps('Letters: No-letters-page')}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
-        <TextView variant="MobileBodyBold" textAlign={'center'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign={'center'} accessibilityRole="header">
           {t('noLetters.header')}
         </TextView>
         <TextView variant="MobileBody" textAlign={'center'} py={theme.dimensions.noLettersPaddingY}>
