@@ -7,11 +7,12 @@ import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentState, getPayment } from 'store/slices'
 import { PaymentsAttributeData } from 'store/api'
+import { Pressable } from 'react-native'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { RootState } from 'store'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type PaymentDetailsScreenProps = StackScreenProps<ProfileStackParamList, 'PaymentDetails'>
 
@@ -20,6 +21,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
 
   const placeHolder = t('common:noneNoted')
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, gutter } = theme.dimensions
@@ -41,16 +43,11 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
     return /\d/.test(accountNumber)
   }
 
-  const redirectLink = (): void => {
-    // launchExternalLink(LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT)
-  }
-
   const textViewProps: TextViewProps = {
     variant: 'MobileBody',
     textDecoration: 'underline',
     textDecorationColor: 'link',
     color: 'link',
-    onPress: redirectLink,
     accessibilityRole: 'link',
     ...testIdProps(t('payments.ifIAmMissingPayemt')),
   }
@@ -100,7 +97,9 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
           )}
         </TextArea>
         <Box mx={gutter} mt={contentMarginTop}>
-          <TextView {...textViewProps}>{t('payments.ifMyPaymentDoesNotLookRight')}</TextView>
+          <Pressable onPress={navigateTo('PaymentIssue')} {...testIdProps(t('payments.ifMyPaymentDoesNotLookRight'))} accessibilityRole="link" accessible={true}>
+            <TextView {...textViewProps}>{t('payments.ifMyPaymentDoesNotLookRight')}</TextView>
+          </Pressable>
         </Box>
       </Box>
     </VAScrollView>
