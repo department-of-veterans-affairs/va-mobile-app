@@ -27,7 +27,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   const { standardMarginBetween, gutter, contentMarginTop } = theme.dimensions
   const { currentPagePayments, currentPagePagination, loading, loadedPaymentsByYear } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
-  const noPayments = !loadedPaymentsByYear || isEmpty(loadedPaymentsByYear)
+  const noPayments = false // this will change when backend integration
 
   useEffect(() => {
     dispatch(getPayments('2021', 1))
