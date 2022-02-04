@@ -217,6 +217,8 @@
   "notifications.settings.switch.a11yHint": "Select whether to turn on push notifications for {{ notificationChannelName }}",
   "notifications.settings.title": "Notification Settings",
   "payments.a11yHint": "Go to the payments page",
+  "payments.missingPayments.body": "V\ufeffA pays benefits on the first day of the month for the previous month. Please wait at least 3 business days (Monday through Friday) before reporting non-receipt of a payment.\n\nTo report a missing payment, contact the Veterans Help Line. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.",
+  "payments.missingPayments.pageTitle": "Payment Missing",
   "payments.ifIAmMissingPayemt": "What if I'm missing a payment?",
   "payments.ifMyPaymentDoesNotLookRight": "What if my payment information doesn't look right?",
   "payments.pickerLabel": "Select a year",
