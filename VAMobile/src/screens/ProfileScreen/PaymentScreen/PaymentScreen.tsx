@@ -26,7 +26,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { standardMarginBetween, gutter, contentMarginTop } = theme.dimensions
-  const { currentPagePayments, currentPagePagination, loading, loadedPaymentsByYear } = useSelector<RootState, PaymentState>((state) => state.payments)
+  const { currentPagePayments, currentPagePagination, loading } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
   const noPayments = false // this will change when backend integration
 
