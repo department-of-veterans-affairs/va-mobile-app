@@ -5,16 +5,17 @@ import { isEmpty } from 'underscore'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { Box, LoadingComponent, TextView, TextViewProps, VAModalPicker, VAModalPickerProps, VAScrollView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, TextView, TextViewProps, VAModalPicker, VAModalPickerProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentState, getPayments } from 'store/slices'
-import { PaymentsByDate } from 'store/api'
+import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { RootState } from 'store'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentScreenProps = StackScreenProps<ProfileStackParamList, 'Payments'>
 
@@ -27,6 +28,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   const { standardMarginBetween, gutter, contentMarginTop } = theme.dimensions
   const { currentPagePayments, currentPagePagination, loading } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
+  const noPayments = false // this will change when backend integration
 
   useEffect(() => {
     dispatch(getPayments('2021', 1))
@@ -87,9 +89,9 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   }
 
   const getPaymentsData = (): ReactNode => {
-    const noPayments = !currentPagePayments || isEmpty(currentPagePayments)
+    const noCurrentPayments = !currentPagePayments || isEmpty(currentPagePayments)
 
-    if (noPayments) {
+    if (noCurrentPayments) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
           <></>
@@ -99,8 +101,16 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     return getGroupedPayments(newCurrentPagePayments, theme, { t, tc }, onPaymentPress, true, currentPagePagination)
   }
 
+  if (useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
+  }
+
   if (loading) {
     return <LoadingComponent text={t('payments.loading')} />
+  }
+
+  if (noPayments) {
+    return <NoPaymentsScreen />
   }
 
   return (
