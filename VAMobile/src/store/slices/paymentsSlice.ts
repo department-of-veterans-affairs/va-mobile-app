@@ -33,8 +33,238 @@ export const initialPaymentsState: PaymentState = {
   currentPagePagination: initialPaginationState,
 }
 
-function later(delay: number, value: PaymentsGetData) {
+function fakeApi(delay: number, year: string, page: number) {
+  const value = getDummyData(year, page)
   return new Promise((resolve) => setTimeout(resolve, delay, value))
+}
+
+function getDummyData(year: string, page: number) {
+  const Data21 = {
+    '1': {
+      data: [
+        {
+          id: '1',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-02-01T00:00:00.000-07:00',
+            amount: '$3,746.20',
+            payementType: 'Compensation & Pension - Recurring',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '2',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-02-01T00:00:00.000-06:00',
+            amount: '$1,172.60',
+            payementType: 'Post-9/11 GI Bill',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '3',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-03-01T00:00:00.000-06:00',
+            amount: '$3,746.20',
+            payementType: 'Compensation & Pension - Recurring',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '4',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-03-13T00:00:00.000-06:00',
+            amount: '$7,045.00',
+            payementType: 'Post 9/11 GI Bill Payment to School',
+            paymentMethod: 'Direct Deposit',
+            bank: null,
+            account: '*************    ',
+          },
+        },
+        {
+          id: '5',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-03-30T00:00:00.000-06:00',
+            amount: '$1,271.17',
+            payementType: 'Compensation & Pension - Retroactive',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '6',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-04-01T00:00:00.000-06:00',
+            amount: '$3,271.17',
+            payementType: 'Compensation & Pension - Retroactive',
+            paymentMethod: 'Paper Check',
+            bank: null,
+            account: null,
+          },
+        },
+        {
+          id: '7',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-05-01T00:00:00.000-06:00',
+            amount: '$3,271.17',
+            payementType: 'Compensation & Pension - Recurring',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '8',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-06-01T00:00:00.000-06:00',
+            amount: '$3,271.17',
+            payementType: 'Compensation & Pension - Recurring',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '9',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-07-01T00:00:00.000-06:00',
+            amount: '$3,271.17',
+            payementType: 'Compensation & Pension - Recurring',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '10',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-08-01T00:00:00.000-06:00',
+            amount: '$3,271.17',
+            payementType: 'Compensation & Pension - Recurring',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+      ],
+      meta: {
+        pagination: {
+          currentPage: 1,
+          perPage: 10,
+          totalEntries: 12,
+        },
+      },
+    },
+    '2': {
+      data: [
+        {
+          id: '1',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-01-01T00:00:00.000-07:00',
+            amount: '$3,746.20',
+            payementType: 'Compensation & Pension - Recurring',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '2',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2021-01-01T00:00:00.000-06:00',
+            amount: '$1,172.60',
+            payementType: 'Post-9/11 GI Bill',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+      ],
+      meta: {
+        pagination: {
+          currentPage: 2,
+          perPage: 10,
+          totalEntries: 12,
+        },
+      },
+    },
+  }
+  const Data22 = {
+    '1': {
+      data: [
+        {
+          id: '1',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2022-01-01T00:00:00.000-07:00',
+            amount: '$3,746.20',
+            payementType: 'Compensation & Pension - Recurring',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+        {
+          id: '2',
+          type: 'paymentHistoryInformation',
+          attributes: {
+            date: '2022-01-01T00:00:00.000-06:00',
+            amount: '$1,172.60',
+            payementType: 'Post-9/11 GI Bill',
+            paymentMethod: 'Direct Deposit',
+            bank: 'BANK OF AMERICA, N.A.',
+            account: '********0567',
+          },
+        },
+      ],
+      meta: {
+        pagination: {
+          currentPage: 1,
+          perPage: 10,
+          totalEntries: 2,
+        },
+      },
+    },
+  }
+  const dataEmpty = {
+    data: [],
+  }
+
+  if (year === '2021') {
+    if (page === 1) {
+      return Data21['1']
+    } else if (page === 2) {
+      return Data21['2']
+    } else {
+      return dataEmpty
+    }
+  } else if (year === '2022') {
+    if (page === 1) {
+      return Data22['1']
+    } else {
+      return dataEmpty
+    }
+  } else {
+    return dataEmpty
+  }
 }
 
 /**
@@ -61,90 +291,7 @@ export const getPayments =
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const paymentsList: any = await later(3000, {
-        data: [
-          {
-            id: '1',
-            type: 'paymentHistoryInformation',
-            attributes: {
-              date: '2021-02-01T00:00:00.000-07:00',
-              amount: '$3,746.20',
-              payementType: 'Compensation & Pension - Recurring',
-              paymentMethod: 'Direct Deposit',
-              bank: 'BANK OF AMERICA, N.A.',
-              account: '********0567',
-            },
-          },
-          {
-            id: '2',
-            type: 'paymentHistoryInformation',
-            attributes: {
-              date: '2021-02-01T00:00:00.000-06:00',
-              amount: '$1,172.60',
-              payementType: 'Post-9/11 GI Bill',
-              paymentMethod: 'Direct Deposit',
-              bank: 'BANK OF AMERICA, N.A.',
-              account: '********0567',
-            },
-          },
-          {
-            id: '3',
-            type: 'paymentHistoryInformation',
-            attributes: {
-              date: '2021-03-01T00:00:00.000-06:00',
-              amount: '$3,746.20',
-              payementType: 'Compensation & Pension - Recurring',
-              paymentMethod: 'Direct Deposit',
-              bank: 'BANK OF AMERICA, N.A.',
-              account: '********0567',
-            },
-          },
-          {
-            id: '4',
-            type: 'paymentHistoryInformation',
-            attributes: {
-              date: '2021-03-13T00:00:00.000-06:00',
-              amount: '$7,045.00',
-              payementType: 'Post 9/11 GI Bill Payment to School',
-              paymentMethod: 'Direct Deposit',
-              bank: null,
-              account: '*************    ',
-            },
-          },
-          {
-            id: '5',
-            type: 'paymentHistoryInformation',
-            attributes: {
-              date: '2021-03-30T00:00:00.000-06:00',
-              amount: '$1,271.17',
-              payementType: 'Compensation & Pension - Retroactive',
-              paymentMethod: 'Direct Deposit',
-              bank: 'BANK OF AMERICA, N.A.',
-              account: '********0567',
-            },
-          },
-          {
-            id: '6',
-            type: 'paymentHistoryInformation',
-            attributes: {
-              date: '2021-04-01T00:00:00.000-06:00',
-              amount: '$3,271.17',
-              payementType: 'Compensation & Pension - Retroactive',
-              paymentMethod: 'Paper Check',
-              bank: null,
-              account: null,
-            },
-          },
-        ],
-        meta: {
-          pagination: {
-            currentPage: 1,
-            perPage: 10,
-            totalEntries: 5,
-          },
-          dataFromStore: false,
-        },
-      })
+      const paymentsList: any = await fakeApi(3000, year, page)
 
       dispatch(dispatchFinishGetPayments({ payments: paymentsList, yearAndPage }))
     } catch (error) {

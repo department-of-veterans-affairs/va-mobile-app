@@ -3,9 +3,9 @@ import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { isEmpty } from 'underscore'
 import { useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 
-import { Box, ErrorComponent, LoadingComponent, TextView, TextViewProps, VAModalPicker, VAModalPickerProps, VAScrollView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextView, TextViewProps, VAModalPicker, VAModalPickerProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentState, getPayments } from 'store/slices'
 import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api'
@@ -29,10 +29,8 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   const { currentPagePayments, currentPagePagination, loading } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
   const noPayments = false // this will change when backend integration
-
-  useEffect(() => {
-    dispatch(getPayments('2021', 1))
-  }, [dispatch])
+  const todaysDate = DateTime.local()
+  const currentYear = todaysDate.get('year').toString()
 
   type yearsDatePickerOption = {
     label: string
@@ -41,9 +39,6 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   }
 
   const getPickerOptions = (): Array<yearsDatePickerOption> => {
-    const todaysDate = DateTime.local()
-    const currentYear = todaysDate.get('year').toString()
-
     return [
       {
         label: currentYear,
@@ -55,6 +50,11 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
         value: '2021',
         a11yLabel: '2021',
       },
+      {
+        label: '2020',
+        value: '2020',
+        a11yLabel: '2020',
+      },
     ]
   }
 
@@ -62,6 +62,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
     if (curSelectedRange) {
       setYearPickerOption(curSelectedRange)
+      fetchPayments(1, curSelectedRange.value)
     }
   }
 
@@ -70,7 +71,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   }
 
   const pickerOptions = getPickerOptions()
-  const [yearPickerOption, setYearPickerOption] = useState(pickerOptions[1])
+  const [yearPickerOption, setYearPickerOption] = useState(pickerOptions[0])
 
   const textViewProps: TextViewProps = {
     variant: 'MobileBody',
@@ -101,6 +102,40 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     return getGroupedPayments(newCurrentPagePayments, theme, { t, tc }, onPaymentPress, true, currentPagePagination)
   }
 
+  const fetchPayments = useCallback(
+    (requestedPage = 1, year: string = yearPickerOption.value) => {
+      // request the next page
+      dispatch(getPayments(year, requestedPage))
+    },
+    [dispatch, yearPickerOption.value],
+  )
+
+  // Render pagination for payments
+  const renderPagination = (): ReactNode => {
+    const page = currentPagePagination?.currentPage || 1
+    const paginationProps: PaginationProps = {
+      onNext: () => {
+        fetchPayments(page + 1)
+      },
+      onPrev: () => {
+        fetchPayments(page - 1)
+      },
+      totalEntries: currentPagePagination?.totalEntries || 0,
+      pageSize: currentPagePagination?.perPage || 0,
+      page,
+    }
+
+    return (
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
+      </Box>
+    )
+  }
+
+  useEffect(() => {
+    fetchPayments()
+  }, [dispatch, fetchPayments])
+
   if (useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
   }
@@ -126,6 +161,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
         </Box>
       </Box>
       {getPaymentsData()}
+      {renderPagination()}
     </VAScrollView>
   )
 }
