@@ -5,10 +5,11 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 
 import { DateTime } from 'luxon'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
-import { InitialState } from 'store/reducers'
+import { context, mockNavProps, mockStore, render } from 'testUtils'
+import { InitialState } from 'store/slices'
 import EstimatedDecisionDate from './EstimatedDecisionDate'
 import { AlertBox, TextView, VAButton } from 'components'
+import { RenderAPI } from '@testing-library/react-native'
 
 const mockExternalLinkSpy = jest.fn()
 
@@ -27,22 +28,15 @@ jest.mock('utils/hooks', () => {
 
 context('EstimatedDecisionDate', () => {
   let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
   const initializeTestCase = (maxEstDate: string, showCovidMessage: boolean): void => {
     props = mockNavProps({ maxEstDate, showCovidMessage })
 
-    store = mockStore({
-      ...InitialState,
-    })
-
-    act(() => {
-      component = renderWithProviders(<EstimatedDecisionDate {...props} />, store)
-    })
-
-    testInstance = component.root
+    component = render(<EstimatedDecisionDate {...props} />, { preloadedState: { ...InitialState } })
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -93,13 +87,13 @@ context('EstimatedDecisionDate', () => {
         })
 
         it('should show the message "Claim completion dates aren\'t available right now." instead of the date', async () => {
-          expect(textViews[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
+          expect(textViews[1].props.children).toEqual("Claim completion dates aren't available right now.")
         })
 
         it('should not show text after the no date message', async () => {
           expect(textViews.length).toEqual(2)
           expect(textViews[0].props.children).toEqual('Estimated decision date:')
-          expect(textViews[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
+          expect(textViews[1].props.children).toEqual("Claim completion dates aren't available right now.")
         })
       })
 
@@ -123,13 +117,13 @@ context('EstimatedDecisionDate', () => {
       })
 
       it('should show the message "Claim completion dates aren\'t available right now." instead of the date', async () => {
-        expect(textViews[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
+        expect(textViews[1].props.children).toEqual("Claim completion dates aren't available right now.")
       })
 
       it('should not show text after the no date message', async () => {
         expect(textViews.length).toEqual(2)
         expect(textViews[0].props.children).toEqual('Estimated decision date:')
-        expect(textViews[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
+        expect(textViews[1].props.children).toEqual("Claim completion dates aren't available right now.")
       })
     })
   })

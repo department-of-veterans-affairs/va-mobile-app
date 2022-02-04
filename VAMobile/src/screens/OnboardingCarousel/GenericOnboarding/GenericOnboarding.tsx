@@ -53,7 +53,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
         )}
         {listOfText && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={listOfText} bulletColor="contrast" />
+            <VABulletList listOfText={listOfText} />
           </Box>
         )}
       </Box>

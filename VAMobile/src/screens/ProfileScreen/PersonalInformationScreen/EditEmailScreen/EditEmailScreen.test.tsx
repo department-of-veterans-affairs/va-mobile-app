@@ -1,17 +1,17 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
 import EditEmailScreen from './EditEmailScreen'
 import { TextInput } from 'react-native'
 import Mock = jest.Mock
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-import { deleteEmail, updateEmail } from 'store/actions'
+import { deleteEmail, updateEmail } from 'store/slices'
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
@@ -25,8 +25,8 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
-jest.mock('../../../../store/actions', () => {
-  let actual = jest.requireActual('../../../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateEmail: jest.fn(() => {
@@ -46,7 +46,7 @@ jest.mock('../../../../store/actions', () => {
 
 context('EditEmailScreen', () => {
   let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onBackSpy: Mock
   let props: any
@@ -59,11 +59,11 @@ context('EditEmailScreen', () => {
 
     onBackSpy = jest.fn(() => {})
 
-    store = mockStore({
+    store ={
       ...InitialState,
       personalInformation: { ...InitialState.personalInformation, ...storeProps },
       errors: errorsState,
-    })
+    }
 
     props = mockNavProps(
       {},
@@ -79,11 +79,9 @@ context('EditEmailScreen', () => {
       },
     )
 
-    act(() => {
-      component = renderWithProviders(<EditEmailScreen {...props} />, store)
-    })
+    component = render(<EditEmailScreen {...props} />, { preloadedState: store })
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -110,7 +108,7 @@ context('EditEmailScreen', () => {
     it('should display an alertbox and field error', async () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my', id: '0' } } })
 
-      act(() => {
+      await waitFor(() => {
         navHeaderSpy.save.props.onSave()
       })
 
@@ -123,7 +121,7 @@ context('EditEmailScreen', () => {
     it('should display an alertbox and field error', async () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: '', id: '0' } } })
 
-      act(() => {
+      await waitFor(() => {
         navHeaderSpy.save.props.onSave()
       })
 
@@ -136,7 +134,7 @@ context('EditEmailScreen', () => {
     it('should call updateEmail', async () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' } } })
 
-      act(() => {
+      await waitFor(() => {
         navHeaderSpy.save.props.onSave()
       })
 

@@ -2,31 +2,28 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { act } from 'react-test-renderer'
 
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import PrepareForVideoVisit from './PrepareForVideoVisit'
 import { TextView } from 'components'
 
 context('PrepareForVideoVisit', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: any
   let props: any
 
   beforeEach(() => {
-    store = mockStore({
-      ...InitialState
-    })
-
     props = mockNavProps({}, { setOptions: jest.fn() })
 
-    act(() => {
-      component = renderWithProviders(<PrepareForVideoVisit {...props}/>, store)
+    component = render(<PrepareForVideoVisit {...props} />, {
+      preloadedState: {
+        ...InitialState,
+      },
     })
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

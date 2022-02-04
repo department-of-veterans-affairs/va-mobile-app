@@ -37,6 +37,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 jest.mock('react-native/Libraries/Linking/Linking', () => {
   return {
     addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
     openURL: jest.fn(() => Promise.resolve('')),
   }
 })
@@ -228,22 +229,22 @@ globalAny.fetch = jest.fn(() =>
 )
 
 jest.mock('react-native-notifications', () => {
-	return {
-		Notifications: {
-			events: jest.fn(() => {
-				return {
-					registerRemoteNotificationsRegistered: jest.fn(),
-					registerRemoteNotificationsRegistrationFailed: jest.fn(),
-					registerNotificationReceivedForeground: jest.fn(),
-					registerNotificationOpened: jest.fn(),
-					registerNotificationReceivedBackground: jest.fn(),
-				}
-			}),
-			getInitialNotification: jest.fn( ()=> {
-				return Promise.resolve()
-			})
-		},
-	}
+  return {
+    Notifications: {
+      events: jest.fn(() => {
+        return {
+          registerRemoteNotificationsRegistered: jest.fn(),
+          registerRemoteNotificationsRegistrationFailed: jest.fn(),
+          registerNotificationReceivedForeground: jest.fn(),
+          registerNotificationOpened: jest.fn(),
+          registerNotificationReceivedBackground: jest.fn(),
+        }
+      }),
+      getInitialNotification: jest.fn(() => {
+        return Promise.resolve()
+      }),
+    },
+  }
 })
 globalAny.FormData = () => ({
   append: jest.fn(),

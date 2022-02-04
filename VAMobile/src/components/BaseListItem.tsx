@@ -71,12 +71,20 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
           name={'CheckMark'}
           height={theme.dimensions.pickerModalSelectedIconHeight}
           width={theme.dimensions.pickerModalSelectedIconWidth}
-          fill={theme.colors.icon.grayDark}
+          fill={theme.colors.icon.pickerIcon}
           {...decoratorProps}
         />
       )
     default:
-      return <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={10} height={15} {...decoratorProps} />
+      return (
+        <VAIcon
+          name={'ArrowRight'}
+          fill={theme.colors.icon.chevronListItem}
+          width={theme.dimensions.chevronListItemWidth}
+          height={theme.dimensions.chevronListItemHeight}
+          {...decoratorProps}
+        />
+      )
   }
 }
 

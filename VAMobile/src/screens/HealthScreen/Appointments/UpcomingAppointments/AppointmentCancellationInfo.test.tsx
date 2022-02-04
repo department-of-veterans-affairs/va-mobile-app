@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import { act } from 'react-test-renderer'
 
 import { AppointmentData, AppointmentPhone, AppointmentStatus, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
@@ -11,7 +11,7 @@ import { ClickForActionLink, TextView, VAButton } from 'components'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
 context('AppointmentCancellationInfo', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: any
 
   let appointmentPhoneData = {
@@ -22,7 +22,7 @@ context('AppointmentCancellationInfo', () => {
 
   let appointmentLocationName = 'VA Long Beach Healthcare System'
 
-  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone, isCovidVaccine?: boolean): void => {
+  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone, isCovidVaccine = false): void => {
     const mockAppointment: AppointmentData = {
       ...defaultAppoinment,
       attributes: {
@@ -38,11 +38,9 @@ context('AppointmentCancellationInfo', () => {
       },
     }
 
-    act(() => {
-      component = renderWithProviders(<AppointmentCancellationInfo appointment={mockAppointment} />)
-    })
+    component = render(<AppointmentCancellationInfo appointment={mockAppointment} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

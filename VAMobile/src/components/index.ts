@@ -77,6 +77,8 @@ export { default as VAModalPicker } from './FormWrapper/FormFields/Picker/VAModa
 export * from './FormWrapper/FormFields/Picker/VAModalPicker'
 export { default as TextLineWithIcon } from './TextLineWithIcon'
 export * from './TextLineWithIcon'
+export { default as InlineTextWithIcons } from './InlineTextWithIcons'
+export * from './InlineTextWithIcons'
 export { default as SignoutButton } from './SignoutButton'
 export * from './SignoutButton'
 export { default as FocusedNavHeaderText } from './FocusedNavHeaderText'

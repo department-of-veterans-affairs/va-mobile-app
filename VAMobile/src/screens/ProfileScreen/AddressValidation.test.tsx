@@ -4,12 +4,11 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockStore, renderWithProviders, findByTestID } from 'testUtils'
+import { context, mockStore, render, findByTestID, RenderAPI } from 'testUtils'
 import AddressValidation from './AddressValidation'
-import { initialPersonalInformationState, InitialState } from 'store/reducers'
 import { AddressData, AddressValidationScenarioTypes, AddressValidationScenarioTypesConstants } from 'store/api/types'
 import { AccordionCollapsible, TextView, VASelector } from 'components'
-import { updateAddress } from 'store'
+import { updateAddress, initialPersonalInformationState, InitialState } from 'store/slices'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
 
 const mockAddress: AddressData = {
@@ -39,8 +38,8 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
-jest.mock('../../store/actions', () => {
-  let actual = jest.requireActual('../../store/actions')
+jest.mock('../../store/slices', () => {
+  let actual = jest.requireActual('../../store/slices')
   return {
     ...actual,
     updateAddress: jest.fn(() => {
@@ -53,25 +52,23 @@ jest.mock('../../store/actions', () => {
 })
 
 context('AddressValidation', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
+
   let testInstance: ReactTestInstance
 
   const prepInstanceWithStore = (addressValidationScenario: AddressValidationScenarioTypes = AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE) => {
-    store = mockStore({
-      ...InitialState,
-      personalInformation: {
-        ...initialPersonalInformationState,
-        addressValidationScenario,
-        addressData: mockAddress,
+    component = render(<AddressValidation addressEntered={mockAddress} addressId={12345} />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: {
+          ...initialPersonalInformationState,
+          addressValidationScenario,
+          addressData: mockAddress,
+        },
       },
     })
 
-    act(() => {
-      component = renderWithProviders(<AddressValidation addressEntered={mockAddress} addressId={12345} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

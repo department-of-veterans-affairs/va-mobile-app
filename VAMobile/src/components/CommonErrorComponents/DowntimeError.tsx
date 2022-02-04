@@ -1,11 +1,12 @@
-import { ErrorsState, StoreState } from 'store'
 import { ViewStyle } from 'react-native'
-import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
 import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
+import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { useSelector } from 'react-redux'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
@@ -20,7 +21,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.main,
   }
 
   const containerStyles = {
@@ -28,7 +28,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const feature = DowntimeScreenIDToFeature[screenID]
   const featureName = downtimeWindowsByFeature[feature]?.featureName
   const endTime = downtimeWindowsByFeature[feature]?.endTime.toFormat('fff')
@@ -42,7 +42,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
           text={t('downtime.message', { featureName, endTime })}
           textA11yLabel={t('downtime.message', { featureName, endTime })}
           border="warning"
-          background="noCardBackground"
         />
       </Box>
     </VAScrollView>

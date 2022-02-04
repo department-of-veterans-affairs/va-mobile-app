@@ -37,10 +37,10 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox text={error} border="error" background="noCardBackground" />
+            <AlertBox text={error} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('fileUpload.uploadFileUsingCamera')}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
@@ -54,7 +54,6 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
             title={t('fileUpload.accessibilityAlert.title')}
             text={t('fileUpload.accessibilityAlert.body')}
             border="informational"
-            background="noCardBackground"
             textA11yLabel={t('fileUpload.accessibilityAlert.body.a11y')}
           />
         </Box>

@@ -4,12 +4,12 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import Carousel from './Carousel'
-import {TextView} from '../index'
+import { TextView } from '../index'
 
 context('Carousel', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let t = jest.fn(() => {})
 
@@ -17,11 +17,12 @@ context('Carousel', () => {
     return <TextView>Test Component</TextView>
   }
 
-  beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<Carousel screenList={[ { name: 'TestComponent', component: TestComponent } ]} onCarouselEnd={() => {}} translation={t} />)
+  beforeEach(async () => {
+    await waitFor(() => {
+      component = render(<Carousel screenList={[{ name: 'TestComponent', component: TestComponent }]} onCarouselEnd={() => {}} translation={t} />)
     })
-    testInstance = component.root
+
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

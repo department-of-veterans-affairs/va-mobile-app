@@ -78,7 +78,7 @@ const VASelector: FC<VASelectorProps> = ({
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
-      return <VAIcon name="ErrorCheckBox" width={selectorWidth} height={selectorHeight} {...testIdProps('ErrorCheckBox')} />
+      return <VAIcon name="ErrorCheckBox" width={selectorWidth} height={selectorHeight} stroke={theme.colors.icon.error} {...testIdProps('ErrorCheckBox')} />
     }
 
     const filledName = selectorType === SelectorType.Checkbox ? 'FilledCheckBox' : 'FilledRadio'

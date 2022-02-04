@@ -6,26 +6,19 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
-import { context, renderWithProviders, mockStore } from 'testUtils'
-import DowntimeError from "./DowntimeError";
-import Mock = jest.Mock;
+import { context, render, RenderAPI } from 'testUtils'
+import DowntimeError from './DowntimeError'
+import Mock = jest.Mock
 
 context('DowntimeError', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onTryAgainSpy: Mock
 
   beforeEach(() => {
-    store = mockStore({})
+    component = render(<DowntimeError screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />)
 
-    act(() => {
-      component = renderWithProviders(
-        <DowntimeError screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />,
-        store
-      )
-    })
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

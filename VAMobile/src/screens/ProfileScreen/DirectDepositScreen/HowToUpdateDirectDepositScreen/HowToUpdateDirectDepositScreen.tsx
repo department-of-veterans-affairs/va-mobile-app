@@ -19,11 +19,11 @@ const HowToUpdateDirectDepositScreen: FC = () => {
       <VAScrollView {...testIdProps('Direct-deposit: How-to-update-direct-deposit-page')}>
         <ProfileBanner />
         <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
-          <AlertBox title={t('howToUpdateDirectDeposit.alert.title')} border="warning" background="noCardBackground" text={t('howToUpdateDirectDeposit.alert.body')} />
+          <AlertBox title={t('howToUpdateDirectDeposit.alert.title')} border="warning" text={t('howToUpdateDirectDeposit.alert.body')} />
         </Box>
         <Box mt={standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
               {t('howToUpdateDirectDeposit.card.title')}
             </TextView>
             <Box mt={standardMarginBetween}>

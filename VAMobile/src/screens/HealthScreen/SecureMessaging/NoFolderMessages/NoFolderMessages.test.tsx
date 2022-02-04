@@ -4,52 +4,51 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders} from 'testUtils'
-import {TextView, VAButton} from 'components'
+import { context, render, RenderAPI } from 'testUtils'
+import { TextView, VAButton } from 'components'
 import NoFolderMessages from './NoFolderMessages'
-import {updateSecureMessagingTab} from 'store/actions'
+import { updateSecureMessagingTab } from 'store/slices'
+import { when } from 'jest-when'
 
-jest.mock('../../../../store/actions', () => {
-  let actual = jest.requireActual('../../../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
 const mockNavigationSpy = jest.fn()
-jest.mock('../../../../utils/hooks', () => {
-  const original = jest.requireActual('../../../../utils/hooks')
-  const theme = jest.requireActual('../../../../styles/themes/standardTheme').default
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
 context('NoFolderMessages', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
+  const mockNavigateToSpy = jest.fn()
 
   const initializeTestInstance = () => {
-    act(() => {
-      component = renderWithProviders(
-        <NoFolderMessages folderName={'test'} />, store
-      )
-    })
+    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('SecureMessaging').mockReturnValue(mockNavigateToSpy)
+    mockNavigationSpy.mockReturnValueOnce(() => {}).mockReturnValueOnce(mockNavigateToSpy)
+    component = render(<NoFolderMessages folderName={'test'} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -62,31 +61,27 @@ context('NoFolderMessages', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe('You don\'t have any messages in your test folder')
+    expect(texts[0].props.children).toBe("You don't have any messages in your test folder")
   })
 
   describe('on click of the go to inbox button', () => {
     it('should call updateSecureMessagingTab and useRouteNavigation', async () => {
       testInstance.findByType(VAButton).props.onPress()
       expect(updateSecureMessagingTab).toHaveBeenCalled()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 })
 
 context('NoDrafts', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
+  const mockNavigateToSpy = jest.fn()
 
   const initializeTestInstance = () => {
-    act(() => {
-      component = renderWithProviders(
-        <NoFolderMessages folderName={'Drafts'} />, store
-      )
-    })
-
-    testInstance = component.root
+    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('SecureMessaging').mockReturnValue(mockNavigateToSpy)
+    component = render(<NoFolderMessages folderName={'Drafts'} />)
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -99,14 +94,14 @@ context('NoDrafts', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe('You don\'t have any drafts in your Drafts folder')
+    expect(texts[0].props.children).toBe("You don't have any drafts in your Drafts folder")
   })
 
   describe('on click of the go to inbox button', () => {
     it('should call updateSecureMessagingTab and useRouteNavigation', async () => {
       testInstance.findByType(VAButton).props.onPress()
       expect(updateSecureMessagingTab).toHaveBeenCalled()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 })

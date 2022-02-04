@@ -2,14 +2,14 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 
 import AppealPhase from './AppealPhase'
-import {AppealEventTypes} from 'store/api/types'
-import {TextView} from 'components'
+import { AppealEventTypes } from 'store/api/types'
+import { TextView } from 'components'
 
 context('AppealPhase', () => {
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
@@ -18,18 +18,16 @@ context('AppealPhase', () => {
       event: {
         date: '2015-04-24',
         type,
-      }
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<AppealPhase {...props} />)
-    })
+    component = render(<AppealPhase {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
-   initializeTestInstance('claim_decision')
+    initializeTestInstance('claim_decision')
   })
 
   it('should initialize', async () => {
@@ -80,7 +78,7 @@ context('AppealPhase', () => {
   describe('when the type is certified', () => {
     it('should display "Your appeal was sent to the Board of Veterans\' Appeals" as the phase header', async () => {
       initializeTestInstance('certified')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your appeal was sent to the Board of Veterans\' Appeals')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual("Your appeal was sent to the Board of Veterans' Appeals")
     })
   })
 
@@ -108,7 +106,7 @@ context('AppealPhase', () => {
   describe('when the type is bva_decision', () => {
     it('should display "Board of Veterans\' Appeals made a decision" as the phase header', async () => {
       initializeTestInstance('bva_decision')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Board of Veterans\' Appeals made a decision')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual("Board of Veterans' Appeals made a decision")
     })
   })
 
@@ -122,7 +120,7 @@ context('AppealPhase', () => {
   describe('when the type is remand_return', () => {
     it('should display "Your appeal was returned to the Board of Veterans\' Appeals" as the phase header', async () => {
       initializeTestInstance('remand_return')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your appeal was returned to the Board of Veterans\' Appeals')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual("Your appeal was returned to the Board of Veterans' Appeals")
     })
   })
 
@@ -185,7 +183,7 @@ context('AppealPhase', () => {
   describe('when the type is vacated', () => {
     it('should display "Board of Veterans\' Appeals vacated a previous decision" as the phase header', async () => {
       initializeTestInstance('vacated')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Board of Veterans\' Appeals vacated a previous decision')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual("Board of Veterans' Appeals vacated a previous decision")
     })
   })
 

@@ -149,7 +149,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <TextView flex={1}>{currentlySelectedOption?.label}</TextView>
           <Box pr={theme.dimensions.buttonPadding}>
-            <VAIcon name="DatePickerArrows" fill="grayDark" width={16} height={16} />
+            <VAIcon name="DatePickerArrows" fill="pickerIcon" width={16} height={16} />
           </Box>
         </Box>
       </Box>
@@ -195,7 +195,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const actionsBarBoxProps: BoxProps = {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'main',
+    backgroundColor: 'pickerControls',
     minHeight: theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.gutter,
@@ -240,7 +240,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                 <TextView allowFontScaling={false}>{cancelLabel}</TextView>
               </Pressable>
               <Box flex={4}>
-                <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
+                <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign={'center'} allowFontScaling={false}>
                   {t(labelKey || '')}
                 </TextView>
               </Box>

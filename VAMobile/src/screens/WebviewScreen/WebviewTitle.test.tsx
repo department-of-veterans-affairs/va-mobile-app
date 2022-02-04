@@ -2,21 +2,19 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 
 import WebviewTitle from './WebviewTitle'
 import { TextView } from 'components'
 
 context('WebviewTitle', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<WebviewTitle title={'my title'} />)
-    })
+    component = render(<WebviewTitle title={'my title'} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

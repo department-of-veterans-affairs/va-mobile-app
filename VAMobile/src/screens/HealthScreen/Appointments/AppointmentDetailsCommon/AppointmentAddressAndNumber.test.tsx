@@ -2,16 +2,15 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import { ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'
 import { AppointmentAddress } from 'store/api/types'
 
 context('AppointmentAddressAndNumber', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
@@ -22,7 +21,7 @@ context('AppointmentAddressAndNumber', () => {
     zipCode: '90822',
   }
 
-  const initializeTestInstance = (appointmentType: string, address: AppointmentAddress | undefined): void => {
+  const initializeTestInstance = async (appointmentType: string, address: AppointmentAddress | undefined): Promise<void> => {
     props = mockNavProps({
       appointmentType,
       healthcareService: 'Rehabilitation Clinic',
@@ -37,19 +36,19 @@ context('AppointmentAddressAndNumber', () => {
       },
     })
 
-    store = mockStore({
-      ...InitialState,
+    await waitFor(() => {
+      component = render(<AppointmentAddressAndNumber {...props} />, {
+        preloadedState: {
+          ...InitialState,
+        },
+      })
     })
 
-    act(() => {
-      component = renderWithProviders(<AppointmentAddressAndNumber {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
-  beforeEach(() => {
-    initializeTestInstance('VA', addressData)
+  beforeEach(async () => {
+    await initializeTestInstance('VA', addressData)
   })
 
   it('initializes correctly', async () => {
@@ -58,7 +57,7 @@ context('AppointmentAddressAndNumber', () => {
 
   describe('when the appointment type is not VA/CC/at VA location/ATLAS', () => {
     it('should not render any TextViews', async () => {
-      initializeTestInstance('VA_VIDEO_CONNECT_HOME', addressData)
+      await initializeTestInstance('VA_VIDEO_CONNECT_HOME', addressData)
       expect(testInstance.findAllByType(TextView).length).toEqual(0)
     })
   })
@@ -71,7 +70,7 @@ context('AppointmentAddressAndNumber', () => {
 
   describe('when the appointmentType is VA_VIDEO_CONNECT_ONSITE', () => {
     it('should display the healthcareService', async () => {
-      initializeTestInstance('VA_VIDEO_CONNECT_ONSITE', addressData)
+      await initializeTestInstance('VA_VIDEO_CONNECT_ONSITE', addressData)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Rehabilitation Clinic')
     })
   })
@@ -98,7 +97,7 @@ context('AppointmentAddressAndNumber', () => {
 
   describe('when the address does not exist', () => {
     it('should not display the address TextViews', async () => {
-      initializeTestInstance('VA', undefined)
+      await initializeTestInstance('VA', undefined)
       expect(testInstance.findAllByType(TextView).length).toEqual(7)
     })
   })

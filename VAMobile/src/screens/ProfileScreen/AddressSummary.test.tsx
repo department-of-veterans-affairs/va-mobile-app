@@ -1,32 +1,29 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import { context, mockStore, renderWithProviders } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, mockStore, render, RenderAPI } from 'testUtils'
 
-import AddressSummary, {addressDataField, profileAddressOptions} from './AddressSummary'
+import AddressSummary, { addressDataField, profileAddressOptions } from './AddressSummary'
 import Mock = jest.Mock
-import {AddressData, UserDataProfile} from 'store/api/types'
+import { AddressData, UserDataProfile } from 'store/api/types'
 import { TextView } from 'components'
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import { Pressable } from 'react-native'
 
-const initializeWithUpdatedData = (component: any, profile: UserDataProfile, addressData: Array<addressDataField>): ReactTestInstance => {
-  const store = mockStore({
-    ...InitialState,
-    personalInformation: { ...InitialState.personalInformation, profile }
+const initializeWithUpdatedData = (component: RenderAPI, profile: UserDataProfile, addressData: Array<addressDataField>): ReactTestInstance => {
+  component = render(<AddressSummary addressData={addressData} />, {
+    preloadedState: {
+      ...InitialState,
+      personalInformation: { ...InitialState.personalInformation, profile },
+    },
   })
 
-  act(() => {
-    component = renderWithProviders(<AddressSummary addressData={addressData} />, store)
-  })
-
-  return component.root
+  return component.container
 }
 
 context('AddressSummary', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let addressData: any
   let onPressSpy: Mock
   let onPressSpy2: Mock
@@ -115,16 +112,14 @@ context('AddressSummary', () => {
       { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onPressSpy2 },
     ]
 
-    store = mockStore({
-      ...InitialState,
-      personalInformation: { ...InitialState.personalInformation, profile }
+    component = render(<AddressSummary addressData={addressData} />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: { ...InitialState.personalInformation, profile },
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<AddressSummary addressData={addressData} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

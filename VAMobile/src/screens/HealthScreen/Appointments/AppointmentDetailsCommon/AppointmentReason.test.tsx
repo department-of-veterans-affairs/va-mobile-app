@@ -2,15 +2,14 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders, findByTypeWithSubstring } from 'testUtils'
+import { context, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
 
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import AppointmentReason from './AppointmentReason'
 
-context('AppointmentTypeAndDate', () => {
-  let store: any
-  let component: any
+context('AppointmentReason', () => {
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
   let reasonText = 'New Issue: 22.4.55'
@@ -20,15 +19,13 @@ context('AppointmentTypeAndDate', () => {
       reason: reason,
     })
 
-    store = mockStore({
-      ...InitialState,
+    component = render(<AppointmentReason {...props} />, {
+      preloadedState: {
+        ...InitialState,
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<AppointmentReason {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

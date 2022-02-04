@@ -14,7 +14,7 @@ const AppealIssues: FC<AppealsIssuesProps> = ({ issues }) => {
 
   return (
     <TextArea {...testIdProps('Your-appeal: Issues-tab-appeal-details-page')}>
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
+      <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
         {t('appealDetails.currentlyOnAppeal')}
       </TextView>
       <VABulletList listOfText={issues} />

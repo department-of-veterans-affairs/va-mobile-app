@@ -1,11 +1,11 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, renderWithProviders, mockNavProps } from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, render, mockNavProps, RenderAPI } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import WhatDoIDoIfDisagreement from './WhatDoIDoIfDisagreement'
-import {TextView} from 'components'
+import { TextView } from 'components'
 
 const mockExternalLinkSpy = jest.fn()
 
@@ -23,17 +23,15 @@ jest.mock('utils/hooks', () => {
 })
 
 context('WhatDoIDoIfDisagreement', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
     const props = mockNavProps(undefined, { setOptions: jest.fn() })
 
-    act(() => {
-      component = renderWithProviders(<WhatDoIDoIfDisagreement {...props} />)
-    })
+    component = render(<WhatDoIDoIfDisagreement {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
