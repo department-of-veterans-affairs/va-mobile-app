@@ -15,7 +15,7 @@ import { getTestIDFromTextLines } from './accessibility'
  */
 export const groupPaymentsByDate = (paymentsList?: PaymentsList): PaymentsByDate => {
   const paymentsByDate = groupBy(paymentsList || [], (payment) => {
-    return payment.attributes.date
+    return getFormattedDate(payment.attributes.date, 'yyyy-MM-dd')
   })
 
   return paymentsByDate
@@ -99,7 +99,7 @@ export const getGroupedPayments = (
     const listItems = getListItemsForPayments(listOfPayments, translations, onPaymentPress, paymentsPageMetaData, groupIdx)
 
     groupIdx = groupIdx + listItems.length
-    const displayedDate = getFormattedDate(new Date(date).toISOString(), 'MMMM dd, yyyy')
+    const displayedDate = getFormattedDate(date, 'MMMM d, yyyy')
     return (
       <Box key={date} mb={theme.dimensions.standardMarginBetween}>
         <DefaultList items={listItems} title={displayedDate} />

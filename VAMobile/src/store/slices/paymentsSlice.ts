@@ -67,7 +67,7 @@ export const getPayments =
             id: '1',
             type: 'paymentHistoryInformation',
             attributes: {
-              date: '2021-02-01T00:00:00.000-06:00',
+              date: '2021-02-01T00:00:00.000-07:00',
               amount: '$3,746.20',
               payementType: 'Compensation & Pension - Recurring',
               paymentMethod: 'Direct Deposit',
@@ -107,7 +107,7 @@ export const getPayments =
               amount: '$7,045.00',
               payementType: 'Post 9/11 GI Bill Payment to School',
               paymentMethod: 'Direct Deposit',
-              bank: 'null',
+              bank: null,
               account: '*************    ',
             },
           },
@@ -121,6 +121,18 @@ export const getPayments =
               paymentMethod: 'Direct Deposit',
               bank: 'BANK OF AMERICA, N.A.',
               account: '********0567',
+            },
+          },
+          {
+            id: '6',
+            type: 'paymentHistoryInformation',
+            attributes: {
+              date: '2021-04-01T00:00:00.000-06:00',
+              amount: '$3,271.17',
+              payementType: 'Compensation & Pension - Retroactive',
+              paymentMethod: 'Paper Check',
+              bank: null,
+              account: null,
             },
           },
         ],
@@ -141,6 +153,15 @@ export const getPayments =
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
+  }
+
+/**
+ * Redux action to get a single payment
+ */
+export const getPayment =
+  (appointmentID: string): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchGetPayment(appointmentID))
   }
 
 /**
@@ -169,8 +190,15 @@ const paymentstSlice = createSlice({
       state.error = error
       state.loading = false
     },
+    dispatchGetPayment: (state, action: PayloadAction<string>) => {
+      const paymentId = action.payload
+      const { paymentsById = {} } = state
+      const payment: PaymentsData = paymentsById[paymentId]
+
+      state.payment = payment
+    },
   },
 })
 
-export const { dispatchFinishGetPayments, dispatchStartGetPayments } = paymentstSlice.actions
+export const { dispatchFinishGetPayments, dispatchStartGetPayments, dispatchGetPayment } = paymentstSlice.actions
 export default paymentstSlice.reducer

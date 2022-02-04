@@ -4,7 +4,7 @@ export type PaymentsAttributeData = {
   payementType: string
   paymentMethod: string
   bank: string | null
-  account: string
+  account: string | null
 }
 
 export type PaymentsList = Array<PaymentsData>
