@@ -41,3 +41,5 @@ export const SnackBarConstants: {
   animationDuration: 100,
   duration: 900000,
 }
+
+export const DIRECT_DEPOSIT = 'Direct Deposit'
