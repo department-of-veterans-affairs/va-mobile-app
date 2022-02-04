@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { isEmpty } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -32,10 +33,6 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   useEffect(() => {
     dispatch(getPayments('2021', 1))
   }, [dispatch])
-
-  const redirectLink = (): void => {
-    // launchExternalLink(LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT)
-  }
 
   type yearsDatePickerOption = {
     label: string
@@ -80,7 +77,6 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     textDecoration: 'underline',
     textDecorationColor: 'link',
     color: 'link',
-    onPress: redirectLink,
     accessibilityRole: 'link',
     ...testIdProps(t('payments.ifIAmMissingPayemt')),
   }
@@ -121,7 +117,9 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     <VAScrollView>
       <Box {...testIdProps('', false, 'payments-page')}>
         <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
-          <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
+          <Pressable onPress={navigateTo('PaymentMissing')} {...testIdProps(t('payments.ifIAmMissingPayemt'))} accessibilityRole="link" accessible={true}>
+            <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
+          </Pressable>
         </Box>
         <Box mx={gutter} mb={standardMarginBetween}>
           <VAModalPicker {...pickerProps} />

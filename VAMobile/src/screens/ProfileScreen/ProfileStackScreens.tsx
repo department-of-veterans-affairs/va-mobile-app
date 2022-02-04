@@ -19,6 +19,7 @@ import MilitaryInformationScreen from './MilitaryInformationScreen'
 import NotificationsSettingsScreen from './SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import PaymentDetailsScreen from './PaymentScreen/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentIssue from './PaymentScreen/PaymentIssueScreen/PaymentIssueScreen'
+import PaymentMissing from './PaymentScreen/PaymentMissingSceen/PaymentMissingScreen'
 import PaymentScreen from './PaymentScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import SettingsScreen from './SettingsScreen'
@@ -52,6 +53,7 @@ export type ProfileStackParamList = {
     paymentID: string
   }
   PaymentIssue: undefined
+  PaymentMissing: undefined
 }
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
@@ -92,5 +94,6 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'Payments'} name="Payments" component={PaymentScreen} options={{ title: t('home:payments.title') }} />,
     <ProfileStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ title: t('paymentDetails.title') }} />,
     <ProfileStack.Screen key={'PaymentIssue'} name="PaymentIssue" component={PaymentIssue} />,
+    <ProfileStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} />,
   ]
 }
