@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type PaymentScreenProps = StackScreenProps<ProfileStackParamList, 'Payments'>
 
@@ -22,6 +22,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const { standardMarginBetween, gutter, contentMarginTop } = theme.dimensions
   const { currentPagePayments, currentPagePagination, loading } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
@@ -65,6 +66,10 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     }
   }
 
+  const onPaymentPress = (paymentID: string): void => {
+    navigateTo('PaymentDetails', { paymentID })()
+  }
+
   const pickerOptions = getPickerOptions()
   const [yearPickerOption, setYearPickerOption] = useState(pickerOptions[1])
 
@@ -95,7 +100,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
         </Box>
       )
     }
-    return getGroupedPayments(newCurrentPagePayments, theme, { t, tc }, () => {}, true, currentPagePagination)
+    return getGroupedPayments(newCurrentPagePayments, theme, { t, tc }, onPaymentPress, true, currentPagePagination)
   }
 
   if (loading) {
