@@ -62,7 +62,7 @@ context('MilitaryInformationScreen', () => {
       const profileBanner = testInstance.findAllByType(ProfileBanner)
       expect(profileBanner).toBeTruthy()
 
-      const header = findByTestID(testInstance, 'period-of-service')
+      const header = findByTestID(testInstance, 'Period of service')
       expect(header.props.children).toBe('Period of service')
 
       const texts = testInstance.findAllByType(TextView)
