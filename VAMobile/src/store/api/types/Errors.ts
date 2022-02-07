@@ -58,7 +58,7 @@ export const DowntimeFeatureTypeConstants: {
   secureMessaging: DowntimeFeatureType
   appointments: DowntimeFeatureType
   userProfileUpdate: DowntimeFeatureType
-  paymentHistory: DowntimeFeatureType
+  payments: DowntimeFeatureType
 } = {
   facilityLocator: 'facility_locator',
   authDSLogon: 'auth_dslogon',
@@ -73,7 +73,7 @@ export const DowntimeFeatureTypeConstants: {
   secureMessaging: 'secure_messaging',
   appointments: 'appointments',
   userProfileUpdate: 'user_profile_update',
-  paymentHistory: 'payment_history',
+  payments: 'payment_history',
 }
 
 // Friendly names shown in downtime messages
@@ -88,7 +88,7 @@ export const DowntimeFeatureNameConstants = {
   [DowntimeFeatureTypeConstants.militaryServiceHistory]: 'Military Service History',
   [DowntimeFeatureTypeConstants.appeals]: 'Appeals',
   [DowntimeFeatureTypeConstants.userProfileUpdate]: 'Personal Information',
-  [DowntimeFeatureTypeConstants.paymentHistory]: 'Payment History',
+  [DowntimeFeatureTypeConstants.payments]: 'Payments',
 }
 
 // which screen to show which downtime message on
@@ -104,7 +104,7 @@ export const DowntimeFeatureToScreenID = {
   // it was determined that claims and appeals would be interconnected and downtime for either would block both
   [DowntimeFeatureTypeConstants.appeals]: ScreenIDTypesConstants.CLAIMS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.userProfileUpdate]: ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.paymentHistory]: ScreenIDTypesConstants.PAYMENTS_SCREEN_ID,
+  [DowntimeFeatureTypeConstants.payments]: ScreenIDTypesConstants.PAYMENTS_SCREEN_ID,
 }
 
 export const DowntimeScreenIDToFeature: DowntimeScreenIDToFeatureType = invert(DowntimeFeatureToScreenID)
