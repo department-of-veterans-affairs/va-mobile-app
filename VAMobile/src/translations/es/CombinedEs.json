@@ -1,0 +1,21 @@
+{
+"claimsAndAppeals.subText":"Revise su estado de reclamo o apelación",
+"claimsAndAppeals.title":"Reclamaciones y apelaciones",
+"contactVA.a11yHint":"Ir a la página de información de contacto V-A",
+"contactVA.title":"Contacto VA",
+"contactVA.title.a11yLabel":"Contacto V-A",
+"coronavirusFaqs.a11yHint":"Obtenga las últimas actualizaciones COVID-19",
+"coronavirusFaqs.title":"V\ufeffA COVID-19 Actualizaciones",
+"findLocation.a11yHint":"Ir al localizador de instalaciones V-A",
+"findLocation.title":"Encontrar una ubicación de VA",
+"findLocation.titleA11yLabel":"Encuentra una ubicación V-A",
+"greetings.afternoon":"Buenas tardes",
+"greetings.evening":"Buenas noches",
+"greetings.morning":"Buenos días",
+"healthCare.subText":"Revise sus citas, envíe mensajes y obtenga sus registros de vacunas.",
+"healthCare.title":"Cuidado de la salud",
+"letters.subText":"Descargar letras y documentos comunes VA",
+"letters.title":"Letras",
+"title":"Casa",
+"webview.vagov":"Va.gov"
+}
