@@ -13,6 +13,13 @@ export const englishFunctions: newFunctions = {
     filled: filled,
 }
 
+
+/**
+ * 
+ * @param featureName fiejfoiejf
+ * @param endTime 
+ * @returns 
+ */
 function downtimeMessage(featureName: string, endTime: Date)
 {
     return featureName + " on V\ufeffA mobile app is currently unavailable. We’re working to fix this. We intend to restore this by " + endTime + ". Please check back soon.";
