@@ -86,7 +86,6 @@ export type AppointmentsState = {
   loadingAppointmentCancellation: boolean
   appointmentCancellationStatus?: AppointmentCancellationStatusTypes
   error?: Error
-  appointment?: AppointmentData
   currentPageAppointmentsByYear: CurrentPageAppointmentsByYear
   upcomingAppointmentsById?: AppointmentsMap
   pastAppointmentsById?: AppointmentsMap
@@ -108,7 +107,6 @@ export const initialAppointmentsState: AppointmentsState = {
   loading: false,
   loadingAppointmentCancellation: false,
   appointmentCancellationStatus: undefined,
-  appointment: {} as AppointmentData,
   upcomingAppointmentsById: {} as AppointmentsMap,
   pastAppointmentsById: {} as AppointmentsMap,
   upcomingVaServiceError: false,
@@ -549,19 +547,16 @@ export const cancelAppointment =
   }
 
 /**
- * Redux action to get a single appointment
+ * Redux action to track appointment details
  */
-export const getAppointment =
-  (appointmentID: string): AppThunk =>
-  async (dispatch, getState) => {
-    await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
-    const [totalTime] = getAnalyticsTimers(getState())
-    await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
-    await registerReviewEvent()
-    await dispatch(resetAnalyticsActionStart())
-    await dispatch(setAnalyticsTotalTimeStart())
-    dispatch(dispatchGetAppointment(appointmentID))
-  }
+export const trackAppointmentDetail = (): AppThunk => async (dispatch, getState) => {
+  await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+  const [totalTime] = getAnalyticsTimers(getState())
+  await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
+  await registerReviewEvent()
+  await dispatch(resetAnalyticsActionStart())
+  await dispatch(setAnalyticsTotalTimeStart())
+}
 
 /**
  * Redux action to reset appointment cancellation state
@@ -647,14 +642,6 @@ const appointmentsSlice = createSlice({
       state.paginationByTimeFrame.pastThreeMonths = pastAppointmentsPagination
     },
 
-    dispatchGetAppointment: (state, action: PayloadAction<string>) => {
-      const appointmentID = action.payload
-      const { upcomingAppointmentsById = {}, pastAppointmentsById = {} } = state
-      const appointment: AppointmentData = upcomingAppointmentsById[appointmentID] || pastAppointmentsById[appointmentID]
-
-      state.appointment = appointment
-    },
-
     dispatchStartCancelAppointment: (state) => {
       state.loadingAppointmentCancellation = true
     },
@@ -726,7 +713,6 @@ export const {
   dispatchFinishPrefetchAppointments,
   dispatchStartPrefetchAppointments,
   dispatchStartGetAppointmentsInDateRange,
-  dispatchGetAppointment,
   dispatchStartCancelAppointment,
   dispatchClearAppointmentCancellation,
   dispatchClearLoadedAppointments,
