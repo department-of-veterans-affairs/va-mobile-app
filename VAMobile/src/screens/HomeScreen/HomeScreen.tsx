@@ -3,20 +3,19 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
-import { DateTime } from 'luxon'
+import { Functions } from 'translations/newFunctions'
 import { HomeStackParamList } from './HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
+import { Language } from 'utils/i18nTest'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
-import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { stringToTitleCase } from 'utils/formattingUtils'
+import { resources } from 'utils/i18n'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
-import { resources } from '../../utils/i18n';
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -24,8 +23,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  //const t = useTranslation(NAMESPACE.HOME)
-  const Language = resources.en.jonTest
+
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
@@ -46,10 +44,10 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   const onClaimsAndAppeals = navigateTo('ClaimsTab')
   const onContactVA = navigateTo('ContactVA')
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: Language["webview.vagov"] })
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: Language.strings['webview.vagov'] })
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: Language["webview.vagov"] })
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: Language.strings['webview.vagov'] })
   }
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
@@ -57,29 +55,21 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   const buttonDataList: Array<SimpleListItemObj> = [
     {
-      text: Language["findLocation.title"],
-      a11yHintText: Language["findLocation.a11yHint"],
+      text: Language.strings['findLocation.title'],
+      a11yHintText: Language.strings['findLocation.a11yHint'],
       onPress: onFacilityLocator,
-      testId: Language["findLocation.titleA11yLabel"],
+      testId: Language.strings['findLocation.titleA11yLabel'],
     },
-    { text: Language["contactVA.title"], a11yHintText: Language["contactVA.a11yHint"], onPress: onContactVA, testId: Language["contactVA.title.a11yLabel"] },
-    { text: Language["coronavirusFaqs.title"], a11yHintText: Language["coronavirusFaqs.a11yHint"], onPress: onCoronaVirusFAQ },
+    {
+      text: Language.strings['contactVA.title'],
+      a11yHintText: Language.strings['contactVA.a11yHint'],
+      onPress: onContactVA,
+      testId: Language.strings['contactVA.title.a11yLabel'],
+    },
+    { text: Language.strings['coronavirusFaqs.title'], a11yHintText: Language.strings['coronavirusFaqs.a11yHint'], onPress: onCoronaVirusFAQ },
   ]
 
-  let greeting
-  const currentHour = DateTime.now().toObject()?.hour
-  if (currentHour === undefined) {
-    greeting = null
-  } else if (currentHour < UserGreetingTimeConstants.EVENING) {
-    greeting = Language["greetings.evening"]
-  } else if (currentHour < UserGreetingTimeConstants.MORNING) {
-    greeting = Language["greetings.morning"]
-  } else if (currentHour < UserGreetingTimeConstants.AFTERNOON) {
-    greeting = Language["greetings.afternoon"]
-  } else {
-    greeting = Language["greetings.evening"]
-  }
-  const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
+  const heading = Functions.greetingMessage(name)
 
   return (
     <VAScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
@@ -92,8 +82,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         </Box>
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
-            title={Language["claimsAndAppeals.title"]}
-            subText={Language["claimsAndAppeals.subText"]}
+            title={Language.strings['claimsAndAppeals.title']}
+            subText={Language.strings['claimsAndAppeals.subText']}
             onPress={onClaimsAndAppeals}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -101,8 +91,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             borderStyle={'solid'}
           />
           <LargeNavButton
-            title={Language["healthCare.title"]}
-            subText={Language["healthCare.subText"]}
+            title={Language.strings['healthCare.title']}
+            subText={Language.strings['healthCare.subText']}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -110,8 +100,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             borderStyle={'solid'}
           />
           <LargeNavButton
-            title={Language["letters.title"]}
-            subText={Language["letters.subText"]}
+            title={Language.strings['letters.title']}
+            subText={Language.strings['letters.subText']}
             onPress={onLetters}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -135,13 +125,12 @@ const HomeScreenStack = createStackNavigator()
  * Stack screen for the Home tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.HOME)
-  const Language = resources.en.home
+  const Language2 = resources.en.home
   const headerStyles = useHeaderStyles()
 
   return (
     <HomeScreenStack.Navigator screenOptions={headerStyles}>
-      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: Language["title"] }} />
+      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: Language2.title }} />
     </HomeScreenStack.Navigator>
   )
 }

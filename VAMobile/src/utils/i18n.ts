@@ -1,11 +1,11 @@
 import * as claimsEN from 'translations/en/claims.json'
+import * as combinedEn from 'translations/en/combinedEn.json'
 import * as commonEN from 'translations/en/common.json'
 import * as healthEN from 'translations/en/health.json'
 import * as homeEN from 'translations/en/home.json'
 import * as loginEN from 'translations/en/login.json'
 import * as profileEN from 'translations/en/profile.json'
 import * as settingsEN from 'translations/en/settings.json'
-import * as combinedEn from 'translations/en/combinedEn.json'
 
 import { NAMESPACE } from 'constants/namespaces'
 
@@ -25,8 +25,8 @@ export const resources = {
     login: loginEN,
     profile: profileEN,
     settings: settingsEN,
-    jonTest: combinedEn
-  }
+    jonTest: combinedEn,
+  },
 }
 
 // Initialize the internationalization library
