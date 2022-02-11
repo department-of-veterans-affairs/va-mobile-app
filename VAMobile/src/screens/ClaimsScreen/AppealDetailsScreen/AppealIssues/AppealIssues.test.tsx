@@ -17,9 +17,7 @@ context('AppealIssues', () => {
 
     const issues = ['Service connection, Post-traumatic stress disorder', 'Eligibility for loan guaranty benefits', 'Service connected']
 
-    await waitFor(() => {
-      component = render(<AppealIssues issues={issues} {...props} />)
-    })
+    component = render(<AppealIssues issues={issues} {...props} />)
 
     testInstance = component.container
   })
