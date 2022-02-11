@@ -16,18 +16,16 @@ type FeatureItem = {
   useMobileImageCss?: boolean
 }
 
-const baseUrl = '/va-mobile-app'
-
 const FeatureList: FeatureItem[] = [
   {
     title: 'VA: Health and Benefits App',
-    image: `${baseUrl}/img/va-logo.png`,
+    image: '/img/va-logo.png',
     useMobileImageCss: true,
     description: <>The mobile app allows Veterans to more easily complete key transactions across VA health and benefits services.</>,
   },
   {
     title: 'React Native',
-    image: `${baseUrl}/img/react-native-logo.png`,
+    image: '/img/react-native-logo.png',
     description: (
       <>
         The <code>front end</code> is built using{' '}
@@ -40,7 +38,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Ruby on Rails',
-    image: `${baseUrl}/img/ruby-logo.png`,
+    image: '/img/ruby-logo.png',
     description: (
       <>
         The <code>back end</code> is built using{' '}

@@ -40,6 +40,8 @@ context('PastAppointmentDetails', () => {
   ) => {
     props = mockNavProps(undefined, undefined, { params: { appointmentID: '1' } })
 
+    console.log('Rafy')
+
     component = render(<PastAppointmentDetails {...props} />, {
       preloadedState: {
         ...InitialState,
@@ -51,7 +53,7 @@ context('PastAppointmentDetails', () => {
           upcomingCcServiceError: false,
           pastVaServiceError: false,
           pastCcServiceError: false,
-          pastAppointmentsById:
+          upcomingAppointmentsById:
             status === 'BOOKED'
               ? {
                   '1': bookedAppointmentsList.filter((obj) => {

@@ -8,14 +8,15 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 const config = {
   title: 'VA: Health and Benefits app documentation',
   tagline: 'All the documentation for the VA mobile app',
-  url: 'https://department-of-veterans-affairs.github.io/',
-  baseUrl: '/va-mobile-app/',
+  url: 'https://didactic-lamp-12152085.pages.github.io/',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'department-of-veterans-affairs', // Usually your GitHub org/user name.
   projectName: 'va-mobile-app', // Usually your repo name.
   plugins: [
+    'docusaurus-plugin-relative-paths',
     './docusaurus-plugin-react-native-web',
     [
       'docusaurus-plugin-react-docgen-typescript',
@@ -46,7 +47,6 @@ const config = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          remarkPlugins: [require('mdx-mermaid')],
           // Please change this to your repo.
         },
         theme: {
@@ -57,13 +57,11 @@ const config = {
     [
       'redocusaurus',
       {
-        specs: [
-          {
-            routePath: '/api/',
-            specUrl: 'https://raw.githubusercontent.com/department-of-veterans-affairs/vets-api/master/modules/mobile/docs/openapi.yaml',
-          },
-        ],
-      },
+        specs: [{
+          routePath: "/api/",
+          specUrl: 'https://raw.githubusercontent.com/department-of-veterans-affairs/vets-api/master/modules/mobile/docs/openapi.yaml',
+        }],
+      }
     ],
   ],
 

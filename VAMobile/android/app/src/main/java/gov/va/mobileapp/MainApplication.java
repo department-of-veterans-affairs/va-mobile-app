@@ -28,6 +28,7 @@ import gov.va.mobileapp.native_modules.RNReviewPackage;
 import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
 import gov.va.mobileapp.notifications.VAPushNotifications;
 import com.facebook.react.bridge.JSIModulePackage;
+import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 
 public class MainApplication extends Application implements ReactApplication, INotificationsApplication {
 
@@ -57,6 +58,11 @@ public class MainApplication extends Application implements ReactApplication, IN
         @Override
         protected String getJSMainModuleName() {
             return "index";
+        }
+
+        @Override
+        protected JSIModulePackage getJSIModulePackage() {
+            return new ReanimatedJSIModulePackage();
         }
 
     };

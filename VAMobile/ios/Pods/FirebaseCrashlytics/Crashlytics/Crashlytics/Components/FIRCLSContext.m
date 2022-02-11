@@ -74,6 +74,26 @@ FIRCLSContextInitData FIRCLSContextBuildInitData(FIRCLSInternalReport* report,
   initData.maxKeyValues = [settings maxCustomKeys];
   initData.betaToken = "";
 
+  // If this is set, then we could attempt to do a synchronous submission for certain kinds of
+  // events (exceptions). This is a very cool feature, but adds complexity to the backend. For now,
+  // we're going to leave this disabled. It does work in the exception case, but will ultimtely
+  // result in the following crash to be discared. Usually that crash isn't interesting. But, if it
+  // was, we'd never have a chance to see it.
+  initData.delegate = nil;
+
+#if CLS_MACH_EXCEPTION_SUPPORTED
+  __block exception_mask_t mask = 0;
+
+  // TODO(b/141241224) This if statement was hardcoded to no, so this block was never run
+  //  FIRCLSSignalEnumerateHandledSignals(^(int idx, int signal) {
+  //    if ([self.delegate ensureDeliveryOfUnixSignal:signal]) {
+  //      mask |= FIRCLSMachExceptionMaskForSignal(signal);
+  //    }
+  //  });
+
+  initData.machExceptionMask = mask;
+#endif
+
   return initData;
 }
 
@@ -106,6 +126,7 @@ bool FIRCLSContextInitialize(FIRCLSInternalReport* report,
 
   // some values that aren't tied to particular subsystem
   _firclsContext.readonly->debuggerAttached = FIRCLSProcessDebuggerAttached();
+  _firclsContext.readonly->delegate = initData->delegate;
 
   dispatch_group_async(group, queue, ^{
     FIRCLSHostInitialize(&_firclsContext.readonly->host);
@@ -190,7 +211,7 @@ bool FIRCLSContextInitialize(FIRCLSInternalReport* report,
       _firclsContext.readonly->machException.path =
           FIRCLSContextAppendToRoot(rootPath, FIRCLSReportMachExceptionFile);
 
-      FIRCLSMachExceptionInit(&_firclsContext.readonly->machException);
+      FIRCLSMachExceptionInit(&_firclsContext.readonly->machException, initData->machExceptionMask);
     });
 #endif
 
@@ -201,7 +222,7 @@ bool FIRCLSContextInitialize(FIRCLSInternalReport* report,
           initData->customExceptionsEnabled ? initData->maxCustomExceptions : 0;
 
       FIRCLSExceptionInitialize(&_firclsContext.readonly->exception,
-                                &_firclsContext.writable->exception);
+                                &_firclsContext.writable->exception, initData->delegate);
     });
   } else {
     FIRCLSSDKLog("Debugger present - not installing handlers\n");

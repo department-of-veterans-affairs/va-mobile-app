@@ -86,6 +86,7 @@ export type AppointmentsState = {
   loadingAppointmentCancellation: boolean
   appointmentCancellationStatus?: AppointmentCancellationStatusTypes
   error?: Error
+  appointment?: AppointmentData
   currentPageAppointmentsByYear: CurrentPageAppointmentsByYear
   upcomingAppointmentsById?: AppointmentsMap
   pastAppointmentsById?: AppointmentsMap
@@ -107,6 +108,7 @@ export const initialAppointmentsState: AppointmentsState = {
   loading: false,
   loadingAppointmentCancellation: false,
   appointmentCancellationStatus: undefined,
+  appointment: {} as AppointmentData,
   upcomingAppointmentsById: {} as AppointmentsMap,
   pastAppointmentsById: {} as AppointmentsMap,
   upcomingVaServiceError: false,
@@ -140,23 +142,6 @@ export const initialAppointmentsState: AppointmentsState = {
     pastAllCurrentYear: {},
     pastAllLastYear: {},
   },
-}
-
-// Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
-const trackAppointmentPaginationDiscrepancy = async (previousPagination: AppointmentsMetaPagination, currentPagination?: AppointmentsMetaPagination): Promise<void> => {
-  // skip first call by checking against the initial state
-  if (
-    previousPagination.totalEntries === initialPaginationState.totalEntries &&
-    previousPagination.currentPage === initialPaginationState.currentPage &&
-    previousPagination.perPage === initialPaginationState.perPage
-  ) {
-    return
-  }
-
-  // As a user paginates, if there is a delta in the numbers of totalEntries then we know a discrepancy has occurred
-  if (previousPagination?.totalEntries !== currentPagination?.totalEntries) {
-    await logAnalyticsEvent(Events.vama_appts_page_warning())
-  }
 }
 
 export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
@@ -514,7 +499,6 @@ export const getAppointmentsInDateRange =
         'page[size]': DEFAULT_PAGE_SIZE.toString(),
         sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
       } as Params)
-      await trackAppointmentPaginationDiscrepancy(appointmentsPagination, appointmentsList?.meta?.pagination)
       dispatch(dispatchFinishGetAppointmentsInDateRange({ timeFrame, appointments: appointmentsList }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -547,16 +531,19 @@ export const cancelAppointment =
   }
 
 /**
- * Redux action to track appointment details
+ * Redux action to get a single appointment
  */
-export const trackAppointmentDetail = (): AppThunk => async (dispatch, getState) => {
-  await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
-  const [totalTime] = getAnalyticsTimers(getState())
-  await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
-  await registerReviewEvent()
-  await dispatch(resetAnalyticsActionStart())
-  await dispatch(setAnalyticsTotalTimeStart())
-}
+export const getAppointment =
+  (appointmentID: string): AppThunk =>
+  async (dispatch, getState) => {
+    await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+    const [totalTime] = getAnalyticsTimers(getState())
+    await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
+    await registerReviewEvent()
+    await dispatch(resetAnalyticsActionStart())
+    await dispatch(setAnalyticsTotalTimeStart())
+    dispatch(dispatchGetAppointment(appointmentID))
+  }
 
 /**
  * Redux action to reset appointment cancellation state
@@ -642,6 +629,14 @@ const appointmentsSlice = createSlice({
       state.paginationByTimeFrame.pastThreeMonths = pastAppointmentsPagination
     },
 
+    dispatchGetAppointment: (state, action: PayloadAction<string>) => {
+      const appointmentID = action.payload
+      const { upcomingAppointmentsById = {}, pastAppointmentsById = {} } = state
+      const appointment: AppointmentData = upcomingAppointmentsById[appointmentID] || pastAppointmentsById[appointmentID]
+
+      state.appointment = appointment
+    },
+
     dispatchStartCancelAppointment: (state) => {
       state.loadingAppointmentCancellation = true
     },
@@ -713,6 +708,7 @@ export const {
   dispatchFinishPrefetchAppointments,
   dispatchStartPrefetchAppointments,
   dispatchStartGetAppointmentsInDateRange,
+  dispatchGetAppointment,
   dispatchStartCancelAppointment,
   dispatchClearAppointmentCancellation,
   dispatchClearLoadedAppointments,

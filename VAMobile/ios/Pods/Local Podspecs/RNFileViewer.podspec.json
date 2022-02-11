@@ -1,6 +1,6 @@
 {
   "name": "RNFileViewer",
-  "version": "2.1.5",
+  "version": "2.1.4",
   "summary": "Native file viewer for react-native",
   "homepage": "https://github.com/vinzscam/react-native-file-viewer",
   "license": "MIT",

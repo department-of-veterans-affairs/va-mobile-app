@@ -66,7 +66,8 @@ typedef struct {
 } FIRCLSMachExceptionReadContext;
 
 #pragma mark - API
-void FIRCLSMachExceptionInit(FIRCLSMachExceptionReadContext* context);
+void FIRCLSMachExceptionInit(FIRCLSMachExceptionReadContext* context, exception_mask_t ignoreMask);
+exception_mask_t FIRCLSMachExceptionMaskForSignal(int signal);
 
 void FIRCLSMachExceptionCheckHandlers(void);
 

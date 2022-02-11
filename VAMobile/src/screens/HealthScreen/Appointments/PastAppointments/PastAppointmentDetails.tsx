@@ -9,7 +9,7 @@ import {
   AppointmentStatusDetailTypeConsts,
   AppointmentTypeConstants,
 } from 'store/api/types'
-import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
+import { AppointmentsState, getAppointment } from 'store/slices/appointmentsSlice'
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
@@ -31,9 +31,8 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
-  const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { appointment } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
-  const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail, reason, isCovidVaccine, healthcareProvider } =
     attributes || ({} as AppointmentAttributes)
@@ -47,7 +46,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
       : t('appointments.canceled.whoCanceled.you')
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail())
+    dispatch(getAppointment(appointmentID))
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
