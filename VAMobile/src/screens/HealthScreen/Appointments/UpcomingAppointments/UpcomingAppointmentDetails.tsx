@@ -29,7 +29,7 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
-import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
+import { AppointmentsState, clearAppointmentCancellation, getAppointment } from 'store/slices'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
@@ -60,9 +60,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
-  const appointment = upcomingAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const {
     appointmentType,
@@ -89,7 +88,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       : t('appointments.canceled.whoCanceled.you')
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail())
+    dispatch(getAppointment(appointmentID))
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })

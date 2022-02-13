@@ -21,5 +21,6 @@
 __BEGIN_DECLS
 
 void FIRCLSHandler(FIRCLSFile* file, thread_t crashedThread, void* uapVoid);
+void FIRCLSHandlerAttemptImmediateDelivery(void);
 
 __END_DECLS

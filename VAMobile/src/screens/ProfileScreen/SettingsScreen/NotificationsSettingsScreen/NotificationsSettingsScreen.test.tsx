@@ -70,7 +70,9 @@ context('NotificationsSettingsScreen', () => {
     testInstance = component.container
   }
   beforeEach(async () => {
-    initializeTestInstance(false, true, [apptPrefOn])
+    await waitFor(() => {
+      initializeTestInstance(false, true, [apptPrefOn])
+    })
   })
 
   it('initializes correctly', async () => {

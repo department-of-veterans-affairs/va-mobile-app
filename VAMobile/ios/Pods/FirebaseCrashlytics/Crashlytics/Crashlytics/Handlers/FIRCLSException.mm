@@ -57,7 +57,8 @@ static Method FIRCLSGetNSApplicationReportExceptionMethod(void);
 
 #pragma mark - API
 void FIRCLSExceptionInitialize(FIRCLSExceptionReadOnlyContext *roContext,
-                               FIRCLSExceptionWritableContext *rwContext) {
+                               FIRCLSExceptionWritableContext *rwContext,
+                               void *delegate) {
   if (!FIRCLSUnlinkIfExists(roContext->path)) {
     FIRCLSSDKLog("Unable to reset the exception file %s\n", strerror(errno));
   }
@@ -79,9 +80,10 @@ void FIRCLSExceptionInitialize(FIRCLSExceptionReadOnlyContext *roContext,
 
 void FIRCLSExceptionRecordModel(FIRExceptionModel *exceptionModel) {
   const char *name = [[exceptionModel.name copy] UTF8String];
-  const char *reason = [[exceptionModel.reason copy] UTF8String] ?: "";
+  const char *reason = [[exceptionModel.reason copy] UTF8String];
 
-  FIRCLSExceptionRecord(FIRCLSExceptionTypeCustom, name, reason, [exceptionModel.stackTrace copy]);
+  FIRCLSExceptionRecord(FIRCLSExceptionTypeCustom, name, reason, [exceptionModel.stackTrace copy],
+                        NO);
 }
 
 void FIRCLSExceptionRecordNSException(NSException *exception) {
@@ -90,7 +92,7 @@ void FIRCLSExceptionRecordNSException(NSException *exception) {
   NSArray *returnAddresses = [exception callStackReturnAddresses];
 
   NSString *name = [exception name];
-  NSString *reason = [exception reason] ?: @"";
+  NSString *reason = [exception reason];
 
   // It's tempting to try to make use of callStackSymbols here.  But, the output
   // of that function is not intended to be machine-readible.  We could parse it,
@@ -105,7 +107,7 @@ void FIRCLSExceptionRecordNSException(NSException *exception) {
   }
 
   FIRCLSExceptionRecord(FIRCLSExceptionTypeObjectiveC, [name UTF8String], [reason UTF8String],
-                        frames);
+                        frames, YES);
 }
 
 static void FIRCLSExceptionRecordFrame(FIRCLSFile *file, FIRStackFrame *frame) {
@@ -187,14 +189,15 @@ void FIRCLSExceptionWrite(FIRCLSFile *file,
 void FIRCLSExceptionRecord(FIRCLSExceptionType type,
                            const char *name,
                            const char *reason,
-                           NSArray<FIRStackFrame *> *frames) {
+                           NSArray<FIRStackFrame *> *frames,
+                           BOOL attemptDelivery) {
   if (!FIRCLSContextIsInitialized()) {
     return;
   }
 
   bool native = FIRCLSExceptionIsNative(type);
 
-  FIRCLSSDKLog("Recording an exception structure (%d)\n", native);
+  FIRCLSSDKLog("Recording an exception structure (%d, %d)\n", attemptDelivery, native);
 
   // exceptions can happen on multiple threads at the same time
   if (native) {
@@ -215,6 +218,9 @@ void FIRCLSExceptionRecord(FIRCLSExceptionType type,
       FIRCLSFileClose(&file);
 
       // disallow immediate delivery for non-native exceptions
+      if (attemptDelivery) {
+        FIRCLSHandlerAttemptImmediateDelivery();
+      }
     });
   } else {
     FIRCLSUserLoggingWriteAndCheckABFiles(
@@ -272,19 +278,21 @@ static void FIRCLSCatchAndRecordActiveException(std::type_info *typeInfo) {
 #endif
     }
   } catch (const char *exc) {
-    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, "const char *", exc, nil);
+    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, "const char *", exc, nil, YES);
   } catch (const std::string &exc) {
-    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, "std::string", exc.c_str(), nil);
+    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, "std::string", exc.c_str(), nil, YES);
   } catch (const std::exception &exc) {
-    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, FIRCLSExceptionDemangle(name), exc.what(), nil);
+    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, FIRCLSExceptionDemangle(name), exc.what(), nil,
+                          YES);
   } catch (const std::exception *exc) {
-    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, FIRCLSExceptionDemangle(name), exc->what(), nil);
+    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, FIRCLSExceptionDemangle(name), exc->what(), nil,
+                          YES);
   } catch (const std::bad_alloc &exc) {
     // it is especially important to avoid demangling in this case, because the expetation at this
     // point is that all allocations could fail
-    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, "std::bad_alloc", exc.what(), nil);
+    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, "std::bad_alloc", exc.what(), nil, YES);
   } catch (...) {
-    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, FIRCLSExceptionDemangle(name), "", nil);
+    FIRCLSExceptionRecord(FIRCLSExceptionTypeCpp, FIRCLSExceptionDemangle(name), "", nil, YES);
   }
 }
 

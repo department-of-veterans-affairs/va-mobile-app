@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
-import { getBuildNumber, getVersionName } from 'utils/deviceData'
+import { buildNumber, versionName } from 'utils/deviceData'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type AppVersionAndBuildProps = {
@@ -19,19 +19,6 @@ export type AppVersionAndBuildProps = {
 const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'primary', textWeight = 'MobileBody' }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [versionName, setVersionName] = useState<string>()
-  const [buildNumber, setBuildNumber] = useState<number>()
-
-  useEffect(() => {
-    async function getVersionAndBuild() {
-      const version = await getVersionName()
-      const build = await getBuildNumber()
-      setVersionName(version)
-      setBuildNumber(build)
-    }
-
-    getVersionAndBuild()
-  }, [])
 
   return (
     <Box mb={theme.dimensions.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>

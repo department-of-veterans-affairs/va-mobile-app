@@ -1,1 +1,1 @@
-We added general improvements and fixed a few bugs.
+You can now view the app in both light and dark mode. We’ve also fixed a few bugs.

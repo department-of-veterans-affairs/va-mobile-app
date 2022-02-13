@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { getVersionName } from './deviceData'
 import { requestReview } from './rnReviews'
+import { versionName } from './deviceData'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const STORAGE_REVIEW_EVENT_KEY = '@review_event'
@@ -13,23 +13,21 @@ export const registerReviewEvent = async (): Promise<void> => {
   const prev = await AsyncStorage.getItem(STORAGE_REVIEW_EVENT_KEY)
   const total = prev ? parseInt(prev, 10) + 1 : 1
   await AsyncStorage.setItem(STORAGE_REVIEW_EVENT_KEY, `${total}`)
-  const versionName = await getVersionName()
   if (total >= IN_APP_REVIEW_ACTIONS_THRESHOLD) {
     const lastReview = await AsyncStorage.getItem(STORAGE_LAST_REVIEW_PROMPT_DATE_MILLIS)
     if (!lastReview) {
-      await callReviewAPI(versionName)
+      await callReviewAPI()
     } else {
       const days = DateTime.fromMillis(parseInt(lastReview, 10)).diffNow('days').days
       const lastReviewVersion = await AsyncStorage.getItem(STORAGE_LAST_REVIEW_VERSION)
-
       if (days > IN_APP_REVIEW_INTERVAL_DAYS && lastReviewVersion !== versionName) {
-        await callReviewAPI(versionName)
+        await callReviewAPI()
       }
     }
   }
 }
 
-const callReviewAPI = async (versionName: string): Promise<void> => {
+const callReviewAPI = async (): Promise<void> => {
   await requestReview()
   await AsyncStorage.setItem(STORAGE_REVIEW_EVENT_KEY, '0')
   await AsyncStorage.setItem(STORAGE_LAST_REVIEW_PROMPT_DATE_MILLIS, `${DateTime.now().millisecond}`)
