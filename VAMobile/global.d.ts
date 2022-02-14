@@ -45,3 +45,7 @@ type modifyToastType = Omit<ToastType, 'show'> & {
 }
 
 declare var snackBar: modifyToastType
+
+declare var global: any
+
+declare var process: any

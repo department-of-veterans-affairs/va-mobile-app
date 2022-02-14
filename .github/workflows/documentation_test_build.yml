@@ -1,0 +1,30 @@
+name: Documentation Test Build
+
+# Adapted from https://docusaurus.io/docs/deployment
+
+on:
+  pull_request:
+    branches: [develop]
+    paths: 
+      - VAMobile/src/components/**
+      - VAMobile/documentation/**
+      - VAMobile/src/utils/hooks.tsx
+
+jobs:
+  test-deploy:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: yarn
+          cache-dependency-path: VAMobile/yarn.lock
+      - name: Test build
+        working-directory: VAMobile
+        run: |
+          yarn install --frozen-lockfile
+          cd documentation
+          yarn install --frozen-lockfile
+          yarn build

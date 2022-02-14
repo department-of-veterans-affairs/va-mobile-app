@@ -30,6 +30,7 @@ import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchProfileLogout } from './personalInformationSlice'
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
+import { dispatchVaccineLogout } from './vaccineSlice'
 import { isAndroid } from 'utils/platform'
 import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -451,6 +452,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchMilitaryHistoryLogout())
     dispatch(dispatchDisabilityRatingLogout())
     dispatch(dispatchFinishLogout())
+    dispatch(dispatchVaccineLogout())
   }
 }
 
