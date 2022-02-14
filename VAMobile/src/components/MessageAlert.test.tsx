@@ -4,11 +4,11 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, findByTypeWithText, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, render, RenderAPI } from 'testUtils'
 import { AlertBox, LoadingComponent, MessageAlert, TextView } from 'components'
 
 context('MessageAlert', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = ({
@@ -26,19 +26,18 @@ context('MessageAlert', () => {
     savingDraft?: boolean
     sendMessageFailed?: boolean
   }): void => {
-    act(() => {
-      component = renderWithProviders(
-        <MessageAlert
-          hasValidationError={hasValidationError}
-          saveDraftAttempted={saveDraftAttempted}
-          saveDraftComplete={saveDraftComplete}
-          saveDraftFailed={saveDraftFailed}
-          savingDraft={savingDraft}
-          sendMessageFailed={sendMessageFailed}
-        />,
-      )
-    })
-    testInstance = component.root
+    component = render(
+      <MessageAlert
+        hasValidationError={hasValidationError}
+        saveDraftAttempted={saveDraftAttempted}
+        saveDraftComplete={saveDraftComplete}
+        saveDraftFailed={saveDraftFailed}
+        savingDraft={savingDraft}
+        sendMessageFailed={sendMessageFailed}
+      />,
+    )
+
+    testInstance = component.container
   }
 
   it('displays save draft success', async () => {

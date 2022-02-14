@@ -88,7 +88,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
 
   return (
     <TextArea>
-      <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
+      <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
         {title}
       </TextView>
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween}>
@@ -106,7 +106,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         </Box>
       ) : (
         <>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)} mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" {...testIdProps(name)} mt={theme.dimensions.standardMarginBetween}>
             {name}
           </TextView>
           {linkOrPhone}

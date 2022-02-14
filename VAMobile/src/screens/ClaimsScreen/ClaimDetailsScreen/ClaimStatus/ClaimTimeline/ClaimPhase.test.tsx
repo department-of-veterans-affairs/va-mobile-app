@@ -1,12 +1,14 @@
 import React from 'react'
 
-import { context, renderWithProviders } from "testUtils";
-import { act, ReactTestInstance } from "react-test-renderer";
+import { context, render, RenderAPI } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 import { claim } from '../../../claimData'
-import ClaimPhase from "./ClaimPhase";
-import PhaseIndicator from "./PhaseIndicator";
-import {TextView, VAButton, VAIcon} from "components"
-import { Pressable } from "react-native";
+import ClaimPhase from './ClaimPhase'
+import PhaseIndicator from './PhaseIndicator'
+import { TextView, VAButton, VAIcon } from 'components'
+import { Pressable } from 'react-native'
+import { waitFor } from '@testing-library/react-native'
+import { when } from 'jest-when'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../utils/hooks', () => {
@@ -18,33 +20,36 @@ jest.mock('../../../../../utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
 context('ClaimPhase', () => {
   let props: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
+  let mockNavigateToClaimFileUploadSpy: jest.Mock
 
-  const initializeTestInstance = ( phase: number, current: number ) => {
+  const initializeTestInstance = (phase: number, current: number) => {
+    mockNavigateToClaimFileUploadSpy = jest.fn()
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('ClaimFileUpload', { 'claimID': undefined }).mockReturnValue(mockNavigateToClaimFileUploadSpy)
     props = {
       phase,
       current,
-      attributes: claim.attributes
+      attributes: claim.attributes,
     }
 
-    act(() => {
-      component = renderWithProviders(<ClaimPhase {...props} />)
-    })
+    component = render(<ClaimPhase {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   // make sure the component works
   it('initializes correctly', async () => {
-    await initializeTestInstance(1,1)
+    initializeTestInstance(1, 1)
     expect(component).toBeTruthy()
     expect(testInstance.findAllByType(PhaseIndicator).length).toEqual(1)
   })
@@ -55,7 +60,7 @@ context('ClaimPhase', () => {
       initializeTestInstance(1, 2)
     })
 
-    it('should render with an icon',  async () => {
+    it('should render with an icon', async () => {
       const icon = testInstance.findAllByType(VAIcon)[1]
       expect(icon).toBeTruthy()
       expect(icon.props.name).toEqual('ArrowDown')
@@ -63,15 +68,16 @@ context('ClaimPhase', () => {
 
     // TODO: need a way to test component state. So far jest + enzyme doesnt seem the work in RN
 
-    it('should render text details after pressing icon',  async () => {
-      const icon = testInstance.findAllByType(VAIcon)[1]
-      const pressable = testInstance.findByType(Pressable)
-      pressable.props.onPress()
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('June 6, 2019')
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Thank you. VA received your claim')
-      expect(icon.props.name).toEqual('ArrowUp')
+    it('should render text details after pressing icon', async () => {
+      await waitFor(() => {
+        const icon = testInstance.findAllByType(VAIcon)[1]
+        const pressable = testInstance.findByType(Pressable)
+        pressable.props.onPress()
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('June 6, 2019')
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Thank you. VA received your claim')
+        expect(icon.props.name).toEqual('ArrowUp')
+      })
     })
-
   })
 
   describe('when phase is equal to current', () => {
@@ -79,22 +85,22 @@ context('ClaimPhase', () => {
       initializeTestInstance(2, 2)
     })
 
-    it('should render with an arrow icon',  async () => {
+    it('should render with an arrow icon', async () => {
       const icon = testInstance.findAllByType(VAIcon)[0]
       expect(icon).toBeTruthy()
       expect(icon.props.name).toEqual('ArrowDown')
     })
 
-
-    it('should render text details after pressing icon',  async () => {
-      const icon = testInstance.findAllByType(VAIcon)[0]
-      const pressable = testInstance.findByType(Pressable)
-      pressable.props.onPress()
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('June 6, 2019')
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Your claim has been assigned to a reviewer who is determining if additional information is needed.')
-      expect(icon.props.name).toEqual('ArrowUp')
+    it('should render text details after pressing icon', async () => {
+      await waitFor(() => {
+        const icon = testInstance.findAllByType(VAIcon)[0]
+        const pressable = testInstance.findByType(Pressable)
+        pressable.props.onPress()
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('June 6, 2019')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Your claim has been assigned to a reviewer who is determining if additional information is needed.')
+        expect(icon.props.name).toEqual('ArrowUp')
+      })
     })
-
   })
 
   describe('when phase is greater than current', () => {
@@ -102,17 +108,15 @@ context('ClaimPhase', () => {
       initializeTestInstance(4, 2)
     })
 
-    it('should not render with an arrow icon',  async () => {
+    it('should not render with an arrow icon', async () => {
       const icon = testInstance.findAllByType(VAIcon)[0]
       expect(icon).toBeFalsy()
     })
 
-
-    it('should not render text details',  async () => {
+    it('should not render text details', async () => {
       expect(testInstance.findAllByType(TextView)[2]).toBeFalsy()
       expect(testInstance.findAllByType(TextView)[3]).toBeFalsy()
     })
-
   })
 
   describe('when phase is 3', () => {
@@ -128,14 +132,14 @@ context('ClaimPhase', () => {
             date: '2020-07-16',
             status: 'NEEDED',
             uploaded: false,
-            uploadsAllowed: true
+            uploadsAllowed: true,
           },
           {
             type: 'still_need_from_you_list',
             date: '2020-07-16',
             status: 'NEEDED',
             uploaded: false,
-            uploadsAllowed: true
+            uploadsAllowed: true,
           },
         ]
         initializeTestInstance(3, 2)
@@ -151,7 +155,7 @@ context('ClaimPhase', () => {
       describe('on click of the file request button', () => {
         it('should call useRouteNavigation', async () => {
           buttons[0].props.onPress()
-          expect(mockNavigationSpy).toHaveBeenCalled()
+          expect(mockNavigateToClaimFileUploadSpy).toHaveBeenCalled()
         })
       })
 
@@ -169,8 +173,8 @@ context('ClaimPhase', () => {
               date: '2020-07-16',
               status: 'NEEDED',
               uploaded: false,
-              uploadsAllowed: true
-            }
+              uploadsAllowed: true,
+            },
           ]
           initializeTestInstance(3, 2)
 

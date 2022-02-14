@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, mockStore, render, RenderAPI, waitFor, when } from 'testUtils'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
 import {
@@ -12,17 +12,132 @@ import {
   initialErrorsState,
   initializeErrorsByScreenID,
   InitialState,
-} from 'store/reducers'
+} from 'store/slices'
 import ClaimsScreen from './ClaimsScreen'
 import { AlertBox, ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import * as api from 'store/api'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ClaimsAndAppealsGetDataMeta } from 'store/api'
+import { cleanup } from '@testing-library/react-native'
+
+const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
+  {
+    id: '1',
+    type: 'appeal',
+    attributes: {
+      subtype: 'supplementalClaim',
+      completed: false,
+      dateFiled: '2020-10-22',
+      updatedAt: '2020-10-28',
+      displayTitle: 'supplemental claim for disability compensation',
+    },
+  },
+  {
+    id: '0',
+    type: 'claim',
+    attributes: {
+      subtype: 'Disability',
+      completed: false,
+      dateFiled: '2020-11-13',
+      updatedAt: '2020-11-30',
+      displayTitle: 'Disability',
+    },
+  },
+  {
+    id: '4',
+    type: 'claim',
+    attributes: {
+      subtype: 'Compensation',
+      completed: false,
+      dateFiled: '2020-06-11',
+      updatedAt: '2020-12-07',
+      displayTitle: 'Compensation',
+    },
+  },
+]
+
+const closedClaimsAndAppealsList: api.ClaimsAndAppealsList = [
+  {
+    id: '2',
+    type: 'appeal',
+    attributes: {
+      subtype: 'supplementalClaim',
+      completed: true,
+      dateFiled: '2020-10-22',
+      updatedAt: '2020-10-28',
+      displayTitle: 'supplemental claim for disability compensation',
+    },
+  },
+  {
+    id: '3',
+    type: 'claim',
+    attributes: {
+      subtype: 'Disability',
+      completed: true,
+      dateFiled: '2020-11-13',
+      updatedAt: '2020-11-30',
+      displayTitle: 'Disability',
+    },
+  },
+  {
+    id: '5',
+    type: 'claim',
+    attributes: {
+      subtype: 'Compensation',
+      completed: true,
+      dateFiled: '2020-06-11',
+      updatedAt: '2020-12-07',
+      displayTitle: 'Disability',
+    },
+  },
+]
+
+const mockPagination: ClaimsAndAppealsGetDataMeta = {
+  dataFromStore: false,
+
+  pagination: {
+    currentPage: 1,
+    perPage: 10,
+    totalEntries: 3,
+  },
+}
+
+const mockPaginationClaimsServiceError: ClaimsAndAppealsGetDataMeta = {
+  ...mockPagination,
+  errors: [
+    {
+      service: 'claims',
+    },
+  ],
+}
+
+const mockPaginationAppealsServiceError: ClaimsAndAppealsGetDataMeta = {
+  ...mockPagination,
+  errors: [
+    {
+      service: 'appeals',
+    },
+  ],
+}
+
+const mockPaginationAppealsClaimsServiceError: ClaimsAndAppealsGetDataMeta = {
+  ...mockPagination,
+  errors: [
+    {
+      service: 'claims',
+    },
+    {
+      service: 'appeals',
+    },
+  ],
+}
 
 context('ClaimsScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (loading = false, claimsServiceError = false, appealsServiceError = false, errorsState: ErrorsState = initialErrorsState) => {
@@ -33,8 +148,12 @@ context('ClaimsScreen', () => {
       appealsServiceError,
     }
 
-    store = mockStore({
+    const preloadedState = {
       ...InitialState,
+      personalInformation: {
+        ...InitialState.personalInformation,
+        needsDataLoad: false,
+      },
       claimsAndAppeals,
       errors: errorsState,
       authorizedServices: {
@@ -42,37 +161,46 @@ context('ClaimsScreen', () => {
         claims: true,
         appeals: true,
       },
-    })
+    }
 
     const props = mockNavProps()
 
-    act(() => {
-      component = renderWithProviders(<ClaimsScreen {...props} />, store)
+    component = render(<ClaimsScreen {...props} />, {
+      preloadedState,
     })
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
+  afterEach(cleanup)
 
   describe('when loadingAllClaimsAndAppeals is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      await waitFor(() => {
+        initializeTestInstance()
+        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      })
+
+      expect(await component.UNSAFE_queryByType(LoadingComponent)).toBeNull()
     })
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-    expect(testInstance.findAllByType(SegmentedControl).length).toEqual(1)
-    expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(1)
+    initializeTestInstance()
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('when claimsServiceError exists but not appealsServiceError', () => {
     it('should display an alertbox specifying claims is unavailable', async () => {
-      initializeTestInstance(false, true)
+      await waitFor(() => {
+        when(api.get as jest.Mock)
+          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+          .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPaginationClaimsServiceError })
+        initializeTestInstance()
+      })
+
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Claims status is unavailable')
     })
@@ -80,7 +208,13 @@ context('ClaimsScreen', () => {
 
   describe('when appealsServiceError exists but not claimsServiceError', () => {
     it('should display an alertbox specifying appeals is unavailable', async () => {
-      initializeTestInstance(false, false, true)
+      await waitFor(() => {
+        when(api.get as jest.Mock)
+          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+          .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPaginationAppealsServiceError })
+        initializeTestInstance()
+      })
+
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal status is unavailable')
     })
@@ -88,7 +222,12 @@ context('ClaimsScreen', () => {
 
   describe('when there is both a claimsServiceError and an appealsServiceError', () => {
     it('should display an alert and not display the segmented control or the ClaimsAndAppealsListView component', async () => {
-      initializeTestInstance(false, true, true)
+      await waitFor(() => {
+        when(api.get as jest.Mock)
+          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+          .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPaginationAppealsClaimsServiceError })
+        initializeTestInstance()
+      })
       expect(testInstance.findAllByType(SegmentedControl).length).toEqual(0)
       expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(0)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
@@ -98,6 +237,7 @@ context('ClaimsScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
+      const props = mockNavProps()
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.CLAIMS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -105,89 +245,122 @@ context('ClaimsScreen', () => {
         ...initialErrorsState,
         errorsByScreenID,
       }
-
-      initializeTestInstance(true, false, false, errorState)
+      component = render(<ClaimsScreen {...props} />, {
+        preloadedState: {
+          ...InitialState,
+          errors: errorState,
+          authorizedServices: {
+            ...initialAuthorizedServicesState,
+            claims: false,
+            appeals: false,
+          },
+          personalInformation: {
+            ...InitialState.personalInformation,
+            needsDataLoad: false,
+          },
+        },
+      })
+      testInstance = component.container
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async () => {
+      const props = mockNavProps()
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,
         errorsByScreenID,
       }
 
-      initializeTestInstance(true, false, false, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      component = render(<ClaimsScreen {...props} />, {
+        preloadedState: {
+          ...InitialState,
+          errors: errorState,
+          authorizedServices: {
+            ...initialAuthorizedServicesState,
+            claims: false,
+            appeals: false,
+          },
+          personalInformation: {
+            ...InitialState.personalInformation,
+            needsDataLoad: false,
+          },
+        },
+      })
+
+      testInstance = component.container
+      await waitFor(() => {
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      })
     })
   })
 
   describe('when claims service is authorized and appeals service is not authorized', () => {
     it('should not render the NoClaimsAndAppealsAccess component', async () => {
-      store = mockStore({
-        ...InitialState,
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          claims: false,
-          appeals: true,
+      const props = mockNavProps()
+
+      component = render(<ClaimsScreen {...props} />, {
+        preloadedState: {
+          ...InitialState,
+          authorizedServices: {
+            ...initialAuthorizedServicesState,
+            claims: false,
+            appeals: true,
+          },
         },
       })
 
-      const props = mockNavProps()
+      testInstance = component.container
 
-      act(() => {
-        component = renderWithProviders(<ClaimsScreen {...props} />, store)
+      await waitFor(() => {
+        expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(0)
       })
-
-      testInstance = component.root
-
-      expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(0)
     })
   })
 
   describe('when claims service is not authorized and appeals service is authorized', () => {
     it('should not render the NoClaimsAndAppealsAccess component', async () => {
-      store = mockStore({
-        ...InitialState,
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          claims: true,
-          appeals: false,
+      const props = mockNavProps()
+
+      component = render(<ClaimsScreen {...props} />, {
+        preloadedState: {
+          ...InitialState,
+          authorizedServices: {
+            ...initialAuthorizedServicesState,
+            claims: true,
+            appeals: false,
+          },
         },
       })
 
-      const props = mockNavProps()
+      testInstance = component.container
 
-      act(() => {
-        component = renderWithProviders(<ClaimsScreen {...props} />, store)
+      await waitFor(() => {
+        expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(0)
       })
-
-      testInstance = component.root
-
-      expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(0)
     })
   })
 
   describe('when claims service and appeals service are both not authorized', () => {
     it('should render the NoClaimsAndAppealsAccess component', async () => {
-      store = mockStore({
-        ...InitialState,
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          claims: false,
-          appeals: false,
-        },
-      })
-
       const props = mockNavProps()
 
-      act(() => {
-        component = renderWithProviders(<ClaimsScreen {...props} />, store)
+      await waitFor(() => {
+        component = render(<ClaimsScreen {...props} />, {
+          preloadedState: {
+            ...InitialState,
+            authorizedServices: {
+              ...initialAuthorizedServicesState,
+              claims: false,
+              appeals: false,
+            },
+          },
+        })
       })
 
-      testInstance = component.root
+      testInstance = component.container
 
       expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(1)
     })

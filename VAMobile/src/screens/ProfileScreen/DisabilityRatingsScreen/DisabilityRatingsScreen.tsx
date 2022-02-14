@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import {
@@ -20,24 +19,26 @@ import {
   TextViewProps,
   VAScrollView,
 } from 'components'
-import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
+import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import ProfileBanner from '../ProfileBanner'
 import getEnv from 'utils/env'
 
 const DisabilityRatingsScreen: FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
-  const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
@@ -68,6 +69,7 @@ const DisabilityRatingsScreen: FC = () => {
       textLines.push({
         text: percentageText,
         variant: 'MobileBodyBold',
+        color: 'primaryTitle',
       })
     }
 
@@ -110,7 +112,7 @@ const DisabilityRatingsScreen: FC = () => {
         <TextArea>
           <Box accessible={true}>
             {combinedPercentText && (
-              <TextView variant="MobileBodyBold" accessibilityRole="text">
+              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="text">
                 {combinedPercentText}
               </TextView>
             )}
@@ -127,7 +129,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>
@@ -145,7 +147,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('disabilityRatingDetails.needHelp')}
           </TextView>
         </Box>
@@ -188,6 +190,7 @@ const DisabilityRatingsScreen: FC = () => {
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
+    color: 'primaryTitle',
     mx: gutter,
     mb: condensedMarginBetween,
     mt: standardMarginBetween,

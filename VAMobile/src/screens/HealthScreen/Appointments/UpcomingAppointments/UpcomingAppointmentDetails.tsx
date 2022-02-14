@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import {
@@ -30,15 +29,16 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
-import { AppointmentsState, StoreState } from 'store/reducers'
+import { AppointmentsState, clearAppointmentCancellation, getAppointment } from 'store/slices'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { clearAppointmentCancellation, getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
-import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
@@ -57,10 +57,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const {
@@ -122,7 +122,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.specialInstructions')}
           </TextView>
           <TextView variant="MobileBody">{comment}</TextView>
@@ -153,7 +153,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (isVideoAppt && !isAppointmentCanceled) {
       return (
         <Box mb={isGFE ? 0 : theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
           <TextView variant="MobileBody">{t(getVideoInstructionsTranslationID())}</TextView>
@@ -198,7 +198,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       return (
         <Box>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoinVirtualSession')}
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
@@ -221,7 +221,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('upcomingAppointmentDetails.appointmentCode', { code: code })}
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.useCode')}</TextView>
@@ -248,12 +248,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.SUCCESS) {
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox
-            title={t('upcomingAppointmentDetails.cancelAppointmentSuccess.title')}
-            text={t('upcomingAppointmentDetails.cancelAppointmentSuccess.body')}
-            border="success"
-            background="noCardBackground"
-          />
+          <AlertBox title={t('upcomingAppointmentDetails.cancelAppointmentSuccess.title')} text={t('upcomingAppointmentDetails.cancelAppointmentSuccess.body')} border="success" />
         </Box>
       )
     } else if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
@@ -270,11 +265,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox
-            title={t('upcomingAppointmentDetails.cancelAppointmentFail.title')}
-            text={t('upcomingAppointmentDetails.cancelAppointmentFail.body')}
-            border="error"
-            background="noCardBackground">
+          <AlertBox title={t('upcomingAppointmentDetails.cancelAppointmentFail.title')} text={t('upcomingAppointmentDetails.cancelAppointmentFail.body')} border="error">
             <Box my={theme.dimensions.standardMarginBetween}>
               <TextView color="primary" variant="MobileBodyBold" {...testIdProps(location.name)}>
                 {location.name}

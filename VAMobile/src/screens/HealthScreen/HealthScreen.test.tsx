@@ -2,19 +2,16 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByOnPressFunction, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HealthScreen } from './HealthScreen'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
-import { TextView, MessagesCountTag, LargeNavButton } from 'components'
+import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
+import { TextView, MessagesCountTag } from 'components'
+import { when } from 'jest-when'
 
 const mockNavigateToSpy = jest.fn()
-const mockNavigateToCrisisLineSpy = jest.fn()
-const mockNavigateToAppointmentSpy = jest.fn()
-const mockNavigateToSecureMessagingSpy = jest.fn()
-const mockNavigateToVAVaccinesSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
@@ -25,11 +22,6 @@ jest.mock('utils/hooks', () => {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
-        .mockReturnValueOnce(mockNavigateToCrisisLineSpy)
-        .mockReturnValueOnce(mockNavigateToAppointmentSpy)
-        .mockReturnValueOnce(mockNavigateToSecureMessagingSpy)
-        .mockReturnValueOnce(mockNavigateToVAVaccinesSpy)
-        .mockReturnValue(() => { })
     },
     useTheme: jest.fn(() => {
       return { ...theme }
@@ -38,107 +30,128 @@ jest.mock('utils/hooks', () => {
 })
 
 context('HealthScreen', () => {
-  let component: any
+  let component: RenderAPI
   let props: any
-  let store: any
   let testInstance: ReactTestInstance
+
+  let mockNavigateToCrisisLineSpy: jest.Mock
+  let mockNavigateToAppointmentSpy: jest.Mock
+  let mockNavigateToSecureMessagingSpy: jest.Mock
+  let mockNavigateToVAVaccinesSpy: jest.Mock
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
   const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true) => {
-    props = mockNavProps(
-      undefined,
-      { setOptions: jest.fn(), navigate: mockNavigationSpy }
-    )
+    mockNavigateToCrisisLineSpy = jest.fn()
+    mockNavigateToAppointmentSpy = jest.fn()
+    mockNavigateToSecureMessagingSpy = jest.fn()
+    mockNavigateToVAVaccinesSpy = jest.fn()
+    when(mockNavigateToSpy)
+        .mockReturnValue(() => {})
+        .calledWith('VeteransCrisisLine').mockReturnValue(mockNavigateToCrisisLineSpy)
+        .calledWith('Appointments').mockReturnValue(mockNavigateToAppointmentSpy)
+        .calledWith('SecureMessaging').mockReturnValue(mockNavigateToSecureMessagingSpy)
+        .calledWith('VaccineList').mockReturnValue(mockNavigateToVAVaccinesSpy)
 
-    store = mockStore({
-      auth: { ...initialAuthState },
-      secureMessaging: {
-        ...initialSecureMessagingState,
-        hasLoadedInbox,
-        inbox: {
-          type: 'Inbox',
-          id: '123',
-          attributes: {
-            //SecureMessagingFolderAttributes
-            folderId: 123,
-            name: 'Inbox',
-            count: 45,
-            unreadCount: unreadCount,
-            systemFolder: true,
+    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
+
+    component = render(<HealthScreen {...props} />, {
+      preloadedState: {
+        auth: { ...initialAuthState },
+        secureMessaging: {
+          ...initialSecureMessagingState,
+          hasLoadedInbox,
+          inbox: {
+            type: 'Inbox',
+            id: '123',
+            attributes: {
+              //SecureMessagingFolderAttributes
+              folderId: 123,
+              name: 'Inbox',
+              count: 45,
+              unreadCount: unreadCount,
+              systemFolder: true,
+            },
           },
         },
+        errors: initialErrorsState,
       },
-      errors: initialErrorsState,
     })
 
-    act(() => {
-      component = renderWithProviders(<HealthScreen {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
   beforeEach(() => {
     initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('on click of the crisis line button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(1, 'VeteransCrisisLine')
-      expect(mockNavigateToCrisisLineSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+        expect(mockNavigateToCrisisLineSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('on click of the appointments button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(2, 'Appointments')
-      expect(mockNavigateToAppointmentSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(mockNavigateToAppointmentSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('on click of the secure messaging button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(3, 'SecureMessaging')
-      expect(mockNavigateToSecureMessagingSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[1].props.onPress()
+        expect(mockNavigateToSecureMessagingSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('on click of the vaccines button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[2].props.onPress()
-      expect(mockNavigateToSpy).toHaveBeenNthCalledWith(4, 'VaccineList')
-      expect(mockNavigateToVAVaccinesSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[2].props.onPress()
+        expect(mockNavigateToVAVaccinesSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('on click of the covid-19 updates button', () => {
     it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
-      testInstance.findAllByType(Pressable)[3].props.onPress()
-      const expectNavArgs =
-      {
-        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-        displayTitle: 'va.gov'
-      }
-      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[3].props.onPress()
+        const expectNavArgs = {
+          url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
+          displayTitle: 'va.gov',
+        }
+        expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
+      })
     })
   })
 
   it('should render messagesCountTag with the correct count number', async () => {
-    expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
-    expect(testInstance.findAllByType(TextView)[7].props.children).toBe(13)
+    await waitFor(() => {
+      expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
+      expect(testInstance.findAllByType(TextView)[7].props.children).toBe(13)
+    })
   })
 
   describe('when there are zero unread inbox messages', () => {
     it('should not render a messagesCountTag', async () => {
-      initializeTestInstance(0)
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe('Messages')
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Send and receive secure messages')
+      await waitFor(() => {
+        initializeTestInstance(0)
+        expect(testInstance.findAllByType(TextView)[6].props.children).toBe('Messages')
+        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Send and receive secure messages')
+      })
     })
   })
 })

@@ -1,19 +1,19 @@
 import React from 'react'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, mockStore, render } from 'testUtils'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
 import AskForClaimDecision from './AskForClaimDecision'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState, submitClaimDecision } from 'store/slices'
 import { AlertBox, VASelector, ErrorComponent, VAButton, TextView } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import { submitClaimDecision } from 'store/actions'
+import { RenderAPI } from '@testing-library/react-native'
 
-jest.mock('../../../../../../store/actions', () => {
-  let actual = jest.requireActual('../../../../../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     submitClaimDecision: jest.fn(() => {
@@ -26,7 +26,7 @@ jest.mock('../../../../../../store/actions', () => {
 })
 
 context('AskForClaimDecision', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
   let store: any
@@ -55,30 +55,28 @@ context('AskForClaimDecision', () => {
       },
     )
 
-    store = mockStore({
-      ...InitialState,
-      claimsAndAppeals: {
-        ...InitialState.claimsAndAppeals,
-        submittedDecision,
-        error,
-        claim: {
-          id: '600156928',
-          type: 'evss_claims',
-          attributes: {
-            ...Claim.attributes,
-            decisionLetterSent,
-            open: false,
+    component = render(<AskForClaimDecision {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        claimsAndAppeals: {
+          ...InitialState.claimsAndAppeals,
+          submittedDecision,
+          error,
+          claim: {
+            id: '600156928',
+            type: 'evss_claims',
+            attributes: {
+              ...Claim.attributes,
+              decisionLetterSent,
+              open: false,
+            },
           },
         },
+        errors: errorsState,
       },
-      errors: errorsState,
     })
 
-    act(() => {
-      component = renderWithProviders(<AskForClaimDecision {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

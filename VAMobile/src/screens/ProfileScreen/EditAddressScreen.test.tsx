@@ -5,14 +5,13 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTestID, findByTypeWithSubstring, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton, BackButton } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
-import { validateAddress, deleteAddress, finishValidateAddress } from 'store/actions'
+import { validateAddress, ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
@@ -25,8 +24,8 @@ jest.mock('@react-navigation/stack', () => {
   }
 })
 
-jest.mock('../../store/actions', () => {
-  let actual = jest.requireActual('../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     validateAddress: jest.fn(() => {
@@ -77,8 +76,7 @@ jest.mock('@react-navigation/native', () => {
 })
 
 context('EditAddressScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
   let profileInfo: UserDataProfile
@@ -113,27 +111,24 @@ context('EditAddressScreen', () => {
       },
     )
 
-    store = mockStore({
-      ...InitialState,
-      personalInformation: {
-        profile,
-        loading: false,
-        savingAddress: false,
-        addressSaved,
-        showValidation,
-        needsDataLoad: false,
-        emailSaved: false,
-        preloadComplete: false,
-        phoneNumberSaved: false,
+    component = render(<EditAddressScreen {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: {
+          profile,
+          loading: false,
+          addressSaved,
+          showValidation,
+          needsDataLoad: false,
+          emailSaved: false,
+          preloadComplete: false,
+          phoneNumberSaved: false,
+        },
+        errors: errorsState,
       },
-      errors: errorsState,
     })
 
-    act(() => {
-      component = renderWithProviders(<EditAddressScreen {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

@@ -3,52 +3,53 @@ import { Linking, Pressable } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
+import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
 import { ClaimType } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { InitialState } from 'store/reducers'
+import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
 
 const mockNavigationSpy = jest.fn()
-jest.mock('../../../../utils/hooks', () => {
-  const original = jest.requireActual('../../../../utils/hooks')
-  const theme = jest.requireActual('../../../../styles/themes/standardTheme').default
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
 context('ClaimStatus', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
+  let mockNavigateToConsolidatedClaimsNoteSpy: jest.Mock
+  let mockNavigateToWhatDoIDoIfDisagreementSpy: jest.Mock
 
   const maxEstDate = '2019-12-11'
 
   const initializeTestInstance = (maxEstDate: string, claimType: ClaimType): void => {
+    mockNavigateToConsolidatedClaimsNoteSpy = jest.fn()
+    mockNavigateToWhatDoIDoIfDisagreementSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(() => {}).mockReturnValueOnce(mockNavigateToConsolidatedClaimsNoteSpy).mockReturnValueOnce(mockNavigateToWhatDoIDoIfDisagreementSpy)
     props = mockNavProps({
       claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
       claimType,
     })
-
-    store = mockStore({
-      ...InitialState,
+    component = render(<ClaimStatus {...props} />, {
+      preloadedState: {
+        ...InitialState,
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<ClaimStatus {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -63,14 +64,16 @@ context('ClaimStatus', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', async () => {
         testInstance.findAllByType(Pressable)[5].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenNthCalledWith(1, 'ConsolidatedClaimsNote')
+        expect(mockNavigateToConsolidatedClaimsNoteSpy).toHaveBeenCalled()
       })
     })
 
     describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
       it('should call useRouteNavigation', async () => {
         testInstance.findAllByType(Pressable)[6].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenNthCalledWith(2, 'WhatDoIDoIfDisagreement')
+        expect(mockNavigateToWhatDoIDoIfDisagreementSpy).toHaveBeenCalled()
       })
     })
   })
@@ -78,7 +81,9 @@ context('ClaimStatus', () => {
   describe('when the claimType is CLOSED', () => {
     it('should display text detailing decision packet information', async () => {
       initializeTestInstance('', 'CLOSED')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A decision packet has been mailed to you. Typically, decision notices are received within 10 days, but this is dependent upon U.S. Postal Service timeframes.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
+        'A decision packet has been mailed to you. Typically, decision notices are received within 10 days, but this is dependent upon U.S. Postal Service timeframes.',
+      )
     })
 
     it('should display the date for the event in the events timeline where the type is "completed"', async () => {

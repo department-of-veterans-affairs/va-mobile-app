@@ -7,10 +7,11 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import DocumentPicker from 'react-native-document-picker'
 import { ImagePickerResponse } from 'react-native-image-picker'
 
-import { context, mockNavProps, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import Attachments from './Attachments'
 import { AlertBox, TextView, VAButton } from 'components'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { when } from 'jest-when'
 
 let mockShowActionSheetWithOptions = jest.fn()
 jest.mock('@expo/react-native-action-sheet', () => {
@@ -23,7 +24,7 @@ jest.mock('@expo/react-native-action-sheet', () => {
   }
 })
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
@@ -33,27 +34,32 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
 context('Attachments', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
   let goBack: jest.Mock
+  let mockNavigateToEditDraftSpy: jest.Mock
 
   const initializeTestInstance = (attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse> = []) => {
     goBack = jest.fn()
+    mockNavigateToEditDraftSpy = jest.fn()
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('EditDraft', { attachmentFileToAdd: {name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
+        .mockReturnValue(mockNavigateToEditDraftSpy)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentsList } })
 
-    act(() => {
-      component = renderWithProviders(<Attachments {...props} />)
-    })
+    component = render(<Attachments {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -61,17 +67,21 @@ context('Attachments', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('on click of select a file', () => {
     it('should call showActionSheetWithOptions and display the action sheet', async () => {
-      testInstance.findByType(VAButton).props.onPress()
+      await waitFor(() => {
+        testInstance.findByType(VAButton).props.onPress()
 
-      expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
+        expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
 
-      const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0]
-      expect(actionSheetConfig.options).toEqual(['Camera', 'Photo gallery', 'File folder', 'Cancel'])
+        const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0]
+        expect(actionSheetConfig.options).toEqual(['Camera', 'Photo gallery', 'File folder', 'Cancel'])
+      })
     })
   })
 
@@ -84,15 +94,17 @@ context('Attachments', () => {
       expect(buttons.length).toEqual(1)
       expect(buttons[0].props.label).toEqual('Select a File')
 
-      buttons[0].props.onPress()
+      await waitFor(() => {
+        buttons[0].props.onPress()
+      })
 
       const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
-      act(() => {
+      await waitFor(() => {
         actionSheetCallback(2)
       })
 
-      await act(() => {
+      await waitFor(() => {
         promise
       })
 
@@ -113,20 +125,22 @@ context('Attachments', () => {
         expect(buttons.length).toEqual(1)
         expect(buttons[0].props.label).toEqual('Select a File')
 
-        buttons[0].props.onPress()
+        await waitFor(() => {
+          buttons[0].props.onPress()
+        })
 
         const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
-        act(() => {
+        await waitFor(() => {
           actionSheetCallback(2)
         })
 
-        await act(() => {
+        await waitFor(() => {
           promise
         })
 
         testInstance.findAllByType(VAButton)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigateToEditDraftSpy).toHaveBeenCalled()
       })
     })
 
@@ -139,15 +153,17 @@ context('Attachments', () => {
         expect(buttons.length).toEqual(1)
         expect(buttons[0].props.label).toEqual('Select a File')
 
-        buttons[0].props.onPress()
+        await waitFor(() => {
+          buttons[0].props.onPress()
+        })
 
         const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
-        act(() => {
+        await waitFor(() => {
           actionSheetCallback(2)
         })
 
-        await act(() => {
+        await waitFor(() => {
           promise
         })
 
@@ -164,15 +180,17 @@ context('Attachments', () => {
         const allButtons = testInstance.findAllByType(VAButton)
         expect(allButtons[0].props.label).toEqual('Select a File')
 
-        allButtons[0].props.onPress()
+        await waitFor(() => {
+          allButtons[0].props.onPress()
+        })
 
         const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
-        act(() => {
+        await waitFor(() => {
           actionSheetCallback(2)
         })
 
-        await act(() => {
+        await waitFor(() => {
           failCasePromise
         })
 
@@ -187,15 +205,17 @@ context('Attachments', () => {
           const allButtons = testInstance.findAllByType(VAButton)
           expect(allButtons[0].props.label).toEqual('Select a File')
 
-          allButtons[0].props.onPress()
+          await waitFor(() => {
+            allButtons[0].props.onPress()
+          })
 
           const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
-          act(() => {
+          await waitFor(() => {
             actionSheetCallback(2)
           })
 
-          await act(() => {
+          await waitFor(() => {
             failCasePromise
           })
 
@@ -213,15 +233,17 @@ context('Attachments', () => {
           const allButtons = testInstance.findAllByType(VAButton)
           expect(allButtons[0].props.label).toEqual('Select a File')
 
-          allButtons[0].props.onPress()
+          await waitFor(() => {
+            allButtons[0].props.onPress()
+          })
 
           const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
-          act(() => {
+          await waitFor(() => {
             actionSheetCallback(2)
           })
 
-          await act(() => {
+          await waitFor(() => {
             failCasePromise
           })
 
@@ -241,15 +263,17 @@ context('Attachments', () => {
           const allButtons = testInstance.findAllByType(VAButton)
           expect(allButtons[0].props.label).toEqual('Select a File')
 
-          allButtons[0].props.onPress()
+          await waitFor(() => {
+            allButtons[0].props.onPress()
+          })
 
           const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
-          act(() => {
+          await waitFor(() => {
             actionSheetCallback(2)
           })
 
-          await act(() => {
+          await waitFor(() => {
             failCasePromise
           })
 
@@ -269,15 +293,17 @@ context('Attachments', () => {
           const allButtons = testInstance.findAllByType(VAButton)
           expect(allButtons[0].props.label).toEqual('Select a File')
 
-          allButtons[0].props.onPress()
+          await waitFor(() => {
+            allButtons[0].props.onPress()
+          })
 
           const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
-          act(() => {
+          await waitFor(() => {
             actionSheetCallback(2)
           })
 
-          await act(() => {
+          await waitFor(() => {
             failCasePromise
           })
 

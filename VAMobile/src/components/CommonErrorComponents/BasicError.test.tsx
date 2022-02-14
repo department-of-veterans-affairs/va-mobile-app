@@ -5,28 +5,23 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders, mockStore } from 'testUtils'
-import BasicError from "./BasicError";
-import Mock = jest.Mock;
-import {Pressable} from "react-native";
+import { context, render, RenderAPI, waitFor } from 'testUtils'
+import BasicError from './BasicError'
+import Mock = jest.Mock
+import { Pressable } from 'react-native'
 
 context('BasicError', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onTryAgainSpy: Mock
-
-  beforeEach(() => {
-    store = mockStore({})
+  beforeEach(async () => {
     onTryAgainSpy = jest.fn(() => {})
 
-    act(() => {
-      component = renderWithProviders(
-        <BasicError onTryAgain={onTryAgainSpy} messageText={'message body'} />,
-        store
-      )
+    await waitFor(() => {
+      component = render(<BasicError onTryAgain={onTryAgainSpy} messageText={'message body'} />)
     })
-    testInstance = component.root
+
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -35,7 +30,9 @@ context('BasicError', () => {
 
   describe('when the try again button is clicked', () => {
     it('should call the onTryAgain function', async () => {
-      testInstance.findByType(Pressable).props.onPress()
+      await waitFor(() => {
+        testInstance.findByType(Pressable).props.onPress()
+      })
       expect(onTryAgainSpy).toBeCalled()
     })
   })

@@ -14,7 +14,8 @@ import {
 } from 'store/api/types'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PersonalInformationState } from 'store/slices'
+import { RootState } from 'store'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -302,7 +303,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const launchExternalLink = useExternalLink()
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const marginTop = theme.dimensions.condensedMarginBetween
   const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, profile?.fullName || '', t, docketName || 'UNDF DOCKET')
@@ -321,7 +322,9 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
                 {details[0]}
               </TextView>
               <TextView variant="MobileBody" mt={marginTop}>
-                <TextView variant="MobileBodyBold">{details[1]}</TextView>
+                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+                  {details[1]}
+                </TextView>
                 {details[2]}
               </TextView>
             </Box>
@@ -511,7 +514,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
               <TextView variant="MobileBody" mt={marginTop}>
                 {details[3]}
               </TextView>
-              <TextView variant="MobileBodyBold" mt={marginTop}>
+              <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop}>
                 {details[1]}
               </TextView>
               <TextView variant="MobileBody">{details[2]}</TextView>
@@ -523,7 +526,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <TextView variant="MobileBodyBold" mt={marginTop}>
+            <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop}>
               {details[1]}
             </TextView>
             <TextView variant="MobileBody">{details[2]}</TextView>
@@ -579,10 +582,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
 
   return (
     <TextArea>
-      <TextView variant="BitterBoldHeading" accessibilityRole="header">
+      <TextView variant="BitterBoldHeading" color={'primaryTitle'} accessibilityRole="header">
         {t('appealDetails.currentStatus')}
       </TextView>
-      <TextView variant="MobileBodyBold" mt={marginTop} accessibilityRole="header">
+      <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop} accessibilityRole="header">
         {statusHeadingAndTitle.title}
       </TextView>
       {renderStatusDetails()}

@@ -1,13 +1,13 @@
 import * as Types from './types'
-import {contentTypes, get, post, setRefreshToken} from './api'
+import { contentTypes, get, post, setRefreshToken } from './api'
 
 import { context, fetch } from 'testUtils'
 
-jest.mock('../actions/auth', () => {
+jest.mock('store/slices', () => {
   return {
-    refreshAccessToken: (token: string): Promise<boolean>  => {
+    refreshAccessToken: (token: string): Promise<boolean> => {
       return Promise.resolve(true)
-    }
+    },
   }
 })
 
@@ -54,20 +54,20 @@ context('api', () => {
 
   it('should handle POST correctly if contentType is specified to be multipart/form-data', async () => {
     fetch.mockResolvedValue({ status: 200, json: () => Promise.resolve({ res: 'response' }) })
-    const formData = new FormData
+    const formData = new FormData()
 
-    const result = await post('/foo', {formData} , contentTypes.multipart)
+    const result = await post('/foo', { formData }, contentTypes.multipart)
 
     const headers = expect.objectContaining({ 'Content-Type': contentTypes.multipart })
 
-    const body = {formData: formData}
+    const body = { formData: formData }
 
     expect(fetch).toHaveBeenCalledWith('https://test-api/foo', expect.objectContaining({ method: 'POST', body, headers }))
     expect(result).toEqual(expect.objectContaining({ res: 'response' }))
   })
 
   it('should handle 401 and make the call again', async () => {
-    fetch.mockResolvedValueOnce({ status: 401, text: () => Promise.resolve('unauthorized') }).mockResolvedValueOnce({ status: 200, json: () => Promise.resolve({ foo: 'test' })})
+    fetch.mockResolvedValueOnce({ status: 401, text: () => Promise.resolve('unauthorized') }).mockResolvedValueOnce({ status: 200, json: () => Promise.resolve({ foo: 'test' }) })
 
     setRefreshToken('refresh')
 

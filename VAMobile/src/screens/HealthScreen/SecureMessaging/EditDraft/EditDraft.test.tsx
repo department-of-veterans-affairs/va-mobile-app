@@ -2,17 +2,17 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTestID, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import EditDraft from './EditDraft'
-import { InteractionManager, Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
-import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
-import { initializeErrorsByScreenID, InitialState } from 'store/reducers'
-import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
-import { saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
+import { AlertBox, ErrorComponent, LoadingComponent, TextView, VATextInput } from 'components'
+import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
+import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -24,20 +24,13 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
-const runAfterTransition = (testToRun: () => void) => {
-  InteractionManager.runAfterInteractions(() => {
-    testToRun()
-  })
-  jest.runAllTimers()
-}
-
-jest.mock('store/actions', () => {
-  let actual = jest.requireActual('store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
@@ -47,6 +40,24 @@ jest.mock('store/actions', () => {
       }
     }),
     saveDraft: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    getMessage: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    getMessageRecipients: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    getThread: jest.fn(() => {
       return {
         type: '',
         payload: '',
@@ -127,12 +138,15 @@ const mockMessages: SecureMessagingMessageMap = {
 }
 
 context('EditDraft', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
   let goBack: jest.Mock
-  let store: any
   let navHeaderSpy: any
+  let navigateSpy: jest.Mock
+  let navigateToVeteransCrisisLineSpy: jest.Mock
+  let navigateToAddToFilesSpy: jest.Mock
+  let navigateToAttachAFileSpy: jest.Mock
 
   const initializeTestInstance = ({
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -144,13 +158,26 @@ context('EditDraft', () => {
     messageID = 2,
   }) => {
     goBack = jest.fn()
+    navigateSpy = jest.fn()
+    navigateToVeteransCrisisLineSpy = jest.fn()
+    navigateToAddToFilesSpy = jest.fn()
+    navigateToAttachAFileSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteransCrisisLineSpy)
+      .calledWith('Attachments', { origin: 'Draft', attachmentsList: [], messageID: 2 })
+      .mockReturnValue(navigateToAddToFilesSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' })
+      .mockReturnValue(navigateToAttachAFileSpy)
 
     props = mockNavProps(
       undefined,
       {
-        navigate: mockNavigationSpy,
+        navigate: navigateSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -161,51 +188,49 @@ context('EditDraft', () => {
       { params: { attachmentFileToAdd: {}, messageID } },
     )
 
-    store = mockStore({
-      ...InitialState,
-      secureMessaging: {
-        ...InitialState.secureMessaging,
-        sendMessageFailed: sendMessageFailed,
-        recipients: noRecipientsReturned
-          ? []
-          : [
-              {
-                id: 'id',
-                type: 'type',
-                attributes: {
-                  triageTeamId: 0,
-                  name: 'Doctor 1',
-                  relationType: 'PATIENT',
-                  preferredTeam: true,
+    component = render(<EditDraft {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        secureMessaging: {
+          ...InitialState.secureMessaging,
+          sendMessageFailed: sendMessageFailed,
+          recipients: noRecipientsReturned
+            ? []
+            : [
+                {
+                  id: 'id',
+                  type: 'type',
+                  attributes: {
+                    triageTeamId: 0,
+                    name: 'Doctor 1',
+                    relationType: 'PATIENT',
+                    preferredTeam: true,
+                  },
                 },
-              },
-              {
-                id: 'id2',
-                type: 'type',
-                attributes: {
-                  triageTeamId: 1,
-                  name: 'Doctor 2',
-                  relationType: 'PATIENT',
-                  preferredTeam: true,
+                {
+                  id: 'id2',
+                  type: 'type',
+                  attributes: {
+                    triageTeamId: 1,
+                    name: 'Doctor 2',
+                    relationType: 'PATIENT',
+                    preferredTeam: true,
+                  },
                 },
-              },
-            ],
-        hasLoadedRecipients,
-        loading,
-        messagesById: mockMessages,
-        threads,
-      },
-      errors: {
-        ...InitialState.errors,
-        errorsByScreenID,
+              ],
+          hasLoadedRecipients,
+          loading,
+          messagesById: mockMessages,
+          threads,
+        },
+        errors: {
+          ...InitialState.errors,
+          errorsByScreenID,
+        },
       },
     })
 
-    act(() => {
-      component = renderWithProviders(<EditDraft {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -213,7 +238,9 @@ context('EditDraft', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('when no recipients are returned', () => {
@@ -226,16 +253,16 @@ context('EditDraft', () => {
     })
 
     it('should display an AlertBox', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       })
     })
 
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
-        runAfterTransition(() => {
+        await waitFor(() => {
           testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
-          expect(mockNavigationSpy).toHaveBeenCalled()
+          expect(navigateSpy).toHaveBeenCalled()
           expect(updateSecureMessagingTab).toHaveBeenCalled()
         })
       })
@@ -243,8 +270,8 @@ context('EditDraft', () => {
   })
 
   describe('when hasLoadedRecipients is false', () => {
-    it('should display the LoadingComponent', () => {
-      runAfterTransition(() => {
+    it('should display the LoadingComponent', async () => {
+      await waitFor(() => {
         initializeTestInstance({ loading: true })
         expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
       })
@@ -253,7 +280,7 @@ context('EditDraft', () => {
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
         expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
       })
@@ -262,34 +289,33 @@ context('EditDraft', () => {
 
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
       })
     })
   })
 
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(
-          findByTypeWithText(
-            testInstance,
-            TextView,
-            'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-          ),
-        ).toBeTruthy()
       })
+
+      expect(
+        findByTypeWithText(
+          testInstance,
+          TextView,
+          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
+        ),
+      ).toBeTruthy()
     })
   })
 
   describe('when pressing the back button', () => {
     it('should ask for confirmation if any field filled in', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
-        })
+      await waitFor(() => {
+        testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
         navHeaderSpy.back.props.onPress()
         expect(goBack).not.toHaveBeenCalled()
         expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
@@ -299,18 +325,18 @@ context('EditDraft', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToAddToFilesSpy).toHaveBeenCalled()
       })
     })
   })
 
   describe('on click of the "How to attach a file" link', () => {
     it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(navigateToAttachAFileSpy).toHaveBeenCalled()
       })
     })
   })
@@ -322,13 +348,13 @@ context('EditDraft', () => {
     })
 
     it('should display error alert', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
       })
     })
     describe('when the My HealtheVet phone number link is clicked', () => {
       it('should call Linking open url with the parameter tel:8773270022', async () => {
-        runAfterTransition(() => {
+        await waitFor(() => {
           testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
           expect(Linking.openURL).toBeCalledWith('tel:8773270022')
         })
@@ -336,7 +362,7 @@ context('EditDraft', () => {
     })
     describe('when the call TTY phone link is clicked', () => {
       it('should call Linking open url with the parameter tel:711', async () => {
-        runAfterTransition(() => {
+        await waitFor(() => {
           testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
           expect(Linking.openURL).toBeCalledWith('tel:711')
         })

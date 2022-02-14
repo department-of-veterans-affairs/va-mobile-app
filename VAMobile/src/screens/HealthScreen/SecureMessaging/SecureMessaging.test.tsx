@@ -4,60 +4,48 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, renderWithProviders, mockStore } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import SecureMessaging from './SecureMessaging'
-import {updateSecureMessagingTab} from 'store/actions'
-import {TouchableOpacity} from 'react-native'
-import {
-  ErrorsState,
-  initialAuthorizedServicesState,
-  initialErrorsState,
-  initializeErrorsByScreenID,
-  InitialState
-} from 'store/reducers'
-import {CommonErrorTypesConstants} from 'constants/errors'
-import {ScreenIDTypesConstants} from 'store/api/types'
-import {ErrorComponent} from 'components/CommonErrorComponents'
-import NotEnrolledSM from "./NotEnrolledSM/NotEnrolledSM";
+import { updateSecureMessagingTab, ErrorsState, initialAuthorizedServicesState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
+import { TouchableOpacity } from 'react-native'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { ErrorComponent } from 'components/CommonErrorComponents'
+import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
 
-jest.mock('../../../store/actions', () => {
-  let actual = jest.requireActual('../../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
-
 context('SecureMessaging', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
-  let store: any
 
   const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, authorizedSM = true) => {
     props = mockNavProps()
 
-    store = mockStore({
-      ...InitialState,
-      errors: errorsState,
-      authorizedServices: {
-        ...initialAuthorizedServicesState,
-        secureMessaging: authorizedSM,
+    component = render(<SecureMessaging {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        errors: errorsState,
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          secureMessaging: authorizedSM,
+        },
       },
     })
 
-    act(() => {
-      component = renderWithProviders(<SecureMessaging {...props} />, store)
-    })
-
-    testInstance = component.root
-
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -65,13 +53,17 @@ context('SecureMessaging', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('when user is not authorized for secure messaging', () => {
     it('should display NotEnrolledSM component', async () => {
-      initializeTestInstance(initialErrorsState, false)
-      expect(testInstance.findAllByType(NotEnrolledSM).length).toEqual(1)
+      await waitFor(() => {
+        initializeTestInstance(initialErrorsState, false)
+        expect(testInstance.findAllByType(NotEnrolledSM).length).toEqual(1)
+      })
     })
   })
 
@@ -85,11 +77,13 @@ context('SecureMessaging', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(errorState)
-      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      await waitFor(() => {
+        initializeTestInstance(errorState)
+        expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      })
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
       const errorState: ErrorsState = {
@@ -97,8 +91,10 @@ context('SecureMessaging', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      await waitFor(() => {
+        initializeTestInstance(errorState)
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      })
     })
   })
 
@@ -112,12 +108,14 @@ context('SecureMessaging', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(errorState)
-      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
-      expect(testInstance.findByProps({'phone':'877-327-0022'})).toBeTruthy()
+      await waitFor(() => {
+        initializeTestInstance(errorState)
+        expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+        expect(testInstance.findByProps({ phone: '877-327-0022' })).toBeTruthy()
+      })
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
 
@@ -126,15 +124,19 @@ context('SecureMessaging', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      await waitFor(() => {
+        initializeTestInstance(errorState)
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      })
     })
   })
 
   describe('on click of a segmented control tab', () => {
     it('should call updateSecureMessagingTab', async () => {
-      testInstance.findAllByType(TouchableOpacity)[0].props.onPress()
-      expect(updateSecureMessagingTab).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(TouchableOpacity)[0].props.onPress()
+        expect(updateSecureMessagingTab).toHaveBeenCalled()
+      })
     })
   })
 })

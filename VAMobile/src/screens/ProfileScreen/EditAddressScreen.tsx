@@ -1,6 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
@@ -26,14 +25,15 @@ import { Countries } from 'constants/countries'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PersonalInformationState, deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/slices'
 import { RootNavStackParamList } from 'App'
+import { RootState } from 'store'
 import { States } from 'constants/states'
-import { deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/actions'
 import { profileAddressOptions } from './AddressSummary'
 import { stringToTitleCase } from '../../utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
 import HeaderTitle from 'components/HeaderTitle'
 
@@ -80,10 +80,10 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressSaved, savingAddress, showValidation } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressSaved, savingAddress, showValidation } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const destructiveAlert = useDestructiveAlert()
 
@@ -503,7 +503,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+            <AlertBox title={t('editAddress.alertError')} border="error" />
           </Box>
         )}
         <FormWrapper

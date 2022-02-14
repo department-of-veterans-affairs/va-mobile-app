@@ -2,15 +2,14 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, mockStore, render } from 'testUtils'
 
-import {InitialState} from 'store/reducers'
 import ClaimDetails from './ClaimDetails'
-import {TextView} from 'components'
+import { TextView } from 'components'
+import { RenderAPI } from '@testing-library/react-native'
 
 context('ClaimDetails', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
@@ -60,20 +59,13 @@ context('ClaimDetails', () => {
             },
           ],
         },
-      }
+      },
     })
 
-    store = mockStore({
-      ...InitialState,
-    })
+    component = render(<ClaimDetails {...props} />)
 
-    act(() => {
-      component = renderWithProviders(<ClaimDetails {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
-
 
   beforeEach(() => {
     initializeTestInstance(contentionList)

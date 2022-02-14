@@ -1,12 +1,13 @@
-import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
-import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
+import { useSelector } from 'react-redux'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 /**
@@ -15,9 +16,9 @@ import { useTheme, useTranslation } from 'utils/hooks'
 export type ProfileBannerProps = Record<string, unknown>
 
 const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const { mostRecentBranch } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const t = useTranslation(NAMESPACE.PROFILE)
 

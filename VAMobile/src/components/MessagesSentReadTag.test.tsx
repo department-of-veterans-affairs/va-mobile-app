@@ -4,28 +4,26 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, renderWithProviders} from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import TextView from './TextView'
-import MessagesSentReadTag from "./MessagesSentReadTag";
+import MessagesSentReadTag from './MessagesSentReadTag'
 
 context('MessagesSentReadTag', () => {
-    let component: any
-    let testInstance: ReactTestInstance
+  let component: RenderAPI
+  let testInstance: ReactTestInstance
 
-    beforeEach(() => {
-        act(() => {
-            component = renderWithProviders(<MessagesSentReadTag text={'READ'} />)
-        })
-        testInstance = component.root
-    })
+  beforeEach(() => {
+    component = render(<MessagesSentReadTag text={'READ'} />)
+    testInstance = component.container
+  })
 
-    it('initializes correctly', async () => {
-        expect(component).toBeTruthy()
-    })
+  it('initializes correctly', async () => {
+    expect(component).toBeTruthy()
+  })
 
-    it("should render text as 'READ'", async () => {
-        const texts = testInstance.findAllByType(TextView)
-        expect(texts.length).toBe(1)
-        expect(texts[0].props.children).toBe('READ')
-    })
+  it("should render text as 'READ'", async () => {
+    const texts = testInstance.findAllByType(TextView)
+    expect(texts.length).toBe(1)
+    expect(texts[0].props.children).toBe('READ')
+  })
 })
