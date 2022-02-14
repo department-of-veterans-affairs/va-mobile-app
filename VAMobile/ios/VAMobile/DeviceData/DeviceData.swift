@@ -9,20 +9,41 @@ import Foundation
 import UIKit
 
 @objc(DeviceData)
-class DeviceData: NSObject {
+class DeviceData: NSObject, RCTBridgeModule {
+
+   static func moduleName() -> String! {
+    return "DeviceData"
+  }
+
   @objc
   static func requiresMainQueueSetup() -> Bool {
     return true
    }
-  
-  @objc
-  func constantsToExport() -> [AnyHashable : Any]! {
-   return [
-    "deviceName" : UIDevice.current.name,
-    "versionName" :   UIApplication.versionName,
-    "buildNumber" : UIApplication.build
-   ]
+
+
+  // Exposes the device name from the global settings.
+  // @returns the user-assigned name of the device.
+  @objc(getDeviceName:rejecter:)
+  func getDeviceName(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+    resolve(UIDevice.current.name)
   }
+  
+  
+  // Exposes the app version name.
+  // @returns version name of the app (1.1.1).  
+  @objc(getVersionName:rejecter:)
+  func getVersionName(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+    resolve(UIApplication.versionName)
+  }
+  
+  
+  //Exposes the app build number.
+  // @returns build number of the app (0).
+  @objc(getBuildNumber:rejecter:)
+  func getBuildNumber(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+    resolve(UIApplication.build)
+  }
+  
 }
 
 extension UIApplication {

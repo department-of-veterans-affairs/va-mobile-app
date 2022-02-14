@@ -157,6 +157,12 @@ export const Events = {
       },
     }
   },
+  // Issue#2273 Track appointment pagination discrepancies
+  vama_appts_page_warning: (): Event => {
+    return {
+      name: 'vama_appts_page_warning',
+    }
+  },
 }
 
 export const UserAnalytics = {

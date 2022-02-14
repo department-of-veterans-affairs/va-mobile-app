@@ -182,8 +182,12 @@ const vaccineSlice = createSlice({
 
       state.detailsLoading = false
     },
+
+    dispatchVaccineLogout: () => {
+      return { ...initialVaccineState }
+    },
   },
 })
 
-export const { dispatchFinishGetLocation, dispatchFinishGetVaccines, dispatchStartGetLocation, dispatchStartGetVaccines } = vaccineSlice.actions
+export const { dispatchFinishGetLocation, dispatchFinishGetVaccines, dispatchStartGetLocation, dispatchStartGetVaccines, dispatchVaccineLogout } = vaccineSlice.actions
 export default vaccineSlice.reducer
