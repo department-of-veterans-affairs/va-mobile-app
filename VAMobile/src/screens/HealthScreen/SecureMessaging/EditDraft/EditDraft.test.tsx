@@ -166,10 +166,13 @@ context('EditDraft', () => {
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteransCrisisLineSpy)
-        .calledWith('Attachments', { origin: 'Draft', attachmentsList: [], messageID: 2 }).mockReturnValue(navigateToAddToFilesSpy)
-        .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' }).mockReturnValue(navigateToAttachAFileSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteransCrisisLineSpy)
+      .calledWith('Attachments', { origin: 'Draft', attachmentsList: [], messageID: 2 })
+      .mockReturnValue(navigateToAddToFilesSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' })
+      .mockReturnValue(navigateToAttachAFileSpy)
 
     props = mockNavProps(
       undefined,
