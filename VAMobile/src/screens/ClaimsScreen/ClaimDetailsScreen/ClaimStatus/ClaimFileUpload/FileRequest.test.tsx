@@ -103,7 +103,7 @@ context('FileRequest', () => {
 
       await waitFor(() => {
         initializeTestInstance(updatedRequests)
-        expect(findByTypeWithText(testInstance, TextView, 'You have 2 file requests from VA')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'You have 2 file requests from V\ufeffA')).toBeTruthy()
       })
     })
   })
@@ -111,7 +111,7 @@ context('FileRequest', () => {
   describe('when number of requests is equal to 1', () => {
     it('should display the text "You have 1 file request from VA"', async () => {
       await waitFor(() => {
-        expect(findByTypeWithText(testInstance, TextView, 'You have 1 file request from VA')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'You have 1 file request from V\ufeffA')).toBeTruthy()
       })
     })
 
@@ -159,7 +159,7 @@ context('FileRequest', () => {
 
     describe('on click of a file request', () => {
       it('should navigate to file request detals page', async () => {
-        findByTestID(testInstance, 'request-1').props.onPress()
+        findByTestID(testInstance, 'Request 1').props.onPress()
         expect(mockNavigateToFileRequestdetailsSpy).toHaveBeenCalled()
       })
     })

@@ -269,6 +269,7 @@
   "fileRequest.title": "File Request",
   "fileRequest.askForYourClaimEvaluationTitle": "Ask for your claim evaluation",
   "fileRequest.askForYourClaimEvaluationBody": "Please review the evaluation details if you are ready for us to begin evaluating your claim",
+  "fileRequest.buttonA11yHint": "Go to the file request details page to upload file.",
   "fileRequest.viewEvaluationDetails": "Review Evaluation Details",
   "fileRequest.viewEvaluationDetailsA11yHint": "navigates to the claim evaluation details page",
   "fileRequest.weSentYouALaterText": "We sent you a letter in the mail asking for more evidence to support your claim. We'll wait 30 days for your evidence before we begin evaluating your claim.",

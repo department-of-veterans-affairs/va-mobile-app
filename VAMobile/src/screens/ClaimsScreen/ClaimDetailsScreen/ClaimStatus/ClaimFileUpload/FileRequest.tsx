@@ -52,6 +52,7 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
         onPress: navigateTo('FileRequestDetails', { request }),
         claimsRequestNumber: requestNumber,
         fileUploaded: uploaded,
+        a11yHintText: t('fileRequest.buttonA11yHint'),
       }
 
       if (!uploaded) {
