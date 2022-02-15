@@ -8,8 +8,9 @@ import { ClaimType } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
 import AskForClaimDecision from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
-import ClaimFileUpload from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/ClaimFileUpload'
 import ConsolidatedClaimsNote from './ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
+import FileRequest from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
+import FileRequestDetails from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import SelectFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
 import TakePhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import UploadConfirmation from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadConfirmation/UploadConfirmation'
@@ -40,8 +41,11 @@ export type ClaimsStackParamList = {
   AppealDetailsScreen: {
     appealID: string
   }
-  ClaimFileUpload: {
+  FileRequest: {
     claimID: string
+  }
+  FileRequestDetails: {
+    request: ClaimEventData
   }
   AskForClaimDecision: {
     claimID: string
@@ -77,7 +81,7 @@ export const getClaimsScreens = (t: TFunction): Array<ReactNode> => {
     <ClaimsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />,
     <ClaimsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />,
     <ClaimsStack.Screen key={'AppealDetailsScreen'} name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('statusDetails.title') }} />,
-    <ClaimsStack.Screen key={'ClaimFileUpload'} name="ClaimFileUpload" component={ClaimFileUpload} options={{ title: t('fileUpload.title') }} />,
+    <ClaimsStack.Screen key={'FileRequest'} name="FileRequest" component={FileRequest} options={{ title: t('fileRequest.title') }} />,
     <ClaimsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} />,
     <ClaimsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />,
@@ -86,5 +90,6 @@ export const getClaimsScreens = (t: TFunction): Array<ReactNode> => {
     <ClaimsStack.Screen key={'UploadSuccess'} name="UploadSuccess" component={UploadSuccess} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadConfirmation'} name="UploadConfirmation" component={UploadConfirmation} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadFailure'} name="UploadFailure" component={UploadFailure} options={{ title: t('fileUpload.title') }} />,
+    <ClaimsStack.Screen key={'FileRequestDetails'} name="FileRequestDetails" component={FileRequestDetails} options={{ title: t('fileRequest.title') }} />,
   ]
 }
