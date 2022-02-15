@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { BaseListItemProps, Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -46,7 +46,13 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
     return map(requests, (request) => {
       const { displayName, uploaded } = request
 
-      const item = { text: displayName || '', onPress: navigateTo('FileRequestDetails', { request }), claimsRequestNumber: requestNumber, fileUploaded: uploaded }
+      const item: SimpleListItemObj = {
+        text: displayName || '',
+        testId: displayName,
+        onPress: navigateTo('FileRequestDetails', { request }),
+        claimsRequestNumber: requestNumber,
+        fileUploaded: uploaded,
+      }
 
       if (!uploaded) {
         requestNumber++
@@ -63,13 +69,7 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
   return (
     <VAScrollView {...testIdProps('file-request-page')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <TextView
-          variant="MobileBodyBold"
-          accessibilityRole="header"
-          mt={standardMarginBetween}
-          mb={condensedMarginBetween}
-          mx={gutter}
-          accessibilityLabel={t(`claimPhase.youHaveFileRequestA11yHints${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={standardMarginBetween} mb={condensedMarginBetween} mx={gutter}>
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         <Box>
