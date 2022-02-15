@@ -331,52 +331,32 @@
             "trackedItemId": 293439,
             "description": "You may be able to furnish documents that can substitute for service treatment records.  Submit any  copies of the following documents you have that relate to your disability during service:\r*  Statements from military medical personnel (nurses, medics, corpsmen, doctors)\r\r*  \"Buddy\" certificates or affidavits - (A \"buddy\" certificate or affidavit is a statement by a person who knew you when you were in service and knows of any disability you had while on active duty.  The statement should state the dates and places they saw the condition(s) and should describe what they saw.  If the person making the statement was on active duty at the time, they should show their service number and unit of assignment.)\r\r*  State or local accident and police reports\r\r*  Employment physical examinations\r\r*  Medical evidence from hospitals, clinics and private physicians by which or by whom you may have been treated after separation\r\r*  Letters written during service\r\r*  Photographs taken during service\r\r*  Pharmacy prescription records\r\r*  Insurance examinations",
             "displayName": "Request 1",
-            "overdue": true,
-            "status": "SUBMITTED_AWAITING_REVIEW",
-            "uploaded": true,
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
             "uploadsAllowed": true,
             "openedDate": "2021-05-05",
-            "requestedDate": null,
+            "requestedDate": "2021-06-05",
             "receivedDate": null,
             "closedDate": null,
             "suspenseDate": "2021-06-04",
-            "documents": [
-              {
-                "trackedItemId": 293439,
-                "fileType": "Photographs",
-                "documentType": "L070",
-                "filename": "multifile.pdf",
-                "uploadDate": "2021-05-25"
-              }
-            ],
-            "uploadDate": "2021-05-25",
-            "date": "2021-05-25"
+            "documents": []
           },
           {
             "type": "still_need_from_you_list",
             "trackedItemId": 293447,
-            "description": "You may also submit statements from individuals having knowledge of your claimed condition.  These individuals should tell us what they observed of your condition, including the approximate dates, places and circumstances.  They should clearly state whether they actually witnessed the event leading to your condition.  If they were in service with you, they should include name, rank, and unit of assignment.  All statements must have the following certification:  \"I hereby certify that this information is true and correct to the best of my knowledge and belief.\"\r",
+            "description": "Accidental injury - 21-4176 needed",
             "displayName": "Request 3",
-            "overdue": true,
-            "status": "SUBMITTED_AWAITING_REVIEW",
-            "uploaded": true,
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
             "uploadsAllowed": true,
             "openedDate": "2021-05-05",
             "requestedDate": null,
             "receivedDate": null,
             "closedDate": null,
-            "suspenseDate": "2021-06-04",
-            "documents": [
-              {
-                "trackedItemId": 293447,
-                "fileType": "VA 21-4142a General Release for Medical Provider Information",
-                "documentType": "L827",
-                "filename": "sample.pdf",
-                "uploadDate": "2021-05-13"
-              }
-            ],
-            "uploadDate": "2021-05-13",
-            "date": "2021-05-13"
+            "suspenseDate": null,
+            "documents": []
           },
           {
             "type": "phase2",

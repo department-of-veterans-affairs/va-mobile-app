@@ -4,6 +4,7 @@ import React, { FC, ReactElement, useState } from 'react'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
+import FileRequestNumberIndicator from 'screens/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import SwitchComponent, { SwitchProps } from './Switch'
 import VAIcon, { VAIconProps } from './VAIcon'
 
@@ -57,6 +58,12 @@ export type BaseListItemProps = {
 
   /** Optional active background color for an individual item */
   activeBackgroundColor?: BackgroundVariant
+
+  /** Optional file request number for the number indicator */
+  cliamsRequestNumber?: number
+
+  /** Optional file request if file was loaded to show check mark */
+  fileUploaded?: boolean
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
@@ -93,7 +100,21 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  * @returns BaseListItem component
  */
 const BaseListItem: FC<BaseListItemProps> = (props) => {
-  const { onPress, a11yHint, a11yRole, a11yState, decorator, decoratorProps, testId, a11yValue, children, backgroundColor, activeBackgroundColor } = props
+  const {
+    onPress,
+    a11yHint,
+    a11yRole,
+    a11yState,
+    decorator,
+    decoratorProps,
+    testId,
+    a11yValue,
+    children,
+    backgroundColor,
+    activeBackgroundColor,
+    cliamsRequestNumber,
+    fileUploaded,
+  } = props
   const theme = useTheme()
 
   const [isPressed, setIsPressed] = useState(false)
@@ -169,6 +190,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
       <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
+        {cliamsRequestNumber !== undefined ? <FileRequestNumberIndicator requestNumber={cliamsRequestNumber} fileUploaded={fileUploaded} /> : <></>}
         {children}
         {showDecorator && (
           <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>

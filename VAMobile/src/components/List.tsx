@@ -21,6 +21,12 @@ export type ListItemObj = {
 
   /** on press event */
   onPress?: () => void
+
+  /** request file number for file indicator */
+  requestNumber?: number
+
+  /** request file if file was loaded */
+  fileUploaded?: boolean
 } & Partial<BaseListItemProps>
 
 /**

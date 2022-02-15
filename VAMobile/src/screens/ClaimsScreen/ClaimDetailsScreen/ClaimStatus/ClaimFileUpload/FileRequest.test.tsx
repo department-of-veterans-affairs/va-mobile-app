@@ -1,10 +1,9 @@
 import React from 'react'
+import { context, findByTestID, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
-
-import ClaimFileUpload from './ClaimFileUpload'
-import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
+import FileRequest from './FileRequest'
+import { ErrorComponent, TextView } from 'components'
 import { ClaimEventData } from 'store/api/types'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
@@ -27,12 +26,11 @@ jest.mock('../../../../../utils/hooks', () => {
   }
 })
 
-context('ClaimFileUpload', () => {
+context('FileRequest', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
-  let mockNavigateToTakeOrSelectPhotoSpy: jest.Mock
-  let mockNavigateToSelectFileSpy: jest.Mock
+  let mockNavigateToFileRequestdetailsSpy: jest.Mock
 
   let requests = [
     {
@@ -41,19 +39,19 @@ context('ClaimFileUpload', () => {
       status: 'NEEDED',
       uploaded: false,
       uploadsAllowed: true,
+      displayName: 'Request 1',
     },
   ]
 
   const initializeTestInstance = (requests: ClaimEventData[], currentPhase?: number, errorsState: ErrorsState = initialErrorsState): void => {
     props = mockNavProps(undefined, undefined, { params: { requests, currentPhase } })
-    mockNavigateToTakeOrSelectPhotoSpy = jest.fn()
-    mockNavigateToSelectFileSpy = jest.fn()
+    mockNavigateToFileRequestdetailsSpy = jest.fn()
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('TakePhotos', { request: requests[0]}).mockReturnValue(mockNavigateToTakeOrSelectPhotoSpy)
-        .calledWith('SelectFile', { request: requests[0]}).mockReturnValue(mockNavigateToSelectFileSpy)
+      .mockReturnValue(() => {})
+      .calledWith('FileRequestDetails', { request: requests[0] })
+      .mockReturnValue(mockNavigateToFileRequestdetailsSpy)
 
-    component = render(<ClaimFileUpload {...props} />, {
+    component = render(<FileRequest {...props} />, {
       preloadedState: {
         ...InitialState,
         claimsAndAppeals: {
@@ -105,8 +103,7 @@ context('ClaimFileUpload', () => {
 
       await waitFor(() => {
         initializeTestInstance(updatedRequests)
-
-        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('You have 2 file requests from VA')
+        expect(findByTypeWithText(testInstance, TextView, 'You have 2 file requests from VA')).toBeTruthy()
       })
     })
   })
@@ -114,79 +111,18 @@ context('ClaimFileUpload', () => {
   describe('when number of requests is equal to 1', () => {
     it('should display the text "You have 1 file request from VA"', async () => {
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('You have 1 file request from VA')
+        expect(findByTypeWithText(testInstance, TextView, 'You have 1 file request from VA')).toBeTruthy()
       })
     })
-  })
 
-  describe('when waiverSubmitted is false', () => {
-    describe('when the currentPhase is 3', () => {
-      it('should display an AlertBox', async () => {
-        await waitFor(() => {
-          initializeTestInstance(requests, 3)
-          expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        })
-      })
-    })
-  })
-
-  describe('on click of the take or select photos button', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        findByTestID(testInstance, 'Take or Select Photos').props.onPress()
-        expect(mockNavigateToTakeOrSelectPhotoSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('on click of the select files button', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        findByTestID(testInstance, 'Select a File').props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
-        expect(mockNavigateToSelectFileSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe("when the request hasn't had files uploaded", () => {
-    it('should display the select a file and take or select photos buttons', async () => {
-      await waitFor(() => {
-        const buttons = testInstance.findAllByType(VAButton)
-        expect(buttons.length).toEqual(3)
-        expect(buttons[0].props.label).toEqual('Select a File')
-        expect(buttons[1].props.label).toEqual('Take or Select Photos')
-      })
-    })
-  })
-
-  describe('when the request has had files uploaded', () => {
-    it('should display the uploaded date', async () => {
-      let updatedRequests = [
-        {
-          type: 'still_need_from_you_list',
-          trackedItemId: 255451,
-          description: 'Final Attempt Letter',
-          displayName: 'Request 9',
-          overdue: false,
-          status: 'NEEDED',
-          uploaded: true,
-          uploadsAllowed: true,
-          openedDate: null,
-          requestedDate: '2019-07-09',
-          receivedDate: null,
-          closedDate: '2019-07-19',
-          suspenseDate: null,
-          documents: [],
-          uploadDate: '2021-01-30',
-          date: '2019-07-19',
-        },
-      ]
-
-      await waitFor(() => {
-        initializeTestInstance(updatedRequests)
-        expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Uploaded 01/30/21')
-      })
+    it('should have we sent you a letter text section', async () => {
+      expect(
+        findByTypeWithText(
+          testInstance,
+          TextView,
+          "We sent you a letter in the mail asking for more evidence to support your claim. We'll wait 30 days for your evidence before we begin evaluating your claim.",
+        ),
+      ).toBeTruthy()
     })
   })
 
@@ -218,6 +154,25 @@ context('ClaimFileUpload', () => {
       await waitFor(() => {
         initializeTestInstance(requests, undefined, errorState)
         expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      })
+    })
+
+    describe('on click of a file request', () => {
+      it('should navigate to file request detals page', async () => {
+        findByTestID(testInstance, 'request-1').props.onPress()
+        expect(mockNavigateToFileRequestdetailsSpy).toHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('when waiverSubmitted is false', () => {
+    describe('when the currentPhase is 3', () => {
+      it('should display evaluation section', async () => {
+        await waitFor(() => {
+          initializeTestInstance(requests, 3)
+          expect(findByTypeWithText(testInstance, TextView, 'Ask for your claim evaluation')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Please review the evaluation details if you are ready for us to begin evaluating your claim')).toBeTruthy()
+        })
       })
     })
   })
