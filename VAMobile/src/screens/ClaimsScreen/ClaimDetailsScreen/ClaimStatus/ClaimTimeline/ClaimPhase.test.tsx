@@ -34,8 +34,9 @@ context('ClaimPhase', () => {
   const initializeTestInstance = (phase: number, current: number) => {
     mockNavigateToClaimFileUploadSpy = jest.fn()
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('ClaimFileUpload', { 'claimID': undefined }).mockReturnValue(mockNavigateToClaimFileUploadSpy)
+      .mockReturnValue(() => {})
+      .calledWith('FileRequest', { claimID: undefined })
+      .mockReturnValue(mockNavigateToClaimFileUploadSpy)
     props = {
       phase,
       current,
