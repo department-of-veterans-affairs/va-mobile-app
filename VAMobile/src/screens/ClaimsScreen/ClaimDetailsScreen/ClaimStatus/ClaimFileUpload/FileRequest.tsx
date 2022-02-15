@@ -46,7 +46,7 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
     return map(requests, (request) => {
       const { displayName, uploaded } = request
 
-      const item = { text: displayName || '', onPress: navigateTo('FileRequestDetails', { request }), cliamsRequestNumber: requestNumber, fileUploaded: uploaded }
+      const item = { text: displayName || '', onPress: navigateTo('FileRequestDetails', { request }), claimsRequestNumber: requestNumber, fileUploaded: uploaded }
 
       if (!uploaded) {
         requestNumber++

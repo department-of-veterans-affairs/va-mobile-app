@@ -60,7 +60,7 @@ export type BaseListItemProps = {
   activeBackgroundColor?: BackgroundVariant
 
   /** Optional file request number for the number indicator */
-  cliamsRequestNumber?: number
+  claimsRequestNumber?: number
 
   /** Optional file request if file was loaded to show check mark */
   fileUploaded?: boolean
@@ -112,7 +112,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     children,
     backgroundColor,
     activeBackgroundColor,
-    cliamsRequestNumber,
+    claimsRequestNumber,
     fileUploaded,
   } = props
   const theme = useTheme()
@@ -190,7 +190,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
       <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
-        {cliamsRequestNumber !== undefined ? <FileRequestNumberIndicator requestNumber={cliamsRequestNumber} fileUploaded={fileUploaded} /> : <></>}
+        {claimsRequestNumber !== undefined ? <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} /> : <></>}
         {children}
         {showDecorator && (
           <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
