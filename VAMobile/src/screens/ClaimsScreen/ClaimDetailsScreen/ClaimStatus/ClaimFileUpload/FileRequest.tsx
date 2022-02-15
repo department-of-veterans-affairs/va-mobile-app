@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { BaseListItemProps, Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
