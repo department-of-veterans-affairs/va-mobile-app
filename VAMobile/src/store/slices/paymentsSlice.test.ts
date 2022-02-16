@@ -52,6 +52,13 @@ context('paymentHistory', () => {
           },
           availableYears: ['2021'],
         },
+        links: {
+          self: 'https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1',
+          first: 'https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1',
+          prev: null,
+          next: null,
+          last: 'https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1',
+        },
       }
 
       when(api.get as jest.Mock)

@@ -56,7 +56,6 @@ export const getPayments =
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getPayments(year, page, screenID))))
     dispatch(dispatchStartGetPayments())
-    let loadedPayments: PaymentsGetData | null = null
     let yearAndPage: string | undefined
 
     if (year) {
@@ -68,7 +67,7 @@ export const getPayments =
 
     // get stored list of payments
     const { loadedPaymentsByYear, paginationByYearAndPage: paginationByYear } = paymentsState
-    loadedPayments = getLoadedPayments(loadedPaymentsByYear, paginationByYear, yearAndPage || '')
+    const loadedPayments = getLoadedPayments(loadedPaymentsByYear, paginationByYear, yearAndPage || '')
 
     if (loadedPayments) {
       dispatch(dispatchFinishGetPayments({ payments: loadedPayments, yearAndPage }))

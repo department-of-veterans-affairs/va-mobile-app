@@ -56,9 +56,9 @@ export type PaymentsPaginationByYearAndPage = {
 }
 
 export type PaymentsPaginationLinks = {
-  self: string
-  first: string
-  prev: string
-  next: string
-  last: string
+  self: string | null
+  first: string | null
+  prev: string | null
+  next: string | null
+  last: string | null
 }
