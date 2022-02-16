@@ -26,7 +26,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
   const placeHolder = t('common:noneNoted')
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, gutter } = theme.dimensions
   const { payment } = useSelector<RootState, PaymentState>((state) => state.payments)
-  const { date, payementType, paymentMethod, bank, account, amount } = payment?.attributes || ({} as PaymentsAttributeData)
+  const { date, paymentType, paymentMethod, bank, account, amount } = payment?.attributes || ({} as PaymentsAttributeData)
 
   useEffect(() => {
     dispatch(getPayment(paymentID))
@@ -64,7 +64,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
             <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-              {payementType}
+              {paymentType}
             </TextView>
           </Box>
           <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>

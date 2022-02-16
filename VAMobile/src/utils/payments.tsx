@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
 import { each, forEach, groupBy, keys, map } from 'underscore'
 import React, { ReactNode } from 'react'
@@ -130,11 +131,11 @@ const getListItemsForPayments = (
   const { currentPage, perPage, totalEntries } = paymentsPagination
 
   forEach(listOfPayments, (payment, index) => {
-    const { payementType, amount } = payment.attributes
+    const { paymentType, amount } = payment.attributes
     const textLines: Array<TextLineWithIconProps> = []
 
     textLines.push(
-      { text: tc('text.raw', { text: payementType }), variant: 'MobileBodyBold', color: 'primaryTitle' },
+      { text: tc('text.raw', { text: paymentType }), variant: 'MobileBodyBold', color: 'primaryTitle' },
       { text: tc('text.raw', { text: amount }), variant: 'MobileBody', color: 'primaryTitle' },
     )
 
@@ -151,4 +152,30 @@ const getListItemsForPayments = (
   })
 
   return listItems
+}
+
+/**
+ * @param year - type string, set the year
+ *
+ * @returns tuple of the first and last day of the year
+ */
+export const getFirstAndLastDayOfYear = (year?: string): [string | undefined, string | undefined] => {
+  let firstDayOfyear: string | undefined
+  let lastDayOfyear: string | undefined
+  if (year) {
+    firstDayOfyear = DateTime.fromISO(year).set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 }).startOf('day').toISO()
+    lastDayOfyear = DateTime.fromISO(year).set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 }).endOf('day').toISO()
+  }
+
+  return [firstDayOfyear, lastDayOfyear]
+}
+
+/**
+ * @param year - type string, set the year
+ * @param year - type number, set the page number
+ *
+ * @returns string example 2021-1
+ */
+export const createYearAndPageString = (year: string, page: number): string => {
+  return `${year}-${page}`
 }
