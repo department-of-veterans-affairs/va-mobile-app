@@ -1,14 +1,13 @@
-import { DateTime } from 'luxon'
 import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { isEmpty } from 'underscore'
+import { isEmpty, map } from 'underscore'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextView, TextViewProps, VAModalPicker, VAModalPickerProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentState, getPayments } from 'store/slices'
-import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api'
+import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { RootState } from 'store'
 import { deepCopyObject } from 'utils/common'
@@ -26,11 +25,12 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { standardMarginBetween, gutter, contentMarginTop } = theme.dimensions
-  const { currentPagePayments, currentPagePagination, loading } = useSelector<RootState, PaymentState>((state) => state.payments)
+  const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
-  const noPayments = false // this will change when backend integration
-  const todaysDate = DateTime.local()
-  const currentYear = todaysDate.get('year').toString()
+  const noPayments = availableYears.length === 0
+
+  const [yearPickerOption, setYearPickerOption] = useState<yearsDatePickerOption>()
+  const [pickerOptions, setpickerOptions] = useState<Array<yearsDatePickerOption>>([])
 
   type yearsDatePickerOption = {
     label: string
@@ -38,25 +38,16 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     a11yLabel: string
   }
 
-  const getPickerOptions = (): Array<yearsDatePickerOption> => {
-    return [
-      {
-        label: currentYear,
-        value: currentYear,
-        a11yLabel: currentYear,
-      },
-      {
-        label: '2021',
-        value: '2021',
-        a11yLabel: '2021',
-      },
-      {
-        label: '2020',
-        value: '2020',
-        a11yLabel: '2020',
-      },
-    ]
-  }
+  const getPickerOptions = useCallback((): Array<yearsDatePickerOption> => {
+    return map(availableYears, (item) => {
+      const year = item.toString()
+      return {
+        label: year,
+        value: year,
+        a11yLabel: year,
+      }
+    })
+  }, [availableYears])
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
     const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
@@ -70,9 +61,6 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     navigateTo('PaymentDetails', { paymentID })()
   }
 
-  const pickerOptions = getPickerOptions()
-  const [yearPickerOption, setYearPickerOption] = useState(pickerOptions[0])
-
   const textViewProps: TextViewProps = {
     variant: 'MobileBody',
     textDecoration: 'underline',
@@ -84,7 +72,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
 
   const pickerProps: VAModalPickerProps = {
     labelKey: 'profile:payments.pickerLabel',
-    selectedValue: yearPickerOption.value,
+    selectedValue: yearPickerOption?.value || '',
     onSelectionChange: setValuesOnPickerSelect,
     pickerOptions,
   }
@@ -102,23 +90,21 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
     return getGroupedPayments(newCurrentPagePayments, theme, { t, tc }, onPaymentPress, true, currentPagePagination)
   }
 
-  const fetchPayments = useCallback(
-    (requestedPage = 1, year: string = yearPickerOption.value) => {
-      // request the next page
-      dispatch(getPayments(year, requestedPage))
-    },
-    [dispatch, yearPickerOption.value],
-  )
+  const fetchPayments = (requestedPage?: number, year?: string) => {
+    // request the next page
+    dispatch(getPayments(year, requestedPage, ScreenIDTypesConstants.PAYMENTS_SCREEN_ID))
+  }
 
   // Render pagination for payments
   const renderPagination = (): ReactNode => {
     const page = currentPagePagination?.currentPage || 1
+    const year = yearPickerOption?.value
     const paginationProps: PaginationProps = {
       onNext: () => {
-        fetchPayments(page + 1)
+        fetchPayments(page + 1, year)
       },
       onPrev: () => {
-        fetchPayments(page - 1)
+        fetchPayments(page - 1, year)
       },
       totalEntries: currentPagePagination?.totalEntries || 0,
       pageSize: currentPagePagination?.perPage || 0,
@@ -133,8 +119,18 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
   }
 
   useEffect(() => {
-    fetchPayments()
-  }, [dispatch, fetchPayments])
+    // if payments exists grab the latest year first page. Prevents from refetching the latest year first page if it does exists.
+    const year = !noPayments ? availableYears[0] : undefined
+    fetchPayments(1, year)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setpickerOptions(getPickerOptions())
+  }, [availableYears, getPickerOptions])
+
+  useEffect(() => {
+    setYearPickerOption(pickerOptions[0])
+  }, [pickerOptions])
 
   if (useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
@@ -157,7 +153,7 @@ const PaymentScreen: FC<PaymentScreenProps> = () => {
           </Pressable>
         </Box>
         <Box mx={gutter} mb={standardMarginBetween}>
-          <VAModalPicker {...pickerProps} />
+          <VAModalPicker {...pickerProps} key={yearPickerOption?.value} />
         </Box>
       </Box>
       {getPaymentsData()}

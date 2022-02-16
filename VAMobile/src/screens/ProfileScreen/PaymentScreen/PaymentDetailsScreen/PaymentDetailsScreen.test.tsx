@@ -29,7 +29,7 @@ context('PaymentDetailsScreen', () => {
               attributes: {
                 date: '2021-02-01T00:00:00.000-07:00',
                 amount: '$3,746.20',
-                payementType: 'Compensation & Pension - Recurring',
+                paymentType: 'Compensation & Pension - Recurring',
                 paymentMethod: 'Direct Deposit',
                 bank: 'BANK OF AMERICA, N.A.',
                 account: '********0567',
@@ -41,7 +41,7 @@ context('PaymentDetailsScreen', () => {
               attributes: {
                 date: '2021-02-01T00:00:00.000-07:00',
                 amount: '$3,746.20',
-                payementType: 'Compensation & Pension - Recurring',
+                paymentType: 'Compensation & Pension - Recurring',
                 paymentMethod: 'Paper Check',
                 bank: null,
                 account: null,
@@ -76,7 +76,6 @@ context('PaymentDetailsScreen', () => {
 
     it('should show payment details information when paper check', async () => {
       initializeTestInstance('2')
-      component.debug('Rafael')
       expect(findByTypeWithText(testInstance, TextView, 'February 1, 2021')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Compensation & Pension - Recurring')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Amount')).toBeTruthy()
