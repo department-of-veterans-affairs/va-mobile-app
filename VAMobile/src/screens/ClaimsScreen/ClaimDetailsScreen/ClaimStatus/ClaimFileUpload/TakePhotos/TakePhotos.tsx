@@ -77,7 +77,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         </TextView>
         <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
       </TextArea>
-      <Box mt={theme.dimensions.textAndButtonLargeMargin}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <VAButton
           onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0)}
           label={t('fileUpload.takeOrSelectPhotos')}
