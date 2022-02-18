@@ -27,6 +27,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
 
   useEffect(() => {
     request.documentType = documentType
@@ -40,11 +41,20 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         onSelectionChange: setDocumentType,
         pickerOptions: DocumentTypes526,
         labelKey: 'claims:fileUpload.documentType',
-        includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: false,
       },
       fieldErrorMessage: t('claims:fileUpload.documentType.fieldError'),
+    },
+    {
+      fieldType: FieldType.Selector,
+      fieldProps: {
+        labelKey: 'claims:fileUpload.evidenceOnly',
+        selected: confirmed,
+        onSelectionChange: setConfirmed,
+        isRequiredField: true,
+      },
+      fieldErrorMessage: t('fileUpload.evidenceOnly.error'),
     },
   ]
 
@@ -63,8 +73,8 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
             onPress={() => {
               setOnSaveClicked(true)
             }}
-            label={t('fileUpload.upload')}
-            testID={t('fileUpload.upload')}
+            label={t('fileUpload.submit')}
+            testID={t('fileUpload.submit')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.uploadFileA11yHint')}
           />
