@@ -22,7 +22,7 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 - Ayush Chakravarty - Product
 - Ashley Matthews - Product
 - Brenda Rocha - Product
-- Cat Greim - Program
+- TBD - Program
 
 
 ### UX
@@ -30,6 +30,8 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 - Meli Manak - UX Design
 - Melissa Lefevre - UX Design
 - Esther Kitavi - UX Design
+- Lauren Russell - UX Design
+- Holly Collier - UX Design
 - Alex Taylor - Principal UX Designer
 
 
