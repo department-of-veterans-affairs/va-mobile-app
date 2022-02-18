@@ -4,7 +4,21 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import {
+  AlertBox,
+  BackButton,
+  Box,
+  ButtonTypesConstants,
+  ClickForActionLink,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  TextArea,
+  TextView,
+  VAButton,
+  VAScrollView,
+} from 'components'
+
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -37,6 +51,22 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
   }
 
+  const collapsibleContent = (): ReactNode => {
+    const linkToCallProps: LinkButtonProps = {
+      displayedText: t('fileUpload.goToVaGov'),
+      linkType: LinkTypeOptionsConstants.url,
+      linkUrlIconType: LinkUrlIconType.Arrow,
+      numberOrUrlLink: LINK_URL_GO_TO_VA_GOV,
+    }
+
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody">{t('fileUpload.accessibilityAlert.body')}</TextView>
+        <ClickForActionLink {...linkToCallProps} />
+      </Box>
+    )
+  }
+
   return (
     <VAScrollView {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
       {!!error && (
@@ -45,14 +75,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         </Box>
       )}
       <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
-        <CollapsibleAlert
-          border="informational"
-          headerText={t('fileUpload.accessibilityAlert.title')}
-          bodyText={t('fileUpload.accessibilityAlert.body')}
-          hasLink={true}
-          linkText={t('fileUpload.goToVaGov')}
-          linkUrl={LINK_URL_GO_TO_VA_GOV}
-        />
+        <CollapsibleAlert border="informational" headerText={t('fileUpload.accessibilityAlert.title')} body={collapsibleContent()} />
       </Box>
       <TextArea>
         <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
