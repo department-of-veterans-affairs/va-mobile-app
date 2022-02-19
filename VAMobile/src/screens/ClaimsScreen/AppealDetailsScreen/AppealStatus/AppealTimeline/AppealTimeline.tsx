@@ -13,7 +13,11 @@ type AppealTimelineProps = {
 
 const AppealTimeline: FC<AppealTimelineProps> = ({ events }) => {
   useEffect(() => {
-    sortByDate(events, 'data')
+    /** TODO: figure out the root cause of this issue. The sort is causing a crash because the events being passed in
+     * are read only.
+     */
+    const copiedEvents = [...events]
+    sortByDate(copiedEvents, 'data')
   }, [events])
 
   return (
