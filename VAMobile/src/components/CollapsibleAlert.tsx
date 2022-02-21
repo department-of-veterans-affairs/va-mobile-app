@@ -22,7 +22,7 @@ export type CollapsibleAlertProps = {
 const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, testID }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(false)
 
   const onPress = (): void => {
     setExpanded(!expanded)
@@ -73,7 +73,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
     <Box {...boxProps} {...testIdProps('Collapsible-Alert', true)} importantForAccessibility={'no'}>
       <TextArea>
         {accordionHeader()}
-        {!expanded && body}
+        {expanded && body}
       </TextArea>
     </Box>
   )
