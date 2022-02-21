@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
+import performance from '@react-native-firebase/perf'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
@@ -200,12 +201,9 @@ const finishInitialize = async (dispatch: AppDispatch, loginPromptType: LOGIN_PR
     supportedBiometric: supportedBiometric,
     loggedIn,
   }
-
-  // check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
-  if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
-    await crashlytics().setCrashlyticsCollectionEnabled(false)
-    await analytics().setAnalyticsCollectionEnabled(false)
-  }
+  crashlytics().setCrashlyticsCollectionEnabled(true)
+  analytics().setAnalyticsCollectionEnabled(true)
+  performance().setPerformanceCollectionEnabled(true)
   dispatch(dispatchInitializeAction(payload))
 }
 

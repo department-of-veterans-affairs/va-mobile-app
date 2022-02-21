@@ -4,10 +4,12 @@ import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 
+import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { RootState } from 'store'
+import { dispatchFirebaseLoggingOnStaging } from 'store/slices/analyticsSlice'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useTheme } from 'utils/hooks'
@@ -30,6 +32,7 @@ const DebugScreen: FC = ({}) => {
 
   // push data
   const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
+  const { firebaseOnStaging } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
@@ -59,6 +62,10 @@ const DebugScreen: FC = ({}) => {
     resetReviewActionCount()
   }
 
+  const enableStagingLogsOnFirebase = (): void => {
+    dispatch(dispatchFirebaseLoggingOnStaging())
+  }
+
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
@@ -70,6 +77,15 @@ const DebugScreen: FC = ({}) => {
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
             <VAButton onPress={resetInAppReview} label={'Reset In-App Review Actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
+        <Box mt={theme.dimensions.contentMarginTop}>
+          <TextArea>
+            <VAButton
+              onPress={enableStagingLogsOnFirebase}
+              label={`${firebaseOnStaging ? 'Disable' : 'Enable'} Staging Logs on Firebase`}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+            />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
