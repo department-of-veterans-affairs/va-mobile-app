@@ -46,11 +46,5 @@ context('CollapsibleAlert', () => {
           })
         })
       })
-    
-      describe('when expanded is false', () => {
-        it('should render the collapsedContent', async () => {
-            expect(testInstance.container.findAllByType(TextView)[1].props.children).toBeNull()
-        })
-      })
     })
     
