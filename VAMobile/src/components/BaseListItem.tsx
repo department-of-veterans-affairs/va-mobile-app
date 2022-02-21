@@ -18,6 +18,8 @@ export enum ButtonDecoratorType {
   None = 'None',
   /** Picker selected item decorator **/
   SelectedItem = 'SelectedItem',
+  /** Trash can decorator */
+  Delete = 'Delete',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
