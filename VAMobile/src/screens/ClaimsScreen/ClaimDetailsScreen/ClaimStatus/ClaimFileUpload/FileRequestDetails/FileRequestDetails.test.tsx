@@ -60,7 +60,7 @@ context('FileRequestDetails', () => {
       await waitFor(() => {
         const buttons = testInstance.findAllByType(VAButton)
         expect(buttons.length).toEqual(2)
-        expect(buttons[0].props.label).toEqual('Select a File')
+        expect(buttons[0].props.label).toEqual('Select a file')
         expect(buttons[1].props.label).toEqual('Take or Select Photos')
       })
     })
