@@ -302,7 +302,7 @@
   "fileUpload.pleaseRequestFromPhoneFiles": "To submit evidence that supports this claim, please select a file from your phone's files. You can ",
   "fileUpload.pleaseRequestFromPhoneFiles.bolded": "only submit 1 file ",
   "fileUpload.pleaseRequestFromPhoneFiles.pt2": "with this request.",
-  "fileUpload.selectAFile": "Select a File",
+  "fileUpload.selectAFile": "Select a file",
   "fileUpload.selectAFileA11yHint": "Select a file and upload to your claim",
   "fileUpload.selectAFileToUpload": "Select a file to upload for {{requestTitle}}",
   "fileUpload.selectAFileWithPhoneA11yHint": "Select a file from your device",
