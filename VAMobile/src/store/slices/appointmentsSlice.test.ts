@@ -3,7 +3,6 @@ import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLoca
 import { context, realStore, when } from 'testUtils'
 import {
   AppointmentsDateRange,
-  getAppointment,
   getAppointmentsInDateRange,
   groupAppointmentsByYear,
   initialAppointmentsState,
@@ -21,13 +20,11 @@ import { InitialState } from 'store/slices'
 export const ActionTypes: {
   APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE: string
   APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: string
-  APPOINTMENTS_GET_APPOINTMENT: string
   APPOINTMENTS_START_PREFETCH_APPOINTMENTS: string
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: string
 } = {
   APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE: 'appointments/dispatchStartGetAppointmentsInDateRange',
   APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: 'appointments/dispatchFinishGetAppointmentsInDateRange',
-  APPOINTMENTS_GET_APPOINTMENT: 'appointments/dispatchGetAppointment',
   APPOINTMENTS_START_PREFETCH_APPOINTMENTS: 'appointments/dispatchStartPrefetchAppointments',
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: 'appointments/dispatchFinishPrefetchAppointments',
 }
@@ -455,79 +452,6 @@ context('appointments', () => {
       const { appointments } = store.getState()
       expect(appointments.error).toEqual(error)
     })
-  })
-
-  describe('getAppointment', () => {
-    it('should be able to get appointment from past', async () => {
-      const store = realStore({
-        appointments: {
-          ...initialAppointmentsState,
-          loading: false,
-          loadingAppointmentCancellation: false,
-          upcomingVaServiceError: false,
-          upcomingCcServiceError: false,
-          pastVaServiceError: false,
-          pastCcServiceError: false,
-          pastAppointmentsById: {
-            '1': canceledAppointmentList[0],
-          },
-          loadedAppointmentsByTimeFrame: {
-            upcoming: [],
-            pastThreeMonths: canceledAppointmentList,
-            pastFiveToThreeMonths: [],
-            pastEightToSixMonths: [],
-            pastElevenToNineMonths: [],
-            pastAllCurrentYear: [],
-            pastAllLastYear: [],
-          },
-        },
-      })
-      await store.dispatch(getAppointment('1'))
-
-      const actions = store.getActions()
-
-      const action = _.find(actions, { type: ActionTypes.APPOINTMENTS_GET_APPOINTMENT })
-      expect(action).toBeTruthy()
-
-      const { appointments } = store.getState()
-      expect(appointments.appointment).toEqual(canceledAppointmentList[0])
-      expect(appointments.error).toBeFalsy()
-    })
-  })
-  it('should be able to get appointment from upcoming', async () => {
-    const store = realStore({
-      appointments: {
-        ...initialAppointmentsState,
-        loading: false,
-        loadingAppointmentCancellation: false,
-        upcomingVaServiceError: false,
-        upcomingCcServiceError: false,
-        pastVaServiceError: false,
-        pastCcServiceError: false,
-        upcomingAppointmentsById: {
-          '1': bookedAppointmentsList[0],
-        },
-        loadedAppointmentsByTimeFrame: {
-          upcoming: bookedAppointmentsList,
-          pastThreeMonths: [],
-          pastFiveToThreeMonths: [],
-          pastEightToSixMonths: [],
-          pastElevenToNineMonths: [],
-          pastAllCurrentYear: [],
-          pastAllLastYear: [],
-        },
-      },
-    })
-    await store.dispatch(getAppointment('1'))
-
-    const actions = store.getActions()
-
-    const action = _.find(actions, { type: ActionTypes.APPOINTMENTS_GET_APPOINTMENT })
-    expect(action).toBeTruthy()
-
-    const { appointments } = store.getState()
-    expect(appointments.appointment).toEqual(bookedAppointmentsList[0])
-    expect(appointments.error).toBeFalsy()
   })
 
   describe('prefetchAppointments', () => {
