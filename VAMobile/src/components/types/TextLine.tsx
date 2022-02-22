@@ -18,7 +18,7 @@ export type TextLine = {
   /** alignment of the text */
   textAlign?: 'center' | 'left' | 'right'
 
-  /** sets the text to be a tag. Set to true to use default colors; otherwise pass in optional props */
+  /** sets the text to be a tag */
   textTag?: {
     /** optional background color for tag */
     backgroundColor?: BackgroundVariant
