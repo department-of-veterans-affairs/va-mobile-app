@@ -151,7 +151,7 @@ export const AuthGuard: FC = () => {
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
-  const { firebaseOnStaging } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
@@ -195,11 +195,11 @@ export const AuthGuard: FC = () => {
 
   useEffect(() => {
     // check if analytics for staging enabled, or check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
-    const toggle = firebaseOnStaging || !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
+    const toggle = firebaseDebugMode || !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
     crashlytics().setCrashlyticsCollectionEnabled(toggle)
     analytics().setAnalyticsCollectionEnabled(toggle)
     performance().setPerformanceCollectionEnabled(toggle)
-  }, [firebaseOnStaging])
+  }, [firebaseDebugMode])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')

@@ -9,9 +9,9 @@ import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { RootState } from 'store'
-import { dispatchFirebaseLoggingOnStaging } from 'store/slices/analyticsSlice'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
+import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -32,7 +32,7 @@ const DebugScreen: FC = ({}) => {
 
   // push data
   const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
-  const { firebaseOnStaging } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
@@ -62,8 +62,8 @@ const DebugScreen: FC = ({}) => {
     resetReviewActionCount()
   }
 
-  const enableStagingLogsOnFirebase = (): void => {
-    dispatch(dispatchFirebaseLoggingOnStaging())
+  const onClickFirebaseDebugMode = (): void => {
+    dispatch(toggleFirebaseDebugMode())
   }
 
   return (
@@ -82,8 +82,8 @@ const DebugScreen: FC = ({}) => {
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
             <VAButton
-              onPress={enableStagingLogsOnFirebase}
-              label={`${firebaseOnStaging ? 'Disable' : 'Enable'} Staging Logs on Firebase`}
+              onPress={onClickFirebaseDebugMode}
+              label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase Debug Mode`}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </TextArea>
