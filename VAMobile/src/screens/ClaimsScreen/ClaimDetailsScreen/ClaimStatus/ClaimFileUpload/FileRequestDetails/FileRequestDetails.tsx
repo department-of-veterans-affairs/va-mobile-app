@@ -1,10 +1,12 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { StyleProp, ViewStyle } from 'react-native'
+import { map } from 'underscore'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -16,7 +18,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
   const navigateTo = useRouteNavigation()
   const { request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const { displayName, description, uploaded } = request
+  const { displayName, description, uploaded, uploadDate, documents } = request
 
   const boxProps: BoxProps = {
     borderStyle: 'solid',
@@ -29,9 +31,47 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
     flexGrow: 1,
   }
 
+  const getUploadedFileNames = (): JSX.Element[] => {
+    return map(documents || [], (item, index) => {
+      return (
+        <TextView variant="MobileBody" key={index}>
+          {item.filename}
+        </TextView>
+      )
+    })
+  }
+
+  const getUploadedDate = (): string => {
+    return uploadDate ? formatDateMMMMDDYYYY(uploadDate) : ''
+  }
+
+  const getUploadedFileType = (): string | undefined => {
+    return documents && documents.length > 0 ? documents[0].fileType : ''
+  }
+
   return (
     <VAScrollView {...testIdProps('file-request-details-page')} contentContainerStyle={mainViewStyle}>
       <Box mt={contentMarginTop} mb={contentMarginBottom} flex={1}>
+        {uploaded && (
+          <Box mb={standardMarginBetween}>
+            <TextArea>
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
+                {t('fileRequestDetails.submittedTitle')}
+              </TextView>
+              <TextView mb={standardMarginBetween} variant="MobileBody">
+                {getUploadedDate()}
+              </TextView>
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
+                {t('fileRequestDetails.fileTitle')}
+              </TextView>
+              <Box mb={standardMarginBetween}>{getUploadedFileNames()}</Box>
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
+                {t('fileRequestDetails.typeTitle')}
+              </TextView>
+              <TextView variant="MobileBody">{getUploadedFileType()}</TextView>
+            </TextArea>
+          </Box>
+        )}
         <TextArea>
           <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {displayName}
