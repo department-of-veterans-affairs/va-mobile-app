@@ -1,3 +1,5 @@
+import { BackgroundVariant } from '../Box'
+import { ColorVariant, FontVariant } from '../TextView'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
 
 /**
@@ -16,8 +18,17 @@ export type TextLine = {
   /** alignment of the text */
   textAlign?: 'center' | 'left' | 'right'
 
-  /** sets the text to be a tag */
-  isTextTag?: boolean
+  /** sets the text to be a tag. Set to true to use default colors; otherwise pass in optional props */
+  textTag?: {
+    /** optional background color for tag */
+    backgroundColor?: BackgroundVariant
+
+    /** optional text color for tag */
+    color?: ColorVariant
+
+    /** optional variant for tag text */
+    variant?: FontVariant
+  }
 }
 
 export type InlineText = {
