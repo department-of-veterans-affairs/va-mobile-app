@@ -276,25 +276,32 @@
             "date": "2021-06-04"
           },
           {
-            "type": "never_received_from_you_list",
+            "type": "still_need_from_you_list",
             "trackedItemId": 293448,
             "description": "Combat not verified",
             "displayName": "Request 4",
             "overdue": false,
-            "status": "NO_LONGER_REQUIRED",
+            "status": "NEEDED",
             "uploaded": true,
-            "uploadsAllowed": false,
-            "openedDate": null,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
             "requestedDate": "2021-05-05",
             "receivedDate": null,
-            "closedDate": "2021-06-04",
+            "closedDate": null,
             "suspenseDate": null,
             "documents": [
               {
                 "trackedItemId": 293448,
                 "fileType": "Military Personnel Record",
                 "documentType": "L034",
-                "filename": "dog-puppy-on-garden-royalty-free-image-1586966191.pdf",
+                "filename": "post-deployment-document.pdf",
+                "uploadDate": "2021-05-13"
+              },
+              {
+                "trackedItemId": 293448,
+                "fileType": "Military Personnel Record",
+                "documentType": "L034",
+                "filename": "DD214.pdf",
                 "uploadDate": "2021-05-13"
               }
             ],
