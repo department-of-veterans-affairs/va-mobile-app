@@ -246,6 +246,9 @@ jest.mock('react-native-notifications', () => {
     },
   }
 })
+
 globalAny.FormData = () => ({
   append: jest.fn(),
 })
+
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
