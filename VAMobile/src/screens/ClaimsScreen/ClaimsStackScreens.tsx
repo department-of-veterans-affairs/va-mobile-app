@@ -5,6 +5,7 @@ import React, { ReactNode } from 'react'
 
 import { ClaimEventData } from 'store/api/types'
 import { ClaimType } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
 import AskForClaimDecision from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
@@ -83,7 +84,7 @@ export const getClaimsScreens = (t: TFunction): Array<ReactNode> => {
     <ClaimsStack.Screen key={'AppealDetailsScreen'} name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('statusDetails.title') }} />,
     <ClaimsStack.Screen key={'FileRequest'} name="FileRequest" component={FileRequest} options={{ title: t('fileRequest.title') }} />,
     <ClaimsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} />,
-    <ClaimsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ title: t('fileUpload.title') }} />,
+    <ClaimsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ title: stringToTitleCase(t('fileUpload.takeOrSelectPhotos')) }} />,
     <ClaimsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadOrAddPhotos'} name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadFile'} name="UploadFile" component={UploadFile} options={{ title: t('fileUpload.title') }} />,
