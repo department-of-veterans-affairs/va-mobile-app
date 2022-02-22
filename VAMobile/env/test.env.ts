@@ -25,4 +25,5 @@ export const LINK_URL_GO_TO_MY_HEALTHEVET="https://www.myhealth.va.gov/mhv-porta
 export const APPLE_STORE_LINK="https://apps.apple.com/us/app/va-health-and-benefits/id1559609596"
 export const GOOGLE_PLAY_LINK="https://play.google.com/store/apps/details?id=gov.va.mobileapp"
 export const LINK_URL_GO_TO_PATIENT_PORTAL="https://patientportal.myhealth.va.gov/"
+export const LINK_URL_GO_TO_VA_GOV="https://va.gov"
 export const ENVIRONMENT="test"
