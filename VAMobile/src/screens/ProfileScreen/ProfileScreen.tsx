@@ -92,6 +92,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const onLettersAndDocs = navigateTo('LettersOverview')
 
+  const onPayments = navigateTo('Payments')
+
   const onSettings = navigateTo('Settings')
 
   const onDisabilityRatings = navigateTo('DisabilityRatings')
@@ -113,6 +115,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   buttonDataList.push(
     { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
+    { text: t('home:payments.title'), a11yHintText: t('payments.a11yHint'), onPress: onPayments },
+
     { text: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
   )
 
