@@ -84,6 +84,10 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
           {...decoratorProps}
         />
       )
+    case ButtonDecoratorType.Delete:
+      return (
+        <VAIcon name={'TrashSolid'} height={theme.dimensions.listTrashIconHeight} width={theme.dimensions.listTrashIconWidth} fill={theme.colors.icon.error} {...decoratorProps} />
+      )
     default:
       return (
         <VAIcon

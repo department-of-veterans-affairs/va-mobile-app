@@ -292,7 +292,6 @@
   "fileUpload.evidenceOnly": "The file I uploaded is evidence for this claim only",
   "fileUpload.evidenceOnly.error": "Check the box to confirm the information is correct",
   "fileUpload.fileFolder": "File folder",
-  "fileUpload.fileName": "{{fileName}}.{{fileType}}",
   "fileUpload.fileSizeError": "This file cannot be added because it exceeds the maximum file size.",
   "fileUpload.fileSizeErrorWithMBUsed": "This file cannot be added because it exceeds the maximum file size. You have used {{mbUsed}} MB of the 50 MB limit.",
   "fileUpload.fileTypeError": "This file cannot be added because it is not an accepted file type. The accepted file types are: pdf (unlocked), gif, jpeg, jpg, bmp, txt.",

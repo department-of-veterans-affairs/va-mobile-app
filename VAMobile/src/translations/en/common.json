@@ -32,6 +32,8 @@
   "empty": "Empty",
   "error": "Error - {{ error }}",
   "field": "Field",
+  "file.deleted": "File deleted",
+  "file.removeConfirm": "Are you sure you would like to delete this file?",
   "fileFolder": "File folder",
   "filled": "Filled - {{ value }}",
   "forward": "Forward",
