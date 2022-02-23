@@ -41,10 +41,16 @@ context('UploadFile', () => {
     uploadsAllowed: true,
   }
 
-  const initializeTestInstance = (fileUploaded?: DocumentPickerResponse, imageUploaded?: ImagePickerResponse) => {
+  const initializeTestInstance = (imageUploaded?: ImagePickerResponse) => {
     navigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(navigateToSpy)
-    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded, imageUploaded } })
+
+    const file = {
+      name: 'File 1',
+      size: 100
+    } as DocumentPickerResponse
+
+    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded: file, imageUploaded } })
 
     component = render(<UploadFile {...props} />, {
       preloadedState: {
@@ -85,20 +91,6 @@ context('UploadFile', () => {
       })
 
       expect(navigateToSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe('when a file is uploaded', () => {
-    it('should display the uploaded file name', async () => {
-      initializeTestInstance({ name: 'uploadedFile', uri: '', copyError: '', fileCopyUri: '', size: 10, type: 'pdf' })
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('uploadedFile')
-    })
-  })
-
-  describe('when an image is uploaded', () => {
-    it('should display the uploaded image name', async () => {
-      initializeTestInstance(undefined, { assets: [{ fileName: 'uploadedImage' }] })
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('uploadedImage')
     })
   })
 })
