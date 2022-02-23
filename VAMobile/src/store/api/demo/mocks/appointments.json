@@ -224,6 +224,183 @@
             "timeZone": "America/New_York",
             "vetextId": ";20210329.170030"
           }
+        },
+        {
+          "id": "8a48912a6d02b0fc016d20b4ccb9001b",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "Vilasini Reddy",
+            "healthcareService": "Test clinic 2",
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "2021-10-01T06:00:00.000-06:00",
+            "startDateUtc": "2021-10-01T12:00:00.000Z",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":
+            {
+              "optionDate1": "10/01/2021",
+              "optionTime1": "PM",
+              "optionDate2": "10/02/2021",
+              "optionTime2": "PM",
+              "optionDate3": "No Date Selected",
+              "optionTime3": "No Time Selected"
+            },
+            "typeOfCare": "Optometry (routine eye exam)",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "8a48e8db6d70a38a016d72b354240003",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location":
+            {
+              "id": "442",
+              "name": "Cheyenne VA Medical Center",
+              "address":
+              {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone":
+              {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "2021-11-02T01:00:00.000-07:00",
+            "startDateUtc": "2021-11-02T08:00:00.000Z",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":
+            {
+              "optionDate1": "10/01/2021",
+              "optionTime1": "PM",
+              "optionDate2": "11/03/2021",
+              "optionTime2": "AM",
+              "optionDate3": "11/02/2021",
+              "optionTime3": "AM"
+            },
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "6a48912a6d02b0fc016d20b4ccb9001d",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "",
+            "healthcareService": "Test clinic 2",
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "2021-10-01T06:00:00.000-06:00",
+            "startDateUtc": "2021-10-01T12:00:00.000Z",
+            "status": "SUBMITTED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":
+            {
+              "optionDate1": "10/01/2021",
+              "optionTime1": "PM",
+              "optionDate2": "10/02/2021",
+              "optionTime2": "PM",
+              "optionDate3": "No Date Selected",
+              "optionTime3": "No Time Selected"
+            },
+            "typeOfCare": "Optometry (routine eye exam)",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
         }
       ],
       "meta": {
@@ -232,7 +409,7 @@
           "currentPage": 1,
           "perPage": 10,
           "totalPages": 1,
-          "totalEntries": 6
+          "totalEntries": 9
         }
       },
       "links": {
@@ -365,6 +542,242 @@
               "lastName": "TestDoctor"
             }
           }
+        },
+        {
+          "id": "9a48912a6d02b0fc016d20b4ccb9001a",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "Vilasini Reddy",
+            "healthcareService": "Test clinic 2",
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
+            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "status": "SUBMITTED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":
+            {
+              "optionDate1": "10/01/2022",
+              "optionTime1": "PM",
+              "optionDate2": "10/02/2022",
+              "optionTime2": "PM",
+              "optionDate3": "No Date Selected",
+              "optionTime3": "No Time Selected"
+            },
+            "typeOfCare": "Optometry (routine eye exam)",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "9a48e8db6d70a38a016d72b354240002",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location":
+            {
+              "id": "442",
+              "name": "Cheyenne VA Medical Center",
+              "address":
+              {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone":
+              {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "2022-11-02T01:00:00.000-07:00",
+            "startDateUtc": "2022-11-02T08:00:00.000Z",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":
+            {
+              "optionDate1": "10/01/2022",
+              "optionTime1": "PM",
+              "optionDate2": "11/03/2022",
+              "optionTime2": "AM",
+              "optionDate3": "11/02/2022",
+              "optionTime3": "AM"
+            },
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "",
+            "healthcareService": "Test clinic 2",
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
+            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "status": "SUBMITTED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":
+            {
+              "optionDate1": "10/01/2022",
+              "optionTime1": "PM",
+              "optionDate2": "10/02/2022",
+              "optionTime2": "PM",
+              "optionDate3": "No Date Selected",
+              "optionTime3": "No Time Selected"
+            },
+            "typeOfCare": "Optometry (routine eye exam)",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "6a48912a6d02b0fc016d20b4ccb9001a",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "",
+            "healthcareService": "Test clinic 2",
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
+            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":
+            {
+              "optionDate1": "10/01/2022",
+              "optionTime1": "PM",
+              "optionDate2": "10/02/2022",
+              "optionTime2": "PM",
+              "optionDate3": "No Date Selected",
+              "optionTime3": "No Time Selected"
+            },
+            "typeOfCare": "Optometry (routine eye exam)",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
         }
       ],
       "meta": {
@@ -373,7 +786,7 @@
           "currentPage": 1,
           "perPage": 10,
           "totalPages": 1,
-          "totalEntries": 3
+          "totalEntries": 7
         }
       },
       "links": {

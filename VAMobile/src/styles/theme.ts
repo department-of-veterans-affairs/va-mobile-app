@@ -91,7 +91,6 @@ export type VATypographyThemeVariants = {
   MobileBody: string
   MobileBodyBold: string
   UnreadMessagesTag: string
-  SentMessagesReadTag: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -101,6 +100,8 @@ export type VATypographyThemeVariants = {
   VASelector: string
   HelperText: string
   SnackBarBtnText: string
+  LabelTag: string
+  LabelTagBold: string
 }
 
 export type VABackgroundColors = {
@@ -134,6 +135,8 @@ export type VABackgroundColors = {
   pickerControls: string
   menu: string
   alertBox: string
+  warningTag: string
+  inactiveTag: string
 }
 
 export type VABorderColors = {
@@ -288,13 +291,14 @@ export type VATheme = {
     MobileBody: VAFontSizes
     MobileBodyBold: VAFontSizes
     UnreadMessagesTag: VAFontSizes
-    SentMessagesReadTag: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
     MobileBodyLink: VAFontSizes
     ClaimPhase: VAFontSizes
     VASelector: VAFontSizes
+    LabelTag: VAFontSizes
+    LabelTagBold: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }
