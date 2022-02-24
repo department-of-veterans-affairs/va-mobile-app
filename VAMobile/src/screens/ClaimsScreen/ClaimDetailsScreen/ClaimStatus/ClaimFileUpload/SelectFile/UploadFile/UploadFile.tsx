@@ -8,6 +8,7 @@ import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import FileList from 'components/FileList'
 
 type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
 
@@ -64,9 +65,9 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {request.displayName}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {fileUploaded?.name || (imageUploaded?.assets ? imageUploaded.assets[0].fileName : undefined)}
-        </TextView>
+      </Box>
+      <FileList files={[fileUploaded]} onDelete={() => {}} />
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
         <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
