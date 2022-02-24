@@ -39,15 +39,15 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const requestEvalAlert = useDestructiveAlert()
 
-  const displaySubmittedDecisionScreen = submittedDecision && !error
+  const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
 
   useEffect(() => {
-    if (displaySubmittedDecisionScreen) {
+    if (navigateToClaimsDetailsPage) {
       navigation.navigate('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
     }
-  }, [displaySubmittedDecisionScreen, navigation, claimID, claimType])
+  }, [navigateToClaimsDetailsPage, navigation, claimID, claimType])
 
   if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
