@@ -279,6 +279,7 @@
   "fileUpload.accessibilityAlert.body": "We currently do not have the technology that assists screenreaders in uploading pictures. You may want to upload your evidence on VA.gov.",
   "fileUpload.accessibilityAlert.body.a11y": "We currently do not have the technology that assists screenreaders in uploading pictures. You may want to upload your evidence on V-A .gov.",
   "fileUpload.accessibilityAlert.title": "This feature is not yet accessible to screenreaders",
+  "fileUpload.addPhoto": "Add photo",
   "fileUpload.addAnotherPhoto": "Add Another Photo",
   "fileUpload.addAnotherPhotoA11yHint": "Add another photo using your device's camera",
   "fileUpload.acceptedFileTypeOptions": "pdf (unlocked), gif, jpeg, jpg, bmp, txt",
