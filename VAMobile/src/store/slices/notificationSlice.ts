@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { AppThunk } from 'store'
 import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference } from '../api'
-import { deviceName } from 'utils/deviceData'
+import { getDeviceName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
 import { notificationsEnabled } from 'utils/notifications'
 
@@ -44,6 +44,7 @@ export const registerDevice =
       if (deviceToken) {
         const savedToken = await AsyncStorage.getItem(DEVICE_TOKEN_KEY)
         const savedSid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+        const deviceName = await getDeviceName()
         console.debug(`saved endpointSid: ${savedSid}`)
         // if there is no saved token, we have not registered
         // if there is a token and it is different, we need to register the change with VETEXT
