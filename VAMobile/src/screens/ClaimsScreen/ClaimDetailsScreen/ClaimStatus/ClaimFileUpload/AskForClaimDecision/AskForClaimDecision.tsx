@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -25,7 +24,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<ClaimsStackParamList, 'AskForClaimDecision'>
 
@@ -38,7 +37,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const { showActionSheetWithOptions } = useActionSheet()
+  const requestEvalAlert = useDestructiveAlert()
 
   const displaySubmittedDecisionScreen = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
@@ -70,21 +69,19 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }
 
   const onRequestEvaluation = (): void => {
-    const options = [t('askForClaimDecision.alertBtnTitle'), t('common:cancel')]
-    showActionSheetWithOptions(
-      {
-        message: t('askForClaimDecision.alertTitle'),
-        options,
-        cancelButtonIndex: 1,
-      },
-      (buttonIndex) => {
-        switch (buttonIndex) {
-          case 0:
-            onSubmit()
-            break
-        }
-      },
-    )
+    requestEvalAlert({
+      title: t('askForClaimDecision.alertTitle'),
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('askForClaimDecision.alertBtnTitle'),
+          onPress: onSubmit,
+        },
+      ],
+    })
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
