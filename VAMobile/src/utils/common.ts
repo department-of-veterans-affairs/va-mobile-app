@@ -273,7 +273,7 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
  * @param actionPressed - action to perform on undo
  * @param isUndo - if user pressed undo it will not show undo again
  * @param isError - if it is an error will show the error icon
- * @param withNav - offset snackbar to be over the bottom nav
+ * @param withNavBar - offset snackbar to be over the bottom nav
  * @returns snackbar
  */
 export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
