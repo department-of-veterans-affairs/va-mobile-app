@@ -4,8 +4,8 @@ import React, { ReactNode } from 'react'
 import _ from 'underscore'
 
 import {
+  AppointmentAttributes,
   AppointmentData,
-  AppointmentStatusConstants,
   AppointmentType,
   AppointmentTypeConstants,
   AppointmentTypeToID,
@@ -13,6 +13,7 @@ import {
   AppointmentsList,
   AppointmentsMetaPagination,
 } from 'store/api'
+import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
@@ -237,4 +238,15 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   })
 
   return yearToSortedMonths
+}
+
+/**
+ * Returns true or false if the appointment is a pending appointment
+ * @param attributes - data attributes of an appointment
+ */
+export const isAPendingAppointment = (attributes: AppointmentAttributes): boolean => {
+  const { status, isPending } = attributes || ({} as AppointmentAttributes)
+  const validPendingStatus = status === AppointmentStatusConstants.SUBMITTED || status === AppointmentStatusConstants.CANCELLED
+
+  return !!(isPending && validPendingStatus)
 }

@@ -11,6 +11,8 @@ type AppointmentReasonProps = {
 const AppointmentReason: FC<AppointmentReasonProps> = ({ reason }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
+
+  // TODO add Pending Appointments version of reasons
   return (
     <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
       <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
