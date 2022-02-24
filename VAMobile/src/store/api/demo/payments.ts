@@ -26,7 +26,6 @@ export type PaymentsDemoReturnTypes = undefined | PaymentsGetData
 
 export const getPaymentsHistory = (store: DemoStore, params: Params, endpoint: string): PaymentsGetData => {
   const page = params['page[number]'] || '1'
-  const date = params.startDate || '2017-01-01T00:00:00-05:00'
-  const year = getFormattedDate(date.toString(), 'yyyy')
+  const year = params.startDate ? getFormattedDate(params.startDate.toString(), 'yyyy') : '2017'
   return store[endpoint as keyof PaymenDemoStore][year as PaymentsYearNumber][page as PaymentsPageNumber] as PaymentsGetData
 }
