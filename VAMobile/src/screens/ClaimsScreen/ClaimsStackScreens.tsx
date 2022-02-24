@@ -36,6 +36,7 @@ export type ClaimsStackParamList = {
   ClaimDetailsScreen: {
     claimID: string
     claimType: ClaimType
+    focusOnSnackbar?: boolean
   }
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: undefined
@@ -83,7 +84,7 @@ export const getClaimsScreens = (t: TFunction): Array<ReactNode> => {
     <ClaimsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />,
     <ClaimsStack.Screen key={'AppealDetailsScreen'} name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('statusDetails.title') }} />,
     <ClaimsStack.Screen key={'FileRequest'} name="FileRequest" component={FileRequest} options={{ title: t('fileRequest.title') }} />,
-    <ClaimsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} />,
+    <ClaimsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} options={{ title: t('askForClaimDecision.pageTitle') }} />,
     <ClaimsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ title: stringToTitleCase(t('fileUpload.takeOrSelectPhotos')) }} />,
     <ClaimsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadOrAddPhotos'} name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ title: t('fileUpload.title') }} />,
