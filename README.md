@@ -449,7 +449,7 @@ Once KPIS are added, they should be indicated here
 
 [Debug/Testing documentation](https://firebase.google.com/docs/analytics/debugview#android)
 
-To log analytics to the debug dashboard in Firebase:
+### To log analytics to the debug dashboard in Firebase:
 - iOS:
   - Make sure the `-FIRDebugEnabled` flag is enabled in your `XCode > Product > Scheme > Edit Scheme`, under the Test (Debug) scheme
   - Start the emulator or build to device
