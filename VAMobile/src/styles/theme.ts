@@ -5,8 +5,8 @@ export type VAButtonBackgroundColors = {
   buttonSecondaryActive: string
   buttonDisabled: string
   buttonSecondaryDisabled: string
-  buttonImportant: string
-  buttonImportantActive: string
+  buttonDestructive: string
+  buttonDestructiveActive: string
   buttonWhite: string
   buttonWhiteActive: string
   brandedPrimary: string
@@ -17,8 +17,8 @@ export type VAButtonBackgroundColors = {
 export type VAButtonBorderColors = {
   buttonSecondary: string
   buttonSecondaryActive: string
-  buttonImportant: string
-  buttonImportantActive: string
+  buttonDestructive: string
+  buttonDestructiveActive: string
   brandedPrimary: string
   brandedPrimaryActive: string
 }
@@ -27,7 +27,7 @@ export type VAButtonTextColors = {
   buttonPrimary: string
   buttonSecondary: string
   buttonDisabled: string
-  buttonImportant: string
+  buttonDestructive: string
   buttonWhite: string
   brandedPrimary: string
 }

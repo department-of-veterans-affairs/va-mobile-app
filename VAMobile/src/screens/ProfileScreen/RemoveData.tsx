@@ -24,7 +24,7 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
       <VAButton
         onPress={() => setDisplayAlert(true)}
         label={t('personalInformation.removeData', { pageName: stringToTitleCase(pageName) })}
-        buttonType={ButtonTypesConstants.buttonImportant}
+        buttonType={ButtonTypesConstants.buttonDestructive}
         a11yHint={t('personalInformation.removeData.a11yHint', { pageName })}
       />
     )
