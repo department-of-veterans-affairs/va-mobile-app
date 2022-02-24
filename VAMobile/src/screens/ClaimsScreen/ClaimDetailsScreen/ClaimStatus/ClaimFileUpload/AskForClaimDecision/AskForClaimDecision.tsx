@@ -3,7 +3,20 @@ import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, ButtonTypesConstants, ErrorComponent, FieldType, FormFieldType, FormWrapper, TextArea, TextView, VABulletList, VAButton, VAScrollView } from 'components'
+import {
+  Box,
+  ButtonTypesConstants,
+  ErrorComponent,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  LoadingComponent,
+  TextArea,
+  TextView,
+  VABulletList,
+  VAButton,
+  VAScrollView,
+} from 'components'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
@@ -21,7 +34,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const t = useTranslation(NAMESPACE.CLAIMS)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { submittedDecision, error, claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
@@ -39,6 +52,10 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
+  }
+
+  if (loadingSubmitClaimDecision) {
+    return <LoadingComponent text={t('askForClaimDecision.loading')} />
   }
 
   const bulletedListOfText = [
