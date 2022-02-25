@@ -23,23 +23,17 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
         <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('appointments.pending.yourContactDetails')}
         </TextView>
-        <TextView variant="MobileBody">
-          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-            {`${t('common:email')}: `}
-            <TextView variant="MobileBody">{patientEmail}</TextView>
-          </TextView>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+          {`${t('common:email')}: `}
+          <TextView variant="MobileBody">{patientEmail}</TextView>
         </TextView>
-        <TextView variant="MobileBody">
-          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-            {`${t('common:phoneNumber')}: `}
-            <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
-          </TextView>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+          {`${t('common:phoneNumber')}: `}
+          <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
         </TextView>
-        <TextView variant="MobileBody">
-          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-            {`${t('common:call')}: `}
-            <TextView variant="MobileBody">{bestTimeToCall?.join(' ')}</TextView>
-          </TextView>
+        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+          {`${t('common:call')}: `}
+          <TextView variant="MobileBody">{bestTimeToCall?.join(' ')}</TextView>
         </TextView>
       </Box>
     )
