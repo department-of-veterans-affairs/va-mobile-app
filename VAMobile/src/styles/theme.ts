@@ -77,6 +77,7 @@ export type VAIconColors = {
   spinner: string
   dark: string
   covid19Vaccinations: string
+  photoAdd: string
   pickerIcon: string
   pagination: string
   chevronCollapsible: string
@@ -100,6 +101,7 @@ export type VATypographyThemeVariants = {
   ActionBar: string
   VASelector: string
   HelperText: string
+  HelperTextBold: string
   SnackBarBtnText: string
 }
 
@@ -146,6 +148,7 @@ export type VABorderColors = {
   phaseIndicatorUpcoming: string
   success: string
   primaryDarkest: string
+  photoAdd: string
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string

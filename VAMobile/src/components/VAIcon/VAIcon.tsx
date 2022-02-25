@@ -61,6 +61,7 @@ import { AccessibilityState } from 'store/slices'
 import { RootState } from 'store'
 import { updateFontScale } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
+import Add from './svgs/add.svg'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
@@ -90,6 +91,7 @@ export const VA_ICON_MAP = {
   ClaimsUnselected,
   ProfileSelected,
   ProfileUnselected,
+  Add,
   ArrowDown,
   ArrowUp,
   ArrowLeft,
