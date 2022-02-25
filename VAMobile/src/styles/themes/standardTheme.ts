@@ -242,6 +242,7 @@ let theme: VATheme = {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
+    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
   },
 }

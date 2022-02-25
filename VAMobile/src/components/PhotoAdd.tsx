@@ -7,19 +7,19 @@ import React, { FC } from 'react'
 import TextView, { TextViewProps } from './TextView'
 
 type PhotoAddProps = {
+  /** width of the component */
   width: number
+  /** height of the component */
   height: number
-  onPressFunc: () => void
+  /** Add Photo on press with error and success callback */
+  onPress: () => void
+  /** TestID for the pressable */
   testID?: string
 }
 
-const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPressFunc, testID }) => {
+const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress, testID }) => {
   const { colors: themeColor } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
-
-  const onPress = (): void => {
-    onPressFunc()
-  }
 
   const pressableProps: PressableProps = {
     onPress,
@@ -37,7 +37,7 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPressFunc, testID }) => 
   }
 
   const textProps: TextViewProps = {
-    variant: 'SnackBarBtnText',
+    variant: 'HelperTextBold',
     color: 'footerButton',
     textAlign: 'center',
   }

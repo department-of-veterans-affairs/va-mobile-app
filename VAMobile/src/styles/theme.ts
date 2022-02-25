@@ -101,6 +101,7 @@ export type VATypographyThemeVariants = {
   ActionBar: string
   VASelector: string
   HelperText: string
+  HelperTextBold: string
   SnackBarBtnText: string
 }
 
