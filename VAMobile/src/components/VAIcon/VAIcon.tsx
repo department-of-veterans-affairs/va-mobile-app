@@ -158,6 +158,7 @@ export type VAIconProps = BoxProps & {
   /** optional boolean that prevents the icon from being scaled when set to true */
   preventScaling?: boolean
 
+  /** optional margin left */
   ml?: number
 }
 
