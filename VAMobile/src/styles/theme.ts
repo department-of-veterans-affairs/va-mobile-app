@@ -64,6 +64,7 @@ export type VAIconColors = {
   link: string
   nav: string
   largeNav: string
+  deleteFill: string
   disclosure: string
   success: string
   error: string

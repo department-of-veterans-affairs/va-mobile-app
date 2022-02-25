@@ -195,3 +195,13 @@ export const onAddPhotos = (
     },
   )
 }
+
+/**
+ * Delete a photo from the photo array
+ *
+ * @param image - ImagePickerResponse image selection for deletion
+ */
+export const deletePhoto = (deleteCallbackIfUri: (response: ImagePickerResponse[]) => void, deleteIndex: number, images: ImagePickerResponse[]): void => {
+  images.splice(deleteIndex, 1)
+  deleteCallbackIfUri(images)
+}

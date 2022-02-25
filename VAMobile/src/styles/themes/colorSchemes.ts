@@ -57,6 +57,7 @@ export const lightTheme = {
     link: colors.primary, //'#0071bb',
     nav: colors.linkDefault, //'#004795',
     largeNav: colors.primary,
+    deleteFill: colors.base, //212121
     disclosure: colors.grayLight,
     success: colors.green, //'#2E8540',
     error: colors.secondaryDark, //'#CD2026',
@@ -206,6 +207,7 @@ export const darkTheme = {
     link: colors.darkmodeLightBlue,
     nav: colors.darkmodeLightBlue,
     largeNav: colors.darkmodeLightBlue,
+    deleteFill: colors.base, //212121
     disclosure: colors.grayLight,
     success: colors.green,
     error: colors.darkmodeRed,
