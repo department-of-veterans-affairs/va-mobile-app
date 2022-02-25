@@ -157,6 +157,8 @@ export type VAIconProps = BoxProps & {
 
   /** optional boolean that prevents the icon from being scaled when set to true */
   preventScaling?: boolean
+
+  ml?: number
 }
 
 /**
@@ -170,7 +172,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
   const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
-  const { name, width, height, fill, stroke, preventScaling } = props
+  const { name, width, height, fill, stroke, preventScaling, ml } = props
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
@@ -198,6 +200,10 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
 
   if (height && isFinite(height)) {
     domProps = Object.assign({}, domProps, { height: preventScaling ? height : fs(height) })
+  }
+
+  if (ml) {
+    domProps = Object.assign({}, domProps, { ml: ml })
   }
 
   return (
