@@ -131,7 +131,9 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
           </Box>
           <TextView color={textColor}>{subText}</TextView>
         </Box>
-        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
+        <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+          <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} />
+        </Box>
       </Pressable>
     </Box>
   )
