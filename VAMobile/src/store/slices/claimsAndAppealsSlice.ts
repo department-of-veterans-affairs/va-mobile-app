@@ -27,7 +27,7 @@ import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { getItemsInRange, isErrorObject } from 'utils/common'
+import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 
@@ -422,17 +422,19 @@ export const submitClaimDecision =
   (claimID: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(submitClaimDecision(claimID, screenID))))
+    const retryFunction = () => dispatch(submitClaimDecision(claimID, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartSubmitClaimDecision())
 
     try {
       await api.post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 
       dispatch(dispatchFinishSubmitClaimDecision())
+      showSnackBar('Request sent', dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishSubmitClaimDecision(error))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        showSnackBar('Request could not be sent', dispatch, retryFunction, false, true)
       }
     }
   }
