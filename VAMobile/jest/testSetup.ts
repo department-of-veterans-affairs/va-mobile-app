@@ -249,3 +249,7 @@ jest.mock('react-native-notifications', () => {
 globalAny.FormData = () => ({
   append: jest.fn(),
 })
+
+globalAny.snackBar = {
+  show: jest.fn(),
+}
