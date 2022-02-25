@@ -18,6 +18,8 @@ export enum ButtonDecoratorType {
   None = 'None',
   /** Picker selected item decorator **/
   SelectedItem = 'SelectedItem',
+  /** Trash can decorator */
+  Delete = 'Delete',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -81,6 +83,10 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
           fill={theme.colors.icon.pickerIcon}
           {...decoratorProps}
         />
+      )
+    case ButtonDecoratorType.Delete:
+      return (
+        <VAIcon name={'TrashSolid'} height={theme.dimensions.listTrashIconHeight} width={theme.dimensions.listTrashIconWidth} fill={theme.colors.icon.error} {...decoratorProps} />
       )
     default:
       return (

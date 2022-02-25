@@ -210,6 +210,8 @@ let theme: VATheme = {
     menuElevation: 20,
     chevronListItemWidth: 10,
     chevronListItemHeight: 15,
+    listTrashIconWidth: 14,
+    listTrashIconHeight: 16,
   },
 
   fontFace: {
