@@ -20,12 +20,22 @@ import {
   VAScrollView,
 } from 'components'
 import {
+  AppointmentAddressAndNumber,
+  AppointmentReason,
+  AppointmentTypeAndDate,
+  ContactInformation,
+  PendingAppointmentAlert,
+  PendingAppointmentCancelButton,
+  PreferredAppointmentType,
+  PreferredDateAndTime,
+  ProviderName,
+} from '../AppointmentDetailsCommon'
+import {
   AppointmentAttributes,
   AppointmentCancellationStatusConstants,
   AppointmentData,
   AppointmentLocation,
   AppointmentStatusConstants,
-  AppointmentStatusDetailTypeConsts,
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
@@ -37,13 +47,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
+import { isAPendingAppointment } from 'utils/appointments'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
-import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
-import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
-import ProviderName from '../AppointmentDetailsCommon/ProviderName'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -64,29 +71,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const appointment = upcomingAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const {
-    appointmentType,
-    healthcareService,
-    location,
-    startDateUtc,
-    minutesDuration,
-    timeZone,
-    comment,
-    practitioner,
-    status,
-    statusDetail,
-    reason,
-    isCovidVaccine,
-    healthcareProvider,
-  } = attributes || ({} as AppointmentAttributes)
-  const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
+  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, reason, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
+  const { name, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
+  const pendingAppointment = isAPendingAppointment(attributes)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
-
-  const whoCanceled =
-    statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
-      ? t('appointments.canceled.whoCanceled.facility')
-      : t('appointments.canceled.whoCanceled.you')
 
   useEffect(() => {
     dispatch(trackAppointmentDetail())
@@ -119,6 +108,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     },
   }
 
+  // TODO abstract some of these render functions into their own components - too many in one file
   const CommunityCare_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
       return (
@@ -234,7 +224,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const AddToCalendar = (): ReactElement => {
-    if (!isAppointmentCanceled) {
+    if (!isAppointmentCanceled && !pendingAppointment) {
       return (
         <Box my={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
@@ -290,6 +280,26 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
+  const readerCancelInformation = (): ReactElement => {
+    if (pendingAppointment) {
+      return <></>
+    }
+
+    return (
+      <Box mt={theme.dimensions.condensedMarginBetween}>
+        {!isAppointmentCanceled ? (
+          <AppointmentCancellationInfo appointment={appointment} />
+        ) : (
+          <TextArea>
+            <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+              {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
+            </TextView>
+          </TextArea>
+        )}
+      </Box>
+    )
+  }
+
   if (loadingAppointmentCancellation || !isTransitionComplete) {
     return <LoadingComponent text={t(!isTransitionComplete ? 'appointmentDetails.loading' : 'upcomingAppointmentDetails.loadingAppointmentCancellation')} />
   }
@@ -297,51 +307,31 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   return (
     <VAScrollView {...testIdProps('Appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        <PendingAppointmentAlert attributes={attributes} />
         {renderCancellationAlert()}
         <TextArea>
-          <AppointmentTypeAndDate
-            timeZone={timeZone}
-            startDateUtc={startDateUtc}
-            appointmentType={appointmentType}
-            isAppointmentCanceled={isAppointmentCanceled}
-            whoCanceled={whoCanceled}
-            isCovidVaccine={isCovidVaccine}
-          />
+          <AppointmentTypeAndDate attributes={attributes} />
           <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
 
           <VAVCAtHome_AppointmentData />
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} healthcareProvider={healthcareProvider} />
+          <ProviderName attributes={attributes} />
 
-          <AppointmentAddressAndNumber
-            appointmentType={appointmentType}
-            healthcareService={healthcareService}
-            address={address}
-            location={location}
-            phone={phone}
-            isCovidVaccine={isCovidVaccine}
-          />
+          <AppointmentAddressAndNumber attributes={attributes} />
 
           <Atlas_AppointmentData />
-
           <CommunityCare_AppointmentData />
 
+          <PreferredDateAndTime attributes={attributes} />
+          <PreferredAppointmentType attributes={attributes} />
           {reason && <AppointmentReason reason={reason} />}
+          <ContactInformation attributes={attributes} />
+          <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointment?.id} />
         </TextArea>
 
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          {!isAppointmentCanceled ? (
-            <AppointmentCancellationInfo appointment={appointment} />
-          ) : (
-            <TextArea>
-              <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
-                {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
-              </TextView>
-            </TextArea>
-          )}
-        </Box>
+        {readerCancelInformation()}
       </Box>
     </VAScrollView>
   )

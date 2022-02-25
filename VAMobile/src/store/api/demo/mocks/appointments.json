@@ -262,7 +262,7 @@
             "startDateLocal": "2021-10-01T06:00:00.000-06:00",
             "startDateUtc": "2021-10-01T12:00:00.000Z",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
+            "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/Denver",
             "vetextId": null,
             "reason": "routine-follow-up",
@@ -281,7 +281,13 @@
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
+            "practitioner": {
+              "prefix": "Dr.",
+              "firstName": "Larry",
+              "middleName": "",
+              "lastName": "TestDoctor"
+            }
           }
         },
         {
@@ -321,7 +327,7 @@
             "startDateLocal": "2021-11-02T01:00:00.000-07:00",
             "startDateUtc": "2021-11-02T08:00:00.000Z",
             "status": "CANCELLED",
-            "statusDetail": null,
+            "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
             "vetextId": null,
             "reason": "New Issue",
@@ -599,7 +605,13 @@
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
+            "practitioner": {
+              "prefix": "Dr.",
+              "firstName": "Larry",
+              "middleName": "",
+              "lastName": "TestDoctor"
+            }
           }
         },
         {
