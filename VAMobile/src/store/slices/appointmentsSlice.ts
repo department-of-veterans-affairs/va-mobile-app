@@ -256,6 +256,7 @@ export const prefetchAppointments =
                 phoneOnly: false,
                 statusDetail: null,
                 isCovidVaccine: true,
+                isPending: false,
                 startDateLocal: '2021-09-06T19:53:14.000+00:00',
                 startDateUtc: '2021-09-06T19:53:14.000+00:00',
                 minutesDuration: 60,
@@ -314,6 +315,7 @@ export const prefetchAppointments =
                 minutesDuration: 60,
                 phoneOnly: true,
                 isCovidVaccine: false,
+                isPending: false,
                 startDateLocal: '2021-09-17T13:10:00.000-06:00',
                 startDateUtc: '2021-09-17T19:10:00.000+00:00',
                 status: AppointmentStatusConstants.BOOKED,
@@ -334,7 +336,8 @@ export const prefetchAppointments =
             endDate: past.endDate,
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
             'page[number]': '1', // prefetch assume always first page
-            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
+            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest,
+            'included[]': 'pending',
           } as Params)
         }
       }
@@ -351,6 +354,7 @@ export const prefetchAppointments =
                 phoneOnly: false,
                 statusDetail: null,
                 isCovidVaccine: true,
+                isPending: false,
                 startDateLocal: '2022-09-06T19:53:14.000+00:00',
                 startDateUtc: '2022-09-06T19:53:14.000+00:00',
                 minutesDuration: 60,
@@ -409,6 +413,7 @@ export const prefetchAppointments =
                 minutesDuration: 60,
                 phoneOnly: false,
                 isCovidVaccine: true,
+                isPending: false,
                 startDateLocal: '2022-09-17T13:10:00.000-06:00',
                 startDateUtc: '2022-09-17T19:10:00.000+00:00',
                 status: AppointmentStatusConstants.BOOKED,
@@ -452,6 +457,7 @@ export const prefetchAppointments =
                 timeZone: 'America/Denver' as AppointmentTimeZone,
                 reason: null,
                 isCovidVaccine: false,
+                isPending: false,
               },
             },
           ],
@@ -472,6 +478,7 @@ export const prefetchAppointments =
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
             'page[number]': '1', // prefetch assume always first page
             sort: 'startDateUtc',
+            'included[]': 'pending',
           } as Params)
         }
       }
@@ -513,6 +520,7 @@ export const getAppointmentsInDateRange =
         'page[number]': page.toString(),
         'page[size]': DEFAULT_PAGE_SIZE.toString(),
         sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
+        'included[]': 'pending',
       } as Params)
       await trackAppointmentPaginationDiscrepancy(appointmentsPagination, appointmentsList?.meta?.pagination)
       dispatch(dispatchFinishGetAppointmentsInDateRange({ timeFrame, appointments: appointmentsList }))

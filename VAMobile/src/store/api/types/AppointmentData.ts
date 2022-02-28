@@ -111,14 +111,23 @@ export type AppointmentStatusDetailType = 'CANCELLED BY CLINIC & AUTO RE-BOOK' |
 
 export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE' | 'VA_VIDEO_CONNECT_GFE'
 
-export type AppointmentProposedTimes = {
-  optionDate1: string
-  optionTime1: string
-  optionDate2: string
-  optionTime2: string
-  optionDate3: string
-  optionTime3: string
+export type AppointmentProposedTimesPeriodType = 'AM' | 'PM'
+
+export const AppointmentProposedTimesPeriodConstant: {
+  AM: AppointmentProposedTimesPeriodType
+  PM: AppointmentProposedTimesPeriodType
+} = {
+  AM: 'AM',
+  PM: 'PM',
 }
+
+export type AppointmentProposedTimesItem = {
+  date: string | null
+  time: AppointmentProposedTimesPeriodType | null
+}
+
+export type AppointmentProposedTimes = Array<AppointmentProposedTimesItem>
+
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
   cancelId?: string
@@ -137,7 +146,8 @@ export type AppointmentAttributes = {
   phoneOnly: boolean
   reason: string | null
   isCovidVaccine: boolean
-  isPending?: boolean
+  // pending appointment props
+  isPending: boolean
   typeOfCare?: string
   friendlyLocationName?: string
   proposedTimes?: AppointmentProposedTimes

@@ -50,7 +50,9 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     )
   }
 
-  const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
+  let cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
+  // if no cityStateZip provider then return empty string
+  cityStateZip = cityStateZip === ',' ? cityStateZip : ''
 
   const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
@@ -58,12 +60,12 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     <Box>
       {getHealthServiceHeaderSection()}
       <Box {...testIdProps(testId)} accessible={true}>
-        {!appointmentIsAtlas && (
+        {!appointmentIsAtlas && !!location?.name && (
           <TextView variant="MobileBody" selectable={true}>
             {location.name}
           </TextView>
         )}
-        {!!address && (
+        {!!address?.street && (
           <TextView variant="MobileBody" selectable={true}>
             {address.street}
           </TextView>
@@ -82,7 +84,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
           {...a11yHintProp(t('common:directions.a11yHint'))}
         />
       </Box>
-      {!appointmentIsAtlas && <ClickToCallPhoneNumber phone={phone} />}
+      {!appointmentIsAtlas && phone && <ClickToCallPhoneNumber phone={phone} />}
     </Box>
   )
 }
