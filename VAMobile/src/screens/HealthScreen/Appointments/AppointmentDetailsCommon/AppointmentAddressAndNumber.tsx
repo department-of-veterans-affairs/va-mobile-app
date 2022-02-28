@@ -51,8 +51,8 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
   }
 
   let cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
-  // if no cityStateZip provider then return empty string
-  cityStateZip = cityStateZip === ',' ? cityStateZip : ''
+  // if no cityStateZip then return empty string
+  cityStateZip = cityStateZip === ',' ? '' : cityStateZip
 
   const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
