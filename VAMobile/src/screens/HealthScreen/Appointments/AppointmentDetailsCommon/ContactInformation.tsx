@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react'
+import React, { FC } from 'react'
 
 import { AppointmentAttributes } from 'store/api'
 import { Box, TextView } from 'components'
