@@ -3,6 +3,7 @@ import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLoca
 import { context, realStore, when } from 'testUtils'
 import {
   AppointmentsDateRange,
+  getAppointmentMessages,
   getAppointmentsInDateRange,
   groupAppointmentsByYear,
   initialAppointmentsState,
@@ -22,11 +23,15 @@ export const ActionTypes: {
   APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: string
   APPOINTMENTS_START_PREFETCH_APPOINTMENTS: string
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: string
+  APPOINTMENTS_START_GET_APPOINTMENT_MESSAGES: string
+  APPOINTMENTS_FINISH_GET_APPOINTMENT_MESSAGES: string
 } = {
   APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE: 'appointments/dispatchStartGetAppointmentsInDateRange',
   APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: 'appointments/dispatchFinishGetAppointmentsInDateRange',
   APPOINTMENTS_START_PREFETCH_APPOINTMENTS: 'appointments/dispatchStartPrefetchAppointments',
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: 'appointments/dispatchFinishPrefetchAppointments',
+  APPOINTMENTS_START_GET_APPOINTMENT_MESSAGES: 'appointments/dispatchStartGetAppointmentMessages',
+  APPOINTMENTS_FINISH_GET_APPOINTMENT_MESSAGES: 'appointments/dispatchFinishGetAppointmentMessages'
 }
 
 export const bookedAppointmentsList: AppointmentsList = [
@@ -782,6 +787,24 @@ context('appointments', () => {
 
       const { appointments } = store.getState()
       expect(appointments.error).toEqual(error)
+    })
+  })
+
+  describe('getAppointmentMessages', () => {
+    it('should get appointment messages for an appointmentID', async () => {
+      const store = realStore()
+      await store.dispatch(getAppointmentMessages('1'))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: ActionTypes.APPOINTMENTS_START_GET_APPOINTMENT_MESSAGES })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.appointments.messagesLoading).toBeTruthy()
+
+      expect(api.get as jest.Mock).toBeCalledWith(`/v0/appointment_requests/1/messages`)
+
+      const finishAction = _.find(actions, { type: ActionTypes.APPOINTMENTS_FINISH_GET_APPOINTMENT_MESSAGES })
+      expect(finishAction).toBeTruthy()
+      expect(finishAction?.state.appointments.messagesLoading).toBeFalsy()
     })
   })
 })

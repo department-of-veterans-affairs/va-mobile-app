@@ -39,7 +39,7 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
-import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
+import { AppointmentsState, clearAppointmentCancellation, getAppointmentMessages, trackAppointmentDetail } from 'store/slices'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
@@ -67,15 +67,18 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus, appointmentMessagesById } = useSelector<RootState, AppointmentsState>(
+    (state) => state.appointments,
+  )
 
   const appointment = upcomingAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, reason, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
   const { name, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+  const messages = appointmentMessagesById[appointmentID]
 
   useEffect(() => {
     dispatch(trackAppointmentDetail())
@@ -83,6 +86,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       setIsTransitionComplete(true)
     })
   }, [dispatch, appointmentID])
+
+  useEffect(() => {
+    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
+      dispatch(getAppointmentMessages(appointmentID))
+    }
+  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
 
   useEffect(() => {
     navigation.setOptions({
@@ -326,7 +335,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
-          {reason && <AppointmentReason reason={reason} />}
+          <AppointmentReason attributes={attributes} messages={messages} />
           <ContactInformation attributes={attributes} />
           <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointment?.id} />
         </TextArea>
