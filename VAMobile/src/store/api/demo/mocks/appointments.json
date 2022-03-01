@@ -268,15 +268,16 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":
-            {
-              "optionDate1": "10/01/2021",
-              "optionTime1": "PM",
-              "optionDate2": "10/02/2021",
-              "optionTime2": "PM",
-              "optionDate3": "No Date Selected",
-              "optionTime3": "No Time Selected"
-            },
+            "proposedTimes":[
+              {
+                "date": "10/01/2021",
+                "time": "PM"
+              },
+              {
+                "date": "10/02/2021",
+                "time": "PM"
+              }
+            ],
             "typeOfCare": "Optometry (routine eye exam)",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
@@ -333,15 +334,20 @@
             "reason": "New Issue",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":
-            {
-              "optionDate1": "10/01/2021",
-              "optionTime1": "PM",
-              "optionDate2": "11/03/2021",
-              "optionTime2": "AM",
-              "optionDate3": "11/02/2021",
-              "optionTime3": "AM"
-            },
+            "proposedTimes":[
+              {
+                "date": "10/01/2021",
+                "time": "PM"
+              },
+              {
+                "date": "11/02/2021",
+                "time": "AM"
+              },
+              {
+                "date": "11/03/2021",
+                "time": "AM"
+              }
+            ],
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
@@ -392,15 +398,16 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":
-            {
-              "optionDate1": "10/01/2021",
-              "optionTime1": "PM",
-              "optionDate2": "10/02/2021",
-              "optionTime2": "PM",
-              "optionDate3": "No Date Selected",
-              "optionTime3": "No Time Selected"
-            },
+            "proposedTimes":[
+              {
+                "date": "10/01/2021",
+                "time": "PM"
+              },
+              {
+                "date": "10/02/2021",
+                "time": "PM"
+              }
+            ],
             "typeOfCare": "Optometry (routine eye exam)",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
@@ -592,15 +599,17 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":
-            {
-              "optionDate1": "10/01/2022",
-              "optionTime1": "PM",
-              "optionDate2": "10/02/2022",
-              "optionTime2": "PM",
-              "optionDate3": "No Date Selected",
-              "optionTime3": "No Time Selected"
-            },
+
+            "proposedTimes":[
+              {
+                "date": "10/01/2022",
+                "time": "PM"
+              },
+              {
+                "date": "10/02/2022",
+                "time": "PM"
+              }
+            ],
             "typeOfCare": "Optometry (routine eye exam)",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
@@ -657,15 +666,20 @@
             "reason": "New Issue",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":
-            {
-              "optionDate1": "10/01/2022",
-              "optionTime1": "PM",
-              "optionDate2": "11/03/2022",
-              "optionTime2": "AM",
-              "optionDate3": "11/02/2022",
-              "optionTime3": "AM"
-            },
+            "proposedTimes":[
+              {
+                "date": "10/01/2022",
+                "time": "PM"
+              },
+              {
+                "date": "11/02/2022",
+                "time": "AM"
+              },
+              {
+                "date": "11/03/2022",
+                "time": "AM"
+              }
+            ],
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
@@ -716,15 +730,16 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":
-            {
-              "optionDate1": "10/01/2022",
-              "optionTime1": "PM",
-              "optionDate2": "10/02/2022",
-              "optionTime2": "PM",
-              "optionDate3": "No Date Selected",
-              "optionTime3": "No Time Selected"
-            },
+            "proposedTimes":[
+              {
+                "date": "10/01/2022",
+                "time": "PM"
+              },
+              {
+                "date": "10/02/2022",
+                "time": "PM"
+              }
+            ],
             "typeOfCare": "Optometry (routine eye exam)",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
@@ -775,20 +790,72 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":
-            {
-              "optionDate1": "10/01/2022",
-              "optionTime1": "PM",
-              "optionDate2": "10/02/2022",
-              "optionTime2": "PM",
-              "optionDate3": "No Date Selected",
-              "optionTime3": "No Time Selected"
-            },
+            "proposedTimes":[
+              {
+                "date": "10/01/2022",
+                "time": "PM"
+              },
+              {
+                "date": "10/02/2022",
+                "time": "PM"
+              }
+            ],
             "typeOfCare": "Optometry (routine eye exam)",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "6a48912a6d02b0fc016d20b4ccb9001z",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "",
+            "healthcareService": "Test clinic 2",
+            "location":
+            {
+              "id": null,
+              "name": "",
+              "address":
+              {
+                "street": "",
+                "city": "",
+                "state": "",
+                "zipCode": ""
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
+            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":[],
+            "typeOfCare": "",
+            "patientPhoneNumber": "",
+            "patientEmail": "",
+            "bestTimeToCall": [],
+            "friendlyLocationName": ""
           }
         }
       ],
@@ -798,7 +865,7 @@
           "currentPage": 1,
           "perPage": 10,
           "totalPages": 1,
-          "totalEntries": 7
+          "totalEntries": 8
         }
       },
       "links": {

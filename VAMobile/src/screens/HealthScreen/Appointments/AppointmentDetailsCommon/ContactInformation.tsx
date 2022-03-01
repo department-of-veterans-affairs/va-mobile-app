@@ -20,21 +20,29 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
   if (isAppointmentPending) {
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
-          {t('appointments.pending.yourContactDetails')}
-        </TextView>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-          {`${t('common:email')}: `}
-          <TextView variant="MobileBody">{patientEmail}</TextView>
-        </TextView>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-          {`${t('common:phoneNumber')}: `}
-          <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
-        </TextView>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-          {`${t('common:call')}: `}
-          <TextView variant="MobileBody">{bestTimeToCall?.join(' ')}</TextView>
-        </TextView>
+        {(!!patientEmail || !!patientPhoneNumber || !!bestTimeToCall?.length) && (
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+            {t('appointments.pending.yourContactDetails')}
+          </TextView>
+        )}
+        {!!patientEmail && (
+          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+            {`${t('common:email')}: `}
+            <TextView variant="MobileBody">{patientEmail}</TextView>
+          </TextView>
+        )}
+        {!!patientPhoneNumber && (
+          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+            {`${t('common:phoneNumber')}: `}
+            <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
+          </TextView>
+        )}
+        {!!bestTimeToCall?.length && (
+          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+            {`${t('common:call')}: `}
+            <TextView variant="MobileBody">{bestTimeToCall?.join(' ')}</TextView>
+          </TextView>
+        )}
       </Box>
     )
   }

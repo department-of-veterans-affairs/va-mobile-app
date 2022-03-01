@@ -36,6 +36,10 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
 
   let content
   if (isAppointmentPending) {
+    if (!typeOfCare) {
+      return <></>
+    }
+
     // pending
     const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
     const title = appointmentCanceled ? 'appointments.pending.cancelled.pendingRequestTypeOfCare' : 'appointments.pending.submitted.pendingRequestTypeOfCare'

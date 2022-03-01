@@ -58,17 +58,17 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     <Box>
       {getHealthServiceHeaderSection()}
       <Box {...testIdProps(testId)} accessible={true}>
-        {!appointmentIsAtlas && (
+        {!appointmentIsAtlas && !!location?.name && (
           <TextView variant="MobileBody" selectable={true}>
             {location.name}
           </TextView>
         )}
-        {!!address && (
+        {!!address?.street && (
           <TextView variant="MobileBody" selectable={true}>
             {address.street}
           </TextView>
         )}
-        {!!cityStateZip && (
+        {!!address?.city && address?.state && address?.zipCode && (
           <TextView variant="MobileBody" selectable={true}>
             {cityStateZip}
           </TextView>
@@ -82,7 +82,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
           {...a11yHintProp(t('common:directions.a11yHint'))}
         />
       </Box>
-      {!appointmentIsAtlas && <ClickToCallPhoneNumber phone={phone} />}
+      {!appointmentIsAtlas && phone && <ClickToCallPhoneNumber phone={phone} />}
     </Box>
   )
 }
