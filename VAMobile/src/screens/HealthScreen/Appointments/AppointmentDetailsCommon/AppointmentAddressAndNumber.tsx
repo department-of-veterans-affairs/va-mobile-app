@@ -50,9 +50,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     )
   }
 
-  let cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
-  // if no cityStateZip then return empty string
-  cityStateZip = cityStateZip === ',' ? '' : cityStateZip
+  const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
 
   const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
@@ -70,7 +68,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
             {address.street}
           </TextView>
         )}
-        {!!cityStateZip && (
+        {!!address?.city && address?.state && address?.zipCode && (
           <TextView variant="MobileBody" selectable={true}>
             {cityStateZip}
           </TextView>
