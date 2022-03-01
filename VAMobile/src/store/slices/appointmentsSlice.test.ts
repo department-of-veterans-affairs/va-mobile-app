@@ -804,7 +804,7 @@ context('appointments', () => {
 
       const finishAction = _.find(actions, { type: ActionTypes.APPOINTMENTS_FINISH_GET_APPOINTMENT_MESSAGES })
       expect(finishAction).toBeTruthy()
-      expect(startAction?.state.appointments.messagesLoading).toBeFalsy()
+      expect(finishAction?.state.appointments.messagesLoading).toBeFalsy()
     })
   })
 })
