@@ -12,7 +12,7 @@ import {
   ProviderName,
 } from '../AppointmentDetailsCommon'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
-import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
+import { AppointmentsState, getAppointmentMessages, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
@@ -31,14 +31,15 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
-  const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { pastAppointmentsById, appointmentMessagesById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, status, reason } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, status } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
+  const messages = appointmentMessagesById[appointmentID]
 
   useEffect(() => {
     dispatch(trackAppointmentDetail())
@@ -46,6 +47,12 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
       setIsTransitionComplete(true)
     })
   }, [dispatch, appointmentID])
+
+  useEffect(() => {
+    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
+      dispatch(getAppointmentMessages(appointmentID))
+    }
+  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
 
   if (!isTransitionComplete) {
     return <LoadingComponent text={t('appointmentDetails.loading')} />
@@ -85,7 +92,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
-          {reason && <AppointmentReason reason={reason} />}
+          <AppointmentReason attributes={attributes} messages={messages} />
           <ContactInformation attributes={attributes} />
         </TextArea>
 
