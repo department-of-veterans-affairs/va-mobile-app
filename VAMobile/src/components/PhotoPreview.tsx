@@ -1,4 +1,4 @@
-import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Asset } from 'react-native-image-picker/src/types'
 import { Image, Pressable, PressableProps } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
@@ -18,7 +18,7 @@ type PhotoPreviewProps = {
   /** height of the photo */
   height: number
   /** imagePickerResponse with asset to style for component and fileSize */
-  image: ImagePickerResponse
+  image: Asset
   /** function callback for if deletion is selected */
   onDeleteCallback: () => void
   /** flag for whether this is the last photo available for deletion */
@@ -47,7 +47,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   const t = useTranslation(NAMESPACE.CLAIMS)
   const { showActionSheetWithOptions } = useActionSheet()
   const [selected, setSelected] = useState(false)
-  const { fileSize, uri } = image.assets ? image.assets[0] : ({} as Asset)
+  const uri = image.uri
 
   const photo = (): ReactNode => {
     return <StyledImage source={{ uri }} width={width} height={height} borderRadius={5} />
@@ -69,8 +69,8 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
       (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
-            onDeleteCallback()
             setSelected(false)
+            onDeleteCallback()
             break
           case 1:
             setSelected(false)
@@ -112,7 +112,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
           {!selected && <VAIcon name={'Delete'} width={24} height={24} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
-      <TextView {...textProps}>{fileSize ? bytesToFinalSizeDisplay(fileSize, t) : undefined}</TextView>
+      <TextView {...textProps}>{image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t) : undefined}</TextView>
     </Pressable>
   )
 }
