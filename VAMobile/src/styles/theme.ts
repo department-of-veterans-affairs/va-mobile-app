@@ -239,6 +239,9 @@ export type VATheme = {
     messageIconHeight: number
     maxNumMessageAttachments: number
     paginationButtonPadding: number
+    photoPreviewIconSize: number
+    photoPreviewBorderRadius: number
+    photoPreviewIconPadding: number
     pickerModalTopPadding: number
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number

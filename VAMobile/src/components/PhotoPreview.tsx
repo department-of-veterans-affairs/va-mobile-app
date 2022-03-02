@@ -11,6 +11,7 @@ import Box, { BoxProps } from './Box'
 import React, { FC, ReactNode, useState } from 'react'
 import TextView, { TextViewProps } from './TextView'
 import styled from 'styled-components'
+import theme from 'styles/themes/standardTheme'
 
 type PhotoPreviewProps = {
   /** width of the photo */
@@ -50,7 +51,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   const uri = image.uri
 
   const photo = (): ReactNode => {
-    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={5} />
+    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={theme.dimensions.photoPreviewBorderRadius} />
   }
 
   const onPress = (): void => {
@@ -83,13 +84,13 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   const pressableProps: PressableProps = { onPress }
 
   const boxProps: BoxProps = {
-    borderRadius: 5,
+    borderRadius: theme.dimensions.photoPreviewBorderRadius,
     width: width,
     height: height,
   }
 
   const blueOpacity: BoxProps = {
-    borderRadius: 5,
+    borderRadius: theme.dimensions.photoPreviewBorderRadius,
     width: width,
     height: height,
     opacity: 0.4,
@@ -107,9 +108,9 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
       <Box {...boxProps}>
         <Box>{photo()}</Box>
         {selected && <Box {...blueOpacity} />}
-        <Box pt={5} pr={5} position="absolute" alignSelf="flex-end">
-          {selected && <VAIcon name={'Minus'} width={24} height={24} fill={themeColor.icon.photoAdd} />}
-          {!selected && <VAIcon name={'Delete'} width={24} height={24} fill={themeColor.icon.deleteFill} />}
+        <Box pt={theme.dimensions.photoPreviewIconPadding} pr={theme.dimensions.photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
+          {selected && <VAIcon name={'Minus'} width={theme.dimensions.photoPreviewIconSize} height={theme.dimensions.photoPreviewIconSize} fill={themeColor.icon.photoAdd} />}
+          {!selected && <VAIcon name={'Delete'} width={theme.dimensions.photoPreviewIconSize} height={theme.dimensions.photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
       <TextView {...textProps}>{image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t) : undefined}</TextView>
