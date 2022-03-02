@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [ closed ]
     branches:
-      - master
+      - main
 jobs:
   tag_for_release:
     if: github.event.pull_request.merged == true
