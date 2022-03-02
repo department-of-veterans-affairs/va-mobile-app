@@ -1,7 +1,6 @@
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
-import { bytesToMegabytes } from './common'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
@@ -129,26 +128,31 @@ export const postCameraLaunchCallback = (
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
   t: TFunction,
-  displayBytesUsed: boolean,
 ): void => {
   const { assets, errorMessage, didCancel } = response
-  const { fileSize, type, uri } = assets ? assets[0] : ({} as Asset)
-
   if (didCancel) {
     return
-  }
-
-  if (!!fileSize && fileSize + totalBytesUsed > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
-    const fileSizeError = displayBytesUsed ? t('fileUpload.fileSizeErrorWithMBUsed', { mbUsed: bytesToMegabytes(totalBytesUsed) }) : t('fileUpload.fileSizeError')
-    setError(fileSizeError)
-  } else if (!!type && !isValidFileType(type)) {
-    setError(t('fileUpload.fileTypeError'))
   } else if (errorMessage) {
     setError(errorMessage)
   } else {
-    setError('')
-
-    if (uri) {
+    let fileSizeAdded = 0
+    let badFileType = false
+    let badUri = false
+    assets?.forEach((asset) => {
+      if (asset.fileSize) {
+        fileSizeAdded = fileSizeAdded + asset.fileSize
+      }
+      if (!!asset.type && !isValidFileType(asset.type)) {
+        badFileType = true
+        setError(t('fileUpload.fileTypeError'))
+      } else if (!asset.uri) {
+        badUri = true
+      }
+    })
+    if (fileSizeAdded + totalBytesUsed > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
+      setError(t('fileUpload.fileSizeError'))
+    } else if (badFileType === false && badUri === false) {
+      setError('')
       callbackIfUri(response)
     }
   }
@@ -182,13 +186,15 @@ export const onAddPhotos = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
+          setError('')
           launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
+            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
+          setError('')
+          launchImageLibrary({ selectionLimit: 10, mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
       }
@@ -201,7 +207,7 @@ export const onAddPhotos = (
  *
  * @param image - ImagePickerResponse image selection for deletion
  */
-export const deletePhoto = (deleteCallbackIfUri: (response: ImagePickerResponse[]) => void, deleteIndex: number, images: ImagePickerResponse[]): void => {
+export const deletePhoto = (deleteCallbackIfUri: (response: Asset[]) => void, deleteIndex: number, images: Asset[]): void => {
   images.splice(deleteIndex, 1)
   deleteCallbackIfUri(images)
 }

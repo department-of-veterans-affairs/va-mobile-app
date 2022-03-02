@@ -48,7 +48,11 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   })
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
-    navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
+    if (response && response.assets && response.assets.length > 10) {
+      setError(t('fileUpload.tooManyPhotosError'))
+    } else {
+      navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
+    }
   }
 
   const collapsibleContent = (): ReactNode => {
