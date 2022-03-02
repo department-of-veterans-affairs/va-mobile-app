@@ -14,7 +14,10 @@ context('PhotoPreview', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
-  let image:Asset
+  let image: Asset = {
+    uri:"testing",
+    fileSize:1234
+  }
 
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
