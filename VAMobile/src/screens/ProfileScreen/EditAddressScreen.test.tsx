@@ -689,7 +689,7 @@ context('EditAddressScreen', () => {
       expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'State is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Zip code is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
     })
   })
 
@@ -709,7 +709,7 @@ context('EditAddressScreen', () => {
       expect(textViews[242].props.children).toEqual('Street address is required')
       expect(textViews[257].props.children).toEqual('Please select a valid option')
       expect(textViews[269].props.children).toEqual('Please select a valid option')
-      expect(textViews[274].props.children).toEqual('Zip code is required')
+      expect(textViews[274].props.children).toEqual('Postal code is required')
     })
   })
 
