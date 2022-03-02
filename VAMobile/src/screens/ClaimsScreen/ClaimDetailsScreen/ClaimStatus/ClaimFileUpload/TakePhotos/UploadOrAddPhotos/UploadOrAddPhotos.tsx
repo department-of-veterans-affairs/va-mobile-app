@@ -83,11 +83,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       setErrorMessage(t('fileUpload.tooManyPhotosError'))
     } else {
       const imagesCopy = imagesList
-      console.log('imagesCopy.length: ' + imagesCopy?.length)
       response.assets?.forEach((asset) => {
         imagesCopy?.push(asset)
       })
-      console.log('imagesCopy.length.2: ' + imagesCopy?.length)
       setImagesList(imagesCopy)
       let fileSizeAdded = 0
       response.assets?.forEach((asset) => {

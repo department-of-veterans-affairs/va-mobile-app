@@ -27,7 +27,6 @@ context('UploadOrAddPhotos', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
-  let store: any
   let navigateToSpy: jest.Mock
 
   let request = {
