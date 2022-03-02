@@ -38,13 +38,13 @@ type StyledImageProps = {
 }
 
 const StyledImage = styled(Image)<StyledImageProps>`
-  width: ${themeFn<StyledImageProps>((theme, props) => props.width)}px;
-  height: ${themeFn<StyledImageProps>((theme, props) => props.height)}px;
-  border-radius: ${themeFn<StyledImageProps>((theme, props) => props.borderRadius)}px;
+  width: ${themeFn<StyledImageProps>((_theme, props) => props.width)}px;
+  height: ${themeFn<StyledImageProps>((_theme, props) => props.height)}px;
+  border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
 `
 
 const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, testID }) => {
-  const { colors: themeColor, dimensions:themeDim } = useTheme()
+  const { colors: themeColor, dimensions: themeDim } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const { showActionSheetWithOptions } = useActionSheet()
   const [selected, setSelected] = useState(false)
