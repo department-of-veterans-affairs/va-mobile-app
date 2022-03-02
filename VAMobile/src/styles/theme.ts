@@ -64,6 +64,7 @@ export type VAIconColors = {
   link: string
   nav: string
   largeNav: string
+  deleteFill: string
   disclosure: string
   success: string
   error: string
@@ -238,6 +239,9 @@ export type VATheme = {
     messageIconHeight: number
     maxNumMessageAttachments: number
     paginationButtonPadding: number
+    photoPreviewIconSize: number
+    photoPreviewBorderRadius: number
+    photoPreviewIconPadding: number
     pickerModalTopPadding: number
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number
