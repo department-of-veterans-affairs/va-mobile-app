@@ -8,13 +8,13 @@ import Mock = jest.Mock
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import PhotoPreview from 'components/PhotoPreview'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Asset } from 'react-native-image-picker/src/types'
 
 context('PhotoPreview', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
-  let image:ImagePickerResponse
+  let image:Asset
 
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
