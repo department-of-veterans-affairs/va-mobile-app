@@ -31,9 +31,29 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     setFilesList(fileUploaded ? [fileUploaded] : [imageUploaded])
   }, [fileUploaded, imageUploaded])
 
+  const onCancel = () => {
+    confirmAlert({
+      title: t('fileUpload.discard.confirm.title'),
+      message: t('fileUpload.discard.confirm.message'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('fileUpload.discard'),
+          onPress: () => {
+            navigation.navigate('FileRequestDetails', { request })
+          },
+        },
+      ],
+    })
+  }
+
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+      headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
