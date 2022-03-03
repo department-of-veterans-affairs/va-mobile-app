@@ -1,22 +1,21 @@
-import { Dimensions } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch } from 'react-redux'
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
-
-import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { bytesToFinalSizeDisplay } from 'utils/common'
-import { useActionSheet } from '@expo/react-native-action-sheet'
-
 import { AlertBox, BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, PhotoAdd, PhotoPreview, TextView, VAButton, VAScrollView } from 'components'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
+import { Dimensions } from 'react-native'
+import _ from 'underscore'
+
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { bytesToFinalSizeDisplay } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { useActionSheet } from '@expo/react-native-action-sheet'
+import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import _ from 'underscore'
+import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
@@ -30,6 +29,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
+  const MAX_NUM_PHOTOS = 10
 
   useEffect(() => {
     navigation.setOptions({
@@ -45,6 +45,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     const uploadedImages = (): ReactElement[] => {
       return _.map(imagesList || [], (asset, index) => {
         return (
+          /** Rightmost photo doesn't need right margin b/c of gutter margins
+          * Every 3rd photo, right margin is changed to zero*/
           <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
             <PhotoPreview
               width={calculatedWidth}
@@ -63,7 +65,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     return (
       <Box display="flex" flexDirection="row" flexWrap="wrap" mx={theme.dimensions.gutter}>
         {uploadedImages()}
-        {(!imagesList || imagesList.length < 10) && (
+        {(!imagesList || imagesList.length < MAX_NUM_PHOTOS) && (
           <Box mt={condensedMarginBetween} accessible={true} accessibilityRole="image">
             <PhotoAdd
               width={calculatedWidth}
@@ -79,7 +81,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
-    if (response && response.assets && response.assets.length + (imagesList?.length || 0) > 10) {
+    if (response && response.assets && response.assets.length + (imagesList?.length || 0) > MAX_NUM_PHOTOS) {
       setErrorMessage(t('fileUpload.tooManyPhotosError'))
     } else {
       const imagesCopy = imagesList
