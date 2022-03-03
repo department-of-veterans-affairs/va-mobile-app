@@ -1,3 +1,11 @@
+import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Dimensions } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useActionSheet } from '@expo/react-native-action-sheet'
+import { useDispatch } from 'react-redux'
+import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
+import _ from 'underscore'
+
 import { AlertBox, BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, PhotoAdd, PhotoPreview, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
@@ -8,14 +16,6 @@ import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-
-import { Dimensions } from 'react-native'
-import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useDispatch } from 'react-redux'
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
-import _ from 'underscore'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
