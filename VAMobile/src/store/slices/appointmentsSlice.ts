@@ -26,7 +26,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { getItemsInRange, isErrorObject } from 'utils/common'
+import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 import _ from 'underscore'
@@ -540,20 +540,27 @@ export const getAppointmentsInDateRange =
  * Redux action to cancel appointment associated with the given cancelID
  */
 export const cancelAppointment =
-  (cancelID?: string, appointmentID?: string, screenID?: ScreenIDTypes): AppThunk =>
+  (cancelID?: string, appointmentID?: string, isPendingAppointment?: boolean): AppThunk =>
   async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(cancelAppointment(cancelID, appointmentID))))
+    const retryFunction = () => dispatch(cancelAppointment(cancelID, appointmentID, isPendingAppointment))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartCancelAppointment())
 
     try {
       await api.put('/v0/appointments/cancel/' + cancelID)
       await registerReviewEvent()
       dispatch(dispatchFinishCancelAppointment({ appointmentID }))
+      // TODO refactor translation to work in store
+      const successText = isPendingAppointment ? 'Pending request canceled' : 'Canceled upcoming appointment'
+      showSnackBar(successText, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishCancelAppointment({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        // TODO refactor translation to work in store
+        const errorText = isPendingAppointment
+          ? 'Request could not be canceled. Try again or contact your facility to cancel.'
+          : 'Appointment could not be canceled. Try again or contact your facility to cancel.'
+        showSnackBar(errorText, dispatch, retryFunction, false, true)
       }
     }
   }

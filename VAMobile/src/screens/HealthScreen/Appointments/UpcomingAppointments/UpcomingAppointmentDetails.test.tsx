@@ -265,29 +265,6 @@ context('UpcomingAppointmentDetails', () => {
     })
   })
 
-  describe('when the appointment cancellation is successful', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
-      })
-    })
-    it('should display alert', async () => {
-      expect(testInstance.findByType(AlertBox)).toBeTruthy()
-    })
-  })
-
-  describe('when the appointment cancellation is unsuccessful', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
-      })
-    })
-
-    it('should display alert', async () => {
-      expect(testInstance.findByType(AlertBox)).toBeTruthy()
-    })
-  })
-
   describe('when the appointment is canceled', () => {
     it('should show if you cancelled', async () => {
       await waitFor(() => {

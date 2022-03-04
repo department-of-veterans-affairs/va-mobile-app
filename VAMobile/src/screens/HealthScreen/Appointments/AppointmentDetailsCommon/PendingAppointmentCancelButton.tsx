@@ -3,9 +3,12 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentStatusConstants } from 'store/api'
 import { Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
+import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import { useDispatch } from 'react-redux'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
@@ -15,18 +18,54 @@ type PendingAppointmentCancelButtonProps = {
 const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = ({ attributes, appointmentID }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const t = useTranslation(NAMESPACE.HEALTH)
-  const navigateTo = useRouteNavigation()
+  const dispatch = useDispatch()
   const theme = useTheme()
+  const confirmAlert = useDestructiveAlert()
+  const isAndroidDevice = isAndroid()
 
-  const { cancelId, status } = attributes || ({} as AppointmentAttributes)
+  const { cancelId, typeOfCare, status } = attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending && status !== AppointmentStatusConstants.CANCELLED) {
-    const cancelAppointment = navigateTo('AppointmentCancellationConfirmation', { cancelID: cancelId, appointmentID: appointmentID })
+    const onPress = () => {
+      dispatch(cancelAppointment(cancelId, appointmentID, true))
+    }
+
+    const androidButtons = [
+      {
+        text: t('upcomingAppointmentDetails.cancelAppointment.android.noKeep'),
+      },
+      {
+        text: t('upcomingAppointmentDetails.cancelAppointment.android.yesCancel'),
+        onPress,
+      },
+    ]
+    const iosButtons = [
+      {
+        text: t('common:cancel'),
+      },
+      {
+        text: t('appointments.pending.cancelRequest.yes'),
+        onPress,
+      },
+      {
+        text: t('appointments.pending.cancelRequest.no'),
+      },
+    ]
+
+    const onCancel = () => {
+      confirmAlert({
+        title: '',
+        message: t('appointments.pending.cancelRequest.message', { typeOfCare }),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: isAndroidDevice ? androidButtons : iosButtons,
+      })
+    }
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
         <VAButton
-          onPress={cancelAppointment}
+          onPress={onCancel}
           label={t('appointments.pending.cancelRequest')}
           a11yHint={t('appointments.pending.cancelRequest.a11yHint')}
           buttonType={ButtonTypesConstants.buttonDestructive}

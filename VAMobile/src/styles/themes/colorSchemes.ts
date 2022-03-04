@@ -104,6 +104,7 @@ export const lightTheme = {
     snackBarBtn: colors.darkmodeLightBlue,
     backButton: colors.white,
     snackBarText: colors.white,
+    warningTag: colors.darkmodeGrayWarmDark,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -253,6 +254,7 @@ export const darkTheme = {
     snackBarBtn: colors.primary,
     backButton: colors.darkmodeLightBlue,
     snackBarText: colors.grayDark,
+    warningTag: colors.darkmodeGrayWarmDark,
   },
   buttonBackground: {
     buttonPrimary: colors.darkmodeLightBlue,

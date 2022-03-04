@@ -135,6 +135,17 @@ export const formatDateMMMMDDYYYY = (date: string): string => {
 }
 
 /**
+ * Returns the date formatted in the format MM/DD/YYYY
+ *
+ * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns date string formatted as MM/DD/YYYY
+ */
+export const formatDateMMDDYYYY = (date: string): string => {
+  return getFormattedDate(date, 'MM/dd/yyyy')
+}
+
+/**
  * Returns the substring of all entries before the provided character
  *
  * @param originalStr - string to be formatted
