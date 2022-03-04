@@ -4,6 +4,7 @@ import { TFunction } from 'i18next'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
+import { MAX_NUM_PHOTOS } from 'constants/claims'
 
 /** function that returns the tracked items that need uploads from a claimant or have had uploads from a claimant */
 export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[] => {
@@ -195,7 +196,7 @@ export const onAddPhotos = (
           })
           break
         case 1:
-          launchImageLibrary({ selectionLimit: 10, mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+          launchImageLibrary({ selectionLimit: MAX_NUM_PHOTOS, mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
