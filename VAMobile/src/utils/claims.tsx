@@ -142,13 +142,17 @@ export const postCameraLaunchCallback = (
       if (asset.fileSize) {
         fileSizeAdded = fileSizeAdded + asset.fileSize
       }
-      if (!!asset.type && !isValidFileType(asset.type)) {
+      if (asset.type === undefined || (!!asset.type && !isValidFileType(asset.type))) {
         badFileType = true
         setError(t('fileUpload.fileTypeError'))
       } else if (!asset.uri) {
         badUri = true
       }
     })
+    if (assets?.length === 0) {
+      badFileType = true
+      setError(t('fileUpload.fileTypeError'))
+    }
     if (fileSizeAdded + totalBytesUsed > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
       setError(t('fileUpload.fileSizeError'))
     } else if (badFileType === false && badUri === false) {

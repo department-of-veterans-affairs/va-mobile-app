@@ -1,7 +1,7 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
   AlertBox,
@@ -17,9 +17,9 @@ import {
   VAButton,
   VAScrollView,
 } from 'components'
-import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
+import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
@@ -73,7 +73,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   return (
     <VAScrollView {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
       {!!error && (
-        <Box mb={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <AlertBox text={error} border="error" />
         </Box>
       )}
