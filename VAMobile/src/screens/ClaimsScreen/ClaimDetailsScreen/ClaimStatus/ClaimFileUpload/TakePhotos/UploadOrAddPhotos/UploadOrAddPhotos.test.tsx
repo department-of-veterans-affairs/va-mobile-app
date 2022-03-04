@@ -1,13 +1,12 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import UploadOrAddPhotos from './UploadOrAddPhotos'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { InitialState } from 'store/slices'
-import { VAButton, VAModalPicker } from 'components'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../../../utils/hooks', () => {
@@ -28,7 +27,6 @@ context('UploadOrAddPhotos', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
-  let store: any
   let navigateToSpy: jest.Mock
 
   let request = {
@@ -67,15 +65,5 @@ context('UploadOrAddPhotos', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-  })
-
-  describe('on click of the upload button', () => {
-    it('should call useRouteNavigation', async () => {
-      act(() => {
-        testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
-        testInstance.findAllByType(VAButton)[0].props.onPress()
-      })
-      expect(navigateToSpy).toHaveBeenCalled()
-    })
   })
 })

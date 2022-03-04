@@ -1,30 +1,22 @@
-import { Dimensions, Image } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
-import styled from 'styled-components'
-
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Dimensions } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
+import { useDispatch } from 'react-redux'
+import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, PhotoAdd, PhotoPreview, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
+import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { onAddPhotos } from 'utils/claims'
+import { bytesToFinalSizeDisplay } from 'utils/common'
+import { deletePhoto, onAddPhotos } from 'utils/claims'
+import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-
-type StyledImageProps = {
-  /** prop to set image width */
-  width: number
-}
-const StyledImage = styled(Image)<StyledImageProps>`
-  width: ${themeFn<StyledImageProps>((theme, props) => props.width)}px;
-  height: 150px;
-`
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
@@ -34,9 +26,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
   const { request, firstImageResponse } = route.params
-  const [imagesList, setImagesList] = useState([firstImageResponse])
+  const dispatch = useDispatch()
+  const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
-  const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets ? firstImageResponse.assets[0].fileSize : 0)
+  const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
 
   useEffect(() => {
     navigation.setOptions({
@@ -44,30 +37,85 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   })
 
-  const displayImages = (): ReactElement[] => {
+  const displayImages = (): ReactElement => {
     const { condensedMarginBetween, gutter } = theme.dimensions
     /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
     const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
 
-    return _.map(imagesList, (image, index) => {
-      const { uri } = image.assets ? image.assets[0] : ({} as Asset)
-      return (
-        /** Rightmost photo doesn't need right margin b/c of gutter margins
-         * Every 3rd photo, right margin is changed to zero*/
-        <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
-          <StyledImage source={{ uri }} width={calculatedWidth} />
-        </Box>
-      )
-    })
+    const uploadedImages = (): ReactElement[] => {
+      return _.map(imagesList || [], (asset, index) => {
+        return (
+          /** Rightmost photo doesn't need right margin b/c of gutter margins
+           * Every 3rd photo, right margin is changed to zero*/
+          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
+            <PhotoPreview
+              width={calculatedWidth}
+              height={calculatedWidth}
+              image={asset}
+              onDeleteCallback={(): void => {
+                deletePhoto(deleteCallbackIfUri, index, imagesList || [])
+              }}
+              lastPhoto={imagesList?.length === 1 ? true : undefined}
+            />
+          </Box>
+        )
+      })
+    }
+
+    return (
+      <Box display="flex" flexDirection="row" flexWrap="wrap" mx={theme.dimensions.gutter}>
+        {uploadedImages()}
+        {(!imagesList || imagesList.length < MAX_NUM_PHOTOS) && (
+          <Box mt={condensedMarginBetween} accessible={true} accessibilityRole="image">
+            <PhotoAdd
+              width={calculatedWidth}
+              height={calculatedWidth}
+              onPress={(): void => {
+                onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed || 0)
+              }}
+            />
+          </Box>
+        )}
+      </Box>
+    )
   }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
-    setImagesList([...imagesList, response])
+    if (response && response.assets && response.assets.length + (imagesList?.length || 0) > MAX_NUM_PHOTOS) {
+      setErrorMessage(t('fileUpload.tooManyPhotosError'))
+    } else {
+      const imagesCopy = imagesList
+      response.assets?.forEach((asset) => {
+        imagesCopy?.push(asset)
+      })
+      setImagesList(imagesCopy)
+      let fileSizeAdded = 0
+      response.assets?.forEach((asset) => {
+        if (asset.fileSize) {
+          fileSizeAdded = fileSizeAdded + asset.fileSize
+        }
+      })
+      if (fileSizeAdded && totalBytesUsed) {
+        setTotalBytesUsed(totalBytesUsed + fileSizeAdded)
+      }
+    }
+  }
 
-    const { fileSize } = response.assets ? response.assets[0] : ({} as Asset)
-
-    if (fileSize) {
-      setTotalBytesUsed(totalBytesUsed || 0 + fileSize)
+  const deleteCallbackIfUri = (response: Asset[]): void => {
+    if (response.length === 0) {
+      navigation.goBack()
+    } else {
+      setErrorMessage('')
+      setImagesList(response)
+      let bytesUsed = 0
+      response.forEach((image) => {
+        if (image.fileSize) {
+          bytesUsed = bytesUsed + image.fileSize
+        }
+      })
+      setTotalBytesUsed(bytesUsed)
+      snackBar.hideAll()
+      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
     }
   }
 
@@ -75,6 +123,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
 
   useEffect(() => {
     request.documentType = documentType
@@ -88,50 +137,73 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         onSelectionChange: setDocumentType,
         pickerOptions: DocumentTypes526,
         labelKey: 'claims:fileUpload.documentType',
-        includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: false,
       },
       fieldErrorMessage: t('claims:fileUpload.documentType.fieldError'),
     },
+    {
+      fieldType: FieldType.Selector,
+      fieldProps: {
+        labelKey: 'claims:fileUpload.evidenceOnlyPhoto',
+        selected: confirmed,
+        onSelectionChange: setConfirmed,
+        isRequiredField: true,
+      },
+      fieldErrorMessage: t('fileUpload.evidenceOnly.error'),
+    },
   ]
 
   return (
     <VAScrollView {...testIdProps('File-upload: Upload-files-or-add-photos-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!errorMessage && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox text={errorMessage} border="error" />
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <AlertBox title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mx={theme.dimensions.gutter}>
           {request.displayName}
         </TextView>
-        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.standardMarginBetween} display="flex" flexDirection="row" flexWrap="wrap">
+        <Box
+          backgroundColor={'contentBox'}
+          borderTopWidth={1}
+          borderTopColor="primary"
+          borderBottomWidth={1}
+          borderBottomColor="primary"
+          pt={theme.dimensions.standardMarginBetween}
+          pb={theme.dimensions.standardMarginBetween}
+          display="flex"
+          flexDirection="row"
+          flexWrap="wrap">
           {displayImages()}
         </Box>
-        <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-        <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-          <VAButton
-            onPress={() => {
-              setOnSaveClicked(true)
-            }}
-            label={t('fileUpload.upload')}
-            testID={t('fileUpload.upload')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('fileUpload.uploadA11yHint')}
-          />
-          {imagesList.length < 10 && (
-            <Box mt={theme.dimensions.condensedMarginBetween}>
-              <VAButton
-                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed || 0)}
-                label={t('fileUpload.addAnotherPhoto')}
-                testID={t('fileUpload.addAnotherPhoto')}
-                buttonType={ButtonTypesConstants.buttonSecondary}
-                a11yHint={t('fileUpload.addAnotherPhotoA11yHint')}
-              />
-            </Box>
-          )}
+        <Box
+          justifyContent="space-between"
+          flexDirection="row"
+          mx={theme.dimensions.gutter}
+          mt={theme.dimensions.condensedMarginBetween}
+          mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="HelperText" color={'brandedPrimaryText'}>
+            {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
+          </TextView>
+          <TextView variant="HelperText" color={'brandedPrimaryText'}>
+            {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
+          </TextView>
+        </Box>
+        <Box mx={theme.dimensions.gutter}>
+          <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+          <Box mt={theme.dimensions.textAndButtonLargeMargin}>
+            <VAButton
+              onPress={() => {
+                setOnSaveClicked(true)
+              }}
+              label={t('fileUpload.submit')}
+              testID={t('fileUpload.submit')}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+              a11yHint={t('fileUpload.uploadA11yHint')}
+            />
+          </Box>
         </Box>
       </Box>
     </VAScrollView>
