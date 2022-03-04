@@ -1,6 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
-
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 
@@ -18,7 +17,7 @@ import {
   VAButton,
   VAScrollView,
 } from 'components'
-
+import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -48,7 +47,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   })
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
-    if (response && response.assets && response.assets.length > 10) {
+    if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
       navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
