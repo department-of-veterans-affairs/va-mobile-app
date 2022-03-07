@@ -1,4 +1,3 @@
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'

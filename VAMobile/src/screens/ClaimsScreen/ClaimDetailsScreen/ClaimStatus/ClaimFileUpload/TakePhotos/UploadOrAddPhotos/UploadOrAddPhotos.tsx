@@ -54,6 +54,86 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   })
 
+  useEffect(() => {
+    if (fileUploadedFailure || filesUploadedSuccess) {
+      dispatch(fileUploadSuccess())
+    }
+
+    if (filesUploadedSuccess) {
+      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
+      navigation.navigate('FileRequest', { claimID: claim?.id || '' })
+    } else if (fileUploadedFailure) {
+      showSnackBar(
+        t('fileUpload.submitted.error'),
+        dispatch,
+        () => {
+          dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
+        },
+        false,
+        true,
+        false,
+      )
+    }
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
+
+  const [documentType, setDocumentType] = useState('')
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
+
+  useEffect(() => {
+    request.documentType = documentType
+  }, [documentType, request])
+
+  if (loadingFileUpload) {
+    return <LoadingComponent text={t('fileUpload.loading')} />
+  }
+
+  const onUploadConfirmed = () => {
+    dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
+  }
+
+  const onUpload = (): void => {
+    confirmAlert({
+      title: t('fileUpload.submit.confirm.title'),
+      message: t('fileUpload.submit.confirm.message'),
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('fileUpload.submit'),
+          onPress: onUploadConfirmed,
+        },
+      ],
+    })
+  }
+
+  const pickerField: Array<FormFieldType<unknown>> = [
+    {
+      fieldType: FieldType.Picker,
+      fieldProps: {
+        selectedValue: documentType,
+        onSelectionChange: setDocumentType,
+        pickerOptions: DocumentTypes526,
+        labelKey: 'claims:fileUpload.documentType',
+        isRequiredField: true,
+        disabled: false,
+      },
+      fieldErrorMessage: t('claims:fileUpload.documentType.fieldError'),
+    },
+    {
+      fieldType: FieldType.Selector,
+      fieldProps: {
+        labelKey: 'claims:fileUpload.evidenceOnlyPhoto',
+        selected: confirmed,
+        onSelectionChange: setConfirmed,
+        isRequiredField: true,
+      },
+      fieldErrorMessage: t('fileUpload.evidenceOnly.error'),
+    },
+  ]
+
   const displayImages = (): ReactElement => {
     const { condensedMarginBetween, gutter } = theme.dimensions
     /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
@@ -135,86 +215,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
     }
   }
-
-  useEffect(() => {
-    if (fileUploadedFailure || filesUploadedSuccess) {
-      dispatch(fileUploadSuccess())
-    }
-
-    if (filesUploadedSuccess) {
-      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
-      navigation.navigate('FileRequest', { claimID: claim?.id || '' })
-    } else if (fileUploadedFailure) {
-      showSnackBar(
-        t('fileUpload.submitted.error'),
-        dispatch,
-        () => {
-          dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
-        },
-        false,
-        true,
-        false,
-      )
-    }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
-
-  const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
-  }
-
-  const onUpload = (): void => {
-    confirmAlert({
-      title: t('fileUpload.submit.confirm.title'),
-      message: t('fileUpload.submit.confirm.message'),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('common:cancel'),
-        },
-        {
-          text: t('fileUpload.submit'),
-          onPress: onUploadConfirmed,
-        },
-      ],
-    })
-  }
-
-  if (loadingFileUpload) {
-    return <LoadingComponent text={t('fileUpload.loading')} />
-  }
-
-  const [documentType, setDocumentType] = useState('')
-  const [onSaveClicked, setOnSaveClicked] = useState(false)
-  const [confirmed, setConfirmed] = useState(false)
-
-  useEffect(() => {
-    request.documentType = documentType
-  }, [documentType, request])
-
-  const pickerField: Array<FormFieldType<unknown>> = [
-    {
-      fieldType: FieldType.Picker,
-      fieldProps: {
-        selectedValue: documentType,
-        onSelectionChange: setDocumentType,
-        pickerOptions: DocumentTypes526,
-        labelKey: 'claims:fileUpload.documentType',
-        isRequiredField: true,
-        disabled: false,
-      },
-      fieldErrorMessage: t('claims:fileUpload.documentType.fieldError'),
-    },
-    {
-      fieldType: FieldType.Selector,
-      fieldProps: {
-        labelKey: 'claims:fileUpload.evidenceOnlyPhoto',
-        selected: confirmed,
-        onSelectionChange: setConfirmed,
-        isRequiredField: true,
-      },
-      fieldErrorMessage: t('fileUpload.evidenceOnly.error'),
-    },
-  ]
 
   return (
     <VAScrollView {...testIdProps('File-upload: Upload-files-or-add-photos-page')}>
