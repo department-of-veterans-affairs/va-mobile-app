@@ -14,11 +14,8 @@ import FileRequest from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRe
 import FileRequestDetails from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import SelectFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
 import TakePhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
-import UploadConfirmation from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadConfirmation/UploadConfirmation'
-import UploadFailure from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadFailure/UploadFailure'
 import UploadFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
 import UploadOrAddPhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
-import UploadSuccess from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadSucesss/UploadSuccess'
 import WhatDoIDoIfDisagreement from './ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 
 export type DocumentPickerResponse = {
@@ -67,12 +64,6 @@ export type ClaimsStackParamList = {
     fileUploaded: DocumentPickerResponse
     imageUploaded: ImagePickerResponse
   }
-  UploadConfirmation: {
-    request: ClaimEventData
-    filesList: Array<ImagePickerResponse> | Array<DocumentPickerResponse>
-  }
-  UploadSuccess: undefined
-  UploadFailure: undefined
 }
 
 const ClaimsStack = createStackNavigator<ClaimsStackParamList>()
@@ -89,9 +80,6 @@ export const getClaimsScreens = (t: TFunction): Array<ReactNode> => {
     <ClaimsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadOrAddPhotos'} name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadFile'} name="UploadFile" component={UploadFile} options={{ title: t('fileUpload.title') }} />,
-    <ClaimsStack.Screen key={'UploadSuccess'} name="UploadSuccess" component={UploadSuccess} options={{ title: t('fileUpload.title') }} />,
-    <ClaimsStack.Screen key={'UploadConfirmation'} name="UploadConfirmation" component={UploadConfirmation} options={{ title: t('fileUpload.title') }} />,
-    <ClaimsStack.Screen key={'UploadFailure'} name="UploadFailure" component={UploadFailure} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'FileRequestDetails'} name="FileRequestDetails" component={FileRequestDetails} options={{ title: t('fileRequest.title') }} />,
   ]
 }
