@@ -91,7 +91,8 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
       component={HowToUpdateDirectDepositScreen}
       options={{ title: t('directDeposit.title') }}
     />,
-    <ProfileStack.Screen key={'Payments'} name="Payments" component={PaymentScreen} options={{ title: t('home:payments.title') }} />,
+    /* --- Temporarily disabling the Payments feature --- */
+    // <ProfileStack.Screen key={'Payments'} name="Payments" component={PaymentScreen} options={{ title: t('home:payments.title') }} />,
     <ProfileStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ title: t('paymentDetails.title') }} />,
     <ProfileStack.Screen key={'PaymentIssue'} name="PaymentIssue" component={PaymentIssue} />,
     <ProfileStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} />,

@@ -52,6 +52,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
   const onHealthCare = navigateTo('HealthTab')
+
+  /* --- Temporarily disabling the Payments feature --- */
   // const onPayments = navigateTo('Payments')
 
   const buttonDataList: Array<SimpleListItemObj> = [
@@ -117,7 +119,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
           />
-          {/* <LargeNavButton
+          {/* --- Temporarily disabling the Payments feature ---
+          <LargeNavButton
             title={t('payments.title')}
             subText={t('payments.subText')}
             onPress={onPayments}
