@@ -2,34 +2,37 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Dimensions } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, PhotoAdd, PhotoPreview, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { bytesToFinalSizeDisplay } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
 const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
+  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { showActionSheetWithOptions } = useActionSheet()
   const { request, firstImageResponse } = route.params
   const dispatch = useDispatch()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
+  const confirmAlert = useDestructiveAlert()
 
   useEffect(() => {
     navigation.setOptions({
@@ -119,7 +122,48 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
   }
 
-  const onUpload = navigateTo('UploadConfirmation', { request, filesList: imagesList })
+  useEffect(() => {
+    if (fileUploadedFailure || filesUploadedSuccess) {
+      dispatch(fileUploadSuccess())
+    }
+
+    if (filesUploadedSuccess) {
+      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
+      navigation.navigate('FileRequest', { claimID: claim?.id || '' })
+    } else if (fileUploadedFailure) {
+      showSnackBar(
+        t('fileUpload.submitted.error'),
+        dispatch,
+        () => {
+          dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
+        },
+        false,
+        true,
+        false,
+      )
+    }
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
+
+  const onUploadConfirmed = () => {
+    dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
+  }
+
+  const onUpload = (): void => {
+    confirmAlert({
+      title: t('fileUpload.submit.confirm.title'),
+      message: t('fileUpload.submit.confirm.message'),
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('fileUpload.submit'),
+          onPress: onUploadConfirmed,
+        },
+      ],
+    })
+  }
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)

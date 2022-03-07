@@ -16,13 +16,13 @@ import {
   ClaimsAndAppealsList,
   ScreenIDTypes,
 } from 'store/api/types'
+import { Asset } from 'react-native-image-picker'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { ImagePickerResponse } from 'react-native-image-picker'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -443,18 +443,14 @@ export const submitClaimDecision =
  * Redux action to upload a file to a claim
  */
 export const uploadFileToClaim =
-  (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AppThunk =>
+  (claimID: string, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchStartFileUpload())
     await logAnalyticsEvent(Events.vama_claim_upload_start())
     try {
       if (files.length > 1) {
-        const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse) => {
-          if ('assets' in file) {
-            return file.assets ? file.assets[0].base64 : undefined
-          } else if ('size' in file) {
-            return file.base64
-          }
+        const fileStrings = files.map((file: DocumentPickerResponse | Asset) => {
+          return file.base64
         })
 
         const payload = JSON.parse(
@@ -473,13 +469,11 @@ export const uploadFileToClaim =
         let typeOfFile: string | undefined
         let uriOfFile: string | undefined
 
-        if ('assets' in fileToUpload) {
-          if (fileToUpload.assets && fileToUpload.assets.length > 0) {
-            const { fileName, type, uri } = fileToUpload.assets[0]
-            nameOfFile = fileName
-            typeOfFile = type
-            uriOfFile = uri
-          }
+        if ('fileSize' in fileToUpload) {
+          const { fileName, type, uri } = fileToUpload
+          nameOfFile = fileName
+          typeOfFile = type
+          uriOfFile = uri
         } else if ('size' in fileToUpload) {
           const { name, uri, type } = fileToUpload
           nameOfFile = name
