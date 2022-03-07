@@ -21,15 +21,15 @@ type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
 const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const { request, fileUploaded, imageUploaded } = route.params
+  const { request, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
-  const [filesList, setFilesList] = useState<DocumentPickerResponse[] | ImagePickerResponse[]>([])
+  const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([])
   const confirmAlert = useDestructiveAlert()
 
   useEffect(() => {
-    setFilesList(fileUploaded ? [fileUploaded] : [imageUploaded])
-  }, [fileUploaded, imageUploaded])
+    setFilesList([fileUploaded])
+  }, [fileUploaded])
 
   const onCancel = () => {
     confirmAlert({

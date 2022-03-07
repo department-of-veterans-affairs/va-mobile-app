@@ -6,7 +6,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, PhotoAdd, PhotoPreview, TextView, VAButton, VAScrollView } from 'components'
+import {
+  AlertBox,
+  BackButton,
+  Box,
+  ButtonTypesConstants,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  LoadingComponent,
+  PhotoAdd,
+  PhotoPreview,
+  TextView,
+  VAButton,
+  VAScrollView,
+} from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
@@ -163,6 +177,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         },
       ],
     })
+  }
+
+  if (loadingFileUpload) {
+    return <LoadingComponent text={t('fileUpload.loading')} />
   }
 
   const [documentType, setDocumentType] = useState('')
