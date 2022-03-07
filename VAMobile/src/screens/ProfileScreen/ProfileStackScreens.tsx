@@ -20,7 +20,7 @@ import NotificationsSettingsScreen from './SettingsScreen/NotificationsSettingsS
 import PaymentDetailsScreen from './PaymentScreen/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentIssue from './PaymentScreen/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from './PaymentScreen/PaymentMissingSceen/PaymentMissingScreen'
-import PaymentScreen from './PaymentScreen'
+// import PaymentScreen from './PaymentScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import SettingsScreen from './SettingsScreen'
 
