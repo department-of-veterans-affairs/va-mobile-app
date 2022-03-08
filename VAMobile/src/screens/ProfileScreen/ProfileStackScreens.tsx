@@ -20,7 +20,7 @@ import NotificationsSettingsScreen from './SettingsScreen/NotificationsSettingsS
 import PaymentDetailsScreen from './PaymentScreen/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentIssue from './PaymentScreen/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from './PaymentScreen/PaymentMissingSceen/PaymentMissingScreen'
-import PaymentScreen from './PaymentScreen'
+// import PaymentScreen from './PaymentScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import SettingsScreen from './SettingsScreen'
 
@@ -91,7 +91,8 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
       component={HowToUpdateDirectDepositScreen}
       options={{ title: t('directDeposit.title') }}
     />,
-    <ProfileStack.Screen key={'Payments'} name="Payments" component={PaymentScreen} options={{ title: t('home:payments.title') }} />,
+    /* --- Temporarily disabling the Payments feature --- */
+    // <ProfileStack.Screen key={'Payments'} name="Payments" component={PaymentScreen} options={{ title: t('home:payments.title') }} />,
     <ProfileStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ title: t('paymentDetails.title') }} />,
     <ProfileStack.Screen key={'PaymentIssue'} name="PaymentIssue" component={PaymentIssue} />,
     <ProfileStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} />,
