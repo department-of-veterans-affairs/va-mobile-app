@@ -18,8 +18,7 @@ import { cancelAppointment } from 'store/slices'
 import { formatDateMMDDYYYY } from 'utils/formattingUtils'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch, useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -33,7 +32,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const isAndroidDevice = isAndroid()
 
   const { attributes } = (appointment || {}) as AppointmentData

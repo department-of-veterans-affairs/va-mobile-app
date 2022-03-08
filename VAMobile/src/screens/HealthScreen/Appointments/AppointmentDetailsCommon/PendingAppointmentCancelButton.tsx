@@ -7,8 +7,7 @@ import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch, useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
@@ -18,7 +17,7 @@ type PendingAppointmentCancelButtonProps = {
 const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = ({ attributes, appointmentID }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const t = useTranslation(NAMESPACE.HEALTH)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
   const isAndroidDevice = isAndroid()
