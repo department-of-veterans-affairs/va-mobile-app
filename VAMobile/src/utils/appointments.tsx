@@ -171,7 +171,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   if (attributes.status === AppointmentStatusConstants.CANCELLED) {
     textLines.push({ text: t('appointments.canceled'), textTag: { backgroundColor: 'inactiveTag', variant: 'LabelTagBold' } })
   } else if (isPendingAppointment) {
-    textLines.push({ text: t('appointments.pending'), textTag: { backgroundColor: 'warningTag', color: 'primary', variant: 'LabelTagBold' } })
+    textLines.push({ text: t('appointments.pending'), textTag: { backgroundColor: 'warningTag', color: 'warningTag', variant: 'LabelTagBold' } })
   }
 
   // pending appointments
