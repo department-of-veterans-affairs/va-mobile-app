@@ -84,41 +84,39 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
 
-  const onPersonalAndContactInformation = navigateTo('PersonalInformation')
+  const getTopSection = (): Array<SimpleListItemObj> => {
+    const buttonDataList: Array<SimpleListItemObj> = []
 
-  const onMilitaryInformation = navigateTo('MilitaryInformation')
+    buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: navigateTo('DisabilityRatings') })
 
-  const onDirectDeposit = isIDMESignin ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+    if (userProfileUpdate) {
+      buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: navigateTo('PersonalInformation') })
+    }
 
-  const onLettersAndDocs = navigateTo('LettersOverview')
+    buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: navigateTo('MilitaryInformation') })
 
-  const onPayments = navigateTo('Payments')
+    // Show if user has permission or if user did not signed in through IDME
+    if (directDepositBenefits || !isIDMESignin) {
+      buttonDataList.push({
+        text: t('directDeposit.information'),
+        a11yHintText: t('directDeposit.a11yHint'),
+        onPress: isIDMESignin ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit'),
+      })
+    }
 
-  const onSettings = navigateTo('Settings')
-
-  const onDisabilityRatings = navigateTo('DisabilityRatings')
-
-  const buttonDataList: Array<SimpleListItemObj> = []
-
-  buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: onDisabilityRatings })
-
-  if (userProfileUpdate) {
-    buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
+    return buttonDataList
   }
 
-  buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
-
-  // Show if user has permission or if user did not signed in through IDME
-  if (directDepositBenefits || !isIDMESignin) {
-    buttonDataList.push({ text: t('directDeposit.information'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
+  const getMiddleSection = (): Array<SimpleListItemObj> => {
+    return [
+      { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: navigateTo('LettersOverview') },
+      { text: t('home:payments.title'), a11yHintText: t('payments.a11yHint'), onPress: navigateTo('Payments') },
+    ]
   }
 
-  buttonDataList.push(
-    { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
-    { text: t('home:payments.title'), a11yHintText: t('payments.a11yHint'), onPress: onPayments },
-
-    { text: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
-  )
+  const getLastSection = (): Array<SimpleListItemObj> => {
+    return [{ text: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: navigateTo('Settings') }]
+  }
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
   if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID)) {
@@ -145,7 +143,13 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps('Profile-page')}>
       <ProfileBanner />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
-        <SimpleList items={buttonDataList} />
+        <SimpleList items={getTopSection()} />
+      </Box>
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <SimpleList items={getMiddleSection()} />
+      </Box>
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <SimpleList items={getLastSection()} />
       </Box>
       <Box px={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <SignoutButton />
