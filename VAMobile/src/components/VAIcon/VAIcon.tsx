@@ -170,13 +170,12 @@ export type VAIconProps = BoxProps & {
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
+const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, ...boxProps }) => {
   const theme = useTheme()
-  let domProps = Object.create(props)
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
   const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
-  const { name, width, height, fill, stroke, preventScaling } = props
+  let iconProps = Object.create({ name, width, height, stroke, preventScaling, fill })
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
@@ -185,30 +184,29 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   }, [dispatch, fontScale])
 
   if (fill) {
-    domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || theme.colors.text[fill as keyof VATextColors] || fill })
+    iconProps = Object.assign({}, iconProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || theme.colors.text[fill as keyof VATextColors] || fill })
   }
 
   if (stroke) {
-    domProps = Object.assign({}, domProps, { stroke: theme.colors.icon[stroke as keyof VAIconColors] || stroke })
+    iconProps = Object.assign({}, iconProps, { stroke: theme.colors.icon[stroke as keyof VAIconColors] || stroke })
   }
 
   const Icon: FC<SvgProps> | undefined = VA_ICON_MAP[name]
   if (!Icon) {
     return <></>
   }
-  delete domProps.name
 
   if (width && isFinite(width)) {
-    domProps = Object.assign({}, domProps, { width: preventScaling ? width : fs(width) })
+    iconProps = Object.assign({}, iconProps, { width: preventScaling ? width : fs(width) })
   }
 
   if (height && isFinite(height)) {
-    domProps = Object.assign({}, domProps, { height: preventScaling ? height : fs(height) })
+    iconProps = Object.assign({}, iconProps, { height: preventScaling ? height : fs(height) })
   }
 
   return (
-    <Box {...domProps}>
-      <Icon {...domProps} />
+    <Box {...boxProps}>
+      <Icon {...iconProps} />
     </Box>
   )
 }

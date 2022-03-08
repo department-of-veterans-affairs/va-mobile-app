@@ -1,10 +1,9 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import _ from 'underscore'
 
 import { AppealEventData } from 'store/api/types'
 import { Box } from 'components'
-import { sortByDate } from 'utils/common'
 import AppealPhase from './AppealPhase'
 
 type AppealTimelineProps = {
@@ -12,10 +11,6 @@ type AppealTimelineProps = {
 }
 
 const AppealTimeline: FC<AppealTimelineProps> = ({ events }) => {
-  useEffect(() => {
-    sortByDate(events, 'data')
-  }, [events])
-
   return (
     <Box>
       {_.map(events, (event, index) => {

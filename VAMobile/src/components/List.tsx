@@ -3,7 +3,6 @@ import React, { FC } from 'react'
 import { SwitchProps } from './Switch'
 import { TextView } from './index'
 import { TextViewProps } from './TextView'
-import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import BaseListItem, { BaseListItemProps } from './BaseListItem'
@@ -74,7 +73,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
     <Box>
       {title && (
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView {...titleProps} {...testIdProps(generateTestID(titleA11yLabel ? titleA11yLabel : title, ''))}>
+          <TextView {...titleProps} {...testIdProps(titleA11yLabel ? titleA11yLabel : title)}>
             {title}
           </TextView>
         </Box>
