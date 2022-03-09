@@ -42,11 +42,11 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const messages = appointmentMessagesById[appointmentID]
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail())
+    dispatch(trackAppointmentDetail(pendingAppointment))
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
-  }, [dispatch, appointmentID])
+  }, [dispatch, appointmentID, pendingAppointment])
 
   useEffect(() => {
     if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {

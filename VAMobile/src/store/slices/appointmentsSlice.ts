@@ -550,6 +550,7 @@ export const cancelAppointment =
       await api.put('/v0/appointments/cancel/' + cancelID)
       await registerReviewEvent()
       dispatch(dispatchFinishCancelAppointment({ appointmentID }))
+      await logAnalyticsEvent(Events.vama_appt_cancel(!!isPendingAppointment))
       // TODO refactor translation to work in store
       const successText = isPendingAppointment ? 'Pending request canceled' : 'Canceled upcoming appointment'
       showSnackBar(successText, dispatch, undefined, true)
@@ -593,14 +594,17 @@ export const getAppointmentMessages =
 /**
  * Redux action to track appointment details
  */
-export const trackAppointmentDetail = (): AppThunk => async (dispatch, getState) => {
-  await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
-  const [totalTime] = getAnalyticsTimers(getState())
-  await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
-  await registerReviewEvent()
-  await dispatch(resetAnalyticsActionStart())
-  await dispatch(setAnalyticsTotalTimeStart())
-}
+export const trackAppointmentDetail =
+  (isPendingAppointment?: boolean): AppThunk =>
+  async (dispatch, getState) => {
+    await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+    const [totalTime] = getAnalyticsTimers(getState())
+    await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
+    await logAnalyticsEvent(Events.vama_appt_view_details(!!isPendingAppointment))
+    await registerReviewEvent()
+    await dispatch(resetAnalyticsActionStart())
+    await dispatch(setAnalyticsTotalTimeStart())
+  }
 
 /**
  * Redux action to reset appointment cancellation state
