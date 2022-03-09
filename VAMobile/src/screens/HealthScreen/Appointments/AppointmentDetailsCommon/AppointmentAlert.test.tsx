@@ -5,10 +5,10 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, render, RenderAPI } from 'testUtils'
 
 import { InitialState } from 'store/slices'
-import PendingAppointmentAlert from './PendingAppointmentAlert'
+import AppointmentAlert from './AppointmentAlert'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 
-context('PendingAppointmentAlert', () => {
+context('AppointmentAlert', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
@@ -18,7 +18,7 @@ context('PendingAppointmentAlert', () => {
       ...defaultAppointmentAttributes
     }
 
-    component = render(<PendingAppointmentAlert attributes={props} />, {
+    component = render(<AppointmentAlert attributes={props} />, {
       preloadedState: {
         ...InitialState,
       },

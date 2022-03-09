@@ -52,7 +52,7 @@ context('AppointmentTypeAndDate', () => {
   describe('when isAppointmentCanceled is true', () => {
     it('should render a TextView with the cancellation text', async () => {
       await initializeTestInstance(AppointmentStatusConstants.CANCELLED)
-      expect(findByTypeWithSubstring(testInstance, TextView, 'canceled this appointment')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Canceled appointment for')).toBeTruthy()
     })
   })
 

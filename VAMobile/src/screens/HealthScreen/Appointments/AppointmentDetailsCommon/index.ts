@@ -1,5 +1,5 @@
-export { default as PendingAppointmentAlert } from './PendingAppointmentAlert'
-export * from './PendingAppointmentAlert'
+export { default as AppointmentAlert } from './AppointmentAlert'
+export * from './AppointmentAlert'
 export { default as ContactInformation } from './ContactInformation'
 export * from './ContactInformation'
 export { default as PreferredAppointmentType } from './PreferredAppointmentType'

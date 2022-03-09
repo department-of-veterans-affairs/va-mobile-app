@@ -3,10 +3,10 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import {
   AppointmentAddressAndNumber,
+  AppointmentAlert,
   AppointmentReason,
   AppointmentTypeAndDate,
   ContactInformation,
-  PendingAppointmentAlert,
   PreferredAppointmentType,
   PreferredDateAndTime,
   ProviderName,
@@ -80,7 +80,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   return (
     <VAScrollView {...testIdProps('Past-appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <PendingAppointmentAlert attributes={attributes} />
+        <AppointmentAlert attributes={attributes} />
         <TextArea>
           <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
             <AppointmentTypeAndDate attributes={attributes} />
