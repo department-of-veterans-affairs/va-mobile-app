@@ -326,6 +326,6 @@ workflows:
           cron: "0 14 * * 2"
           filters:
             branches:
-              only: master
+              only: main
     jobs:
       - run_release_lanes

@@ -54,9 +54,11 @@ context('ProfileScreen', () => {
     navigateToHowToUpdateDirectDepositSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('DirectDeposit').mockReturnValue(navigateToDirectDepositSpy)
-        .calledWith('HowToUpdateDirectDeposit').mockReturnValue(navigateToHowToUpdateDirectDepositSpy)
+      .mockReturnValue(() => {})
+      .calledWith('DirectDeposit')
+      .mockReturnValue(navigateToDirectDepositSpy)
+      .calledWith('HowToUpdateDirectDeposit')
+      .mockReturnValue(navigateToHowToUpdateDirectDepositSpy)
 
     component = render(<ProfileScreen />, {
       preloadedState: {
@@ -92,10 +94,8 @@ context('ProfileScreen', () => {
   }
 
   it('initializes correctly', async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-      expect(component).toBeTruthy()
-    })
+    initializeTestInstance()
+    expect(component).toBeTruthy()
   })
 
   describe('when loading is set to true', () => {

@@ -10,9 +10,9 @@ What does the release pipeline look like? What are the steps? Who has to sign of
 6. tests?
 7. sign offs?
 9. approvals?
-10. merge to master -> kicks of builds to app stores -> updates master with build bumps
+10. merge to main -> kicks of builds to app stores -> updates main with build bumps
 11. version tag?
-12. create PR to merge master back to develop to catch QA changes and bumps
+12. create PR to merge main back to develop to catch QA changes and bumps
 
 ## Questions
 Do the QA builds really need to happen on the release branch? Currently builds go out twice a week to the dev/qa team and should encompass any changes. is there a need to make separate (read extra) staging builds for this?

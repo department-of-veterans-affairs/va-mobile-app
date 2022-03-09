@@ -185,6 +185,8 @@ platform :ios do
   end
 
   def upload_deobfuscation_file
+    download_dsyms
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip", app_id: ENV['FIREBASE_IOS_APP_ID'])
+    clean_build_artifacts
   end
 end

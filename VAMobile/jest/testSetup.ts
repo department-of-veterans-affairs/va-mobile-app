@@ -246,6 +246,19 @@ jest.mock('react-native-notifications', () => {
     },
   }
 })
+
 globalAny.FormData = () => ({
   append: jest.fn(),
+})
+
+globalAny.snackBar = {
+  show: jest.fn(),
+}
+
+jest.mock('@react-native-firebase/perf', () => {
+  return jest.fn(() => {
+    return {
+      setPerformanceCollectionEnabled: jest.fn(() => Promise.resolve()),
+    }
+  })
 })

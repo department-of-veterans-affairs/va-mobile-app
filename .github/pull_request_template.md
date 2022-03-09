@@ -25,4 +25,4 @@ situations that could not be tested during development. -->
 - [ ] No secrets or API keys are checked in
 - [ ] All imports are absolute (no relative imports)
 - [ ] New functions and Redux work have proper TSDoc annotations
-- [ ] Branch name is prefixed with `feature/` or `bugfix/` (`hotfix/` is reserved for emergency PRs to `master`)
+- [ ] Branch name is prefixed with `feature/` or `bugfix/` (`hotfix/` is reserved for emergency PRs to `main`)

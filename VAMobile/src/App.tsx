@@ -10,16 +10,20 @@ import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toas
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import { enableScreens } from 'react-native-screens'
+import { utils } from '@react-native-firebase/app'
 import KeyboardManager from 'react-native-keyboard-manager'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import Toast from 'react-native-toast-notifications'
 import ToastContainer from 'react-native-toast-notifications'
 import analytics from '@react-native-firebase/analytics'
+import crashlytics from '@react-native-firebase/crashlytics'
 import i18n from 'utils/i18n'
+import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
-import { AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { EnvironmentTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
@@ -48,8 +52,11 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
+import getEnv from 'utils/env'
 import store, { RootState } from 'store'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
+
+const { ENVIRONMENT, IS_TEST } = getEnv()
 
 enableScreens(true)
 
@@ -144,6 +151,7 @@ export const AuthGuard: FC = () => {
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
+  const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
@@ -184,6 +192,14 @@ export const AuthGuard: FC = () => {
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
     return (): void => sub.remove()
   }, [dispatch, isVoiceOverTalkBackRunning])
+
+  useEffect(() => {
+    // check if analytics for staging enabled, or check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
+    const toggle = firebaseDebugMode || !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
+    crashlytics().setCrashlyticsCollectionEnabled(toggle)
+    analytics().setAnalyticsCollectionEnabled(toggle)
+    performance().setPerformanceCollectionEnabled(toggle)
+  }, [firebaseDebugMode])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
