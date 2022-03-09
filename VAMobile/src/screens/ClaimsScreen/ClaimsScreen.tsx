@@ -62,7 +62,6 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   }
 
   if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
-    console.log('Hey I am here')
     return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
   }
 

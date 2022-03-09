@@ -14,21 +14,40 @@ import { claim } from '../claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { InteractionManager } from 'react-native'
+import { StackNavigationOptions } from '@react-navigation/stack'
+
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
+  return {
+    ...actual,
+    useNavigation: () => ({
+      setOptions: jest.fn(),
+      goBack: jest.fn(),
+    }),
+  }
+})
 
 context('ClaimDetailsScreen', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
-
-  const runAfterTransition = (testToRun: () => void) => {
-    InteractionManager.runAfterInteractions(() => {
-      testToRun()
-    })
-    jest.runAllTimers()
-  }
+  let navHeaderSpy: any
+  let navigateToSpy: jest.Mock
 
   const initializeTestInstance = (loadingClaim = false, errorsState: ErrorsState = initialErrorsState) => {
-    props = mockNavProps(undefined, undefined, { params: { claimID: '0', claimType: 'ACTIVE' } })
+    props = mockNavProps(
+      undefined,
+      {
+        navigate: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+          }
+        },
+        goBack: jest.fn(),
+      },
+      { params: { claimID: '0', claimType: 'ACTIVE' } },
+    )
 
     component = render(<ClaimDetailsScreen {...props} />, {
       preloadedState: {
