@@ -8,14 +8,19 @@ import { context, findByTypeWithText, mockNavProps, render, RenderAPI } from 'te
 import { initialAuthState, initialPaymentsState } from 'store/slices'
 import { TextView } from 'components'
 import PaymentDetailsScreen from './PaymentDetailsScreen'
+import { getFormattedDate } from 'utils/formattingUtils'
 
 context('PaymentDetailsScreen', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
+  let paymentDate: string
+  let formattedDate: string
 
   const initializeTestInstance = (pId: string = '1') => {
     props = mockNavProps(undefined, undefined, { params: { paymentID: pId } })
+    paymentDate = '2021-02-01T00:00:00.000-07:00'
+    formattedDate = getFormattedDate(paymentDate, 'MMMM d, yyyy')
 
     component = render(<PaymentDetailsScreen {...props} />, {
       preloadedState: {
@@ -27,7 +32,7 @@ context('PaymentDetailsScreen', () => {
               id: '1',
               type: 'paymentHistoryInformation',
               attributes: {
-                date: '2021-02-01T00:00:00.000-07:00',
+                date: paymentDate,
                 amount: '$3,746.20',
                 paymentType: 'Compensation & Pension - Recurring',
                 paymentMethod: 'Direct Deposit',
@@ -39,7 +44,7 @@ context('PaymentDetailsScreen', () => {
               id: '2',
               type: 'paymentHistoryInformation',
               attributes: {
-                date: '2021-02-01T00:00:00.000-07:00',
+                date: paymentDate,
                 amount: '$3,746.20',
                 paymentType: 'Compensation & Pension - Recurring',
                 paymentMethod: 'Paper Check',
@@ -62,7 +67,7 @@ context('PaymentDetailsScreen', () => {
   describe('when showing payment info', () => {
     it('should show payment details information when direct deposit', async () => {
       initializeTestInstance()
-      expect(findByTypeWithText(testInstance, TextView, 'February 1, 2021')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, formattedDate)).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Compensation & Pension - Recurring')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Amount')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, '$3,746.20')).toBeTruthy()
@@ -76,7 +81,7 @@ context('PaymentDetailsScreen', () => {
 
     it('should show payment details information when paper check', async () => {
       initializeTestInstance('2')
-      expect(findByTypeWithText(testInstance, TextView, 'February 1, 2021')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, formattedDate)).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Compensation & Pension - Recurring')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Amount')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, '$3,746.20')).toBeTruthy()
