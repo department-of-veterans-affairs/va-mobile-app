@@ -116,7 +116,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const onUploadConfirmed = () => {
-    console.log('request', JSON.stringify(request))
     dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
   }
 
