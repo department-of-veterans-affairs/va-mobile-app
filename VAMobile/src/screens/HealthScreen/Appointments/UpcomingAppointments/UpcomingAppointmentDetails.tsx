@@ -3,10 +3,10 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import {
   AppointmentAddressAndNumber,
+  AppointmentAlert,
   AppointmentReason,
   AppointmentTypeAndDate,
   ContactInformation,
-  PendingAppointmentAlert,
   PendingAppointmentCancelButton,
   PreferredAppointmentType,
   PreferredDateAndTime,
@@ -273,7 +273,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   return (
     <VAScrollView {...testIdProps('Appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <PendingAppointmentAlert attributes={attributes} />
+        <AppointmentAlert attributes={attributes} />
         <TextArea>
           <AppointmentTypeAndDate attributes={attributes} />
           <AddToCalendar />

@@ -255,7 +255,7 @@ context('UpcomingAppointmentDetails', () => {
         initializeTestInstance(AppointmentTypeConstants.VA, AppointmentStatusConstants.CANCELLED, undefined, false, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit VA.gov or call your VA Medical Center.')).toBeTruthy()
     })
   })
 
@@ -287,14 +287,14 @@ context('UpcomingAppointmentDetails', () => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
       })
 
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if facility cancelled (rebook)', async () => {
       await waitFor(() => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       })
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })
 

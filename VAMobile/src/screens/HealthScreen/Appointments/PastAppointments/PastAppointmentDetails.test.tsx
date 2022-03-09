@@ -140,14 +140,14 @@ context('PastAppointmentDetails', () => {
       await waitFor(() => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC)
       })
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if facility cancelled (rebook)', async () => {
       await waitFor(() => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       })
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })
 
