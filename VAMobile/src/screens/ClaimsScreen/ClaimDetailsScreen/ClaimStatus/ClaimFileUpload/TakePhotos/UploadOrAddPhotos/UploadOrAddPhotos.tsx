@@ -22,8 +22,9 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
-import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
+import { ClaimsStackParamList } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -41,12 +42,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const theme = useTheme()
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { showActionSheetWithOptions } = useActionSheet()
-  const { request, firstImageResponse } = route.params
+  const { request: originalRequest, firstImageResponse } = route.params
   const dispatch = useDispatch()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
   const confirmAlert = useDestructiveAlert()
+  const [request, setRequest] = useState<ClaimEventData>(originalRequest)
 
   useEffect(() => {
     navigation.setOptions({
@@ -101,14 +103,20 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [confirmed, setConfirmed] = useState(false)
 
   useEffect(() => {
-    request.documentType = documentType
-  }, [documentType, request])
+    setRequest((prevRequest) => {
+      return {
+        ...prevRequest,
+        documentType,
+      }
+    })
+  }, [documentType])
 
   if (loadingFileUpload) {
     return <LoadingComponent text={t('fileUpload.loading')} />
   }
 
   const onUploadConfirmed = () => {
+    console.log('request', JSON.stringify(request))
     dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
   }
 
