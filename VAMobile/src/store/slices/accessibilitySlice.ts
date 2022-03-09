@@ -51,7 +51,7 @@ export const updateAccessibilityFocus =
  */
 export const sendUsesLargeTextAnalytics = (): AppThunk => async () => {
   const islargeText = PixelRatio.getFontScale() > 1
-  await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(islargeText))
+  await setAnalyticsUserProperty(UserAnalytics.vama_uses_large_text(islargeText))
 }
 
 /**

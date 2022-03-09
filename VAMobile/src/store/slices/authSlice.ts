@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
+import performance from '@react-native-firebase/perf'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
@@ -26,6 +27,7 @@ import { dispatchClearCerner } from './patientSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
+import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
 import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchProfileLogout } from './personalInformationSlice'
@@ -206,7 +208,9 @@ const finishInitialize = async (dispatch: AppDispatch, loginPromptType: LOGIN_PR
   if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
     await crashlytics().setCrashlyticsCollectionEnabled(false)
     await analytics().setAnalyticsCollectionEnabled(false)
+    await performance().setPerformanceCollectionEnabled(false)
   }
+
   dispatch(dispatchInitializeAction(payload))
 }
 
@@ -451,6 +455,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchProfileLogout())
     dispatch(dispatchMilitaryHistoryLogout())
     dispatch(dispatchDisabilityRatingLogout())
+    dispatch(dispatchClearPaymentsOnLogout())
     dispatch(dispatchFinishLogout())
     dispatch(dispatchVaccineLogout())
   }
