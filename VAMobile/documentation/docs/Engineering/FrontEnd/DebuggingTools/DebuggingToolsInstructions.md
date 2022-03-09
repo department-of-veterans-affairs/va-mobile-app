@@ -54,9 +54,9 @@ You must have only the tool you want to use open so that the debugger connects t
 
 ### React Developer Tools (standalone application)
 
- 1. If not installed yet follow the installation instructions in the [react standalone page](https://github.com/facebook/react/tree/main/packages/react-devtools) to install it.
+ 1. If not installed yet follow the installation instructions in the [react standalone page](https://github.com/facebook/react/tree/main/packages/react-devtools) to install it. Globally on your machine not in the project.
 
- 2. If installed of after the installation launch the react devtools standalone app.
+ 2. If installed or after the installation launch the react devtools standalone app.
 
  3. Launch the debugger from your device.
 
