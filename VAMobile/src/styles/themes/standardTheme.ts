@@ -91,7 +91,7 @@ const fontSizes = {
   },
   LabelTagBold: {
     fontSize: 16,
-    lineHeight: 16
+    lineHeight: 16,
   },
   HelperTextBold: {
     fontSize: 16,
