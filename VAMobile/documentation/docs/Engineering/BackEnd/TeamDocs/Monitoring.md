@@ -185,8 +185,30 @@ Additionally you can add variables for use across all widgets within a single da
 
 1. Define a metric to alert on. This works the same as discussed in the graphs section above
 
+![](../../../../static/img/backend/datadog-alert-metric.png)
+
 2. Define alert thresholds. These will dictate when the alert triggers
+
+![](../../../../static/img/backend/datadog-alert-threshold.png)
 
 3. Decide how you would like to be notified when the alert triggers
 
+![](../../../../static/img/backend/datadog-alert-notify.png)
+
 4. Define message you want to appear when alert triggers
+
+![](../../../../static/img/backend/datadog-mobile-api-dashboard.png)
+
+To receive alert messages in slack the Datadog slack tool will need to be added to the channel where you want notifications then the channel also needs to be added via the slack integration within Datadog. Once this is complete the channel will be in a dropdown in the ‘Notify your team’ section shown above. [Slack integration docs](https://docs.datadoghq.com/integrations/slack/?tab=slackapplication)
+
+![](../../../../static/img/backend/datadog-slack-integration-1.png)
+![](../../../../static/img/backend/datadog-slack-integration-2.png)
+
+### Good Places to Get Started
+
+[Datadog 101 videos](https://www.youtube.com/playlist?list=PLdh-RwQzDsaOoFo0D8xSEHO0XXOKi1-5J) and [Datadog documentation home page](https://docs.datadoghq.com/getting_started/)
+
+### Existing Mobile Dashboards
+
+[Dashboard](https://app.datadoghq.com/dashboard/9nz-cn7-ws6/mobile-api-dashboard) and [Alerts](https://app.datadoghq.com/monitors/manage?q=mobile). If you have issues accessing the dashboard or the VA Datadog site reach out in the shared mobile slack channel
+
