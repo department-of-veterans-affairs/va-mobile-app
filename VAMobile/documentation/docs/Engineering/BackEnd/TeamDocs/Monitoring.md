@@ -113,3 +113,80 @@ In the resulting logs, click on one of the logs to see additional details, inclu
 The contents of the json are then listed under “detected fields”.
 
 ![](../../../../static/img/backend/grafana-loki-detected-fields.png)
+
+## Statsd Metrics
+
+You can create custom Mobile metrics within Vets API by adding new statsd entries to `modules/mobile/config/initializers/statsd.rb`.
+
+![](../../../../static/img/backend/statsd.png)
+
+More information about Statsd can be found at: https://github.com/Shopify/statsd-instrument . In order for metics to be picked up an entry for the associated endpoint must also be in `ansible/deployment/config/revproxy-vagov/vars/nginx_components.yml` in the [DevOps repo](https://github.com/department-of-veterans-affairs/devops)
+
+![](../../../../static/img/backend/mobile-api-components.png)
+
+## Datadog
+
+This section will share a short overview of how to use Datadog to analyze, and alert on VA metrics
+
+### Integrations
+
+One of the major Pros of Datadog is a plethora of already created integration steps.[Datadog integration documentation](https://docs.datadoghq.com/getting_started/integrations/)
+
+![](../../../../static/img/backend/datadog-aws-integration.png)
+
+### Exploring Metrics
+
+You can search for existing metrics using Datadog’s explore page. Within Datadog navigate to Metrics -> Explore from the sidebar. Selecting a metric from here will automatically create a graph that can be modified and exported to new or existing dashboards. [Explore documentation](https://docs.datadoghq.com/metrics/explorer/)
+
+![](../../../../static/img/backend/datadog-metrics-explorer.png)
+
+### Creating Graphs
+
+1. Navigate to Dashboards -> Quick Graphs or edit a graph from an existing dashboard
+2. Choose the metric to graph by searching or selecting it from the dropdown next to ‘Metric’
+
+![](../../../../static/img/backend/datadog-create-graphs-1.png)
+
+3. Select filters for the metric
+
+![](../../../../static/img/backend/datadog-create-graphs-2.png)
+
+4. Decide how to aggregate the metric (Max, Min, Avg, Sum)
+
+![](../../../../static/img/backend/datadog-create-graphs-3.png)
+
+5. Apply functions to the metric. [Functions documentation](https://docs.datadoghq.com/dashboards/functions/)
+
+![](../../../../static/img/backend/datadog-create-graphs-4.png)
+
+Example: Total requests per second to any mobile endpoint averaged over 5 minutes
+
+![](../../../../static/img/backend/datadog-example-graph-query.png)
+![](../../../../static/img/backend/datadog-example-graph.png)
+
+### Formulas
+
+You can compare multiple metrics by using formulas.
+Example: Request error rate averaged over 5 minutes
+
+![](../../../../static/img/backend/datadog-formula-graph.png)
+
+### Dashboards
+
+Dashboards allow you to display many different widgets. Select the ‘Add widgets’ button then select the desired widget. [Widgets documentation](https://docs.datadoghq.com/dashboards/widgets/)
+
+![](../../../../static/img/backend/datadog-add-widgets.png)
+
+Additionally you can add variables for use across all widgets within a single dashboard. At the top of a dashboard select the pencil icon then fill in the details of your variable. These variables can be accessed from within a widget using `$[variable name]`. [Template variables documentation](https://docs.datadoghq.com/dashboards/template_variables/)
+
+![](../../../../static/img/backend/datadog-mobile-api-dashboard.png)
+
+### Creating Alerts
+
+1. Define a metric to alert on. This works the same as discussed in the graphs section above
+
+2. Define alert thresholds. These will dictate when the alert triggers
+
+3. Decide how you would like to be notified when the alert triggers
+
+4. Define message you want to appear when alert triggers
