@@ -154,7 +154,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
           </Box>
           <Box mt={standardMarginBetween}>
             <VAButton
-              onPress={navigateTo('ClaimFileUpload', { claimID })}
+              onPress={navigateTo('FileRequest', { claimID })}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
               buttonType={ButtonTypesConstants.buttonPrimary}

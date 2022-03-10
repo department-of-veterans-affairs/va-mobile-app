@@ -14,6 +14,7 @@ import { initialLettersState } from 'store/slices/lettersSlice'
 import { initialMilitaryServiceState } from 'store/slices/militaryServiceSlice'
 import { initialNotificationsState } from 'store/slices/notificationSlice'
 import { initialPatientState } from 'store/slices/patientSlice'
+import { initialPaymentsState } from 'store/slices/paymentsSlice'
 import { initialPersonalInformationState } from 'store/slices/personalInformationSlice'
 import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
@@ -36,6 +37,7 @@ export * from './personalInformationSlice'
 export * from './secureMessagingSlice'
 export * from './snackBarSlice'
 export * from './vaccineSlice'
+export * from './paymentsSlice'
 
 export const InitialState: RootState = {
   auth: initialAuthState,
@@ -56,4 +58,5 @@ export const InitialState: RootState = {
   vaccine: initialVaccineState,
   patient: initialPatientState,
   snackBar: initialSnackBarState,
+  payments: initialPaymentsState,
 }

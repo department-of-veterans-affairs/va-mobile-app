@@ -10,6 +10,7 @@
   "loaGate.expandMsg": "Read more if you haven't yet verified",
   "loaGate.expandMsg.a11yHint": "review what you will need to verify your identity",
   "loaGate.readMore.bulletOne": "Upload a picture of your driver’s license or passport,",
+  "loaGate.readMore.bulletOne.a11y": "Upload a picture of your driver’s license or passport, or",
   "loaGate.readMore.bulletTwo": "Answer questions based on private and public data (like your credit report)",
   "loaGate.readMore.itemOne": "1. Your Social Security number, ",
   "loaGate.readMore.itemOne.and": "and",

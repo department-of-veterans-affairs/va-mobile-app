@@ -65,6 +65,7 @@ export type VAIconColors = {
   link: string
   nav: string
   largeNav: string
+  deleteFill: string
   disclosure: string
   success: string
   error: string
@@ -78,6 +79,7 @@ export type VAIconColors = {
   spinner: string
   dark: string
   covid19Vaccinations: string
+  photoAdd: string
   pickerIcon: string
   pagination: string
   chevronCollapsible: string
@@ -100,6 +102,7 @@ export type VATypographyThemeVariants = {
   ActionBar: string
   VASelector: string
   HelperText: string
+  HelperTextBold: string
   SnackBarBtnText: string
   LabelTag: string
   LabelTagBold: string
@@ -150,6 +153,7 @@ export type VABorderColors = {
   phaseIndicatorUpcoming: string
   success: string
   primaryDarkest: string
+  photoAdd: string
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string
@@ -239,6 +243,9 @@ export type VATheme = {
     messageIconHeight: number
     maxNumMessageAttachments: number
     paginationButtonPadding: number
+    photoPreviewIconSize: number
+    photoPreviewBorderRadius: number
+    photoPreviewIconPadding: number
     pickerModalTopPadding: number
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number
@@ -281,6 +288,8 @@ export type VATheme = {
     menuElevation: number
     chevronListItemWidth: number
     chevronListItemHeight: number
+    listTrashIconWidth: number
+    listTrashIconHeight: number
   }
   fontFace: {
     regular: string

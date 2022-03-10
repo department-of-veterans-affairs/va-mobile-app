@@ -4,7 +4,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import DocumentPicker from 'react-native-document-picker'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList, DocumentPickerResponse } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
@@ -93,23 +93,33 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
   return (
     <VAScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox text={error} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
-          {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
-        </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-          {t('fileUpload.pleaseRequestFromPhoneFiles')}
-        </TextView>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
-          {t('fileUpload.acceptedFileTypes')}
-        </TextView>
-        <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
-        <Box mt={theme.dimensions.textAndButtonLargeMargin}>
+        <TextArea>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+            {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
+          </TextView>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+            {t('fileUpload.pleaseRequestFromPhoneFiles')}
+            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+              {t('fileUpload.pleaseRequestFromPhoneFiles.bolded')}
+              <TextView variant="MobileBody">{t('fileUpload.pleaseRequestFromPhoneFiles.pt2')}</TextView>
+            </TextView>
+          </TextView>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+            {t('fileUpload.maxFileSize')}
+          </TextView>
+          <TextView variant="MobileBody">{t('fileUpload.50MB')}</TextView>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+            {t('fileUpload.acceptedFileTypes')}
+          </TextView>
+          <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
+        </TextArea>
+        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <VAButton
             onPress={onSelectFile}
             label={t('fileUpload.selectAFile')}

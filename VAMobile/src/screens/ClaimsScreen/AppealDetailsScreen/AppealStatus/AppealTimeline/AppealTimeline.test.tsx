@@ -29,9 +29,7 @@ context('AppealTimeline', () => {
       ],
     })
 
-    await waitFor(() => {
-      component = render(<AppealTimeline {...props} />)
-    })
+    component = render(<AppealTimeline {...props} />)
 
     testInstance = component.container
   })

@@ -8,7 +8,7 @@ import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 import { contentTypes } from 'store/api/api'
-import { ImagePickerResponse } from 'react-native-image-picker'
+import { Asset } from 'react-native-image-picker'
 import {
   fileUploadSuccess,
   getAppeal,
@@ -73,12 +73,12 @@ context('claimsAndAppeals', () => {
     },
   ]
 
-  const multiFiles: Array<ImagePickerResponse> = [
+  const multiFiles: Array<Asset> = [
     {
-      assets: [{ base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile' }],
+      base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile'
     },
     {
-      assets: [{ base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile' }],
+      base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile'
     },
   ]
 

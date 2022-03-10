@@ -1,0 +1,317 @@
+{
+    "/v0/payment-history": {
+        "2017": {
+            "1": {
+                "data": [
+                    {
+                        "id": "6137485",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2017-06-01T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "5927090",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2017-05-01T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "5726991",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2017-03-31T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "5566836",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2017-03-01T00:00:00.000-06:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "5396414",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2017-02-01T00:00:00.000-06:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "5396467",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": "********0567",
+                            "amount": "$3,746.20",
+                            "bank": "BANK OF AMERICA, N.A.",
+                            "date": "2017-02-01T00:00:00.000-06:00",
+                            "paymentMethod": "Direct Deposit",
+                            "paymentType": "Compensation & Pension - Recurring"
+                        }
+                    },
+                    {
+                        "id": "5396489",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": "********0567",
+                            "amount": "$1,172.60",
+                            "bank": "BANK OF AMERICA, N.A.",
+                            "date": "2017-03-01T00:00:00.000-06:00",
+                            "paymentMethod": "Direct Deposit",
+                            "paymentType": "Post-9/11 GI Bill"
+                        }
+                    }
+                ],
+                "meta": {
+                    "pagination": {
+                        "currentPage": 1,
+                        "perPage": 10,
+                        "totalPages": 1,
+                        "totalEntries": 7
+                    },
+                    "availableYears": [
+                        2017,
+                        2016
+                    ]
+                },
+                "links": {
+                    "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1",
+                    "first": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1",
+                    "prev": null,
+                    "next": null,
+                    "last": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1"
+                }
+            }
+        },
+        "2016": {
+            "1": {
+                "data": [
+                    {
+                        "id": "5226388",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-12-30T00:00:00.000-06:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "5025983",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-12-01T00:00:00.000-06:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "4855733",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-11-01T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "4695614",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-09-30T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "4495396",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-09-01T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "4255127",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-08-01T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "4125128",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-07-01T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "3874869",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-06-01T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "3851737",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$685.91",
+                            "bank": null,
+                            "date": "2016-05-13T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Retro/One Time - CH31"
+                        }
+                    },
+                    {
+                        "id": "3684492",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-04-29T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    }
+                ],
+                "meta": {
+                    "pagination": {
+                        "currentPage": 1,
+                        "perPage": 10,
+                        "totalPages": 2,
+                        "totalEntries": 13
+                    },
+                    "availableYears": [
+                        2017,
+                        2016
+                    ]
+                },
+                "links": {
+                    "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
+                    "first": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
+                    "prev": null,
+                    "next": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=2",
+                    "last": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=2"
+                }
+            },
+            "2": {
+                "data": [
+                    {
+                        "id": "3464314",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-04-01T00:00:00.000-05:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "3294075",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-03-01T00:00:00.000-06:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    },
+                    {
+                        "id": "3173789",
+                        "type": "payment_history",
+                        "attributes": {
+                            "account": null,
+                            "amount": "$603.33",
+                            "bank": null,
+                            "date": "2016-02-01T00:00:00.000-06:00",
+                            "paymentMethod": "Paper Check",
+                            "paymentType": "Regular Chapter 31"
+                        }
+                    }
+                ],
+                "meta": {
+                    "pagination": {
+                        "currentPage": 2,
+                        "perPage": 10,
+                        "totalPages": 2,
+                        "totalEntries": 13
+                    },
+                    "availableYears": [
+                        2017,
+                        2016
+                    ]
+                },
+                "links": {
+                    "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=2",
+                    "first": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
+                    "prev": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
+                    "next": null,
+                    "last": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=2"
+                }
+            }
+        }
+    }
+}

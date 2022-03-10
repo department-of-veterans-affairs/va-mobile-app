@@ -9,6 +9,7 @@ export type AnalyticsState = {
   loginTimestamp: number
   totalTimeStart: number
   actionStart: number
+  firebaseDebugMode: boolean
 }
 
 /** initial values for analyticsState */
@@ -16,6 +17,7 @@ export const initialAnalyticsState: AnalyticsState = {
   loginTimestamp: -1,
   totalTimeStart: -1,
   actionStart: -1,
+  firebaseDebugMode: false,
 }
 
 /**
@@ -44,6 +46,11 @@ export const resetAnalyticsActionStart = (): AppThunk => async (dispatch) => {
   await dispatch(dispatchSetActionStart(ACTION_START_DEFAULT))
 }
 
+/** Redux function to toggle logging for Firebase on staging on and off */
+export const toggleFirebaseDebugMode = (): AppThunk => async (dispatch) => {
+  await dispatch(dispatchFirebaseDebugMode())
+}
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -64,9 +71,13 @@ const analyticSlice = createSlice({
     dispatchSetActionStart: (state, action: PayloadAction<number>) => {
       state.actionStart = action.payload
     },
+
+    dispatchFirebaseDebugMode: (state) => {
+      state.firebaseDebugMode = !state.firebaseDebugMode
+    },
   },
 })
 
 // Action creators created by the slice
-export const { dispatchSetAnalyticsLogin, dispatchSetActionStart, dispatchSetTotalTimeStart } = analyticSlice.actions
+export const { dispatchSetAnalyticsLogin, dispatchSetActionStart, dispatchSetTotalTimeStart, dispatchFirebaseDebugMode } = analyticSlice.actions
 export default analyticSlice.reducer

@@ -34,9 +34,7 @@ context('App', () => {
       }),
     }))
 
-    await waitFor(() => {
-      component = render(<App />, { preloadedState: { auth: initialAuthState }, navigationProvided: true })
-    })
+    component = render(<App />, { preloadedState: { auth: initialAuthState }, navigationProvided: true })
 
     expect(component).toBeTruthy()
   })
