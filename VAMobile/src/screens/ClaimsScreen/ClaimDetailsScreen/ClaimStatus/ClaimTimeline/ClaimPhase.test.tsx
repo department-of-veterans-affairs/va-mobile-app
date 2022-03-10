@@ -34,8 +34,9 @@ context('ClaimPhase', () => {
   const initializeTestInstance = (phase: number, current: number) => {
     mockNavigateToClaimFileUploadSpy = jest.fn()
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('ClaimFileUpload', { 'claimID': undefined }).mockReturnValue(mockNavigateToClaimFileUploadSpy)
+      .mockReturnValue(() => {})
+      .calledWith('FileRequest', { claimID: undefined })
+      .mockReturnValue(mockNavigateToClaimFileUploadSpy)
     props = {
       phase,
       current,
@@ -161,7 +162,7 @@ context('ClaimPhase', () => {
 
       describe('when number of requests is greater than 1', () => {
         it('should display the text "You have {{number}} file requests from VA"', async () => {
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('You have 2 file requests from VA')
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('You have 2 file requests from V\ufeffA')
         })
       })
 
@@ -178,7 +179,7 @@ context('ClaimPhase', () => {
           ]
           initializeTestInstance(3, 2)
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('You have 1 file request from VA')
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('You have 1 file request from V\ufeffA')
         })
       })
     })

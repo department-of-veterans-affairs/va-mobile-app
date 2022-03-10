@@ -6,6 +6,7 @@ import { RefObject } from 'react'
 import { contains, isEmpty, map } from 'underscore'
 
 import { AppDispatch } from 'store'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { ErrorObject } from 'store/api'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { PhoneData } from 'store/api/types/PhoneData'
@@ -160,19 +161,25 @@ export const sanitizeString = (val: string): string => {
  * Example: '(12 MB)'
  *
  * @param bytes - given number to convert mb, kb, or bytes representation
+ * @param t - translation function
+ * @param includeParens - whether to display parenthesis around the size. Defaults to true
  */
-export const bytesToFinalSizeDisplay = (bytes: number, t: TFunction): string => {
+export const bytesToFinalSizeDisplay = (bytes: number, t: TFunction, includeParens = true): string => {
+  let fileSize = ''
+
   if (bytes < 10) {
     // Less than 0.01 KB, display with Bytes size unit
-    return `(${bytes} ${t('common:Bytes')})`
+    fileSize = `${bytes} ${t('common:Bytes')}`
   } else if (bytes < 10000) {
     // Less than 0.01 MB, display with KB size unit
     const kb = bytesToKilobytes(bytes)
-    return `(${kb} ${t('common:KB')})`
+    fileSize = `${kb} ${t('common:KB')}`
   } else {
     const mb = bytesToMegabytes(bytes)
-    return `(${mb} ${t('common:MB')})`
+    fileSize = `${mb} ${t('common:MB')}`
   }
+
+  return includeParens ? `(${fileSize})` : fileSize
 }
 
 /**
@@ -266,7 +273,7 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
  * @param actionPressed - action to perform on undo
  * @param isUndo - if user pressed undo it will not show undo again
  * @param isError - if it is an error will show the error icon
- * @param withNav - offset snackbar to be over the bottom nav
+ * @param withNavBar - offset snackbar to be over the bottom nav
  * @returns snackbar
  */
 export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
@@ -293,4 +300,29 @@ export function showSnackBar(message: string, dispatch: AppDispatch, actionPress
 
 export const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
   return map(itemTexts, 'text').join(' ')
+}
+
+/**
+ * Provides a name and size as strings for either an image picker or document picker file
+ * @param attachment - response from the image or document picker
+ * @param t - translation function
+ * @param fileSizeParens - whether to include parenthesis around the file size
+ */
+export const getFileDisplay = (attachment: ImagePickerResponse | DocumentPickerResponse, t: TFunction, fileSizeParens: boolean): { fileName: string; fileSize: string } => {
+  let fileName: string | undefined
+  let fileSize: number | undefined
+
+  if ('assets' in attachment) {
+    const { fileName: name, fileSize: size } = attachment.assets ? attachment.assets[0] : ({} as Asset)
+    fileName = name || ''
+    fileSize = size || 0
+  } else if ('size' in attachment) {
+    const { name, size } = attachment
+    fileName = name || ''
+    fileSize = size || 0
+  }
+
+  const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, t, fileSizeParens) : ''
+
+  return { fileName: fileName || '', fileSize: formattedFileSize }
 }

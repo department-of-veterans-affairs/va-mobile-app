@@ -49,15 +49,16 @@ context('ClaimsAndAppealsListView', () => {
   let mockNavigateToClaimDetailsScreenSpy: jest.Mock
   let mockNavigateToAppealDetailsScreenSpy: jest.Mock
 
-
-  const initializeTestInstance = async (claimType: ClaimType, isEmpty?: boolean): Promise<void> => {
+  const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
     mockNavigateToClaimDetailsScreenSpy = jest.fn()
     mockNavigateToAppealDetailsScreenSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('ClaimDetailsScreen', { claimID: '2', claimType:'ACTIVE' }).mockReturnValue(mockNavigateToClaimDetailsScreenSpy)
-        .calledWith('AppealDetailsScreen', { appealID: '0' }).mockReturnValue(mockNavigateToAppealDetailsScreenSpy)
+      .mockReturnValue(() => {})
+      .calledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' })
+      .mockReturnValue(mockNavigateToClaimDetailsScreenSpy)
+      .calledWith('AppealDetailsScreen', { appealID: '0' })
+      .mockReturnValue(mockNavigateToAppealDetailsScreenSpy)
     props = mockNavProps({ claimType })
 
     const activeClaimsAndAppeals: ClaimsAndAppealsList = [
@@ -99,38 +100,36 @@ context('ClaimsAndAppealsListView', () => {
       },
     ]
 
-    await waitFor(() => {
-      component = render(<ClaimsAndAppealsListView {...props} />, {
-        preloadedState: {
-          ...InitialState,
-          claimsAndAppeals: {
-            ...InitialState.claimsAndAppeals,
-            claimsAndAppealsByClaimType: {
-              ACTIVE: isEmpty ? [] : activeClaimsAndAppeals,
-              CLOSED: isEmpty ? [] : closedClaimsAndAppeals,
+    component = render(<ClaimsAndAppealsListView {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        claimsAndAppeals: {
+          ...InitialState.claimsAndAppeals,
+          claimsAndAppealsByClaimType: {
+            ACTIVE: isEmpty ? [] : activeClaimsAndAppeals,
+            CLOSED: isEmpty ? [] : closedClaimsAndAppeals,
+          },
+          claimsAndAppealsMetaPagination: {
+            ACTIVE: {
+              currentPage: 2,
+              perPage: 1,
+              totalEntries: 5,
             },
-            claimsAndAppealsMetaPagination: {
-              ACTIVE: {
-                currentPage: 2,
-                perPage: 1,
-                totalEntries: 5,
-              },
-              CLOSED: {
-                currentPage: 2,
-                perPage: 1,
-                totalEntries: 5,
-              },
+            CLOSED: {
+              currentPage: 2,
+              perPage: 1,
+              totalEntries: 5,
             },
           },
         },
-      })
+      },
     })
 
     testInstance = component.container
   }
 
   beforeEach(async () => {
-    await initializeTestInstance('ACTIVE')
+    initializeTestInstance('ACTIVE')
   })
 
   it('initializes correctly', async () => {
