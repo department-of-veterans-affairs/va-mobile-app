@@ -62,10 +62,10 @@ You'll now see a query interface for searching and analyzing log files:
 In the Log browser, enter a query  starting with an app label to view all logs for a given app.
 
 Many developers will be interested in vets-api logs:
-  a. To use this use case as an example, click "Log browser"
-  b. Make sure "app" is highlighted
-  c. Scroll down and highlight "vets-api-server" or "vets-api-worker" depending on your need
-  d. Click "Show logs"
+1. To use this use case as an example, click "Log browser"
+2. Make sure "app" is highlighted
+3. Scroll down and highlight "vets-api-server" or "vets-api-worker" depending on your need
+4. Click "Show logs"
 
 ![](../../../../static/img/backend/grafana-loki-query-steps.png)
 
@@ -81,9 +81,11 @@ A basic query example that searches for errors within the logs:
 { app=~"vets-api-server", filename=~".+json.log" } |~ "error"`
 ```
 
-![](../../../../static/img/backend/grafana-query-example.png)
+![](../../../../static/img/backend/grafana-loki-query-error.png)
 
 If searching for data that has a specific key and value, the data can be searched using regex. In the example below, The query is looking for log lines that contain a key of "message" with a value of "Mobile Request".
+
+![](../../../../static/img/backend/grafana-loki-query-mobile-request.png)
 
 ###  How to Parse Logs
 
@@ -130,7 +132,7 @@ This section will share a short overview of how to use Datadog to analyze, and a
 
 ### Integrations
 
-One of the major Pros of Datadog is a plethora of already created integration steps.[Datadog integration documentation](https://docs.datadoghq.com/getting_started/integrations/)
+One of the major Pros of Datadog is a plethora of already created integration steps. [Datadog integration documentation](https://docs.datadoghq.com/getting_started/integrations/)
 
 ![](../../../../static/img/backend/datadog-aws-integration.png)
 
@@ -197,7 +199,7 @@ Additionally you can add variables for use across all widgets within a single da
 
 4. Define message you want to appear when alert triggers
 
-![](../../../../static/img/backend/datadog-mobile-api-dashboard.png)
+![](../../../../static/img/backend/datadog-alert-message.png)
 
 To receive alert messages in slack the Datadog slack tool will need to be added to the channel where you want notifications then the channel also needs to be added via the slack integration within Datadog. Once this is complete the channel will be in a dropdown in the 'Notify your team' section shown above. [Slack integration docs](https://docs.datadoghq.com/integrations/slack/?tab=slackapplication)
 
@@ -219,10 +221,10 @@ This section outlines the steps to take should an alert occur while it's [your t
 ### Handling Backend Alerts
 
 1. First use tools described above to track down the source of an issue.
-    a. Look up the error in [Sentry](http://sentry.vfs.va.gov/vets-gov/). You can find expanded error details, stack traces, and parameters in Sentry. A good query to start with is searching for the 'Mobile' namespace sorted by 'Last Seen'. Add more filters by toggling open the search builder sidebar on the right of the search field.
-    b. [Loki logs via Grafana](http://grafana.vfs.va.gov/) can help you find more data or trace the requests before the error occurred.
-    c. Our [Datadog dashboard](https://app.datadoghq.com/dashboard/9nz-cn7-ws6/mobile-api-dashboard?from_ts=1637771308851&to_ts=1637774908851&live=true) offers a wider metric based view of how often the issue has been occurring. It's also the first place to look for latency issues and to check if an upstream service is down.
-    d. [Datadog's Application Performance Management tool](https://app.datadoghq.com/apm/service/vets-api/rack.request?env=production&topGraphs=latency%3Alatency%2CbreakdownAs%3Apercentage%2Cerrors%3Acount%2Chits%3Acount&start=1642522116800&end=1642525716800&paused=false) is also configured for vets-api. It breaks down the ruby, database, and upstream calls down so you can determine the source latency. The APM also provides p50 and p99 latency data to let us know how slow the worst 50% and 1% of calls are doing.
+    1. Look up the error in [Sentry](http://sentry.vfs.va.gov/vets-gov/). You can find expanded error details, stack traces, and parameters in Sentry. A good query to start with is searching for the 'Mobile' namespace sorted by 'Last Seen'. Add more filters by toggling open the search builder sidebar on the right of the search field.
+    2. [Loki logs via Grafana](http://grafana.vfs.va.gov/) can help you find more data or trace the requests before the error occurred.
+    3. Our [Datadog dashboard](https://app.datadoghq.com/dashboard/9nz-cn7-ws6/mobile-api-dashboard?from_ts=1637771308851&to_ts=1637774908851&live=true) offers a wider metric based view of how often the issue has been occurring. It's also the first place to look for latency issues and to check if an upstream service is down.
+    4. [Datadog's Application Performance Management tool](https://app.datadoghq.com/apm/service/vets-api/rack.request?env=production&topGraphs=latency%3Alatency%2CbreakdownAs%3Apercentage%2Cerrors%3Acount%2Chits%3Acount&start=1642522116800&end=1642525716800&paused=false) is also configured for vets-api. It breaks down the ruby, database, and upstream calls down so you can determine the source latency. The APM also provides p50 and p99 latency data to let us know how slow the worst 50% and 1% of calls are doing.
 2. If you've determined that the source of the issue is an upstream service contact the [relevant party](https://docs.google.com/document/d/11-AzvvQsiPD47AQebcYeZML-NDHWDhz5-RTn0RnvlX4/edit#heading=h.hz3tr392i4no).
 3. If you believe a forward proxy is down or having trouble connecting to the service. Then contact the Operations team via DSVA Slack's [#vfs-platform-support](https://dsva.slack.com/archives/CBU0KDSB1) channel. To open a support ticket type `/support`. This will open a modal window with a form rather than posting a Slack message. For the 'I need help from' field select 'Operations Team'. Then add the details in the 'Summary of request' field.
 4. Finally if the error is not from the API, a forward proxy connection to an upstream service, or an upstream service itself but rather an issue with infrastructure that we (and VSP/VFS) control then a SNOW ticket should be opened. Only a DSVA team member can do this. Reach out to a stakeholder and have them open a SNOW ticket for you (currently [Travis Newby](https://dsva.slack.com/team/U020ZP3JK63) or [Leanna Miller](https://dsva.slack.com/team/U019Q7S7B7X)).

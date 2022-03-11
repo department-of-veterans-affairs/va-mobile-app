@@ -2,9 +2,9 @@
 
 ## Prerequisites
 This guide assumes that you have locally:
-* Configured and turned on the SOCKS proxy
-* Checked out the DevOps repo
-* Configured your AWS credentials and MFA
+* Configured and turned on the [SOCKS proxy](https://depo-platform-documentation.scrollhelp.site/getting-started/Internal-tools-access-via-SOCKS-proxy.1821081710.html)
+* Checked out the [DevOps repo](https://github.com/department-of-veterans-affairs/devops)
+* Configured your [AWS credentials and MFA](https://github.com/department-of-veterans-affairs/devops#setup)
 
 ## Review Instances
 
@@ -22,7 +22,7 @@ The API backing it will have a URL with '-api' appended to the first part of the
 
 ### API Calls
 #### API Tokens
-You can obtain a token from the token generator app on Heroku. User credentials are in 1Password. If you do not yet have access to the shared 1Password 'VA.gov' vault ask a teammate to fetch the credentials you need.
+You can obtain a token from the [token generator](https://va-mobile-cutter.herokuapp.com) app on Heroku. User credentials are in 1Password. If you do not yet have access to the shared 1Password 'VA.gov' vault ask a teammate to fetch the credentials you need.
 
 #### Making Requests
 As with the URLs you've been accessing so far, all API requests must go through the SOCKS proxy. You can configure this in your API client (Postman, Insomnia, Paw, etc). The proxy URL is `socks5h://127.0.0.1:2001`. Requests, as in staging and production, require that you include an 'Authorization' header. An example request using the SOCKS proxy to the user endpoint would look like below.
