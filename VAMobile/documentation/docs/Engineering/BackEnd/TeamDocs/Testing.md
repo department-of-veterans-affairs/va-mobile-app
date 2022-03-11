@@ -63,7 +63,7 @@ Once you’ve started a Rails console you’ll need a user session to test most 
 irb(main):001:0> user = IAMSSOeOAuth::SessionManager.new('EESBp0xiLD6p1g86q4g1').find_or_create_user
 ```
 
-## Stagin Instances
+## Staging Instances
 
 ### API Calls
 API calls are made in a similar way to the review instances above. Note that your API client may not connect to staging if going through the SOCKS proxy. The API URL for staging is http://staging-api.va.gov/mobile.
