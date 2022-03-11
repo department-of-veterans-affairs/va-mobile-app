@@ -40,12 +40,12 @@ You can SSH into the review instance and test code directly in a review instance
 
 ![](../../../../static/img/backend/jenkins-console-output.png)
 
-Then search for “SSH at”.
+Then search for "SSH at".
 ```
 07:15:00  [0;32m  msg: Review instance available at http://9bbbb1184faf0a6cb1c551390c073923.review.vetsgov-internal/, or via SSH at ip-172-30-18-119.us-gov-west-1.compute.internal[0m
 ```
 
-In the example above ‘ip-172-30-18-119.us-gov-west-1.compute.internal’ is the address for the instance. To open a Rails console SSH in and then run the console Docker command as below.
+In the example above 'ip-172-30-18-119.us-gov-west-1.compute.internal' is the address for the instance. To open a Rails console SSH in and then run the console Docker command as below.
 ```
 ssh ip-172-30-18-119.us-gov-west-1.compute.internal
 cd ~/vets-api; docker-compose -f docker-compose.review.yml exec vets-api bundle exec rails c
@@ -57,7 +57,7 @@ irb(main):001:0>
 
 ### User sessions
 
-Once you’ve started a Rails console you’ll need a user session to test most features. As with the API calls you’ll need an API token. Given a token the IAM session manager will create a user for you.
+Once you've started a Rails console you'll need a user session to test most features. As with the API calls you'll need an API token. Given a token the IAM session manager will create a user for you.
 
 ```
 irb(main):001:0> user = IAMSSOeOAuth::SessionManager.new('EESBp0xiLD6p1g86q4g1').find_or_create_user
@@ -76,7 +76,7 @@ curl --request GET \
 
 ### Console Access
 
-To connect to a staging instance, open a terminal locally and enter ‘mfa’ followed by a code from a 2FA tool such as [Authy](https://authy.com/). Change into the devops repo dir, and run the SSM script with ‘staging’ as an argument. The script will return a numbered list of available instances.
+To connect to a staging instance, open a terminal locally and enter 'mfa' followed by a code from a 2FA tool such as [Authy](https://authy.com/). Change into the devops repo dir, and run the SSM script with 'staging' as an argument. The script will return a numbered list of available instances.
 
 ```
 mfa {2fa code}
