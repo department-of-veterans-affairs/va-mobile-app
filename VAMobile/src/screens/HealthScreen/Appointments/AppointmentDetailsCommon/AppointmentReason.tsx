@@ -29,7 +29,7 @@ const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages })
       <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
         {t('upcomingAppointmentDetails.reason')}
       </TextView>
-      <TextView variant="MobileBody">{`${reason}${messageText}`}</TextView>
+      <TextView variant="MobileBody">{`${reason || ''}${messageText}`}</TextView>
     </Box>
   )
 }
