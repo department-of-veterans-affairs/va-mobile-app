@@ -31,7 +31,7 @@ const t = useTranslation(NAMESPACE.CLAIMS)
 For basic usage, the translation function takes in the desired key as the only argument and will resolve to the display value associated with that key.
 
 ```
-t(claimDetails.needHelp)
+t('claimDetails.needHelp')
 ``` 
 
 This value can be used like any other string, either placed directly into a TextView component:
