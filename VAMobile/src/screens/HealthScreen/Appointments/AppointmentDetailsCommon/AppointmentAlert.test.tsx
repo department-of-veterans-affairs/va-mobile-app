@@ -2,20 +2,32 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { context, render, RenderAPI } from 'testUtils'
+import {context, findByTypeWithSubstring, render, RenderAPI} from 'testUtils'
 
 import { InitialState } from 'store/slices'
 import AppointmentAlert from './AppointmentAlert'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
+import {
+  AppointmentLocation,
+  AppointmentStatus,
+  AppointmentStatusConstants,
+  AppointmentStatusDetailType,
+  AppointmentStatusDetailTypeConsts,
+} from 'store/api/types/AppointmentData'
+import { AlertBox, TextView } from 'components'
+
 
 context('AppointmentAlert', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (): void => {
+  const initializeTestInstance = (status: AppointmentStatus = AppointmentStatusConstants.BOOKED, statusDetail: AppointmentStatusDetailType = AppointmentStatusDetailTypeConsts.CLINIC_REBOOK, location?: AppointmentLocation): void => {
     props ={
-      ...defaultAppointmentAttributes
+      ...defaultAppointmentAttributes,
+      status,
+      statusDetail,
+      location: location || defaultAppointmentAttributes.location,
     }
 
     component = render(<AppointmentAlert attributes={props} />, {
@@ -27,11 +39,35 @@ context('AppointmentAlert', () => {
     testInstance = component.container
   }
 
-  beforeEach(() => {
+  it('initializes correctly', async () => {
     initializeTestInstance()
+    expect(component).toBeTruthy()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('should not show alert for booked appointments', async () => {
+    initializeTestInstance()
+    const alerts = testInstance.findAllByType(AlertBox)
+    expect(alerts.length).toEqual(0)
+  })
+
+  describe('when an appointment is CANCELLED', () => {
+    describe('when a facility cancels an appointment', () => {
+      it('should display facility name', async () => {
+        initializeTestInstance(AppointmentStatusConstants.CANCELLED)
+        expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
+      })
+
+      it('should display "facility"', async () => {
+        initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK, { name: ''})
+        expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled this appointment.')).toBeTruthy()
+      })
+    })
+
+    describe('when you cancels an appointment', () => {
+      it('should display "You"', async () => {
+        initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)
+        expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled this appointment.')).toBeTruthy()
+      })
+    })
   })
 })

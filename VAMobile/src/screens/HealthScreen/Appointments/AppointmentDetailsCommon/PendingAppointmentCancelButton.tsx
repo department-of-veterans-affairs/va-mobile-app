@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 
-import { AppointmentAttributes, AppointmentStatusConstants } from 'store/api'
+import { AppointmentAttributes } from 'store/api'
+import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
