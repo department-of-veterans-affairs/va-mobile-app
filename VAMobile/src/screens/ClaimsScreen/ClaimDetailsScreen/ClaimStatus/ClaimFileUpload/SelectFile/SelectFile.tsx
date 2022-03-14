@@ -27,9 +27,14 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+      headerLeft: (props): ReactNode => <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
+
+  const onBack = () => {
+    snackBar.hideAll()
+    navigation.goBack()
+  }
 
   const onFileFolder = async (): Promise<void> => {
     const {
@@ -53,6 +58,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       }
 
       setError('')
+      snackBar.hideAll()
       navigateTo('UploadFile', { request, fileUploaded: document })()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
