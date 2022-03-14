@@ -20,10 +20,12 @@ export const AppointmentStatusConstants: {
   BOOKED: AppointmentStatus
   CANCELLED: AppointmentStatus
   SUBMITTED: AppointmentStatus
+  HIDDEN: AppointmentStatus
 } = {
   BOOKED: 'BOOKED',
   CANCELLED: 'CANCELLED',
   SUBMITTED: 'SUBMITTED',
+  HIDDEN: 'HIDDEN',
 }
 
 export const AppointmentStatusDetailTypeConsts: {
@@ -105,7 +107,7 @@ export type AppointmentLocation = {
 
 export type AppointmentTimeZone = 'Pacific/Honolulu' | 'America/Anchorage' | 'America/Los_Angeles' | 'America/Phoenix' | 'America/Denver' | 'America/Chicago' | 'America/New_York'
 
-export type AppointmentStatus = 'BOOKED' | 'CANCELLED' | 'SUBMITTED'
+export type AppointmentStatus = 'BOOKED' | 'CANCELLED' | 'SUBMITTED' | 'HIDDEN'
 
 export type AppointmentStatusDetailType = 'CANCELLED BY CLINIC & AUTO RE-BOOK' | 'CANCELLED BY CLINIC' | 'CANCELLED BY PATIENT & AUTO-REBOOK' | 'CANCELLED BY PATIENT'
 
