@@ -19,7 +19,7 @@ const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => 
   const { proposedTimes } = attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending && !!proposedTimes?.length) {
-    proposedTimes?.filter(({ date }) => {
+    const filteredTimes = proposedTimes?.filter(({ date }) => {
       return !!date
     })
 
@@ -28,7 +28,7 @@ const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => 
         <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {t('appointments.pending.preferredDateAndTime')}
         </TextView>
-        {proposedTimes?.map(({ date, time }, index) => {
+        {filteredTimes?.map(({ date, time }, index) => {
           const timeSlot = time === AppointmentProposedTimesPeriodConstant.AM ? t('appointments.pending.inMorning') : t('appointments.pending.inAfternoon')
           return (
             <TextView key={index} variant="MobileBody">

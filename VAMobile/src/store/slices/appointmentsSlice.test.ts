@@ -14,7 +14,7 @@ import {
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import _ from 'underscore'
-import { AppointmentsList, AppointmentsMetaPagination } from '../api'
+import { AppointmentMessages, AppointmentsList, AppointmentsMetaPagination } from '../api'
 import { AppointmentTypeConstants, AppointmentStatusConstants, AppointmentStatusDetailTypeConsts } from 'store/api/types'
 import { InitialState } from 'store/slices'
 
@@ -792,6 +792,21 @@ context('appointments', () => {
 
   describe('getAppointmentMessages', () => {
     it('should get appointment messages for an appointmentID', async () => {
+
+      const mockMessageData: Array<AppointmentMessages> = [
+        {
+          attributes: {
+            messageText: 'Testing',
+            messageDateTime: '11/11/2019 12:26:13',
+            appointmentRequestId: '8a4886886e4c8e22016e5bee49c30007',
+            date: '2019-11-11T12:26:13.931+0000'
+          }
+        }
+      ]
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointment_requests/1/messages')
+          .mockResolvedValue({ data: mockMessageData })
+
       const store = realStore()
       await store.dispatch(getAppointmentMessages('1'))
       const actions = store.getActions()
@@ -800,11 +815,12 @@ context('appointments', () => {
       expect(startAction).toBeTruthy()
       expect(startAction?.state.appointments.messagesLoading).toBeTruthy()
 
-      expect(api.get as jest.Mock).toBeCalledWith(`/v0/appointment_requests/1/messages`)
-
       const finishAction = _.find(actions, { type: ActionTypes.APPOINTMENTS_FINISH_GET_APPOINTMENT_MESSAGES })
       expect(finishAction).toBeTruthy()
       expect(finishAction?.state.appointments.messagesLoading).toBeFalsy()
+
+      const { appointments } = store.getState()
+      expect(appointments.appointmentMessagesById['1']).toEqual(mockMessageData)
     })
   })
 })

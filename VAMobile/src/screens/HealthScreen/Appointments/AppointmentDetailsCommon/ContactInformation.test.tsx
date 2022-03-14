@@ -2,10 +2,12 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { context, render, RenderAPI } from 'testUtils'
+import { context, findByTypeWithSubstring, render, RenderAPI } from 'testUtils'
 
 import { InitialState } from 'store/slices'
 import ContactInformation from './ContactInformation'
+import { TextView } from 'components'
+import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 
 context('ContactInformation', () => {
   let component: RenderAPI
@@ -16,7 +18,9 @@ context('ContactInformation', () => {
     props ={
       patientEmail: 'test@test.com',
       patientPhoneNumber: '145-141-2523',
-      bestTimeToCall: 'Noon'
+      bestTimeToCall: ['Noon'],
+      isPending: true,
+      status: AppointmentStatusConstants.SUBMITTED
     }
 
     component = render(<ContactInformation attributes={props} />, {
@@ -34,5 +38,11 @@ context('ContactInformation', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should show email, phone number, and best time to call', async () => {
+    expect(findByTypeWithSubstring(testInstance, TextView, 'test@test.com')).toBeTruthy()
+    expect(findByTypeWithSubstring(testInstance, TextView, '145-141-2523')).toBeTruthy()
+    expect(findByTypeWithSubstring(testInstance, TextView, 'Noon')).toBeTruthy()
   })
 })
