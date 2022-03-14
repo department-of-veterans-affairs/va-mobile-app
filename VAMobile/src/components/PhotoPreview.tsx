@@ -100,7 +100,6 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
 
   const textProps: TextViewProps = {
     variant: 'HelperText',
-    color: 'brandedPrimaryText',
   }
 
   return (

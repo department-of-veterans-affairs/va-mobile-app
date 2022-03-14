@@ -249,7 +249,7 @@ export const darkTheme = {
     input: colors.grayLight,
     inputFocused: colors.grayLightest,
     inputRequired: colors.grayLightest,
-    brandedPrimaryText: colors.grayLightest,
+    brandedPrimaryText: colors.grayDark,
     segmentControllerActive: colors.grayLightest,
     segmentControllerInactive: colors.grayLighter,
     snackBarBtn: colors.primary,
