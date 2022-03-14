@@ -191,7 +191,7 @@ let theme: VATheme = {
     snackBarMarginBottom: 0,
     snackBarMarginLeft: 10,
     snackBarMarginRight: 10,
-    snackBarButtonTopMargin: 5,
+    snackBarButtonTopBottomMargin: 5,
     snackBarConfirmBtnMarginRight: 15,
     snackBarVerticalMargin: 10,
     snackBarBorderRadius: 4,
