@@ -1,4 +1,4 @@
-# Iam
+# IAM
 
 ## Authentication Sequence Diagram
 
