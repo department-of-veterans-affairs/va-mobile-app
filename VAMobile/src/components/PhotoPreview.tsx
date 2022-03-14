@@ -1,17 +1,16 @@
 import { Asset } from 'react-native-image-picker/src/types'
 import { Image, Pressable, PressableProps } from 'react-native'
+import React, { FC, ReactNode, useState } from 'react'
+import styled from 'styled-components'
+
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { bytesToFinalSizeDisplay } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
-import React, { FC, ReactNode, useState } from 'react'
 import TextView, { TextViewProps } from './TextView'
-import styled from 'styled-components'
-import theme from 'styles/themes/standardTheme'
 
 type PhotoPreviewProps = {
   /** width of the photo */
@@ -46,39 +45,39 @@ const StyledImage = styled(Image)<StyledImageProps>`
 const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, testID }) => {
   const { colors: themeColor, dimensions: themeDim } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
-  const { showActionSheetWithOptions } = useActionSheet()
   const [selected, setSelected] = useState(false)
   const uri = image.uri
+  const confirmAlert = useDestructiveAlert()
 
   const photo = (): ReactNode => {
-    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={theme.dimensions.photoPreviewBorderRadius} />
+    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={themeDim.photoPreviewBorderRadius} />
   }
 
   const onPress = (): void => {
     setSelected(true)
-    const title = t('fileUpload.deletePopup')
     const message = lastPhoto ? t('fileUpload.deletePopupNavWarning') : undefined
-    const options = [t('fileUpload.delete'), t('common:cancel')]
-    showActionSheetWithOptions(
-      {
-        title,
-        message,
-        options,
-        cancelButtonIndex: 1,
-        destructiveButtonIndex: 0,
-      },
-      (buttonIndex) => {
-        switch (buttonIndex) {
-          case 0:
+
+    confirmAlert({
+      title: t('fileUpload.deletePopup'),
+      message,
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('common:cancel'),
+          onPress: () => {
+            setSelected(false)
+          },
+        },
+        {
+          text: t('fileUpload.delete'),
+          onPress: () => {
             setSelected(false)
             onDeleteCallback()
-            break
-          case 1:
-            setSelected(false)
-            break
-        }
-      },
-    )
+          },
+        },
+      ],
+    })
   }
 
   const pressableProps: PressableProps = { onPress }
