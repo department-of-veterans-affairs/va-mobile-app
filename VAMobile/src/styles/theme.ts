@@ -271,7 +271,7 @@ export type VATheme = {
     snackBarIconSize: number
     snackBarBottomOffset: number
     snackBarBottomOffsetWithNav: number
-    snackBarButtonTopMargin: number
+    snackBarButtonTopBottomMargin: number
     snackBarConfirmBtnMarginRight: number
     snackBarIconTopMargin: number
     menuShadowX: number
