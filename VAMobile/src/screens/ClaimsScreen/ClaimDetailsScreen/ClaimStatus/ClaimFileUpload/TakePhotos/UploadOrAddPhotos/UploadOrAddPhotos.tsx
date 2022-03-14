@@ -69,7 +69,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         {
           text: t('fileUpload.discard.photos'),
           onPress: () => {
-            snackBar.hideAll(), navigation.navigate('FileRequestDetails', { request })
+            snackBar.hideAll()
+            navigation.navigate('FileRequestDetails', { request })
           },
         },
       ],
