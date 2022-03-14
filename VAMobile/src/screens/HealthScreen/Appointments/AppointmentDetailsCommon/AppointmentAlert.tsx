@@ -16,10 +16,11 @@ const AppointmentAlert: FC<AppointmentAlertProps> = ({ attributes }) => {
 
   const { status, statusDetail, location } = attributes || ({} as AppointmentAttributes)
   const appointmentBooked = status === AppointmentStatusConstants.BOOKED
+  const appointmentHidden = status === AppointmentStatusConstants.HIDDEN
   const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
-  // dont show alerts for booked appointments
-  if (appointmentBooked) {
+  // dont show alerts for booked or hidden appointments
+  if (appointmentBooked || appointmentHidden) {
     return <></>
   }
 

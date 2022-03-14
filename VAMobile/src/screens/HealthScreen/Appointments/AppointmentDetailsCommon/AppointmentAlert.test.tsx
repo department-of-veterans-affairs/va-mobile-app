@@ -50,6 +50,12 @@ context('AppointmentAlert', () => {
     expect(alerts.length).toEqual(0)
   })
 
+  it('should not show alert for hidden appointments', async () => {
+    initializeTestInstance(AppointmentStatusConstants.HIDDEN)
+    const alerts = testInstance.findAllByType(AlertBox)
+    expect(alerts.length).toEqual(0)
+  })
+
   describe('when an appointment is CANCELLED', () => {
     describe('when a facility cancels an appointment', () => {
       it('should display facility name', async () => {
@@ -68,6 +74,13 @@ context('AppointmentAlert', () => {
         initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)
         expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled this appointment.')).toBeTruthy()
       })
+    })
+  })
+
+  describe('when an appointment is SUBMITTED', () => {
+    it('should display facility name', async () => {
+      initializeTestInstance(AppointmentStatusConstants.SUBMITTED)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'The time and date of this appointment are still to be determined.')).toBeTruthy()
     })
   })
 })
