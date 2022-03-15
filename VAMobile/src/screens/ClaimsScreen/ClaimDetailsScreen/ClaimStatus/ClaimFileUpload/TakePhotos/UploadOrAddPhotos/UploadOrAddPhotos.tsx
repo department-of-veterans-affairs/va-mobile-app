@@ -270,6 +270,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         <Box
           justifyContent="space-between"
           flexDirection="row"
+          flexWrap="wrap"
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.condensedMarginBetween}
           mb={theme.dimensions.standardMarginBetween}>

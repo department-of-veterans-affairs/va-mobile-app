@@ -112,7 +112,9 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
           {!selected && <VAIcon name={'Delete'} width={themeDim.photoPreviewIconSize} height={themeDim.photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
-      <TextView {...textProps}>{image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined}</TextView>
+      <Box width={width} flexDirection="row">
+        <TextView {...textProps}>{image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined}</TextView>
+      </Box>
     </Pressable>
   )
 }
