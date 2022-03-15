@@ -36,13 +36,15 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
-  const { request } = route.params
+  const { request, focusOnSnackbar } = route.params
   const { displayName } = request
   const [error, setError] = useState('')
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+      headerLeft: (props): ReactNode => (
+        <BackButton onPress={onBack} focusOnButton={focusOnSnackbar ? false : true} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
     })
   })
 

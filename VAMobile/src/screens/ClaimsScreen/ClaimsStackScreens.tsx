@@ -51,9 +51,11 @@ export type ClaimsStackParamList = {
   }
   TakePhotos: {
     request: ClaimEventData
+    focusOnSnackbar?: boolean
   }
   SelectFile: {
     request: ClaimEventData
+    focusOnSnackbar?: boolean
   }
   UploadOrAddPhotos: {
     request: ClaimEventData

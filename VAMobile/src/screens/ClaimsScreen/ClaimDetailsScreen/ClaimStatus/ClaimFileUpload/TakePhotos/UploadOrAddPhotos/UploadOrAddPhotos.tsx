@@ -229,7 +229,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
       showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
-      navigation.goBack()
+      navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
       setImagesList(response)

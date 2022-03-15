@@ -23,11 +23,13 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
   const [error, setError] = useState('')
-  const { request } = route.params
+  const { request, focusOnSnackbar } = route.params
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+      headerLeft: (props): ReactNode => (
+        <BackButton onPress={onBack} focusOnButton={focusOnSnackbar ? false : true} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
     })
   })
 
