@@ -56,6 +56,7 @@ export type VATextColors = {
   snackBarBtn: string
   backButton: string
   snackBarText: string
+  bodyText: string
 }
 
 export type VAIconColors = {

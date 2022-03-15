@@ -275,10 +275,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.condensedMarginBetween}
           mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="HelperText" color={'brandedPrimaryText'}>
+          <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
           </TextView>
-          <TextView variant="HelperText" color={'brandedPrimaryText'}>
+          <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>
         </Box>
