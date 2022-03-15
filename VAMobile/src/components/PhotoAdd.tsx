@@ -47,7 +47,9 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress, testID }) => {
       <Box {...boxProps}>
         <VAIcon name={'Add'} width={32} height={32} fill={themeColor.icon.photoAdd} />
       </Box>
-      <TextView {...textProps}>{t('fileUpload.addPhoto')}</TextView>
+      <Box width={width} flexDirection="row">
+        <TextView {...textProps}>{t('fileUpload.addPhoto')}</TextView>
+      </Box>
     </Pressable>
   )
 }
