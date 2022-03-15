@@ -69,6 +69,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         {
           text: t('fileUpload.discard.photos'),
           onPress: () => {
+            snackBar.hideAll()
             navigation.navigate('FileRequestDetails', { request })
           },
         },
@@ -227,7 +228,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
-      navigation.goBack()
+      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
+      navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
       setImagesList(response)
