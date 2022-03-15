@@ -120,7 +120,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   const onFileDelete = () => {
     showSnackBar(t('common:file.deleted'), dispatch, undefined, true, false, false)
-    navigation.navigate('SelectFile',{request,focusOnSnackbar: true})
+    navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
   }
 
   const pickerField: Array<FormFieldType<unknown>> = [
