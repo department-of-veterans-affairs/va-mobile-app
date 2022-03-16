@@ -40,6 +40,9 @@ See [Issue Tracking](https://github.com/department-of-veterans-affairs/va.gov-te
 ## Screen shot(s) and additional information
 <!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. -->
 
-## Additional Tasks
-- [ ] Add additional labels (i.e. front-end, back-end)
-- [ ] Make sure to add ticket to the Bug Backlog on the VA-Mobile-Eng board
+## Ticket Checklist
+- [ ] Steps to reproduce are defined
+- [ ] Desired behavior is added
+- [ ] Labels added (front-end, back-end, feature, bug)
+- [ ] Linked to an Epic (General Tech/Design Debt & Maintenance) 
+
