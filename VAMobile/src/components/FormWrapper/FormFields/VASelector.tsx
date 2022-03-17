@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon, VAIconProps } from '../../index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateInputTestID, renderInputError } from './formFieldUtils'
+import { renderInputError } from './formFieldUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export enum SelectorType {
