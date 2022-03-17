@@ -24,11 +24,6 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
   const { condensedMarginBetween, contentMarginBottom, contentMarginTop, standardMarginBetween, gutter } = theme.dimensions
 
-  // need to get the claim to keep track of if/when files were uploaded for a request
-  // useEffect(() => {
-  //   dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID))
-  // }, [dispatch, claimID])
-
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   const getRequests = (): Array<SimpleListItemObj> => {
