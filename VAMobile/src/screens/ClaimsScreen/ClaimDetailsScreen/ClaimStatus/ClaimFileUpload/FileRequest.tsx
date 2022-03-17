@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
-import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
+import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<ClaimsStackParamList, 'FileRequest'>
 
@@ -19,27 +19,20 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
-  const dispatch = useAppDispatch()
   const { claimID } = route.params
   const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
   const { condensedMarginBetween, contentMarginBottom, contentMarginTop, standardMarginBetween, gutter } = theme.dimensions
 
   // need to get the claim to keep track of if/when files were uploaded for a request
-  useEffect(() => {
-    dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID))
-  }, [dispatch, claimID])
+  // useEffect(() => {
+  //   dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID))
+  // }, [dispatch, claimID])
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   const getRequests = (): Array<SimpleListItemObj> => {
     // move uploaded requests to the end
-    requests.push(
-      requests.splice(
-        requests.findIndex((r) => r.uploaded === true),
-        1,
-      )[0],
-    )
 
     let requestNumber = 1
 
