@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon, VAIconProps } from '../../index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { renderInputError } from './formFieldUtils'
+import { generateInputTestID, renderInputError } from './formFieldUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export enum SelectorType {
@@ -102,14 +102,10 @@ const VASelector: FC<VASelectorProps> = ({
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
   const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'radio'
   const a11yState = selectorType === SelectorType.Checkbox ? { checked: selected } : { selected }
+  const resultingTestID = `${a11yLabel || t(labelKey, labelArgs)} ${error ? t('common:error', { error }) : ''}`
 
   return (
-    <TouchableWithoutFeedback
-      onPress={selectorOnPress}
-      accessibilityState={a11yState}
-      accessibilityRole={a11yRole}
-      {...hintProp}
-      {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
+    <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={a11yState} accessibilityRole={a11yRole} {...hintProp} {...testIdProps(resultingTestID)}>
       <Box>
         {!!error && <Box ml={checkboxLabelMargin + selectorWidth}>{renderInputError(theme, error)}</Box>}
         <Box flexDirection="row">
