@@ -27,8 +27,6 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   const getRequests = (): Array<SimpleListItemObj> => {
-    // move uploaded requests to the end
-
     let requestNumber = 1
 
     return map(requests, (request) => {
