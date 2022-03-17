@@ -9,6 +9,7 @@ import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimEventData } from 'store/api'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
@@ -33,10 +34,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
-  const { request, firstImageResponse } = route.params
+  const { request: originalRequest, firstImageResponse } = route.params
   const [imagesList, setImagesList] = useState([firstImageResponse])
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets ? firstImageResponse.assets[0].fileSize : 0)
+  const [request, setRequest] = useState<ClaimEventData>(originalRequest)
 
   useEffect(() => {
     navigation.setOptions({
@@ -77,8 +79,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
   useEffect(() => {
-    request.documentType = documentType
-  }, [documentType, request])
+    setRequest((prevRequest) => {
+      return {
+        ...prevRequest,
+        documentType,
+      }
+    })
+  }, [documentType])
 
   const pickerField: Array<FormFieldType<unknown>> = [
     {

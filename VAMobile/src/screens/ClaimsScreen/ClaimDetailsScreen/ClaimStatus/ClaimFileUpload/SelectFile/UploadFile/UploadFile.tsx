@@ -3,6 +3,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimEventData } from 'store/api'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,7 +16,8 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { request, fileUploaded, imageUploaded } = route.params
+  const { request: originalRequest, fileUploaded, imageUploaded } = route.params
+  const [request, setRequest] = useState<ClaimEventData>(originalRequest)
 
   useEffect(() => {
     navigation.setOptions({
@@ -29,8 +31,13 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
   useEffect(() => {
-    request.documentType = documentType
-  }, [documentType, request])
+    setRequest((prevRequest) => {
+      return {
+        ...prevRequest,
+        documentType,
+      }
+    })
+  }, [documentType])
 
   const pickerField: Array<FormFieldType<unknown>> = [
     {
