@@ -22,8 +22,9 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
-import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
+import { ClaimsStackParamList } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -41,12 +42,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const theme = useTheme()
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { showActionSheetWithOptions } = useActionSheet()
-  const { request, firstImageResponse } = route.params
+  const { request: originalRequest, firstImageResponse } = route.params
   const dispatch = useDispatch()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
   const confirmAlert = useDestructiveAlert()
+  const [request, setRequest] = useState<ClaimEventData>(originalRequest)
 
   useEffect(() => {
     navigation.setOptions({
@@ -67,6 +69,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         {
           text: t('fileUpload.discard.photos'),
           onPress: () => {
+            snackBar.hideAll()
             navigation.navigate('FileRequestDetails', { request })
           },
         },
@@ -101,8 +104,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [confirmed, setConfirmed] = useState(false)
 
   useEffect(() => {
-    request.documentType = documentType
-  }, [documentType, request])
+    setRequest((prevRequest) => {
+      return {
+        ...prevRequest,
+        documentType,
+      }
+    })
+  }, [documentType])
 
   if (loadingFileUpload) {
     return <LoadingComponent text={t('fileUpload.loading')} />
@@ -220,7 +228,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
-      navigation.goBack()
+      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
+      navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
       setImagesList(response)
@@ -263,13 +272,14 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         <Box
           justifyContent="space-between"
           flexDirection="row"
+          flexWrap="wrap"
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.condensedMarginBetween}
           mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="HelperText" color={'brandedPrimaryText'}>
+          <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
           </TextView>
-          <TextView variant="HelperText" color={'brandedPrimaryText'}>
+          <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>
         </Box>

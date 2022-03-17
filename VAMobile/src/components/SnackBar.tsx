@@ -35,15 +35,17 @@ const SnackBar: FC<ToastProps> = (toast) => {
     marginLeft: dimensions.snackBarBetweenSpace,
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: dimensions.snackBarButtonTopMargin,
+    marginTop: dimensions.snackBarButtonTopBottomMargin,
     marginRight: dimensions.snackBarConfirmBtnMarginRight,
+    marginBottom: dimensions.snackBarButtonTopBottomMargin,
   }
 
   const dismissBtnStlye: StyleProp<ViewStyle> = {
     marginLeft: dimensions.snackBarBetweenSpace,
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: dimensions.snackBarButtonTopMargin,
+    marginTop: dimensions.snackBarButtonTopBottomMargin,
+    marginBottom: dimensions.snackBarButtonTopBottomMargin,
   }
 
   const mainContainerProps: BoxProps = {
@@ -63,7 +65,8 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const messageContainerProps: BoxProps = {
     flexDirection: 'row',
-    mt: dimensions.snackBarButtonTopMargin,
+    mt: dimensions.snackBarButtonTopBottomMargin,
+    mb: dimensions.snackBarButtonTopBottomMargin,
     alignItems: 'center',
   }
 
