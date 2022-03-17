@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
