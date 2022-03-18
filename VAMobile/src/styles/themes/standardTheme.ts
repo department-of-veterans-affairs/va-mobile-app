@@ -138,7 +138,6 @@ let theme: VATheme = {
     messagesDecoratorMarginLeft: 16,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
-    pickerLabelMargin: 9,
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
     navBarHeight: 56,

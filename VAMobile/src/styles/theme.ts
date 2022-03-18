@@ -210,7 +210,6 @@ export type VATheme = {
     messagesDecoratorMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
-    pickerLabelMargin: number
     checkboxLabelMargin: number
     navigationBarIconMarginTop: number
     touchableMinHeight: number
