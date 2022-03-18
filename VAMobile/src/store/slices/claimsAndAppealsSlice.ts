@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import _, { filter, map } from 'underscore'
+import { find, map, sortBy } from 'underscore'
 
 import * as api from '../api'
 import { AppThunk } from 'store'
@@ -15,6 +15,7 @@ import {
   ClaimsAndAppealsGetData,
   ClaimsAndAppealsGetDataMetaPagination,
   ClaimsAndAppealsList,
+  FILE_REQUEST_STATUS,
   ScreenIDTypes,
 } from 'store/api/types'
 import { Asset } from 'react-native-image-picker'
@@ -25,7 +26,7 @@ import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { FILE_REQUEST_STATUS } from 'utils/claims'
+
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -107,7 +108,7 @@ const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
 }
 
 export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): ClaimsAndAppealsList => {
-  return _.sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
+  return sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
     return new Date(claimAndAppeal.attributes.updatedAt)
   }).reverse()
 }
@@ -532,7 +533,8 @@ export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {
   await logAnalyticsEvent(Events.vama_claim_file_request())
 }
 
-const getDocuments = (
+// creates the documents array after submitting a file request
+const createFileRequestDocumentsArray = (
   files: Array<Asset> | Array<DocumentPickerResponse>,
   trackedItemId: number | undefined,
   documentType: string,
@@ -547,13 +549,13 @@ const getDocuments = (
       name = item.name
     }
 
-    const fileType = filter(DocumentTypes526, (type) => {
+    const fileType = find(DocumentTypes526, (type) => {
       return type.value === documentType
     })
 
     return {
       trackedItemId,
-      fileType: fileType.length > 0 ? fileType[0].label : '',
+      fileType: fileType ? fileType.label : '',
       filename: name,
       documentType,
       uploadDate,
@@ -677,7 +679,7 @@ const claimsAndAppealsSlice = createSlice({
         state.claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
         state.claim.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
 
-        state.claim.attributes.eventsTimeline[indexOfRequest].documents = getDocuments(
+        state.claim.attributes.eventsTimeline[indexOfRequest].documents = createFileRequestDocumentsArray(
           files || [],
           request?.trackedItemId || undefined,
           request?.documentType || '',

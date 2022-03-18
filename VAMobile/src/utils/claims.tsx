@@ -3,23 +3,8 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
-import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
+import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
-
-export const FILE_REQUEST_TYPE: {
-  STILL_NEED_FROM_YOU: string
-  RECEIVED_FROM_YOU: string
-} = {
-  STILL_NEED_FROM_YOU: 'still_need_from_you_list',
-  RECEIVED_FROM_YOU: 'received_from_you_list',
-}
-export const FILE_REQUEST_STATUS: {
-  NEEDED: string
-  SUBMITTED_AWAITING_REVIEW: string
-} = {
-  NEEDED: 'NEEDED',
-  SUBMITTED_AWAITING_REVIEW: 'SUBMITTED_AWAITING_REVIEW',
-}
 
 /** function that returns the tracked items that need uploads from a claimant or have had uploads from a claimant */
 export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[] => {

@@ -538,3 +538,18 @@ export type ClaimDocUploadData = {
 export type ClaimDecisionResponseData = {
   data: { jobId: string }
 }
+
+export const FILE_REQUEST_TYPE: {
+  STILL_NEED_FROM_YOU: string
+  RECEIVED_FROM_YOU: string
+} = {
+  STILL_NEED_FROM_YOU: 'still_need_from_you_list',
+  RECEIVED_FROM_YOU: 'received_from_you_list',
+}
+export const FILE_REQUEST_STATUS: {
+  NEEDED: string
+  SUBMITTED_AWAITING_REVIEW: string
+} = {
+  NEEDED: 'NEEDED',
+  SUBMITTED_AWAITING_REVIEW: 'SUBMITTED_AWAITING_REVIEW',
+}
