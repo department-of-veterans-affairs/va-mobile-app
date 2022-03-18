@@ -206,6 +206,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
+    snackBar.hideAll()
     if (response && response.assets && response.assets.length + (imagesList?.length || 0) > MAX_NUM_PHOTOS) {
       setErrorMessage(t('fileUpload.tooManyPhotosError'))
     } else {
