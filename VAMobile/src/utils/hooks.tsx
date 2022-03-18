@@ -317,7 +317,7 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
             messageRef.current.measureLayout(
               scrollPoint,
               (_, y, __, height) => {
-                currentObject.scrollTo({ y: y * height, animated: false })
+                currentObject.scrollTo({ y: y, animated: false })
               },
               () => {
                 currentObject.scrollTo({ y: 0 })
