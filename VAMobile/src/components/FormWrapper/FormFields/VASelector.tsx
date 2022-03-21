@@ -56,6 +56,7 @@ const VASelector: FC<VASelectorProps> = ({
 }) => {
   const theme = useTheme()
   const t = useTranslation()
+  const iconWidth = 22
 
   const selectorOnPress = (): void => {
     if (!disabled) {
@@ -74,14 +75,14 @@ const VASelector: FC<VASelectorProps> = ({
     return {
       name,
       stroke,
-      width: 22,
+      width: iconWidth,
       height: 22,
       fill,
     } as VAIconProps
   }
 
   const errorBoxProps: BoxProps = {
-    ml: 10 + 22,
+    ml: 10 + iconWidth,
   }
 
   const selectorBoxProps: BoxProps = {
