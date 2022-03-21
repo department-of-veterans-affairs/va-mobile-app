@@ -36,20 +36,28 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
-  const { request } = route.params
+  const { request, focusOnSnackbar } = route.params
   const { displayName } = request
   const [error, setError] = useState('')
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+      headerLeft: (props): ReactNode => (
+        <BackButton onPress={onBack} focusOnButton={focusOnSnackbar ? false : true} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
     })
   })
+
+  const onBack = () => {
+    snackBar.hideAll()
+    navigation.goBack()
+  }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
+      snackBar.hideAll()
       navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
     }
   }

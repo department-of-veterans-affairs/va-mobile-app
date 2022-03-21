@@ -27,6 +27,7 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
 
     const fileButton: DefaultListItemObj = {
       textLines,
+      a11yHintText: t('fileUpload.delete.a11yHint'),
       testId: getA11yLabelText(textLines),
       decorator: ButtonDecoratorType.Delete,
       onPress: () => {

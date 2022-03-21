@@ -4,6 +4,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { ClaimsStackParamList } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
@@ -20,11 +21,12 @@ type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
 const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const { request, fileUploaded } = route.params
+  const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([])
   const confirmAlert = useDestructiveAlert()
+  const [request, setRequest] = useState<ClaimEventData>(originalRequest)
 
   useEffect(() => {
     setFilesList([fileUploaded])
@@ -83,8 +85,13 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const [confirmed, setConfirmed] = useState(false)
 
   useEffect(() => {
-    request.documentType = documentType
-  }, [documentType, request])
+    setRequest((prevRequest) => {
+      return {
+        ...prevRequest,
+        documentType,
+      }
+    })
+  }, [documentType])
 
   if (loadingFileUpload) {
     return <LoadingComponent text={t('fileUpload.loading')} />
@@ -113,7 +120,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   const onFileDelete = () => {
     showSnackBar(t('common:file.deleted'), dispatch, undefined, true, false, false)
-    navigation.goBack()
+    navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
   }
 
   const pickerField: Array<FormFieldType<unknown>> = [
