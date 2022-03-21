@@ -40,6 +40,7 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress, testID }) => {
     variant: 'HelperTextBold',
     color: 'footerButton',
     textAlign: 'center',
+    width: width,
   }
 
   return (

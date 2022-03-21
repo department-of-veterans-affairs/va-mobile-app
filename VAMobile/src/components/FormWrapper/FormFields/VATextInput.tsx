@@ -153,7 +153,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     const wrapperProps = isTextArea ? textAreaWrapperProps : getInputWrapperProps(theme, error, isFocused)
 
     let textInputBox = (
-      <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
+      <Box {...wrapperProps}>
         <Box width="100%">
           <TextInput {...inputProps} {...textAreaProps} ref={inputRef || ref} accessibilityRole={'none'} accessible={false} />
         </Box>
