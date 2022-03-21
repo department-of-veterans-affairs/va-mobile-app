@@ -3,17 +3,28 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
-import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
+import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 
 /** function that returns the tracked items that need uploads from a claimant or have had uploads from a claimant */
 export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[] => {
-  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && event.uploadsAllowed)
+  const notUploadedRequests = events.filter(
+    (event: ClaimEventData) => event.status === FILE_REQUEST_STATUS.NEEDED && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU && event.uploadsAllowed,
+  )
+  const uploadedRequests = events.filter(
+    (event: ClaimEventData) =>
+      (event.status === FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU) ||
+      event.type === FILE_REQUEST_TYPE.RECEIVED_FROM_YOU,
+  )
+
+  return [...notUploadedRequests, ...uploadedRequests]
 }
 
 /** function that returns the tracked items that need uploads from a claimant */
 export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEventData[] => {
-  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && !event.uploaded && event.uploadsAllowed)
+  return events.filter(
+    (event: ClaimEventData) => event.status === FILE_REQUEST_STATUS.NEEDED && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU && !event.uploaded && event.uploadsAllowed,
+  )
 }
 
 /** function that returns the number of tracked items that need uploads from a claimant */
