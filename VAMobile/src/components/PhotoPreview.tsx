@@ -84,6 +84,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
     onPress,
     accessibilityRole: 'button',
     accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
+    accessibilityLabel: photoPosition,
   }
 
   const boxProps: BoxProps = {
@@ -109,7 +110,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   return (
     <Pressable {...pressableProps}>
       <Box {...boxProps}>
-        <Box accessibilityLabel={photoPosition}>{photo()}</Box>
+        <Box>{photo()}</Box>
         {selected && <Box {...blueOpacity} />}
         <Box pt={themeDim.photoPreviewIconPadding} pr={themeDim.photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
           {selected && <VAIcon name={'Minus'} width={themeDim.photoPreviewIconSize} height={themeDim.photoPreviewIconSize} fill={themeColor.icon.photoAdd} />}
