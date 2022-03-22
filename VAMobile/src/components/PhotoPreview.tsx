@@ -23,8 +23,6 @@ type PhotoPreviewProps = {
   onDeleteCallback: () => void
   /** flag for whether this is the last photo available for deletion */
   lastPhoto?: boolean
-  /** TestID String */
-  testID?: string
   /** Photo Position in array */
   photoPosition?: string
 }
@@ -44,7 +42,7 @@ const StyledImage = styled(Image)<StyledImageProps>`
   border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
 `
 
-const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, testID, photoPosition }) => {
+const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
   const { colors: themeColor, dimensions: themeDim } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const [selected, setSelected] = useState(false)
