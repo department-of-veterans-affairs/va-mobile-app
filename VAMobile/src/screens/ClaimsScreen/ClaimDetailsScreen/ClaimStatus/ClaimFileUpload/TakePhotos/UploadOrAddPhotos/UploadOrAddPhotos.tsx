@@ -172,7 +172,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         return (
           /** Rightmost photo doesn't need right margin b/c of gutter margins
            * Every 3rd photo, right margin is changed to zero*/
-          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
+          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index}>
             <PhotoPreview
               width={calculatedWidth}
               height={calculatedWidth}
@@ -180,7 +180,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
               onDeleteCallback={(): void => {
                 deletePhoto(deleteCallbackIfUri, index, imagesList || [])
               }}
+              photoPosition={
+                imagesList && imagesList?.length > 1
+                  ? t('fileUpload.ofTotalPhotos', { photoNum: index + 1, totalPhotos: imagesList?.length })
+                  : t('fileUpload.ofTotalPhoto', { photoNum: index + 1, totalPhotos: imagesList?.length })
+              }
               lastPhoto={imagesList?.length === 1 ? true : undefined}
+              testID={t('fileUpload.deletePhoto.allyLabel')}
             />
           </Box>
         )
@@ -191,7 +197,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       <Box display="flex" flexDirection="row" flexWrap="wrap" mx={theme.dimensions.gutter}>
         {uploadedImages()}
         {(!imagesList || imagesList.length < MAX_NUM_PHOTOS) && (
-          <Box mt={condensedMarginBetween} accessible={true} accessibilityRole="image">
+          <Box mt={condensedMarginBetween}>
             <PhotoAdd
               width={calculatedWidth}
               height={calculatedWidth}
