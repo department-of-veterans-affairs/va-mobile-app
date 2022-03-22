@@ -110,7 +110,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const getMiddleSection = (): Array<SimpleListItemObj> => {
     return [
       { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: navigateTo('LettersOverview') },
-      { text: t('home:payments.title'), a11yHintText: t('payments.a11yHint'), onPress: navigateTo('Payments') },
+      // { text: t('home:payments.title'), a11yHintText: t('payments.a11yHint'), onPress: navigateTo('Payments') },
     ]
   }
 

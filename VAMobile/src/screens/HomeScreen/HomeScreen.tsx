@@ -52,7 +52,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
   const onHealthCare = navigateTo('HealthTab')
-  const onPayments = navigateTo('Payments')
+  // const onPayments = navigateTo('Payments')
 
   const buttonDataList: Array<SimpleListItemObj> = [
     {
@@ -117,7 +117,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
           />
-          <LargeNavButton
+          {/* <LargeNavButton
             title={t('payments.title')}
             subText={t('payments.subText')}
             onPress={onPayments}
@@ -125,7 +125,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
-          />
+          /> */}
         </Box>
         <Box my={theme.dimensions.contentMarginBottom}>
           <SimpleList items={buttonDataList} />
