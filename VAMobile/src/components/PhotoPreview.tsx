@@ -85,7 +85,6 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
     accessibilityRole: 'button',
     accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
   }
-  //`${photoPosition || ''} ${ }`
 
   const boxProps: BoxProps = {
     borderRadius: themeDim.photoPreviewBorderRadius,
