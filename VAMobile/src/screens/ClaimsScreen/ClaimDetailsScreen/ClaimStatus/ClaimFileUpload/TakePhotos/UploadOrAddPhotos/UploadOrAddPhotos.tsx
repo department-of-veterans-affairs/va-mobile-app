@@ -180,11 +180,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
               onDeleteCallback={(): void => {
                 deletePhoto(deleteCallbackIfUri, index, imagesList || [])
               }}
-              photoPosition={
-                imagesList && imagesList?.length > 1
-                  ? t('fileUpload.ofTotalPhotos', { photoNum: index + 1, totalPhotos: imagesList?.length })
-                  : t('fileUpload.ofTotalPhoto', { photoNum: index + 1, totalPhotos: imagesList?.length })
-              }
+              photoPosition={t(imagesList && imagesList?.length > 1 ? 'fileUpload.ofTotalPhotos' : 'fileUpload.ofTotalPhoto', {
+                photoNum: index + 1,
+                totalPhotos: imagesList?.length,
+              })}
               lastPhoto={imagesList?.length === 1 ? true : undefined}
             />
           </Box>
