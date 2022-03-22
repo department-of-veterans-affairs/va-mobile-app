@@ -186,7 +186,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
                   : t('fileUpload.ofTotalPhoto', { photoNum: index + 1, totalPhotos: imagesList?.length })
               }
               lastPhoto={imagesList?.length === 1 ? true : undefined}
-              testID={t('fileUpload.deletePhoto.allyLabel')}
             />
           </Box>
         )
