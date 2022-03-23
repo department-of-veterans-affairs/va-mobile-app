@@ -49,7 +49,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
 
   return (
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} alignItems={'center'}>
+      <Box display="flex" flexDirection="row" ml={10} height={theme.dimensions.headerHeight} alignItems={'center'}>
         {chevron}
         <TextView variant="ActionBar" color="backButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {t(label)}

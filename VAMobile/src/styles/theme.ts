@@ -203,16 +203,9 @@ export type VATheme = {
     buttonPadding: number
     alertBorderWidth: number
     listItemDecoratorMarginLeft: number
-    messagesDecoratorMarginLeft: number
-    noLettersPaddingY: number
-    datePickerArrowsPaddingRight: number
     pickerLabelMargin: number
-    navigationBarIconMarginTop: number
     touchableMinHeight: number
     textAreaHeight: number
-    headerButtonMargin: number
-    headerButtonPadding: number
-    textInputLabelMarginBottom: number
     phaseIndicatorRightMargin: number
     phaseIndicatorDiameter: number
     phaseIndicatorBorderWidth: number
@@ -229,19 +222,10 @@ export type VATheme = {
     tagCurvedBorder: number
     tagTopPadding: number
     tagHorizontalPadding: number
-    messagePhotoAttachmentMaxHeight: number
-    messageIconLeftMargin: number
-    messageIconWidth: number
-    messageIconHeight: number
     maxNumMessageAttachments: number
-    paginationButtonPadding: number
     photoPreviewIconSize: number
     photoPreviewBorderRadius: number
     photoPreviewIconPadding: number
-    pickerModalTopPadding: number
-    pickerModalSelectedIconWidth: number
-    pickerModalSelectedIconHeight: number
-    messageSentReadLeftMargin: number
     syncLogoSpacing: number
     navBarHeight: number
     paginationTopPadding: number
@@ -255,8 +239,6 @@ export type VATheme = {
     snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
     chevronListItemHeight: number
-    listTrashIconWidth: number
-    listTrashIconHeight: number
   }
   fontFace: {
     regular: string

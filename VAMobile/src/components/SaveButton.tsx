@@ -33,7 +33,7 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
 
   return (
     <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(a11yHint || t('save.a11yHint'))}>
-      <Box pr={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerButtonPadding}>
+      <Box pr={10} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={14}>
         <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
           {t('save')}
         </TextView>
