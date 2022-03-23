@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { bytesToFinalSizeDisplay } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
+
 import { themeFn } from 'utils/theme'
 import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
@@ -23,8 +23,8 @@ type PhotoPreviewProps = {
   onDeleteCallback: () => void
   /** flag for whether this is the last photo available for deletion */
   lastPhoto?: boolean
-  /** TestID String */
-  testID?: string
+  /** Photo Position in array */
+  photoPosition?: string
 }
 
 type StyledImageProps = {
@@ -42,7 +42,7 @@ const StyledImage = styled(Image)<StyledImageProps>`
   border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
 `
 
-const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, testID }) => {
+const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
   const { colors: themeColor, dimensions: themeDim } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const [selected, setSelected] = useState(false)
@@ -80,7 +80,12 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
     })
   }
 
-  const pressableProps: PressableProps = { onPress }
+  const pressableProps: PressableProps = {
+    onPress,
+    accessibilityRole: 'button',
+    accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
+    accessibilityLabel: photoPosition,
+  }
 
   const boxProps: BoxProps = {
     borderRadius: themeDim.photoPreviewBorderRadius,
@@ -103,7 +108,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   }
 
   return (
-    <Pressable {...pressableProps} {...testIdProps(testID || '')}>
+    <Pressable {...pressableProps}>
       <Box {...boxProps}>
         <Box>{photo()}</Box>
         {selected && <Box {...blueOpacity} />}
