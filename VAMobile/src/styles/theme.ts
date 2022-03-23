@@ -211,7 +211,6 @@ export type VATheme = {
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
     pickerLabelMargin: number
-    checkboxLabelMargin: number
     navigationBarIconMarginTop: number
     touchableMinHeight: number
     textAreaHeight: number
@@ -257,32 +256,8 @@ export type VATheme = {
     webviewButtonSize: number
     webviewButtona11ySize: number
     errorLabelBottomMargin: number
-    selectorWidth: number
-    selectorHeight: number
-    snackBarPadding: number
-    snackBarMarginBottom: number
-    snackBarMarginRight: number
-    snackBarMarginLeft: number
-    snackBarVerticalMargin: number
-    snackBarBorderRadius: number
-    snackBarBetweenSpace: number
-    snackBarShadowX: number
-    snackBarShadowY: number
-    snackBarShadowOpacity: number
-    snackBarIconSize: number
     snackBarBottomOffset: number
     snackBarBottomOffsetWithNav: number
-    snackBarButtonTopBottomMargin: number
-    snackBarConfirmBtnMarginRight: number
-    snackBarIconTopMargin: number
-    menuShadowX: number
-    menuShadowY: number
-    menuShadowOpacity: number
-    menuShadowRadius: number
-    menuOpacity: number
-    menuBorderRadius: number
-    menuItemMinWidth: number
-    menuElevation: number
     chevronListItemWidth: number
     chevronListItemHeight: number
     listTrashIconWidth: number
