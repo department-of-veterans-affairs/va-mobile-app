@@ -37,7 +37,7 @@ platform :ios do
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
     sign
     build
-    notes ||= "New QA version for " + Time.new.strftime("%m.%d.%Y")
+    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.empty?
     upload_tf(notes, "Development Team")
     upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
@@ -84,7 +84,7 @@ platform :ios do
     update_version(options[:version])
     sign
     build
-    notes ||= "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
+    notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y") if notes.empty?
     puts notes
     upload_tf(notes, options[:tfGroup])
     upload_deobfuscation_file

@@ -30,7 +30,7 @@ platform :android do
     bundle("Release")
     upload("Development Team")
     bundle("Debug")
-    notes ||= "New QA version for " + Time.new.strftime("%m.%d.%Y")
+    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.empty?
     distribute_to_firebase(notes, "qa")
     tag_build
     message = "New QA build successfully uploaded to Google Play"
@@ -63,7 +63,7 @@ platform :android do
     puts options[:psTrack]
     upload(options[:psTrack])
     bundle("Debug")
-    notes ||= "New On Demand version for " + Time.new.strftime("%m.%d.%Y")
+    notes = "New On Demand version for " + Time.new.strftime("%m.%d.%Y") if notes.empty?
     puts notes
     distribute_to_firebase(notes, "qa")
     tag_build
@@ -95,7 +95,7 @@ platform :android do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-    slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+#     slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
 # method to update the version and build in the repo

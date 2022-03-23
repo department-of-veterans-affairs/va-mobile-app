@@ -58,6 +58,9 @@ declare -a tf_opts=("Development Team" "Ad Hoc Production Testers" "IAM Group" "
 PS_TRACK="Development Team"
 declare -a ps_opts=("Ad Hoc Production Testers" "Development Team" "UAT Group" "VA Production Testers" "VA Production Testers" "Temp - Push" "508 Office")
 
+# Notes set to empty string
+NOTES=""
+
 ### Prints Illegal arg error and exits script
 ## $1: list of the possible option values
 ## $2: flag being set
