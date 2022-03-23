@@ -189,23 +189,19 @@ export type VAColorScheme = {
 export type VATheme = {
   colors: VAColorScheme
   dimensions: {
-    keyboardManagerDistanceFromTextField: number
+    attachmentIconTopMargin: number
     borderWidth: number
     focusedInputBorderWidth: number
     buttonBorderWidth: number
     gutter: number
     textIconMargin: number
-    textXPadding: number
     contentMarginTop: number
     contentMarginBottom: number
     standardMarginBetween: number
     condensedMarginBetween: number
     cardPadding: number
-    cardMargin: number
     buttonPadding: number
     alertBorderWidth: number
-    alertPaddingY: number
-    alertPaddingX: number
     listItemDecoratorMarginLeft: number
     messagesDecoratorMarginLeft: number
     noLettersPaddingY: number
@@ -222,7 +218,6 @@ export type VATheme = {
     phaseIndicatorBorderWidth: number
     phaseIndicatorIconWidth: number
     phaseIndicatorIconHeight: number
-    bulletMargin: number
     textAndButtonLargeMargin: number
     fileUploadMargin: number
     biometricsPreferenceMarginTop: number
@@ -230,9 +225,10 @@ export type VATheme = {
     headerHeight: number
     textInputMargin: number
     formMarginBetween: number
-    tagCountMinWidth: number
-    tagCountCurvedBorder: number
-    tagCountTopPadding: number
+    tagMinWidth: number
+    tagCurvedBorder: number
+    tagTopPadding: number
+    tagHorizontalPadding: number
     messagePhotoAttachmentMaxHeight: number
     messageIconLeftMargin: number
     messageIconWidth: number
@@ -249,7 +245,6 @@ export type VATheme = {
     syncLogoSpacing: number
     navBarHeight: number
     paginationTopPadding: number
-    collapsibleIconMargin: number
     loginContentMarginBottom: number
     webviewReloadButtonHeight: number
     webviewReloadButtonSize: number
