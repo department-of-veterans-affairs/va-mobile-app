@@ -129,12 +129,12 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" selectable={false}>
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')}>
+          <TextView variant="MobileBody" accessibilityRole="text" selectable={false}>
             {t('disabilityRating.learnAboutSummary')}
           </TextView>
         </Box>
@@ -152,7 +152,7 @@ const DisabilityRatingsScreen: FC = () => {
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claims:claimDetails.callVA.a11yLabel')}>
+          <TextView variant="MobileBody" selectable={false}>
             {t('claims:claimDetails.callVA')}
           </TextView>
         </Box>
@@ -185,7 +185,6 @@ const DisabilityRatingsScreen: FC = () => {
     linkUrlIconType: LinkUrlIconType.Arrow,
     numberOrUrlLink: LINK_URL_ABOUT_DISABILITY_RATINGS,
     accessibilityHint: t('disabilityRating.learnAboutLinkTitle.a11yHint'),
-    accessibilityLabel: t('disabilityRating.learnAboutLinkTitle.a11yLabel'),
   }
 
   const titleProps: TextViewProps = {

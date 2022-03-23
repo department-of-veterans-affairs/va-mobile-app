@@ -16,7 +16,7 @@ const NoClaimsAndAppealsAccess: FC = () => {
         </TextView>
       </Box>
       <TextArea>
-        <TextView {...testIdProps(t('claimsAndAppeals.noClaimsAndAppealsAccess.body.a11yLabel'))}>{t('claimsAndAppeals.noClaimsAndAppealsAccess.body')}</TextView>
+        <TextView>{t('claimsAndAppeals.noClaimsAndAppealsAccess.body')}</TextView>
         <ClickToCallPhoneNumber phone={t('claimDetails.VANumber')} displayedText={t('claimDetails.VANumberDisplayed')} />
       </TextArea>
     </VAScrollView>

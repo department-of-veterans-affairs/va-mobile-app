@@ -24,7 +24,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       // using react-navigation internal HeaderTitle component to easily maintain font and styling while being able to add an accessibilityLabel
-      headerTitle: (header) => <HeaderTitle {...testIdProps(t('contactVA.title.a11yLabel'))} headerTitle={header.children} />,
+      headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
     })
   })
 
@@ -37,10 +37,10 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
-          <TextView color="primary" variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
+          <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+          <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
             {t('contactVA.va411.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />

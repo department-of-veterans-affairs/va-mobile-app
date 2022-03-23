@@ -9,10 +9,12 @@ const NoMatchInRecords: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
-  const accordionContent = (textID: string, textA11yLabelID: string): ReactNode => {
+  const accordionContent = (textID: string, textA11yLabelID?: string): ReactNode => {
+    const a11yProps = textA11yLabelID ? { ...testIdProps(t(`noMatch.${textA11yLabelID}`)) } : {}
+
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <Box {...testIdProps(t(`noMatch.${textA11yLabelID}`))}>
+        <Box {...a11yProps}>
           <TextView variant="MobileBody">{t(`noMatch.${textID}`)}</TextView>
         </Box>
         <ClickToCallPhoneNumber phone={t('noMatch.phoneNumber')} displayedText={t('noMatch.phoneNumberDisplayed')} />
@@ -20,9 +22,11 @@ const NoMatchInRecords: FC = () => {
     )
   }
 
-  const accordionHeader = (textID: string, textA11yLabelID: string): ReactNode => {
+  const accordionHeader = (textID: string, textA11yLabelID?: string): ReactNode => {
+    const a11yProps = textA11yLabelID ? { ...testIdProps(t(`noMatch.${textA11yLabelID}`)) } : {}
+
     return (
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} {...testIdProps(t(`noMatch.${textA11yLabelID}`))}>
+      <TextView variant="MobileBodyBold" color={'primaryTitle'} {...a11yProps}>
         {t(`noMatch.${textID}`)}
       </TextView>
     )
@@ -32,12 +36,12 @@ const NoMatchInRecords: FC = () => {
     <VAScrollView {...testIdProps('Health care: No match in records')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
-          <Box {...testIdProps(t('noMatch.titleA11yLabel'))} accessibilityRole="header" accessible={true}>
+          <Box accessibilityRole="header" accessible={true}>
             <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
               {t('noMatch.title')}
             </TextView>
           </Box>
-          <Box {...testIdProps(t('noMatch.noMatchA11yLabel'))} accessible={true}>
+          <Box accessible={true}>
             <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
               {t('noMatch.noMatch')}
             </TextView>
@@ -50,24 +54,15 @@ const NoMatchInRecords: FC = () => {
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <AccordionCollapsible
-            header={accordionHeader('currentlyRegisteredPatient', 'currentlyRegisteredPatientA11yLabel')}
+            header={accordionHeader('currentlyRegisteredPatient')}
             expandedContent={accordionContent('currentlyRegisteredPatientContent', 'currentlyRegisteredPatientContentA11yLabel')}
-            testID={t('noMatch.currentlyRegisteredPatientA11yLabel')}
           />
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <AccordionCollapsible
-            header={accordionHeader('enrolledInHealthCare', 'enrolledInHealthCareA11yLabel')}
-            expandedContent={accordionContent('enrolledInHealthCareContent', 'enrolledInHealthCareContentA11yLabel')}
-            testID={t('noMatch.enrolledInHealthCareA11yLabel')}
-          />
+          <AccordionCollapsible header={accordionHeader('enrolledInHealthCare')} expandedContent={accordionContent('enrolledInHealthCareContent')} />
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <AccordionCollapsible
-            header={accordionHeader('notEnrolled', 'notEnrolledA11yLabel')}
-            expandedContent={accordionContent('notEnrolledContent', 'notEnrolledContentA11yLabel')}
-            testID={t('noMatch.notEnrolledA11yLabel')}
-          />
+          <AccordionCollapsible header={accordionHeader('notEnrolled')} expandedContent={accordionContent('notEnrolledContent')} />
         </Box>
       </Box>
     </VAScrollView>

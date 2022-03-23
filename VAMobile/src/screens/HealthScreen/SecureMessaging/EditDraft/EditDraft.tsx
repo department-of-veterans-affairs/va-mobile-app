@@ -377,11 +377,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     if (noProviderError) {
       return (
         <Box mx={theme.dimensions.gutter}>
-          <AlertBox
-            title={t('secureMessaging.composeMessage.noMatchWithProvider')}
-            text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
-            textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
-            border="error">
+          <AlertBox title={t('secureMessaging.composeMessage.noMatchWithProvider')} text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')} border="error">
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
@@ -401,10 +397,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+            <Box mt={theme.dimensions.condensedMarginBetween} accessible={true}>
               <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
             </Box>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+            <Box mt={theme.dimensions.standardMarginBetween} accessible={true}>
               <TextView>
                 <TextView variant="MobileBodyBold" color={'primaryTitle'}>
                   {t('secureMessaging.composeMessage.important')}

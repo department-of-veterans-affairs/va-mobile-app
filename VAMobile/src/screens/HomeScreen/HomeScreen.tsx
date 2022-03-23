@@ -59,9 +59,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       text: t('findLocation.title'),
       a11yHintText: t('findLocation.a11yHint'),
       onPress: onFacilityLocator,
-      testId: t('findLocation.titleA11yLabel'),
     },
-    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
+    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA },
     { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
   ]
 

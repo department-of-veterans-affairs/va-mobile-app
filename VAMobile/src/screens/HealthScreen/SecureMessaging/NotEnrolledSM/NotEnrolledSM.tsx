@@ -18,14 +18,12 @@ const NotEnrolledSM: FC = () => {
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),
     boldedText: ' ' + tc('and'),
-    a11yLabel: t('notEnrolledSM.youAreEnrolled.a11yLabel'),
   }
   const bulletTwo = {
     text: t('notEnrolledSM.youAreRegistered'),
     boldedText: ' ' + tc('and'),
-    a11yLabel: t('notEnrolledSM.youAreRegistered.a11yLabel'),
   }
-  const bulletThree = { text: t('notEnrolledSM.bothYouAndYour'), a11yLabel: t('notEnrolledSM.bothYouAndYour.a11yLabel') }
+  const bulletThree = { text: t('notEnrolledSM.bothYouAndYour') }
 
   const redirectLink = (): void => {
     launchExternalLink(LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT)
@@ -55,7 +53,7 @@ const NotEnrolledSM: FC = () => {
             <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
+            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.withSM')}
             </TextView>
             <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>

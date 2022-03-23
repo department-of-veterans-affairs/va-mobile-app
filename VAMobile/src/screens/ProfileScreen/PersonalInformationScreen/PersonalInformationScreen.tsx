@@ -195,7 +195,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   return (
     <VAScrollView {...testIdProps('Personal-information-page')}>
       <ProfileBanner />
-      <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
+      <TextView variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}
       </TextView>
 
@@ -209,7 +209,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
       <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} title={t('personalInformation.phoneNumbers')} />
 
-      <Pressable onPress={navigateTo('HowWillYou')} {...testIdProps(t('personalInformation.howWillYouUseContactInfo.a11yLabel'))} accessibilityRole="link" accessible={true}>
+      <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howWillYouUseContactInfo')}</TextView>
       </Pressable>
 

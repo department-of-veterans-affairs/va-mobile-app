@@ -35,8 +35,8 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
     if (isActiveClaim) {
       const detailsFAQListItems: Array<SimpleListItemObj> = [
-        { text: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote'), testId: t('claimDetails.whyWeCombine.a11yLabel') },
-        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: navigateTo('WhatDoIDoIfDisagreement'), testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
+        { text: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote') },
+        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: navigateTo('WhatDoIDoIfDisagreement') },
       ]
 
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false

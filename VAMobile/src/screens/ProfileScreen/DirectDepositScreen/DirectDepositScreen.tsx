@@ -86,9 +86,7 @@ const DirectDepositScreen: FC = () => {
       </Box>
       <Box accessible={true}>
         <Box mx={gutter} mt={contentMarginTop}>
-          <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
-            {t('directDeposit.viewAndEditText')}
-          </TextView>
+          <TextView variant="MobileBody">{t('directDeposit.viewAndEditText')}</TextView>
         </Box>
       </Box>
       <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />

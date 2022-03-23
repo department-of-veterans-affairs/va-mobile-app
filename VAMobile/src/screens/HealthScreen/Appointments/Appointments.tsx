@@ -84,13 +84,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     if (pastAppointmentError || upcomingAppointmentError) {
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox
-            title={t('appointments.appointmentsStatusSomeUnavailable')}
-            text={t('appointments.troubleLoadingSomeAppointments')}
-            border="error"
-            titleA11yLabel={t('appointments.appointmentsStatusSomeUnavailable.a11yLabel')}
-            textA11yLabel={t('appointments.troubleLoadingSomeAppointments.a11yLabel')}
-          />
+          <AlertBox title={t('appointments.appointmentsStatusSomeUnavailable')} text={t('appointments.troubleLoadingSomeAppointments')} border="error" />
         </Box>
       )
     }

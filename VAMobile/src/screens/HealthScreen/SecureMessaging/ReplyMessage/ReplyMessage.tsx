@@ -206,10 +206,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
           showInTextArea={false}
           a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
-          <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+          <Box mt={theme.dimensions.condensedMarginBetween} accessible={true}>
             <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
           </Box>
-          <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+          <Box mt={theme.dimensions.standardMarginBetween} accessible={true}>
             <TextView>
               <TextView variant="MobileBodyBold" color={'primaryTitle'}>
                 {t('secureMessaging.composeMessage.important')}

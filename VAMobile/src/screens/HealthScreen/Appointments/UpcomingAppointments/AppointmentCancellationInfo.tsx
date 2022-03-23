@@ -1,7 +1,7 @@
 import { useRouteNavigation } from 'utils/hooks'
 import React, { FC } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
+import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import {
   Box,
   ButtonTypesConstants,
@@ -39,14 +39,11 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     linkType: LinkTypeOptionsConstants.url,
     linkUrlIconType: LinkUrlIconType.Arrow,
     numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-    testID: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
     accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
   }
 
   let title
-  let titleA11yLabel
   let body
-  let bodyA11yLabel
 
   if (isCovidVaccine) {
     title = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title')
@@ -58,8 +55,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
         title = t('upcomingAppointmentDetails.doYouNeedToCancel')
-        body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
-        bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
+        body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: t(AppointmentTypeToID[appointmentType]) })
         break
       case AppointmentTypeConstants.COMMUNITY_CARE:
         title = t('upcomingAppointmentDetails.doYouNeedToCancel')
@@ -88,10 +84,10 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
 
   return (
     <TextArea>
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
+      <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
         {title}
       </TextView>
-      <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBody" {...testIdProps(body)} mt={theme.dimensions.standardMarginBetween}>
         {body}
       </TextView>
       {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
@@ -106,7 +102,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         </Box>
       ) : (
         <>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" {...testIdProps(name)} mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {name}
           </TextView>
           {linkOrPhone}

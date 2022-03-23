@@ -100,7 +100,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.takePhotoEachPage')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} {...testIdProps(t('fileUpload.ifMoreThan10.a11y'))}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.ifMoreThan10.1')}
           <TextView variant="MobileBodyBold">
             {t('fileUpload.ifMoreThan10.2')}

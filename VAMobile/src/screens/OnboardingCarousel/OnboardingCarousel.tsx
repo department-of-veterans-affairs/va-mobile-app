@@ -35,7 +35,6 @@ const OnboardingAppOverview: FC = () => {
       header={t('onboarding.welcomeMessage', { firstName })}
       headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
       text={t('onboarding.allInformationYouNeed')}
-      textA11yLabel={t('onboarding.allInformationYouNeed.a11yLabel')}
       testID="Onboarding-app-overview-page"
       displayLogo={true}
       centerHeader={true}

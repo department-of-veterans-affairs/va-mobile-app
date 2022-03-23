@@ -64,7 +64,7 @@
   "errors.callHelpCenter.a11yHint": "Dials this number via your device’s call function",
   "errors.callHelpCenter.button.a11yHint": "Try to reload the app",
   "errors.callHelpCenter.informationLine": "If the app still doesn't work, call our MyVA411 main information line. We're here 24/7.",
-  "errors.callHelpCenter.informationLine.a11yLabel": "If the app still doesn't work, call our My V-A 4 1 1 main information line. We're here 24 7.",
+  "errors.callHelpCenter.informationLine.a11yLabel": "If the app still doesn't work, call our My V\uFEFFA 4 1 1 main information line. We're here 24 7.",
   "errors.callHelpCenter.informationLine.number": "8006982411",
   "errors.callHelpCenter.informationLine.number.a11yLabel": "8 0 0 6 9 8 2 4 1 1. select zero",
   "errors.callHelpCenter.informationLine.numberDisplayed": "800-698-2411",

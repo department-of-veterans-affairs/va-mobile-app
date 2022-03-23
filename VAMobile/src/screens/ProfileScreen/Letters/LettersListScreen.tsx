@@ -59,7 +59,6 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
           description: t('letters.benefitVerification.description'),
           letterType,
           screenID: ScreenIDTypesConstants.BENEFIT_VERIFICATION_LETTER_SCREEN_ID,
-          descriptionA11yLabel: t('letters.benefitVerificationA11yLabel.description'),
         })
       case LetterTypeConstants.proofOfService:
         return navigateTo('GenericLetter', {
@@ -81,7 +80,6 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
           description: t('letters.minimumEssentialCoverage.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID,
-          descriptionA11yLabel: t('letters.minimumEssentialCoverageA11yLabel.description'),
         })
       default:
         return undefined

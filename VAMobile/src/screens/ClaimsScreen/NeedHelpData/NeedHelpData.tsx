@@ -26,14 +26,11 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
       numberOrUrlLink: LINK_URL_CLAIM_APPEAL_STATUS,
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
-      testID: t('appealDetails.visitVAGovA11yLabel'),
     }
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody" {...testIdProps(t('appealDetails.viewMoreDetailsA11yLabel'))}>
-          {t('appealDetails.viewMoreDetails')}
-        </TextView>
+        <TextView variant="MobileBody">{t('appealDetails.viewMoreDetails')}</TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.visitVAGovA11yHint'))} />
         </Box>
@@ -54,7 +51,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
           {t('claimDetails.needHelp')}
         </TextView>
       </Box>
-      <Box {...testIdProps(t('claimDetails.callVA.a11yLabel'))} accessible={true}>
+      <Box accessible={true}>
         <TextView variant="MobileBody">{t('claimDetails.callVA')}</TextView>
       </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>

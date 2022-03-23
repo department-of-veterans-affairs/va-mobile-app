@@ -38,7 +38,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
           <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
             {t('militaryInformation.incorrectServiceInfo')}
           </TextView>
-          <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} color="primary" variant="MobileBody" my={standardMarginBetween}>
+          <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
             {t('militaryInformation.incorrectServiceInfo.body')}
           </TextView>
           <ClickForActionLink

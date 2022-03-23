@@ -58,7 +58,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }
 
   const bulletedListOfText = [
-    { text: t('askForClaimDecision.whetherYouGetVABenefits'), a11yLabel: t('askForClaimDecision.whetherYouGetVABenefitsA11yLabel') },
+    { text: t('askForClaimDecision.whetherYouGetVABenefits') },
     { text: t('askForClaimDecision.paymentAmount') },
     { text: t('askForClaimDecision.whetherYouGetOurHelp') },
     { text: t('askForClaimDecision.dateBenefits') },
@@ -91,7 +91,6 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
         selected: haveSubmittedEvidence,
         onSelectionChange: setHaveSubmittedEvidence,
         labelKey: 'claims:askForClaimDecision.haveSubmittedAllEvidence',
-        a11yLabel: t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel'),
         a11yHint: t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint'),
         isRequiredField: true,
       },

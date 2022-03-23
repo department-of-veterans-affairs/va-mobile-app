@@ -34,17 +34,13 @@ const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => 
     <VAScrollView {...testIdProps('Successful Send Confirmation: successful-send-confirmation-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <AlertBox
-          border={'success'}
-          title={t('secureMessaging.sent.messageSent')}
-          text={t('secureMessaging.sent.threeBusinessDays')}
-          textA11yLabel={t('secureMessaging.sent.threeBusinessDays.a11y')}>
+        <AlertBox border={'success'} title={t('secureMessaging.sent.messageSent')} text={t('secureMessaging.sent.threeBusinessDays')}>
           <Box {...testIdProps(t('secureMessaging.composeMessage.important'))} accessibilityRole={'header'} accessible={true}>
             <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={theme.dimensions.standardMarginBetween}>
               {t('secureMessaging.composeMessage.important')}
             </TextView>
           </Box>
-          <Box {...testIdProps(t('secureMessaging.sent.pleaseCall.a11y'))} accessible={true} my={theme.dimensions.standardMarginBetween}>
+          <Box accessible={true} my={theme.dimensions.standardMarginBetween}>
             <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
           </Box>
           <VAButton

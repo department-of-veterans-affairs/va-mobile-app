@@ -35,7 +35,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   if (_.isEmpty(currentPageUpcomingAppointmentsByYear)) {
-    return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
+    return <NoAppointments subText={t('noAppointments.youCanSchedule')} />
   }
 
   const requestPage = (requestedPage: number) => {

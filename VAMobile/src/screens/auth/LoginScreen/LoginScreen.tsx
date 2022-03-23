@@ -90,11 +90,7 @@ const LoginScreen: FC = () => {
             buttonType={ButtonTypesConstants.buttonWhite}
             hideBorder={true}
           />
-          <Pressable
-            onPress={onFacilityLocator}
-            {...testIdProps(t('home:findLocation.titleA11yLabel'))}
-            accessibilityHint={t('home:findLocation.a11yHint')}
-            accessibilityRole="button">
+          <Pressable onPress={onFacilityLocator} accessibilityHint={t('home:findLocation.a11yHint')} accessibilityRole="button">
             <Box {...findLocationProps}>
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}

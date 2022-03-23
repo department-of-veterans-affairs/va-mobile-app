@@ -260,7 +260,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         linkType: LinkTypeOptionsConstants.url,
         linkUrlIconType: LinkUrlIconType.Arrow,
         numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-        testID: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
         accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
       }
 
@@ -336,9 +335,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             <AppointmentCancellationInfo appointment={appointment} />
           ) : (
             <TextArea>
-              <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
-                {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
-              </TextView>
+              <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
             </TextArea>
           )}
         </Box>

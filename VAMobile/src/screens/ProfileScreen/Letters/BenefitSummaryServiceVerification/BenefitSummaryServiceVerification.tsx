@@ -232,11 +232,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         </TextView>
         <SimpleList items={includeMilitaryServiceInfoList} />
 
-        <SimpleList
-          items={getBenefitAndDisabilityToggleList()}
-          title={t('letters.benefitService.benefitAndDisabilityInfo')}
-          titleA11yLabel={t('letters.benefitService.benefitAndDisabilityInfoA11yLabel')}
-        />
+        <SimpleList items={getBenefitAndDisabilityToggleList()} title={t('letters.benefitService.benefitAndDisabilityInfo')} />
 
         <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
