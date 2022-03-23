@@ -80,11 +80,13 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
     })
   }
 
+  const imageSize = image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined
+
   const pressableProps: PressableProps = {
     onPress,
     accessibilityRole: 'button',
     accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
-    accessibilityLabel: photoPosition,
+    accessibilityLabel: imageSize ? photoPosition?.concat(imageSize) : photoPosition,
   }
 
   const boxProps: BoxProps = {
@@ -118,7 +120,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
         </Box>
       </Box>
       <Box width={width} flexDirection="row">
-        <TextView {...textProps}>{image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined}</TextView>
+        <TextView {...textProps}>{imageSize}</TextView>
       </Box>
     </Pressable>
   )
