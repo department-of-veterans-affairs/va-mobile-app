@@ -1,7 +1,6 @@
 import { Box, BoxProps, VAIcon } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps } from 'react-native'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import React, { FC } from 'react'
 import TextView, { TextViewProps } from './TextView'
@@ -13,16 +12,16 @@ type PhotoAddProps = {
   height: number
   /** Add Photo on press with error and success callback */
   onPress: () => void
-  /** TestID for the pressable */
-  testID?: string
 }
 
-const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress, testID }) => {
+const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
   const { colors: themeColor } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
   const pressableProps: PressableProps = {
     onPress,
+    accessibilityRole: 'button',
+    accessibilityHint: t('fileUpload.addPhoto.a11y'),
   }
 
   const boxProps: BoxProps = {
@@ -40,10 +39,11 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress, testID }) => {
     variant: 'HelperTextBold',
     color: 'footerButton',
     textAlign: 'center',
+    width: width,
   }
 
   return (
-    <Pressable {...pressableProps} {...testIdProps(testID || '')}>
+    <Pressable {...pressableProps}>
       <Box {...boxProps}>
         <VAIcon name={'Add'} width={32} height={32} fill={themeColor.icon.photoAdd} />
       </Box>

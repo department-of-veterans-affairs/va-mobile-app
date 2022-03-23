@@ -76,7 +76,7 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
         <Box>
           <SimpleList items={getRequests()} />
         </Box>
-        <TextView mt={condensedMarginBetween} mx={gutter} mb={contentMarginBottom} variant="MobileBody" accessibilityRole="header">
+        <TextView mt={condensedMarginBetween} mx={gutter} mb={contentMarginBottom} variant="HelperText" accessibilityRole="header">
           {t('fileRequest.weSentYouALaterText')}
         </TextView>
         <Box mt={standardMarginBetween}>
