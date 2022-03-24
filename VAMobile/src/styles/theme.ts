@@ -239,6 +239,8 @@ export type VATheme = {
     snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
     chevronListItemHeight: number
+    headerButtonSpacing: number
+    headerLeftButtonFromTextPadding: number
   }
   fontFace: {
     regular: string

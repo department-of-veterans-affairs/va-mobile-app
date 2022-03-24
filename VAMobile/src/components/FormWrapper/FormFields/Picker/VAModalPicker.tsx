@@ -183,7 +183,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     return (
       <TouchableWithoutFeedback {...props} {...testIdProps(t(buttonText || ''))} {...a11yHintProp(t('common:pickerLaunchBtn.a11yHint'))}>
-        <Box pr={10} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={14}>
+        <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
             {t(buttonText || '')}
           </TextView>
