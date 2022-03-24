@@ -83,7 +83,7 @@ context('ClaimDetails', () => {
 
       expect(textViews[0].props.children).toEqual('Claim type')
       expect(textViews[2].props.children).toEqual('Date received')
-      expect(textViews[4].props.children).toEqual('Your representative for VA claims')
+      expect(textViews[4].props.children).toEqual('Your representative for V\uFEFFA claims')
     })
   })
 

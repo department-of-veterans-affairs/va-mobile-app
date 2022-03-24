@@ -246,7 +246,7 @@ context('ComposeMessage', () => {
           findByTypeWithText(
             testInstance,
             TextView,
-            'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
+            'It can take up to three business days to receive a response from a member of your health care team or the administrative V\uFEFFA staff member you contacted.',
           ),
         ).toBeTruthy()
       })

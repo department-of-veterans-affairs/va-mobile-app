@@ -208,7 +208,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Any updates you make here will also update in your VA.gov profile.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Any updates you make here will also update in your V\uFEFFA\uFEFF.gov profile.')
     })
   })
 

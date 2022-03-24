@@ -214,6 +214,12 @@ context('ReplyMessage', () => {
       })
     })
     describe('when a required field is not filled', () => {
+      it('should display a field error for that field2', async () => {
+        await waitFor(() => {
+          expect(navigateToAttachmentsFAQSpy).not.toHaveBeenCalled()
+        })
+      })
+
       it('should display a field error for that field', async () => {
         await waitFor(() => {
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()

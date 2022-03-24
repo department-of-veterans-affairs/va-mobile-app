@@ -118,7 +118,7 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nATLAS location')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('V\uFEFFA Video Connect\r\nATLAS location')
     })
 
     it('should display the appointment code', async () => {
@@ -133,7 +133,7 @@ context('UpcomingAppointmentDetails', () => {
       })
     })
     it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nhome')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('V\uFEFFA Video Connect\r\nhome')
     })
     it('should display the how to join your virtual session text', async () => {
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('How to join your virtual session')
@@ -170,7 +170,7 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nVA location')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('V\uFEFFA Video Connect\r\nVA location')
     })
 
     it('should state that the video meeting must be joined from the listed location', async () => {
@@ -189,7 +189,7 @@ context('UpcomingAppointmentDetails', () => {
       })
     })
     it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nusing a VA device')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('V\uFEFFA Video Connect\r\nusing a V\uFEFFA device')
     })
 
     it('should state that the video meeting must be joined using a VA device', async () => {
@@ -215,7 +215,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is va', () => {
     it('should display the name of the facility location', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA appointment')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('V\uFEFFA appointment')
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Blind Rehabilitation Center')
     })
   })
@@ -255,7 +255,7 @@ context('UpcomingAppointmentDetails', () => {
         initializeTestInstance(AppointmentTypeConstants.VA, AppointmentStatusConstants.CANCELLED, undefined, false, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit V\uFEFFA.gov or call your V\uFEFFA medical center.')).toBeTruthy()
     })
   })
 

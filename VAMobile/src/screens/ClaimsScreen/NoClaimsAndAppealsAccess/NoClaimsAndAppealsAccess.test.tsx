@@ -29,7 +29,7 @@ context('NoClaimsAndAppealsAccess', () => {
 
   it('should render the body', async () => {
     expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
-      "We're sorry. We can't find any claims for you in our records. If you think this is an error, call the VA benefits hotline.",
+      "We're sorry. We can't find any claims for you in our records. If you think this is an error, call the V\uFEFFA benefits hotline.",
     )
   })
 

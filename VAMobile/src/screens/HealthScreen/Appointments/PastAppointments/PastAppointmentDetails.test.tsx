@@ -96,7 +96,7 @@ context('PastAppointmentDetails', () => {
 
       allTextViews = testInstance.findAllByType(TextView)
       expect(allTextViews.length).toEqual(4)
-      expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nusing a VA device')
+      expect(allTextViews[0].props.children).toEqual('V\uFEFFA Video Connect\r\nusing a V\uFEFFA device')
 
       await waitFor(() => {
         initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
@@ -104,7 +104,7 @@ context('PastAppointmentDetails', () => {
 
       allTextViews = testInstance.findAllByType(TextView)
       expect(allTextViews.length).toEqual(4)
-      expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nhome')
+      expect(allTextViews[0].props.children).toEqual('V\uFEFFA Video Connect\r\nhome')
     })
   })
 

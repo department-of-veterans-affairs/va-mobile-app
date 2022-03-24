@@ -75,7 +75,7 @@ context('ClaimPhase', () => {
         const pressable = testInstance.findByType(Pressable)
         pressable.props.onPress()
         expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('June 6, 2019')
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Thank you. VA received your claim')
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Thank you. V\uFEFFA received your claim')
         expect(icon.props.name).toEqual('ArrowUp')
       })
     })

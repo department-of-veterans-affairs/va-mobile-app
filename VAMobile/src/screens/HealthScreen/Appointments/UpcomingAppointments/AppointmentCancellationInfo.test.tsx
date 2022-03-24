@@ -60,7 +60,7 @@ context('AppointmentCancellationInfo', () => {
     })
     it('should display the correct cancellation body', async () => {
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
-        "Call your VA health facility. You can't cancel V\ufeffA Video Connect at an ATLAS location appointments online.",
+        "Call your V\ufeffA health facility. You can't cancel V\ufeffA Video Connect at an ATLAS location appointments online.",
       )
     })
     it('should display the correct location name', async () => {
@@ -80,7 +80,7 @@ context('AppointmentCancellationInfo', () => {
     })
     it('should display the correct cancellation body', async () => {
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
-        "Call your VA health facility. You can't cancel V\ufeffA Video Connect at a VA location appointments online.",
+        "Call your V\uFEFFA health facility. You can't cancel V\ufeffA Video Connect at a V\uFEFFA location appointments online.",
       )
     })
     it('should display the correct location name', async () => {
@@ -100,7 +100,7 @@ context('AppointmentCancellationInfo', () => {
     })
     it('should display the correct cancellation body', async () => {
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
-        "Call your VA health facility. You can't cancel V\ufeffA Video Connect using a VA device appointments online.",
+        "Call your V\uFEFFA health facility. You can't cancel V\ufeffA Video Connect using a V\uFEFFA device appointments online.",
       )
     })
     it('should display the correct location name', async () => {
@@ -119,7 +119,7 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Do you need to cancel?')
     })
     it('should display the correct cancellation body', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("Call your VA health facility. You can't cancel V\ufeffA Video Connect at home appointments online.")
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("Call your V\uFEFFA health facility. You can't cancel V\ufeffA Video Connect at home appointments online.")
     })
     it('should display the correct location name', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
@@ -178,7 +178,7 @@ context('AppointmentCancellationInfo', () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(appointmentLocationName)
     })
     it('should display the find VA locations link', async () => {
-      expect(testInstance.findByType(ClickForActionLink).props.displayedText).toEqual('Find your VA location')
+      expect(testInstance.findByType(ClickForActionLink).props.displayedText).toEqual('Find your V\uFEFFA location')
     })
   })
 

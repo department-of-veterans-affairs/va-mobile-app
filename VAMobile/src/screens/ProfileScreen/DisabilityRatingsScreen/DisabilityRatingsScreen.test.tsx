@@ -88,7 +88,7 @@ context('DisabilityRatingsScreen', () => {
     const headers = testInstance.findAllByProps({ accessibilityRole: 'header' })
     expect(headers[5].props.children).toBe('Combined disability rating')
     expect(headers[15].props.children).toBe('Individual ratings')
-    expect(headers[20].props.children).toBe('Learn about VA disability ratings')
+    expect(headers[20].props.children).toBe('Learn about V\uFEFFA disability ratings')
     expect(headers[30].props.children).toBe('Need Help?')
 
     const texts = testInstance.findAllByType(TextView)
@@ -108,7 +108,7 @@ context('DisabilityRatingsScreen', () => {
     expect(texts[12].props.children).toBe('Effective date:  08/09/2013')
 
     const links = testInstance.findAllByProps({ accessibilityRole: 'link' })
-    expect(links[0].findByType(TextView).props.children).toBe('About VA disability ratings')
+    expect(links[0].findByType(TextView).props.children).toBe('About V\uFEFFA disability ratings')
     expect(links[5].findByType(TextView).props.children).toBe('800-827-1000')
     expect(links[10].findByType(TextView).props.children).toBe('711')
   })
