@@ -187,18 +187,6 @@ context('ReplyMessage', () => {
     })
   })
 
-  describe('on click of the collapsible view', () => {
-    it('should display the when will i get a reply children text', async () => {
-      waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
-          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-        )
-      })
-    })
-  })
-
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
@@ -214,11 +202,6 @@ context('ReplyMessage', () => {
       })
     })
     describe('when a required field is not filled', () => {
-      it('should display a field error for that field2', async () => {
-        await waitFor(() => {
-          expect(navigateToAttachmentsFAQSpy).not.toHaveBeenCalled()
-        })
-      })
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
@@ -361,6 +344,18 @@ context('ReplyMessage', () => {
           testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
           expect(Linking.openURL).toBeCalledWith('tel:711')
         })
+      })
+    })
+  })
+
+  describe('on click of the collapsible view', () => {
+    it('should display the when will I get a reply children text', async () => {
+      waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+
+        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
+          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
+        )
       })
     })
   })
