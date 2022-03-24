@@ -1,34 +1,88 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, TextView, VAButton, VAScrollView } from 'components'
+import { BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimEventData } from 'store/api'
-import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
+import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
+import { ClaimsStackParamList } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import FileList from 'components/FileList'
 
 type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
 
 const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
-  const { request: originalRequest, fileUploaded, imageUploaded } = route.params
+  const { request: originalRequest, fileUploaded } = route.params
+  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const dispatch = useDispatch()
+  const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([])
+  const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
 
   useEffect(() => {
+    setFilesList([fileUploaded])
+  }, [fileUploaded])
+
+  const onCancel = () => {
+    confirmAlert({
+      title: t('fileUpload.discard.confirm.title'),
+      message: t('fileUpload.discard.confirm.message'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('fileUpload.discard'),
+          onPress: () => {
+            navigation.navigate('FileRequestDetails', { request })
+          },
+        },
+      ],
+    })
+  }
+
+  useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+      headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
-  const onUpload = navigateTo('UploadConfirmation', { request, filesList: fileUploaded ? [fileUploaded] : [imageUploaded] })
+  useEffect(() => {
+    if (fileUploadedFailure || filesUploadedSuccess) {
+      dispatch(fileUploadSuccess())
+    }
+
+    if (filesUploadedSuccess) {
+      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
+      navigation.navigate('FileRequest', { claimID: claim?.id || '' })
+    } else if (fileUploadedFailure) {
+      showSnackBar(
+        t('fileUpload.submitted.error'),
+        dispatch,
+        () => {
+          dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
+        },
+        false,
+        true,
+        false,
+      )
+    }
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
 
   useEffect(() => {
     setRequest((prevRequest) => {
@@ -39,6 +93,36 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     })
   }, [documentType])
 
+  if (loadingFileUpload) {
+    return <LoadingComponent text={t('fileUpload.loading')} />
+  }
+
+  const onUploadConfirmed = () => {
+    dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
+  }
+
+  const onUpload = (): void => {
+    confirmAlert({
+      title: t('fileUpload.submit.confirm.title'),
+      message: t('fileUpload.submit.confirm.message'),
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('fileUpload.submit'),
+          onPress: onUploadConfirmed,
+        },
+      ],
+    })
+  }
+
+  const onFileDelete = () => {
+    showSnackBar(t('common:file.deleted'), dispatch, undefined, true, false, false)
+    navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
+  }
+
   const pickerField: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Picker,
@@ -47,11 +131,20 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         onSelectionChange: setDocumentType,
         pickerOptions: DocumentTypes526,
         labelKey: 'claims:fileUpload.documentType',
-        includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: false,
       },
       fieldErrorMessage: t('claims:fileUpload.documentType.fieldError'),
+    },
+    {
+      fieldType: FieldType.Selector,
+      fieldProps: {
+        labelKey: 'claims:fileUpload.evidenceOnly',
+        selected: confirmed,
+        onSelectionChange: setConfirmed,
+        isRequiredField: true,
+      },
+      fieldErrorMessage: t('fileUpload.evidenceOnly.error'),
     },
   ]
 
@@ -61,17 +154,17 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
           {request.displayName}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {fileUploaded?.name || (imageUploaded?.assets ? imageUploaded.assets[0].fileName : undefined)}
-        </TextView>
+      </Box>
+      <FileList files={[fileUploaded]} onDelete={onFileDelete} />
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
         <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={() => {
               setOnSaveClicked(true)
             }}
-            label={t('fileUpload.upload')}
-            testID={t('fileUpload.upload')}
+            label={t('fileUpload.submit')}
+            testID={t('fileUpload.submit')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.uploadFileA11yHint')}
           />

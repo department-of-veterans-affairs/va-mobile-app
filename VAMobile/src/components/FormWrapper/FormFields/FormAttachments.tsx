@@ -1,13 +1,13 @@
 import React, { FC, ReactNode } from 'react'
 
-import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import _ from 'underscore'
 
 import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } from 'components/index'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { bytesToFinalSizeDisplay } from 'utils/common'
+import { getFileDisplay } from 'utils/common'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
@@ -32,20 +32,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
 
   const renderFileNames = (): ReactNode => {
     return _.map(attachmentsList || [], (attachment, index) => {
-      let fileName: string | undefined
-      let fileSize: number | undefined
-
-      if ('assets' in attachment) {
-        const { fileName: name, fileSize: size } = attachment.assets ? attachment.assets[0] : ({} as Asset)
-        fileName = name || ''
-        fileSize = size
-      } else if ('size' in attachment) {
-        const { name, size } = attachment
-        fileName = name || ''
-        fileSize = size
-      }
-
-      const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
+      const { fileName, fileSize: formattedFileSize } = getFileDisplay(attachment, tFunction, true)
       const text = [fileName, formattedFileSize].join(' ').trim()
 
       return (

@@ -520,6 +520,10 @@ export type ClaimsAndAppealsList = Array<ClaimAndAppealData>
 
 // TODO: need to get data shape for this.
 export type ClaimEventDocumentData = {
+  trackedItemId?: number
+  fileType?: string
+  documentType?: string
+  filename?: string
   uploadDate: string
 }
 

@@ -1,1 +1,1 @@
-We fixed an issue that prevented some users from uploading supporting documents (files or images) for their claims.
+You can now more easily upload multiple images to your claim. We’ve also made accessibility improvements and fixed a few bugs.

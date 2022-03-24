@@ -113,7 +113,6 @@ context('HomeScreen', () => {
       })
     })
 
-    /* --- Temporarily disabling the Payments feature --- */
     // it('should render the payments button', async () => {
     //   await waitFor(() => {
     //     expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Payments')

@@ -89,6 +89,10 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
+  HelperTextBold: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
   SnackBarBtnText: {
     fontSize: 16,
     lineHeight: 22,
@@ -165,6 +169,9 @@ let theme: VATheme = {
     messageIconHeight: 16,
     maxNumMessageAttachments: 4,
     paginationButtonPadding: 15,
+    photoPreviewIconSize: 24,
+    photoPreviewBorderRadius: 5,
+    photoPreviewIconPadding: 5,
     pickerModalTopPadding: 60,
     pickerModalSelectedIconWidth: 16,
     pickerModalSelectedIconHeight: 13,
@@ -184,7 +191,7 @@ let theme: VATheme = {
     snackBarMarginBottom: 0,
     snackBarMarginLeft: 10,
     snackBarMarginRight: 10,
-    snackBarButtonTopMargin: 5,
+    snackBarButtonTopBottomMargin: 5,
     snackBarConfirmBtnMarginRight: 15,
     snackBarVerticalMargin: 10,
     snackBarBorderRadius: 4,
@@ -206,6 +213,8 @@ let theme: VATheme = {
     menuElevation: 20,
     chevronListItemWidth: 10,
     chevronListItemHeight: 15,
+    listTrashIconWidth: 14,
+    listTrashIconHeight: 16,
   },
 
   fontFace: {
@@ -242,6 +251,7 @@ let theme: VATheme = {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
+    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
   },
 }

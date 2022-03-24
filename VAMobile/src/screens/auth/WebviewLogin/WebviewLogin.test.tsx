@@ -17,12 +17,10 @@ context('WebviewLogin', () => {
       },
     )
 
-    await waitFor(() => {
-      component = render(<WebviewLogin {...mockProps} />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-        },
-      })
+    component = render(<WebviewLogin {...mockProps} />, {
+      preloadedState: {
+        auth: { ...initialAuthState },
+      },
     })
   })
 

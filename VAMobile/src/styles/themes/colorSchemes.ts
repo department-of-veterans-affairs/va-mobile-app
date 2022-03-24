@@ -44,6 +44,7 @@ export const lightTheme = {
     phaseIndicatorUpcoming: colors.grayLight,
     success: colors.green,
     primaryDarkest: colors.primaryDarkest,
+    photoAdd: colors.primary,
     pickerAndInput: colors.gray,
     focusedPickerAndInput: colors.primaryDarker,
     confirmation: colors.goldLight,
@@ -56,6 +57,7 @@ export const lightTheme = {
     link: colors.primary, //'#0071bb',
     nav: colors.linkDefault, //'#004795',
     largeNav: colors.primary,
+    deleteFill: colors.base, //212121
     disclosure: colors.grayLight,
     success: colors.green, //'#2E8540',
     error: colors.secondaryDark, //'#CD2026',
@@ -69,6 +71,7 @@ export const lightTheme = {
     spinner: colors.grayMedium,
     dark: colors.black,
     covid19Vaccinations: colors.white,
+    photoAdd: colors.primary,
     pickerIcon: colors.grayDark,
     pagination: colors.white,
     chevronCollapsible: colors.primary,
@@ -102,6 +105,7 @@ export const lightTheme = {
     snackBarBtn: colors.darkmodeLightBlue,
     backButton: colors.white,
     snackBarText: colors.white,
+    bodyText: colors.grayDark,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -191,6 +195,7 @@ export const darkTheme = {
     phaseIndicatorUpcoming: colors.darkmodeBorder,
     success: colors.greenLight,
     primaryDarkest: colors.grayLight,
+    photoAdd: colors.darkmodeLightBlue,
     pickerAndInput: colors.grayLight,
     focusedPickerAndInput: colors.gold,
     confirmation: colors.gold,
@@ -203,6 +208,7 @@ export const darkTheme = {
     link: colors.darkmodeLightBlue,
     nav: colors.darkmodeLightBlue,
     largeNav: colors.darkmodeLightBlue,
+    deleteFill: colors.base, //212121
     disclosure: colors.grayLight,
     success: colors.green,
     error: colors.darkmodeRed,
@@ -216,6 +222,7 @@ export const darkTheme = {
     spinner: colors.grayMedium,
     dark: colors.grayLighter,
     covid19Vaccinations: colors.white,
+    photoAdd: colors.darkmodeLightBlue,
     pickerIcon: colors.grayLight,
     pagination: colors.white,
     chevronCollapsible: colors.darkmodeLightBlue,
@@ -249,6 +256,7 @@ export const darkTheme = {
     snackBarBtn: colors.primary,
     backButton: colors.darkmodeLightBlue,
     snackBarText: colors.grayDark,
+    bodyText: colors.grayLighter,
   },
   buttonBackground: {
     buttonPrimary: colors.darkmodeLightBlue,
