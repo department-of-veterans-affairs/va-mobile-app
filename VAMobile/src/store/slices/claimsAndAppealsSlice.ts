@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { find, map, sortBy } from 'underscore'
+import _ from 'underscore'
 
 import * as api from '../api'
 import { AppThunk } from 'store'
@@ -10,12 +10,10 @@ import {
   ClaimDecisionResponseData,
   ClaimDocUploadData,
   ClaimEventData,
-  ClaimEventDocumentData,
   ClaimsAndAppealsErrorServiceTypesConstants,
   ClaimsAndAppealsGetData,
   ClaimsAndAppealsGetDataMetaPagination,
   ClaimsAndAppealsList,
-  FILE_REQUEST_STATUS,
   ScreenIDTypes,
 } from 'store/api/types'
 import { Asset } from 'react-native-image-picker'
@@ -24,9 +22,7 @@ import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndApp
 import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { DocumentTypes526 } from 'constants/documentTypes'
 import { Events, UserAnalytics } from 'constants/analytics'
-
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -108,7 +104,7 @@ const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
 }
 
 export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): ClaimsAndAppealsList => {
-  return sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
+  return _.sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
     return new Date(claimAndAppeal.attributes.updatedAt)
   }).reverse()
 }
@@ -502,8 +498,7 @@ export const uploadFileToClaim =
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
       }
       await logAnalyticsEvent(Events.vama_claim_upload_compl())
-
-      dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description, files, request }))
+      dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description }))
     } catch (error) {
       if (isErrorObject(error)) {
         await logAnalyticsEvent(Events.vama_claim_upload_fail())
@@ -531,36 +526,6 @@ export const sendClaimStep3Analytics = (): AppThunk => async () => {
  */
 export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {
   await logAnalyticsEvent(Events.vama_claim_file_request())
-}
-
-// creates the documents array after submitting a file request
-const createFileRequestDocumentsArray = (
-  files: Array<Asset> | Array<DocumentPickerResponse>,
-  trackedItemId: number | undefined,
-  documentType: string,
-  uploadDate: string,
-): Array<ClaimEventDocumentData> => {
-  return map(files, (item) => {
-    let name: string | undefined
-
-    if ('fileSize' in item) {
-      name = item.fileName
-    } else if ('size' in item) {
-      name = item.name
-    }
-
-    const fileType = find(DocumentTypes526, (type) => {
-      return type.value === documentType
-    })
-
-    return {
-      trackedItemId,
-      fileType: fileType ? fileType.label : '',
-      filename: name,
-      documentType,
-      uploadDate,
-    } as ClaimEventDocumentData
-  })
 }
 
 /**
@@ -667,25 +632,13 @@ const claimsAndAppealsSlice = createSlice({
       state.loadingFileUpload = true
     },
 
-    dispatchFinishFileUpload: (
-      state,
-      action: PayloadAction<{ error?: Error; eventDescription?: string; files?: Array<Asset> | Array<DocumentPickerResponse>; request?: ClaimEventData }>,
-    ) => {
-      const { error, eventDescription, files, request } = action.payload
+    dispatchFinishFileUpload: (state, action: PayloadAction<{ error?: Error; eventDescription?: string }>) => {
+      const { error, eventDescription } = action.payload
 
       if (state.claim && !error) {
-        const dateUploadedString = DateTime.local().toISO()
         const indexOfRequest = state.claim.attributes.eventsTimeline.findIndex((el) => el.description === eventDescription)
         state.claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
-        state.claim.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
-
-        state.claim.attributes.eventsTimeline[indexOfRequest].documents = createFileRequestDocumentsArray(
-          files || [],
-          request?.trackedItemId || undefined,
-          request?.documentType || '',
-          dateUploadedString,
-        )
-        state.claim.attributes.eventsTimeline[indexOfRequest].uploadDate = dateUploadedString
+        state.claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
       }
 
       state.loadingFileUpload = false

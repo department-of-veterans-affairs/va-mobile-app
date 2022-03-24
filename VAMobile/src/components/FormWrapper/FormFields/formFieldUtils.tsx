@@ -8,14 +8,7 @@ import { VATheme } from '../../../styles/theme'
 /**
  * Creates the label for the picker and text input components
  */
-const generateInputLabel = (
-  error: string | undefined,
-  disabled: boolean | undefined,
-  isRequiredField: boolean | undefined,
-  labelKey: string,
-  t: TFunction,
-  isHelperText: boolean,
-): ReactElement => {
+const generateInputLabel = (error: string | undefined, disabled: boolean | undefined, isRequiredField: boolean | undefined, labelKey: string, t: TFunction): ReactElement => {
   const variant = error ? 'MobileBodyBold' : 'MobileBody'
   const color: ColorVariant = disabled ? 'placeholder' : 'primaryTitle'
 
@@ -28,7 +21,7 @@ const generateInputLabel = (
 
   if (isRequiredField) {
     return (
-      <Box display="flex" flexDirection="row" flexWrap="wrap" mb={isHelperText ? 0 : 8}>
+      <Box display="flex" flexDirection="row" flexWrap="wrap">
         {label}
         <TextView>&nbsp;</TextView>
         <TextView color={'inputRequired'} variant={variant}>
@@ -54,11 +47,10 @@ export const renderInputLabelSection = (
   helperTextKey: string | undefined,
   theme: VATheme,
 ): ReactElement => {
-  const isHelperText = !!helperTextKey
   return (
     <Box>
-      {generateInputLabel(error, disabled, isRequiredField, labelKey, t, isHelperText)}
-      {isHelperText && (
+      {generateInputLabel(error, disabled, isRequiredField, labelKey, t)}
+      {!!helperTextKey && (
         <TextView mb={theme.dimensions.pickerLabelMargin} variant="HelperText">
           {t(helperTextKey)}
         </TextView>
@@ -95,7 +87,6 @@ export const getInputWrapperProps = (theme: VATheme, error: string | undefined, 
     minHeight: theme.dimensions.touchableMinHeight,
     borderColor: getInputBorderColor(error, isFocused),
     borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
-    px: 8,
   }
 }
 

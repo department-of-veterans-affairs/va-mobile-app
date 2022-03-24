@@ -1,6 +1,6 @@
-import { PixelRatio, View } from 'react-native'
+import { InteractionManager, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactNode, Ref, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode, Ref, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAButton, VAIconProps, VAModalPicker, VAScrollView } from 'components'
@@ -37,8 +37,7 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
           key={m.messageId}
           message={m}
           isInitialMessage={m.messageId === message.messageId}
-          // if it is the only message in the thread no point of scrolling it will only scroll on large text and if there is more than one thread message
-          collapsibleMessageRef={m.messageId === message.messageId && (threadMessages.length > 1 || PixelRatio.getFontScale() > 1) ? messageRef : undefined}
+          collapsibleMessageRef={m.messageId === message.messageId ? messageRef : undefined}
         />
       ),
   )
@@ -50,6 +49,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
   const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
 
   /* useref is used to persist the folder the message is in Example the message was first in test folder and the user moves it to test2. The user is still under folder
@@ -72,17 +72,20 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const subject = message ? message.subject : ''
   const category = message ? message.category : 'OTHER'
 
-  // have to use uselayout due to the screen showing in white or showing the previouse data
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
     dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
+
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
   }, [messageID, dispatch])
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && isTransitionComplete) {
       scrollToSelectedMessage()
     }
-  }, [loading, scrollToSelectedMessage])
+  }, [loading, isTransitionComplete, scrollToSelectedMessage])
 
   useEffect(() => {
     if (isUndo || moveMessageFailed) {
@@ -169,7 +172,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
   }
 
-  if (loading || movingMessage) {
+  if (loading || !isTransitionComplete || movingMessage) {
     return (
       <LoadingComponent
         text={

@@ -30,7 +30,6 @@ Help() {
     echo "t | type              Type of build. Default is 'qa'. Choose from [ $(arrayPrint type_opts) ]"
     echo "f | flight_group      Test Flight group to build for (iOS). Default is 'Development Team'. Choose from [ $(arrayPrint tf_opts) ]"
     echo "p | play_track        Google Play Track to build for (Android). Default is 'Development Team'. Choose from [ $(arrayPrint ps_opts) ]"
-    echo "n | notes             Notes to display in Test Flight or Firebase Distribution for this build. Default depends on the lane."
     echo "h | help              Displays this help menu."
     echo
 }
@@ -57,9 +56,6 @@ declare -a tf_opts=("Development Team" "Ad Hoc Production Testers" "IAM Group" "
 # Play Store track default and options
 PS_TRACK="Development Team"
 declare -a ps_opts=("Ad Hoc Production Testers" "Development Team" "UAT Group" "VA Production Testers" "VA Production Testers" "Temp - Push" "508 Office")
-
-# Notes set to empty string
-NOTES=""
 
 ### Prints Illegal arg error and exits script
 ## $1: list of the possible option values
@@ -113,9 +109,6 @@ while [ $# -gt 0 ]; do
 	-p|--play_track)
 	  isInArray ps_opts "$2" PS_TRACK $1
 	  ;;
-	-n|--notes)
-	  NOTES=$2
-	  ;;
 	-h|--help)
 	  Help;;
     *)
@@ -135,7 +128,6 @@ echo ENV: $ENV
 echo TYPE: $TYPE
 echo TF_GROUP: "$TF_GROUP"
 echo PS_TRACK: "$PS_TRACK"
-echo NOTES: "$NOTES"
 
 # save the base directory to move about the project
 BASE_DIR="$PWD"
@@ -156,7 +148,7 @@ then
   yarn bundle:ios &&
   cd "$BASE_DIR"/ios &&
   # run fastlane
-  fastlane on_demand version:"qa" tfGroup:"$TF_GROUP" notes:"$NOTES";
+  fastlane on_demand version:"qa" tfGroup:"$TF_GROUP";
 fi
 cd "$BASE_DIR" || exit
 
@@ -167,5 +159,5 @@ then
   yarn bundle:android &&
   cd "$BASE_DIR"/android &&
   # run fastlane
-  fastlane on_demand version:"qa" psTrack:"$PS_TRACK" notes:"$NOTES";
+  fastlane on_demand version:"qa" psTrack:"$PS_TRACK";
 fi

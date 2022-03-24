@@ -316,8 +316,8 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
           if (scrollPoint) {
             messageRef.current.measureLayout(
               scrollPoint,
-              (_, y) => {
-                currentObject.scrollTo({ y: y, animated: true })
+              (_, y, __, height) => {
+                currentObject.scrollTo({ y: y * height, animated: false })
               },
               () => {
                 currentObject.scrollTo({ y: 0 })
@@ -329,7 +329,7 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
       if (shouldFocus) {
         setFocus()
       }
-    }, 400)
+    }, 200)
     return () => clearTimeout(timeOut)
   }, [messageRef, setFocus, shouldFocus])
 

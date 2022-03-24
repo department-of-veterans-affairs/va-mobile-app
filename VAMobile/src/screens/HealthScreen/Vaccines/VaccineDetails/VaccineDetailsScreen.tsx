@@ -77,7 +77,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>
             {t('vaccines.details.typeAndDosage')}
           </TextView>
-          <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+          <TextView variant="MobileBody" selectable={true}>
             {vaccine.attributes?.shortDescription || placeHolder}
           </TextView>
           {isCovidVaccine && (
@@ -85,7 +85,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
               <TextView variant="MobileBodyBold" color={'primaryTitle'}>
                 {t('vaccines.details.manufacturer')}
               </TextView>
-              <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+              <TextView variant="MobileBody" selectable={true}>
                 {vaccine.attributes?.manufacturer || placeHolder}
               </TextView>
             </>
@@ -128,7 +128,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
               <TextView variant="MobileBodyBold" color={'primaryTitle'}>
                 {t('vaccines.details.reaction')}
               </TextView>
-              <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+              <TextView variant="MobileBody" selectable={true}>
                 {vaccine.attributes?.reaction || placeHolder}
               </TextView>
             </Box>
