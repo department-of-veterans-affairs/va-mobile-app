@@ -144,6 +144,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     height: theme.dimensions.textAreaHeight,
     borderColor: getInputBorderColor(error, isFocused),
     borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
+    pl: 8,
   }
 
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')
@@ -153,7 +154,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     const wrapperProps = isTextArea ? textAreaWrapperProps : getInputWrapperProps(theme, error, isFocused)
 
     let textInputBox = (
-      <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
+      <Box {...wrapperProps}>
         <Box width="100%">
           <TextInput {...inputProps} {...textAreaProps} ref={inputRef || ref} accessibilityRole={'none'} accessible={false} />
         </Box>
