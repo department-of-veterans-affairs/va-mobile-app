@@ -69,6 +69,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         {
           text: t('fileUpload.discard.photos'),
           onPress: () => {
+            snackBar.hideAll()
             navigation.navigate('FileRequestDetails', { request })
           },
         },
@@ -171,7 +172,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         return (
           /** Rightmost photo doesn't need right margin b/c of gutter margins
            * Every 3rd photo, right margin is changed to zero*/
-          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
+          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index}>
             <PhotoPreview
               width={calculatedWidth}
               height={calculatedWidth}
@@ -179,6 +180,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
               onDeleteCallback={(): void => {
                 deletePhoto(deleteCallbackIfUri, index, imagesList || [])
               }}
+              photoPosition={t(imagesList && imagesList?.length > 1 ? 'fileUpload.ofTotalPhotos' : 'fileUpload.ofTotalPhoto', {
+                photoNum: index + 1,
+                totalPhotos: imagesList?.length,
+              })}
               lastPhoto={imagesList?.length === 1 ? true : undefined}
             />
           </Box>
@@ -190,7 +195,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       <Box display="flex" flexDirection="row" flexWrap="wrap" mx={theme.dimensions.gutter}>
         {uploadedImages()}
         {(!imagesList || imagesList.length < MAX_NUM_PHOTOS) && (
-          <Box mt={condensedMarginBetween} accessible={true} accessibilityRole="image">
+          <Box mt={condensedMarginBetween}>
             <PhotoAdd
               width={calculatedWidth}
               height={calculatedWidth}
@@ -205,6 +210,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
+    snackBar.hideAll()
     if (response && response.assets && response.assets.length + (imagesList?.length || 0) > MAX_NUM_PHOTOS) {
       setErrorMessage(t('fileUpload.tooManyPhotosError'))
     } else {
@@ -227,7 +233,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
-      navigation.goBack()
+      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
+      navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
       setImagesList(response)
@@ -270,13 +277,14 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         <Box
           justifyContent="space-between"
           flexDirection="row"
+          flexWrap="wrap"
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.condensedMarginBetween}
           mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="HelperText" color={'brandedPrimaryText'}>
+          <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
           </TextView>
-          <TextView variant="HelperText" color={'brandedPrimaryText'}>
+          <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>
         </Box>

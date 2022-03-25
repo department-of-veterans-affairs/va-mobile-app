@@ -1,17 +1,16 @@
 import { Asset } from 'react-native-image-picker/src/types'
 import { Image, Pressable, PressableProps } from 'react-native'
+import React, { FC, ReactNode, useState } from 'react'
+import styled from 'styled-components'
+
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { bytesToFinalSizeDisplay } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
+
 import { themeFn } from 'utils/theme'
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
-import React, { FC, ReactNode, useState } from 'react'
 import TextView, { TextViewProps } from './TextView'
-import styled from 'styled-components'
-import theme from 'styles/themes/standardTheme'
 
 type PhotoPreviewProps = {
   /** width of the photo */
@@ -24,8 +23,8 @@ type PhotoPreviewProps = {
   onDeleteCallback: () => void
   /** flag for whether this is the last photo available for deletion */
   lastPhoto?: boolean
-  /** TestID String */
-  testID?: string
+  /** Photo Position in array */
+  photoPosition?: string
 }
 
 type StyledImageProps = {
@@ -43,45 +42,52 @@ const StyledImage = styled(Image)<StyledImageProps>`
   border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
 `
 
-const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, testID }) => {
+const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
   const { colors: themeColor, dimensions: themeDim } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
-  const { showActionSheetWithOptions } = useActionSheet()
   const [selected, setSelected] = useState(false)
   const uri = image.uri
+  const confirmAlert = useDestructiveAlert()
 
   const photo = (): ReactNode => {
-    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={theme.dimensions.photoPreviewBorderRadius} />
+    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={themeDim.photoPreviewBorderRadius} />
   }
 
   const onPress = (): void => {
     setSelected(true)
-    const title = t('fileUpload.deletePopup')
     const message = lastPhoto ? t('fileUpload.deletePopupNavWarning') : undefined
-    const options = [t('fileUpload.delete'), t('common:cancel')]
-    showActionSheetWithOptions(
-      {
-        title,
-        message,
-        options,
-        cancelButtonIndex: 1,
-        destructiveButtonIndex: 0,
-      },
-      (buttonIndex) => {
-        switch (buttonIndex) {
-          case 0:
+
+    confirmAlert({
+      title: t('fileUpload.deletePopup'),
+      message,
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('common:cancel'),
+          onPress: () => {
+            setSelected(false)
+          },
+        },
+        {
+          text: t('fileUpload.delete'),
+          onPress: () => {
             setSelected(false)
             onDeleteCallback()
-            break
-          case 1:
-            setSelected(false)
-            break
-        }
-      },
-    )
+          },
+        },
+      ],
+    })
   }
 
-  const pressableProps: PressableProps = { onPress }
+  const imageSize = image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined
+
+  const pressableProps: PressableProps = {
+    onPress,
+    accessibilityRole: 'button',
+    accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
+    accessibilityLabel: imageSize ? photoPosition?.concat(imageSize) : photoPosition,
+  }
 
   const boxProps: BoxProps = {
     borderRadius: themeDim.photoPreviewBorderRadius,
@@ -100,11 +106,11 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
 
   const textProps: TextViewProps = {
     variant: 'HelperText',
-    color: 'brandedPrimaryText',
+    color: 'bodyText',
   }
 
   return (
-    <Pressable {...pressableProps} {...testIdProps(testID || '')}>
+    <Pressable {...pressableProps}>
       <Box {...boxProps}>
         <Box>{photo()}</Box>
         {selected && <Box {...blueOpacity} />}
@@ -113,7 +119,9 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
           {!selected && <VAIcon name={'Delete'} width={themeDim.photoPreviewIconSize} height={themeDim.photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
-      <TextView {...textProps}>{image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined}</TextView>
+      <Box width={width} flexDirection="row">
+        <TextView {...textProps}>{imageSize}</TextView>
+      </Box>
     </Pressable>
   )
 }

@@ -250,7 +250,7 @@
             "date": "2021-06-04"
           },
           {
-            "type": "never_received_from_you_list",
+            "type": "received_from_you_list",
             "trackedItemId": 293446,
             "description": "Buddy mentioned - No complete address",
             "displayName": "Request 5",
@@ -281,7 +281,7 @@
             "description": "Combat not verified",
             "displayName": "Request 4",
             "overdue": false,
-            "status": "NEEDED",
+            "status": "SUBMITTED_AWAITING_REVIEW",
             "uploaded": true,
             "uploadsAllowed": true,
             "openedDate": "2021-05-05",

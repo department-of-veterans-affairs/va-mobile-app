@@ -2,7 +2,7 @@ import { AccessibilityProps, Modal, Pressable, PressableProps, TouchableWithoutF
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { Box, BoxProps, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
+import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
 import { VAIconProps } from 'components/VAIcon'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
@@ -145,10 +145,10 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const wrapperProps = getInputWrapperProps(theme, error, false)
 
     const valueBox = (
-      <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
+      <Box {...wrapperProps}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <TextView flex={1}>{currentlySelectedOption?.label}</TextView>
-          <Box pr={theme.dimensions.buttonPadding}>
+          <Box mr={8} ml={16} my={16}>
             <VAIcon name="DatePickerArrows" fill="pickerIcon" width={16} height={16} />
           </Box>
         </Box>
@@ -222,6 +222,11 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     ...a11yHintProp(t('common:done.picker.a11yHint')),
   }
 
+  const commonButtonProps: TextViewProps = {
+    allowFontScaling: false,
+    py: 3, // bump up the padding to make touch target a bit bigger #2740
+  }
+
   return (
     <View>
       <Modal
@@ -237,7 +242,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancel} {...cancelButtonProps}>
-                <TextView allowFontScaling={false}>{cancelLabel}</TextView>
+                <TextView {...commonButtonProps}>{cancelLabel}</TextView>
               </Pressable>
               <Box flex={4}>
                 <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign={'center'} allowFontScaling={false}>
@@ -245,7 +250,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                 </TextView>
               </Box>
               <Pressable onPress={onConfirm} {...confirmButtonProps}>
-                <TextView allowFontScaling={false}>{confirmLabel}</TextView>
+                <TextView {...commonButtonProps}>{confirmLabel}</TextView>
               </Pressable>
             </Box>
             <VAScrollView bounces={false}>

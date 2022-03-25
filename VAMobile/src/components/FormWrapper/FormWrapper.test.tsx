@@ -169,7 +169,7 @@ context('FormWrapper', () => {
 
         initializeTestInstance([shortenedFieldsList], true)
         textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 1].props.children).toEqual('I confirm that this information is correct')
+        expect(textViews[textViews.length - 1].props.children).toEqual('I confirm that this information is correct. (Required)')
       })
     })
   })
