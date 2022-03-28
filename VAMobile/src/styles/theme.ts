@@ -203,38 +203,17 @@ export type VATheme = {
     buttonPadding: number
     alertBorderWidth: number
     listItemDecoratorMarginLeft: number
-    pickerLabelMargin: number
     touchableMinHeight: number
-    textAreaHeight: number
-    phaseIndicatorRightMargin: number
-    phaseIndicatorDiameter: number
-    phaseIndicatorBorderWidth: number
-    phaseIndicatorIconWidth: number
-    phaseIndicatorIconHeight: number
     textAndButtonLargeMargin: number
-    fileUploadMargin: number
-    biometricsPreferenceMarginTop: number
-    carouselProgressDotsMargin: number
     headerHeight: number
-    textInputMargin: number
     formMarginBetween: number
     tagMinWidth: number
     tagCurvedBorder: number
     tagTopPadding: number
     tagHorizontalPadding: number
     maxNumMessageAttachments: number
-    photoPreviewIconSize: number
-    photoPreviewBorderRadius: number
-    photoPreviewIconPadding: number
-    syncLogoSpacing: number
     navBarHeight: number
     paginationTopPadding: number
-    loginContentMarginBottom: number
-    webviewReloadButtonHeight: number
-    webviewReloadButtonSize: number
-    webviewButtonSize: number
-    webviewButtona11ySize: number
-    errorLabelBottomMargin: number
     snackBarBottomOffset: number
     snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
