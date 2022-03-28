@@ -20,6 +20,7 @@ import com.wix.reactnativenotifications.core.notification.IPushNotification;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import gov.va.mobileapp.native_modules.CustomTabsIntentManager;
 import gov.va.mobileapp.native_modules.DeviceDataPackage;
 import gov.va.mobileapp.native_modules.RNCalendarPackage;
 import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
@@ -50,6 +51,7 @@ public class MainApplication extends Application implements ReactApplication, IN
             packages.add(new RNNotificationPrefsPackage());
             packages.add(new RNSecureRandomPackage());
             packages.add(new RNReviewPackage());
+            packages.add(new CustomTabsIntentManager());
 
             return packages;
         }

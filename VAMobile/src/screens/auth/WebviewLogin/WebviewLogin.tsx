@@ -10,7 +10,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
-import { startIosAuthSession } from 'utils/rnAuthSesson'
+import { startAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -51,9 +51,9 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   }, [authParamsLoadingState, dispatch])
 
   useEffect(() => {
-    const iosAuth = async () => {
+    const startAuth = async () => {
       try {
-        const callbackUrl = await startIosAuthSession(codeChallenge || '', authorizeStateParam || '')
+        const callbackUrl = await startAuthSession(codeChallenge || '', authorizeStateParam || '')
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
@@ -69,8 +69,8 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
       }
     }
     dispatch(sendLoginStartAnalytics())
-    if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.READY && isIOS()) {
-      iosAuth()
+    if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.READY) {
+      startAuth()
     }
   }, [authParamsLoadingState, codeChallenge, authorizeStateParam, dispatch, navigation])
 
