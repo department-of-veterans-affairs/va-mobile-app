@@ -131,7 +131,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
-      marginRight: theme.dimensions.textInputMargin,
+      marginRight: 40,
       color: isFocused ? theme.colors.text.inputFocused : theme.colors.text.input,
     },
     onFocus,
@@ -141,7 +141,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const textAreaWrapperProps: BoxProps = {
     backgroundColor: 'textBox',
-    height: theme.dimensions.textAreaHeight,
+    height: 201,
     borderColor: getInputBorderColor(error, isFocused),
     borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
   }
@@ -167,7 +167,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
     const content = (
       <Box>
-        {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
+        {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey)}
         {!!error && renderInputError(theme, error)}
         {textInputBox}
       </Box>

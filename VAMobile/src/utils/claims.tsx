@@ -2,7 +2,9 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import React, { ReactElement } from 'react'
 
+import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 
@@ -224,4 +226,44 @@ export const onAddPhotos = (
 export const deletePhoto = (deleteCallbackIfUri: (response: Asset[]) => void, deleteIndex: number, images: Asset[]): void => {
   images.splice(deleteIndex, 1)
   deleteCallbackIfUri(images)
+}
+
+/**
+ * Return the indicators common props
+ *
+ * @param fs - fontscale function
+ */
+export const getIndicatorCommonProps = (fs: (val: number) => number) => {
+  const indicatorDiameter = 30
+  return {
+    height: fs(indicatorDiameter),
+    width: fs(indicatorDiameter),
+    borderRadius: fs(indicatorDiameter),
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center',
+    mr: 10,
+  } as BoxProps
+}
+
+/**
+ * Return the indicators number or checkmark icon
+ *
+ * @param number - number to show in the indicator
+ * @param useCheckMark - boolen to show check mark instead of number
+ */
+export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactElement => {
+  if (useCheckMark) {
+    return (
+      <Box justifyContent={'center'} alignItems={'center'}>
+        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" />
+      </Box>
+    )
+  } else {
+    return (
+      <TextView variant="ClaimPhase" color="claimPhase" textAlign={'center'}>
+        {number}
+      </TextView>
+    )
+  }
 }

@@ -1,4 +1,4 @@
-import { Appearance, Platform } from 'react-native'
+import { Appearance } from 'react-native'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
@@ -33,8 +33,6 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
 export const getTheme = (): VATheme => {
   return theme
 }
-
-const claimPhaseLineHeight = Platform.OS === 'ios' ? 25 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
@@ -75,7 +73,7 @@ const fontSizes = {
   },
   ClaimPhase: {
     fontSize: 20,
-    lineHeight: claimPhaseLineHeight,
+    lineHeight: 25,
   },
   ActionBar: {
     fontSize: 20,
@@ -131,38 +129,17 @@ let theme: VATheme = {
     buttonPadding: 10,
     alertBorderWidth: 8,
     listItemDecoratorMarginLeft: 20,
-    pickerLabelMargin: 8,
     navBarHeight: 56,
     touchableMinHeight: 44,
-    textAreaHeight: 201,
-    phaseIndicatorRightMargin: 10,
-    phaseIndicatorDiameter: 30,
-    phaseIndicatorBorderWidth: 2,
-    phaseIndicatorIconWidth: 15,
-    phaseIndicatorIconHeight: 15,
     textAndButtonLargeMargin: 40,
-    fileUploadMargin: 40,
-    biometricsPreferenceMarginTop: 60,
-    carouselProgressDotsMargin: 6,
     headerHeight: 64,
-    textInputMargin: 40,
     formMarginBetween: 30,
     tagMinWidth: 29,
     tagCurvedBorder: 2,
     tagTopPadding: 3,
     tagHorizontalPadding: 10,
     maxNumMessageAttachments: 4,
-    photoPreviewIconSize: 24,
-    photoPreviewBorderRadius: 5,
-    photoPreviewIconPadding: 5,
-    syncLogoSpacing: 50,
     paginationTopPadding: 40,
-    loginContentMarginBottom: 80,
-    webviewReloadButtonHeight: isIOS() ? 64 : 45,
-    webviewReloadButtonSize: 17,
-    webviewButtonSize: 16,
-    webviewButtona11ySize: 44,
-    errorLabelBottomMargin: 3,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
     chevronListItemWidth: 10,
