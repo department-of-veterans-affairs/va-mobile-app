@@ -190,7 +190,7 @@ context('ComposeMessage', () => {
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
         await waitFor(() => {
-          testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+          testInstance.findByProps({ label: 'Go to inbox' }).props.onPress()
           expect(navigateSpy).toHaveBeenCalledWith('SecureMessaging')
           expect(updateSecureMessagingTab).toHaveBeenCalled()
         })

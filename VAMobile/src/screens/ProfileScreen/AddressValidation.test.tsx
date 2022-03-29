@@ -167,7 +167,7 @@ context('AddressValidation', () => {
         testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
       })
 
-      const useThisAddressButton = findByTestID(testInstance, 'Use This Address')
+      const useThisAddressButton = findByTestID(testInstance, 'Use this address')
       expect(useThisAddressButton).toBeTruthy()
 
       useThisAddressButton.props.onPress()

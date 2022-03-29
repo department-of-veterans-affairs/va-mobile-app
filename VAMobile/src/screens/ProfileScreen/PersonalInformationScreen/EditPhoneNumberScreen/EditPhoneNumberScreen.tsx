@@ -23,7 +23,7 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { dispatchClearErrors } from 'store/slices/errorSlice'
-import { formatPhoneNumber, getNumbersFromString, stringToTitleCase } from 'utils/formattingUtils'
+import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
@@ -184,7 +184,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: stringToTitleCase(buttonTitle) })}
+              label={t('personalInformation.removeData', { pageName: buttonTitle })}
               buttonType={ButtonTypesConstants.buttonImportant}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: buttonTitle })}
             />
