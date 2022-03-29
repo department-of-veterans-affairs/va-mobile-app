@@ -7,12 +7,13 @@ import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
+import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { SecureMessagingState, getMessage, getThread, moveMessage, moveMessageToTrash } from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { formatSubject, getfolderName } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -197,14 +198,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
     const withNavBar = replyExpired ? false : true
+    const sliceMessages = {
+      failureMsg: GenerateFolderMessage(newFolder, folders, false, true),
+      successMsg: GenerateFolderMessage(newFolder, folders, false, false),
+      undoFailureMsg: GenerateFolderMessage(newFolder, folders, true, true),
+      undoMsg: GenerateFolderMessage(newFolder, folders, true, false),
+    }
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
-      if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(moveMessageToTrash(messageID, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
-      } else {
-        dispatch(moveMessage(messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
-      }
+      dispatch(moveMessage(sliceMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
     }
   }
 

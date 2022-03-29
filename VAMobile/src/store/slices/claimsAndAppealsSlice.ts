@@ -61,6 +61,12 @@ export type ClaimsAndAppealsState = {
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
 }
+
+type MessageData = {
+  successMsg: string
+  failureMsg: string
+}
+
 const initialPaginationState = {
   currentPage: 1,
   totalEntries: 0,
@@ -447,8 +453,10 @@ export const submitClaimDecision =
  * Redux action to upload a file to a claim
  */
 export const uploadFileToClaim =
-  (claimID: string, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
+  (claimID: string, messages: MessageData, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
   async (dispatch) => {
+    const retryFunction = () => dispatch(uploadFileToClaim(claimID, messages, request, files))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartFileUpload())
     await logAnalyticsEvent(Events.vama_claim_upload_start())
     try {
@@ -504,10 +512,12 @@ export const uploadFileToClaim =
       await logAnalyticsEvent(Events.vama_claim_upload_compl())
 
       dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description, files, request }))
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         await logAnalyticsEvent(Events.vama_claim_upload_fail())
         dispatch(dispatchFinishFileUpload({ error }))
+        showSnackBar(messages.failureMsg, dispatch, retryFunction, false, true)
       }
     }
   }

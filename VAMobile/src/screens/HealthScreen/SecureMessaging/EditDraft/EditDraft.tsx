@@ -64,6 +64,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
+  const sliceMessages = {
+    successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
+    failureMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
+  }
 
   const {
     hasLoadedRecipients,
@@ -185,7 +189,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         {
           text: t('common:delete'),
           onPress: () => {
-            dispatch(deleteDraft(messageID))
+            dispatch(deleteDraft(messageID, sliceMessages))
           },
         },
       ],

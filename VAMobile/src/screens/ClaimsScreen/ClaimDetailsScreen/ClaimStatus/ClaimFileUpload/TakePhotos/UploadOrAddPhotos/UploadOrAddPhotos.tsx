@@ -49,6 +49,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
+  const sliceMessages = {
+    successMsg: t('fileUpload.submitted'),
+    failureMsg: t('fileUpload.submitted.error'),
+  }
 
   useEffect(() => {
     navigation.setOptions({
@@ -83,19 +87,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
 
     if (filesUploadedSuccess) {
-      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
       navigation.navigate('FileRequest', { claimID: claim?.id || '' })
-    } else if (fileUploadedFailure) {
-      showSnackBar(
-        t('fileUpload.submitted.error'),
-        dispatch,
-        () => {
-          dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
-        },
-        false,
-        true,
-        false,
-      )
     }
   }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
 
@@ -117,7 +109,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
+    dispatch(uploadFileToClaim(claim?.id || '', sliceMessages, request, imagesList || []))
   }
 
   const onUpload = (): void => {

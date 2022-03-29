@@ -27,6 +27,10 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([])
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
+  const sliceMessages = {
+    successMsg: t('fileUpload.submitted'),
+    failureMsg: t('fileUpload.submitted.error'),
+  }
 
   useEffect(() => {
     setFilesList([fileUploaded])
@@ -64,19 +68,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     }
 
     if (filesUploadedSuccess) {
-      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
       navigation.navigate('FileRequest', { claimID: claim?.id || '' })
-    } else if (fileUploadedFailure) {
-      showSnackBar(
-        t('fileUpload.submitted.error'),
-        dispatch,
-        () => {
-          dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
-        },
-        false,
-        true,
-        false,
-      )
     }
   }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
 
@@ -98,7 +90,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
+    dispatch(uploadFileToClaim(claim?.id || '', sliceMessages, request, filesList))
   }
 
   const onUpload = (): void => {

@@ -48,7 +48,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (deleteDraftComplete) {
-      showSnackBar(t('secureMessaging.deleteDraft.snackBarMessage'), dispatch, undefined, true, false, true)
       dispatch(dispatchResetDeleteDraftComplete())
     }
   }, [deleteDraftComplete, dispatch, t])
