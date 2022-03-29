@@ -1,4 +1,4 @@
-name: "Create Release PRs"
+name: "Merge Release to Main and Create PR to Develop"
 
 on:
   workflow_call:
@@ -10,8 +10,8 @@ on:
     outputs:
       devPrUrl:
         value: ${{jobs.create_prs.outputs.devPrUrl}}
-      releasePrUrl:
-        value: ${{jobs.create_prs.outputs.releasePrUrl}}
+      releaseHash:
+        value: ${{jobs.create_prs.outputs.releaseHash}}
   workflow_dispatch:
     inputs:
       version:
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       devPrUrl: ${{steps.urls.outputs.dev}}
-      releasePrUrl: ${{steps.urls.outputs.release}}
+      releaseHash: ${{steps.urls.outputs.release}}
     steps:
       - name: 'Set up GH CLI secret'
         run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
@@ -39,16 +39,26 @@ jobs:
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout release/${{inputs.version}}
+          git checkout -b dev-to-release
+          git push -u origin dev-to-release
           echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
-      - name: 'Create PR to merge changes back to main'
+      - name: 'Merge changes to main and tag for release build'
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout release/${{inputs.version}}
-          echo "RELEASE_PR=$(gh pr create -B main -t ${{inputs.version}} -b "PR to merge ${{inputs.version}} changes into main and build for the stores" -a travis-newby)" >> $GITHUB_ENV
+          git checkout -b merge-to-main
+          git merge -s ours main -m "merge main changes"
+          git checkout main
+          git merge merge-to-main --squash
+          git commit  -m ${{inputs.version}}
+          git push
+          git tag -a ${{inputs.version}} -m ${{inputs.version}}
+          git push origin ${{inputs.version}}
+          echo "RELEASE_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: 'Set Outputs'
         id: urls
         run: |
           echo "::set-output name=dev::${{env.DEV_PR}}"
-          echo "::set-output name=release::${{env.RELEASE_PR}}"
+          echo "::set-output name=release::${{env.RELEASE_HASH}}"
 
