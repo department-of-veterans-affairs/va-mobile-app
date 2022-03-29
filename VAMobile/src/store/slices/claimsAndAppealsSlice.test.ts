@@ -52,6 +52,11 @@ export const ActionTypes: {
   CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: 'claimsAndAppeals/dispatchFileUploadSuccess',
 }
 
+const sliceMessages = {
+    successMsg: 'success',
+    failureMsg: 'failure'
+}
+
 context('claimsAndAppeals', () => {
   const claimEventData: ClaimEventData = {
     description: 'need proof of something',
@@ -492,7 +497,7 @@ context('claimsAndAppeals', () => {
     it('should dispatch the correct actions', async () => {
       const store = realStore()
 
-      await store.dispatch(uploadFileToClaim('id', claimEventData, files))
+      await store.dispatch(uploadFileToClaim('id', sliceMessages, claimEventData, files))
 
       const actions = store.getActions()
 
@@ -539,7 +544,7 @@ context('claimsAndAppeals', () => {
       }
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(uploadFileToClaim('id', claimEventData, files))
+      await store.dispatch(uploadFileToClaim('id', sliceMessages, claimEventData, files))
       const { claimsAndAppeals } = store.getState()
 
       expect(claimsAndAppeals?.claim?.attributes.eventsTimeline[0].uploaded).toBe(true)
@@ -550,7 +555,7 @@ context('claimsAndAppeals', () => {
 
       const store = realStore()
 
-      await store.dispatch(uploadFileToClaim('id', claimEventData, multiFiles))
+      await store.dispatch(uploadFileToClaim('id', sliceMessages, claimEventData, multiFiles))
 
       expect(api.post as jest.Mock).toBeCalledWith('/v0/claim/id/documents/multi-image', { document_type: 'L228', files: ['imgstring', 'imgstring'], tracked_item_id: 1 })
     })
