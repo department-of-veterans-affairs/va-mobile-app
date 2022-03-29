@@ -14,7 +14,7 @@ The important sections within the console are listed below. Anything not listed 
 
 Something to note about all the data presented in these sections, none of the data is attributed to individual users for purposes of anonymity and privacy. The tools here allow you to get data on events and see stack traces of crashes, but not directly debug the issues of a specific user.
 
-All analytics, crashlytics, and performance are turned off for non-production environments, with the only exception being DebugView.
+All analytics, crashlytics, and performance are turned off for non-production environments, with the only exception being [DebugView](#debugview).
 
 ## Crashlytics
 
@@ -30,7 +30,7 @@ Performance provides many default metrics on http requests and app runtime, and 
 
 ![Performance Dashboard](/img/firebaseImages/firebase-perf.png)
 
-[Performance](https://firebase.google.com/docs/perf-mon) is added to the app through the `@react-native-firebase/perf` package. The only code added to the repo which affects Crashlytics is for toggling [DebugView](#debugview) and explained in that section. Additional custom traces can be added to the code by following the examples in the package docs.
+[Performance](https://firebase.google.com/docs/perf-mon) is added to the app through the `@react-native-firebase/perf` package. The only code added to the repo which affects Performance is for toggling [DebugView](#debugview) and explained in that section. Additional custom traces can be added to the code by following the examples in the package docs.
 
 ## App Distribution
 
@@ -40,11 +40,11 @@ App Distribution provides a dashboard for all the releases of the app. It lists 
 
 ## Analytics
 
-Analytics provides metrics on discrete events within the app. Most general events like accessing a screen are built into the package and provided in the dashboard without any additional coding, but all other actions like pressing a button or downloading a file are tracked as a custom analytic event. These events are collated and displayed in multiple ways in the Analytics subsections of the nav menu, as listed in the subsetions below.
+Analytics provides metrics on discrete events within the app. Most general events like accessing a screen are built into the package and provided in the dashboard without any additional coding, but all other actions like pressing a button or downloading a file are tracked as a custom analytic event. These events are collated and displayed in multiple ways in the Analytics subsections of the nav menu, as listed in the subsections below.
 
-To add an analytics event to the code:
+### To Add a New Analytics Event
 
-Add an event name with optional parameters to the `Events` constant in `VAMobile/src/constants/analytics.ts`. Additionally, if user properties need to be tracked, they can be added to the `UserAnalytics` object:
+Add an event name with optional parameters to the `Events` constant in `constants/analytics.ts`. Additionally, if user properties need to be tracked, they can be added to the `UserAnalytics` object:
 ```
 export const Events = {
   ... ,
@@ -68,14 +68,14 @@ export const UserAnalytics = {
   },
 }
 ```
-Then include the analytics utility functions in your screen and call the event name:
+Then include the analytics utility functions in your screen or store slice and call the event name:
 ```
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 
 export const analyticsAction = (): AppThunk => async (dispatch, getState) => {
   await setAnalyticsUserProperty(UserAnalytics.vama_uses_property(true))
   const [totalTime] = getAnalyticsTimers(getState())
-  await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
+  await logAnalyticsEvent(Events.vama_new_event_name(totalTime))
   ...
 }
 ```
@@ -98,9 +98,13 @@ Selecting the Realtime dashboard will show all events that occured within the in
 
 The Events page shows a list of all discrete events in the app, the count of each event firing, and the number of unique users who initiated that event. The events list can be filtered for a specific date range, but no other filters can be applied on this screen.
 
+![Analytics Events](/img/firebaseImages/firebase-events.png)
+
 ### DebugView
 
 DebugView allows developers to get a live stream of events in real-time, with up to a 60 second delay when first starting. An `Enable Firebase Debug Mode` button has been added to the developer screen to make debugging easier.
+
+![Analytics DebugView](/img/firebaseImages/firebase-debugview.png)
 
 For developers building locally, follow the steps listed below to get started:
 
