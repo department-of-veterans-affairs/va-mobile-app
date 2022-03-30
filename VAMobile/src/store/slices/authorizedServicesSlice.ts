@@ -15,6 +15,7 @@ export type AuthorizedServicesState = {
   appointments: boolean
   claims: boolean
   directDepositBenefits: boolean
+  directDepositBenefitsUpdate: boolean
   lettersAndDocuments: boolean
   militaryServiceHistory: boolean
   userProfileUpdate: boolean
@@ -27,6 +28,7 @@ export const initialAuthorizedServicesState: AuthorizedServicesState = {
   appointments: false,
   claims: false,
   directDepositBenefits: false,
+  directDepositBenefitsUpdate: false,
   lettersAndDocuments: false,
   militaryServiceHistory: false,
   userProfileUpdate: false,

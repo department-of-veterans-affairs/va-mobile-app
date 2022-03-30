@@ -4,7 +4,7 @@ import React, { FC, useEffect } from 'react'
 import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
@@ -20,15 +20,12 @@ type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const {
     directDepositBenefits,
+    directDepositBenefitsUpdate,
     userProfileUpdate,
     militaryServiceHistory: militaryInfoAuthorization,
   } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
-  const {
-    loading: personalInformationLoading,
-    needsDataLoad: personalInformationNeedsUpdate,
-    profile,
-  } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
+  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
   const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
 
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
@@ -82,8 +79,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, disabilityRatingNeedsUpdate, drNotInDowntime])
 
-  const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
-
   const getTopSection = (): Array<SimpleListItemObj> => {
     const buttonDataList: Array<SimpleListItemObj> = []
 
@@ -96,11 +91,11 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: navigateTo('MilitaryInformation') })
 
     // Show if user has permission or if user did not signed in through IDME
-    if (directDepositBenefits || !isIDMESignin) {
+    if (directDepositBenefits) {
       buttonDataList.push({
         text: t('directDeposit.information'),
         a11yHintText: t('directDeposit.a11yHint'),
-        onPress: isIDMESignin ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit'),
+        onPress: directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit'),
       })
     }
 

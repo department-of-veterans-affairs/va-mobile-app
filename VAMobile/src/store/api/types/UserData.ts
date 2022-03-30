@@ -54,6 +54,7 @@ export type VAServices =
   | 'appointments'
   | 'claims'
   | 'directDepositBenefits'
+  | 'directDepositBenefitsUpdate'
   | 'lettersAndDocuments'
   | 'militaryServiceHistory'
   | 'userProfileUpdate'
@@ -64,6 +65,7 @@ export const VAServicesConstants: {
   Appointments: VAServices
   Claims: VAServices
   DirectDepositBenefits: VAServices
+  DirectDepositBenefitsUpdate: VAServices
   LettersAndDocuments: VAServices
   MilitaryServiceHistory: VAServices
   UserProfileUpdate: VAServices
@@ -73,6 +75,7 @@ export const VAServicesConstants: {
   Appointments: 'appointments',
   Claims: 'claims',
   DirectDepositBenefits: 'directDepositBenefits',
+  DirectDepositBenefitsUpdate: 'directDepositBenefitsUpdate',
   LettersAndDocuments: 'lettersAndDocuments',
   MilitaryServiceHistory: 'militaryServiceHistory',
   UserProfileUpdate: 'userProfileUpdate',
