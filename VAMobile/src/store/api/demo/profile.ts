@@ -67,7 +67,7 @@ export const deleteUserPhone = (store: DemoStore, params: Params): EditResponseD
 /**
  * type to hold phone keys in UserDataProfile type to keep phone updates typesafe
  */
-type PhoneKeyUnion = 'homePhoneNumber' | 'mobilePhoneNumber' | 'workPhoneNumber' | 'faxNumber'
+type PhoneKeyUnion = 'homePhoneNumber' | 'mobilePhoneNumber' | 'workPhoneNumber'
 
 /**
  * function returns the tuple of the PhoneKeyUnion and ProfileFormattedFieldType to use as keys when updating the store
@@ -84,9 +84,6 @@ const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, ProfileFormattedFi
     }
     case PhoneTypeConstants.WORK: {
       return ['workPhoneNumber', 'formattedWorkPhone']
-    }
-    case PhoneTypeConstants.FAX: {
-      return ['faxNumber', 'formattedFaxPhone']
     }
   }
   throw Error('Unexpected Phone type')

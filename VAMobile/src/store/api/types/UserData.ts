@@ -21,7 +21,6 @@ export type UserDataProfile = {
   contactEmail: EmailData
   signinEmail: string
   birthDate: string
-  gender: string
   addresses: string
   residentialAddress?: AddressData
   mailingAddress?: AddressData
@@ -31,8 +30,6 @@ export type UserDataProfile = {
   formattedMobilePhone?: string
   workPhoneNumber: PhoneData
   formattedWorkPhone?: string
-  faxNumber: PhoneData
-  formattedFaxPhone?: string
   signinService: SigninServiceTypes
 }
 

@@ -59,7 +59,6 @@ context('personalInformation', () => {
         contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
         signinEmail: 'ben@gmail.com',
         birthDate: '1990-05-08',
-        gender: 'M',
         addresses: '',
         residentialAddress: {
           id: 1,
@@ -113,14 +112,6 @@ context('personalInformation', () => {
           phoneType: 'HOME',
         },
         formattedWorkPhone: '(858)-690-1287',
-        faxNumber: {
-          id: 1,
-          areaCode: '858',
-          countryCode: '1',
-          phoneNumber: '6901286',
-          phoneType: 'HOME',
-        },
-        formattedFaxPhone: '(858)-690-1286',
         signinService: 'IDME',
       },
       needsDataLoad: false,
@@ -268,14 +259,6 @@ context('personalInformation', () => {
         data: {
           attributes: {
             profile: {
-              fax_phone: {
-                id: 1,
-                areaCode: '555',
-                countryCode: '1',
-                phoneNumber: '1234567',
-                phoneType: 'FAX',
-              },
-              formattedFaxPhone: '(555)-123-4567',
               formattedHomePhone: '(555)-123-4568',
               formattedMobilePhone: '(555)-123-4569',
               formattedWorkPhone: '(555)-123-4560',
@@ -308,7 +291,6 @@ context('personalInformation', () => {
               contactEmail: { emailAddress: 'user123@id.me', id: '0' },
               signinEmail: 'user123@id.me',
               birthDate: '04/01/1970',
-              gender: 'M',
               addresses: '1234 Test Ln',
             },
           },

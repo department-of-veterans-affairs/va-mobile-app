@@ -76,7 +76,6 @@ const PhoneTypeToFormattedNumber: {
   HOME: 'formattedHomePhone',
   MOBILE: 'formattedMobilePhone',
   WORK: 'formattedWorkPhone',
-  FAX: 'formattedFaxPhone',
 }
 
 const AddressPouToProfileAddressFieldType: {
@@ -126,7 +125,7 @@ export const getProfileInfo =
 /**
  * Redux action to update the users phone number
  *
- * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE, or FAX)
+ * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE)
  * @param phoneNumber - string of numbers signifying area code and phone number
  * @param extension - string of numbers signifying extension number
  * @param numberId - number indicating the id of the phone number
@@ -467,7 +466,6 @@ const peronalInformationSlice = createSlice({
         profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
         profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
         profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
-        profile.formattedFaxPhone = getFormattedPhoneNumber(profile.faxNumber)
       }
 
       state.profile = profile
