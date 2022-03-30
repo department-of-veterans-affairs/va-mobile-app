@@ -139,10 +139,10 @@ context('ProfileScreen', () => {
       })
     })
 
-    describe('when user did not signs in through IDME and does not have direcDepositBenefits', () => {
+    describe('when user did not signs in through IDME and does not have directDepositBenefits', () => {
       it('should navigate to HowToUpdateDirectDeposit', async () => {
         await waitFor(() => {
-          initializeTestInstance(true, false, false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
+          initializeTestInstance(false, false, false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
         })
         findByTestID(testInstance, 'direct-deposit-information').props.onPress()
         expect(navigateToHowToUpdateDirectDepositSpy).toHaveBeenCalled()
