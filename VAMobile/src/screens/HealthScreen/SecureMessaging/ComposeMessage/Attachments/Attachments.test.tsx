@@ -92,7 +92,7 @@ context('Attachments', () => {
 
       const buttons = testInstance.findAllByType(VAButton)
       expect(buttons.length).toEqual(1)
-      expect(buttons[0].props.label).toEqual('Select a File')
+      expect(buttons[0].props.label).toEqual('Select a file')
 
       await waitFor(() => {
         buttons[0].props.onPress()
@@ -123,7 +123,7 @@ context('Attachments', () => {
 
         const buttons = testInstance.findAllByType(VAButton)
         expect(buttons.length).toEqual(1)
-        expect(buttons[0].props.label).toEqual('Select a File')
+        expect(buttons[0].props.label).toEqual('Select a file')
 
         await waitFor(() => {
           buttons[0].props.onPress()
@@ -151,7 +151,7 @@ context('Attachments', () => {
 
         const buttons = testInstance.findAllByType(VAButton)
         expect(buttons.length).toEqual(1)
-        expect(buttons[0].props.label).toEqual('Select a File')
+        expect(buttons[0].props.label).toEqual('Select a file')
 
         await waitFor(() => {
           buttons[0].props.onPress()
@@ -178,7 +178,7 @@ context('Attachments', () => {
         jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
         const allButtons = testInstance.findAllByType(VAButton)
-        expect(allButtons[0].props.label).toEqual('Select a File')
+        expect(allButtons[0].props.label).toEqual('Select a file')
 
         await waitFor(() => {
           allButtons[0].props.onPress()
@@ -203,7 +203,7 @@ context('Attachments', () => {
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
           const allButtons = testInstance.findAllByType(VAButton)
-          expect(allButtons[0].props.label).toEqual('Select a File')
+          expect(allButtons[0].props.label).toEqual('Select a file')
 
           await waitFor(() => {
             allButtons[0].props.onPress()
@@ -231,7 +231,7 @@ context('Attachments', () => {
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
           const allButtons = testInstance.findAllByType(VAButton)
-          expect(allButtons[0].props.label).toEqual('Select a File')
+          expect(allButtons[0].props.label).toEqual('Select a file')
 
           await waitFor(() => {
             allButtons[0].props.onPress()
@@ -261,7 +261,7 @@ context('Attachments', () => {
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
           const allButtons = testInstance.findAllByType(VAButton)
-          expect(allButtons[0].props.label).toEqual('Select a File')
+          expect(allButtons[0].props.label).toEqual('Select a file')
 
           await waitFor(() => {
             allButtons[0].props.onPress()
@@ -291,7 +291,7 @@ context('Attachments', () => {
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
           const allButtons = testInstance.findAllByType(VAButton)
-          expect(allButtons[0].props.label).toEqual('Select a File')
+          expect(allButtons[0].props.label).toEqual('Select a file')
 
           await waitFor(() => {
             allButtons[0].props.onPress()
