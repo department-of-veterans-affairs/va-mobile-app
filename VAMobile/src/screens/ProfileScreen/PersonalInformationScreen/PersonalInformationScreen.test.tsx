@@ -236,8 +236,8 @@ context('PersonalInformationScreen', () => {
 
   describe('when there is a mailing address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Tiburon, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
+      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Tiburon, CA, 94920')
     })
   })
 
@@ -256,7 +256,7 @@ context('PersonalInformationScreen', () => {
         component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
       testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Add your mailing address')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Add your mailing address')
 
       profile = {} as UserDataProfile
       store = {
@@ -271,14 +271,14 @@ context('PersonalInformationScreen', () => {
         component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
       testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Add your mailing address')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Add your mailing address')
     })
   })
 
   describe('when there is a residential address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('10 Laurel Way')
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Novato, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('10 Laurel Way')
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Novato, CA, 94920')
     })
   })
 
@@ -297,13 +297,13 @@ context('PersonalInformationScreen', () => {
         component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
       testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Add your home address')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Add your home address')
     })
   })
 
   describe('where is a home number', () => {
     it('should display the formatted home phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('(858)-690-1289')
+      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('(858)-690-1289')
     })
   })
 
@@ -326,13 +326,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Add your home phone number')
+      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('Add your home phone number')
     })
   })
 
   describe('where is a work number', () => {
     it('should display the formatted work phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('(858)-690-1287')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('(858)-690-1287')
     })
   })
 
@@ -355,13 +355,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Add your work phone number')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Add your work phone number')
     })
   })
 
   describe('where is a cell number', () => {
     it('should display the formatted cell phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('(858)-690-1288')
+      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('(858)-690-1288')
     })
   })
 
@@ -384,13 +384,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Add your cell phone number')
+      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Add your cell phone number')
     })
   })
 
   describe('when there is an email address', () => {
     it('should display the email address', async () => {
-      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('ben@gmail.com')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('ben@gmail.com')
     })
   })
 
@@ -413,7 +413,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('Add your email address')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Add your email address')
     })
   })
 
