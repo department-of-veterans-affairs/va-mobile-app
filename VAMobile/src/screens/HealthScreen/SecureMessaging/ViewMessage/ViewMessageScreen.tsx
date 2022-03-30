@@ -200,10 +200,10 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     const newFolder = Number(value)
     const withNavBar = replyExpired ? false : true
     const snackbarMessages: SnackbarMessages = {
-      successMsg: GenerateFolderMessage(newFolder, folders, false, false),
-      errorMsg: GenerateFolderMessage(newFolder, folders, false, true),
-      undoMsg: GenerateFolderMessage(newFolder, folders, true, false),
-      undoErrorMsg: GenerateFolderMessage(newFolder, folders, true, true),
+      successMsg: GenerateFolderMessage(t, newFolder, folders, false, false),
+      errorMsg: GenerateFolderMessage(t, newFolder, folders, false, true),
+      undoMsg: GenerateFolderMessage(t, currentFolder, folders, true, false),
+      undoErrorMsg: GenerateFolderMessage(t, currentFolder, folders, true, true),
     }
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)

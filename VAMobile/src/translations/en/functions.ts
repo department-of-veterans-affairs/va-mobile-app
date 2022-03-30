@@ -1,10 +1,8 @@
-import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { TFunction } from 'i18next'
 import { getfolderName } from 'utils/secureMessaging'
-import { useTranslation } from 'utils/hooks'
 
-export const GenerateFolderMessage = (folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean): string => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+export const GenerateFolderMessage = (t: TFunction, folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean): string => {
   const folderName = getfolderName(folderID.toString(), folders)
   let messageString
   const folderString =
