@@ -27,6 +27,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { Events, UserAnalytics } from 'constants/analytics'
 
+import { SnackbarMessages } from 'components/SnackBar'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -60,11 +61,6 @@ export type ClaimsAndAppealsState = {
   claimsAndAppealsByClaimType: ClaimsAndAppealsListType
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
-}
-
-type MessageData = {
-  successMsg: string
-  failureMsg: string
 }
 
 const initialPaginationState = {
@@ -453,7 +449,7 @@ export const submitClaimDecision =
  * Redux action to upload a file to a claim
  */
 export const uploadFileToClaim =
-  (claimID: string, messages: MessageData, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
+  (claimID: string, messages: SnackbarMessages, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
   async (dispatch) => {
     const retryFunction = () => dispatch(uploadFileToClaim(claimID, messages, request, files))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
@@ -517,7 +513,7 @@ export const uploadFileToClaim =
       if (isErrorObject(error)) {
         await logAnalyticsEvent(Events.vama_claim_upload_fail())
         dispatch(dispatchFinishFileUpload({ error }))
-        showSnackBar(messages.failureMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }

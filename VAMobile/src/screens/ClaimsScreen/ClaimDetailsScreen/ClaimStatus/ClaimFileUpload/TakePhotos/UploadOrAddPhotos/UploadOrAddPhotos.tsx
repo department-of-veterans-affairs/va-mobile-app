@@ -29,6 +29,7 @@ import { DocumentTypes526 } from 'constants/documentTypes'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { bytesToFinalSizeDisplay } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
@@ -49,9 +50,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
-  const sliceMessages = {
+  const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
-    failureMsg: t('fileUpload.submitted.error'),
+    errorMsg: t('fileUpload.submitted.error'),
   }
 
   useEffect(() => {
@@ -109,7 +110,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', sliceMessages, request, imagesList || []))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || []))
   }
 
   const onUpload = (): void => {

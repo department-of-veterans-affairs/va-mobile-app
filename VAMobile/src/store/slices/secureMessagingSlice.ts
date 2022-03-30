@@ -38,6 +38,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Params, contentTypes } from 'store/api/api'
 import { READ, UNREAD } from 'constants/secureMessaging'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
+import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -130,13 +131,6 @@ export const initialSecureMessagingState: SecureMessagingState = {
   deleteDraftComplete: false,
   deleteDraftFailed: false,
   deletingDraft: false,
-}
-
-type MessageData = {
-  failureMsg: string
-  successMsg: string
-  undoFailureMsg?: string
-  undoMsg?: string
 }
 
 /**
@@ -513,7 +507,7 @@ export const sendMessage =
 
 const refreshFoldersAfterMove = (
   dispatch: AppDispatch,
-  messages: MessageData,
+  messages: SnackbarMessages,
   messageID: number,
   newFolderID: number,
   currentFolderID: number,
@@ -554,7 +548,7 @@ const refreshFoldersAfterMove = (
  */
 export const moveMessage =
   (
-    messages: MessageData,
+    messages: SnackbarMessages,
     messageID: number,
     newFolderID: number,
     currentFolderID: number,
@@ -580,7 +574,7 @@ export const moveMessage =
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage({ error }))
-        showSnackBar(isUndo && messages.undoFailureMsg ? messages.undoFailureMsg : messages.failureMsg, dispatch, retryFunction, false, true, withNavBar)
+        showSnackBar(isUndo && messages.undoErrorMsg ? messages.undoErrorMsg : messages.errorMsg, dispatch, retryFunction, false, true, withNavBar)
       }
     }
   }
@@ -589,7 +583,7 @@ export const moveMessage =
  * Redux action to delete a saved draft
  */
 export const deleteDraft =
-  (messageID: number, messages: MessageData): AppThunk =>
+  (messageID: number, messages: SnackbarMessages): AppThunk =>
   async (dispatch) => {
     const retryFunction = () => dispatch(deleteDraft(messageID, messages))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
@@ -606,7 +600,7 @@ export const deleteDraft =
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishDeleteDraft(error))
-        showSnackBar(messages.failureMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }

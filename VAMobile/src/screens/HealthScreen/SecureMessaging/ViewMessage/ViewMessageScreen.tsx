@@ -14,6 +14,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
+import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject, getfolderName } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -198,16 +199,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
     const withNavBar = replyExpired ? false : true
-    const sliceMessages = {
-      failureMsg: GenerateFolderMessage(newFolder, folders, false, true),
+    const snackbarMessages: SnackbarMessages = {
       successMsg: GenerateFolderMessage(newFolder, folders, false, false),
-      undoFailureMsg: GenerateFolderMessage(newFolder, folders, true, true),
+      errorMsg: GenerateFolderMessage(newFolder, folders, false, true),
       undoMsg: GenerateFolderMessage(newFolder, folders, true, false),
+      undoErrorMsg: GenerateFolderMessage(newFolder, folders, true, true),
     }
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
-      dispatch(moveMessage(sliceMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
+      dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
     }
   }
 

@@ -47,6 +47,7 @@ import {
   saveDraft,
   updateSecureMessagingTab,
 } from 'store/slices'
+import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
@@ -64,9 +65,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
-  const sliceMessages = {
+  const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
-    failureMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
+    errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
   }
 
   const {
@@ -189,7 +190,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         {
           text: t('common:delete'),
           onPress: () => {
-            dispatch(deleteDraft(messageID, sliceMessages))
+            dispatch(deleteDraft(messageID, snackbarMessages))
           },
         },
       ],
