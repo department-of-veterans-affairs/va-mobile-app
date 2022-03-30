@@ -566,9 +566,9 @@ export const moveMessage =
 
     try {
       if (newFolderID === SecureMessagingSystemFolderIdConstants.DELETED) {
-        await deleteMessage(messageID)
+        await callDeleteMessageApi(messageID)
       } else {
-        await messageMove(messageID, newFolderID)
+        await callMoveMessageApi(messageID, newFolderID)
       }
       refreshFoldersAfterMove(dispatch, messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
     } catch (error) {
@@ -590,7 +590,7 @@ export const deleteDraft =
     dispatch(dispatchStartDeleteDraft())
 
     try {
-      await deleteMessage(messageID)
+      await callDeleteMessageApi(messageID)
 
       dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
@@ -608,7 +608,7 @@ export const deleteDraft =
 /**
  * Delete a message
  */
-export const deleteMessage = async (messageID: number): Promise<void> => {
+export const callDeleteMessageApi = async (messageID: number): Promise<void> => {
   await api.del(`/v0/messaging/health/messages/${messageID}`)
 }
 
@@ -617,7 +617,7 @@ export const deleteMessage = async (messageID: number): Promise<void> => {
  * @param messageID - the messageID number
  * @param newFolderID - the new folder for the message
  */
-export const messageMove = async (messageID: number, newFolderID: number): Promise<void> => {
+export const callMoveMessageApi = async (messageID: number, newFolderID: number): Promise<void> => {
   await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
 }
 
