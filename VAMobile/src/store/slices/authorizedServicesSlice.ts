@@ -27,8 +27,8 @@ export const initialAuthorizedServicesState: AuthorizedServicesState = {
   appeals: false,
   appointments: false,
   claims: false,
-  directDepositBenefits: false,
-  directDepositBenefitsUpdate: false,
+  directDepositBenefits: false, // User can view, but not edit their Direct Deposit
+  directDepositBenefitsUpdate: false, // User can view and update their Direct Deposit
   lettersAndDocuments: false,
   militaryServiceHistory: false,
   userProfileUpdate: false,
