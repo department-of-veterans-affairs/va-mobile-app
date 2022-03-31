@@ -1,7 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { useActionSheet } from '@expo/react-native-action-sheet'
 import DocumentPicker from 'react-native-document-picker'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
@@ -10,7 +9,7 @@ import { ClaimsStackParamList, DocumentPickerResponse } from '../../../../Claims
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -21,9 +20,9 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { showActionSheetWithOptions } = useActionSheet()
   const [error, setError] = useState('')
   const { request, focusOnSnackbar } = route.params
+  const showActionSheet = useShowActionSheet()
 
   useEffect(() => {
     navigation.setOptions({
@@ -81,7 +80,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
     const options = [t('fileUpload.fileFolder'), t('common:cancel')]
 
-    showActionSheetWithOptions(
+    showActionSheet(
       {
         options,
         cancelButtonIndex: 1,
