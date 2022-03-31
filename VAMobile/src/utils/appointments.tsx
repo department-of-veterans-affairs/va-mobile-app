@@ -142,12 +142,13 @@ const getListItemsForAppointments = (
     const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+    const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
 
     listItems.push({
       textLines,
       a11yValue,
       onPress: () => onAppointmentPress(appointment.id),
-      a11yHintText: t('appointments.viewDetails'),
+      a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
       testId: getTestIDFromTextLines(textLines),
     })
   })

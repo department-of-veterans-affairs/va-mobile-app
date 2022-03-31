@@ -11,7 +11,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { deepCopyObject } from 'utils/common'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToSortedMonths } from 'utils/appointments'
+import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToSortedMonths, isAPendingAppointment } from 'utils/appointments'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -130,6 +130,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment, index) => {
       const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
+      const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = tc('common:listPosition', { position, total: totalEntries })
@@ -138,7 +139,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines,
         a11yValue,
         onPress: () => onPastAppointmentPress(appointment.id),
-        a11yHintText: t('appointments.viewDetails'),
+        a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
         testId: getTestIDFromTextLines(textLines),
       })
     })

@@ -140,7 +140,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
             onPress={onCancelAppointment}
             label={t('upcomingAppointmentDetails.cancelAppointment')}
             a11yHint={t('upcomingAppointmentDetails.cancelAppointment.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
+            buttonType={ButtonTypesConstants.buttonDestructive}
             {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
           />
         </Box>

@@ -91,6 +91,7 @@
   "pagination.info": "{{beginIdx}} to {{endIdx}} of {{totalEntries}}",
   "pagination.previous": "Previous page",
   "pagination.next": "Next page",
+  "phoneNumber": "Phone number",
   "pickerLaunchBtn.a11yHint": "Launches the picker modal",
   "pickerLaunchBtn": "Move",
   "pickerMoveMessageToFolder": "Move message to",
