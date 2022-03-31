@@ -43,7 +43,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
   }
 
   return (
-    <Box {...testIdProps('Your-appeal: Status-tab-appeal-details-page')}>
+    <Box>
       <CollapsibleView text={t('appealDetails.viewPastEvents')} contentInTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')}>
         <AppealTimeline events={events} />
       </CollapsibleView>
