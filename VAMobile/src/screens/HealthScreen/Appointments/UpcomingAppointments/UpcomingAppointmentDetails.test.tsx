@@ -255,36 +255,13 @@ context('UpcomingAppointmentDetails', () => {
         initializeTestInstance(AppointmentTypeConstants.VA, AppointmentStatusConstants.CANCELLED, undefined, false, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit VA.gov or call your VA Medical Center.')).toBeTruthy()
     })
   })
 
   describe('when the status is not CANCELLED', () => {
     it('should display the add to calendar click for action link', async () => {
       expect(testInstance.findAllByType(ClickForActionLink)[0].props.displayedText).toEqual('Add to calendar')
-    })
-  })
-
-  describe('when the appointment cancellation is successful', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
-      })
-    })
-    it('should display alert', async () => {
-      expect(testInstance.findByType(AlertBox)).toBeTruthy()
-    })
-  })
-
-  describe('when the appointment cancellation is unsuccessful', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
-      })
-    })
-
-    it('should display alert', async () => {
-      expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })
   })
 
@@ -310,14 +287,14 @@ context('UpcomingAppointmentDetails', () => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
       })
 
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if facility cancelled (rebook)', async () => {
       await waitFor(() => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       })
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })
 
