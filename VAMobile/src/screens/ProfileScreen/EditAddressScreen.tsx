@@ -30,7 +30,6 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { States } from 'constants/states'
 import { profileAddressOptions } from './AddressSummary'
-import { stringToTitleCase } from '../../utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -495,7 +494,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: stringToTitleCase(lowerCaseTitle) })}
+              label={t('personalInformation.removeData', { pageName: lowerCaseTitle })}
               buttonType={ButtonTypesConstants.buttonDestructive}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
             />

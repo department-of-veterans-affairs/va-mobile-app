@@ -5,12 +5,14 @@ import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/type
 import { StackNavigationOptions } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
+import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React from 'react'
 
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
+import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { AppDispatch, RootState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
@@ -22,6 +24,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
+import { capitalizeFirstLetter, stringToTitleCase } from './formattingUtils'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
@@ -284,7 +287,7 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
       ActionSheetIOS.showActionSheetWithOptions(
         {
           ...remainingProps,
-          options: buttons.map((button) => button.text),
+          options: buttons.map((button) => stringToTitleCase(button.text)),
         },
         (buttonIndex) => {
           const onPress = buttons[buttonIndex]?.onPress
@@ -316,8 +319,8 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
           if (scrollPoint) {
             messageRef.current.measureLayout(
               scrollPoint,
-              (_, y, __, height) => {
-                currentObject.scrollTo({ y: y * height, animated: false })
+              (_, y) => {
+                currentObject.scrollTo({ y: y, animated: true })
               },
               () => {
                 currentObject.scrollTo({ y: 0 })
@@ -329,7 +332,7 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
       if (shouldFocus) {
         setFocus()
       }
-    }, 200)
+    }, 400)
     return () => clearTimeout(timeOut)
   }, [messageRef, setFocus, shouldFocus])
 
@@ -420,3 +423,28 @@ export function useAttachments(): [
 }
 
 export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
+
+/**
+ * Returns a wrapper to showActionSheetWithOptions that converts iOS options to title case
+ */
+export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
+  const { showActionSheetWithOptions } = useActionSheet()
+
+  return (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => {
+    // Use title case for iOS, sentence case for Android
+    const casedOptionText = options.options.map((optionText) => {
+      if (isIOS()) {
+        return stringToTitleCase(optionText)
+      } else {
+        return capitalizeFirstLetter(optionText)
+      }
+    })
+
+    const casedOptions = {
+      ...options,
+      options: casedOptionText,
+    }
+
+    showActionSheetWithOptions(casedOptions, callback)
+  }
+}

@@ -1,7 +1,6 @@
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Dimensions } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
@@ -33,7 +32,7 @@ import { bytesToFinalSizeDisplay } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
@@ -41,7 +40,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const { showActionSheetWithOptions } = useActionSheet()
+  const showActionSheetWithOptions = useShowActionSheet()
   const { request: originalRequest, firstImageResponse } = route.params
   const dispatch = useDispatch()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
@@ -172,7 +171,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         return (
           /** Rightmost photo doesn't need right margin b/c of gutter margins
            * Every 3rd photo, right margin is changed to zero*/
-          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
+          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index}>
             <PhotoPreview
               width={calculatedWidth}
               height={calculatedWidth}
@@ -180,6 +179,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
               onDeleteCallback={(): void => {
                 deletePhoto(deleteCallbackIfUri, index, imagesList || [])
               }}
+              photoPosition={t(imagesList && imagesList?.length > 1 ? 'fileUpload.ofTotalPhotos' : 'fileUpload.ofTotalPhoto', {
+                photoNum: index + 1,
+                totalPhotos: imagesList?.length,
+              })}
               lastPhoto={imagesList?.length === 1 ? true : undefined}
             />
           </Box>
@@ -191,7 +194,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       <Box display="flex" flexDirection="row" flexWrap="wrap" mx={theme.dimensions.gutter}>
         {uploadedImages()}
         {(!imagesList || imagesList.length < MAX_NUM_PHOTOS) && (
-          <Box mt={condensedMarginBetween} accessible={true} accessibilityRole="image">
+          <Box mt={condensedMarginBetween}>
             <PhotoAdd
               width={calculatedWidth}
               height={calculatedWidth}
@@ -206,6 +209,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
+    snackBar.hideAll()
     if (response && response.assets && response.assets.length + (imagesList?.length || 0) > MAX_NUM_PHOTOS) {
       setErrorMessage(t('fileUpload.tooManyPhotosError'))
     } else {

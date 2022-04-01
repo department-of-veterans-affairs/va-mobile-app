@@ -20,6 +20,7 @@ type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const {
     directDepositBenefits,
+    directDepositBenefitsUpdate,
     userProfileUpdate,
     militaryServiceHistory: militaryInfoAuthorization,
   } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -82,7 +83,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, disabilityRatingNeedsUpdate, drNotInDowntime])
 
-  const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
+  const isIDMEOrLoginGovSignin = profile?.signinService === SigninServiceTypesConstants.IDME || profile?.signinService === SigninServiceTypesConstants.LOGINGOV
 
   const getTopSection = (): Array<SimpleListItemObj> => {
     const buttonDataList: Array<SimpleListItemObj> = []
@@ -96,11 +97,11 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: navigateTo('MilitaryInformation') })
 
     // Show if user has permission or if user did not signed in through IDME
-    if (directDepositBenefits || !isIDMESignin) {
+    if (directDepositBenefits || !isIDMEOrLoginGovSignin) {
       buttonDataList.push({
         text: t('directDeposit.information'),
         a11yHintText: t('directDeposit.a11yHint'),
-        onPress: isIDMESignin ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit'),
+        onPress: directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit'),
       })
     }
 
