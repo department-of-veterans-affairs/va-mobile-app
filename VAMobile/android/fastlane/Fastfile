@@ -43,10 +43,10 @@ platform :android do
     puts 'Run the review lane'
     update_version_and_build(options[:version ])
     bundle("Release")
-    upload("Pre-Prod Stash")
-    tag_build
+#     upload("Pre-Prod Stash")
+#     tag_build
     message = "New Production build successfully uploaded to Pre=Prod Stash Track on Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
+#     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
 
   desc "Promote the release in Pre-Prod stash to Production"
@@ -95,7 +95,8 @@ platform :android do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-    slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+    puts exception
+#     slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
 # method to update the version and build in the repo
