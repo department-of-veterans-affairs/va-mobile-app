@@ -88,15 +88,6 @@ const DebugScreen: FC = ({}) => {
             />
           </TextArea>
         </Box>
-        <Box mt={theme.dimensions.contentMarginTop}>
-          <TextArea>
-            <VAButton
-              onPress={onClickFirebaseDebugMode}
-              label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase Debug Mode`}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-            />
-          </TextArea>
-        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
