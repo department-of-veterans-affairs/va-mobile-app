@@ -1,7 +1,7 @@
 import { isEqual, map } from 'underscore'
 import React, { ReactElement, useEffect } from 'react'
 
-import { Box, SelectorType, TextView, VASelector } from '../../index'
+import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SelectorType, TextLine, TextView, VASelector } from '../../index'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -28,10 +28,14 @@ export type RadioGroupProps<T> = {
   onChange: (val: T) => void
   /** optional boolean that disables the radio group when set to true */
   disabled?: boolean
+  /** optional boolean to indicate to use the radio buttons in a list */
+  isRadioList?: boolean
+  /** optional text to show as the radio list title */
+  radioListTitle?: string
 }
 
 /**A common component to display radio button selectors for a list of selectable items*/
-const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGroupProps<T>): ReactElement => {
+const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const hasSingleOption = options.length === 1
@@ -63,8 +67,9 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
     return <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} labelKey={labelKey} labelArgs={labelArgs} disabled={disabled} />
   }
 
-  const getRadios = (): ReactElement => {
-    const radios = map(options, (option, index) => {
+  /** creates the radio group with an optiona title and the radio button on the left side */
+  const getStandardRadioGroup = () => {
+    return map(options, (option, index) => {
       const { headerText } = option
       return (
         <Box key={index}>
@@ -81,8 +86,36 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
         </Box>
       )
     })
+  }
 
-    return <Box>{radios}</Box>
+  /** creates the radio group with a optional title and the radio buttons in a list with the radio button ot the far right */
+  const getRadioGroupList = () => {
+    const listItems: Array<DefaultListItemObj> = options.map((option) => {
+      const selected = isEqual(option.value, value)
+      const onSelectorChange = (): void => {
+        if (!disabled) {
+          onChange(option.value)
+        }
+      }
+      const textLines: Array<TextLine> = [{ text: option.labelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' }]
+
+      const radioButton: DefaultListItemObj = {
+        textLines,
+        decorator: disabled ? ButtonDecoratorType.DisablededRadio : selected ? ButtonDecoratorType.FilledRadio : ButtonDecoratorType.EmptyRadio,
+        onPress: onSelectorChange,
+      }
+
+      return radioButton
+    })
+    return (
+      <Box>
+        <DefaultList items={listItems} title={radioListTitle} />
+      </Box>
+    )
+  }
+
+  const getRadios = (): ReactElement => {
+    return <Box>{isRadioList ? getRadioGroupList() : getStandardRadioGroup()}</Box>
   }
 
   return getRadios()

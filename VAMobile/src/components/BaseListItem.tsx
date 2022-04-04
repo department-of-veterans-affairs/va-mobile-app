@@ -20,6 +20,12 @@ export enum ButtonDecoratorType {
   SelectedItem = 'SelectedItem',
   /** Trash can decorator */
   Delete = 'Delete',
+  /** Empty radio button decorator */
+  EmptyRadio = 'EmptyRadio',
+  /** Filled radio button decorator */
+  FilledRadio = 'FilledRadio',
+  /** Disabled radio button decorator */
+  DisablededRadio = 'DisabledRadio',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -87,6 +93,39 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
     case ButtonDecoratorType.Delete:
       return (
         <VAIcon name={'TrashSolid'} height={theme.dimensions.listTrashIconHeight} width={theme.dimensions.listTrashIconWidth} fill={theme.colors.icon.error} {...decoratorProps} />
+      )
+    case ButtonDecoratorType.FilledRadio:
+      return (
+        <VAIcon
+          name={'FilledRadio'}
+          height={theme.dimensions.selectorHeight}
+          width={theme.dimensions.selectorWidth}
+          fill={theme.colors.icon.checkboxEnabledPrimary}
+          stroke={theme.colors.icon.checkboxEnabledPrimary}
+          {...decoratorProps}
+        />
+      )
+    case ButtonDecoratorType.EmptyRadio:
+      return (
+        <VAIcon
+          name={'EmptyRadio'}
+          height={theme.dimensions.selectorHeight}
+          width={theme.dimensions.selectorWidth}
+          fill={theme.colors.icon.checkboxDisabledContrast}
+          stroke={theme.colors.icon.checkboxDisabled}
+          {...decoratorProps}
+        />
+      )
+    case ButtonDecoratorType.DisablededRadio:
+      return (
+        <VAIcon
+          name={'DisabledRadio'}
+          height={theme.dimensions.selectorHeight}
+          width={theme.dimensions.selectorWidth}
+          fill={theme.colors.icon.checkboxDisabledContrast}
+          stroke={theme.colors.icon.checkboxDisabled}
+          {...decoratorProps}
+        />
       )
     default:
       return (
@@ -162,6 +201,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     onPressOut: _onPressOut,
     accessible: true,
     accessibilityRole,
+    disabled: decorator === ButtonDecoratorType.DisablededRadio,
   }
 
   const boxProps: BoxProps = {

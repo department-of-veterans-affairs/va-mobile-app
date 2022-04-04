@@ -15,10 +15,12 @@ type AppointmentFlowLayoutProps = {
   secondActionButtonPress?: () => void
   /** Optional boolean to disable first action button  */
   disableFirstAction?: boolean
+  /** Optional boolean to disable second action button  */
+  disableSecondAction?: boolean
 }
 
 /** Component for the common sections for the appointment flow modal steps */
-const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({ onClose, firstActionButtonPress, secondActionButtonPress, disableFirstAction, children }) => {
+const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({ onClose, firstActionButtonPress, secondActionButtonPress, disableFirstAction, disableSecondAction, children }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const { contentMarginBottom, gutter, contentMarginTop, standardMarginBetween, textIconMargin } = theme.dimensions
@@ -28,18 +30,18 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({ onClose, firstA
     if (secondActionButtonPress) {
       return (
         <Box flexDirection="row">
-          <Box flex={0.5} mr={10}>
-            <VAButton onPress={firstActionPress} label={t('common:back')} buttonType={'brandedPrimary'} disabled={disableFirstAction} />
+          <Box flex={1} mr={10}>
+            <VAButton onPress={firstActionPress} label={t('common:back')} buttonType={'buttonPrimary'} disabled={disableFirstAction} />
           </Box>
-          <Box flex={0.5}>
-            <VAButton onPress={secondActionButtonPress} label={t('common:continue')} buttonType={'brandedPrimary'} />
+          <Box flex={1}>
+            <VAButton onPress={secondActionButtonPress} label={t('common:continue')} buttonType={'buttonPrimary'} disabled={disableSecondAction} />
           </Box>
         </Box>
       )
     } else {
       return (
         <Box>
-          <VAButton onPress={firstActionPress} label={t('appointments.submitAppointmentRequest')} buttonType={'brandedPrimary'} />
+          <VAButton onPress={firstActionPress} label={t('appointments.submitAppointmentRequest')} buttonType={'buttonPrimary'} />
         </Box>
       )
     }
