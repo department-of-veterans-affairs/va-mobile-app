@@ -3,7 +3,7 @@ import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, SegmentedControl, VAButton, VAScrollView } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -11,7 +11,7 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
@@ -33,6 +33,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
@@ -116,6 +117,10 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
         </Box>
+      </Box>
+      {/* TODO: Needs to be removed and replace with the actual button per design */}
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <VAButton onPress={navigateTo('AppointmentFlowModal')} label={'Request Appointment'} buttonType={ButtonTypesConstants.buttonPrimary} />
       </Box>
     </VAScrollView>
   )

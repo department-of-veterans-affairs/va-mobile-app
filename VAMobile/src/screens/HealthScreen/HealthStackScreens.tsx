@@ -1,6 +1,6 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { TFunction } from 'i18next'
-import { createStackNavigator } from '@react-navigation/stack'
+import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
@@ -8,6 +8,7 @@ import { FormHeaderType } from 'constants/secureMessaging'
 import { SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
+import AppointmentFlowModal from './Appointments/RequestAppointments/AppointmentFlowModal'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
@@ -99,6 +100,7 @@ export type HealthStackParamList = WebviewStackParams & {
   VaccineDetails: {
     vaccineId: string
   }
+  AppointmentFlowModal: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -140,5 +142,11 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
     <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
+    <HealthStack.Screen
+      key={'AppointmentFlowModal'}
+      name="AppointmentFlowModal"
+      component={AppointmentFlowModal}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
   ]
 }
