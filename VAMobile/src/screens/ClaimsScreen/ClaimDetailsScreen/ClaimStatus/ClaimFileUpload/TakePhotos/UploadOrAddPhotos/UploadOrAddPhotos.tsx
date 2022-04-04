@@ -28,6 +28,7 @@ import { DocumentTypes526 } from 'constants/documentTypes'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { bytesToFinalSizeDisplay } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
@@ -48,6 +49,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('fileUpload.submitted'),
+    errorMsg: t('fileUpload.submitted.error'),
+  }
 
   useEffect(() => {
     navigation.setOptions({
@@ -82,19 +87,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
 
     if (filesUploadedSuccess) {
-      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
       navigation.navigate('FileRequest', { claimID: claim?.id || '' })
-    } else if (fileUploadedFailure) {
-      showSnackBar(
-        t('fileUpload.submitted.error'),
-        dispatch,
-        () => {
-          dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
-        },
-        false,
-        true,
-        false,
-      )
     }
   }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
 
@@ -116,7 +109,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, imagesList || []))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || []))
   }
 
   const onUpload = (): void => {
