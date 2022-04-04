@@ -1,6 +1,5 @@
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -166,6 +165,11 @@ android {
             keyPassword System.getenv("ANDROID_KS_KEY_PW")
         }
     }
+    packagingOptions {
+        jniLibs {
+            pickFirsts += ['**/armeabi-v7a/libc++_shared.so', '**/x86/libc++_shared.so', '**/x86_64/libc++_shared.so', '**/arm64-v8a/libc++_shared.so', '**/libjsc.so']
+        }
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -200,13 +204,6 @@ android {
         }
     }
 
-      packagingOptions {
-       pickFirst '**/armeabi-v7a/libc++_shared.so'
-       pickFirst '**/x86/libc++_shared.so'
-       pickFirst '**/x86_64/libc++_shared.so'
-       pickFirst '**/arm64-v8a/libc++_shared.so'
-       pickFirst '**/libjsc.so'
-    }
 }
 
 dependencies {
@@ -225,7 +222,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     // kotlin
-    implementation "androidx.core:core-ktx:1.6.0"
+    implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$KOTLIN_VERSION"
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
