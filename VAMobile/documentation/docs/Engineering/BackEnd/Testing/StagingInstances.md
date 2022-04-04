@@ -4,7 +4,7 @@
 API calls are made in a similar way to the review instances above. Note that your API client may not connect to staging if going through the SOCKS proxy. The API URL for staging is http://staging-api.va.gov/mobile.
 ```
 curl --request GET \
-  --url https://staging-api.va.gov/mobile/v0/user \
+  --url https://staging-api.va.gov/mobile/v1/user \
   --header 'Authorization: Bearer 6qdITmRgDqEmsdGyzNj7' \
   --header 'X-Key-Inflection: camel'
 ```

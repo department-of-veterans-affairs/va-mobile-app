@@ -15,6 +15,7 @@ export type AuthorizedServicesState = {
   appointments: boolean
   claims: boolean
   directDepositBenefits: boolean
+  directDepositBenefitsUpdate: boolean
   lettersAndDocuments: boolean
   militaryServiceHistory: boolean
   userProfileUpdate: boolean
@@ -26,7 +27,8 @@ export const initialAuthorizedServicesState: AuthorizedServicesState = {
   appeals: false,
   appointments: false,
   claims: false,
-  directDepositBenefits: false,
+  directDepositBenefits: false, // User can view, but not edit their Direct Deposit
+  directDepositBenefitsUpdate: false, // User can view and update their Direct Deposit
   lettersAndDocuments: false,
   militaryServiceHistory: false,
   userProfileUpdate: false,

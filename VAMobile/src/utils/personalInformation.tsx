@@ -134,8 +134,6 @@ export const getPhoneDataForPhoneType = (phoneType: PhoneType, profile: UserData
   switch (phoneType) {
     case PhoneTypeConstants.HOME:
       return profile.homePhoneNumber
-    case PhoneTypeConstants.FAX:
-      return profile.faxNumber
     case PhoneTypeConstants.MOBILE:
       return profile.mobilePhoneNumber
     case PhoneTypeConstants.WORK:

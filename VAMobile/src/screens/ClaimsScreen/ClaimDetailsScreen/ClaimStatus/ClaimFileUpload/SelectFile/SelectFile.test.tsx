@@ -62,7 +62,7 @@ context('SelectFile', () => {
       expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
 
       const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0]
-      expect(actionSheetConfig.options).toEqual(['File folder', 'Cancel'])
+      expect(actionSheetConfig.options).toEqual(['File Folder', 'Cancel'])
     })
   })
 })

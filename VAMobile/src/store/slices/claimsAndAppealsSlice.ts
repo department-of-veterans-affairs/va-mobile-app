@@ -27,6 +27,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { Events, UserAnalytics } from 'constants/analytics'
 
+import { SnackbarMessages } from 'components/SnackBar'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -61,6 +62,7 @@ export type ClaimsAndAppealsState = {
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
 }
+
 const initialPaginationState = {
   currentPage: 1,
   totalEntries: 0,
@@ -447,8 +449,10 @@ export const submitClaimDecision =
  * Redux action to upload a file to a claim
  */
 export const uploadFileToClaim =
-  (claimID: string, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
+  (claimID: string, messages: SnackbarMessages, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
   async (dispatch) => {
+    const retryFunction = () => dispatch(uploadFileToClaim(claimID, messages, request, files))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartFileUpload())
     await logAnalyticsEvent(Events.vama_claim_upload_start())
     try {
@@ -504,10 +508,12 @@ export const uploadFileToClaim =
       await logAnalyticsEvent(Events.vama_claim_upload_compl())
 
       dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description, files, request }))
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         await logAnalyticsEvent(Events.vama_claim_upload_fail())
         dispatch(dispatchFinishFileUpload({ error }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }

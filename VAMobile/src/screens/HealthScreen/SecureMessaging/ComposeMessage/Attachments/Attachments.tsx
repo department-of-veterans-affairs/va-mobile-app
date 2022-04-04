@@ -1,7 +1,6 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
-import { useActionSheet } from '@expo/react-native-action-sheet'
 import _ from 'underscore'
 import styled from 'styled-components'
 
@@ -17,7 +16,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -34,7 +33,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const tFunction = useTranslation()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { showActionSheetWithOptions } = useActionSheet()
+  const showActionSheetWithOptions = useShowActionSheet()
   const [error, setError] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)

@@ -76,7 +76,6 @@ const PhoneTypeToFormattedNumber: {
   HOME: 'formattedHomePhone',
   MOBILE: 'formattedMobilePhone',
   WORK: 'formattedWorkPhone',
-  FAX: 'formattedFaxPhone',
 }
 
 const AddressPouToProfileAddressFieldType: {
@@ -97,7 +96,7 @@ export const getProfileInfo =
 
     try {
       dispatch(dispatchStartGetProfileInfo())
-      const user = await get<UserData>('/v0/user')
+      const user = await get<UserData>('/v1/user')
 
       // TODO: delete in story #19175
       const userEmail = user?.data.attributes.profile.signinEmail
@@ -126,7 +125,7 @@ export const getProfileInfo =
 /**
  * Redux action to update the users phone number
  *
- * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE, or FAX)
+ * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE)
  * @param phoneNumber - string of numbers signifying area code and phone number
  * @param extension - string of numbers signifying extension number
  * @param numberId - number indicating the id of the phone number
@@ -161,13 +160,13 @@ export const editUsersNumber =
       }
 
       if (createEntry) {
-        await api.post<api.EditResponseData>('/v0/user/phones', updatedPhoneData as unknown as api.Params)
+        await api.post<api.EditResponseData>('/v1/user/phones', updatedPhoneData as unknown as api.Params)
       } else {
         const updatedPutPhoneData = {
           ...updatedPhoneData,
           id: numberId,
         }
-        await api.put<api.EditResponseData>('/v0/user/phones', updatedPutPhoneData as unknown as api.Params)
+        await api.put<api.EditResponseData>('/v1/user/phones', updatedPutPhoneData as unknown as api.Params)
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
@@ -228,7 +227,7 @@ export const deleteUsersNumber =
         }
       }
 
-      await api.del<api.EditResponseData>('/v0/user/phones', deletePhoneData as unknown as api.Params)
+      await api.del<api.EditResponseData>('/v1/user/phones', deletePhoneData as unknown as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
@@ -265,13 +264,13 @@ export const updateEmail =
       const createEntry = !getState().personalInformation.profile?.contactEmail?.emailAddress
 
       if (createEntry) {
-        await api.post<api.EditResponseData>('/v0/user/emails', { emailAddress: email } as unknown as api.Params)
+        await api.post<api.EditResponseData>('/v1/user/emails', { emailAddress: email } as unknown as api.Params)
       } else {
         const emailUpdateData = {
           id: emailId,
           emailAddress: email,
         }
-        await api.put<api.EditResponseData>('/v0/user/emails', emailUpdateData as unknown as api.Params)
+        await api.put<api.EditResponseData>('/v1/user/emails', emailUpdateData as unknown as api.Params)
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
@@ -305,7 +304,7 @@ export const deleteEmail =
         emailAddress: email,
       }
 
-      await api.del<api.EditResponseData>('/v0/user/emails', emailDeleteData as unknown as api.Params)
+      await api.del<api.EditResponseData>('/v1/user/emails', emailDeleteData as unknown as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
@@ -347,9 +346,9 @@ export const updateAddress =
 
       if (createEntry) {
         const postAddressDataPayload = omit(addressData, 'id')
-        await api.post<api.EditResponseData>('/v0/user/addresses', postAddressDataPayload as unknown as api.Params)
+        await api.post<api.EditResponseData>('/v1/user/addresses', postAddressDataPayload as unknown as api.Params)
       } else {
-        await api.put<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
+        await api.put<api.EditResponseData>('/v1/user/addresses', addressData as unknown as api.Params)
       }
 
       dispatch(getProfileInfo(screenID))
@@ -381,7 +380,7 @@ export const deleteAddress =
     try {
       dispatch(dispatchStartSaveAddress())
 
-      await api.del<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
+      await api.del<api.EditResponseData>('/v1/user/addresses', addressData as unknown as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
@@ -406,7 +405,7 @@ export const validateAddress =
 
     try {
       dispatch(dispatchStartValidateAddress())
-      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params)
+      const validationResponse = await api.post<api.AddressValidationData>('/v1/user/addresses/validate', addressData as unknown as api.Params)
       const suggestedAddresses = getSuggestedAddresses(validationResponse)
       const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)
       const validationKey = getValidationKey(suggestedAddresses)
@@ -467,7 +466,6 @@ const peronalInformationSlice = createSlice({
         profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
         profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
         profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
-        profile.formattedFaxPhone = getFormattedPhoneNumber(profile.faxNumber)
       }
 
       state.profile = profile

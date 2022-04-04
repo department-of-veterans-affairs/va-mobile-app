@@ -156,16 +156,16 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
     /**
      * USER PROFILE
      */
-    case '/v0/user/phones': {
+    case '/v1/user/phones': {
       return updateUserPhone(store, params)
     }
-    case '/v0/user/emails': {
+    case '/v1/user/emails': {
       return updateEmail(store, params.emailAddress as string)
     }
-    case '/v0/user/addresses/validate': {
+    case '/v1/user/addresses/validate': {
       return validateAddress(params as unknown as AddressData)
     }
-    case '/v0/user/addresses': {
+    case '/v1/user/addresses': {
       return updateAddress(store, params as unknown as AddressData)
     }
     default: {
@@ -187,13 +187,13 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
     /**
      * USER PROFILE
      */
-    case '/v0/user/phones': {
+    case '/v1/user/phones': {
       return updateUserPhone(store, params)
     }
-    case '/v0/user/emails': {
+    case '/v1/user/emails': {
       return updateEmail(store, params.emailAddress as string)
     }
-    case '/v0/user/addresses': {
+    case '/v1/user/addresses': {
       return updateAddress(store, params as unknown as AddressData)
     }
     case '/v0/payment-information/benefits': {
@@ -219,13 +219,13 @@ const transformDeleteCall = (endpoint: string, params: Params): DemoApiReturns =
     /**
      * USER PROFILE
      */
-    case '/v0/user/phones': {
+    case '/v1/user/phones': {
       return deleteUserPhone(store, params)
     }
-    case '/v0/user/emails': {
+    case '/v1/user/emails': {
       return deleteEmail(store)
     }
-    case '/v0/user/addresses': {
+    case '/v1/user/addresses': {
       return deleteAddress(store, params)
     }
     default: {

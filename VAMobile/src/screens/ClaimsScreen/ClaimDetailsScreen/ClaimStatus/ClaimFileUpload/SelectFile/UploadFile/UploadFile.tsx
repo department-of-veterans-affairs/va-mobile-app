@@ -11,6 +11,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
@@ -27,6 +28,10 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([])
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('fileUpload.submitted'),
+    errorMsg: t('fileUpload.submitted.error'),
+  }
 
   useEffect(() => {
     setFilesList([fileUploaded])
@@ -64,19 +69,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     }
 
     if (filesUploadedSuccess) {
-      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
       navigation.navigate('FileRequest', { claimID: claim?.id || '' })
-    } else if (fileUploadedFailure) {
-      showSnackBar(
-        t('fileUpload.submitted.error'),
-        dispatch,
-        () => {
-          dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
-        },
-        false,
-        true,
-        false,
-      )
     }
   }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
 
@@ -98,7 +91,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList))
   }
 
   const onUpload = (): void => {
