@@ -60,7 +60,6 @@ const AppointmentFlowStep1: FC<AppointmentFlowStep1Props> = ({ navigation }) => 
         onChange={onSetSelectedTypeOfCare}
         value={selectedTypeOfCare}
         isRadioList={true}
-        disabled={true}
         radioListTitle={'Choose the type of care you need (Required)'}
       />
     </AppointmentFlowLayout>
