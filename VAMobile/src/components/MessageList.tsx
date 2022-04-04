@@ -8,7 +8,7 @@ import { READ } from '../constants/secureMessaging'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
-import LabelTag from './LabelTag'
+import MessagesSentReadTag from './MessagesSentReadTag'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}
@@ -55,7 +55,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
           })}
           {isSentReadTag && (
             <Box ml={themes.dimensions.messageSentReadLeftMargin} mt={themes.dimensions.navigationBarIconMarginTop}>
-              <LabelTag text={t('secureMessaging.folders.read.tag')} />
+              <MessagesSentReadTag text={t('secureMessaging.folders.read.tag')} />
             </Box>
           )}
         </Box>

@@ -3,7 +3,6 @@ import { find } from 'underscore'
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
 import { getPayments } from './paymentsSlice'
-import { getFormattedDate } from 'utils/formattingUtils'
 
 const url: string = '/v0/payment-history'
 
@@ -79,8 +78,7 @@ context('paymentHistory', () => {
       expect(endAction?.state.payments.error).toBeFalsy()
 
       const { payments } = store.getState()
-      const expectedDateKey = getFormattedDate(mockPaymentsPayload.data[1].attributes.date, 'yyyy-MM-dd')
-      expect(payments.currentPagePayments).toEqual({ [expectedDateKey]: mockPaymentsPayload.data })
+      expect(payments.currentPagePayments).toEqual({ '2021-01-01': mockPaymentsPayload.data })
       expect(payments.error).toBeFalsy()
     })
 

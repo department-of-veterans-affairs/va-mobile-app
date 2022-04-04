@@ -1,5 +1,4 @@
 import * as api from 'store/api'
-import { APIError, AppointmentGetMessagesData, AppointmentMessages, AppointmentMessagesMap, Params } from 'store/api'
 import { AppThunk } from 'store'
 import {
   AppointmentCancellationStatusConstants,
@@ -20,13 +19,14 @@ import {
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { Params } from 'store/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
+import { getItemsInRange, isErrorObject } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 import _ from 'underscore'
@@ -95,8 +95,6 @@ export type AppointmentsState = {
   pastCcServiceError: boolean
   loadedAppointmentsByTimeFrame: LoadedAppointments
   paginationByTimeFrame: AppointmentsPaginationByTimeFrame
-  messagesLoading: boolean
-  appointmentMessagesById: AppointmentMessagesMap
 }
 
 export const initialPaginationState = {
@@ -142,8 +140,6 @@ export const initialAppointmentsState: AppointmentsState = {
     pastAllCurrentYear: {},
     pastAllLastYear: {},
   },
-  messagesLoading: false,
-  appointmentMessagesById: {} as AppointmentMessagesMap,
 }
 
 // Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
@@ -260,7 +256,6 @@ export const prefetchAppointments =
                 phoneOnly: false,
                 statusDetail: null,
                 isCovidVaccine: true,
-                isPending: false,
                 startDateLocal: '2021-09-06T19:53:14.000+00:00',
                 startDateUtc: '2021-09-06T19:53:14.000+00:00',
                 minutesDuration: 60,
@@ -319,7 +314,6 @@ export const prefetchAppointments =
                 minutesDuration: 60,
                 phoneOnly: true,
                 isCovidVaccine: false,
-                isPending: false,
                 startDateLocal: '2021-09-17T13:10:00.000-06:00',
                 startDateUtc: '2021-09-17T19:10:00.000+00:00',
                 status: AppointmentStatusConstants.BOOKED,
@@ -340,8 +334,7 @@ export const prefetchAppointments =
             endDate: past.endDate,
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
             'page[number]': '1', // prefetch assume always first page
-            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest,
-            'included[]': 'pending',
+            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
           } as Params)
         }
       }
@@ -358,7 +351,6 @@ export const prefetchAppointments =
                 phoneOnly: false,
                 statusDetail: null,
                 isCovidVaccine: true,
-                isPending: false,
                 startDateLocal: '2022-09-06T19:53:14.000+00:00',
                 startDateUtc: '2022-09-06T19:53:14.000+00:00',
                 minutesDuration: 60,
@@ -417,7 +409,6 @@ export const prefetchAppointments =
                 minutesDuration: 60,
                 phoneOnly: false,
                 isCovidVaccine: true,
-                isPending: false,
                 startDateLocal: '2022-09-17T13:10:00.000-06:00',
                 startDateUtc: '2022-09-17T19:10:00.000+00:00',
                 status: AppointmentStatusConstants.BOOKED,
@@ -461,7 +452,6 @@ export const prefetchAppointments =
                 timeZone: 'America/Denver' as AppointmentTimeZone,
                 reason: null,
                 isCovidVaccine: false,
-                isPending: false,
               },
             },
           ],
@@ -482,7 +472,6 @@ export const prefetchAppointments =
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
             'page[number]': '1', // prefetch assume always first page
             sort: 'startDateUtc',
-            'included[]': 'pending',
           } as Params)
         }
       }
@@ -524,7 +513,6 @@ export const getAppointmentsInDateRange =
         'page[number]': page.toString(),
         'page[size]': DEFAULT_PAGE_SIZE.toString(),
         sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
-        'included[]': 'pending',
       } as Params)
       await trackAppointmentPaginationDiscrepancy(appointmentsPagination, appointmentsList?.meta?.pagination)
       dispatch(dispatchFinishGetAppointmentsInDateRange({ timeFrame, appointments: appointmentsList }))
@@ -540,53 +528,20 @@ export const getAppointmentsInDateRange =
  * Redux action to cancel appointment associated with the given cancelID
  */
 export const cancelAppointment =
-  (cancelID?: string, appointmentID?: string, isPendingAppointment?: boolean): AppThunk =>
+  (cancelID?: string, appointmentID?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
-    const retryFunction = () => dispatch(cancelAppointment(cancelID, appointmentID, isPendingAppointment))
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(cancelAppointment(cancelID, appointmentID))))
     dispatch(dispatchStartCancelAppointment())
 
     try {
       await api.put('/v0/appointments/cancel/' + cancelID)
       await registerReviewEvent()
       dispatch(dispatchFinishCancelAppointment({ appointmentID }))
-      await logAnalyticsEvent(Events.vama_appt_cancel(!!isPendingAppointment))
-      // TODO refactor translation to work in store
-      const successText = isPendingAppointment ? 'Pending request canceled' : 'Canceled upcoming appointment'
-      showSnackBar(successText, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishCancelAppointment({ error }))
-        // TODO refactor translation to work in store
-        const errorText = isPendingAppointment
-          ? 'Request could not be canceled. Try again or contact your facility to cancel.'
-          : 'Appointment could not be canceled. Try again or contact your facility to cancel.'
-        showSnackBar(errorText, dispatch, retryFunction, false, true)
-      }
-    }
-  }
-
-/**
- * Gets the message/reason for an appointment detail. Does not use the standard error path because in the case of a failure
- * @param appointmentID - Id of the appointment
- */
-export const getAppointmentMessages =
-  (appointmentID?: string): AppThunk =>
-  async (dispatch) => {
-    if (!appointmentID) {
-      dispatch(dispatchFinishGetAppointmentMessages({}))
-      return
-    }
-
-    try {
-      dispatch(dispatchStartGetAppointmentMessages())
-
-      const messageData = await api.get<AppointmentGetMessagesData>(`/v0/appointment_requests/${appointmentID}/messages`)
-
-      dispatch(dispatchFinishGetAppointmentMessages({ appointmentID, messages: messageData?.data }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetAppointmentMessages({ appointmentID: undefined, messages: undefined, error }))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
   }
@@ -594,17 +549,14 @@ export const getAppointmentMessages =
 /**
  * Redux action to track appointment details
  */
-export const trackAppointmentDetail =
-  (isPendingAppointment?: boolean): AppThunk =>
-  async (dispatch, getState) => {
-    await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
-    const [totalTime] = getAnalyticsTimers(getState())
-    await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
-    await logAnalyticsEvent(Events.vama_appt_view_details(!!isPendingAppointment))
-    await registerReviewEvent()
-    await dispatch(resetAnalyticsActionStart())
-    await dispatch(setAnalyticsTotalTimeStart())
-  }
+export const trackAppointmentDetail = (): AppThunk => async (dispatch, getState) => {
+  await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+  const [totalTime] = getAnalyticsTimers(getState())
+  await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
+  await registerReviewEvent()
+  await dispatch(resetAnalyticsActionStart())
+  await dispatch(setAnalyticsTotalTimeStart())
+}
 
 /**
  * Redux action to reset appointment cancellation state
@@ -753,19 +705,6 @@ const appointmentsSlice = createSlice({
     dispatchClearLoadedAppointments: () => {
       return { ...initialAppointmentsState }
     },
-
-    dispatchStartGetAppointmentMessages: (state) => {
-      state.messagesLoading = true
-    },
-    dispatchFinishGetAppointmentMessages: (state, action: PayloadAction<{ appointmentID?: string; messages?: Array<AppointmentMessages>; error?: APIError }>) => {
-      const { appointmentID, messages, error } = action.payload
-
-      if (!error && appointmentID && messages) {
-        state.appointmentMessagesById[appointmentID] = messages
-      }
-
-      state.messagesLoading = false
-    },
   },
 })
 
@@ -778,8 +717,6 @@ export const {
   dispatchClearAppointmentCancellation,
   dispatchClearLoadedAppointments,
   dispatchFinishCancelAppointment,
-  dispatchStartGetAppointmentMessages,
-  dispatchFinishGetAppointmentMessages,
 } = appointmentsSlice.actions
 
 export default appointmentsSlice.reducer

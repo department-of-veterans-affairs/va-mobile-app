@@ -53,6 +53,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 20,
   },
+  SentMessagesReadTag: {
+    fontSize: 16,
+    lineHeight: 16,
+  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -82,14 +86,6 @@ const fontSizes = {
     lineHeight: 24,
   },
   HelperText: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  LabelTag: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  LabelTagBold: {
     fontSize: 16,
     lineHeight: 22,
   },
@@ -237,9 +233,8 @@ let theme: VATheme = {
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
+    SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
-    LabelTag: fontSizes.LabelTag,
-    LabelTagBold: fontSizes.LabelTagBold,
   },
 
   typography: {
@@ -247,6 +242,7 @@ let theme: VATheme = {
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
+    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
@@ -256,8 +252,6 @@ let theme: VATheme = {
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold),
-    LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag),
-    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
   },
 }

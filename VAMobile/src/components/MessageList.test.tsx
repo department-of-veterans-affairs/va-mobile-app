@@ -8,7 +8,7 @@ import Mock = jest.Mock
 import { context, findByTestID, render, RenderAPI } from 'testUtils'
 import MessageList from './MessageList'
 import VAIcon, { VAIconProps } from './VAIcon'
-import LabelTag from './LabelTag'
+import MessagesSentReadTag from './MessagesSentReadTag'
 import { MessageListItemObj, InlineTextWithIconsProps, TextLine } from 'components'
 
 context('MessageList', () => {
@@ -85,7 +85,7 @@ context('MessageList', () => {
   })
 
   it('should render READ tag for read sent message', async () => {
-    expect(testInstance.findByType(LabelTag).props.text).toEqual('READ')
+    expect(testInstance.findByType(MessagesSentReadTag).props.text).toEqual('READ')
   })
 
   it('should render the VAIcon components for unread item with attachment', async () => {

@@ -73,7 +73,7 @@ context('PastAppointments', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
-  let appointmentData = (status: AppointmentStatus = AppointmentStatusConstants.BOOKED, isPending = false): AppointmentsGroupedByYear => {
+  let appointmentData = (status: AppointmentStatus = AppointmentStatusConstants.BOOKED): AppointmentsGroupedByYear => {
     return {
       '2020': {
         '3': [
@@ -82,7 +82,6 @@ context('PastAppointments', () => {
             attributes: {
               ...defaultAppointmentAttributes,
               status,
-              isPending,
             },
           },
         ],
@@ -207,25 +206,6 @@ context('PastAppointments', () => {
       await waitFor(() => {
         initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED))
         expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('CANCELED')
-      })
-    })
-  })
-
-  describe('when the status is CANCELLED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "CANCELLED"', async () => {
-      await waitFor(() => {
-        initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED, true))
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('CANCELED')
-      })
-    })
-  })
-
-
-  describe('when the status is SUBMITTED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "PENDING"', async () => {
-      await waitFor(() => {
-        initializeTestInstance(appointmentData(AppointmentStatusConstants.SUBMITTED, true))
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('PENDING')
       })
     })
   })
