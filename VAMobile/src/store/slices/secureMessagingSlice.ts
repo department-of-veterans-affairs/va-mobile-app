@@ -38,11 +38,11 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Params, contentTypes } from 'store/api/api'
 import { READ, UNREAD } from 'constants/secureMessaging'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
+import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError, hasErrorCode } from 'utils/errors'
-import { getfolderName } from 'utils/secureMessaging'
 import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
@@ -507,6 +507,7 @@ export const sendMessage =
 
 const refreshFoldersAfterMove = (
   dispatch: AppDispatch,
+  messages: SnackbarMessages,
   messageID: number,
   newFolderID: number,
   currentFolderID: number,
@@ -530,17 +531,11 @@ const refreshFoldersAfterMove = (
   dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true))
   dispatch(dispatchFinishMoveMessage({ isUndo }))
 
-  const message = getSnackBarMessage(newFolderID, folders, isUndo, false)
-
   showSnackBar(
-    message,
+    isUndo && messages.undoMsg ? messages.undoMsg : messages.successMsg,
     dispatch,
     () => {
-      if (currentFolderID !== SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(moveMessage(messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
-      } else {
-        dispatch(moveMessageToTrash(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
-      }
+      dispatch(moveMessage(messages, messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
     },
     isUndo,
     false,
@@ -548,22 +543,12 @@ const refreshFoldersAfterMove = (
   )
 }
 
-// method to create the snackbar message for the move message
-const getSnackBarMessage = (folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean) => {
-  const folderName = getfolderName(folderID.toString(), folders)
-  const folderString =
-    folderID !== SecureMessagingSystemFolderIdConstants.INBOX && folderID !== SecureMessagingSystemFolderIdConstants.DELETED ? `${folderName} folder` : folderName
-
-  const messageString = !isUndo ? `${isError ? 'Failed to move message' : 'Message moved'}` : `${isError ? 'Failed to move message back' : 'Message moved back'}`
-
-  return `${messageString} to ${folderString}`
-}
-
 /**
- * Redux action to move message to another folder
+ * Redux action to move message to another folder or to the trash
  */
 export const moveMessage =
   (
+    messages: SnackbarMessages,
     messageID: number,
     newFolderID: number,
     currentFolderID: number,
@@ -575,58 +560,21 @@ export const moveMessage =
     withNavBar: boolean,
   ): AppThunk =>
   async (dispatch) => {
-    const retryFunction = () => dispatch(moveMessage(messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    const retryFunction = () => dispatch(moveMessage(messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
 
     try {
-      await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
-      refreshFoldersAfterMove(dispatch, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
-    } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishMoveMessage({ error }))
-        showSnackBar(getSnackBarMessage(newFolderID, folders, isUndo, true), dispatch, retryFunction, false, true)
+      if (newFolderID === SecureMessagingSystemFolderIdConstants.DELETED) {
+        await callDeleteMessageApi(messageID)
+      } else {
+        await callMoveMessageApi(messageID, newFolderID)
       }
-    }
-  }
-
-/**
- * Redux action to move message to trash
- */
-export const moveMessageToTrash =
-  (
-    messageID: number,
-    currentFolderID: number,
-    folderToRefresh: number,
-    currentPage: number,
-    messagesLeft: number,
-    isUndo: boolean,
-    folders: SecureMessagingFolderList,
-    withNavBar: boolean,
-  ): AppThunk =>
-  async (dispatch) => {
-    const retryFunction = () => dispatch(moveMessageToTrash(messageID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
-    dispatch(dispatchStartMoveMessage(isUndo))
-
-    try {
-      await deleteMessage(messageID)
-      refreshFoldersAfterMove(
-        dispatch,
-        messageID,
-        SecureMessagingSystemFolderIdConstants.DELETED,
-        currentFolderID,
-        folderToRefresh,
-        currentPage,
-        messagesLeft,
-        isUndo,
-        folders,
-        withNavBar,
-      )
+      refreshFoldersAfterMove(dispatch, messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishMoveMessage({ error }))
-        showSnackBar(getSnackBarMessage(currentFolderID, folders, isUndo, true), dispatch, retryFunction, false, true, withNavBar)
+        showSnackBar(isUndo && messages.undoErrorMsg ? messages.undoErrorMsg : messages.errorMsg, dispatch, retryFunction, false, true, withNavBar)
       }
     }
   }
@@ -635,23 +583,24 @@ export const moveMessageToTrash =
  * Redux action to delete a saved draft
  */
 export const deleteDraft =
-  (messageID: number): AppThunk =>
+  (messageID: number, messages: SnackbarMessages): AppThunk =>
   async (dispatch) => {
-    const retryFunction = () => dispatch(deleteDraft(messageID))
+    const retryFunction = () => dispatch(deleteDraft(messageID, messages))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartDeleteDraft())
 
     try {
-      await deleteMessage(messageID)
+      await callDeleteMessageApi(messageID)
 
       dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
 
       dispatch(dispatchFinishDeleteDraft(undefined))
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         dispatch(dispatchFinishDeleteDraft(error))
-        showSnackBar('Error deleting draft', dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -659,8 +608,17 @@ export const deleteDraft =
 /**
  * Delete a message
  */
-export const deleteMessage = async (messageID: number): Promise<void> => {
+export const callDeleteMessageApi = async (messageID: number): Promise<void> => {
   await api.del(`/v0/messaging/health/messages/${messageID}`)
+}
+
+/**
+ * Move a message
+ * @param messageID - the messageID number
+ * @param newFolderID - the new folder for the message
+ */
+export const callMoveMessageApi = async (messageID: number, newFolderID: number): Promise<void> => {
+  await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
 }
 
 /**

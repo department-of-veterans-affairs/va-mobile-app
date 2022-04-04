@@ -4,12 +4,19 @@ import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toas
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
-import { Box } from 'components'
+import { Box, TextViewProps } from 'components'
 import { BoxProps } from './Box'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
 import colors from '../styles/themes/VAColors'
+
+export type SnackbarMessages = {
+  successMsg: string
+  errorMsg: string
+  undoMsg?: string
+  undoErrorMsg?: string
+}
 
 /**
  * Common snackbar component. This component is wrapped by the react-native-toast-notification library.
@@ -35,15 +42,17 @@ const SnackBar: FC<ToastProps> = (toast) => {
     marginLeft: dimensions.snackBarBetweenSpace,
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: dimensions.snackBarButtonTopMargin,
+    marginTop: dimensions.snackBarButtonTopBottomMargin,
     marginRight: dimensions.snackBarConfirmBtnMarginRight,
+    marginBottom: dimensions.snackBarButtonTopBottomMargin,
   }
 
   const dismissBtnStlye: StyleProp<ViewStyle> = {
     marginLeft: dimensions.snackBarBetweenSpace,
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: dimensions.snackBarButtonTopMargin,
+    marginTop: dimensions.snackBarButtonTopBottomMargin,
+    marginBottom: dimensions.snackBarButtonTopBottomMargin,
   }
 
   const mainContainerProps: BoxProps = {
@@ -63,9 +72,26 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const messageContainerProps: BoxProps = {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    mt: dimensions.snackBarButtonTopMargin,
+    mt: dimensions.snackBarButtonTopBottomMargin,
+    mb: dimensions.snackBarButtonTopBottomMargin,
     alignItems: 'center',
+  }
+
+  const messageProp: TextViewProps = {
+    variant: 'HelperText',
+    color: 'snackBarText',
+  }
+
+  // adjust style depending on if there are 1 or 2 buttons
+  // 1 inline
+  // 2 its own row align to the right
+  if (!isUndo) {
+    // 2
+    messageContainerProps.minWidth = '100%'
+    messageProp.flex = 1
+  } else {
+    // 1
+    messageContainerProps.flexWrap = 'wrap'
   }
 
   const btnContainerProps: BoxProps = {
@@ -94,9 +120,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
                 width={dimensions.snackBarIconSize}
               />
             </Box>
-            <TextView variant={'HelperText'} color={'snackBarText'}>
-              {message}
-            </TextView>
+            <TextView {...messageProp}>{message}</TextView>
           </Box>
         </View>
         <Box {...btnContainerProps}>

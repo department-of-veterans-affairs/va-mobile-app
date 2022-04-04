@@ -87,7 +87,7 @@ context('PastAppointmentDetails', () => {
   })
 
   describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {
-    it('should render only 4 TextViews to display appointment type, date information, and the schedule text', async () => {
+    it('should render only 6 TextViews to display appointment type, date information, and the schedule text', async () => {
       await waitFor(() => {
         initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
       })
@@ -95,7 +95,7 @@ context('PastAppointmentDetails', () => {
       let allTextViews: ReactTestInstance[]
 
       allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews.length).toEqual(4)
+      expect(allTextViews.length).toEqual(6)
       expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nusing a VA device')
 
       await waitFor(() => {
@@ -103,7 +103,7 @@ context('PastAppointmentDetails', () => {
       })
 
       allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews.length).toEqual(4)
+      expect(allTextViews.length).toEqual(6)
       expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nhome')
     })
   })
@@ -140,14 +140,14 @@ context('PastAppointmentDetails', () => {
       await waitFor(() => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC)
       })
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if facility cancelled (rebook)', async () => {
       await waitFor(() => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       })
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })
 

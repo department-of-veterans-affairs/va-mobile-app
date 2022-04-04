@@ -4,12 +4,14 @@ import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 
+import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { RootState } from 'store'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
+import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -30,6 +32,7 @@ const DebugScreen: FC = ({}) => {
 
   // push data
   const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
+  const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
@@ -59,17 +62,30 @@ const DebugScreen: FC = ({}) => {
     resetReviewActionCount()
   }
 
+  const onClickFirebaseDebugMode = (): void => {
+    dispatch(toggleFirebaseDebugMode())
+  }
+
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={onResetFirstTimeLogin} label={'Reset First Time Login'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={resetInAppReview} label={'Reset In-App Review Actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={resetInAppReview} label={'Reset in-app review actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
+        <Box mt={theme.dimensions.contentMarginTop}>
+          <TextArea>
+            <VAButton
+              onPress={onClickFirebaseDebugMode}
+              label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+            />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

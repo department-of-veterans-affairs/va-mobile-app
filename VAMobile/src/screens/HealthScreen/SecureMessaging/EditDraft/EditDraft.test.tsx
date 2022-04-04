@@ -166,10 +166,13 @@ context('EditDraft', () => {
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteransCrisisLineSpy)
-        .calledWith('Attachments', { origin: 'Draft', attachmentsList: [], messageID: 2 }).mockReturnValue(navigateToAddToFilesSpy)
-        .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' }).mockReturnValue(navigateToAttachAFileSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteransCrisisLineSpy)
+      .calledWith('Attachments', { origin: 'Draft', attachmentsList: [], messageID: 2 })
+      .mockReturnValue(navigateToAddToFilesSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' })
+      .mockReturnValue(navigateToAttachAFileSpy)
 
     props = mockNavProps(
       undefined,
@@ -258,7 +261,7 @@ context('EditDraft', () => {
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
         await waitFor(() => {
-          testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+          testInstance.findByProps({ label: 'Go to inbox' }).props.onPress()
           expect(navigateSpy).toHaveBeenCalled()
           expect(updateSecureMessagingTab).toHaveBeenCalled()
         })

@@ -140,7 +140,6 @@ context('EditAddressScreen', () => {
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',
-      gender: 'M',
       addresses: '',
       residentialAddress: {
         id: 0,
@@ -194,14 +193,6 @@ context('EditAddressScreen', () => {
         phoneType: 'HOME',
       },
       formattedWorkPhone: '(858)-690-1287',
-      faxNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901286',
-        phoneType: 'HOME',
-      },
-      formattedFaxPhone: '(858)-690-1286',
       signinService: 'IDME',
     }
 
@@ -689,7 +680,7 @@ context('EditAddressScreen', () => {
       expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'State is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Zip code is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
     })
   })
 
@@ -709,7 +700,7 @@ context('EditAddressScreen', () => {
       expect(textViews[242].props.children).toEqual('Street address is required')
       expect(textViews[257].props.children).toEqual('Please select a valid option')
       expect(textViews[269].props.children).toEqual('Please select a valid option')
-      expect(textViews[274].props.children).toEqual('Zip code is required')
+      expect(textViews[274].props.children).toEqual('Postal code is required')
     })
   })
 
@@ -735,7 +726,7 @@ context('EditAddressScreen', () => {
     it('should display the remove button', () => {
       initializeTestInstance(profileInfo, false, true)
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Home Address')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home address')
     })
   })
 

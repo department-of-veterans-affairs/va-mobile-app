@@ -135,6 +135,17 @@ export const formatDateMMMMDDYYYY = (date: string): string => {
 }
 
 /**
+ * Returns the date formatted in the format MM/DD/YYYY
+ *
+ * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns date string formatted as MM/DD/YYYY
+ */
+export const formatDateMMDDYYYY = (date: string): string => {
+  return getFormattedDate(date, 'MM/dd/yyyy')
+}
+
+/**
  * Returns the substring of all entries before the provided character
  *
  * @param originalStr - string to be formatted
@@ -165,17 +176,25 @@ export const capitalizeWord = (word: string): string => {
  * @returns string with capitalized first letter and rest of the string unchanged
  */
 export const capitalizeFirstLetter = (originalStr: string): string => {
+  if (!originalStr) {
+    return ''
+  }
+
   return originalStr.charAt(0).toUpperCase() + originalStr.slice(1)
 }
 
 /**
  * Returns the string formatted in title case
  *
- * @param originalStr - string to format
+ * @param str - string to format
  *
  * @returns string with the first letter after any spaces capitalized
  */
 export const stringToTitleCase = (str: string): string => {
+  if (!str) {
+    return ''
+  }
+
   return str
     .toLowerCase()
     .split(' ')

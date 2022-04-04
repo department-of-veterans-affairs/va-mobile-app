@@ -10,44 +10,64 @@ PODS:
     - React-Core (= 0.67.1)
     - React-jsi (= 0.67.1)
     - ReactCommon/turbomodule/core (= 0.67.1)
-  - Firebase/AnalyticsWithoutAdIdSupport (8.11.0):
+  - Firebase/AnalyticsWithoutAdIdSupport (8.12.1):
     - Firebase/CoreOnly
-    - FirebaseAnalytics/WithoutAdIdSupport (~> 8.11.0)
-  - Firebase/CoreOnly (8.11.0):
-    - FirebaseCore (= 8.11.0)
-  - Firebase/Crashlytics (8.11.0):
+    - FirebaseAnalytics/WithoutAdIdSupport (~> 8.12.0)
+  - Firebase/CoreOnly (8.12.1):
+    - FirebaseCore (= 8.12.1)
+  - Firebase/Crashlytics (8.12.1):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 8.11.0)
-  - FirebaseAnalytics/WithoutAdIdSupport (8.11.0):
+    - FirebaseCrashlytics (~> 8.12.0)
+  - Firebase/Performance (8.12.1):
+    - Firebase/CoreOnly
+    - FirebasePerformance (~> 8.12.0)
+  - FirebaseABTesting (8.12.0):
+    - FirebaseCore (~> 8.0)
+  - FirebaseAnalytics/WithoutAdIdSupport (8.12.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 8.11.0)
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 8.12.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/MethodSwizzler (~> 7.7)
     - GoogleUtilities/Network (~> 7.7)
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
     - nanopb (~> 2.30908.0)
-  - FirebaseCore (8.11.0):
+  - FirebaseCore (8.12.1):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.11.0):
+  - FirebaseCoreDiagnostics (8.12.0):
     - GoogleDataTransport (~> 9.1)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
     - nanopb (~> 2.30908.0)
-  - FirebaseCrashlytics (8.11.0):
+  - FirebaseCrashlytics (8.12.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
     - GoogleDataTransport (~> 9.1)
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseInstallations (8.11.0):
+  - FirebaseInstallations (8.12.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
     - PromisesObjC (< 3.0, >= 1.2)
+  - FirebasePerformance (8.12.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - FirebaseRemoteConfig (~> 8.0)
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/ISASwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - nanopb (~> 2.30908.0)
+  - FirebaseRemoteConfig (8.12.0):
+    - FirebaseABTesting (~> 8.0)
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
   - Flipper (0.99.0):
     - Flipper-Folly (~> 2.6)
     - Flipper-RSocket (~> 1.4)
@@ -110,7 +130,7 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - GoogleAppMeasurement/WithoutAdIdSupport (8.11.0):
+  - GoogleAppMeasurement/WithoutAdIdSupport (8.12.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/MethodSwizzler (~> 7.7)
     - GoogleUtilities/Network (~> 7.7)
@@ -126,6 +146,7 @@ PODS:
     - GoogleUtilities/Network
   - GoogleUtilities/Environment (7.7.0):
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/ISASwizzler (7.7.0)
   - GoogleUtilities/Logger (7.7.0):
     - GoogleUtilities/Environment
   - GoogleUtilities/MethodSwizzler (7.7.0):
@@ -141,6 +162,15 @@ PODS:
     - GoogleUtilities/Logger
   - IQKeyboardManagerSwift (6.5.4)
   - libevent (2.1.12)
+  - libwebp (1.2.1):
+    - libwebp/demux (= 1.2.1)
+    - libwebp/mux (= 1.2.1)
+    - libwebp/webp (= 1.2.1)
+  - libwebp/demux (1.2.1):
+    - libwebp/webp
+  - libwebp/mux (1.2.1):
+    - libwebp/demux
+  - libwebp/webp (1.2.1)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -427,6 +457,9 @@ PODS:
     - IQKeyboardManagerSwift (= 6.5.4)
     - React-Core
     - React-RCTText
+  - ReactNativeWebPFormat (1.1.2):
+    - React
+    - SDWebImageWebPCoder
   - rn-fetch-blob (0.12.0):
     - React-Core
   - RNCAsyncStorage (1.15.17):
@@ -437,15 +470,19 @@ PODS:
     - React-Core
   - RNDateTimePicker (5.1.0):
     - React-Core
-  - RNFBAnalytics (14.3.0):
-    - Firebase/AnalyticsWithoutAdIdSupport (= 8.11.0)
+  - RNFBAnalytics (14.5.0):
+    - Firebase/AnalyticsWithoutAdIdSupport (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNFBApp (14.3.0):
-    - Firebase/CoreOnly (= 8.11.0)
+  - RNFBApp (14.5.0):
+    - Firebase/CoreOnly (= 8.12.1)
     - React-Core
-  - RNFBCrashlytics (14.3.0):
-    - Firebase/Crashlytics (= 8.11.0)
+  - RNFBCrashlytics (14.5.0):
+    - Firebase/Crashlytics (= 8.12.1)
+    - React-Core
+    - RNFBApp
+  - RNFBPerf (14.5.0):
+    - Firebase/Performance (= 8.12.1)
     - React-Core
     - RNFBApp
   - RNFileViewer (2.1.5):
@@ -461,6 +498,10 @@ PODS:
     - React-RCTImage
   - RNSVG (12.1.1):
     - React
+  - SDWebImage/Core (5.12.4)
+  - SDWebImageWebPCoder (0.8.4):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.10)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -526,6 +567,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeKeyboardManager (from `../node_modules/react-native-keyboard-manager`)
+  - ReactNativeWebPFormat (from `../node_modules/react-native-webp-format`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
@@ -534,6 +576,7 @@ DEPENDENCIES:
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
+  - "RNFBPerf (from `../node_modules/@react-native-firebase/perf`)"
   - RNFileViewer (from `../node_modules/react-native-file-viewer`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
@@ -546,11 +589,14 @@ SPEC REPOS:
   trunk:
     - CocoaAsyncSocket
     - Firebase
+    - FirebaseABTesting
     - FirebaseAnalytics
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseCrashlytics
     - FirebaseInstallations
+    - FirebasePerformance
+    - FirebaseRemoteConfig
     - Flipper
     - Flipper-Boost-iOSX
     - Flipper-DoubleConversion
@@ -566,9 +612,12 @@ SPEC REPOS:
     - GoogleUtilities
     - IQKeyboardManagerSwift
     - libevent
+    - libwebp
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
+    - SDWebImage
+    - SDWebImageWebPCoder
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -644,6 +693,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeKeyboardManager:
     :path: "../node_modules/react-native-keyboard-manager"
+  ReactNativeWebPFormat:
+    :path: "../node_modules/react-native-webp-format"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
@@ -660,6 +711,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBCrashlytics:
     :path: "../node_modules/@react-native-firebase/crashlytics"
+  RNFBPerf:
+    :path: "../node_modules/@react-native-firebase/perf"
   RNFileViewer:
     :path: "../node_modules/react-native-file-viewer"
   RNGestureHandler:
@@ -681,12 +734,15 @@ SPEC CHECKSUMS:
   DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   FBLazyVector: cf409c74423d3507bda74bda1dc41e903ec2cd5b
   FBReactNativeSpec: ef0ce762fdb37900abb01e008cce5f0ef2cce6b7
-  Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c
-  FirebaseAnalytics: 4e4b13031034e6561ed3bd1d47b6fdabbd6487c6
-  FirebaseCore: 2f4f85b453cc8fea4bb2b37e370007d2bcafe3f0
-  FirebaseCoreDiagnostics: 64d9709d804a6c25bd77841371c1fcfd909d5601
-  FirebaseCrashlytics: 62268addefae79601057818156e8bc69d71fee41
-  FirebaseInstallations: 044eede8a049bce71c4541ee68d6e4364fcbe774
+  Firebase: 580d09e8edafc3073ebf09c03fd42e4d80d35fe9
+  FirebaseABTesting: 1b05c92327b3f0a9545cea3bab4d93e82550e29b
+  FirebaseAnalytics: bd10d7706ba8d6e01ea2816f8fe9e9b881cb0918
+  FirebaseCore: 8138de860a90ca7eec5e324da5788fb0ebf1d93c
+  FirebaseCoreDiagnostics: 3b40dfadef5b90433a60ae01f01e90fe87aa76aa
+  FirebaseCrashlytics: 7952ffd988006128325510664b99dc8ca5851dff
+  FirebaseInstallations: 25764cf322e77f99449395870a65b2bef88e1545
+  FirebasePerformance: 2e8861c96657ba16d6512f23a1bc43a7e4aa891e
+  FirebaseRemoteConfig: f174a7091ac8e69bf6d0de2bae2212edb922a0ab
   Flipper: 30e8eeeed6abdc98edaf32af0cda2f198be4b733
   Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
   Flipper-DoubleConversion: 57ffbe81ef95306cc9e69c4aa3aeeeeb58a6a28c
@@ -698,11 +754,12 @@ SPEC CHECKSUMS:
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
-  GoogleAppMeasurement: aa3cb422fab2b05d2efac543a5720d1a85b9dea5
+  GoogleAppMeasurement: ae033c3aad67e68294369373056b4d74cc8ae0d6
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
@@ -737,20 +794,24 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 2c92a8bddd1a3e72c7513d1e74235c2d9c84875c
   ReactCommon: 2e816fad39f65f2a94a5999d5be463a6b620dcf6
   ReactNativeKeyboardManager: 4fb4d82d670ec6c00e9a2d2cc576f7cbb14975d6
+  ReactNativeWebPFormat: 4275844b80c2c385a10ab64f50264d720f2d691c
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: 6bd5a7ba3dde1c3facba418aa273f449bdc5437a
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
-  RNFBAnalytics: 9d4d7543a977f1d3d89e6830ec65f7930e86448e
-  RNFBApp: 16bdf8b75b84631513da3d5f5e2520a436ec9b29
-  RNFBCrashlytics: eb4ea7e8ac4c9d9c6fb179370b3ac1bbc53ab69b
+  RNFBAnalytics: b09c0c3b4a411be0dbc516cc6e357317ee77e019
+  RNFBApp: 06c8447270d295edc431bccd55970d8711a07a42
+  RNFBCrashlytics: 0cfb53fcd558969ee498eb7030ee7065c7dacf8d
+  RNFBPerf: 15708e8e7b9c64add98e0244baa8f055fe6422a6
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
   RNLocalize: f567ea0e35116a641cdffe6683b0d212d568f32a
   RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  SDWebImage: 631cf572cc93dfdfe54162e556410a61f1141928
+  SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
   Yoga: 5cbf25add73edb290e1067017690f7ebf56c5468
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

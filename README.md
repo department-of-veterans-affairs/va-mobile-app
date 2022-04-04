@@ -442,12 +442,6 @@ const NewScreen: FC<INewScreen> = ({ navigation, route }) => {
 }
 ```
 
-## Crashlytics/Google Analytics
-The app has [Google Firebase Analytics for RN](https://rnfirebase.io/analytics/usage) installed. 
-
-Once KPIS are added, they should be indicated here 
-
-[Debug/Testing documentation](https://firebase.google.com/docs/analytics/debugview#android)
 ## Dev Setup
 
 ### Prerequisites
@@ -529,19 +523,6 @@ After you complete this, the .env file should show up as an ignored file. This i
 4. Run `adb -s <device name> reverse tcp:8081 tcp:8081`
 5. Build and run the app via Android studio or command line tool `npx react-native run-android`
 
-
-### Accessibility
-- [React native accessibility](https://reactnative.dev/docs/accessibility)
-
-Elements that need to be accessible will often require you set accessibilityLabel, accessibilityHint, accessibilityValue, and accessibilityState. Use the functions below when settings these properties, if needed, as they ensure elements are queryable for integrations tests and are set properly for accessibility on device.
-- `testIdProps`
-    - for accessibilityLabels(when the literal text needs to sound different for TalkBack or VoiceOver).
-- `a11yHintProp` 
-    - for accessibilityHints(additional text read by TalkBack or VoiceOver ex. Button that opens a link outside the app -> "This page will open in your device's browser").
-- `a11yValueProp` 
-    - for accessibilityValue(additional text read by TalkBack or VoiceOver ex. The first item in a list of items -> "Item 1, 1 of 10").
-
-_Note `AccessibilityState` can be used as normal without a special function_.
 ### Testing
 
 #### Integration

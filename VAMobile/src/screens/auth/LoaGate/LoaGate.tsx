@@ -19,6 +19,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   const bulletOne = {
     text: t('loaGate.readMore.bulletOne'),
     boldedText: ' ' + t('loaGate.readMore.or'),
+    a11yLabel: t('loaGate.readMore.bulletOne.a11y'),
   }
 
   const bodyTextProps: TextViewProps = {

@@ -22,7 +22,6 @@ import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } f
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -145,8 +144,8 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: stringToTitleCase(emailTitle) })}
-              buttonType={ButtonTypesConstants.buttonImportant}
+              label={t('personalInformation.removeData', { pageName: emailTitle })}
+              buttonType={ButtonTypesConstants.buttonDestructive}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: emailTitle })}
             />
           </Box>

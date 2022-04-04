@@ -79,7 +79,7 @@ context('authAction', () => {
     isAndroidMock.mockReturnValue(false)
 
     when(api.get as jest.Mock)
-      .calledWith('/v0/user')
+      .calledWith('/v1/user')
       .mockResolvedValue({
         data: {
           attributes: {

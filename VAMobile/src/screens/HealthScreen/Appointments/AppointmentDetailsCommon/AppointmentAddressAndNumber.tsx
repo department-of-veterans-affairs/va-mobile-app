@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react'
 
-import { AppointmentAddress, AppointmentLocation, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
+import { AppointmentAttributes, AppointmentLocation, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
@@ -16,16 +16,13 @@ export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean 
 }
 
 type AppointmentAddressAndNumberProps = {
-  appointmentType: AppointmentType
-  healthcareService: string
-  location: AppointmentLocation
-  address?: AppointmentAddress
-  phone?: AppointmentPhone
-  isCovidVaccine?: boolean
+  attributes: AppointmentAttributes
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone, isCovidVaccine }) => {
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes }) => {
   const t = useTranslation()
+  const { appointmentType, healthcareService, location, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
+  const { address, phone } = location || ({} as AppointmentLocation)
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
@@ -61,17 +58,17 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
     <Box>
       {getHealthServiceHeaderSection()}
       <Box {...testIdProps(testId)} accessible={true}>
-        {!appointmentIsAtlas && (
+        {!appointmentIsAtlas && !!location?.name && (
           <TextView variant="MobileBody" selectable={true}>
             {location.name}
           </TextView>
         )}
-        {!!address && (
+        {!!address?.street && (
           <TextView variant="MobileBody" selectable={true}>
             {address.street}
           </TextView>
         )}
-        {!!cityStateZip && (
+        {!!address?.city && address?.state && address?.zipCode && (
           <TextView variant="MobileBody" selectable={true}>
             {cityStateZip}
           </TextView>
@@ -85,7 +82,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
           {...a11yHintProp(t('common:directions.a11yHint'))}
         />
       </Box>
-      {!appointmentIsAtlas && <ClickToCallPhoneNumber phone={phone} />}
+      {!appointmentIsAtlas && phone && <ClickToCallPhoneNumber phone={phone} />}
     </Box>
   )
 }

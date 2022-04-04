@@ -1,18 +1,20 @@
-import { InteractionManager, View } from 'react-native'
+import { PixelRatio, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactNode, Ref, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode, Ref, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAButton, VAIconProps, VAModalPicker, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
+import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { SecureMessagingState, getMessage, getThread, moveMessage, moveMessageToTrash } from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
+import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject, getfolderName } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -37,7 +39,8 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
           key={m.messageId}
           message={m}
           isInitialMessage={m.messageId === message.messageId}
-          collapsibleMessageRef={m.messageId === message.messageId ? messageRef : undefined}
+          // if it is the only message in the thread no point of scrolling it will only scroll on large text and if there is more than one thread message
+          collapsibleMessageRef={m.messageId === message.messageId && (threadMessages.length > 1 || PixelRatio.getFontScale() > 1) ? messageRef : undefined}
         />
       ),
   )
@@ -49,7 +52,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
   const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
 
   /* useref is used to persist the folder the message is in Example the message was first in test folder and the user moves it to test2. The user is still under folder
@@ -72,20 +74,17 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const subject = message ? message.subject : ''
   const category = message ? message.category : 'OTHER'
 
-  useEffect(() => {
+  // have to use uselayout due to the screen showing in white or showing the previouse data
+  useLayoutEffect(() => {
     dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
     dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
-
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [messageID, dispatch])
 
   useEffect(() => {
-    if (!loading && isTransitionComplete) {
+    if (!loading) {
       scrollToSelectedMessage()
     }
-  }, [loading, isTransitionComplete, scrollToSelectedMessage])
+  }, [loading, scrollToSelectedMessage])
 
   useEffect(() => {
     if (isUndo || moveMessageFailed) {
@@ -172,7 +171,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
   }
 
-  if (loading || !isTransitionComplete || movingMessage) {
+  if (loading || movingMessage) {
     return (
       <LoadingComponent
         text={
@@ -200,14 +199,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
     const withNavBar = replyExpired ? false : true
+    const snackbarMessages: SnackbarMessages = {
+      successMsg: GenerateFolderMessage(t, newFolder, folders, false, false),
+      errorMsg: GenerateFolderMessage(t, newFolder, folders, false, true),
+      undoMsg: GenerateFolderMessage(t, currentFolder, folders, true, false),
+      undoErrorMsg: GenerateFolderMessage(t, currentFolder, folders, true, true),
+    }
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
-      if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(moveMessageToTrash(messageID, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
-      } else {
-        dispatch(moveMessage(messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
-      }
+      dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
     }
   }
 
