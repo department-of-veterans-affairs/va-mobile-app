@@ -184,7 +184,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
             <VAButton
               onPress={onDeletePressed}
               label={t('personalInformation.removeData', { pageName: buttonTitle })}
-              buttonType={ButtonTypesConstants.buttonDestructive}
+              buttonType={ButtonTypesConstants.buttonImportant}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: buttonTitle })}
             />
           </Box>

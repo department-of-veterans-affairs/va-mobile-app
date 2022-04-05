@@ -53,7 +53,6 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   phoneOnly: false,
   reason: null,
   isCovidVaccine: false,
-  isPending: false,
 }
 
 export const defaultAppoinment: AppointmentData = {

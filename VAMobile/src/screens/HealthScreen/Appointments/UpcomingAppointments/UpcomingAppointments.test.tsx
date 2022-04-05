@@ -8,7 +8,7 @@ import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } fro
 import UpcomingAppointments from './UpcomingAppointments'
 import NoAppointments from '../NoAppointments'
 import { initialAppointmentsState, InitialState, getAppointmentsInDateRange } from 'store/slices'
-import {AppointmentsGroupedByYear, AppointmentStatusConstants} from 'store/api/types'
+import { AppointmentsGroupedByYear } from 'store/api/types'
 import { LoadingComponent, TextView } from 'components'
 import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation, defaultAppointmentAddress, defaultAppointmentPhone } from 'utils/tests/appointments'
 
@@ -173,24 +173,6 @@ context('UpcomingAppointments', () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = 'CANCELLED'
       initializeTestInstance(appointmentsByYearData)
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('CANCELED')
-    })
-  })
-
-  describe('when the status is CANCELLED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "CANCELLED"', async () => {
-      appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.CANCELLED
-      appointmentsByYearData['2020']['3'][0].attributes.isPending = true
-      initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('CANCELED')
-    })
-  })
-
-  describe('when the status is SUBMITTED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "PENDING"', async () => {
-      appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.SUBMITTED
-      appointmentsByYearData['2020']['3'][0].attributes.isPending = true
-      initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('PENDING')
     })
   })
 

@@ -1,3 +1,4 @@
+import { useRouteNavigation } from 'utils/hooks'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
@@ -14,29 +15,23 @@ import {
   VAButton,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { cancelAppointment } from 'store/slices'
-import { formatDateMMDDYYYY } from 'utils/formattingUtils'
-import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type AppointmentCancellationInfoProps = {
   appointment?: AppointmentData
-  goBack?: () => void
 }
 
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const confirmAlert = useDestructiveAlert()
-  const dispatch = useAppDispatch()
-  const isAndroidDevice = isAndroid()
+  const navigateTo = useRouteNavigation()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, startDateUtc } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -89,42 +84,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     </Box>
   )
 
-  const onCancelAppointment = () => {
-    const appointmentDate = formatDateMMDDYYYY(startDateUtc)
-    const onPress = () => {
-      dispatch(cancelAppointment(cancelId, appointment?.id))
-    }
-
-    const androidButtons = [
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.android.noKeep'),
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.android.yesCancel'),
-        onPress,
-      },
-    ]
-    const iosButtons = [
-      {
-        text: t('common:cancel'),
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.yesCancelAppointment'),
-        onPress,
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.noCancelAppointment'),
-      },
-    ]
-
-    confirmAlert({
-      title: '',
-      message: t('upcomingAppointmentDetails.cancelAppointment.message', { appointmentDate }),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: isAndroidDevice ? androidButtons : iosButtons,
-    })
-  }
+  const cancelAppointment = navigateTo('AppointmentCancellationConfirmation', { cancelID: appointment?.attributes?.cancelId, appointmentID: appointment?.id })
 
   return (
     <TextArea>
@@ -137,10 +97,10 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
         <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
-            onPress={onCancelAppointment}
+            onPress={cancelAppointment}
             label={t('upcomingAppointmentDetails.cancelAppointment')}
             a11yHint={t('upcomingAppointmentDetails.cancelAppointment.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonDestructive}
+            buttonType={ButtonTypesConstants.buttonPrimary}
             {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
           />
         </Box>

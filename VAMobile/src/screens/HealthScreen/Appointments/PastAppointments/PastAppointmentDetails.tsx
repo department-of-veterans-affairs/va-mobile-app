@@ -1,27 +1,27 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import {
-  AppointmentAddressAndNumber,
-  AppointmentAlert,
-  AppointmentReason,
-  AppointmentTypeAndDate,
-  ContactInformation,
-  PreferredAppointmentType,
-  PreferredDateAndTime,
-  ProviderName,
-} from '../AppointmentDetailsCommon'
-import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
-import { AppointmentsState, getAppointmentMessages, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
+  AppointmentAttributes,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentStatusDetailTypeConsts,
+  AppointmentTypeConstants,
+} from 'store/api/types'
+import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { isAPendingAppointment } from '../../../../utils/appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
+import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
+import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
+import ProviderName from '../AppointmentDetailsCommon/ProviderName'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
@@ -31,28 +31,27 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
-  const { pastAppointmentsById, appointmentMessagesById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, status } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail, reason, isCovidVaccine, healthcareProvider } =
+    attributes || ({} as AppointmentAttributes)
+  const { address, phone } = location || ({} as AppointmentLocation)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
-  const pendingAppointment = isAPendingAppointment(attributes)
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
-  const messages = appointmentMessagesById[appointmentID]
+
+  const whoCanceled =
+    statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+      ? t('appointments.canceled.whoCanceled.facility')
+      : t('appointments.canceled.whoCanceled.you')
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail(pendingAppointment))
+    dispatch(trackAppointmentDetail())
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
-  }, [dispatch, appointmentID, pendingAppointment])
-
-  useEffect(() => {
-    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
-      dispatch(getAppointmentMessages(appointmentID))
-    }
-  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
+  }, [dispatch, appointmentID])
 
   if (!isTransitionComplete) {
     return <LoadingComponent text={t('appointmentDetails.loading')} />
@@ -61,42 +60,42 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
 
-  const renderScheduleAnotherAppointment = (): ReactElement => {
-    if (pendingAppointment) {
-      return <></>
-    }
-
-    return (
-      <Box mt={theme.dimensions.condensedMarginBetween}>
-        <TextArea>
-          <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
-            {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
-          </TextView>
-        </TextArea>
-      </Box>
-    )
-  }
-
   return (
     <VAScrollView {...testIdProps('Past-appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <AppointmentAlert attributes={attributes} />
         <TextArea>
           <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-            <AppointmentTypeAndDate attributes={attributes} />
+            <AppointmentTypeAndDate
+              timeZone={timeZone}
+              startDateUtc={startDateUtc}
+              appointmentType={appointmentType}
+              isAppointmentCanceled={appointmentIsCanceled}
+              whoCanceled={whoCanceled}
+              isCovidVaccine={isCovidVaccine}
+            />
           </Box>
 
-          <ProviderName attributes={attributes} />
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} healthcareProvider={healthcareProvider} />
 
-          <AppointmentAddressAndNumber attributes={attributes} />
+          <AppointmentAddressAndNumber
+            appointmentType={appointmentType}
+            healthcareService={healthcareService}
+            address={address}
+            location={location}
+            phone={phone}
+            isCovidVaccine={isCovidVaccine}
+          />
 
-          <PreferredDateAndTime attributes={attributes} />
-          <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} messages={messages} />
-          <ContactInformation attributes={attributes} />
+          {reason && <AppointmentReason reason={reason} />}
         </TextArea>
 
-        {renderScheduleAnotherAppointment()}
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <TextArea>
+            <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+              {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
+            </TextView>
+          </TextArea>
+        </Box>
       </Box>
     </VAScrollView>
   )

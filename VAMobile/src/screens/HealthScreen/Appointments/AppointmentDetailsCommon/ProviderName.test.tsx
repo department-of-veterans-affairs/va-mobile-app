@@ -22,13 +22,13 @@ context('ProviderName', () => {
   }
 
   const initializeTestInstance = async (practitioner?: AppointmentPractitioner): Promise<void> => {
-    props ={
+    props = mockNavProps({
       practitioner,
       appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
-    }
+    })
 
     await waitFor(() => {
-      component = render(<ProviderName attributes={props} />, {
+      component = render(<ProviderName {...props} />, {
         preloadedState: {
           ...InitialState,
         },
