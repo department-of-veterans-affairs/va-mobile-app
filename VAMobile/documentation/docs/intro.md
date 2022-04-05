@@ -18,11 +18,13 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 
 ### Product and Program Management
 - Ambika Roos - Product Leadership
+- Matt Hall - Product Leadership
 - Meko Hong - Product
 - Ayush Chakravarty - Product
 - Ashley Matthews - Product
 - Brenda Rocha - Product
-- Cat Greim - Program
+- Brenda Cudone - Product
+- Seth Eheart - Program
 
 
 ### UX
@@ -30,6 +32,9 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 - Meli Manak - UX Design
 - Melissa Lefevre - UX Design
 - Esther Kitavi - UX Design
+- Lauren Russell - UX Design
+- Misty Milliron-Grant - UX Writing
+- Liz Straghalis - Research
 - Alex Taylor - Principal UX Designer
 
 
@@ -39,12 +44,15 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 - Chika Adibemma - Engineer
 - Narin Ratana - Engineer
 - Jayson Perkins - Engineer
-- Teesh Shahi, Engineer
+- Teesh Shahi - Engineer
+- Raf Arroyo - Engineer
+- John Marchi - Engineer
+- Ken Li - Engineer
+- Andrew Herzberg - Engineer
+- Jon Bindbeutel - Engineer
 - Ken Harrison - QA Support
-- Tom Gammons, Engineer, QA
-- Raf Arroyo, Engineer
-- John Marchi, Engineer
-- Ken Li, Engineer
+- Tom Gammons - Engineer, QA
+- Therese Dickson - Engineer, QA
 
 ## Communications
 - Slack: #va-mobile-app
