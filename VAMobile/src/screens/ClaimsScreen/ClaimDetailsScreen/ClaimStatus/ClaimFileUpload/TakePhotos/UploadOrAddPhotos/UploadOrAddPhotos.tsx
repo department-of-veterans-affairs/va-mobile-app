@@ -60,33 +60,31 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   })
 
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', (e) => {
-        if (imagesList?.length === 0) {
-          return
-        }
-        e.preventDefault()
-        confirmAlert({
-          title: t('fileUpload.discard.confirm.title.photos'),
-          message: t('fileUpload.discard.confirm.message.photos'),
-          cancelButtonIndex: 0,
-          destructiveButtonIndex: 1,
-          buttons: [
-            {
-              text: t('common:cancel'),
+  useEffect(() =>
+    navigation.addListener('beforeRemove', (e) => {
+      if (imagesList?.length === 0) {
+        return
+      }
+      e.preventDefault()
+      confirmAlert({
+        title: t('fileUpload.discard.confirm.title.photos'),
+        message: t('fileUpload.discard.confirm.message.photos'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('common:cancel'),
+          },
+          {
+            text: t('fileUpload.discard.photos'),
+            onPress: () => {
+              snackBar.hideAll()
+              navigation.dispatch(e.data.action)
             },
-            {
-              text: t('fileUpload.discard.photos'),
-              onPress: () => {
-                snackBar.hideAll()
-                navigation.dispatch(e.data.action)
-              },
-            },
-          ],
-        })
-      }),
-    [navigation],
+          },
+        ],
+      })
+    }),
   )
 
   const onCancel = () => {
