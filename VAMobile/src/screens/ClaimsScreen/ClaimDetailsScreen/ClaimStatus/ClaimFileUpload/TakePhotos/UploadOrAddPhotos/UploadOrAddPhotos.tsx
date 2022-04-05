@@ -60,7 +60,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   })
 
-  useEffect(() =>
+  useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
       if (imagesList?.length === 0) {
         return
@@ -84,8 +84,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           },
         ],
       })
-    }),
-  )
+    })
+  })
 
   const onCancel = () => {
     navigation.navigate('FileRequestDetails', { request })

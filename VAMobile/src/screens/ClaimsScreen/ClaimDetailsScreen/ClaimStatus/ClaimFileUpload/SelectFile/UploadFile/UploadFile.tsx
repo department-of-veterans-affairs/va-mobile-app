@@ -39,7 +39,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     })
   })
 
-  useEffect(() =>
+  useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
       if (filesList.length === 0) {
         return
@@ -62,8 +62,8 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
           },
         ],
       })
-    }),
-  )
+    })
+  })
 
   const onCancel = () => {
     navigation.navigate('FileRequestDetails', { request })
