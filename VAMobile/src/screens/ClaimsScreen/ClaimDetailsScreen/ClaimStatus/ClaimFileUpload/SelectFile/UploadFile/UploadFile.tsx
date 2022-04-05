@@ -25,7 +25,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
-  const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([])
+  const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const snackbarMessages: SnackbarMessages = {
@@ -34,34 +34,40 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    setFilesList([fileUploaded])
-  }, [fileUploaded])
-
-  const onCancel = () => {
-    confirmAlert({
-      title: t('fileUpload.discard.confirm.title'),
-      message: t('fileUpload.discard.confirm.message'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('common:cancel'),
-        },
-        {
-          text: t('fileUpload.discard'),
-          onPress: () => {
-            navigation.navigate('FileRequestDetails', { request })
-          },
-        },
-      ],
-    })
-  }
-
-  useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
+
+  useEffect(() =>
+    navigation.addListener('beforeRemove', (e) => {
+      if (filesList.length === 0) {
+        return
+      }
+      e.preventDefault()
+      confirmAlert({
+        title: t('fileUpload.discard.confirm.title'),
+        message: t('fileUpload.discard.confirm.message'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('common:cancel'),
+          },
+          {
+            text: t('fileUpload.discard'),
+            onPress: () => {
+              navigation.dispatch(e.data.action)
+            },
+          },
+        ],
+      })
+    }),
+  )
+
+  const onCancel = () => {
+    navigation.navigate('FileRequestDetails', { request })
+  }
 
   useEffect(() => {
     if (fileUploadedFailure || filesUploadedSuccess) {
@@ -69,6 +75,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     }
 
     if (filesUploadedSuccess) {
+      setFilesList([])
       navigation.navigate('FileRequest', { claimID: claim?.id || '' })
     }
   }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
@@ -112,6 +119,8 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   const onFileDelete = () => {
+    setFilesList([])
+    snackBar.hideAll()
     showSnackBar(t('common:file.deleted'), dispatch, undefined, true, false, false)
     navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
   }
