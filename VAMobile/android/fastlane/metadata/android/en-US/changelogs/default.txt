@@ -1,1 +1,1 @@
-You can now view payments made to you by the VA. We’ve also fixed a few bugs.
+You can now review payments made to you by the VA. We’ve also fixed a few bugs.
