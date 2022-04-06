@@ -22,6 +22,10 @@ on:
         description: 'Version Number (eg. v1.1.0)'
         required: true
         type: string
+      pat:
+        description: 'PAT token from composite parent workflow'
+        type: string
+        required: true
 
 jobs:
   create_prs:
