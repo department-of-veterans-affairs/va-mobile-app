@@ -1,13 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
-
 import DocumentPicker from 'react-native-document-picker'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList, DocumentPickerResponse } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -66,7 +66,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       if (DocumentPicker.isCancel(docError as Error)) {
         return
       }
-
+      logNonFatalErrorToFirebase(docError, 'onFileFolder: SelectFile.tsx Error')
       setError(docError.code)
     }
   }
