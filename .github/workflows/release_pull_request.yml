@@ -27,13 +27,14 @@ jobs:
       releaseHash: ${{steps.urls.outputs.release}}
     steps:
       - name: 'Set up GH CLI secret'
-        run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+        run: echo "${{ secrets.GH_ACTIONS_PAT }}" >> token.txt
       - name: 'Log into GH CLI'
         run: gh auth login --with-token < token.txt
       - name: 'Checkout repo'
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: 'Create PR to merge changes back to develop'
         run: |
           git config --global user.name 'VA Automation Bot'
