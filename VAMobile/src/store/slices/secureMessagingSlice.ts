@@ -41,13 +41,15 @@ import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
-import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError, hasErrorCode } from 'utils/errors'
 import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 
 const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
+
+const secureMessagingNonFatalErrorString = 'Secure Messaging Service Error'
 
 export type SecureMessagingState = {
   loading: boolean
@@ -166,6 +168,7 @@ export const fetchInboxMessages =
       dispatch(getInbox())
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `fetchInboxMessages: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishFetchInboxMessages({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
       }
@@ -190,6 +193,7 @@ export const getInbox =
       dispatch(dispatchFinishGetInbox({ inboxData: inbox }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getInbox: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishGetInbox({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -218,6 +222,7 @@ export const listFolders =
       dispatch(dispatchFinishListFolders({ folderData: folders }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `listFolders: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishListFolders({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
       }
@@ -241,6 +246,7 @@ export const listFolderMessages =
       dispatch(dispatchFinishListFolderMessages({ folderID: folderID, messageData: messages }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `listFolderMessages: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishListFolderMessages({ folderID: folderID, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -263,6 +269,7 @@ export const getThread =
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getThread: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishGetThread({ messageID, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -315,6 +322,7 @@ export const getMessage =
       dispatch(dispatchFinishGetMessage({ messageData: response, isDemoMode: demoMode }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishGetMessage({ error, messageId: messageID }))
       }
     }
@@ -347,6 +355,7 @@ export const downloadFileAttachment =
       }
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `downloadFileAttachment: ${secureMessagingNonFatalErrorString}`)
         /** All download errors will be caught here so there is no special path
          *  for network connection errors
          */
@@ -371,6 +380,7 @@ export const getMessageRecipients =
       dispatch(dispatchFinishGetMessageRecipients({ recipients: preferredList }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getMessageRecipients: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishGetMessageRecipients({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -393,6 +403,7 @@ export const getMessageSignature =
       dispatch(dispatchFinishGetMessageSignature({ signature }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getMessageSignature: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishGetMessageSignature({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -430,6 +441,7 @@ export const saveDraft =
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `saveDraft: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSaveDraft({ error }))
       }
     }
@@ -500,6 +512,7 @@ export const sendMessage =
       dispatch(dispatchFinishSendMessage(undefined))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `sendMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSendMessage(error))
       }
     }
@@ -573,6 +586,7 @@ export const moveMessage =
       refreshFoldersAfterMove(dispatch, messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `moveMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishMoveMessage({ error }))
         showSnackBar(isUndo && messages.undoErrorMsg ? messages.undoErrorMsg : messages.errorMsg, dispatch, retryFunction, false, true, withNavBar)
       }
@@ -599,6 +613,7 @@ export const deleteDraft =
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `deleteDraft: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishDeleteDraft(error))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }

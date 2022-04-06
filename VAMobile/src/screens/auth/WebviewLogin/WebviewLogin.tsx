@@ -10,11 +10,11 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import crashlytics from '@react-native-firebase/crashlytics'
 import getEnv from 'utils/env'
 import qs from 'querystringify'
 
@@ -62,7 +62,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
             dispatch(cancelWebLogin())
             navigation.goBack()
           } else {
-            crashlytics().recordError(e, 'iOS Login Error')
+            logNonFatalErrorToFirebase(e, 'iOS Login Error')
             dispatch(sendLoginFailedAnalytics(e))
           }
         }
@@ -96,7 +96,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
             const err = new Error(e.nativeEvent.description)
             err.stack = JSON.stringify(e.nativeEvent)
             err.name = e.nativeEvent.title
-            crashlytics().recordError(err, 'Android Login Webview Error')
+            logNonFatalErrorToFirebase(err, 'Android Login Webview Error')
             dispatch(sendLoginFailedAnalytics(err))
           }}
           renderLoading={(): ReactElement => loadingSpinner}

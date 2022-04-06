@@ -6,6 +6,7 @@ import { RatingData, ScreenIDTypes } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
 export type DisabilityRatingState = {
   ratingData?: RatingData
@@ -37,6 +38,7 @@ export const getDisabilityRating =
       dispatch(dispatchFinishGetRating({ ratingData: ratingData?.data.attributes }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, 'getDisabilityRating: Disability Rating Service Error')
         dispatch(dispatchFinishGetRating({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
