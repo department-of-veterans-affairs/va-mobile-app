@@ -43,7 +43,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
     switch (type) {
       case ClaimOrAppealConstants.claim:
-        return t('claims.claimFor', { displayTitle: displayTitle?.toLowerCase(), date: formattedUpdatedAtDate })
+        return t('claims.claimFor', { displayTitle: displayTitle.toLowerCase(), date: formattedUpdatedAtDate })
       case ClaimOrAppealConstants.appeal:
         return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
     }

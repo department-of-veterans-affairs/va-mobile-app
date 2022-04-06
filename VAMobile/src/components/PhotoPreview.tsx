@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { bytesToFinalSizeDisplay } from 'utils/common'
+
 import { themeFn } from 'utils/theme'
 import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'

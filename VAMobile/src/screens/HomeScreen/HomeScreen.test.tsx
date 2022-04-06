@@ -113,10 +113,10 @@ context('HomeScreen', () => {
       })
     })
 
-    // it('should render the payments button', async () => {
-    //   await waitFor(() => {
-    //     expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Payments')
-    //   })
-    // })
+    it('should render the payments button', async () => {
+      await waitFor(() => {
+        expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Payments')
+      })
+    })
   })
 })

@@ -32,11 +32,12 @@ platform :ios do
   desc "Push a new internal QA build to TestFlight"
   lane :qa do |options|
     puts('Begin QA lane' )
+    notes = options[:notes]
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
     sign
     build
-    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
+    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
     upload_tf(notes, "Development Team")
     upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
@@ -79,10 +80,12 @@ platform :ios do
   desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
   lane :on_demand do |options|
     puts "on demand run"
+    notes = options[:notes]
     update_version(options[:version])
     sign
     build
-    notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
+    notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
+    puts notes
     upload_tf(notes, options[:tfGroup])
     upload_deobfuscation_file
     message = "New On Demand build successfully uploaded to TestFlight Group " + options[:tfGroup]
