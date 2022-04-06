@@ -26,15 +26,15 @@ jobs:
       devPrUrl: ${{steps.urls.outputs.dev}}
       releaseHash: ${{steps.urls.outputs.release}}
     steps:
-      - name: 'Set up GH CLI secret'
-        run: echo "${{ secrets.GH_ACTIONS_PAT }}" >> token.txt
-      - name: 'Log into GH CLI'
-        run: gh auth login --with-token < token.txt
       - name: 'Checkout repo'
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: 'Set up GH CLI secret'
+        run: echo "${{ secrets.GH_ACTIONS_PAT }}" >> token.txt
+      - name: 'Log into GH CLI'
+        run: gh auth login --with-token < token.txt
       - name: 'Create PR to merge changes back to develop'
         run: |
           git config --global user.name 'VA Automation Bot'
@@ -44,6 +44,8 @@ jobs:
           git push -u origin dev-to-release
           echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
       - name: 'Merge changes to main and tag for release build'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
