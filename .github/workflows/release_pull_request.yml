@@ -7,9 +7,9 @@ on:
         description: 'Version Number (eg. v1.1.0)'
         type: string
         required: true
-      pat:
+    secrets:
+      GH_ACTIONS_PAT:
         description: 'PAT token from composite parent workflow'
-        type: string
         required: true
     outputs:
       devPrUrl:
@@ -22,10 +22,6 @@ on:
         description: 'Version Number (eg. v1.1.0)'
         required: true
         type: string
-      pat:
-        description: 'PAT token from composite parent workflow'
-        type: string
-        required: true
 
 jobs:
   create_prs:
@@ -38,9 +34,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ inputs.pat }}
+          token: ${{ secrets.GH_ACTIONS_PAT }}
       - name: 'Set up GH CLI secret'
-        run: echo "${{inputs.pat}}" >> token.txt
+        run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
       - name: 'Log into GH CLI'
         run: gh auth login --with-token < token.txt
       - name: 'Create PR to merge changes back to develop'
