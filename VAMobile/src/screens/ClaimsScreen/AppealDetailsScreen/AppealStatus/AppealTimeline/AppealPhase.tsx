@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppealEventData, AppealEventTypes, AppealEventTypesConstants } from 'store/api/types'
@@ -6,7 +7,7 @@ import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 
 const getEventName = (type: AppealEventTypes, translation: TFunction): string => {
@@ -99,7 +100,7 @@ type AppealPhaseProps = {
 }
 
 const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
 
   const formattedDate = formatDateMMMMDDYYYY(event.date)

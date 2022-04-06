@@ -1,9 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentMessages } from 'store/api'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type AppointmentReasonProps = {
   attributes: AppointmentAttributes
@@ -11,7 +12,7 @@ type AppointmentReasonProps = {
 }
 
 const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   const { reason } = attributes || ({} as AppointmentAttributes)

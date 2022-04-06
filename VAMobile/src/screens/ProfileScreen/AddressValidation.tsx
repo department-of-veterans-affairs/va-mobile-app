@@ -1,5 +1,6 @@
 import { map } from 'underscore'
 import { useNavigation } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
 import { AccordionCollapsible, Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
@@ -9,7 +10,7 @@ import { PersonalInformationState, finishValidateAddress, updateAddress } from '
 import { RootState } from 'store'
 import { ViewStyle } from 'react-native'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 /**
@@ -22,7 +23,7 @@ export type AddressValidationProps = {
 
 const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId }) => {
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
   const theme = useTheme()
 
