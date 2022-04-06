@@ -46,7 +46,7 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git checkou main
+          git checkout main
           git checkout release/${{inputs.version}}
           git checkout -b merge-to-main
           git merge -s ours main -m "merge main changes"
