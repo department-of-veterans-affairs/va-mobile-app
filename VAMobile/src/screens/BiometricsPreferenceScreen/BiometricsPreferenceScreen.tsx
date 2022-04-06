@@ -1,26 +1,27 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getSupportedBiometricA11yLabel, getSupportedBiometricText, getSupportedBiometricTranslationTag } from 'utils/formattingUtils'
+import { getSupportedBiometricA11yLabel, getSupportedBiometricText, getSupportedBiometricTranslationTag, getTranslation } from 'utils/formattingUtils'
 
 import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 
 const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
-  const t = useTranslation(NAMESPACE.SETTINGS)
+  const { t } = useTranslation(NAMESPACE.SETTINGS)
 
   const { supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
   const biometricsA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
-  const bodyText = t(`biometricsPreference.bodyText.${getSupportedBiometricTranslationTag(supportedBiometric || '')}`)
+  const bodyText = getTranslation(`biometricsPreference.bodyText.${getSupportedBiometricTranslationTag(supportedBiometric || '')}`, t)
 
   const onSkip = (): void => {
     dispatch(setDisplayBiometricsPreferenceScreen(false))

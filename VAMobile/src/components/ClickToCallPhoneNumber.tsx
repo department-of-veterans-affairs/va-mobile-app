@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentPhone } from 'store/api/types'
@@ -5,7 +6,7 @@ import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, Tex
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type ClickToCallPhoneNumberProps = {
   /**sets the phone information */
@@ -18,7 +19,7 @@ type ClickToCallPhoneNumberProps = {
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
 const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center }) => {
-  const t = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
 
   if (!phone) {
