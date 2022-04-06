@@ -1,11 +1,9 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'store/api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import AppealCurrentStatus from './AppealCurrentStatus/AppealCurrentStatus'
 import AppealTimeline from './AppealTimeline/AppealTimeline'
 import NeedHelpData from 'screens/ClaimsScreen/NeedHelpData/NeedHelpData'
@@ -23,7 +21,7 @@ type AppealStatusProps = {
 
 const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal, docketName, programArea }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const t = useTranslation(NAMESPACE.CLAIMS)
 
   const NumAppealsAhead = (): ReactElement => {
     // if the number of appeals ahead does not exist or the appeal is closed
@@ -44,7 +42,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
   }
 
   return (
-    <Box {...testIdProps('Your-appeal: Status-tab-appeal-details-page')}>
+    <Box>
       <CollapsibleView text={t('appealDetails.viewPastEvents')} contentInTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')}>
         <AppealTimeline events={events} />
       </CollapsibleView>

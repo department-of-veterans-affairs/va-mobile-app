@@ -1,36 +1,22 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AppointmentAttributes, AppointmentMessages } from 'store/api'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type AppointmentReasonProps = {
-  attributes: AppointmentAttributes
-  messages?: Array<AppointmentMessages>
+  reason: string
 }
 
-const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+const AppointmentReason: FC<AppointmentReasonProps> = ({ reason }) => {
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-
-  const { reason } = attributes || ({} as AppointmentAttributes)
-
-  if (!reason && !messages?.length) {
-    return <></>
-  }
-
-  // Only use the first index as the remaining items are just the doctors response to the user's concern
-  let messageText = messages?.[0].attributes?.messageText
-  messageText = messageText ? ': ' + messageText : ''
-
   return (
     <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
       <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
         {t('upcomingAppointmentDetails.reason')}
       </TextView>
-      <TextView variant="MobileBody">{`${reason || ''}${messageText}`}</TextView>
+      <TextView variant="MobileBody">{reason}</TextView>
     </Box>
   )
 }

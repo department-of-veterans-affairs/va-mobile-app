@@ -1,12 +1,11 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
-import { AppointmentAttributes, AppointmentLocation, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
+import { AppointmentAddress, AppointmentLocation, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
+import { useTranslation } from 'utils/hooks'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
   return (
@@ -17,13 +16,16 @@ export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean 
 }
 
 type AppointmentAddressAndNumberProps = {
-  attributes: AppointmentAttributes
+  appointmentType: AppointmentType
+  healthcareService: string
+  location: AppointmentLocation
+  address?: AppointmentAddress
+  phone?: AppointmentPhone
+  isCovidVaccine?: boolean
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes }) => {
-  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
-  const { appointmentType, healthcareService, location, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
-  const { address, phone } = location || ({} as AppointmentLocation)
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone, isCovidVaccine }) => {
+  const t = useTranslation()
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
@@ -59,17 +61,17 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     <Box>
       {getHealthServiceHeaderSection()}
       <Box {...testIdProps(testId)} accessible={true}>
-        {!appointmentIsAtlas && !!location?.name && (
+        {!appointmentIsAtlas && (
           <TextView variant="MobileBody" selectable={true}>
             {location.name}
           </TextView>
         )}
-        {!!address?.street && (
+        {!!address && (
           <TextView variant="MobileBody" selectable={true}>
             {address.street}
           </TextView>
         )}
-        {!!address?.city && address?.state && address?.zipCode && (
+        {!!cityStateZip && (
           <TextView variant="MobileBody" selectable={true}>
             {cityStateZip}
           </TextView>
@@ -83,7 +85,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
           {...a11yHintProp(t('common:directions.a11yHint'))}
         />
       </Box>
-      {!appointmentIsAtlas && phone && <ClickToCallPhoneNumber phone={phone} />}
+      {!appointmentIsAtlas && <ClickToCallPhoneNumber phone={phone} />}
     </Box>
   )
 }

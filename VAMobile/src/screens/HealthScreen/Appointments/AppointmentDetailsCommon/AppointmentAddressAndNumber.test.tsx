@@ -7,7 +7,7 @@ import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { InitialState } from 'store/slices'
 import { ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'
-import {AppointmentAddress, AppointmentAttributes} from 'store/api/types'
+import { AppointmentAddress } from 'store/api/types'
 
 context('AppointmentAddressAndNumber', () => {
   let component: RenderAPI
@@ -22,22 +22,22 @@ context('AppointmentAddressAndNumber', () => {
   }
 
   const initializeTestInstance = async (appointmentType: string, address: AppointmentAddress | undefined): Promise<void> => {
-    props = {
+    props = mockNavProps({
       appointmentType,
       healthcareService: 'Rehabilitation Clinic',
       location: {
         name: 'VA Long Beach Healthcare System',
-        address,
-        phone: {
-          areaCode: '123',
-          number: '456-7890',
-          extension: '',
-        },
       },
-    } as AppointmentAttributes
+      address,
+      phone: {
+        areaCode: '123',
+        number: '456-7890',
+        extension: '',
+      },
+    })
 
     await waitFor(() => {
-      component = render(<AppointmentAddressAndNumber attributes={props} />, {
+      component = render(<AppointmentAddressAndNumber {...props} />, {
         preloadedState: {
           ...InitialState,
         },

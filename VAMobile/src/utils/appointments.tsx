@@ -4,8 +4,7 @@ import React, { ReactNode } from 'react'
 import _ from 'underscore'
 
 import {
-  AppointmentAttributes,
-  AppointmentData,
+  AppointmentStatusConstants,
   AppointmentType,
   AppointmentTypeConstants,
   AppointmentTypeToID,
@@ -13,7 +12,6 @@ import {
   AppointmentsList,
   AppointmentsMetaPagination,
 } from 'store/api'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
@@ -139,60 +137,14 @@ const getListItemsForAppointments = (
   const { currentPage, perPage, totalEntries } = upcomingPageMetaData
 
   _.forEach(listOfAppointments, (appointment, index) => {
-    const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
-    const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
-    const a11yValue = tc('common:listPosition', { position, total: totalEntries })
-    const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
+    const { attributes } = appointment
+    const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine } = attributes
+    const textLines: Array<TextLineWithIconProps> = []
 
-    listItems.push({
-      textLines,
-      a11yValue,
-      onPress: () => onAppointmentPress(appointment.id),
-      a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
-      testId: getTestIDFromTextLines(textLines),
-    })
-  })
-
-  return listItems
-}
-
-/**
- * Should return an array of TextLineWithIconProps that describes an appointment that is shown in upcoming and past appointment list
- *
- * @param appointment - appointment data
- * @param t - function, the translate function
- * @param theme - type VATheme, the theme object to set some properties
- */
-export const getTextLinesForAppointmentListItem = (appointment: AppointmentData, t: TFunction, theme: VATheme): Array<TextLineWithIconProps> => {
-  const { attributes } = appointment
-  const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider } = attributes
-  const textLines: Array<TextLineWithIconProps> = []
-  const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
-
-  if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-    textLines.push({ text: t('appointments.canceled'), textTag: { backgroundColor: 'inactiveTag', variant: 'LabelTagBold' } })
-  } else if (isPendingAppointment) {
-    textLines.push({ text: t('appointments.pending'), textTag: { backgroundColor: 'warningTag', color: 'warningTag', variant: 'LabelTagBold' } })
-  }
-
-  // pending appointments
-  if (isPendingAppointment) {
-    textLines.push({ text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', color: 'primaryTitle' })
-    switch (appointmentType) {
-      case AppointmentTypeConstants.COMMUNITY_CARE:
-        if (healthcareProvider) {
-          textLines.push({ text: t('common:text.raw', { text: healthcareProvider }) })
-        } else {
-          textLines.push({ text: t('upcomingAppointments.communityCare') })
-        }
-        break
-      case AppointmentTypeConstants.VA:
-      default:
-        textLines.push({
-          text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
-        })
+    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
+      textLines.push({ text: t('appointments.canceled'), isTextTag: true })
     }
-  } else {
+
     textLines.push(
       { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', color: 'primaryTitle' },
       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', color: 'primaryTitle' },
@@ -201,9 +153,20 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
       },
     )
-  }
 
-  return textLines
+    const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
+    const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+
+    listItems.push({
+      textLines,
+      a11yValue,
+      onPress: () => onAppointmentPress(appointment.id),
+      a11yHintText: t('appointments.viewDetails'),
+      testId: getTestIDFromTextLines(textLines),
+    })
+  })
+
+  return listItems
 }
 
 /**
@@ -239,15 +202,4 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   })
 
   return yearToSortedMonths
-}
-
-/**
- * Returns true or false if the appointment is a pending appointment
- * @param attributes - data attributes of an appointment
- */
-export const isAPendingAppointment = (attributes: AppointmentAttributes): boolean => {
-  const { status, isPending } = attributes || ({} as AppointmentAttributes)
-  const validPendingStatus = status === AppointmentStatusConstants.SUBMITTED || status === AppointmentStatusConstants.CANCELLED
-
-  return !!(isPending && validPendingStatus)
 }

@@ -77,7 +77,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
         }
 
         return (
-          <Box display="flex" flexDirection="row" alignItems="flex-start" key={index}>
+          <Box display="flex" flexDirection="row" alignItems="flex-start" key={index} accessible={true}>
             <Box mr={theme.dimensions.textXPadding} mt={theme.dimensions.bulletMargin}>
               <VAIcon name="Bullet" fill={color || 'primary'} />
             </Box>
