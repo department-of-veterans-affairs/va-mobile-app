@@ -40,8 +40,6 @@ export const getAnalyticsTimers = (state: RootState): [number, number, number] =
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
-  console.log('Rafy')
-  console.log(error)
   let errorObject: Error = Error()
 
   // if the error is a string
