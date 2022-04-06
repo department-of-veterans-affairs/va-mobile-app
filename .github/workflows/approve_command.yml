@@ -25,7 +25,8 @@ jobs:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-      pat: ${{ secrets.GH_ACTIONS_PAT }}
+    secrets:
+      GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }}
   comment_complete:
     runs-on: ubuntu-latest
     needs: run_prs
