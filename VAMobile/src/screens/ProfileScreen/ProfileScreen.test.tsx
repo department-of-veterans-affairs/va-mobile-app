@@ -155,10 +155,7 @@ context('ProfileScreen', () => {
       it('should be shown', async () => {
         await waitFor(() => {
           initializeTestInstance(false, false, true)
-          component.debug('Rafael')
         })
-
-        component.debug('Rafael2')
 
         expect(findByTestID(testInstance, 'personal-and-contact-information')).toBeTruthy()
       })

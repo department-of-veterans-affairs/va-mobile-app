@@ -18,6 +18,7 @@ import {
 import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
+import { logNonFatalErrorToFirebase } from './analytics'
 import theme from 'styles/themes/standardTheme'
 
 export const getMessagesListItems = (
@@ -231,6 +232,8 @@ export const onFileFolderSelect = async (
       if (isCancel(docError)) {
         return
       }
+
+      logNonFatalErrorToFirebase(docError, 'onFileFolderSelect: Secure Messaging Error')
 
       if (docError.code) {
         setError(docError.code)

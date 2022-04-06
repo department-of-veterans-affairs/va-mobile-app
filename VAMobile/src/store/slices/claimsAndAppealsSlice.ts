@@ -30,7 +30,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { SnackbarMessages } from 'components/SnackBar'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -62,6 +62,8 @@ export type ClaimsAndAppealsState = {
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
 }
+
+const claimsAndAppealsNonFatalErrorString = 'Claims And Appeals Service Error'
 
 const initialPaginationState = {
   currentPage: 1,
@@ -308,6 +310,7 @@ export const prefetchClaimsAndAppeals =
       dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `prefetchClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: undefined, closed: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -342,6 +345,7 @@ export const getClaimsAndAppeals =
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -380,6 +384,7 @@ export const getClaim =
       dispatch(dispatchFinishGetClaim({ claim: singleClaim?.data }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getClaim: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishGetClaim({ claim: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -415,6 +420,7 @@ export const getAppeal =
       dispatch(dispatchFinishGetAppeal({ appeal: appeal?.data }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getAppeal: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishGetAppeal({ appeal: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -439,6 +445,7 @@ export const submitClaimDecision =
       showSnackBar('Request sent', dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `submitClaimDecision: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishSubmitClaimDecision(error))
         showSnackBar('Request could not be sent', dispatch, retryFunction, false, true)
       }
@@ -511,6 +518,7 @@ export const uploadFileToClaim =
       showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `uploadFileToClaim: ${claimsAndAppealsNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_claim_upload_fail())
         dispatch(dispatchFinishFileUpload({ error }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)

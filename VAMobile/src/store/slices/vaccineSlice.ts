@@ -9,7 +9,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { indexBy } from 'underscore'
 import { isErrorObject } from '../../utils/common'
-import { logAnalyticsEvent } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 
 export type VaccineListType = {
   [key in string]: VaccineListData
@@ -35,6 +35,8 @@ export const initialVaccineState: VaccineState = {
   vaccinePagination: {} as VaccinePaginationMeta,
   loadedVaccines: {} as VaccineListType,
 }
+
+const vaccineNonFatalErrorString = 'Vaccine Service Error'
 
 const getLoadedVaccines = (vaccinesList: VaccineListType, page: string) => {
   const loadedVacccines = vaccinesList[page]
@@ -83,12 +85,13 @@ export const getVaccines =
 
       // Ensure all required fields(date, groupName, and type and dosage) exist; otherwise throw API Error
       if (!hasRequiredFields) {
-        throw { status: 500, json: { errors: [] } } as APIError
+        throw { status: 500, json: { errors: [], text: '{vaccineSlice:{Missing required fields(date, groupName, and type)}}' } } as APIError
       }
 
       dispatch(dispatchFinishGetVaccines({ page, vaccinesData }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getVaccines: ${vaccineNonFatalErrorString}`)
         dispatch(dispatchFinishGetVaccines({ page, vaccinesData: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
       }
@@ -117,6 +120,7 @@ export const getVaccineLocation =
       dispatch(dispatchFinishGetLocation({ vaccineId, location: locationData?.data }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getVaccineLocation: ${vaccineNonFatalErrorString}`)
         dispatch(dispatchFinishGetLocation({ vaccineId: undefined, location: undefined, error }))
       }
     }

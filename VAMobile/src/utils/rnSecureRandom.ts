@@ -1,6 +1,8 @@
 import { NativeModules } from 'react-native'
+import { logNonFatalErrorToFirebase } from './analytics'
 
 const RnSecureRandom = NativeModules.RNSecureRandom
+const rNSecureRandomFatalErrorString = 'RNSecureRandom Error'
 
 /**
  * function calls the secure random libraries in the OS, creates a randomized byte array and transforms the array into
@@ -11,6 +13,7 @@ export const generateBase64 = async (count: number): Promise<string> => {
   try {
     return await RnSecureRandom.generateBase64(count)
   } catch (e) {
+    logNonFatalErrorToFirebase(e, `generateBase64: ${rNSecureRandomFatalErrorString}`)
     console.log(e)
     return ''
   }
@@ -23,6 +26,7 @@ export const generateSHA256String = async (string: string): Promise<string> => {
   try {
     return await RnSecureRandom.generateSHA256String(string)
   } catch (e) {
+    logNonFatalErrorToFirebase(e, `generateSHA256String: ${rNSecureRandomFatalErrorString}`)
     console.log(e)
     return ''
   }
