@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 
 import { AccordionCollapsible, Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
@@ -6,14 +7,14 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PatientState } from 'store/slices'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
+import { useHasCernerFacilities, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const CernerAlert: FC = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const { cernerFacilities, facilities } = useSelector<RootState, PatientState>((state) => state.patient)
   const hasCernerFacilities = useHasCernerFacilities()

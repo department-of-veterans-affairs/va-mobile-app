@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
@@ -9,9 +10,9 @@ import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
@@ -21,7 +22,7 @@ type AppealDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'AppealDe
 const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
   const controlValues = [t('claimDetails.status'), t('appealDetails.issuesTab')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
@@ -51,7 +52,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
       appealType = AppealTypesConstants.appeal
     }
 
-    return t(`appealDetails.${appealType}`)
+    return getTranslation(`appealDetails.${appealType}`, t)
   }
 
   const getSubmittedDate = (): string => {
