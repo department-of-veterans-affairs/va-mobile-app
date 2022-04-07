@@ -1,14 +1,14 @@
 import { Asset } from 'react-native-image-picker/src/types'
 import { Image, Pressable, PressableProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { bytesToFinalSizeDisplay } from 'utils/common'
-
 import { themeFn } from 'utils/theme'
-import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
 
@@ -44,7 +44,8 @@ const StyledImage = styled(Image)<StyledImageProps>`
 
 const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
   const { colors: themeColor, dimensions: themeDim } = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const [selected, setSelected] = useState(false)
   const uri = image.uri
   const confirmAlert = useDestructiveAlert()
@@ -64,7 +65,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
           onPress: () => {
             setSelected(false)
           },

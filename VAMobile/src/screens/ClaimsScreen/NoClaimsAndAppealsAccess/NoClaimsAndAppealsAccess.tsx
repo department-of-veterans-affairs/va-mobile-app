@@ -1,12 +1,14 @@
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
+
 import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
-import React, { FC } from 'react'
+import { useTheme } from 'utils/hooks'
 
 const NoClaimsAndAppealsAccess: FC = () => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
   return (
     <VAScrollView {...testIdProps('Claims: No-claims-and-appeals-page')}>

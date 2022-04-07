@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -5,7 +6,6 @@ import { NAMESPACE } from '../constants/namespaces'
 import { TouchableOpacity } from 'react-native'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
-import { useTranslation } from '../utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 
@@ -43,7 +43,7 @@ const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
 `
 /**A common component for filtering UI views by segments or lanes. Used for things like toggling between Active/Completed claims and Future/Past Appointments */
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected, accessibilityHints }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   useEffect(() => {
     onChange(values[selected])

@@ -1,4 +1,5 @@
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { ButtonDecoratorType } from 'components/BaseListItem'
@@ -6,7 +7,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextLine } from 'components/types'
 import { getA11yLabelText, getFileDisplay } from 'utils/common'
-import { useDestructiveAlert, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert } from 'utils/hooks'
 import DefaultList, { DefaultListItemObj } from 'components/DefaultList'
 
 export type FileListProps = {
@@ -17,7 +18,8 @@ export type FileListProps = {
 }
 
 const FileList: FC<FileListProps> = ({ files, onDelete }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const deleteFileAlert = useDestructiveAlert()
 
   const listObjs: Array<DefaultListItemObj> = files.map((file) => {
@@ -32,15 +34,15 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
       decorator: ButtonDecoratorType.Delete,
       onPress: () => {
         deleteFileAlert({
-          title: t('common:file.removeConfirm'),
+          title: tc('file.removeConfirm'),
           destructiveButtonIndex: 1,
           cancelButtonIndex: 0,
           buttons: [
             {
-              text: t('common:cancel'),
+              text: tc('cancel'),
             },
             {
-              text: t('common:delete'),
+              text: tc('delete'),
               onPress: () => {
                 onDelete(file)
               },

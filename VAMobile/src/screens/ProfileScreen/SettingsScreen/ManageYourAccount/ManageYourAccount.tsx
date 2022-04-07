@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import { BackButton, Box, TextArea, TextView, VAScrollView } from 'components'
@@ -8,12 +9,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type ManageYourAccountProps = StackScreenProps<ProfileStackParamList, 'ManageYourAccount'>
 
 const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.SETTINGS)
+  const { t } = useTranslation(NAMESPACE.SETTINGS)
   const theme = useTheme()
 
   useEffect(() => {

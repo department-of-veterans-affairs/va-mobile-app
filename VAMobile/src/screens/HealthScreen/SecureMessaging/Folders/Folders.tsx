@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
@@ -10,7 +11,7 @@ import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState } from 'store/slices'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 const getListItemsForFolders = (
@@ -96,7 +97,7 @@ export const getUserFolders = (
 type FoldersProps = Record<string, unknown>
 
 const Folders: FC<FoldersProps> = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { folders, loadingFolders } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
