@@ -71,10 +71,10 @@ isInArray() {
 # get options and set values
 while [ $# -gt 0 ]; do
   case "$1" in
-    o|--os)
+    -o|--os)
       isInArray os_opts "$2" os "$1"
       ;;
-    v|--version)
+    -v|--version)
       version=$2
       if [[ ! "$version" =~ v[0-9]*\.[0-9]*\.[0-9]* ]]; then Error; fi ;;
     -h|--help)
