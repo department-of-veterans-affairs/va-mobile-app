@@ -53,7 +53,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
       snackBar.hideAll()
     })
     return unsubscribe
