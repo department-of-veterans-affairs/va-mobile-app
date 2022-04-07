@@ -61,7 +61,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   })
 
   useEffect(() => {
-    navigation.addListener('beforeRemove', (e) => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
       if (imagesList?.length === 0) {
         return
       }
@@ -85,6 +85,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         ],
       })
     })
+    return unsubscribe
   })
 
   const onCancel = () => {

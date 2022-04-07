@@ -52,6 +52,13 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     navigation.goBack()
   }
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      snackBar.hideAll()
+    })
+    return unsubscribe
+  })
+
   const callbackIfUri = (response: ImagePickerResponse): void => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
