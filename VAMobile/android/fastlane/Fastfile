@@ -95,6 +95,7 @@ platform :android do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
+    puts exception
     slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
