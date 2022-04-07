@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
@@ -11,7 +12,7 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
@@ -31,7 +32,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 }
 
 const Appointments: FC<AppointmentsScreenProps> = ({}) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
