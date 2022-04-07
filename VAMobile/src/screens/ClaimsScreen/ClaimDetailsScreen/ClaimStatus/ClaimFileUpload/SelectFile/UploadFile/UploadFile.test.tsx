@@ -53,7 +53,7 @@ context('UploadFile', () => {
       size: 100
     } as DocumentPickerResponse
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded: file, imageUploaded } })
+    props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded: file, imageUploaded } })
 
     component = render(<UploadFile {...props} />, {
       preloadedState: {

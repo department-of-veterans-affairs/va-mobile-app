@@ -37,6 +37,13 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
     navigation.goBack()
   }
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      snackBar.hideAll()
+    })
+    return unsubscribe
+  })
+
   const onFileFolder = async (): Promise<void> => {
     const {
       pickSingle,
