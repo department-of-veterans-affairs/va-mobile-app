@@ -1,6 +1,7 @@
 import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
+import { useTranslation } from 'react-i18next'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
@@ -8,7 +9,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
@@ -18,7 +19,7 @@ type ReloadButtonProps = {
 }
 
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { dimensions, colors } = theme
 
