@@ -33,8 +33,12 @@ context('ClaimDetailsScreen', () => {
   let testInstance: ReactTestInstance
   let navHeaderSpy: any
   let navigateToSpy: jest.Mock
+  let goBack: jest.Mock
+  let abortLoadSpy: jest.Mock
 
   const initializeTestInstance = (loadingClaim = false, errorsState: ErrorsState = initialErrorsState) => {
+    goBack = jest.fn()
+    abortLoadSpy = jest.fn()
     props = mockNavProps(
       undefined,
       {
@@ -44,7 +48,7 @@ context('ClaimDetailsScreen', () => {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
           }
         },
-        goBack: jest.fn(),
+        goBack,
       },
       { params: { claimID: '0', claimType: 'ACTIVE' } },
     )
@@ -56,6 +60,9 @@ context('ClaimDetailsScreen', () => {
           ...initialClaimsAndAppealsState,
           loadingClaim,
           claim: claim,
+          cancelLoadingDetailScreen: {
+            abort: abortLoadSpy
+          }
         },
         errors: errorsState,
       },
@@ -86,7 +93,7 @@ context('ClaimDetailsScreen', () => {
     it('should display the ClaimStatus component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/0`)
+          .calledWith(`/v0/claim/0`, {}, expect.anything())
           .mockResolvedValue({ data: claim })
         initializeTestInstance()
       })
@@ -102,7 +109,7 @@ context('ClaimDetailsScreen', () => {
     it('should display the ClaimDetails component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/0`)
+          .calledWith(`/v0/claim/0`, {}, expect.anything())
           .mockResolvedValue({ data: claim })
         initializeTestInstance()
       })
@@ -141,6 +148,40 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() => {
         initializeTestInstance(false, errorState)
         expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      })
+    })
+  })
+
+  describe('when pressing the back button', () => {
+    it('should call goBack', async () => {
+      await waitFor(async () => {
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        navHeaderSpy.back.props.onPress()
+        expect(goBack).toHaveBeenCalled()
+      })
+    })
+
+    it('should call snb', async () => {
+      await waitFor(async () => {
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        navHeaderSpy.back.props.onPress()
+        expect(goBack).toHaveBeenCalled()
+      })
+    })
+
+    describe('and claim is still loading', () => {})
+    it('should call abort', async () => {
+      const abortSpy = jest.spyOn(AbortController.prototype, 'abort')
+      await waitFor(async () => {
+        initializeTestInstance(true)
+        navHeaderSpy.back.props.onPress()
+        expect(abortSpy).not.toHaveBeenCalled()
       })
     })
   })

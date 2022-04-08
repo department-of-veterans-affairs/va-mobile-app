@@ -33,10 +33,10 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType, focusOnSnackbar } = route.params
-  const { claim, loadingClaim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
@@ -45,6 +45,10 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
           onPress={() => {
             navigation.goBack()
             snackBar.hideAll()
+            // if claim is still loading cancel it
+            if (loadingClaim) {
+              cancelLoadingDetailScreen?.abort()
+            }
           }}
           focusOnButton={focusOnSnackbar ? false : true}
           canGoBack={props.canGoBack}

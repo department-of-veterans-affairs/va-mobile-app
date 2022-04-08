@@ -1,11 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
-import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
+import { BackButton, Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
+import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -18,7 +20,7 @@ import AppealStatus from './AppealStatus/AppealStatus'
 
 type AppealDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'AppealDetailsScreen'>
 
-const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
+const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.CLAIMS)
@@ -31,12 +33,36 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   ]
 
   const { appealID } = route.params
-  const { appeal, loadingAppeal } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { appeal, loadingAppeal, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props): ReactNode => (
+        <BackButton
+          onPress={() => {
+            navigation.goBack()
+            // if appeals is still loading cancel it
+            if (loadingAppeal) {
+              cancelLoadingDetailScreen?.abort()
+            }
+          }}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.back}
+          showCarat={true}
+        />
+      ),
+    })
+  })
 
   useEffect(() => {
     dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
+    const interaction = InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
+    return () => interaction.cancel()
   }, [dispatch, appealID])
 
   const getFilteredIssues = (): Array<string> => {
@@ -77,7 +103,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
   }
 
-  if (loadingAppeal) {
+  if (loadingAppeal || !isTransitionComplete) {
     return <LoadingComponent />
   }
 

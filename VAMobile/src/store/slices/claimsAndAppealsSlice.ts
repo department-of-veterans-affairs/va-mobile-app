@@ -61,6 +61,7 @@ export type ClaimsAndAppealsState = {
   claimsAndAppealsByClaimType: ClaimsAndAppealsListType
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
+  cancelLoadingDetailScreen?: AbortController // abortController to canceling loading of claim(getClaim) and appeal(getAppeal) detail screens
 }
 
 const claimsAndAppealsNonFatalErrorString = 'Claims And Appeals Service Error'
@@ -96,6 +97,7 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
     ACTIVE: initialPaginationState,
     CLOSED: initialPaginationState,
   },
+  cancelLoadingDetailScreen: undefined,
 }
 
 const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
@@ -360,7 +362,12 @@ export const getClaim =
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
-    dispatch(dispatchStartGetClaim())
+
+    // create a new signal to abort if there is a api being called at the moment
+    const newAbortController = new AbortController()
+    const signal = newAbortController.signal
+
+    dispatch(dispatchStartGetClaim({ abortController: newAbortController }))
 
     try {
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
@@ -372,7 +379,7 @@ export const getClaim =
           data: Claim,
         }
       } else {
-        singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
+        singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`, {}, signal)
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
@@ -399,7 +406,12 @@ export const getAppeal =
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
-    dispatch(dispatchStartGetAppeal())
+
+    // create a new signal to abort if there is a api being called at the moment
+    const newAbortController = new AbortController()
+    const signal = newAbortController.signal
+
+    dispatch(dispatchStartGetAppeal({ abortController: newAbortController }))
     try {
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       let appeal
@@ -408,7 +420,7 @@ export const getAppeal =
           data: Appeal,
         }
       } else {
-        appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+        appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`, {}, signal)
       }
 
       const [totalTime] = getAnalyticsTimers(getState())
@@ -636,8 +648,9 @@ const claimsAndAppealsSlice = createSlice({
       state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
     },
 
-    dispatchStartGetClaim: (state) => {
+    dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
       state.loadingClaim = true
+      state.cancelLoadingDetailScreen = action.payload.abortController
     },
 
     dispatchFinishGetClaim: (state, action: PayloadAction<{ claim?: ClaimData; error?: Error }>) => {
@@ -646,10 +659,12 @@ const claimsAndAppealsSlice = createSlice({
       state.claim = claim
       state.error = error
       state.loadingClaim = false
+      state.cancelLoadingDetailScreen = undefined
     },
 
-    dispatchStartGetAppeal: (state) => {
+    dispatchStartGetAppeal: (state, action: PayloadAction<{ abortController: AbortController }>) => {
       state.loadingAppeal = true
+      state.cancelLoadingDetailScreen = action.payload.abortController
     },
 
     dispatchFinishGetAppeal: (state, action: PayloadAction<{ appeal?: AppealData; error?: Error }>) => {
@@ -658,6 +673,7 @@ const claimsAndAppealsSlice = createSlice({
       state.appeal = appeal
       state.error = error
       state.loadingAppeal = false
+      state.cancelLoadingDetailScreen = undefined
     },
 
     dispatchStartSubmitClaimDecision: (state) => {
