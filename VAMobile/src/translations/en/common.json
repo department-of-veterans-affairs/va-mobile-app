@@ -94,7 +94,9 @@
   "pickerMoveMessageToFolder": "Move message to",
   "note": "Note:",
   "MB": "MB",
+  "MB.a11y": "megabytes",
   "KB": "KB",
+  "KB.a11y": "kilobytes",
   "Bytes": "Bytes",
   "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})"
 }
