@@ -164,25 +164,14 @@ context('ClaimDetailsScreen', () => {
       })
     })
 
-    it('should call snb', async () => {
-      await waitFor(async () => {
-        initializeTestInstance()
-      })
-
-      await waitFor(() => {
-        navHeaderSpy.back.props.onPress()
-        expect(goBack).toHaveBeenCalled()
-      })
-    })
-
     describe('and claim is still loading', () => {})
-    it('should call abort', async () => {
-      const abortSpy = jest.spyOn(AbortController.prototype, 'abort')
-      await waitFor(async () => {
-        initializeTestInstance(true)
-        navHeaderSpy.back.props.onPress()
-        expect(abortSpy).not.toHaveBeenCalled()
+      it('should call abort', async () => {
+        const abortSpy = jest.spyOn(AbortController.prototype, 'abort')
+        await waitFor(async () => {
+          initializeTestInstance(true)
+          navHeaderSpy.back.props.onPress()
+          expect(abortSpy).not.toHaveBeenCalled()
+        })
       })
-    })
   })
 })

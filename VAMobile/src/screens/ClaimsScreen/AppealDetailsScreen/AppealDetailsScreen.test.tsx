@@ -16,7 +16,7 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { cleanup, RenderAPI, waitFor } from '@testing-library/react-native'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import {StackNavigationOptions} from "@react-navigation/stack";
+import { StackNavigationOptions } from '@react-navigation/stack'
 
 context('AppealDetailsScreen', () => {
   let component: RenderAPI
@@ -266,13 +266,13 @@ context('AppealDetailsScreen', () => {
     })
 
     describe('and appeal is still loading', () => {})
-    it('should call abort', async () => {
-      const abortSpy = jest.spyOn(AbortController.prototype, 'abort')
-      await waitFor(async () => {
-        initializeTestInstance(true)
-        navHeaderSpy.back.props.onPress()
-        expect(abortSpy).toHaveBeenCalled()
+      it('should call abort', async () => {
+        const abortSpy = jest.spyOn(AbortController.prototype, 'abort')
+        await waitFor(async () => {
+          initializeTestInstance(true)
+          navHeaderSpy.back.props.onPress()
+          expect(abortSpy).toHaveBeenCalled()
+        })
       })
-    })
   })
 })

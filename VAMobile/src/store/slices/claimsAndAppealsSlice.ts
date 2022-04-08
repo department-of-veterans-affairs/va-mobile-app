@@ -363,7 +363,7 @@ export const getClaim =
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
 
-    // create a new signal to abort if there is a api being called at the moment
+    // // create a new signal for this api call so it can be aborted if a user leaves(goes back) to the previous screen
     const newAbortController = new AbortController()
     const signal = newAbortController.signal
 
@@ -407,7 +407,7 @@ export const getAppeal =
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
 
-    // create a new signal to abort if there is a api being called at the moment
+    // create a new signal for this api call so it can be aborted if a user leaves(goes back) to the previous screen
     const newAbortController = new AbortController()
     const signal = newAbortController.signal
 
