@@ -3,12 +3,11 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationOptions } from '@react-navigation/stack'
-import { TFunction } from 'i18next'
-import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
@@ -26,7 +25,6 @@ import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { capitalizeFirstLetter, stringToTitleCase } from './formattingUtils'
 import { getHeaderStyles } from 'styles/common'
-import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
 import HeaderTitle from 'components/HeaderTitle'
 
@@ -71,15 +69,6 @@ export const useFontScale = (): ((val: number) => number) => {
  */
 export const useTheme = (): VATheme => {
   return useContext<VATheme>(ThemeContext)
-}
-
-/** Provides a helper function to get typed checked namespace for VA
- * @param ns - the namespace
- * @returns the translation function
- */
-export const useTranslation = (ns?: i18n_NS): TFunction => {
-  const { t } = realUseTranslation(ns)
-  return t
 }
 
 /**
@@ -225,7 +214,7 @@ export function useIsScreanReaderEnabled(): boolean {
  * @returns an alert showing user they are leaving the app
  */
 export function useExternalLink(): (url: string) => void {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (url: string) => {
     if (url.startsWith(WebProtocolTypesConstants.http)) {
@@ -390,7 +379,7 @@ export function useAttachments(): [
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
   const destructiveAlert = useDestructiveAlert()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
     setAttachmentsList([...attachmentsList, attachmentFileToAdd])
@@ -402,7 +391,7 @@ export function useAttachments(): [
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
     destructiveAlert({
-      title: t('secureMessaging.attachments.removeAttachmentAreYouSure'),
+      title: t('health:secureMessaging.attachments.removeAttachmentAreYouSure'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
