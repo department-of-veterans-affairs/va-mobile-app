@@ -25,7 +25,7 @@ export enum ButtonDecoratorType {
   /** Filled radio button decorator */
   FilledRadio = 'FilledRadio',
   /** Disabled radio button decorator */
-  DisablededRadio = 'DisabledRadio',
+  DisabledRadio = 'DisabledRadio',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -116,7 +116,7 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
           {...decoratorProps}
         />
       )
-    case ButtonDecoratorType.DisablededRadio:
+    case ButtonDecoratorType.DisabledRadio:
       return (
         <VAIcon
           name={'DisabledRadio'}
@@ -201,7 +201,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     onPressOut: _onPressOut,
     accessible: true,
     accessibilityRole,
-    disabled: decorator === ButtonDecoratorType.DisablededRadio,
+    disabled: decorator === ButtonDecoratorType.DisabledRadio,
   }
 
   const boxProps: BoxProps = {
