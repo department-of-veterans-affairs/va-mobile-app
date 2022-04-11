@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton, VAScrollView } from 'components'
@@ -9,13 +10,13 @@ import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { RootState } from 'store'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type GenericLetterProps = StackScreenProps<ProfileStackParamList, 'GenericLetter'>
 
 const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { header, description, letterType, descriptionA11yLabel } = route.params

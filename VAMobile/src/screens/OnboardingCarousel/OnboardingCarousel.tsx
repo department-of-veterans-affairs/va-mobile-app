@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Carousel } from 'components'
@@ -6,27 +7,27 @@ import { capitalizeWord } from 'utils/formattingUtils'
 
 import { PersonalInformationState, completeFirstTimeLogin } from 'store/slices'
 import { RootState } from 'store'
-import { useAppDispatch, useTranslation } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
 const OnboardingProfile: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} testID="Onboarding-profile-page" />
 }
 
 const OnboardingClaimsAndAppeals: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} testID="Onboarding-claims-and-Appeals-page" />
 }
 
 const OnboardingAppointments: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.appointments.header')} text={t('onboarding.appointments.details')} testID="Onboarding-appointments-page" />
 }
 
 const OnboardingAppOverview: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const firstName = profile?.firstName ? `${capitalizeWord(profile?.firstName)}` : ''
 
@@ -45,7 +46,7 @@ const OnboardingAppOverview: FC = () => {
 
 const OnboardingCarousel: FC = () => {
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
 
   const onCarouselEnd = (): void => {
     dispatch(completeFirstTimeLogin())

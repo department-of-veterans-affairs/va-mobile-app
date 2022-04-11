@@ -1,19 +1,21 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 
 import { AccordionCollapsible, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 const NoMatchInRecords: FC = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   const accordionContent = (textID: string, textA11yLabelID: string): ReactNode => {
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <Box {...testIdProps(t(`noMatch.${textA11yLabelID}`))}>
-          <TextView variant="MobileBody">{t(`noMatch.${textID}`)}</TextView>
+        <Box {...testIdProps(getTranslation(`noMatch.${textA11yLabelID}`, t))}>
+          <TextView variant="MobileBody">{getTranslation(`noMatch.${textID}`, t)}</TextView>
         </Box>
         <ClickToCallPhoneNumber phone={t('noMatch.phoneNumber')} displayedText={t('noMatch.phoneNumberDisplayed')} />
       </Box>
@@ -22,8 +24,8 @@ const NoMatchInRecords: FC = () => {
 
   const accordionHeader = (textID: string, textA11yLabelID: string): ReactNode => {
     return (
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} {...testIdProps(t(`noMatch.${textA11yLabelID}`))}>
-        {t(`noMatch.${textID}`)}
+      <TextView variant="MobileBodyBold" color={'primaryTitle'} {...testIdProps(getTranslation(`noMatch.${textA11yLabelID}`, t))}>
+        {getTranslation(`noMatch.${textID}`, t)}
       </TextView>
     )
   }

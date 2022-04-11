@@ -1,12 +1,14 @@
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
+import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useDowntime, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useDowntime } from 'utils/hooks'
 
 export type ErrorComponentProps = {
   /**The screen id for the screen that has the errors*/
@@ -18,7 +20,7 @@ export type ErrorComponentProps = {
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const t = useTranslation()
+  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
   const isInDowntime = useDowntime(DowntimeScreenIDToFeature[props.screenID])
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {

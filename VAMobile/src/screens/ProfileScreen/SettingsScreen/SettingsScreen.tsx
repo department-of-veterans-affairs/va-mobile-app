@@ -1,6 +1,7 @@
 import { Share, StyleProp, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
@@ -14,7 +15,7 @@ import { testIdProps } from 'utils/accessibility'
 
 import { AuthState } from 'store/slices'
 import { RootState } from 'store'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
@@ -24,7 +25,7 @@ type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
 const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.SETTINGS)
+  const { t } = useTranslation(NAMESPACE.SETTINGS)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()

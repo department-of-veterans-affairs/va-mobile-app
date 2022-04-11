@@ -1,5 +1,6 @@
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
@@ -22,7 +23,7 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 import getEnv from 'utils/env'
 
@@ -31,7 +32,7 @@ const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 type TakePhotosProps = StackScreenProps<ClaimsStackParamList, 'TakePhotos'>
 
 const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()

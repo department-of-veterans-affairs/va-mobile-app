@@ -1,6 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { StyleProp, ViewStyle } from 'react-native'
 import { map } from 'underscore'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
@@ -8,12 +9,12 @@ import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<ClaimsStackParamList, 'FileRequestDetails'>
 
 const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
