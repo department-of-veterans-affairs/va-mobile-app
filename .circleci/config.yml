@@ -124,6 +124,8 @@ commands:
       lane:
         type: string
         default: qa
+      notes:
+        type: string
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
@@ -170,6 +172,8 @@ commands:
       lane:
         type: string
         default: qa
+      notes:
+        type: string
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
@@ -236,6 +240,28 @@ jobs:
       - bundle_app:
           os: "android"
       - android_fastlane
+  feature_build_ios:
+    executor: ios
+    steps:
+      - checkout
+      - decode_ios_keys
+      - install_pods
+      - bundle_app:
+          os: "ios"
+      - ios_fastlane:
+          lane: "on_demand"
+          notes: ${CIRCLE_BRANCH}
+  feature_build_android:
+    executor: android
+    steps:
+      - checkout
+      - create_keys_directory
+      - decode_android_keys
+      - bundle_app:
+          os: "android"
+      - android_fastlane:
+          lane: "on_demand"
+          notes: ${CIRCLE_BRANCH}
   cut_release_branch:
     executor: default
     steps:
@@ -311,6 +337,16 @@ workflows:
               only: /^v\d+\.\d+\.\d+/
             branches:
               ignore: /.*/
+  feature_build:
+    jobs:
+      - feature_build_android:
+          filters:
+            tags:
+              only: /^feature-build-.+/
+      - feature_build_ios:
+          filters:
+            tags:
+              only: /^feature-build-.+/
   new_release_branch:
     triggers:
       - schedule:
