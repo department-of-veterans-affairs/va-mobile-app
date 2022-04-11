@@ -1,15 +1,16 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { FooterButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTranslation } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
 
 export type ReplyMessageFooterProps = {
   messageID: number
 }
 
 const ReplyMessageFooter: FC<ReplyMessageFooterProps> = ({ messageID }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
   const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })

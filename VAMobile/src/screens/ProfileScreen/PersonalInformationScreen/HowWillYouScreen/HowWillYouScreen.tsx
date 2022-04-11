@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView, VAScrollView } from 'components'
@@ -7,12 +8,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type HowWillYouScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUpdate'>
 
 const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
 
   useEffect(() => {
