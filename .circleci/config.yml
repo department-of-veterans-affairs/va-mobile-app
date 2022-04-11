@@ -343,10 +343,14 @@ workflows:
           filters:
             tags:
               only: /^feature-build-.+/
+            branches:
+              ignore: /.*/
       - feature_build_ios:
           filters:
             tags:
               only: /^feature-build-.+/
+            branches:
+              ignore: /.*/
   new_release_branch:
     triggers:
       - schedule:
