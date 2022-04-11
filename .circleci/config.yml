@@ -257,6 +257,7 @@ jobs:
     executor: android
     steps:
       - checkout
+      - install_deps
       - create_keys_directory
       - decode_android_keys
       - bundle_app:
