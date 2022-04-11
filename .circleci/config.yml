@@ -126,6 +126,7 @@ commands:
         default: qa
       notes:
         type: string
+        default: ''
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
@@ -174,6 +175,7 @@ commands:
         default: qa
       notes:
         type: string
+        default: ''
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
