@@ -81,7 +81,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
 
   return (
     <Box>
-      <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems={'center'} flexWrap="wrap">
+      <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" flexWrap="wrap">
         <TextView>{t('attachments')}</TextView>
         <Pressable onPress={goToFaq} accessible={true} accessibilityRole="link" accessibilityHint={a11yHint ? a11yHint : undefined} accessibilityLabel={t('howToAttachAFile')}>
           <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" minHeight={theme.dimensions.touchableMinHeight}>
