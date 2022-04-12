@@ -33,16 +33,8 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   })
 
   const onBack = () => {
-    snackBar.hideAll()
     navigation.goBack()
   }
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', () => {
-      snackBar.hideAll()
-    })
-    return unsubscribe
-  })
 
   const onFileFolder = async (): Promise<void> => {
     const {
@@ -66,7 +58,6 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       }
 
       setError('')
-      snackBar.hideAll()
       navigateTo('UploadFile', { request, fileUploaded: document })()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
