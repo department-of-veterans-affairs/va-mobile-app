@@ -44,7 +44,7 @@ export const SnackBarConstants: {
   duration: 900000,
 }
 
-const screensToCloseSnackbarOnNavigation = ['TakePhotos', 'SelectFile', 'UploadOrAddPhotos']
+const screensToCloseSnackbarOnNavigation = ['TakePhotos', 'SelectFile', 'UploadOrAddPhotos', 'SecureMessaging', 'FolderMessages']
 
 export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
   if (screenName) {
