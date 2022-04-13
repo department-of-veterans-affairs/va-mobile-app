@@ -1,4 +1,4 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
@@ -447,4 +447,26 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
 
     showActionSheetWithOptions(casedOptions, callback)
   }
+}
+
+// function that returns if the device is on portrait mode or not
+export function useOrientation(): boolean {
+  const getOrientation = () => {
+    const dim = Dimensions.get('screen')
+    return dim.height >= dim.width
+  }
+
+  const [isPortrait, setIsPortrait] = useState<boolean>(getOrientation())
+
+  useEffect(() => {
+    const sub = Dimensions.addEventListener('change', () => {
+      setIsPortrait(getOrientation())
+    })
+
+    return () => {
+      sub.remove()
+    }
+  }, [])
+
+  return isPortrait
 }
