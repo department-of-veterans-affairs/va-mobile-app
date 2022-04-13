@@ -121,7 +121,6 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   const onFileDelete = () => {
     setFilesList([])
-    snackBar.hideAll()
     showSnackBar(t('common:file.deleted'), dispatch, undefined, true, false, false)
     navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
   }
