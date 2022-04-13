@@ -1,12 +1,15 @@
 import { AccessibilityProps, Modal, Pressable, PressableProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { VAIconProps } from 'components/VAIcon'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { getTranslation } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 import PickerList, { PickerListItemObj } from './PickerList'
 
 /**
@@ -74,7 +77,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
-  const t = useTranslation()
+  const { t } = useTranslation()
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
 
   const [currentSelectedValue, setCurrentSelectedValue] = useState(selectedValue)
@@ -182,10 +186,10 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     }
 
     return (
-      <TouchableWithoutFeedback {...props} {...testIdProps(t(buttonText || ''))} {...a11yHintProp(t('common:pickerLaunchBtn.a11yHint'))}>
+      <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))} {...a11yHintProp(tc('pickerLaunchBtn.a11yHint'))}>
         <Box pr={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerButtonPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
-            {t(buttonText || '')}
+            {getTranslation(buttonText || '', t)}
           </TextView>
         </Box>
       </TouchableWithoutFeedback>
@@ -205,21 +209,21 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
 
-  const cancelLabel = t('common:cancel')
-  const confirmLabel = t(confirmBtnText || 'common:done')
+  const cancelLabel = tc('cancel')
+  const confirmLabel = getTranslation(confirmBtnText || 'common:done', t)
 
   const cancelButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
     ...testIdProps(cancelLabel),
-    ...a11yHintProp(t('common:cancel.picker.a11yHint')),
+    ...a11yHintProp(tc('cancel.picker.a11yHint')),
   }
 
   const confirmButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
     ...testIdProps(confirmLabel),
-    ...a11yHintProp(t('common:done.picker.a11yHint')),
+    ...a11yHintProp(tc('done.picker.a11yHint')),
   }
 
   const commonButtonProps: TextViewProps = {
@@ -246,7 +250,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
               </Pressable>
               <Box flex={4}>
                 <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign={'center'} allowFontScaling={false}>
-                  {t(labelKey || '')}
+                  {getTranslation(labelKey || '', t)}
                 </TextView>
               </Box>
               <Pressable onPress={onConfirm} {...confirmButtonProps}>

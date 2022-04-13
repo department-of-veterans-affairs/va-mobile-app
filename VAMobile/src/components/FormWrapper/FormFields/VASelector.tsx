@@ -1,10 +1,12 @@
 import { TouchableWithoutFeedback } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon, VAIconProps } from '../../index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { getTranslation } from 'utils/formattingUtils'
 import { renderInputError } from './formFieldUtils'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export enum SelectorType {
   Checkbox = 'Checkbox',
@@ -54,7 +56,7 @@ const VASelector: FC<VASelectorProps> = ({
   isRequiredField,
 }) => {
   const theme = useTheme()
-  const t = useTranslation()
+  const { t } = useTranslation()
   const {
     dimensions: { selectorWidth, selectorHeight, checkboxLabelMargin },
   } = theme
@@ -109,14 +111,14 @@ const VASelector: FC<VASelectorProps> = ({
       accessibilityState={a11yState}
       accessibilityRole={a11yRole}
       {...hintProp}
-      {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
+      {...testIdProps(a11yLabel || getTranslation(labelKey, t, labelArgs))}>
       <Box>
         {!!error && <Box ml={checkboxLabelMargin + selectorWidth}>{renderInputError(theme, error)}</Box>}
         <Box flexDirection="row">
           <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
           <Box flex={1} ml={checkboxLabelMargin}>
             <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'primary'}>
-              {t(labelKey, labelArgs)}
+              {getTranslation(labelKey, t, labelArgs)}
             </TextView>
           </Box>
         </Box>
