@@ -15,6 +15,12 @@ import { validateAddress, ErrorsState, initialErrorsState, initializeErrorsByScr
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
+import { SnackbarMessages } from 'components/SnackBar'
+
+const snackbarMessages : SnackbarMessages = {
+  successMsg: 'success',
+  errorMsg: 'failure'
+}
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -769,6 +775,7 @@ context('EditAddressScreen', () => {
             zipCode: '',
             province: 'Ontario',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
@@ -813,6 +820,7 @@ context('EditAddressScreen', () => {
             zipCode: '94920',
             internationalPostalCode: '',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
@@ -856,6 +864,7 @@ context('EditAddressScreen', () => {
             stateCode: 'AP',
             zipCode: '96278',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
