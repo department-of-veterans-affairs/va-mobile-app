@@ -249,7 +249,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         }
       })
       setTotalBytesUsed(bytesUsed)
-      snackBar.hideAll()
       showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
     }
   }
