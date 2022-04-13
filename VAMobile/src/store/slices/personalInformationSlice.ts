@@ -375,7 +375,7 @@ export const updateAddress =
         logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
       }
     }
   }
@@ -405,7 +405,7 @@ export const deleteAddress =
         logNonFatalErrorToFirebase(err, `deleteAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
       }
     }
   }
