@@ -6,10 +6,12 @@ import { AppThunk } from 'store'
 import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference } from '../api'
 import { getDeviceName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { notificationsEnabled } from 'utils/notifications'
 
 export const DEVICE_TOKEN_KEY = '@store_device_token'
 export const DEVICE_ENDPOINT_SID = '@store_device_endpoint_sid'
+const notificationsNonFatalErrorString = 'Notifications Service Error'
 
 export type NotificationsState = {
   deviceToken?: string
@@ -68,7 +70,7 @@ export const registerDevice =
         await AsyncStorage.removeItem(DEVICE_TOKEN_KEY)
       }
     } catch (e) {
-      //TODO: log in crashlytics?
+      logNonFatalErrorToFirebase(e, `registerDevice: ${notificationsNonFatalErrorString}`)
       console.error(e)
     }
     dispatch(dispatchUpdateDeviceToken(deviceToken))
@@ -94,7 +96,7 @@ export const setPushPref =
       }
       dispatch(dispatchEndSetPreference(newPrefSetting))
     } catch (e) {
-      //TODO: log in crashlytics?
+      logNonFatalErrorToFirebase(e, `setPushPref: ${notificationsNonFatalErrorString}`)
       console.error(e)
       dispatch(dispatchEndSetPreference(undefined))
     }
@@ -111,7 +113,7 @@ export const loadPushPreferences = (): AppThunk => async (dispatch) => {
     const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
     dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences: response?.data.attributes.preferences }))
   } catch (e) {
-    //TODO: log in crashlytics?
+    logNonFatalErrorToFirebase(e, `loadPushPreferences: ${notificationsNonFatalErrorString}`)
     console.error(e)
     dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences: [] }))
   }

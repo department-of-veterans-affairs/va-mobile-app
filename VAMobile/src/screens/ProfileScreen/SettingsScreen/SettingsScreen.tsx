@@ -15,6 +15,7 @@ import { testIdProps } from 'utils/accessibility'
 
 import { AuthState } from 'store/slices'
 import { RootState } from 'store'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
@@ -67,6 +68,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
         message: t('shareApp.text', { appleStoreLink: APPLE_STORE_LINK, googlePlayLink: GOOGLE_PLAY_LINK }),
       })
     } catch (e) {
+      logNonFatalErrorToFirebase(e, 'onShare: Settings Error')
       console.error(e)
     }
   }

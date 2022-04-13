@@ -53,6 +53,13 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     navigation.goBack()
   }
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      snackBar.hideAll()
+    })
+    return unsubscribe
+  })
+
   const callbackIfUri = (response: ImagePickerResponse): void => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
@@ -64,6 +71,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
 
   const collapsibleContent = (): ReactNode => {
     const linkToCallProps: LinkButtonProps = {
+      testID: t('fileUpload.goToVaGov'),
       displayedText: t('fileUpload.goToVaGov'),
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
@@ -72,7 +80,9 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody">{t('fileUpload.accessibilityAlert.body')}</TextView>
+        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.accessibilityAlert.body.a11y')}>
+          {t('fileUpload.accessibilityAlert.body')}
+        </TextView>
         <ClickForActionLink {...linkToCallProps} />
       </Box>
     )

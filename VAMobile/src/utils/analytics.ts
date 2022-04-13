@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
 import { RootState } from 'store'
+import { isErrorObject } from './common'
 import analytics from '@react-native-firebase/analytics'
+import crashlytics from '@react-native-firebase/crashlytics'
 
 export type Event = {
   name: string
@@ -34,4 +36,36 @@ export const getAnalyticsTimers = (state: RootState): [number, number, number] =
   const totalTime = now - totalTimeStart
   const actionTime = now - actionStart
   return [totalTime, actionTime, loginTimestamp]
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
+  let errorObject: Error = Error()
+
+  // if the error is a string
+  if (typeof error === 'string') {
+    errorObject.message = error
+    errorObject.name = error
+  } else if (typeof error === 'object' && isErrorObject(error)) {
+    // checks if json is in the object for api error
+    if ('json' in error && error.json) {
+      const { text, json, networkError, status } = error
+      // if the json's errors array has data if not than it creates an error object with the service call status
+      if (json.errors.length > 0) {
+        const { detail, title } = json.errors[0]
+        errorObject.message = detail
+        errorObject.name = title
+      } else {
+        const errorString = `status: ${status} is network error ${networkError}`
+        errorObject.name = errorString
+        errorObject.message = errorString
+      }
+      errorObject.stack = text
+      // checks if stack is in the object for non api error
+    } else if ('stack' in error) {
+      errorObject = error
+    }
+
+    crashlytics().recordError(errorObject, errorName)
+  }
 }
