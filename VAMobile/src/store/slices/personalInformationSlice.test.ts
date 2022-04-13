@@ -542,7 +542,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -577,7 +577,7 @@ context('personalInformation', () => {
         .mockResolvedValue(mockStorePersonalInformation)
 
       const store = realStore()
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -615,7 +615,7 @@ context('personalInformation', () => {
         .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -729,7 +729,7 @@ context('personalInformation', () => {
 
       const store = realStore()
 
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
       expect(api.post as jest.Mock).toBeCalledWith('/v1/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
@@ -798,7 +798,7 @@ context('personalInformation', () => {
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS })
@@ -859,7 +859,7 @@ context('personalInformation', () => {
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS })
@@ -918,7 +918,7 @@ context('personalInformation', () => {
 
       const store = realStore()
 
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
       expect(api.post as jest.Mock).toBeCalledWith('/v1/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
