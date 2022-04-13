@@ -15,6 +15,7 @@ import {
   updateEmail,
   validateAddress,
 } from './personalInformationSlice'
+import { SnackbarMessages } from 'components/SnackBar'
 
 export const ActionTypes: {
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: string
@@ -44,6 +45,11 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: 'personalInformation/dispatchStartValidateAddress',
   PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: 'personalInformation/dispatchFinishValidateAddress',
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: 'personalInformation/dispatchFinishEditAddress',
+}
+
+const removalSnackbarMessages : SnackbarMessages = {
+  successMsg: 'success',
+  errorMsg: 'failure'
 }
 
 context('personalInformation', () => {
@@ -647,7 +653,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(deleteAddress(addressPayload as AddressData))
+      await store.dispatch(deleteAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
