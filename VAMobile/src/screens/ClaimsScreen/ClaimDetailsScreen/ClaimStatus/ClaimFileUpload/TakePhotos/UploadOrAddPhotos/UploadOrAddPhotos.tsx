@@ -29,7 +29,7 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { bytesToFinalSizeDisplay } from 'utils/common'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -292,7 +292,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
           </TextView>
-          <TextView variant="HelperText" color="bodyText">
+          <TextView
+            variant="HelperText"
+            color="bodyText"
+            accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>
         </Box>
