@@ -18,8 +18,8 @@ import AddressValidation from './AddressValidation'
 import { SnackbarMessages } from 'components/SnackBar'
 
 const snackbarMessages : SnackbarMessages = {
-  successMsg: 'success',
-  errorMsg: 'failure'
+  successMsg: 'Mailing address saved',
+  errorMsg: 'Mailing address could not be saved',
 }
 
 jest.mock('@react-navigation/stack', () => {
