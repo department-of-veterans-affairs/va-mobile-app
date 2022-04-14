@@ -63,7 +63,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (imagesList?.length === 0) {
+      if (imagesList?.length === 0 || filesUploadedSuccess) {
         return
       }
       e.preventDefault()

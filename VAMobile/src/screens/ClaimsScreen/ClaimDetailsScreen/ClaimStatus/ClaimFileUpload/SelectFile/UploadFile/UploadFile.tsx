@@ -41,7 +41,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (filesList.length === 0) {
+      if (filesList.length === 0 || filesUploadedSuccess) {
         return
       }
       e.preventDefault()
