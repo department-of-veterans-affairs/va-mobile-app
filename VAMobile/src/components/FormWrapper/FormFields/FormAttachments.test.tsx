@@ -83,7 +83,7 @@ context('FormAttachments', () => {
     describe('when the remove link is clicked for an attachment', () => {
       it('should call the removeOnPress', async () => {
         await waitFor(() => {
-          testInstance.findAllByType(TextView)[3].props.onPress()
+          testInstance.findAllByProps({ accessibilityLabel: 'Remove'})[0].props.onPress()
           expect(removeOnPressSpy).toHaveBeenCalled()
         })
       })
