@@ -28,6 +28,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SecureMessagingState, dispatchSetActionStart, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
@@ -66,6 +67,11 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverName = message ? message.senderName : ''
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.draft.saved'),
+    errorMsg: t('secureMessaging.draft.saved.error'),
+  }
 
   const goToCancel = () => {
     replyCancelConfirmation({
@@ -179,7 +185,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, savedDraftID, true, messageID))
+      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
     } else {
       receiverID &&
         navigation.navigate('SendConfirmation', {
