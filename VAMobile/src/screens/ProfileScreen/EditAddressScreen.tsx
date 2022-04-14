@@ -22,12 +22,14 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
+import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/slices'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
@@ -92,6 +94,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const addressLine3Ref = useRef<TextInput>(null)
   const zipCodeRef = useRef<TextInput>(null)
   const cityRef = useRef<TextInput>(null)
+
+  const snackbarMessages: SnackbarMessages = GenerateAddressMessages(t, addressType)
+
+  const removalSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.residentialAddress.removed'),
+    errorMsg: t('personalInformation.residentialAddress.removed.error'),
+  }
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = profile?.[addressType]?.[itemToGet]
@@ -173,7 +182,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
 
     setDeleting(true)
-    dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    dispatch(deleteAddress(currentAddressData, removalSnackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   const getAddressValues = (): AddressData => {
@@ -213,7 +222,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const onSave = (): void => {
-    dispatch(validateAddress(getAddressValues(), ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    dispatch(validateAddress(getAddressValues(), snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   useEffect(() => {

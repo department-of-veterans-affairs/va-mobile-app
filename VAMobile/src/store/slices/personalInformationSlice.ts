@@ -19,6 +19,7 @@ import {
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { MockUsersEmail } from 'constants/common'
+import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
 import { dispatchUpdateCerner } from './patientSlice'
@@ -31,7 +32,7 @@ import {
   getValidationKey,
   showValidationScreen,
 } from 'utils/personalInformation'
-import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString } from 'utils/common'
+import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString, showSnackBar } from 'utils/common'
 import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
@@ -336,10 +337,11 @@ export const finishEditEmail = (): AppThunk => async (dispatch) => {
  * Redux action to make the API call to update a users address
  */
 export const updateAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+    const retryFunction = () => dispatch(updateAddress(addressData, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSaveAddress())
@@ -367,11 +369,13 @@ export const updateAddress =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveAddress())
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
       }
     }
   }
@@ -380,10 +384,11 @@ export const updateAddress =
  * Remove a users address
  */
 export const deleteAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
+    const retryFunction = () => dispatch(deleteAddress(addressData, messages, screenID))
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteAddress(addressData, screenID))))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSaveAddress())
@@ -394,11 +399,13 @@ export const deleteAddress =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `deleteAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
       }
     }
   }
@@ -407,10 +414,11 @@ export const deleteAddress =
  * Redux action to make the API call to validate a users address
  */
 export const validateAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(validateAddress(addressData, screenID))))
+    const retryFunction = () => dispatch(validateAddress(addressData, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartValidateAddress())
@@ -428,7 +436,7 @@ export const validateAddress =
         if (suggestedAddresses) {
           const address = getAddressDataFromSuggestedAddress(suggestedAddresses[0], addressData.id)
           addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
-          await dispatch(updateAddress(address, screenID))
+          await dispatch(updateAddress(address, messages, screenID))
         }
       }
     } catch (err) {
