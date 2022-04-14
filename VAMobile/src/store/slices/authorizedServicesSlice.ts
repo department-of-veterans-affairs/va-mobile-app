@@ -41,7 +41,6 @@ const authorizedServicesSlice = createSlice({
   reducers: {
     dispatchUpdateAuthorizedServices: (state, action: PayloadAction<AuthorizedServicesUpdatePayload>) => {
       const { authorizedServices, error } = action.payload
-      console.log(authorizedServices)
       const services = authorizedServices || []
 
       const appeals = contains(services, VAServicesConstants.Appeals)
