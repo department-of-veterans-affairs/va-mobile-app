@@ -394,15 +394,6 @@ context('ComposeMessage', () => {
     })
   })
 
-  describe('on click of the "How to attach a file" link', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(navigateToHowToAttachSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
   describe('when message send fails', () => {
     beforeEach(() => {
       // Give a different screenID so it won't display the error screen instead
