@@ -2,7 +2,7 @@ import { AppThunk } from 'store'
 import { DirectDepositErrors } from 'constants/errors'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
 import { includes } from 'lodash'
 import { isErrorObject } from 'utils/common'
@@ -29,6 +29,8 @@ export const initialDirectDepositState: DirectDepositState = {
   bankInfoUpdated: false,
 }
 
+const directDepositNonFatalErrorString = 'Direct Deposit Service Error'
+
 /**
  * Redux action for getting direct deposit information
  */
@@ -44,6 +46,7 @@ export const getBankData =
       dispatch(dispatchFinishGetBankInfo({ paymentAccount: bankInfo?.data.attributes.paymentAccount }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getBankData: ${directDepositNonFatalErrorString}`)
         dispatch(dispatchFinishGetBankInfo({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -82,6 +85,7 @@ export const updateBankInfo =
       dispatch(dispatchFinishSaveBankInfo({ paymentAccount: bankInfo?.data.attributes.paymentAccount }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `updateBankInfo: ${directDepositNonFatalErrorString}`)
         const invalidRoutingNumberError = checkIfRoutingNumberIsInvalid(error)
         dispatch(dispatchFinishSaveBankInfo({ error, invalidRoutingNumberError }))
 

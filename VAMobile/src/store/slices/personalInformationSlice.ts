@@ -32,7 +32,7 @@ import {
   showValidationScreen,
 } from 'utils/personalInformation'
 import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString } from 'utils/common'
-import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -69,6 +69,8 @@ export const initialPersonalInformationState: PersonalInformationState = {
   preloadComplete: false,
   phoneNumberSaved: false,
 }
+
+const personalInformationNonFatalErrorString = 'Personal Information Service Error'
 
 const PhoneTypeToFormattedNumber: {
   [key in PhoneType]: ProfileFormattedFieldType
@@ -115,6 +117,7 @@ export const getProfileInfo =
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getProfileInfo: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishGetProfileInfo({ error }))
         dispatch(dispatchUpdateAuthorizedServices({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
@@ -178,6 +181,7 @@ export const editUsersNumber =
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
@@ -235,6 +239,7 @@ export const deleteUsersNumber =
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
@@ -282,6 +287,7 @@ export const updateEmail =
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -312,6 +318,7 @@ export const deleteEmail =
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -362,6 +369,7 @@ export const updateAddress =
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -388,6 +396,7 @@ export const deleteAddress =
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -424,6 +433,7 @@ export const validateAddress =
       }
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `validateAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishValidateAddress(undefined))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
