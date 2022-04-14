@@ -101,19 +101,19 @@ jobs:
               await addLabels("needs-approval")
               await addComment(errorMessage)
             }
-        - if: ${{ failure() }}
-            uses: actions/github-script@v6
-            with:
-              github-token: ${{ secrets.GH_ACTIONS_PAT }}
-              script: |
-                const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
-                function addComment(body) {
-                  return github.rest.issues.createComment({
-                    owner,
-                    repo,
-                    issue_number: context.payload.issue.number,
-                    body,
-                  });
-                }
+      - if: ${{ failure() }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GH_ACTIONS_PAT }}
+          script: |
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+            function addComment(body) {
+              return github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: context.payload.issue.number,
+                body,
+              });
+            }
 
-                await addComment('Failed to send invitation. See Actions logs for details.)
+            await addComment('Failed to send invitation. See Actions logs for details.)
