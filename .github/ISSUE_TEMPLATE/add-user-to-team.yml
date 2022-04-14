@@ -18,17 +18,17 @@ body:
 - type: input
   id: fullname
   attributes:
-  label: Full Name
-  description: Users Full Name
-  placeholder: John Smith
+    label: Full Name
+    description: Users Full Name
+    placeholder: John Smith
   validations:
-  required: true
+    required: true
 - type: input
   id: username
   attributes:
-  label: GitHub Username
-  description: Users GitHub Username
-  placeholder: '@john-smith-va'
+    label: GitHub Username
+    description: Users GitHub Username
+    placeholder: '@john-smith-va'
   validations:
-  required: true
+    required: true
 
