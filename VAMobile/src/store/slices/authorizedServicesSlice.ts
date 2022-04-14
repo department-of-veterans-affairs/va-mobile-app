@@ -41,12 +41,14 @@ const authorizedServicesSlice = createSlice({
   reducers: {
     dispatchUpdateAuthorizedServices: (state, action: PayloadAction<AuthorizedServicesUpdatePayload>) => {
       const { authorizedServices, error } = action.payload
+      console.log(authorizedServices)
       const services = authorizedServices || []
 
       const appeals = contains(services, VAServicesConstants.Appeals)
       const appointments = contains(services, VAServicesConstants.Appointments)
       const claims = contains(services, VAServicesConstants.Claims)
       const directDepositBenefits = contains(services, VAServicesConstants.DirectDepositBenefits)
+      const directDepositBenefitsUpdate = contains(services, VAServicesConstants.DirectDepositBenefitsUpdate)
       const lettersAndDocuments = contains(services, VAServicesConstants.LettersAndDocuments)
       const militaryServiceHistory = contains(services, VAServicesConstants.MilitaryServiceHistory)
       const userProfileUpdate = contains(services, VAServicesConstants.UserProfileUpdate)
@@ -68,6 +70,7 @@ const authorizedServicesSlice = createSlice({
       state.appointments = appointments
       state.claims = claims
       state.directDepositBenefits = directDepositBenefits
+      state.directDepositBenefitsUpdate = directDepositBenefitsUpdate
       state.lettersAndDocuments = lettersAndDocuments
       state.militaryServiceHistory = militaryServiceHistory
       state.userProfileUpdate = userProfileUpdate
