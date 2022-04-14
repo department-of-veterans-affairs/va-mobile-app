@@ -9,9 +9,9 @@ body:
     value: |
       **Please read before continuing**: This issue form is to request to add a user to the VA Mobile App Team
 
-          **All of the fields in this form are required.** You must provide the following information:
-          - Users full name
-          - Users GitHub username
+      **All of the fields in this form are required.** You must provide the following information:
+      - Users full name
+      - Users GitHub username
 
       Once you complete this form on another users behalf automation will automatically invite the user to the VA organization. We recommend checking back in a minute or so to make sure the `User successfully added` message appears on the issue. If there is an error, this will also appear in the issue.
 
