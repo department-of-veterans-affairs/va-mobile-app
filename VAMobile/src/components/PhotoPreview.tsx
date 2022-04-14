@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
-import { bytesToFinalSizeDisplay } from 'utils/common'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 
 import { themeFn } from 'utils/theme'
 import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
@@ -81,12 +81,13 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   }
 
   const imageSize = image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined
+  const imageSizeA11y = image.fileSize ? bytesToFinalSizeDisplayA11y(image.fileSize, t, false) : undefined
 
   const pressableProps: PressableProps = {
     onPress,
     accessibilityRole: 'button',
     accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
-    accessibilityLabel: imageSize ? photoPosition?.concat(imageSize) : photoPosition,
+    accessibilityLabel: imageSizeA11y ? photoPosition?.concat(imageSizeA11y) : photoPosition,
   }
 
   const boxProps: BoxProps = {

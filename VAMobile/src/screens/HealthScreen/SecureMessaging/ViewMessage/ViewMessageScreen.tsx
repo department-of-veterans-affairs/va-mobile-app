@@ -140,7 +140,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         <BackButton
           onPress={() => {
             navigation.goBack()
-            snackBar.hideAll()
           }}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.back}

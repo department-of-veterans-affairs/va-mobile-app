@@ -29,11 +29,11 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { bytesToFinalSizeDisplay } from 'utils/common'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert, useOrientation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
@@ -44,6 +44,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const showActionSheetWithOptions = useShowActionSheet()
   const { request: originalRequest, firstImageResponse } = route.params
   const dispatch = useDispatch()
+  const isPortrait = useOrientation()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
@@ -168,14 +169,15 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const displayImages = (): ReactElement => {
     const { condensedMarginBetween, gutter } = theme.dimensions
     /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
-    const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
+    const calculatedWidth = ((isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height) - 2 * gutter - 2 * condensedMarginBetween) / 3
 
     const uploadedImages = (): ReactElement[] => {
       return _.map(imagesList || [], (asset, index) => {
         return (
           /** Rightmost photo doesn't need right margin b/c of gutter margins
            * Every 3rd photo, right margin is changed to zero*/
-          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index}>
+
+          <Box mt={condensedMarginBetween} mr={condensedMarginBetween} key={index}>
             <PhotoPreview
               width={calculatedWidth}
               height={calculatedWidth}
@@ -195,7 +197,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
 
     return (
-      <Box display="flex" flexDirection="row" flexWrap="wrap" mx={theme.dimensions.gutter}>
+      <Box display="flex" flexDirection="row" flexWrap="wrap" pl={gutter} pr={condensedMarginBetween}>
         {uploadedImages()}
         {(!imagesList || imagesList.length < MAX_NUM_PHOTOS) && (
           <Box mt={condensedMarginBetween}>
@@ -249,7 +251,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         }
       })
       setTotalBytesUsed(bytesUsed)
-      snackBar.hideAll()
       showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
     }
   }
@@ -288,7 +289,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
           </TextView>
-          <TextView variant="HelperText" color="bodyText">
+          <TextView
+            variant="HelperText"
+            color="bodyText"
+            accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>
         </Box>

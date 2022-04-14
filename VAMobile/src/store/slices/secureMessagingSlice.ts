@@ -445,7 +445,7 @@ export const saveDraft =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `saveDraft: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSaveDraft({ error }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
       }
     }
   }
