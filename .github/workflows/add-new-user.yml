@@ -85,7 +85,7 @@ jobs:
             }
 
             const extractUsernameRegex = /@[a-zA-Z-_0-9]+/;
-            const username = getFirstMatch(extractUsernameRegex, context.payload.issue.body);
+            const username = getFirstMatch(extractUsernameRegex, context.payload.issue.body).substring(1);
 
 
             if(username) {
