@@ -1,10 +1,9 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
-import { BackButton, Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { InteractionManager } from 'react-native'
@@ -13,7 +12,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
@@ -38,23 +37,11 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={() => {
-            navigation.goBack()
-            // if appeals is still loading cancel it
-            if (loadingAppeal) {
-              cancelLoadingDetailScreen?.abort()
-            }
-          }}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.back}
-          showCarat={true}
-        />
-      ),
-    })
+  useBeforeNavBackListener(navigation, () => {
+    // if appeals is still loading cancel it
+    if (loadingAppeal) {
+      cancelLoadingDetailScreen?.abort()
+    }
   })
 
   useEffect(() => {

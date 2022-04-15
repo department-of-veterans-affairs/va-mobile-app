@@ -33,7 +33,7 @@ import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/comm
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useOrientation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
@@ -61,31 +61,28 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   })
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (imagesList?.length === 0 || filesUploadedSuccess) {
-        return
-      }
-      e.preventDefault()
-      confirmAlert({
-        title: t('fileUpload.discard.confirm.title.photos'),
-        message: t('fileUpload.discard.confirm.message.photos'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('common:cancel'),
+  useBeforeNavBackListener(navigation, (e) => {
+    if (imagesList?.length === 0 || filesUploadedSuccess) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('fileUpload.discard.confirm.title.photos'),
+      message: t('fileUpload.discard.confirm.message.photos'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('fileUpload.discard.photos'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
           },
-          {
-            text: t('fileUpload.discard.photos'),
-            onPress: () => {
-              navigation.dispatch(e.data.action)
-            },
-          },
-        ],
-      })
+        },
+      ],
     })
-    return unsubscribe
   })
 
   const onCancel = () => {

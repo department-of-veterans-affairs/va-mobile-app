@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
@@ -38,16 +38,19 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
+  useBeforeNavBackListener(navigation, () => {
+    // if claim is still loading cancel it
+    if (loadingClaim) {
+      cancelLoadingDetailScreen?.abort()
+    }
+  })
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
         <BackButton
           onPress={() => {
             navigation.goBack()
-            // if claim is still loading cancel it
-            if (loadingClaim) {
-              cancelLoadingDetailScreen?.abort()
-            }
           }}
           focusOnButton={focusOnSnackbar ? false : true}
           canGoBack={props.canGoBack}

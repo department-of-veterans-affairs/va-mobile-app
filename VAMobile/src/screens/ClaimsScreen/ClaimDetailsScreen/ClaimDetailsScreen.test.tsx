@@ -13,7 +13,6 @@ import ClaimDetails from './ClaimDetails/ClaimDetails'
 import { claim } from '../claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { InteractionManager } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack'
 
 jest.mock('@react-navigation/native', () => {
@@ -32,7 +31,6 @@ context('ClaimDetailsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
   let navHeaderSpy: any
-  let navigateToSpy: jest.Mock
   let goBack: jest.Mock
   let abortLoadSpy: jest.Mock
 
@@ -43,6 +41,7 @@ context('ClaimDetailsScreen', () => {
       undefined,
       {
         navigate: jest.fn(),
+        addListener: jest.fn(),
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
@@ -150,28 +149,5 @@ context('ClaimDetailsScreen', () => {
         expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
       })
     })
-  })
-
-  describe('when pressing the back button', () => {
-    it('should call goBack', async () => {
-      await waitFor(async () => {
-        initializeTestInstance()
-      })
-
-      await waitFor(() => {
-        navHeaderSpy.back.props.onPress()
-        expect(goBack).toHaveBeenCalled()
-      })
-    })
-
-    describe('and claim is still loading', () => {})
-      it('should call abort', async () => {
-        const abortSpy = jest.spyOn(AbortController.prototype, 'abort')
-        await waitFor(async () => {
-          initializeTestInstance(true)
-          navHeaderSpy.back.props.onPress()
-          expect(abortSpy).not.toHaveBeenCalled()
-        })
-      })
   })
 })

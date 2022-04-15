@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 import * as api from 'store/api'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render, waitForElementToBeRemoved, when } from 'testUtils'
 
 import AppealDetailsScreen from './AppealDetailsScreen'
@@ -14,8 +14,7 @@ import AppealIssues from './AppealIssues/AppealIssues'
 import { AppealEventData, AppealTypes } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { cleanup, RenderAPI, waitFor } from '@testing-library/react-native'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { RenderAPI, waitFor } from '@testing-library/react-native'
 import { StackNavigationOptions } from '@react-navigation/stack'
 
 context('AppealDetailsScreen', () => {
@@ -48,6 +47,7 @@ context('AppealDetailsScreen', () => {
     abortLoadSpy = jest.fn()
     props = mockNavProps(undefined, {
       navigate: jest.fn(),
+      addListener: jest.fn(),
       setOptions: (options: Partial<StackNavigationOptions>) => {
         navHeaderSpy = {
           back: options.headerLeft ? options.headerLeft({}) : undefined,
@@ -250,29 +250,5 @@ context('AppealDetailsScreen', () => {
         expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
       })
     })
-  })
-
-  describe('when pressing the back button', () => {
-    it('should call goBack', async () => {
-      await waitFor(async () => {
-        mockApiCall('supplementalClaim')
-        initializeTestInstance()
-      })
-
-      await waitFor(() => {
-        navHeaderSpy.back.props.onPress()
-        expect(goBack).toHaveBeenCalled()
-      })
-    })
-
-    describe('and appeal is still loading', () => {})
-      it('should call abort', async () => {
-        const abortSpy = jest.spyOn(AbortController.prototype, 'abort')
-        await waitFor(async () => {
-          initializeTestInstance(true)
-          navHeaderSpy.back.props.onPress()
-          expect(abortSpy).toHaveBeenCalled()
-        })
-      })
   })
 })

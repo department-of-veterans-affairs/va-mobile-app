@@ -14,7 +14,7 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 import FileList from 'components/FileList'
 
 type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
@@ -39,31 +39,28 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     })
   })
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (filesList.length === 0 || filesUploadedSuccess) {
-        return
-      }
-      e.preventDefault()
-      confirmAlert({
-        title: t('fileUpload.discard.confirm.title'),
-        message: t('fileUpload.discard.confirm.message'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('common:cancel'),
+  useBeforeNavBackListener(navigation, (e) => {
+    if (filesList.length === 0 || filesUploadedSuccess) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('fileUpload.discard.confirm.title'),
+      message: t('fileUpload.discard.confirm.message'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+        {
+          text: t('fileUpload.discard'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
           },
-          {
-            text: t('fileUpload.discard'),
-            onPress: () => {
-              navigation.dispatch(e.data.action)
-            },
-          },
-        ],
-      })
+        },
+      ],
     })
-    return unsubscribe
   })
 
   const onCancel = () => {
