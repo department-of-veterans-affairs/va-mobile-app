@@ -96,22 +96,22 @@ isInArray() {
 while [ $# -gt 0 ]; do
   case "$1" in
     -e|--environment)
-	  isInArray env_opts "$2" ENV $1
+	  isInArray env_opts "$2" ENV "$1"
       ;;
     -o|--os)
-      isInArray os_opts "$2" OS $1
+      isInArray os_opts "$2" OS "$1"
       ;;
     -b|--branch)
 	  BRANCH=$2
 	  ;;
 	-t|--type)
-	  isInArray type_opts "$2" TYPE $1
+	  isInArray type_opts "$2" TYPE "$1"
 	  ;;
 	-f|--flight_group)
-	  isInArray tf_opts "$2" TF_GROUP $1
+	  isInArray tf_opts "$2" TF_GROUP "$1"
 	  ;;
 	-p|--play_track)
-	  isInArray ps_opts "$2" PS_TRACK $1
+	  isInArray ps_opts "$2" PS_TRACK "$1"
 	  ;;
 	-n|--notes)
 	  NOTES=$2
@@ -130,9 +130,9 @@ done
 
 # sanity check prints for debugging
 echo BRANCH: "$BRANCH"
-echo OS: $OS
-echo ENV: $ENV
-echo TYPE: $TYPE
+echo OS: "$OS"
+echo ENV: "$ENV"
+echo TYPE: "$TYPE"
 echo TF_GROUP: "$TF_GROUP"
 echo PS_TRACK: "$PS_TRACK"
 echo NOTES: "$NOTES"
@@ -167,5 +167,5 @@ then
   yarn bundle:android &&
   cd "$BASE_DIR"/android &&
   # run fastlane
-  fastlane on_demand version:"qa" psTrack:"$PS_TRACK" notes:"$NOTES";
+  fastlane on_demand version:"$TYPE" psTrack:"$PS_TRACK" notes:"$NOTES";
 fi

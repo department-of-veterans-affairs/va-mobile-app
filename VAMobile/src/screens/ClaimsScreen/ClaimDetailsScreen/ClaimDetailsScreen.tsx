@@ -44,7 +44,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
         <BackButton
           onPress={() => {
             navigation.goBack()
-            snackBar.hideAll()
             // if claim is still loading cancel it
             if (loadingClaim) {
               cancelLoadingDetailScreen?.abort()
