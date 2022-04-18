@@ -213,7 +213,7 @@ commands:
   run_on_demand_script:
     description: "Runs a bash script. Takes the working directory, script name and script options as params"
     parameters:
-      branch_name:
+      branch:
         type: string
       os:
         type: string
@@ -224,7 +224,7 @@ commands:
           working_directory: ~/project/VAMobile
           command: |
             chmod +x on-demand-build.sh
-            bash on-demand-build.sh -o <<parameters.os>> -b <<parameters.tag_name>> -n <<parameters.notes>>
+            bash on-demand-build.sh -o <<parameters.os>> -b <<parameters.branch>> -n <<parameters.notes>>
 jobs:
   test:
     executor: default
@@ -265,7 +265,7 @@ jobs:
       - decode_ios_keys
       - install_pods
       - run_on_demand_script:
-          branch_name: ${CIRCLE_TAG}
+          branch: ${CIRCLE_TAG}
           os: ios
           notes: "-o ios -b ${CIRCLE_TAG}"
   feature_build_android:
@@ -276,7 +276,7 @@ jobs:
       - create_keys_directory
       - decode_android_keys
       - run_on_demand_script:
-          branch_name: ${CIRCLE_TAG}
+          branch: ${CIRCLE_TAG}
           os: android
           notes: "-o ios -b ${CIRCLE_TAG}"
   cut_release_branch:
