@@ -6,19 +6,20 @@ import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealType
 import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
+import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 
 type AppealDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'AppealDetailsScreen'>
 
-const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
+const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.CLAIMS)
@@ -31,12 +32,24 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   ]
 
   const { appealID } = route.params
-  const { appeal, loadingAppeal } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { appeal, loadingAppeal, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+
+  useBeforeNavBackListener(navigation, () => {
+    // if appeals is still loading cancel it
+    if (loadingAppeal) {
+      cancelLoadingDetailScreen?.abort()
+    }
+  })
 
   useEffect(() => {
     dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
+    const interaction = InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
+    return () => interaction.cancel()
   }, [dispatch, appealID])
 
   const getFilteredIssues = (): Array<string> => {
@@ -77,7 +90,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
   }
 
-  if (loadingAppeal) {
+  if (loadingAppeal || !isTransitionComplete) {
     return <LoadingComponent />
   }
 

@@ -1,13 +1,13 @@
 import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
-import { StackNavigationOptions } from '@react-navigation/stack'
+import { StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React from 'react'
 
@@ -469,4 +469,25 @@ export function useOrientation(): boolean {
   }, [])
 
   return isPortrait
+}
+
+/**
+ * Hook to catch IOS swipes and Android lower nav back events
+ *
+ * @param navigation - navigation object passed to a screen
+ * @param callback - function to execute when 'beforeRemove' is called
+ */
+export function useBeforeNavBackListener(
+  navigation: StackNavigationProp<ParamListBase, keyof ParamListBase>,
+  callback: (
+    e: EventArg<'beforeRemove', true, { action: Readonly<{ type: string; payload?: object | undefined; source?: string | undefined; target?: string | undefined }> }>,
+  ) => void,
+): void {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      callback(e)
+    })
+
+    return unsubscribe
+  })
 }
