@@ -199,7 +199,7 @@ commands:
             - VAMobile/android/vendor/bundle
       - run:
           working_directory: ~/project/VAMobile/android
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" psTrack:<<parameters.ps_track>>
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" psTrack:"<<parameters.ps_track>>"
   run_script:
     description: "Runs a bash script. Takes the working directory, script name and script options as params"
     parameters:
