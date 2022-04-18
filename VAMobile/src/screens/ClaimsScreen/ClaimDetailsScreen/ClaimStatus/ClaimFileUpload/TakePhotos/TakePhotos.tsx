@@ -1,6 +1,5 @@
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useActionSheet } from '@expo/react-native-action-sheet'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
@@ -23,7 +22,7 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 import getEnv from 'utils/env'
 
@@ -35,7 +34,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { showActionSheetWithOptions } = useActionSheet()
+  const showActionSheetWithOptions = useShowActionSheet()
   const { request, focusOnSnackbar } = route.params
   const { displayName } = request
   const [error, setError] = useState('')
@@ -49,7 +48,6 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   })
 
   const onBack = () => {
-    snackBar.hideAll()
     navigation.goBack()
   }
 
@@ -57,13 +55,13 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
-      snackBar.hideAll()
       navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
     }
   }
 
   const collapsibleContent = (): ReactNode => {
     const linkToCallProps: LinkButtonProps = {
+      testID: t('fileUpload.goToVaGov'),
       displayedText: t('fileUpload.goToVaGov'),
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
@@ -72,7 +70,9 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody">{t('fileUpload.accessibilityAlert.body')}</TextView>
+        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.accessibilityAlert.body.a11y')}>
+          {t('fileUpload.accessibilityAlert.body')}
+        </TextView>
         <ClickForActionLink {...linkToCallProps} />
       </Box>
     )
@@ -110,7 +110,9 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.maxFileSize')}
         </TextView>
-        <TextView variant="MobileBody">{t('fileUpload.50MB')}</TextView>
+        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
+          {t('fileUpload.50MB')}
+        </TextView>
         <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.acceptedFileTypes')}
         </TextView>

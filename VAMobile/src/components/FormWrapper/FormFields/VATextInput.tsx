@@ -144,6 +144,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     height: 201,
     borderColor: getInputBorderColor(error, isFocused),
     borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
+    pl: 8,
   }
 
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')

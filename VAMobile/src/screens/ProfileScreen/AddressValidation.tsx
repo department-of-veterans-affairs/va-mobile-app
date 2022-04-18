@@ -7,6 +7,7 @@ import { AddressData, AddressValidationScenarioTypesConstants, ScreenIDTypesCons
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { ViewStyle } from 'react-native'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
 import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
@@ -25,6 +26,11 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
   const theme = useTheme()
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.residentialAddress.saved'),
+    errorMsg: t('personalInformation.residentialAddress.saved.error'),
+  }
 
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const { validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
@@ -77,7 +83,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       address.validationKey = validationKey
     }
 
-    dispatch(updateAddress(address, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    dispatch(updateAddress(address, snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   const getSuggestedAddressLabelArgs = (address: SuggestedAddress | AddressData): { [key: string]: string } => {

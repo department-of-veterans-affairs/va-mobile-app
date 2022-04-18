@@ -11,6 +11,13 @@ import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 import colors from '../styles/themes/VAColors'
 
+export type SnackbarMessages = {
+  successMsg: string
+  errorMsg: string
+  undoMsg?: string
+  undoErrorMsg?: string
+}
+
 /**
  * Common snackbar component. This component is wrapped by the react-native-toast-notification library.
  */

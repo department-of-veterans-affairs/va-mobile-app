@@ -150,7 +150,7 @@ context('ClaimPhase', () => {
 
       it('should display the view file requests va button', async () => {
         expect(buttons.length).toEqual(1)
-        expect(buttons[0].props.label).toEqual('Review File Requests')
+        expect(buttons[0].props.label).toEqual('Review file requests')
       })
 
       describe('on click of the file request button', () => {
