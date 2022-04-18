@@ -265,7 +265,7 @@ jobs:
       - decode_ios_keys
       - install_pods
       - run_on_demand_script:
-          branch: ${CIRCLE_TAG}
+          branch: ${CIRCLE_BRANCH}
           os: ios
           notes: ${CIRCLE_TAG}
   feature_build_android:
@@ -276,7 +276,7 @@ jobs:
       - create_keys_directory
       - decode_android_keys
       - run_on_demand_script:
-          branch: ${CIRCLE_TAG}
+          branch: ${CIRCLE_BRANCH}
           os: android
           notes: ${CIRCLE_TAG}
   cut_release_branch:
