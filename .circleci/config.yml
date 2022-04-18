@@ -264,7 +264,7 @@ jobs:
       - install_deps
       - decode_ios_keys
       - install_pods
-      - run_script:
+      - run_on_demand_script:
           branch_name: ${CIRCLE_TAG}
           os: ios
           notes: "-o ios -b ${CIRCLE_TAG}"
@@ -275,7 +275,7 @@ jobs:
       - install_deps
       - create_keys_directory
       - decode_android_keys
-      - run_script:
+      - run_on_demand_script:
           branch_name: ${CIRCLE_TAG}
           os: android
           notes: "-o ios -b ${CIRCLE_TAG}"
