@@ -44,7 +44,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
         <BackButton
           onPress={() => {
             navigation.goBack()
-            snackBar.hideAll()
           }}
           focusOnButton={focusOnSnackbar ? false : true}
           canGoBack={props.canGoBack}

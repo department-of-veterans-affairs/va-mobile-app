@@ -15,6 +15,12 @@ import { validateAddress, ErrorsState, initialErrorsState, initializeErrorsByScr
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
+import { SnackbarMessages } from 'components/SnackBar'
+
+const snackbarMessages : SnackbarMessages = {
+  successMsg: 'Mailing address saved',
+  errorMsg: 'Mailing address could not be saved',
+}
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -140,7 +146,6 @@ context('EditAddressScreen', () => {
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',
-      gender: 'M',
       addresses: '',
       residentialAddress: {
         id: 0,
@@ -194,14 +199,6 @@ context('EditAddressScreen', () => {
         phoneType: 'HOME',
       },
       formattedWorkPhone: '(858)-690-1287',
-      faxNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901286',
-        phoneType: 'HOME',
-      },
-      formattedFaxPhone: '(858)-690-1286',
       signinService: 'IDME',
     }
 
@@ -735,7 +732,7 @@ context('EditAddressScreen', () => {
     it('should display the remove button', () => {
       initializeTestInstance(profileInfo, false, true)
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Home Address')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home address')
     })
   })
 
@@ -778,6 +775,7 @@ context('EditAddressScreen', () => {
             zipCode: '',
             province: 'Ontario',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
@@ -822,6 +820,7 @@ context('EditAddressScreen', () => {
             zipCode: '94920',
             internationalPostalCode: '',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
@@ -865,6 +864,7 @@ context('EditAddressScreen', () => {
             stateCode: 'AP',
             zipCode: '96278',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })

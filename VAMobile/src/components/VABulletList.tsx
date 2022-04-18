@@ -76,7 +76,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
         }
 
         return (
-          <Box display="flex" flexDirection="row" alignItems="flex-start" key={index}>
+          <Box display="flex" flexDirection="row" alignItems="flex-start" key={index} accessible={true}>
             <Box mr={20} mt={12}>
               <VAIcon name="Bullet" fill={color || 'primary'} />
             </Box>

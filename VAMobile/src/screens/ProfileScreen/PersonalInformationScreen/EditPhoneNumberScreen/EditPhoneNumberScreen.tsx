@@ -18,12 +18,11 @@ import {
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, deleteUsersNumber, editUsersNumber, finishEditPhoneNumber } from 'store/slices/personalInformationSlice'
-import { PhoneTypeConstants } from 'store/api/types'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { dispatchClearErrors } from 'store/slices/errorSlice'
-import { formatPhoneNumber, getNumbersFromString, stringToTitleCase } from 'utils/formattingUtils'
+import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
@@ -156,7 +155,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     },
   ]
 
-  const testIdPrefix = phoneType === PhoneTypeConstants.FAX ? 'fax-number: ' : `${phoneType.toLowerCase()}-phone: `
+  const testIdPrefix = `${phoneType.toLowerCase()}-phone: `
   const buttonTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
@@ -184,7 +183,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: stringToTitleCase(buttonTitle) })}
+              label={t('personalInformation.removeData', { pageName: buttonTitle })}
               buttonType={ButtonTypesConstants.buttonImportant}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: buttonTitle })}
             />

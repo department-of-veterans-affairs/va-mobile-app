@@ -183,6 +183,33 @@ export const bytesToFinalSizeDisplay = (bytes: number, t: TFunction, includePare
 }
 
 /**
+ * Converts the given bytes to a size display string that includes the size unit and parentheses. Rounded to two decimals
+ * Example: '(12 MB)'
+ * Strings returned use the accessibility labels for screenreaders
+ *
+ * @param bytes - given number to convert mb, kb, or bytes representation
+ * @param t - translation function
+ * @param includeParens - whether to display parenthesis around the size. Defaults to true
+ */
+export const bytesToFinalSizeDisplayA11y = (bytes: number, t: TFunction, includeParens = true): string => {
+  let fileSize = ''
+
+  if (bytes < 10) {
+    // Less than 0.01 KB, display with Bytes size unit
+    fileSize = `${bytes} ${t('common:Bytes')}`
+  } else if (bytes < 10000) {
+    // Less than 0.01 MB, display with KB size unit
+    const kb = bytesToKilobytes(bytes)
+    fileSize = `${kb} ${t('common:KB.a11y')}`
+  } else {
+    const mb = bytesToMegabytes(bytes)
+    fileSize = `${mb} ${t('common:MB.a11y')}`
+  }
+
+  return includeParens ? `(${fileSize})` : fileSize
+}
+
+/**
  * Converts the given bytes to kb, rounded to two decimals
  *
  * @param bytes - given number to convert to kb
@@ -277,6 +304,7 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
  * @returns snackbar
  */
 export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
+  snackBar.hideAll()
   dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
   snackBar.show(message, {
     type: 'custom_snackbar',

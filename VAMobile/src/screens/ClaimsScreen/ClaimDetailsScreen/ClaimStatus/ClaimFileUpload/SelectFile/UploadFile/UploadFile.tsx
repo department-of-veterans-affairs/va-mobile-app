@@ -11,6 +11,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
@@ -24,32 +25,12 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
-  const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([])
+  const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
-
-  useEffect(() => {
-    setFilesList([fileUploaded])
-  }, [fileUploaded])
-
-  const onCancel = () => {
-    confirmAlert({
-      title: t('fileUpload.discard.confirm.title'),
-      message: t('fileUpload.discard.confirm.message'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('common:cancel'),
-        },
-        {
-          text: t('fileUpload.discard'),
-          onPress: () => {
-            navigation.navigate('FileRequestDetails', { request })
-          },
-        },
-      ],
-    })
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('fileUpload.submitted'),
+    errorMsg: t('fileUpload.submitted.error'),
   }
 
   useEffect(() => {
@@ -59,24 +40,44 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      if (filesList.length === 0 || filesUploadedSuccess) {
+        return
+      }
+      e.preventDefault()
+      confirmAlert({
+        title: t('fileUpload.discard.confirm.title'),
+        message: t('fileUpload.discard.confirm.message'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('common:cancel'),
+          },
+          {
+            text: t('fileUpload.discard'),
+            onPress: () => {
+              navigation.dispatch(e.data.action)
+            },
+          },
+        ],
+      })
+    })
+    return unsubscribe
+  })
+
+  const onCancel = () => {
+    navigation.navigate('FileRequestDetails', { request })
+  }
+
+  useEffect(() => {
     if (fileUploadedFailure || filesUploadedSuccess) {
       dispatch(fileUploadSuccess())
     }
 
     if (filesUploadedSuccess) {
-      showSnackBar(t('fileUpload.submitted'), dispatch, undefined, true, false, false)
+      setFilesList([])
       navigation.navigate('FileRequest', { claimID: claim?.id || '' })
-    } else if (fileUploadedFailure) {
-      showSnackBar(
-        t('fileUpload.submitted.error'),
-        dispatch,
-        () => {
-          dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
-        },
-        false,
-        true,
-        false,
-      )
     }
   }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
 
@@ -98,7 +99,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList))
   }
 
   const onUpload = (): void => {
@@ -119,6 +120,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   const onFileDelete = () => {
+    setFilesList([])
     showSnackBar(t('common:file.deleted'), dispatch, undefined, true, false, false)
     navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
   }
