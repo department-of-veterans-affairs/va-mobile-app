@@ -267,7 +267,7 @@ jobs:
       - run_on_demand_script:
           branch: ${CIRCLE_TAG}
           os: ios
-          notes: "-o ios -b ${CIRCLE_TAG}"
+          notes: ${CIRCLE_TAG}
   feature_build_android:
     executor: android
     steps:
@@ -278,7 +278,7 @@ jobs:
       - run_on_demand_script:
           branch: ${CIRCLE_TAG}
           os: android
-          notes: "-o ios -b ${CIRCLE_TAG}"
+          notes: ${CIRCLE_TAG}
   cut_release_branch:
     executor: default
     steps:
