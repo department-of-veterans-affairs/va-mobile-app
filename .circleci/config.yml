@@ -258,7 +258,7 @@ jobs:
           os: ios
       - ios_fastlane:
           lane: on_demand
-          notes: ${CIRCLE_BRANCH}
+          notes: ${CIRCLE_TAG}
           tf_group: Development Team
   feature_build_android:
     executor: android
@@ -271,7 +271,7 @@ jobs:
           os: android
       - android_fastlane:
           lane: on_demand
-          notes: ${CIRCLE_BRANCH}
+          notes: ${CIRCLE_TAG}
           ps_track: Development Team
   cut_release_branch:
     executor: default
