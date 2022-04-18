@@ -473,6 +473,7 @@ export function useOrientation(): boolean {
 
 /**
  * Hook to catch IOS swipes and Android lower nav back events
+ *
  * @param navigation - navigation object passed to a screen
  * @param callback - function to execute when 'beforeRemove' is called
  */
