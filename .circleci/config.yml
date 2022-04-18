@@ -147,7 +147,7 @@ commands:
             - VAMobile/ios/vendor/bundle
       - run:
           working_directory: ~/project/VAMobile/ios
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> tfGroup:<<parameters.tf_group>>
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:<<parameters.notes>> tfGroup:<<parameters.tf_group>>
   decode_android_keys:
     description: "Decodes all the keys needed to build and upload to google play"
     steps:
@@ -199,7 +199,7 @@ commands:
             - VAMobile/android/vendor/bundle
       - run:
           working_directory: ~/project/VAMobile/android
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> psTrack:<<parameters.ps_track>>
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:<<parameters.notes>> psTrack:<<parameters.ps_track>>
   run_script:
     description: "Runs a bash script. Takes the working directory, script name and script options as params"
     parameters:
