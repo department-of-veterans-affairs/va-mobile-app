@@ -127,6 +127,9 @@ commands:
       notes:
         type: string
         default: ''
+      tf_group:
+        type: string
+        default: ''
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
@@ -144,7 +147,7 @@ commands:
             - VAMobile/ios/vendor/bundle
       - run:
           working_directory: ~/project/VAMobile/ios
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> tfGroup:<<parameters.tf_group>>
   decode_android_keys:
     description: "Decodes all the keys needed to build and upload to google play"
     steps:
@@ -176,6 +179,9 @@ commands:
       notes:
         type: string
         default: ''
+      ps_track:
+        type: string
+        default: ''
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
@@ -193,7 +199,7 @@ commands:
             - VAMobile/android/vendor/bundle
       - run:
           working_directory: ~/project/VAMobile/android
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> psTrack:<<parameters.ps_track>>
   run_script:
     description: "Runs a bash script. Takes the working directory, script name and script options as params"
     parameters:
@@ -210,21 +216,6 @@ commands:
           command: |
             chmod +x <<parameters.script_name>>
             bash <<parameters.script_name>> <<parameters.script_options>>
-  run_on_demand_script:
-    description: "Runs a bash script. Takes the working directory, script name and script options as params"
-    parameters:
-      branch:
-        type: string
-      os:
-        type: string
-      notes:
-        type: string
-    steps:
-      - run:
-          working_directory: ~/project/VAMobile
-          command: |
-            chmod +x on-demand-build.sh
-            bash on-demand-build.sh -o <<parameters.os>> -b <<parameters.branch>> -n <<parameters.notes>>
 jobs:
   test:
     executor: default
@@ -261,13 +252,14 @@ jobs:
     executor: ios
     steps:
       - checkout
-      - install_deps
       - decode_ios_keys
       - install_pods
-      - run_on_demand_script:
-          branch: ${CIRCLE_BRANCH}
-          os: ios
-          notes: ${CIRCLE_TAG}
+      - bundle_app:
+          os: "ios"
+      - ios_fastlane:
+          lane: "on_demand"
+          notes: ${CIRCLE_BRANCH}
+          tf_group: "Development Team"
   feature_build_android:
     executor: android
     steps:
@@ -275,10 +267,12 @@ jobs:
       - install_deps
       - create_keys_directory
       - decode_android_keys
-      - run_on_demand_script:
-          branch: ${CIRCLE_BRANCH}
-          os: android
-          notes: ${CIRCLE_TAG}
+      - bundle_app:
+          os: "android"
+      - android_fastlane:
+          lane: "on_demand"
+          notes: ${CIRCLE_BRANCH}
+          ps_track: "Development Team"
   cut_release_branch:
     executor: default
     steps:

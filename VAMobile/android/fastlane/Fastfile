@@ -58,17 +58,19 @@ platform :android do
   lane :on_demand do |options|
     puts "on demand run"
     notes = options[:notes]
+    ps_track = options[:psTrack].empty ? "Development Team" : options[:psTrack] 
+
     datetime = Time.new.strftime("%m.%d.%Y")
     update_version_and_build(options[:version ])
     bundle("Release")
-    puts options[:psTrack]
-    upload(options[:psTrack])
+    puts ps_track
+    upload(ps_track)
     bundle("Debug")
 
     if notes.to_s.empty?
       notes = "New On Demand QA version for " + datetime
     elsif notes.starts_with?("feature-build-")
-      notes = "Feature Build: #{notes.sub('feature-build-','').gsub('-',' ')}" + datetime
+      notes = "Feature Build: #{notes.gsub('feature-build-','').gsub('-',' ')}" + datetime
     end
         puts notes
     distribute_to_firebase(notes, "qa")
