@@ -246,13 +246,13 @@ jobs:
     executor: ios
     steps:
       - checkout
+      - install_deps
       - decode_ios_keys
       - install_pods
-      - bundle_app:
-          os: "ios"
-      - ios_fastlane:
-          lane: "on_demand"
-          notes: ${CIRCLE_BRANCH}
+      - run_script:
+          script_name: "on-demand-build.sh"
+          script_options: "-o ios -b ${CIRCLE_BRANCH}"
+          # workingDir: "~/project/VAMobile"
   feature_build_android:
     executor: android
     steps:
@@ -260,11 +260,10 @@ jobs:
       - install_deps
       - create_keys_directory
       - decode_android_keys
-      - bundle_app:
-          os: "android"
-      - android_fastlane:
-          lane: "on_demand"
-          notes: ${CIRCLE_BRANCH}
+      - run_script:
+          script_name: "on-demand-build.sh"
+          script_options: "-o android -b ${CIRCLE_BRANCH}"
+          workingDir: "~/project/VAMobile"
   cut_release_branch:
     executor: default
     steps:

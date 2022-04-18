@@ -81,14 +81,15 @@ platform :ios do
   lane :on_demand do |options|
     puts "on demand run"
     notes = options[:notes]
+    datetime = Time.new.strftime("%m.%d.%Y")
     update_version(options[:version])
     sign
     build
 
     if notes.to_s.empty?
-      notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
+      notes = "New On Demand QA version for " + datetime
     elsif notes.starts_with?("feature-build-")
-      notes = "Feature Build: #{notes.titleize}"
+      notes = "Feature Build: #{notes.titleize}" + datetime
     end
     
     puts notes
