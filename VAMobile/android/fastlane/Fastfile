@@ -58,7 +58,7 @@ platform :android do
   lane :on_demand do |options|
     puts "on demand run"
     notes = options[:notes]
-    ps_track = options[:psTrack].empty ? "Development Team" : options[:psTrack] 
+    ps_track = options[:psTrack].empty? ? "Development Team" : options[:psTrack] 
 
     datetime = Time.new.strftime("%m.%d.%Y")
     update_version_and_build(options[:version ])

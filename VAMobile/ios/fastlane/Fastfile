@@ -86,7 +86,7 @@ platform :ios do
     sign
     build
 
-    tf_group = options[:tfGroup].empty ? "Development Team" : options[:tfGroup] 
+    tf_group = options[:tfGroup].empty? ? "Development Team" : options[:tfGroup] 
 
     if notes.to_s.empty?
       notes = "New On Demand QA version for " + datetime
