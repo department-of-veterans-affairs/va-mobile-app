@@ -252,6 +252,7 @@ jobs:
     executor: ios
     steps:
       - checkout
+      - install_deps
       - decode_ios_keys
       - install_pods
       - bundle_app:

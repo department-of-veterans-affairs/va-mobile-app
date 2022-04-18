@@ -90,7 +90,7 @@ platform :ios do
 
     if notes.to_s.empty?
       notes = "New On Demand QA version for " + datetime
-    elsif notes.starts_with?("feature-build-")
+    elsif notes.start_with?("feature-build-")
       notes = "Feature Build: #{notes.gsub('feature-build-','').gsub('-',' ')}" + datetime
     end
     
