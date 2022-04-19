@@ -5,10 +5,11 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
 import { includes } from 'lodash'
-import { isErrorObject } from 'utils/common'
+import { isErrorObject, showSnackBar } from 'utils/common'
 
 import * as api from '../api'
 import { APIError, AccountTypes, ScreenIDTypes } from '../api'
+import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 
@@ -62,10 +63,11 @@ export const getBankData =
  * @param screenID - string specifying the screen that a common error would display on
  */
 export const updateBankInfo =
-  (accountNumber: string, routingNumber: string, accountType: AccountTypes, screenID?: ScreenIDTypes): AppThunk =>
+  (accountNumber: string, routingNumber: string, accountType: AccountTypes, snackbarMessages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
+    const retryFunction = () => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, snackbarMessages, screenID))
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, screenID))))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSaveBankInfo())
@@ -83,6 +85,7 @@ export const updateBankInfo =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveBankInfo({ paymentAccount: bankInfo?.data.attributes.paymentAccount }))
+      showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `updateBankInfo: ${directDepositNonFatalErrorString}`)
@@ -93,6 +96,9 @@ export const updateBankInfo =
         // invalidRoutingNumber error is more specific and takes priority over common error
         if (!invalidRoutingNumberError) {
           dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+
+          // added here becuase if it is a routing number error there is no point of retrying and showing snackbar there is already an error shown
+          showSnackBar(snackbarMessages.errorMsg, dispatch, retryFunction, false, true)
         }
       }
     }
