@@ -31,6 +31,8 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   
   func generateUrl(authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String)-> URL? {
     let items = [
+        URLQueryItem(name: "application", value: "vamobile"),
+        URLQueryItem(name: "oauth", value: "true"),
         URLQueryItem(name: "client_id", value: clientId),
         URLQueryItem(name: "redirect_uri", value: redirectUri),
         URLQueryItem(name: "scope", value: scope),

@@ -53,6 +53,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   useEffect(() => {
     const iosAuth = async () => {
       try {
+        debugger
         const callbackUrl = await startIosAuthSession(codeChallenge || '', authorizeStateParam || '')
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {

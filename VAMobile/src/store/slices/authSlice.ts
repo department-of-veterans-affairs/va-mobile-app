@@ -40,7 +40,18 @@ import { pkceAuthorizeParams } from 'utils/oauth'
 import { updateDemoMode } from './demoSlice'
 import getEnv from 'utils/env'
 
-const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, ENVIRONMENT, IS_TEST } = getEnv()
+const {
+  AUTH_CLIENT_ID,
+  AUTH_CLIENT_SECRET,
+  AUTH_ENDPOINT,
+  AUTH_REDIRECT_URL,
+  AUTH_REVOKE_URL,
+  AUTH_SCOPES,
+  AUTH_TOKEN_EXCHANGE_URL,
+  AUTH_TOKEN_REFRESH_URL,
+  ENVIRONMENT,
+  IS_TEST,
+} = getEnv()
 
 let inMemoryRefreshToken: string | undefined
 
@@ -305,7 +316,7 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
       console.debug('processAuthResponse:', await response.text())
       throw Error(`${response.status}`)
     }
-    const authResponse = (await response.json()) as AuthCredentialData
+    const authResponse = (await response.json())?.data as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
     // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
     // state is not uniformly supported on the token exchange request so may not be necessary
@@ -329,7 +340,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
   console.debug('refreshAccessToken: Refreshing access token')
   try {
     await CookieManager.clearAll()
-    const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
+    const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -379,7 +390,7 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
 export const attempIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
   try {
     await CookieManager.clearAll()
-    const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
+    const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -550,7 +561,8 @@ export const handleTokenCallbackUrl =
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
-      const { code } = parseCallbackUrlParams(url)
+      const { code, state } = parseCallbackUrlParams(url)
+      debugger
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
       await CookieManager.clearAll()
@@ -561,12 +573,8 @@ export const handleTokenCallbackUrl =
         },
         body: qs.stringify({
           grant_type: 'authorization_code',
-          client_id: AUTH_CLIENT_ID,
-          client_secret: AUTH_CLIENT_SECRET,
           code_verifier: getState().auth.codeVerifier,
-          code: code,
-          // state: stateParam,
-          redirect_uri: AUTH_REDIRECT_URL,
+          code,
         }),
       })
       const authCredentials = await processAuthResponse(response)
@@ -611,6 +619,8 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
     code_challenge_method: 'S256',
     code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
     state: '12345',
+    application: 'vamobile',
+    oauth: 'true',
   })
   const url = `${AUTH_ENDPOINT}?${params}`
   dispatch(dispatchShowWebLogin(url))
