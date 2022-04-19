@@ -70,9 +70,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
             {displayDate}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-            <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-              {displayName}
-            </TextView>
+            <TextView variant="BitterBoldHeading">{displayName}</TextView>
           </Box>
           <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>
             {t('vaccines.details.typeAndDosage')}

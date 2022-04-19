@@ -102,7 +102,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
     <VAScrollView {...testIdProps('Your-appeal: Appeal-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
-          <TextView variant="BitterBoldHeading" color={'primaryTitle'} mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
+          <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
           </TextView>
           <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>

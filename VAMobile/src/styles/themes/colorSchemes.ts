@@ -80,6 +80,7 @@ export const lightTheme = {
     backButton: colors.white,
     overflowMenuDefault: colors.black,
     unreadMessage: colors.primary,
+    veteransCrisisLineArrow: colors.grayLightest,
   },
   text: {
     footerButton: colors.primary,
@@ -87,7 +88,7 @@ export const lightTheme = {
     navBar: colors.white,
     primary: primaryTextColor,
     primaryTitle: primaryTextColor,
-    primaryContrast: colors.white,
+    primaryContrast: colors.grayLightest,
     primaryContrastDisabled: colors.grayLight,
     secondary: colors.black,
     error: colors.secondaryDark, //'#CD2026',
@@ -231,6 +232,7 @@ export const darkTheme = {
     backButton: colors.darkmodeLightBlue,
     overflowMenuDefault: colors.grayLightest,
     unreadMessage: colors.darkmodeLightBlue,
+    veteransCrisisLineArrow: colors.grayLightest,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,

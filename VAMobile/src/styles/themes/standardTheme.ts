@@ -27,6 +27,7 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
   theme = {
     ...theme,
     colors: { ...colorScheme },
+    typography: buildTypography(colorScheme),
   }
 }
 
@@ -110,6 +111,26 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
     styles.push('textDecorationLine: underline')
   }
   return styles.join(';\n')
+}
+
+const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
+  return {
+    BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
+    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
+    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
+    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag),
+    TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
+    TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
+    TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
+    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colorScheme.text.link, true), // need to verify was using color.linkDefault originally
+    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
+    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
+    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
+    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold),
+    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
+  }
 }
 
 let theme: VATheme = {
@@ -236,24 +257,7 @@ let theme: VATheme = {
     SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
   },
-
-  typography: {
-    BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
-    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
-    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
-    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
-    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag),
-    TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
-    TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
-    TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
-    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
-    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
-    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
-    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
-    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
-    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold),
-    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
-  },
+  typography: buildTypography(colorScheme),
 }
 
 export default theme
