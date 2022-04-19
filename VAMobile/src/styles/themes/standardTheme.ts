@@ -123,7 +123,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
-    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colorScheme.text.link, true), // need to verify was using color.linkDefault originally
+    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colorScheme.text.link, true),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
