@@ -45,7 +45,6 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
           <TextView variant="MobileBody">{t('claimsDetails.whatDoIDoIfDisagreement.content')}</TextView>
           <TextView
             variant="MobileBodyLink"
-            color="link"
             mt={theme.dimensions.standardMarginBetween}
             accessibilityRole="link"
             {...a11yHintProp(`${text} ${t('common:mobileBodyLink.a11yHint')}`)}

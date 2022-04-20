@@ -192,7 +192,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       const prepareForVideoVisitLinkProps: TextViewProps = {
         py: theme.dimensions.buttonPadding,
         variant: 'MobileBodyLink',
-        color: 'link',
         onPress: onPrepareForVideoVisit,
         accessibilityRole: 'link',
       }

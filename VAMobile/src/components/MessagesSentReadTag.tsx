@@ -21,7 +21,7 @@ const MessagesSentReadTag: FC<MessagesSentTagProps> = ({ text }) => {
       borderRadius={theme.dimensions.tagCountCurvedBorder}
       {...testIdProps(text)}
       accessible={true}>
-      <TextView flexWrap={'wrap'} color="primaryContrast" variant="SentMessagesReadTag" px={theme.dimensions.alertPaddingX} pt={theme.dimensions.tagCountTopPadding}>
+      <TextView flexWrap={'wrap'} variant="SentMessagesReadTag" px={theme.dimensions.alertPaddingX} pt={theme.dimensions.tagCountTopPadding}>
         {text}
       </TextView>
     </Box>
