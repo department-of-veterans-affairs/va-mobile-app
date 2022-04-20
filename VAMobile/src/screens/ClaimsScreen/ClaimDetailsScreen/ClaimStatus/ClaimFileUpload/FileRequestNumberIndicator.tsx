@@ -22,7 +22,7 @@ const getCharacter = (requestNumber: number, fileUploaded: boolean | undefined, 
     )
   } else {
     return (
-      <TextView variant="ClaimPhase" color="claimPhase" textAlign={'center'}>
+      <TextView variant="ClaimPhase" textAlign={'center'}>
         {requestNumber}
       </TextView>
     )

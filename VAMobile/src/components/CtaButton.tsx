@@ -41,7 +41,7 @@ const CtaButton: FC = (props) => {
         <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
           {props.children}
         </TextView>
-        <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
+        <VAIcon name="ArrowRight" fill={theme.colors.icon.veteransCrisisLineArrow} width={10} height={15} />
       </Box>
     </TouchableWithoutFeedback>
   )

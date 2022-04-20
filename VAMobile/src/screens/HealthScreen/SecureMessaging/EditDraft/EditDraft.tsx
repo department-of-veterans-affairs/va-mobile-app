@@ -483,9 +483,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-                {subjectHeader}
-              </TextView>
+              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messagesById, messageThread)}
           </Box>

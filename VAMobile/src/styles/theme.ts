@@ -87,6 +87,7 @@ export type VAIconColors = {
   webviewReload: string
   backButton: string
   unreadMessage: string
+  veteransCrisisLineArrow: string
 }
 
 export type VATypographyThemeVariants = {

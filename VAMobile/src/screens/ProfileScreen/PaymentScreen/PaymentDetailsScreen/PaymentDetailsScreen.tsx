@@ -63,9 +63,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
             {getFormattedDate(date, 'MMMM d, yyyy')}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-            <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-              {paymentType}
-            </TextView>
+            <TextView variant="BitterBoldHeading">{paymentType}</TextView>
           </Box>
           <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>
             {t('paymentDetails.amount')}

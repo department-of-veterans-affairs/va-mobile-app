@@ -124,7 +124,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         {...testIdProps(testId)}>
         <Box flex={1}>
           <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor || 'primaryTitle'}>
+            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
               {title}
             </TextView>
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
