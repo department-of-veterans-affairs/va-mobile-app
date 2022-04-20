@@ -1,1 +1,1 @@
-You can now review payments made to you by the VA. We’ve also fixed a few bugs.
+We added general improvements and fixed a few bugs.

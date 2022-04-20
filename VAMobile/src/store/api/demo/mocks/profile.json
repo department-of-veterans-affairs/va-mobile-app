@@ -1,5 +1,5 @@
 {
-  "/v0/user": {
+  "/v1/user": {
     "data": {
       "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
       "type": "user",
@@ -15,7 +15,6 @@
           },
           "signinEmail": "vets.gov.user+228@gmail.com",
           "birthDate": "1950-01-01",
-          "gender": "M",
           "residentialAddress": null,
           "mailingAddress": {
             "id": 269569,
@@ -49,8 +48,7 @@
             "countryCode": "1",
             "phoneNumber": "4446666",
             "phoneType": "HOME"
-          },
-          "faxNumber": null
+          }
         },
         "authorizedServices": [
           "appeals",

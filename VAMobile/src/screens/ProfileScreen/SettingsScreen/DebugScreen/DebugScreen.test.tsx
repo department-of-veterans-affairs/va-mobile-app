@@ -63,12 +63,12 @@ context('DebugScreen', () => {
 
   describe('toggle firebase debug mode', () => {
     it('should say enable if not yet enabled', async () => {
-      expect(findByTypeWithText(testInstance, TextView, 'Enable Firebase Debug Mode')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Enable Firebase debug mode')).toBeTruthy()
     })
 
     it('pressing the button should toggle the debug mode', async () => {
       findByOnPressFunction(testInstance, Pressable, 'onClickFirebaseDebugMode')?.props.onPress()
-      expect(findByTypeWithText(testInstance, TextView, 'Disable Firebase Debug Mode')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Disable Firebase debug mode')).toBeTruthy()
     })
   })
 })
