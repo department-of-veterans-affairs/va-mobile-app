@@ -81,6 +81,7 @@ export const lightTheme = {
     overflowMenuDefault: colors.black,
     unreadMessage: colors.primary,
     veteransCrisisLineArrow: colors.grayLightest,
+    snackBarIcon: colors.white,
   },
   text: {
     footerButton: colors.primary,
@@ -105,7 +106,6 @@ export const lightTheme = {
     segmentControllerInactive: colors.black,
     snackBarBtn: colors.darkmodeLightBlue,
     backButton: colors.white,
-    snackBarText: colors.white,
     bodyText: colors.grayDark,
   },
   buttonBackground: {
@@ -233,6 +233,7 @@ export const darkTheme = {
     overflowMenuDefault: colors.grayLightest,
     unreadMessage: colors.darkmodeLightBlue,
     veteransCrisisLineArrow: colors.grayLightest,
+    snackBarIcon: colors.grayDark,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,
@@ -257,7 +258,6 @@ export const darkTheme = {
     segmentControllerInactive: colors.grayLighter,
     snackBarBtn: colors.primary,
     backButton: colors.darkmodeLightBlue,
-    snackBarText: colors.grayDark,
     bodyText: colors.grayLighter,
   },
   buttonBackground: {

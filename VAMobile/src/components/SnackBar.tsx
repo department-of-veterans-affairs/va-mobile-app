@@ -99,28 +99,24 @@ const SnackBar: FC<ToastProps> = (toast) => {
             <Box mr={dimensions.snackBarBetweenSpace} alignSelf="flex-start" mt={dimensions.snackBarIconTopMargin}>
               <VAIcon
                 name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'}
-                fill={themeColor.text.snackBarText}
+                fill={themeColor.icon.snackBarIcon}
                 height={dimensions.snackBarIconSize}
                 width={dimensions.snackBarIconSize}
               />
             </Box>
-            <TextView variant={'HelperText'} color={'snackBarText'}>
-              {message}
-            </TextView>
+            <TextView variant={'HelperText'}>{message}</TextView>
           </Box>
         </View>
         <Box {...btnContainerProps}>
           {!isUndo && (
             <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
-              <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'} display={'flex'}>
+              <TextView variant={'SnackBarBtnText'} display={'flex'}>
                 {actionBtnText || isError ? 'Retry' : 'Undo'}
               </TextView>
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={() => toast.onHide()} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
-            <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'}>
-              {'Dismiss'}
-            </TextView>
+            <TextView variant={'SnackBarBtnText'}>{'Dismiss'}</TextView>
           </TouchableOpacity>
         </Box>
       </Box>

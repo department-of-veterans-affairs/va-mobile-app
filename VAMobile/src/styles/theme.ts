@@ -55,7 +55,6 @@ export type VATextColors = {
   segmentControllerInactive: string
   snackBarBtn: string
   backButton: string
-  snackBarText: string
   bodyText: string
 }
 
@@ -88,6 +87,7 @@ export type VAIconColors = {
   backButton: string
   unreadMessage: string
   veteransCrisisLineArrow: string
+  snackBarIcon: string
 }
 
 export type VATypographyThemeVariants = {
