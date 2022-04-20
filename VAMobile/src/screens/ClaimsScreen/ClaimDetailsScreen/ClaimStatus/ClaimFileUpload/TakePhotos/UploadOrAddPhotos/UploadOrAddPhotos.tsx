@@ -75,6 +75,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         {
           text: t('common:cancel'),
         },
+
         {
           text: t('fileUpload.discard.photos'),
           onPress: () => {
