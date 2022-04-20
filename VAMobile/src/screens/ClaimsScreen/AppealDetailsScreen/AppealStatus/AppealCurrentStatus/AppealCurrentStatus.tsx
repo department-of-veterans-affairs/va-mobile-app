@@ -322,9 +322,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
                 {details[0]}
               </TextView>
               <TextView variant="MobileBody" mt={marginTop}>
-                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                  {details[1]}
-                </TextView>
+                <TextView variant="MobileBodyBold">{details[1]}</TextView>
                 {details[2]}
               </TextView>
             </Box>
@@ -509,7 +507,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
               <TextView variant="MobileBody" mt={marginTop}>
                 {details[3]}
               </TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop}>
+              <TextView variant="MobileBodyBold" mt={marginTop}>
                 {details[1]}
               </TextView>
               <TextView variant="MobileBody">{details[2]}</TextView>
@@ -521,7 +519,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop}>
+            <TextView variant="MobileBodyBold" mt={marginTop}>
               {details[1]}
             </TextView>
             <TextView variant="MobileBody">{details[2]}</TextView>
@@ -580,7 +578,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       <TextView variant="BitterBoldHeading" accessibilityRole="header">
         {t('appealDetails.currentStatus')}
       </TextView>
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop} accessibilityRole="header">
+      <TextView variant="MobileBodyBold" mt={marginTop} accessibilityRole="header">
         {statusHeadingAndTitle.title}
       </TextView>
       {renderStatusDetails()}

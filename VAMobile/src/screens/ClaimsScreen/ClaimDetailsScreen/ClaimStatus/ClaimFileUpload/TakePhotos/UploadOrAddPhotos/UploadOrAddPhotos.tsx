@@ -260,7 +260,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
             <AlertBox title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
           {request.displayName}
         </TextView>
         <Box

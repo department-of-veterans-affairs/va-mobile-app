@@ -41,9 +41,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
     const data = (
       <Box flexDirection="row">
         <Box flex={1}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-            {headerText}
-          </TextView>
+          <TextView variant="MobileBodyBold">{headerText}</TextView>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <VAIcon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={16} height={10} />

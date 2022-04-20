@@ -21,7 +21,7 @@ import AddressSummary, { addressDataField, profileAddressOptions } from 'screens
 import ProfileBanner from '../ProfileBanner'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
-  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
 
   if (profile && profile.birthDate) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
@@ -59,9 +59,9 @@ const getPhoneNumberData = (
   onWorkPhone: () => void,
   onCellPhone: () => void,
 ): Array<DefaultListItemObj> => {
-  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
-  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
-  let cellText: Array<TextLine> = [{ text: t('personalInformation.mobile'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold' }]
+  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold' }]
+  let cellText: Array<TextLine> = [{ text: t('personalInformation.mobile'), variant: 'MobileBodyBold' }]
 
   homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homePhoneNumber', t))
   workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workPhoneNumber', t))
@@ -75,7 +75,7 @@ const getPhoneNumberData = (
 }
 
 const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
-  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold' }]
 
   if (profile?.contactEmail?.emailAddress) {
     textLines.push({ text: t('personalInformation.dynamicField', { field: profile.contactEmail.emailAddress }) })

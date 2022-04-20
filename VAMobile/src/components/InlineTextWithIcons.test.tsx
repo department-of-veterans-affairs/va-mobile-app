@@ -23,7 +23,6 @@ context('InlineTextWithIcons', () => {
         text: 'Test Email',
         variant: 'MobileBodyBold',
         textAlign: 'left',
-        color: 'primary',
       },
       leftIconProps: { name: 'UnreadIcon', width: 16, height: 16, isOwnLine: true } as VAIconProps,
       rightTextProps: {

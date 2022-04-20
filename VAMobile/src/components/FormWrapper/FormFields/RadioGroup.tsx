@@ -70,7 +70,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
         <Box key={index}>
           {headerText && (
             <Box>
-              <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {headerText}
               </TextView>
             </Box>

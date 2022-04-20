@@ -64,9 +64,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           {attachments?.length && (
             <Box mt={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
               <Box accessible={true} accessibilityRole="header">
-                <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>
-                  {t('secureMessaging.viewMessage.attachments')}
-                </TextView>
+                <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
               </Box>
               {attachments?.map((a, index) => (
                 <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
@@ -90,7 +88,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const getHeader = (): ReactNode => {
     return (
       <Box flexDirection={'column'}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={false}>
+        <TextView variant="MobileBodyBold" accessible={false}>
           {senderName}
         </TextView>
         <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>

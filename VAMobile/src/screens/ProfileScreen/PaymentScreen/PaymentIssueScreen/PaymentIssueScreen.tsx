@@ -29,7 +29,7 @@ const PaymentIssue: FC<PaymentIssueScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps('payment-issue-page')}>
       <Box mt={contentMarginTop}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('payments.ifMyPaymentDoesNotLookRight')}
           </TextView>
           <TextView variant="MobileBody" py={noLettersPaddingY}>
