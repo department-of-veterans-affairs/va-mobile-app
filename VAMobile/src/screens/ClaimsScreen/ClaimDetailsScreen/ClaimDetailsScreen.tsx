@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
@@ -33,10 +33,17 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType, focusOnSnackbar } = route.params
-  const { claim, loadingClaim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
+
+  useBeforeNavBackListener(navigation, () => {
+    // if claim is still loading cancel it
+    if (loadingClaim) {
+      cancelLoadingDetailScreen?.abort()
+    }
+  })
 
   useEffect(() => {
     navigation.setOptions({

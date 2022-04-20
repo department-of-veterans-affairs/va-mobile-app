@@ -47,9 +47,9 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: 'personalInformation/dispatchFinishEditAddress',
 }
 
-const removalSnackbarMessages : SnackbarMessages = {
+const removalSnackbarMessages: SnackbarMessages = {
   successMsg: 'success',
-  errorMsg: 'failure'
+  errorMsg: 'failure',
 }
 
 context('personalInformation', () => {
@@ -730,7 +730,7 @@ context('personalInformation', () => {
       const store = realStore()
 
       await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
-      expect(api.post as jest.Mock).toBeCalledWith('/v1/user/addresses/validate', addressPayload)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
 
@@ -919,7 +919,7 @@ context('personalInformation', () => {
       const store = realStore()
 
       await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
-      expect(api.post as jest.Mock).toBeCalledWith('/v1/user/addresses/validate', addressPayload)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
 

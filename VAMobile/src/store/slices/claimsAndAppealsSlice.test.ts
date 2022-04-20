@@ -373,7 +373,7 @@ context('claimsAndAppeals', () => {
       const claimsDetail: api.ClaimData = Claim
 
       when(api.get as jest.Mock)
-        .calledWith('/v0/claim/245182')
+        .calledWith('/v0/claim/245182', {}, expect.anything())
         .mockResolvedValue({ data: claimsDetail })
 
       const store = realStore()
@@ -397,7 +397,7 @@ context('claimsAndAppeals', () => {
       const error = new Error('backend error')
 
       when(api.get as jest.Mock)
-        .calledWith('/v0/claim/245182')
+        .calledWith('/v0/claim/245182', {}, expect.anything())
         .mockRejectedValue(error)
 
       const store = realStore()
@@ -421,7 +421,7 @@ context('claimsAndAppeals', () => {
     it('should dispatch the correct actions', async () => {
       const id = '2765759'
       when(api.get as jest.Mock)
-        .calledWith(`/v0/appeal/2765759`)
+        .calledWith(`/v0/appeal/2765759`, {}, expect.anything())
         .mockResolvedValue({ data: AppealPayload })
 
       const store = realStore()
@@ -445,7 +445,7 @@ context('claimsAndAppeals', () => {
       const error = new Error('Backend error')
       const id = '2765759'
       when(api.get as jest.Mock)
-        .calledWith(`/v0/appeal/2765759`)
+        .calledWith(`/v0/appeal/2765759`, {}, expect.anything())
         .mockRejectedValue(error)
 
       const store = realStore()

@@ -124,6 +124,12 @@ commands:
       lane:
         type: string
         default: qa
+      notes:
+        type: string
+        default: ''
+      tf_group:
+        type: string
+        default: ''
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
@@ -141,7 +147,7 @@ commands:
             - VAMobile/ios/vendor/bundle
       - run:
           working_directory: ~/project/VAMobile/ios
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" tfGroup:"<<parameters.tf_group>>"
   decode_android_keys:
     description: "Decodes all the keys needed to build and upload to google play"
     steps:
@@ -170,6 +176,12 @@ commands:
       lane:
         type: string
         default: qa
+      notes:
+        type: string
+        default: ''
+      ps_track:
+        type: string
+        default: ''
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
@@ -187,7 +199,7 @@ commands:
             - VAMobile/android/vendor/bundle
       - run:
           working_directory: ~/project/VAMobile/android
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" psTrack:"<<parameters.ps_track>>"
   run_script:
     description: "Runs a bash script. Takes the working directory, script name and script options as params"
     parameters:
@@ -236,6 +248,32 @@ jobs:
       - bundle_app:
           os: "android"
       - android_fastlane
+  feature_build_ios:
+    executor: ios
+    steps:
+      - checkout
+      - install_deps
+      - decode_ios_keys
+      - install_pods
+      - bundle_app:
+          os: ios
+      - ios_fastlane:
+          lane: on_demand
+          notes: ${CIRCLE_TAG}
+          tf_group: Development Team
+  feature_build_android:
+    executor: android
+    steps:
+      - checkout
+      - install_deps
+      - create_keys_directory
+      - decode_android_keys
+      - bundle_app:
+          os: android
+      - android_fastlane:
+          lane: on_demand
+          notes: ${CIRCLE_TAG}
+          ps_track: Development Team
   cut_release_branch:
     executor: default
     steps:
@@ -309,6 +347,20 @@ workflows:
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+/
+            branches:
+              ignore: /.*/
+  feature_build:
+    jobs:
+      - feature_build_android:
+          filters:
+            tags:
+              only: /^feature-build-.+/
+            branches:
+              ignore: /.*/
+      - feature_build_ios:
+          filters:
+            tags:
+              only: /^feature-build-.+/
             branches:
               ignore: /.*/
   new_release_branch:

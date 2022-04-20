@@ -50,6 +50,7 @@ const doRequest = async function (
   endpoint: string,
   params: Params = {},
   contentType: ContentTypes = contentTypes.applicationJson,
+  abortSignal?: AbortSignal,
 ): Promise<Response> {
   const fetchObj: RequestInit = {
     method,
@@ -58,6 +59,7 @@ const doRequest = async function (
       authorization: `Bearer ${_token}`,
       'X-Key-Inflection': 'camel',
     },
+    ...({ signal: abortSignal } || {}),
   }
 
   if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
@@ -85,13 +87,24 @@ const doRequest = async function (
   return fetch(`${API_ROOT}${endpoint}`, fetchObj)
 }
 
-const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}, contentType?: ContentTypes): Promise<T | undefined> {
+const call = async function <T>(
+  method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
+  endpoint: string,
+  params: Params = {},
+  contentType?: ContentTypes,
+  abortSignal?: AbortSignal,
+): Promise<T | undefined> {
   if (!_demoMode) {
     let response
 
     try {
-      response = await doRequest(method, endpoint, params, contentType)
+      response = await doRequest(method, endpoint, params, contentType, abortSignal)
     } catch (networkError) {
+      // networkError coming back as `AbortError` means abortController.abort() was called
+      // @ts-ignore
+      if (networkError?.name === 'AbortError') {
+        return
+      }
       throw { networkError: true }
     }
 
@@ -109,7 +122,16 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
 
       if (didRefresh) {
         console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
-        response = await doRequest(method, endpoint, params)
+        try {
+          response = await doRequest(method, endpoint, params, contentType, abortSignal)
+        } catch (networkError) {
+          // networkError coming back as `AbortError` means abortController.abort() was called
+          // @ts-ignore
+          if (networkError?.name === 'AbortError') {
+            return
+          }
+          throw { networkError: true }
+        }
       }
     }
     if (response.status === 204) {
@@ -134,8 +156,8 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
   }
 }
 
-export const get = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('GET', endpoint, params)
+export const get = async function <T>(endpoint: string, params: Params = {}, abortSignal?: AbortSignal): Promise<T | undefined> {
+  return call<T>('GET', endpoint, params, undefined, abortSignal)
 }
 
 export const post = async function <T>(endpoint: string, params: Params = {}, contentType?: ContentTypes): Promise<T | undefined> {

@@ -39,6 +39,8 @@
   "directDeposit.information": "Direct deposit information",
   "directDeposit.loading": "We're loading your direct deposit information",
   "directDeposit.savingInformation": "We're saving your direct deposit information",
+  "directDeposit.saved": "Direct deposit information saved",
+  "directDeposit.saved.error": "Direct deposit information could not be saved",
   "directDeposit.title": "Direct Deposit",
   "directDeposit.viewAndEditText": "Add, review, or change your direct deposit information for disability compensation and pension benefits. Any updates you make here will also update on VA.gov.",
   "directDeposit.viewAndEditTextA11yLabel": "Add, review, or change your direct deposit information for disability compensation and pension benefits. Any updates you make here will also update on V-A .gov .",
