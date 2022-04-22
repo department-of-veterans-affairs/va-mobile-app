@@ -20,7 +20,7 @@ const OnboardingClaimsAndAppeals: FC = () => {
   return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} testID="Onboarding-claims-and-Appeals-page" />
 }
 
-const OnboardingAppointments: FC = () => {
+const OnboardingHealth: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.appointments.header')} text={t('onboarding.appointments.details')} testID="Onboarding-appointments-page" />
 }
@@ -58,12 +58,12 @@ const OnboardingCarousel: FC = () => {
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 1 }),
-        continueHint: t('onboarding.continueA11yHint.appointmentsOnboarding'),
+        continueHint: t('onboarding.continueA11yHint.healthOnboarding'),
       },
     },
     {
       name: 'OnboardingAppointments',
-      component: OnboardingAppointments,
+      component: OnboardingHealth,
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
@@ -78,7 +78,7 @@ const OnboardingCarousel: FC = () => {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 3 }),
         continueHint: t('onboarding.continueA11yHint.profileOnboarding'),
-        backHint: t('onboarding.backA11yHint.appointmentsOnboarding'),
+        backHint: t('onboarding.backA11yHint.healthOnboarding'),
       },
     },
     {
