@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { BackButton, Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -25,9 +25,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const { messagesByFolderId, loading, paginationMetaByFolderId, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
   const paginationMetaData = paginationMetaByFolderId?.[folderID]
 

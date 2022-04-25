@@ -73,19 +73,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     errorMsg: t('secureMessaging.draft.saved.error'),
   }
 
-  const {
-    hasLoadedRecipients,
-    loading,
-    messagesById,
-    recipients,
-    saveDraftComplete,
-    saveDraftFailed,
-    savingDraft,
-    sendMessageFailed,
-    threads,
-    deleteDraftComplete,
-    deletingDraft,
-  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, savingDraft, threads, deleteDraftComplete, deletingDraft } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
   const destructiveAlert = useDestructiveAlert()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
