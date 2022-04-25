@@ -66,7 +66,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
     <VAScrollView {...testIdProps('Vaccine-details-page')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
-          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+          <TextView variant="MobileBody" mb={standardMarginBetween}>
             {displayDate}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>

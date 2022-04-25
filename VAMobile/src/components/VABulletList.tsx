@@ -70,7 +70,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
 
         const textViewProps: TextViewProps = {
           variant: variant || 'MobileBody',
-          color: color || 'primary',
+          color: color || 'bodyText',
           onPress: linkToRedirect ? async (): Promise<void> => onPress(linkToRedirect) : undefined,
           flexWrap: 'wrap',
           flex: 1,
@@ -79,7 +79,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
         return (
           <Box display="flex" flexDirection="row" alignItems="flex-start" key={index} accessible={true}>
             <Box mr={theme.dimensions.textXPadding} mt={theme.dimensions.bulletMargin}>
-              <VAIcon name="Bullet" fill={color || 'primary'} />
+              <VAIcon name="Bullet" fill={color || 'bodyText'} />
             </Box>
             <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
               {text.trim()}

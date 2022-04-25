@@ -43,7 +43,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     flexShrink: 1,
     mr: theme.dimensions.collapsibleIconMargin,
     borderBottomWidth: 2,
-    borderBottomColor: 'secondary',
+    borderBottomColor: 'photoAdd', // todo rename photoAdd border color to be more abstract (talk to design)
   }
 
   const getArrowIcon = (): React.ReactNode => {

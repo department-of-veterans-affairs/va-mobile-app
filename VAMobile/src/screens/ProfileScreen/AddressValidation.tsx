@@ -145,7 +145,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
   const getAlert = (): ReactNode => {
     return (
-      <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
+      <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
         {getAlertBody()}
       </TextView>
     )

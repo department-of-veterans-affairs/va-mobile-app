@@ -83,7 +83,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
         <VAIcon name={'Logo'} />
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={theme.dimensions.syncLogoSpacing}>
-          <TextView justifyContent={'center'} color={'primaryContrast'} alignItems={'center'} textAlign={'center'}>
+          <TextView variant={'MobileBody'} justifyContent={'center'} color={'primaryContrast'} alignItems={'center'} textAlign={'center'}>
             {displayMessage}
           </TextView>
         </Box>

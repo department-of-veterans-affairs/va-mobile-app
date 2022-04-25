@@ -50,13 +50,13 @@ const NotEnrolledSM: FC = () => {
         </Box>
         <Box>
           <TextArea>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
+            <TextView variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
               {t('notEnrolledSM.withSM')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
             <Box mb={standardMarginBetween}>

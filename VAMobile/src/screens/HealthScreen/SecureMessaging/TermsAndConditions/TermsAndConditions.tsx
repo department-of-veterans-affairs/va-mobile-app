@@ -20,7 +20,7 @@ const TermsAndConditions: FC = () => {
           <TextView variant="BitterBoldHeading">{t('termsAndConditions.title')}</TextView>
         </Box>
         <TextArea>
-          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
+          <TextView variant="MobileBody" mb={standardMarginBetween} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
             {t('termsAndConditions.toAccept')}
           </TextView>
           <Box mb={standardMarginBetween}>
