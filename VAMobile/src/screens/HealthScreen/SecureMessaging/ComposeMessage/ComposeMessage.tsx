@@ -57,10 +57,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     errorMsg: t('secureMessaging.draft.saved.error'),
   }
 
-  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
 
   const [to, setTo] = useState('')

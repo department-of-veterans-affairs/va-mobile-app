@@ -18,7 +18,6 @@ export type MessageAlertProps = {
 const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, savingDraft }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
-  const th = useTranslation(NAMESPACE.HOME)
 
   let title
   let text
