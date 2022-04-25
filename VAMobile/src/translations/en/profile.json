@@ -283,7 +283,7 @@
   "personalInformation.residentialAddress.saved": "Home address saved",
   "personalInformation.residentialAddress.saved.error": "Home address could not be saved",
   "personalInformation.residentialAddress.removed": "Home address removed",
-  "PersonalInformation.residentialAddress.removed.error": "Home address could not be removed",
+  "personalInformation.residentialAddress.removed.error": "Home address could not be removed",
   "personalInformation.savingAddress": "We're saving your address",
   "personalInformation.savingEmailAddress": "We're saving your email address",
   "personalInformation.savingPhoneNumber": "We're saving your phone number",
