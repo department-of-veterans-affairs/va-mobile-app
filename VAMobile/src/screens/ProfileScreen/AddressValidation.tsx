@@ -140,11 +140,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
 
   const accordionHeader = (): ReactNode => {
-    return (
-      <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-        {getAlertTitle()}
-      </TextView>
-    )
+    return <TextView variant="MobileBodyBold">{getAlertTitle()}</TextView>
   }
 
   const getAlert = (): ReactNode => {

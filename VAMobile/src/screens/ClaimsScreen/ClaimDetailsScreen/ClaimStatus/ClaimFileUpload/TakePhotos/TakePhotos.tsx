@@ -94,7 +94,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         />
       </Box>
       <TextArea>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.uploadFileUsingCamera', { displayName })}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>

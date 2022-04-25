@@ -50,7 +50,6 @@ export const getMessagesListItems = (
           }),
           variant: 'MobileBodyBold',
           textAlign: 'left',
-          color: 'primary',
         },
         leftIconProps: unreadIconProps,
         rightTextProps: {

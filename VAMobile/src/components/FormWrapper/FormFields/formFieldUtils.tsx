@@ -17,7 +17,7 @@ const generateInputLabel = (
   isHelperText: boolean,
 ): ReactElement => {
   const variant = error ? 'MobileBodyBold' : 'MobileBody'
-  const color: ColorVariant = disabled ? 'placeholder' : 'primaryTitle'
+  const color: ColorVariant = disabled ? 'placeholder' : 'primary'
 
   const labelProps: TextViewProps = {
     color,

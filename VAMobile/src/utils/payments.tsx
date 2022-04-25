@@ -134,10 +134,7 @@ const getListItemsForPayments = (
     const { paymentType, amount } = payment.attributes
     const textLines: Array<TextLineWithIconProps> = []
 
-    textLines.push(
-      { text: tc('text.raw', { text: paymentType }), variant: 'MobileBodyBold', color: 'primaryTitle' },
-      { text: tc('text.raw', { text: amount }), variant: 'MobileBody', color: 'primaryTitle' },
-    )
+    textLines.push({ text: tc('text.raw', { text: paymentType }), variant: 'MobileBodyBold' }, { text: tc('text.raw', { text: amount }), variant: 'MobileBody' })
 
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = tc('listPosition', { position, total: totalEntries })

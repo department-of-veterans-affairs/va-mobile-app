@@ -28,9 +28,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
     <Box {...testIdProps('Your-claim: Details-tab-claim-details-page')}>
       <TextArea>
         <Box {...testIdProps(t('claimDetails.claimType'))} accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-            {t('claimDetails.claimType')}
-          </TextView>
+          <TextView variant="MobileBodyBold">{t('claimDetails.claimType')}</TextView>
         </Box>
         <Box {...testIdProps(attributes?.claimType || '')} accessible={true}>
           <TextView variant="MobileBody">{attributes?.claimType || ''}</TextView>
@@ -39,7 +37,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         {attributes?.contentionList && attributes.contentionList.length > 0 && (
           <Box>
             <Box {...testIdProps(t('claimDetails.whatYouHaveClaimed'))} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={theme.dimensions.standardMarginBetween}>
+              <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
                 {t('claimDetails.whatYouHaveClaimed')}
               </TextView>
             </Box>
@@ -48,7 +46,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         )}
 
         <Box {...testIdProps(t('claimDetails.dateReceived'))} accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
             {t('claimDetails.dateReceived')}
           </TextView>
         </Box>
@@ -57,7 +55,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         </Box>
 
         <Box {...testIdProps(t('claimDetails.yourRepresentative.a11yLabel'))} accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
             {t('claimDetails.yourRepresentative')}
           </TextView>
         </Box>

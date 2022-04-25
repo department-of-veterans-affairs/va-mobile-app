@@ -37,7 +37,6 @@ export type VATextColors = {
   footerButtonActive: string
   navBar: string
   primary: string
-  primaryTitle: string
   primaryContrast: string
   primaryContrastDisabled: string
   secondary: string

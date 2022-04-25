@@ -120,7 +120,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
     const text = [fileName, formattedFileSize].join(' ').trim()
     return (
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} mb={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
         {text}
       </TextView>
     )
@@ -138,7 +138,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
             <AlertBox text={error} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>

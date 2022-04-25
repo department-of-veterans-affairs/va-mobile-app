@@ -65,13 +65,13 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
             <TextView variant="BitterBoldHeading">{paymentType}</TextView>
           </Box>
-          <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>
+          <TextView variant="MobileBodyBold" selectable={true}>
             {t('paymentDetails.amount')}
           </TextView>
           <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
             {amount}
           </TextView>
-          <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>
+          <TextView variant="MobileBodyBold" selectable={true}>
             {t('paymentDetails.method')}
           </TextView>
           <TextView variant="MobileBody" selectable={true}>
@@ -79,15 +79,13 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
           </TextView>
           {isDirectDeposit && (
             <>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={standardMarginBetween}>
+              <TextView variant="MobileBodyBold" mt={standardMarginBetween}>
                 {t('paymentDetails.bank')}
               </TextView>
               <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
                 {bank || placeHolder}
               </TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                {t('paymentDetails.account')}
-              </TextView>
+              <TextView variant="MobileBodyBold">{t('paymentDetails.account')}</TextView>
               <TextView variant="MobileBody" selectable={true}>
                 {hasAcccountInfo ? account : placeHolder}
               </TextView>
