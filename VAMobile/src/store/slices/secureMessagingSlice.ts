@@ -445,7 +445,7 @@ export const saveDraft =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `saveDraft: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSaveDraft({ error }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -883,20 +883,8 @@ const secureMessagingSlice = createSlice({
         ...state,
         savedDraftID: messageID,
         error,
-        saveDraftFailed: !!error,
-        saveDraftComplete: !error,
         savingDraft: false,
       }
-    },
-
-    resetSaveDraftComplete: (state) => {
-      state.savedDraftID = undefined
-      state.saveDraftComplete = false
-    },
-
-    resetSaveDraftFailed: (state) => {
-      state.saveDraftComplete = false
-      state.saveDraftFailed = false
     },
 
     dispatchStartSendMessage: (state) => {
@@ -998,8 +986,6 @@ export const {
   dispatchStartGetMessageSignature,
   dispatchFinishSaveDraft,
   dispatchStartSaveDraft,
-  resetSaveDraftComplete,
-  resetSaveDraftFailed,
   dispatchFinishSendMessage,
   dispatchStartSendMessage,
   resetSendMessageComplete,

@@ -9,7 +9,7 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
+import { SecureMessagingState, fetchInboxMessages, listFolders, updateSecureMessagingTab } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -45,8 +45,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   useEffect(() => {
     if (secureMessaging && smNotInDowntime) {
-      dispatch(resetSaveDraftComplete())
-      dispatch(resetSaveDraftFailed())
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
       // prefetch inbox message list
       dispatch(fetchInboxMessages(1, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))

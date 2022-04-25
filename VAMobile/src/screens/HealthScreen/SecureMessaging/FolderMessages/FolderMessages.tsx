@@ -8,7 +8,7 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
+import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages } from 'store/slices'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
@@ -35,15 +35,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     // Load first page messages
     dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
     // If draft saved message showing, clear status so it doesn't show again
-    dispatch(resetSaveDraftComplete())
   }, [dispatch, folderID])
-
-  useEffect(() => {
-    if (saveDraftComplete) {
-      // If draft saved message showing, clear status so it doesn't show again
-      dispatch(resetSaveDraftComplete())
-    }
-  }, [dispatch, saveDraftComplete])
 
   useEffect(() => {
     if (deleteDraftComplete) {
@@ -125,11 +117,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <>
       <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
-        {draftSaved && (
-          <Box mt={theme.dimensions.contentMarginTop}>
-            <MessageAlert saveDraftComplete={draftSaved} />
-          </Box>
-        )}
         <MessageList
           items={getMessagesListItems(messages, t, onMessagePress, folderName)}
           title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}

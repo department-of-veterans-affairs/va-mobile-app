@@ -42,7 +42,6 @@ import {
   getMessage,
   getMessageRecipients,
   getThread,
-  resetSaveDraftFailed,
   resetSendMessageFailed,
   saveDraft,
   updateSecureMessagingTab,
@@ -116,7 +115,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
-    dispatch(resetSaveDraftFailed())
     dispatch(dispatchResetDeleteDraftFailed())
 
     if (messageID) {
@@ -401,13 +399,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert
-          hasValidationError={formContainsError}
-          saveDraftAttempted={onSaveDraftClicked}
-          saveDraftFailed={saveDraftFailed}
-          savingDraft={savingDraft}
-          sendMessageFailed={sendMessageFailed}
-        />
+        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
