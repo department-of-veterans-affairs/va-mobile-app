@@ -11,6 +11,8 @@ import UIKit
 struct Constants {
  #if RC
  static let versionSuffix = "RC"
+ #elseif QA
+ static let versionSuffix = "QA"
  #else
  static let versionSuffix = ""
  #endif
