@@ -29,11 +29,11 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { bytesToFinalSizeDisplay } from 'utils/common'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useOrientation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
@@ -61,32 +61,29 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   })
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (imagesList?.length === 0) {
-        return
-      }
-      e.preventDefault()
-      confirmAlert({
-        title: t('fileUpload.discard.confirm.title.photos'),
-        message: t('fileUpload.discard.confirm.message.photos'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('common:cancel'),
+  useBeforeNavBackListener(navigation, (e) => {
+    if (imagesList?.length === 0 || filesUploadedSuccess) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('fileUpload.discard.confirm.title.photos'),
+      message: t('fileUpload.discard.confirm.message.photos'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('common:cancel'),
+        },
+
+        {
+          text: t('fileUpload.discard.photos'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
           },
-          {
-            text: t('fileUpload.discard.photos'),
-            onPress: () => {
-              snackBar.hideAll()
-              navigation.dispatch(e.data.action)
-            },
-          },
-        ],
-      })
+        },
+      ],
     })
-    return unsubscribe
   })
 
   const onCancel = () => {
@@ -240,7 +237,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
       setImagesList([])
-      snackBar.hideAll()
       showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
       navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
     } else {
@@ -253,7 +249,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         }
       })
       setTotalBytesUsed(bytesUsed)
-      snackBar.hideAll()
       showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
     }
   }
@@ -292,7 +287,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           <TextView variant="HelperText" color="bodyText">
             {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
           </TextView>
-          <TextView variant="HelperText" color="bodyText">
+          <TextView
+            variant="HelperText"
+            color="bodyText"
+            accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>
         </Box>

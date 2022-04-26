@@ -1,6 +1,7 @@
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SnackbarMessages } from 'components/SnackBar'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { useDestructiveAlert, useRouteNavigation, useTranslation } from 'utils/hooks'
 import { useDispatch } from 'react-redux'
@@ -17,12 +18,18 @@ type ComposeCancelConfirmationProps = {
   /** id of draft message */
   draftMessageID?: number
 }
+
 export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmationProps) => void {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveAlert()
   const goToDrafts = useGoToDrafts()
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.draft.saved'),
+    errorMsg: t('secureMessaging.draft.saved.error'),
+  }
 
   return (props: ComposeCancelConfirmationProps) => {
     const { replyToID, messageData, draftMessageID, isFormValid, origin } = props
@@ -40,18 +47,8 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       if (!isFormValid) {
         navigateTo('ComposeMessage', { saveDraftConfirmFailed: true })()
       } else {
-        dispatch(saveDraft(messageData, draftMessageID, !!replyToID, replyToID, true))
+        dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
         dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
-        resetAlerts()
-
-        // If we've been to the drafts folder before, we can go directly there.  Otherwise, we want to pop back to the SecureMessaging
-        // screen first, then add the Drafts folder to the stack
-        if (isEditDraft) {
-          goToDrafts(true)
-        } else {
-          navigateTo('SecureMessaging')()
-          goToDrafts(true)
-        }
       }
     }
 

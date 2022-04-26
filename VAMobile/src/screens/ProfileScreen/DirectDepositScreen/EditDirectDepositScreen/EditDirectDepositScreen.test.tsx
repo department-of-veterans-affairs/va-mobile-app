@@ -138,7 +138,13 @@ context('EditDirectDepositScreen', () => {
 
         navHeaderSpy.save.props.onSave()
 
-        expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking', ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)
+        expect(updateBankInfo).toBeCalledWith(
+          '12345678901234567',
+          '123456789',
+          'Checking',
+          { errorMsg: 'Direct deposit information could not be saved', successMsg: 'Direct deposit information saved' },
+          ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID,
+        )
       })
     })
   })

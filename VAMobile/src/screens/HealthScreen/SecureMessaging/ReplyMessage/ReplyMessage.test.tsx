@@ -320,15 +320,6 @@ context('ReplyMessage', () => {
     })
   })
 
-  describe('on click of the "How to attach a file" link', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(navigateToAttachmentsFAQSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
   describe('when message send fails', () => {
     beforeEach(() => {
       initializeTestInstance({}, [], false, true)
