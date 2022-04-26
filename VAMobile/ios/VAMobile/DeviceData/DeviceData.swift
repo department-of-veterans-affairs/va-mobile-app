@@ -8,6 +8,14 @@
 import Foundation
 import UIKit
 
+struct Constants {
+ #if RC
+ static let versionSuffix = "RC"
+ #else
+ static let versionSuffix = ""
+ #endif
+}
+
 @objc(DeviceData)
 class DeviceData: NSObject, RCTBridgeModule {
 
@@ -33,7 +41,7 @@ class DeviceData: NSObject, RCTBridgeModule {
   // @returns version name of the app (1.1.1).  
   @objc(getVersionName:rejecter:)
   func getVersionName(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
-    resolve(UIApplication.versionName)
+   resolve("\(UIApplication.versionName).\(Constants.versionSuffix)")
   }
   
   
