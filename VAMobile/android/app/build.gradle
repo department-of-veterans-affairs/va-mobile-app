@@ -178,6 +178,10 @@ android {
                     abiFilters nativeArchitectures.split(',')
                 }
             }
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher",
+                    appIconRound:"ic_launcher_round"
+            ]
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -185,6 +189,37 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher",
+                    appIconRound:"ic_launcher_round"
+            ]
+        }
+        rc {
+            signingConfig signingConfigs.debug
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher_rc",
+                    appIconRound:"ic_launcher_rc_round"
+            ]
+            matchingFallbacks = ['release', 'debug']
+            versionNameSuffix = ".RC"
+        }
+        qaFirebase {
+            signingConfig signingConfigs.debug
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher_qa",
+                    appIconRound:"ic_launcher_qa_round"
+            ]
+            matchingFallbacks = ['release', 'debug']
+            versionNameSuffix = ".RC"
+        }
+        qaStore{
+            signingConfig signingConfigs.release
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher_qa",
+                    appIconRound:"ic_launcher_qa_round"
+            ]
+            matchingFallbacks = ['release', 'debug']
+            versionNameSuffix = ".RC"
         }
     }
 
