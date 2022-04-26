@@ -210,7 +210,7 @@ android {
                     appIconRound:"ic_launcher_qa_round"
             ]
             matchingFallbacks = ['release', 'debug']
-            versionNameSuffix = ".RC"
+            versionNameSuffix = ".QA"
         }
         qaStore{
             signingConfig signingConfigs.release
@@ -219,7 +219,7 @@ android {
                     appIconRound:"ic_launcher_qa_round"
             ]
             matchingFallbacks = ['release', 'debug']
-            versionNameSuffix = ".RC"
+            versionNameSuffix = ".QA"
         }
     }
 
