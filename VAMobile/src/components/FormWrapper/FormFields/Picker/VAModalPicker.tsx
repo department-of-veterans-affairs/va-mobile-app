@@ -147,7 +147,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const valueBox = (
       <Box {...wrapperProps}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView flex={1}>{currentlySelectedOption?.label}</TextView>
+          <TextView variant="MobileBody" flex={1}>
+            {currentlySelectedOption?.label}
+          </TextView>
           <Box mr={8} ml={16} my={16}>
             <VAIcon name="DatePickerArrows" fill="pickerIcon" width={16} height={16} />
           </Box>
@@ -171,7 +173,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   const renderButton = () => {
-    const color = disabled ? 'primaryContrastDisabled' : 'primaryContrast'
+    const color = disabled ? 'actionBarDisabled' : 'actionBar'
 
     const props: TouchableWithoutFeedbackProps = {
       onPress: showModal,
@@ -223,6 +225,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   const commonButtonProps: TextViewProps = {
+    variant: 'MobileBody',
     allowFontScaling: false,
     py: 3, // bump up the padding to make touch target a bit bigger #2740
   }

@@ -70,7 +70,7 @@ const VeteransCrisisLineScreen: FC = () => {
             />
           </Box>
           <Box mt={standardMarginBetween}>
-            <TextView color="primary" variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
+            <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
               {t('contactVA.tty.body')}
             </TextView>
             <ClickForActionLink

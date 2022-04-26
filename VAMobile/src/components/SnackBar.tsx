@@ -104,7 +104,9 @@ const SnackBar: FC<ToastProps> = (toast) => {
                 width={dimensions.snackBarIconSize}
               />
             </Box>
-            <TextView variant={'HelperText'}>{message}</TextView>
+            <TextView variant={'HelperText'} color={'snackBarTxt'}>
+              {message}
+            </TextView>
           </Box>
         </View>
         <Box {...btnContainerProps}>

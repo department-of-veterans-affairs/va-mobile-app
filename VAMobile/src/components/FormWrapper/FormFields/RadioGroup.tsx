@@ -48,11 +48,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
 
     // Render option as simple text
     if (hasSingleOption) {
-      return (
-        <TextView variant="VASelector" color="primary">
-          {t(labelKey, labelArgs)}
-        </TextView>
-      )
+      return <TextView variant="VASelector">{t(labelKey, labelArgs)}</TextView>
     }
 
     const selected = isEqual(option.value, value)

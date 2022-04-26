@@ -59,7 +59,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
     <VAScrollView {...testIdProps('payments-details-page')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
-          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+          <TextView variant="MobileBody" mb={standardMarginBetween}>
             {getFormattedDate(date, 'MMMM d, yyyy')}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>

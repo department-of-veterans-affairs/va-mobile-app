@@ -102,7 +102,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       let label = folder.attributes.name
 
       const icon = {
-        fill: 'dark',
+        fill: 'defaultMenuItem',
         height: theme.fontSizes.MobileBody.fontSize,
         width: theme.fontSizes.MobileBody.fontSize,
         name: 'FolderSolid',
@@ -116,7 +116,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       }
 
       if (label === FolderNameTypeConstants.inbox) {
-        icon.fill = 'dark'
+        icon.fill = 'defaultMenuItem'
         icon.name = 'InboxSolid'
       }
 

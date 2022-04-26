@@ -4,12 +4,12 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockStore, render, findByTestID, RenderAPI } from 'testUtils'
+import { context, render, findByTestID, RenderAPI } from 'testUtils'
 import AddressValidation from './AddressValidation'
 import { AddressData, AddressValidationScenarioTypes, AddressValidationScenarioTypesConstants } from 'store/api/types'
-import { AccordionCollapsible, TextView, VASelector } from 'components'
+import { AccordionCollapsible, TextView } from 'components'
 import { updateAddress, initialPersonalInformationState, InitialState } from 'store/slices'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
+import { Pressable } from 'react-native'
 
 const mockAddress: AddressData = {
   addressLine1: '2248 San Miguel Ave.',

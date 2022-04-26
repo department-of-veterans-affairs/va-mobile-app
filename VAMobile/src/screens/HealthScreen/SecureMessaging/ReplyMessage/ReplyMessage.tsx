@@ -224,11 +224,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         </CollapsibleView>
       </Box>
       <TextArea>
-        <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
+        <TextView variant="MobileBody" accessible={true}>
+          {t('secureMessaging.formMessage.to')}
+        </TextView>
         <TextView variant="MobileBodyBold" accessible={true}>
           {receiverName}
         </TextView>
-        <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true}>
           {t('secureMessaging.formMessage.subject')}
         </TextView>
         <TextView variant="MobileBodyBold" accessible={true}>

@@ -38,7 +38,6 @@ export type VATextColors = {
   navBar: string
   primary: string
   primaryContrast: string
-  primaryContrastDisabled: string
   secondary: string
   link: string
   error: string
@@ -48,13 +47,15 @@ export type VATextColors = {
   claimPhase: string
   input: string
   inputFocused: string
-  inputRequired: string
   brandedPrimaryText: string
   segmentControllerActive: string
   segmentControllerInactive: string
   snackBarBtn: string
-  backButton: string
+  snackBarTxt: string
+  actionBar: string
+  actionBarDisabled: string
   bodyText: string
+  defaultMenuItem: string
 }
 
 export type VAIconColors = {
@@ -75,7 +76,6 @@ export type VAIconColors = {
   checkboxDisabled: string
   checkboxDisabledContrast: string
   spinner: string
-  dark: string
   covid19Vaccinations: string
   photoAdd: string
   pickerIcon: string
@@ -87,6 +87,7 @@ export type VAIconColors = {
   unreadMessage: string
   veteransCrisisLineArrow: string
   snackBarIcon: string
+  defaultMenuItem: string
 }
 
 export type VATypographyThemeVariants = {
@@ -150,7 +151,7 @@ export type VABorderColors = {
   phaseIndicatorUpcoming: string
   success: string
   primaryDarkest: string
-  photoAdd: string
+  photoAdd: string // todo rename photoAdd border color to be more abstract (talk to design)
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string

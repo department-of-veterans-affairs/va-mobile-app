@@ -22,8 +22,6 @@ interface HomeNavButtonProps {
   backgroundColorActive?: BackgroundVariant
   /**VATextColors color for text */
   textColor?: keyof VATextColors
-  /** optional text color for the subtext */
-  secondaryTextColor?: keyof VATextColors
   /** VAIconColors icon color*/
   iconColor?: keyof VAIconColors
   /**BorderWidths possible widths for HomeNavButton*/
@@ -129,7 +127,9 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             </TextView>
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
-          <TextView color={textColor}>{subText}</TextView>
+          <TextView variant={'MobileBody'} color={textColor}>
+            {subText}
+          </TextView>
         </Box>
         <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>

@@ -52,7 +52,7 @@ export const getAppointmentLocation = (appointmentType: AppointmentType, locatio
  * @returns VAIconProps or undefoned
  */
 export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
-  const iconProp = { fill: theme.colors.icon.dark, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
+  const iconProp = { fill: theme.colors.icon.defaultMenuItem, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
 
   if (appointmentType.includes('VIDEO')) {
     return { ...iconProp, name: 'VideoCamera' }
