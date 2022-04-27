@@ -83,7 +83,11 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     )
 
     if (hideArrow) {
-      return <Box {...testIdProps(testID || '')}>{data}</Box>
+      return (
+        <Box {...testIdProps(testID || '')} accessible={true}>
+          {data}
+        </Box>
+      )
     }
 
     return (

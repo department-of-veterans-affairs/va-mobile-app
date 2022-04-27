@@ -135,7 +135,20 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
     )
   }
 
-  const testID = phaseLessThanEqualToCurrent ? `${heading} ${updatedLastDate}` : heading
+  let status = ''
+
+  if (phase === current) {
+    status = t('claimPhase.heading.a11y.current')
+  } else if (phase < current) {
+    status = t('claimPhase.heading.a11y.completed')
+  }
+
+  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${status} ${heading}`
+
+  if (phaseLessThanEqualToCurrent) {
+    testID = `${testID} ${updatedLastDate}`
+  }
+
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
 
   const detailsText = getDetails(phase, t)
