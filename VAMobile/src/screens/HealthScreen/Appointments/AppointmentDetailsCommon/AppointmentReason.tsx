@@ -21,7 +21,7 @@ const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages })
   }
 
   // Only use the first index as the remaining items are just the doctors response to the user's concern
-  let messageText = messages?.[0].attributes?.messageText
+  let messageText = !messages?.length ? '' : messages?.[0].attributes?.messageText
   messageText = messageText ? ': ' + messageText : ''
 
   return (
