@@ -14,14 +14,14 @@ const MessagesSentReadTag: FC<MessagesSentTagProps> = ({ text }) => {
   const theme = useTheme()
   return (
     <Box
-      minWidth={theme.dimensions.tagCountMinWidth}
+      minWidth={theme.dimensions.tagMinWidth}
       justifyContent={'center'}
       alignSelf={'flex-start'}
       backgroundColor="unreadMessagesTag"
-      borderRadius={theme.dimensions.tagCountCurvedBorder}
+      borderRadius={theme.dimensions.tagCurvedBorder}
       {...testIdProps(text)}
       accessible={true}>
-      <TextView flexWrap={'wrap'} variant="SentMessagesReadTag" px={theme.dimensions.alertPaddingX} pt={theme.dimensions.tagCountTopPadding}>
+      <TextView flexWrap={'wrap'} variant="SentMessagesReadTag" px={theme.dimensions.tagHorizontalPadding} pt={theme.dimensions.tagTopPadding}>
         {text}
       </TextView>
     </Box>

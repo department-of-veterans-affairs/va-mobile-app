@@ -49,16 +49,6 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       } else {
         dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
         dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
-        resetAlerts()
-
-        // If we've been to the drafts folder before, we can go directly there.  Otherwise, we want to pop back to the SecureMessaging
-        // screen first, then add the Drafts folder to the stack
-        if (isEditDraft) {
-          goToDrafts(true)
-        } else {
-          navigateTo('SecureMessaging')()
-          goToDrafts(true)
-        }
       }
     }
 

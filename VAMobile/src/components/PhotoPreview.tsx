@@ -43,14 +43,17 @@ const StyledImage = styled(Image)<StyledImageProps>`
 `
 
 const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
-  const { colors: themeColor, dimensions: themeDim } = useTheme()
+  const { colors: themeColor } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const [selected, setSelected] = useState(false)
   const uri = image.uri
   const confirmAlert = useDestructiveAlert()
+  const photoPreviewIconSize = 24
+  const photoPreviewBorderRadius = 5
+  const photoPreviewIconPadding = 5
 
   const photo = (): ReactNode => {
-    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={themeDim.photoPreviewBorderRadius} />
+    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={photoPreviewBorderRadius} />
   }
 
   const onPress = (): void => {
@@ -91,13 +94,13 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   }
 
   const boxProps: BoxProps = {
-    borderRadius: themeDim.photoPreviewBorderRadius,
+    borderRadius: photoPreviewBorderRadius,
     width: width,
     height: height,
   }
 
   const blueOpacity: BoxProps = {
-    borderRadius: themeDim.photoPreviewBorderRadius,
+    borderRadius: photoPreviewBorderRadius,
     width: width,
     height: height,
     opacity: 0.4,
@@ -114,9 +117,9 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
       <Box {...boxProps}>
         <Box>{photo()}</Box>
         {selected && <Box {...blueOpacity} />}
-        <Box pt={themeDim.photoPreviewIconPadding} pr={themeDim.photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
-          {selected && <VAIcon name={'Minus'} width={themeDim.photoPreviewIconSize} height={themeDim.photoPreviewIconSize} fill={themeColor.icon.photoAdd} />}
-          {!selected && <VAIcon name={'Delete'} width={themeDim.photoPreviewIconSize} height={themeDim.photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
+        <Box pt={photoPreviewIconPadding} pr={photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
+          {selected && <VAIcon name={'Minus'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.photoAdd} />}
+          {!selected && <VAIcon name={'Delete'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
       <Box width={width} flexDirection="row">

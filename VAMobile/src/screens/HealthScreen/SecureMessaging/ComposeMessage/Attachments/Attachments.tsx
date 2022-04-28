@@ -38,7 +38,6 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
   const { origin, attachmentsList, messageID } = route.params
-  const { messagePhotoAttachmentMaxHeight } = theme.dimensions
 
   useEffect(() => {
     navigation.setOptions({
@@ -127,7 +126,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
-  const imageMaxWidthAndHeight = getMaxWidthAndHeightOfImage(image, messagePhotoAttachmentMaxHeight)
+  const imageMaxWidthAndHeight = getMaxWidthAndHeightOfImage(image, 300)
   const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   return (

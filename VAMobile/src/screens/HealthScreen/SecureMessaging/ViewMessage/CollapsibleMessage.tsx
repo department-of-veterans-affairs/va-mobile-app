@@ -93,7 +93,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
         </TextView>
         <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>
           {attachment && (
-            <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
+            <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
             </Box>
           )}
