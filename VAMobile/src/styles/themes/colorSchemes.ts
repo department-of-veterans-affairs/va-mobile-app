@@ -80,6 +80,7 @@ export const lightTheme = {
     backButton: colors.white,
     overflowMenuDefault: colors.black,
     unreadMessage: colors.primary,
+    buttonWithIcon: colors.black,
   },
   text: {
     footerButton: colors.primary,
@@ -231,6 +232,7 @@ export const darkTheme = {
     backButton: colors.darkmodeLightBlue,
     overflowMenuDefault: colors.grayLightest,
     unreadMessage: colors.darkmodeLightBlue,
+    buttonWithIcon: colors.grayLightest,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,
