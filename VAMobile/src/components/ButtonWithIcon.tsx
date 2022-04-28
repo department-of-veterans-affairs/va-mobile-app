@@ -63,14 +63,14 @@ const ButtonWithIcon: FC<ButtonWithIconProps> = ({
     setButtonPressed(false)
   }
 
-  const getBorderColor = (): BorderColorVariant | undefined => {
+  const setBorderColor = (): BorderColorVariant | undefined => {
     if (buttonPressed) {
       return borderColorActive || (theme.colors.border.primaryDarkest as BorderColorVariant)
     }
     return borderColor || (theme.colors.border.secondary as BorderColorVariant)
   }
 
-  const getBackgroundColor = (): BackgroundVariant => {
+  const setBackgroundColor = (): BackgroundVariant => {
     if (buttonPressed && backgroundColorActive) {
       return backgroundColorActive
     }
@@ -96,11 +96,11 @@ const ButtonWithIcon: FC<ButtonWithIconProps> = ({
     flexDirection: 'row',
     flexGrow: 1,
     alignItems: 'center',
-    backgroundColor: getBackgroundColor(),
+    backgroundColor: setBackgroundColor(),
     p: 16,
     borderRadius: 6,
     borderWidth: borderWidth || theme.dimensions.buttonBorderWidth,
-    borderColor: getBorderColor(),
+    borderColor: setBorderColor(),
     borderStyle: borderStyle || 'solid',
   }
 
