@@ -21,7 +21,7 @@ const NoLettersScreen: FC = () => {
         <TextView variant="MobileBodyBold" textAlign={'center'} accessibilityRole="header">
           {t('noLetters.header')}
         </TextView>
-        <TextView variant="MobileBody" textAlign={'center'} py={theme.dimensions.noLettersPaddingY}>
+        <TextView variant="MobileBody" textAlign={'center'} py={6}>
           {t('noLetters.ifYouThink')}
         </TextView>
         <ClickToCallPhoneNumber center={true} phone={t('noLetters.benefitsAndServicesNumber')} displayedText={t('noLetters.benefitsAndServicesNumberDisplayed')} />
