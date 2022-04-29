@@ -65,6 +65,7 @@ import Add from './svgs/add.svg'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
+import CommentSolid from './svgs/comment-solid.svg'
 import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Delete from './svgs/delete.svg'
@@ -72,6 +73,7 @@ import EllipsisSolid from './svgs/ellipsisSolid.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import FolderSolid from './svgs/folder-solid.svg'
 import InboxSolid from './svgs/inbox-solid.svg'
+import ListSolid from './svgs/list-solid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import Minus from './svgs/minus.svg'
@@ -141,6 +143,8 @@ export const VA_ICON_MAP = {
   ExclamationTriangleSolid,
   TrashSolid,
   InboxSolid,
+  CommentSolid,
+  ListSolid,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
