@@ -22,7 +22,7 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({ inlineIcon, 
   const themes = useTheme()
   return (
     <Box flexDirection={'row'}>
-      <Box ml={leftIconProps ? 0 : themes.dimensions.messagesDecoratorMarginLeft} mt={themes.dimensions.navigationBarIconMarginTop} mr={themes.dimensions.condensedMarginBetween}>
+      <Box ml={leftIconProps ? 0 : 16} mt={7} mr={themes.dimensions.condensedMarginBetween}>
         {!inlineIcon && leftIconProps && <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} />}
       </Box>
       {inlineIcon && leftIconProps ? (
@@ -44,7 +44,7 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({ inlineIcon, 
         </TextView>
       )}
       {rightIconProps && (
-        <Box mt={themes.dimensions.navigationBarIconMarginTop}>
+        <Box mt={7}>
           <VAIcon name={rightIconProps.name} width={rightIconProps.width} height={rightIconProps.height} fill={rightIconProps.fill} />
         </Box>
       )}

@@ -157,7 +157,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     const content = (
       <Box>
-        {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
+        {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey)}
         {!!error && renderInputError(theme, error)}
         {valueBox}
       </Box>
@@ -183,7 +183,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     return (
       <TouchableWithoutFeedback {...props} {...testIdProps(t(buttonText || ''))} {...a11yHintProp(t('common:pickerLaunchBtn.a11yHint'))}>
-        <Box pr={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerButtonPadding}>
+        <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
             {t(buttonText || '')}
           </TextView>
@@ -203,7 +203,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     mr: insets.right,
   }
 
-  const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
+  const topPadding = insets.top + 60
 
   const cancelLabel = t('common:cancel')
   const confirmLabel = t(confirmBtnText || 'common:done')

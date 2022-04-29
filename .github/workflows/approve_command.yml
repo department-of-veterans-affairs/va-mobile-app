@@ -25,6 +25,8 @@ jobs:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+    secrets:
+      GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }}
   comment_complete:
     runs-on: ubuntu-latest
     needs: run_prs
@@ -39,7 +41,7 @@ jobs:
         run: |
           gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
           [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
-          [PR to main](${{needs.run_prs.outputs.releasePrUrl}})"
+          Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
       - name: 'Close original issue'
         run: |
           gh issue close ${{ github.event.client_payload.github.payload.issue.number }}

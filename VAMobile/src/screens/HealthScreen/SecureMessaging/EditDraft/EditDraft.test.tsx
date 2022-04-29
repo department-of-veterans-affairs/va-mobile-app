@@ -261,7 +261,7 @@ context('EditDraft', () => {
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
         await waitFor(() => {
-          testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+          testInstance.findByProps({ label: 'Go to inbox' }).props.onPress()
           expect(navigateSpy).toHaveBeenCalled()
           expect(updateSecureMessagingTab).toHaveBeenCalled()
         })
@@ -328,15 +328,6 @@ context('EditDraft', () => {
       await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
         expect(navigateToAddToFilesSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('on click of the "How to attach a file" link', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(navigateToAttachAFileSpy).toHaveBeenCalled()
       })
     })
   })

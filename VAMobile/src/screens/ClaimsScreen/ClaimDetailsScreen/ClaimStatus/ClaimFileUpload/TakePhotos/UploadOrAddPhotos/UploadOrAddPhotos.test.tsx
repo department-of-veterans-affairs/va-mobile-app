@@ -44,7 +44,7 @@ context('UploadOrAddPhotos', () => {
   const initializeTestInstance = () => {
     navigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(navigateToSpy)
-    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, firstImageResponse } })
+    props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, firstImageResponse } })
 
     component = render(<UploadOrAddPhotos {...props} />, {
       preloadedState: {

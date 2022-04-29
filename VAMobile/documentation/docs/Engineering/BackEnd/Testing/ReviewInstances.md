@@ -21,7 +21,7 @@ As with the URLs you've been accessing so far, all API requests must go through 
 
 ```
 curl --proxy socks5h://127.0.0.1:2001 --request GET \
-  --url http://a8710e1eb08cd469aa43874b25f86278-api.review.vetsgov-internal/mobile/v0/user \
+  --url http://a8710e1eb08cd469aa43874b25f86278-api.review.vetsgov-internal/mobile/v1/user \
   --header 'Authorization: Bearer EESBp0xiLD6p1g86q4g1'
   --header 'X-Key-Inflection: camel'
 ```

@@ -279,13 +279,13 @@ context('ViewMessageScreen', () => {
     it('should show AlertBox with Compose button', async () => {
       await waitFor(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
-        expect(testInstance.findByProps({ label: 'Compose a New Message' })).toBeTruthy()
+        expect(testInstance.findByProps({ label: 'Compose a new message' })).toBeTruthy()
       })
     })
 
     it('should use route navigation when Compose button is clicked', async () => {
       await waitFor(() => {
-        testInstance.findByProps({ label: 'Compose a New Message' }).props.onPress()
+        testInstance.findByProps({ label: 'Compose a new message' }).props.onPress()
         expect(navigateToSpy).toHaveBeenCalled()
       })
     })

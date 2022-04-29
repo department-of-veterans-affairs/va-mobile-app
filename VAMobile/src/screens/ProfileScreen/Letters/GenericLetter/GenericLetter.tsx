@@ -26,7 +26,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   }
 
   if (letterDownloadError) {
-    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('Try again to download your letter')} />
+    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
   }
 
   if (downloading) {

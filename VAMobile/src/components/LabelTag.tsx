@@ -23,13 +23,13 @@ const LabelTag: FC<LabelTagProps> = ({ text, backgroundColor, color, variant }) 
   const theme = useTheme()
   return (
     <Box
-      minWidth={theme.dimensions.tagCountMinWidth}
+      minWidth={theme.dimensions.tagMinWidth}
       justifyContent={'center'}
       alignSelf={'flex-start'}
       backgroundColor={backgroundColor || 'unreadMessagesTag'}
-      borderRadius={theme.dimensions.tagCountCurvedBorder}
+      borderRadius={theme.dimensions.tagCurvedBorder}
       {...testIdProps(text)}>
-      <TextView flexWrap={'wrap'} color={color || 'primaryContrast'} variant={variant || 'LabelTag'} px={theme.dimensions.alertPaddingX}>
+      <TextView flexWrap={'wrap'} color={color || 'primaryContrast'} variant={variant || 'LabelTag'} px={theme.dimensions.tagHorizontalPadding}>
         {text}
       </TextView>
     </Box>

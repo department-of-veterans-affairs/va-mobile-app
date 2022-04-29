@@ -71,19 +71,19 @@ const DebugScreen: FC = ({}) => {
       <VAScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={onResetFirstTimeLogin} label={'Reset First Time Login'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={resetInAppReview} label={'Reset In-App Review Actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={resetInAppReview} label={'Reset in-app review actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
             <VAButton
               onPress={onClickFirebaseDebugMode}
-              label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase Debug Mode`}
+              label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </TextArea>
