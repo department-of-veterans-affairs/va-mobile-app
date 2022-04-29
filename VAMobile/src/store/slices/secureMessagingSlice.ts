@@ -414,10 +414,9 @@ export const getMessageSignature =
  * Redux action to save draft
  */
 export const saveDraft =
-  (messageData: SecureMessagingFormData, messages: SnackbarMessages, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AppThunk =>
+  (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AppThunk =>
   async (dispatch, getState) => {
-    const retryFunction = () => dispatch(saveDraft(messageData, messages, messageID, isReply, replyID, refreshFolder))
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
     dispatch(dispatchStartSaveDraft())
     try {
       let response
@@ -440,12 +439,10 @@ export const saveDraft =
         dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       }
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
-      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `saveDraft: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSaveDraft({ error }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
       }
     }
   }
