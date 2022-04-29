@@ -21,25 +21,19 @@ export type InlineTextWithIconsProps = {
 export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({ inlineIcon, leftIconProps, rightIconProps, leftTextProps, rightTextProps }) => {
   const themes = useTheme()
   return (
-    <Box flexDirection={'row'}>
+    <Box flexDirection={'row'} flexGrow={1}>
       <Box ml={leftIconProps ? 0 : 16} mt={7} mr={themes.dimensions.condensedMarginBetween}>
         {!inlineIcon && leftIconProps && <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} />}
       </Box>
       {inlineIcon && leftIconProps ? (
         <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} />
       ) : (
-        <TextView
-          mr={themes.dimensions.condensedMarginBetween}
-          flex={1}
-          variant={leftTextProps.variant}
-          textAlign={leftTextProps.textAlign}
-          color={leftTextProps.color}
-          numberOfLines={1}>
+        <TextView mr={themes.dimensions.condensedMarginBetween} flex={1} variant={leftTextProps.variant} textAlign={leftTextProps.textAlign} color={leftTextProps.color}>
           {leftTextProps.text}
         </TextView>
       )}
       {rightTextProps && (
-        <TextView variant={rightTextProps.variant} textAlign={rightTextProps.textAlign} color={rightTextProps.color}>
+        <TextView variant={rightTextProps.variant} textAlign={rightTextProps.textAlign} color={rightTextProps.color} flex={1}>
           {rightTextProps.text}
         </TextView>
       )}
