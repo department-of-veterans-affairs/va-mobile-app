@@ -115,7 +115,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
 
   const getPhaseHeader = (): ReactNode => {
     return (
-      <Box flexDirection={'row'}>
+      <Box flexDirection={'row'} importantForAccessibility={'no-hide-descendants'}>
         <PhaseIndicator phase={phase} current={current} />
         <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
           <TextView variant={'MobileBodyBold'} color={'primaryTitle'} selectable={!phaseLessThanEqualToCurrent}>
