@@ -5,8 +5,8 @@ import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
-import { bytesToFinalSizeDisplay } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
+
 import { themeFn } from 'utils/theme'
 import { useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
@@ -23,8 +23,8 @@ type PhotoPreviewProps = {
   onDeleteCallback: () => void
   /** flag for whether this is the last photo available for deletion */
   lastPhoto?: boolean
-  /** TestID String */
-  testID?: string
+  /** Photo Position in array */
+  photoPosition?: string
 }
 
 type StyledImageProps = {
@@ -42,15 +42,18 @@ const StyledImage = styled(Image)<StyledImageProps>`
   border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
 `
 
-const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, testID }) => {
-  const { colors: themeColor, dimensions: themeDim } = useTheme()
+const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
+  const { colors: themeColor } = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const [selected, setSelected] = useState(false)
   const uri = image.uri
   const confirmAlert = useDestructiveAlert()
+  const photoPreviewIconSize = 24
+  const photoPreviewBorderRadius = 5
+  const photoPreviewIconPadding = 5
 
   const photo = (): ReactNode => {
-    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={themeDim.photoPreviewBorderRadius} />
+    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={photoPreviewBorderRadius} />
   }
 
   const onPress = (): void => {
@@ -80,16 +83,24 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
     })
   }
 
-  const pressableProps: PressableProps = { onPress }
+  const imageSize = image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined
+  const imageSizeA11y = image.fileSize ? bytesToFinalSizeDisplayA11y(image.fileSize, t, false) : undefined
+
+  const pressableProps: PressableProps = {
+    onPress,
+    accessibilityRole: 'button',
+    accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
+    accessibilityLabel: imageSizeA11y ? photoPosition?.concat(imageSizeA11y) : photoPosition,
+  }
 
   const boxProps: BoxProps = {
-    borderRadius: themeDim.photoPreviewBorderRadius,
+    borderRadius: photoPreviewBorderRadius,
     width: width,
     height: height,
   }
 
   const blueOpacity: BoxProps = {
-    borderRadius: themeDim.photoPreviewBorderRadius,
+    borderRadius: photoPreviewBorderRadius,
     width: width,
     height: height,
     opacity: 0.4,
@@ -103,17 +114,17 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   }
 
   return (
-    <Pressable {...pressableProps} {...testIdProps(testID || '')}>
+    <Pressable {...pressableProps}>
       <Box {...boxProps}>
         <Box>{photo()}</Box>
         {selected && <Box {...blueOpacity} />}
-        <Box pt={themeDim.photoPreviewIconPadding} pr={themeDim.photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
-          {selected && <VAIcon name={'Minus'} width={themeDim.photoPreviewIconSize} height={themeDim.photoPreviewIconSize} fill={themeColor.icon.photoAdd} />}
-          {!selected && <VAIcon name={'Delete'} width={themeDim.photoPreviewIconSize} height={themeDim.photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
+        <Box pt={photoPreviewIconPadding} pr={photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
+          {selected && <VAIcon name={'Minus'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.photoAdd} />}
+          {!selected && <VAIcon name={'Delete'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
       <Box width={width} flexDirection="row">
-        <TextView {...textProps}>{image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined}</TextView>
+        <TextView {...textProps}>{imageSize}</TextView>
       </Box>
     </Pressable>
   )

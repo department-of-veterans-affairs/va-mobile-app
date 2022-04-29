@@ -1,5 +1,6 @@
 import { NativeModules, PermissionsAndroid } from 'react-native'
 import { isIOS } from './platform'
+import { logNonFatalErrorToFirebase } from './analytics'
 
 // Calendar bridge from iOS and Android
 const RNCal = NativeModules.RNCalendar
@@ -53,6 +54,7 @@ export const requestCalendarPermission = async (): Promise<boolean> => {
         return false
       }
     } catch (err) {
+      logNonFatalErrorToFirebase(err, 'requestCalendarPermission: RnCalendar Error')
       console.warn(err)
       return false
     }

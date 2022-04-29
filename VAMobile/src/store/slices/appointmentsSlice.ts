@@ -23,13 +23,15 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 import _ from 'underscore'
+
+const appointmenNonFatalErrorString = 'Appointments Service Error'
 
 const emptyAppointmentsInDateRange: AppointmentsGetData = {
   data: [],
@@ -489,6 +491,7 @@ export const prefetchAppointments =
       dispatch(dispatchFinishPrefetchAppointments({ upcoming: upcomingAppointments, past: pastAppointments }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `prefetchAppointments: ${appointmenNonFatalErrorString}`)
         dispatch(dispatchFinishPrefetchAppointments({ upcoming: undefined, past: undefined, error }))
         dispatch(dispatchSetError({ errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID }))
       }
@@ -530,6 +533,7 @@ export const getAppointmentsInDateRange =
       dispatch(dispatchFinishGetAppointmentsInDateRange({ timeFrame, appointments: appointmentsList }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getAppointmentsInDateRange: ${appointmenNonFatalErrorString}`)
         dispatch(dispatchFinishGetAppointmentsInDateRange({ timeFrame, appointments: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -556,6 +560,7 @@ export const cancelAppointment =
       showSnackBar(successText, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `cancelAppointment: ${appointmenNonFatalErrorString}`)
         dispatch(dispatchFinishCancelAppointment({ error }))
         // TODO refactor translation to work in store
         const errorText = isPendingAppointment

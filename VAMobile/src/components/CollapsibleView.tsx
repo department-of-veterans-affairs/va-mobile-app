@@ -41,7 +41,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     // flexShrink is necessary to keep textView from expanding too far and causing a gap between text contents and arrow icon
     // also keeps textView from pushing arrow beyond right margin when large text is enabled
     flexShrink: 1,
-    mr: theme.dimensions.collapsibleIconMargin,
+    mr: 7,
     borderBottomWidth: 2,
     borderBottomColor: 'secondary',
   }

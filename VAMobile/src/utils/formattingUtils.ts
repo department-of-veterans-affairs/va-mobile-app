@@ -165,7 +165,7 @@ export const getSubstringBeforeChar = (originalStr: string, stopChar: string): s
  * @returns word with capitalized first letter and rest of the word lowercased
  */
 export const capitalizeWord = (word: string): string => {
-  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  return word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : ''
 }
 
 /**
@@ -176,17 +176,25 @@ export const capitalizeWord = (word: string): string => {
  * @returns string with capitalized first letter and rest of the string unchanged
  */
 export const capitalizeFirstLetter = (originalStr: string): string => {
+  if (!originalStr) {
+    return ''
+  }
+
   return originalStr.charAt(0).toUpperCase() + originalStr.slice(1)
 }
 
 /**
  * Returns the string formatted in title case
  *
- * @param originalStr - string to format
+ * @param str - string to format
  *
  * @returns string with the first letter after any spaces capitalized
  */
 export const stringToTitleCase = (str: string): string => {
+  if (!str) {
+    return ''
+  }
+
   return str
     .toLowerCase()
     .split(' ')

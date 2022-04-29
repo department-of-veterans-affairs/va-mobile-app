@@ -18,6 +18,7 @@ import { createYearAndPageString, getFirstAndLastDayOfYear, getLoadedPayments, g
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
 export type PaymentState = {
   payment?: PaymentsData
@@ -84,6 +85,7 @@ export const getPayments =
       dispatch(dispatchFinishGetPayments({ payments: paymentsList, yearAndPage }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, 'getPayments: Payment History Service Error')
         dispatch(dispatchFinishGetPayments({ error, yearAndPage }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }

@@ -442,25 +442,6 @@ const NewScreen: FC<INewScreen> = ({ navigation, route }) => {
 }
 ```
 
-## Crashlytics/Google Analytics
-The app has [Google Firebase Analytics for RN](https://rnfirebase.io/analytics/usage) installed. 
-
-Once KPIS are added, they should be indicated here 
-
-[Debug/Testing documentation](https://firebase.google.com/docs/analytics/debugview#android)
-
-### To log analytics to the debug dashboard in Firebase:
-- iOS:
-  - Make sure the `-FIRDebugEnabled` flag is enabled in your `XCode > Product > Scheme > Edit Scheme`, under the Test (Debug) scheme
-  - Start the emulator or build to device
-  - In the app, go to `Profile > Settings > Developer` and click 'Enable Firebase Debug Mode'
-  - Go the [Firebase Debug dashboard](https://console.firebase.google.com/u/0/project/va-mobile-app/analytics/app/android:gov.va.mobileapp/debugview/) and select your device from the top left Debug Devices list
-- Android
-  - Open Android Studio and run the emulator or build to device
-  - in a terminal, execute the command `adb shell setprop debug.firebase.analytics.ap gov.va.mobileapp`
-  - In the app, go to `Profile > Settings > Developer` and click 'Enable Firebase Debug Mode'
-  - Go the [Firebase Debug dashboard](https://console.firebase.google.com/u/0/project/va-mobile-app/analytics/app/android:gov.va.mobileapp/debugview/) and select your device from the top left Debug Devices list
-  - After debugging is complete, run the command `adb shell setprop debug.firebase.analytics.app .none.`
 ## Dev Setup
 
 ### Prerequisites

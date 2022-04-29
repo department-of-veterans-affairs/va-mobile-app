@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { stringToTitleCase } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type RemoveDataProps = {
@@ -23,7 +22,7 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
     return (
       <VAButton
         onPress={() => setDisplayAlert(true)}
-        label={t('personalInformation.removeData', { pageName: stringToTitleCase(pageName) })}
+        label={t('personalInformation.removeData', { pageName: pageName.toLowerCase() })}
         buttonType={ButtonTypesConstants.buttonDestructive}
         a11yHint={t('personalInformation.removeData.a11yHint', { pageName })}
       />

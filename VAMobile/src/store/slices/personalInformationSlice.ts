@@ -19,6 +19,7 @@ import {
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { MockUsersEmail } from 'constants/common'
+import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
 import { dispatchUpdateCerner } from './patientSlice'
@@ -31,8 +32,8 @@ import {
   getValidationKey,
   showValidationScreen,
 } from 'utils/personalInformation'
-import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString } from 'utils/common'
-import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString, showSnackBar } from 'utils/common'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -70,13 +71,14 @@ export const initialPersonalInformationState: PersonalInformationState = {
   phoneNumberSaved: false,
 }
 
+const personalInformationNonFatalErrorString = 'Personal Information Service Error'
+
 const PhoneTypeToFormattedNumber: {
   [key in PhoneType]: ProfileFormattedFieldType
 } = {
   HOME: 'formattedHomePhone',
   MOBILE: 'formattedMobilePhone',
   WORK: 'formattedWorkPhone',
-  FAX: 'formattedFaxPhone',
 }
 
 const AddressPouToProfileAddressFieldType: {
@@ -97,7 +99,7 @@ export const getProfileInfo =
 
     try {
       dispatch(dispatchStartGetProfileInfo())
-      const user = await get<UserData>('/v0/user')
+      const user = await get<UserData>('/v1/user')
 
       // TODO: delete in story #19175
       const userEmail = user?.data.attributes.profile.signinEmail
@@ -116,6 +118,7 @@ export const getProfileInfo =
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getProfileInfo: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishGetProfileInfo({ error }))
         dispatch(dispatchUpdateAuthorizedServices({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
@@ -126,7 +129,7 @@ export const getProfileInfo =
 /**
  * Redux action to update the users phone number
  *
- * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE, or FAX)
+ * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE)
  * @param phoneNumber - string of numbers signifying area code and phone number
  * @param extension - string of numbers signifying extension number
  * @param numberId - number indicating the id of the phone number
@@ -179,6 +182,7 @@ export const editUsersNumber =
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
@@ -236,6 +240,7 @@ export const deleteUsersNumber =
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
@@ -283,6 +288,7 @@ export const updateEmail =
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -313,6 +319,7 @@ export const deleteEmail =
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -330,10 +337,11 @@ export const finishEditEmail = (): AppThunk => async (dispatch) => {
  * Redux action to make the API call to update a users address
  */
 export const updateAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+    const retryFunction = () => dispatch(updateAddress(addressData, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSaveAddress())
@@ -361,10 +369,13 @@ export const updateAddress =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveAddress())
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
       }
     }
   }
@@ -373,10 +384,11 @@ export const updateAddress =
  * Remove a users address
  */
 export const deleteAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
+    const retryFunction = () => dispatch(deleteAddress(addressData, messages, screenID))
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteAddress(addressData, screenID))))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSaveAddress())
@@ -387,10 +399,13 @@ export const deleteAddress =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true)
       }
     }
   }
@@ -399,10 +414,11 @@ export const deleteAddress =
  * Redux action to make the API call to validate a users address
  */
 export const validateAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(validateAddress(addressData, screenID))))
+    const retryFunction = () => dispatch(validateAddress(addressData, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartValidateAddress())
@@ -420,11 +436,12 @@ export const validateAddress =
         if (suggestedAddresses) {
           const address = getAddressDataFromSuggestedAddress(suggestedAddresses[0], addressData.id)
           addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
-          await dispatch(updateAddress(address, screenID))
+          await dispatch(updateAddress(address, messages, screenID))
         }
       }
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `validateAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishValidateAddress(undefined))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -467,7 +484,6 @@ const peronalInformationSlice = createSlice({
         profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
         profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
         profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
-        profile.formattedFaxPhone = getFormattedPhoneNumber(profile.faxNumber)
       }
 
       state.profile = profile

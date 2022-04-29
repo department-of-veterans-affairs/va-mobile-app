@@ -25,7 +25,7 @@ export type ProfileDemoStore = {
   '/v0/military-service-history': MilitaryServiceHistoryData
   '/v0/letters': LettersData
   '/v0/payment-information/benefits': DirectDepositData
-  '/v0/user': UserData
+  '/v1/user': UserData
 }
 
 /**
@@ -41,9 +41,9 @@ export const updateUserPhone = (store: DemoStore, params: Params): EditResponseD
   const { phoneType } = params
   const [type, formattedType] = getPhoneTypes(phoneType as PhoneType)
 
-  store['/v0/user'].data.attributes.profile[type] = params as unknown as PhoneData
+  store['/v1/user'].data.attributes.profile[type] = params as unknown as PhoneData
   const { areaCode, phoneNumber } = params
-  store['/v0/user'].data.attributes.profile[formattedType] = `${areaCode} + ${phoneNumber}`
+  store['/v1/user'].data.attributes.profile[formattedType] = `${areaCode} + ${phoneNumber}`
   return MOCK_EDIT_RESPONSE
 }
 
@@ -54,20 +54,20 @@ export const updateUserPhone = (store: DemoStore, params: Params): EditResponseD
 export const deleteUserPhone = (store: DemoStore, params: Params): EditResponseData | undefined => {
   const { phoneType } = params
   const [type, formattedType] = getPhoneTypes(phoneType as PhoneType)
-  store['/v0/user'].data.attributes.profile[type] = {
+  store['/v1/user'].data.attributes.profile[type] = {
     areaCode: '',
     countryCode: '',
     phoneNumber: '',
     phoneType: phoneType as PhoneType,
   }
-  store['/v0/user'].data.attributes.profile[formattedType] = undefined
+  store['/v1/user'].data.attributes.profile[formattedType] = undefined
   return MOCK_EDIT_RESPONSE
 }
 
 /**
  * type to hold phone keys in UserDataProfile type to keep phone updates typesafe
  */
-type PhoneKeyUnion = 'homePhoneNumber' | 'mobilePhoneNumber' | 'workPhoneNumber' | 'faxNumber'
+type PhoneKeyUnion = 'homePhoneNumber' | 'mobilePhoneNumber' | 'workPhoneNumber'
 
 /**
  * function returns the tuple of the PhoneKeyUnion and ProfileFormattedFieldType to use as keys when updating the store
@@ -85,9 +85,6 @@ const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, ProfileFormattedFi
     case PhoneTypeConstants.WORK: {
       return ['workPhoneNumber', 'formattedWorkPhone']
     }
-    case PhoneTypeConstants.FAX: {
-      return ['faxNumber', 'formattedFaxPhone']
-    }
   }
   throw Error('Unexpected Phone type')
 }
@@ -97,7 +94,7 @@ const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, ProfileFormattedFi
  * @param emailAddress- new email address to use
  */
 export const updateEmail = (store: DemoStore, emailAddress: string): EditResponseData => {
-  store['/v0/user'].data.attributes.profile.contactEmail = {
+  store['/v1/user'].data.attributes.profile.contactEmail = {
     id: 'mock_id',
     emailAddress: emailAddress,
   }
@@ -109,7 +106,7 @@ export const updateEmail = (store: DemoStore, emailAddress: string): EditRespons
  */
 export const deleteEmail = (store: DemoStore): EditResponseData => {
   // @ts-ignore if it isnt set to null there is an error
-  store['/v0/user'].data.attributes.profile.contactEmail = null
+  store['/v1/user'].data.attributes.profile.contactEmail = null
   return MOCK_EDIT_RESPONSE
 }
 
@@ -174,7 +171,7 @@ const getAddressType = (pouType: addressPouTypes): AddressTypeKey => {
  */
 export const updateAddress = (store: DemoStore, address: AddressData): EditResponseData => {
   const type = getAddressType(address.addressPou)
-  store['/v0/user'].data.attributes.profile[type] = address
+  store['/v1/user'].data.attributes.profile[type] = address
   return MOCK_EDIT_RESPONSE
 }
 
@@ -184,7 +181,7 @@ export const updateAddress = (store: DemoStore, address: AddressData): EditRespo
  */
 export const deleteAddress = (store: DemoStore, params: Params): EditResponseData => {
   const type = getAddressType((params as unknown as AddressData).addressPou)
-  store['/v0/user'].data.attributes.profile[type] = undefined
+  store['/v1/user'].data.attributes.profile[type] = undefined
   return MOCK_EDIT_RESPONSE
 }
 

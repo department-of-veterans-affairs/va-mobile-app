@@ -26,6 +26,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SnackbarMessages } from 'components/SnackBar'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -54,6 +55,11 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [confirmed, setConfirmed] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('directDeposit.saved'),
+    errorMsg: t('directDeposit.saved.error'),
+  }
 
   const accountOptions: Array<PickerItem> = AccountOptions.map((option) => {
     // translate key
@@ -90,7 +96,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   }
 
   const onSave = (): void => {
-    dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes, ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
+    dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes, snackbarMessages, ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
   }
 
   const containsNonNumbersValidation = (input: string): boolean => {
