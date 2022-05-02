@@ -63,33 +63,6 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     })
   })
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (filesList.length === 0 || filesUploadedSuccess) {
-        return
-      }
-      e.preventDefault()
-      confirmAlert({
-        title: t('fileUpload.discard.confirm.title'),
-        message: t('fileUpload.discard.confirm.message'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('common:cancel'),
-          },
-          {
-            text: t('fileUpload.discard'),
-            onPress: () => {
-              navigation.dispatch(e.data.action)
-            },
-          },
-        ],
-      })
-    })
-    return unsubscribe
-  })
-
   const onCancel = () => {
     navigation.navigate('FileRequestDetails', { request })
   }
