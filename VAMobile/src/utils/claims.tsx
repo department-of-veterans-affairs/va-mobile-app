@@ -261,7 +261,7 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
     )
   } else {
     return (
-      <TextView variant="ClaimPhase" color="claimPhase" textAlign={'center'}>
+      <TextView variant="ClaimPhase" textAlign={'center'}>
         {number}
       </TextView>
     )

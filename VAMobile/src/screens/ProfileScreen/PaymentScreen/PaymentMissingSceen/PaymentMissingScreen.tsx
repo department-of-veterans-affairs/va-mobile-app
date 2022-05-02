@@ -29,7 +29,7 @@ const PaymentMissing: FC<PaymentMissingScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps('payment-missing-page')}>
       <Box mt={contentMarginTop}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('payments.ifIAmMissingPayemt')}
           </TextView>
           <TextView variant="MobileBody" py={6}>

@@ -22,7 +22,7 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
           if ('iconProps' in textObj && textObj.iconProps !== undefined) {
             return <TextLineWithIcon key={index} {...textObj} />
           } else {
-            const { text, variant = 'MobileBody', color = 'primary', textAlign = 'left', isTextTag = false } = textObj
+            const { text, variant = 'MobileBody', color, textAlign = 'left', isTextTag = false } = textObj
             if (isTextTag) {
               return <MessagesSentReadTag text={text} key={index} />
             }

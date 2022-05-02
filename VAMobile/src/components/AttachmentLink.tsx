@@ -49,7 +49,7 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, onPress,
         <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
           <VAIcon name="PaperClip" width={16} height={16} fill={'link'} />
         </Box>
-        <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} color={'link'} accessible={true}>
+        <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} accessible={true}>
           {text}
         </TextView>
         {load && <ActivityIndicator accessible={true} size="small" color={theme.colors.icon.spinner} />}

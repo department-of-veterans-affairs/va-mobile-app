@@ -46,7 +46,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
           key={index}>
           <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
             <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
-            <TextView variant="MobileBodyBold" color={'primaryTitle'} ml={theme.dimensions.textIconMargin}>
+            <TextView variant="MobileBodyBold" ml={theme.dimensions.textIconMargin}>
               {text}
             </TextView>
           </Box>

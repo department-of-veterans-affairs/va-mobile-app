@@ -85,7 +85,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
-          <TextView variant={'MobileBodyBold'} color={'primaryTitle'} accessibilityRole={'header'}>
+          <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
             {heading}
           </TextView>
         </Box>
