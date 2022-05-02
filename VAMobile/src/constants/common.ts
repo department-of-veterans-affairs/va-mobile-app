@@ -55,6 +55,9 @@ const screensToCloseSnackbarOnNavigation = [
   'PersonalInformation',
   'DirectDeposit',
   'EditDirectDeposit',
+  'FileRequest',
+  'AppealDetailsScreen',
+  'ClaimDetailsScreen',
 ]
 
 export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
