@@ -384,6 +384,20 @@ workflows:
               only: /^feature-build-.+/
             branches:
               ignore: /.*/
+  release_candidate_build:
+    jobs:
+      - build_android_release_candidate:
+          filters:
+            tags:
+              only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
+            branches:
+              ignore: /.*/
+      - build_ios_release_candidate:
+          filters:
+            tags:
+              only: /^^RC-v\d+\.\d+\.\d+-\d+-\d+$/
+            branches:
+              ignore: /.*/
   new_release_branch:
     triggers:
       - schedule:
