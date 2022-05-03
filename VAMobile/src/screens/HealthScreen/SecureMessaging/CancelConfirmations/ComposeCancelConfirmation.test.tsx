@@ -91,12 +91,17 @@ context('useComposeCancelConfirmation', () => {
     navigateToDraftFolderSavedSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('SecureMessaging').mockReturnValue(navigateToSecureMessagingSpy)
-        .calledWith('ComposeMessage', expect.objectContaining({ saveDraftConfirmFailed: true })).mockReturnValue(navigateToComposeMessageSpy)
-        .calledWith('FolderMessages', expect.objectContaining({ draftSaved: true })).mockReturnValue(navigateToDraftFolderSavedSpy)
-        .calledWith('ViewMessageScreen', { messageID: 2 }).mockReturnValue(navigateToViewMessageScreenSpy)
-        .calledWith('FolderMessages', { draftSaved: false, folderID: -2, folderName: 'Drafts' }).mockReturnValue(navigateToDraftFolderNotSavedSpy)
+      .mockReturnValue(() => {})
+      .calledWith('SecureMessaging')
+      .mockReturnValue(navigateToSecureMessagingSpy)
+      .calledWith('ComposeMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
+      .mockReturnValue(navigateToComposeMessageSpy)
+      .calledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
+      .mockReturnValue(navigateToDraftFolderSavedSpy)
+      .calledWith('ViewMessageScreen', { messageID: 2 })
+      .mockReturnValue(navigateToViewMessageScreenSpy)
+      .calledWith('FolderMessages', { draftSaved: false, folderID: -2, folderName: 'Drafts' })
+      .mockReturnValue(navigateToDraftFolderNotSavedSpy)
 
     const TestComponent: React.FC = () => {
       const alert = useComposeCancelConfirmation()
@@ -140,14 +145,6 @@ context('useComposeCancelConfirmation', () => {
         })
         expect(navigateToComposeMessageSpy).toHaveBeenCalled()
       })
-
-      it('should save and go to drafts folder', async () => {
-        act(() => {
-          saveDraftButtonSpy()
-        })
-        expect(navigateToSecureMessagingSpy).toHaveBeenCalled()
-        expect(navigateToDraftFolderSavedSpy).toHaveBeenCalled()
-      })
     })
   })
 
@@ -163,13 +160,12 @@ context('useComposeCancelConfirmation', () => {
     })
 
     describe('on clicking save draft', () => {
-      it('should save and go to drafts folder', async () => {
-        initializeTestInstance({ body: 'test reply' }, undefined, true, FormHeaderTypeConstants.reply, 2)
+      it('should go back to compose if form not valid', async () => {
+        initializeTestInstance(undefined, undefined, false)
         act(() => {
           saveDraftButtonSpy()
         })
-        expect(navigateToSecureMessagingSpy).toHaveBeenCalled()
-        expect(navigateToDraftFolderSavedSpy).toHaveBeenCalled()
+        expect(navigateToComposeMessageSpy).toHaveBeenCalled()
       })
     })
   })
@@ -186,12 +182,12 @@ context('useComposeCancelConfirmation', () => {
     })
 
     describe('on clicking save draft', () => {
-      it('should save and go to drafts folder', async () => {
-        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, undefined)
+      it('should go back to compose if form not valid', async () => {
+        initializeTestInstance(undefined, undefined, false)
         act(() => {
           saveDraftButtonSpy()
         })
-        expect(navigateToDraftFolderSavedSpy).toHaveBeenCalled()
+        expect(navigateToComposeMessageSpy).toHaveBeenCalled()
       })
     })
   })

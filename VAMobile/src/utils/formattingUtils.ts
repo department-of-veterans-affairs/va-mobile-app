@@ -154,7 +154,7 @@ export const getSubstringBeforeChar = (originalStr: string, stopChar: string): s
  * @returns word with capitalized first letter and rest of the word lowercased
  */
 export const capitalizeWord = (word: string): string => {
-  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  return word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : ''
 }
 
 /**

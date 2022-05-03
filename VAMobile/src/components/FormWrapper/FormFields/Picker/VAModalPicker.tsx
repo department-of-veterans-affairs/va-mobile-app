@@ -151,7 +151,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const valueBox = (
       <Box {...wrapperProps}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView flex={1}>{currentlySelectedOption?.label}</TextView>
+          <TextView variant="MobileBody" flex={1}>
+            {currentlySelectedOption?.label}
+          </TextView>
           <Box mr={8} ml={16} my={16}>
             <VAIcon name="DatePickerArrows" fill="pickerIcon" width={16} height={16} />
           </Box>
@@ -161,7 +163,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     const content = (
       <Box>
-        {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
+        {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey)}
         {!!error && renderInputError(theme, error)}
         {valueBox}
       </Box>
@@ -175,7 +177,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   const renderButton = () => {
-    const color = disabled ? 'primaryContrastDisabled' : 'primaryContrast'
+    const color = disabled ? 'actionBarDisabled' : 'actionBar'
 
     const props: TouchableWithoutFeedbackProps = {
       onPress: showModal,
@@ -187,7 +189,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     return (
       <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))} {...a11yHintProp(tc('pickerLaunchBtn.a11yHint'))}>
-        <Box pr={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerButtonPadding}>
+        <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
             {getTranslation(buttonText || '', t)}
           </TextView>
@@ -207,7 +209,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     mr: insets.right,
   }
 
-  const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
+  const topPadding = insets.top + 60
 
   const cancelLabel = tc('cancel')
   const confirmLabel = getTranslation(confirmBtnText || 'common:done', t)
@@ -227,6 +229,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   const commonButtonProps: TextViewProps = {
+    variant: 'MobileBody',
     allowFontScaling: false,
     py: 3, // bump up the padding to make touch target a bit bigger #2740
   }
@@ -249,7 +252,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                 <TextView {...commonButtonProps}>{cancelLabel}</TextView>
               </Pressable>
               <Box flex={4}>
-                <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign={'center'} allowFontScaling={false}>
+                <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
                   {getTranslation(labelKey || '', t)}
                 </TextView>
               </Box>

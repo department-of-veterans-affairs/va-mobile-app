@@ -15,6 +15,7 @@ import {
   updateEmail,
   validateAddress,
 } from './personalInformationSlice'
+import { SnackbarMessages } from 'components/SnackBar'
 
 export const ActionTypes: {
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: string
@@ -44,6 +45,11 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: 'personalInformation/dispatchStartValidateAddress',
   PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: 'personalInformation/dispatchFinishValidateAddress',
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: 'personalInformation/dispatchFinishEditAddress',
+}
+
+const removalSnackbarMessages: SnackbarMessages = {
+  successMsg: 'success',
+  errorMsg: 'failure',
 }
 
 context('personalInformation', () => {
@@ -134,7 +140,7 @@ context('personalInformation', () => {
       }
 
       when(api.del as jest.Mock)
-        .calledWith('/v1/user/phones', phoneData)
+        .calledWith('/v0/user/phones', phoneData)
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
@@ -149,7 +155,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect(api.del as jest.Mock).toBeCalledWith('/v1/user/phones', phoneData)
+      expect(api.del as jest.Mock).toBeCalledWith('/v0/user/phones', phoneData)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -167,7 +173,7 @@ context('personalInformation', () => {
       }
 
       when(api.put as jest.Mock)
-        .calledWith('/v1/user/phones', updatedPhoneData)
+        .calledWith('/v0/user/phones', updatedPhoneData)
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
@@ -182,7 +188,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v1/user/phones', { areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/phones', { areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -197,7 +203,7 @@ context('personalInformation', () => {
       }
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/phones', updatedPhoneData)
+        .calledWith('/v0/user/phones', updatedPhoneData)
         .mockResolvedValue({})
 
       const store = realStore()
@@ -212,7 +218,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v1/user/phones', { areaCode: '000', countryCode: '1', phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/phones', { areaCode: '000', countryCode: '1', phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -231,7 +237,7 @@ context('personalInformation', () => {
       }
 
       when(api.put as jest.Mock)
-        .calledWith('/v1/user/phones', updatedPhoneData)
+        .calledWith('/v0/user/phones', updatedPhoneData)
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore(mockStorePersonalInformation)
@@ -246,7 +252,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeTruthy()
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v1/user/phones', { areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/phones', { areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: 'HOME', extension: '1111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toEqual(error)
@@ -428,7 +434,7 @@ context('personalInformation', () => {
   describe('edit email', () => {
     it('should edit the users email', async () => {
       when(api.put as jest.Mock)
-        .calledWith('/v1/user/emails')
+        .calledWith('/v0/user/emails')
         .mockResolvedValue({})
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(updateEmail('newEmail@email.com', '111'))
@@ -441,7 +447,7 @@ context('personalInformation', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.emailSaved).toBe(true)
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v1/user/emails', { emailAddress: 'newEmail@email.com', id: '111' })
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/emails', { emailAddress: 'newEmail@email.com', id: '111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -449,7 +455,7 @@ context('personalInformation', () => {
 
     it('should call api.post for a new entry', async () => {
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/emails')
+        .calledWith('/v0/user/emails')
         .mockResolvedValue({})
 
       const store = realStore()
@@ -463,7 +469,7 @@ context('personalInformation', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.emailSaved).toBe(true)
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v1/user/emails', { emailAddress: 'newEmail@email.com' })
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/emails', { emailAddress: 'newEmail@email.com' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -473,7 +479,7 @@ context('personalInformation', () => {
       const error = new Error('error from backend')
 
       when(api.put as jest.Mock)
-        .calledWith('/v1/user/emails', { emailAddress: 'test@email.com', id: '1' })
+        .calledWith('/v0/user/emails', { emailAddress: 'test@email.com', id: '1' })
         .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
@@ -486,7 +492,7 @@ context('personalInformation', () => {
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_SAVE_EMAIL })
       expect(endAction).toBeTruthy()
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v1/user/emails', { emailAddress: 'test@email.com', id: '1' })
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/emails', { emailAddress: 'test@email.com', id: '1' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.emailSaved).toBe(false)
@@ -497,7 +503,7 @@ context('personalInformation', () => {
   describe('delete email', () => {
     it('should delete the users email', async () => {
       when(api.del as jest.Mock)
-        .calledWith('/v1/user/emails')
+        .calledWith('/v0/user/emails')
         .mockResolvedValue({})
       const store = realStore(mockStorePersonalInformation)
       await store.dispatch(deleteEmail('newEmail@email.com', '111'))
@@ -510,7 +516,7 @@ context('personalInformation', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.emailSaved).toBe(true)
 
-      expect(api.del as jest.Mock).toBeCalledWith('/v1/user/emails', { emailAddress: 'newEmail@email.com', id: '111' })
+      expect(api.del as jest.Mock).toBeCalledWith('/v0/user/emails', { emailAddress: 'newEmail@email.com', id: '111' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -532,11 +538,11 @@ context('personalInformation', () => {
       }
 
       when(api.put as jest.Mock)
-        .calledWith('/v1/user/addresses', addressPayload)
+        .calledWith('/v0/user/addresses', addressPayload)
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -548,7 +554,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v1/user/addresses', addressPayload)
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -567,11 +573,11 @@ context('personalInformation', () => {
       }
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/addresses', addressPayload)
+        .calledWith('/v0/user/addresses', addressPayload)
         .mockResolvedValue(mockStorePersonalInformation)
 
       const store = realStore()
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -583,7 +589,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v1/user/addresses', addressPayload)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -605,11 +611,11 @@ context('personalInformation', () => {
       }
 
       when(api.put as jest.Mock)
-        .calledWith('/v1/user/addresses', addressPayload)
+        .calledWith('/v0/user/addresses', addressPayload)
         .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -620,7 +626,7 @@ context('personalInformation', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.savingAddress).toBeFalsy()
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v1/user/addresses', addressPayload)
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.addressSaved).toBe(false)
@@ -643,11 +649,11 @@ context('personalInformation', () => {
       }
 
       when(api.del as jest.Mock)
-        .calledWith('/v1/user/addresses', addressPayload)
+        .calledWith('/v0/user/addresses', addressPayload)
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(deleteAddress(addressPayload as AddressData))
+      await store.dispatch(deleteAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -659,7 +665,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect(api.del as jest.Mock).toBeCalledWith('/v1/user/addresses', addressPayload)
+      expect(api.del as jest.Mock).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -714,17 +720,17 @@ context('personalInformation', () => {
       }
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/addresses', addressPayload)
+        .calledWith('/v0/user/addresses', addressPayload)
         .mockResolvedValue(mockStorePersonalInformation)
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/addresses/validate', addressPayload)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
 
-      await store.dispatch(validateAddress(addressPayload as AddressData))
-      expect(api.post as jest.Mock).toBeCalledWith('/v1/user/addresses/validate', addressPayload)
+      await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
 
@@ -784,15 +790,15 @@ context('personalInformation', () => {
       }
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/addresses', addressPayload)
+        .calledWith('/v0/user/addresses', addressPayload)
         .mockResolvedValue(mockStorePersonalInformation)
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/addresses/validate', addressPayload)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS })
@@ -845,15 +851,15 @@ context('personalInformation', () => {
       }
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/addresses', addressPayload)
+        .calledWith('/v0/user/addresses', addressPayload)
         .mockResolvedValue(mockStorePersonalInformation)
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/addresses/validate', addressPayload)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
       const actions = store.getActions()
 
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS })
@@ -907,13 +913,13 @@ context('personalInformation', () => {
       }
 
       when(api.post as jest.Mock)
-        .calledWith('/v1/user/addresses/validate', addressPayload)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
 
-      await store.dispatch(validateAddress(addressPayload as AddressData))
-      expect(api.post as jest.Mock).toBeCalledWith('/v1/user/addresses/validate', addressPayload)
+      await store.dispatch(validateAddress(addressPayload as AddressData, removalSnackbarMessages))
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
 

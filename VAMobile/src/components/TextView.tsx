@@ -48,7 +48,7 @@ export type TextViewProps = AccessibilityProps &
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
-  return theme.colors.text[props.color as keyof VATextColors] || theme.colors.buttonText[props.color as keyof VAButtonTextColors] || theme.colors.text.primary
+  return theme.colors.text[props.color as keyof VATextColors] || theme.colors.buttonText[props.color as keyof VAButtonTextColors] || ''
 }
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
@@ -61,7 +61,7 @@ const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string =>
 
 const StyledText = styled(Text)`
   ${themeFn<TextViewProps>(getFontFamily)}
-  color: ${themeFn<TextViewProps>(getColor)};
+  ${themeFn<TextViewProps>((theme, props) => (props.color ? `color:${getColor(theme, props)};` : ''))}
   ${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
   ${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
   ${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};

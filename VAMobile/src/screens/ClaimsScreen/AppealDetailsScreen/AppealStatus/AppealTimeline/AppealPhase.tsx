@@ -113,9 +113,7 @@ const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
         <Box flexDirection={'row'}>
           <PhaseIndicator phase={-1} current={0} />
           <Box {...testIdProps(`${heading} ${dateText}`)} flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
-            <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>
-              {heading}
-            </TextView>
+            <TextView variant={'MobileBodyBold'}>{heading}</TextView>
             <TextView variant={'MobileBody'}>{dateText}</TextView>
           </Box>
         </Box>

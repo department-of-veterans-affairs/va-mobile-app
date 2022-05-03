@@ -66,7 +66,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
         <BackButton
           onPress={() => {
             navigation.goBack()
-            snackBar.hideAll()
           }}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.back}

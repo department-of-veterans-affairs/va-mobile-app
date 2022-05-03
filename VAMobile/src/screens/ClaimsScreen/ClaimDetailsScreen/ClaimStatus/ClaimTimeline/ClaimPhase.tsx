@@ -117,10 +117,10 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
 
   const getPhaseHeader = (): ReactNode => {
     return (
-      <Box flexDirection={'row'}>
+      <Box flexDirection={'row'} importantForAccessibility={'no-hide-descendants'}>
         <PhaseIndicator phase={phase} current={current} />
         <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
-          <TextView variant={'MobileBodyBold'} color={'primaryTitle'} selectable={!phaseLessThanEqualToCurrent}>
+          <TextView variant={'MobileBodyBold'} selectable={!phaseLessThanEqualToCurrent}>
             {heading}
           </TextView>
           {phaseLessThanEqualToCurrent && <TextView variant={'MobileBody'}>{updatedLastDate}</TextView>}
@@ -137,7 +137,20 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
     )
   }
 
-  const testID = phaseLessThanEqualToCurrent ? `${heading} ${updatedLastDate}` : heading
+  let status = ''
+
+  if (phase === current) {
+    status = t('claimPhase.heading.a11y.current')
+  } else if (phase < current) {
+    status = t('claimPhase.heading.a11y.completed')
+  }
+
+  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${status} ${heading}`
+
+  if (phaseLessThanEqualToCurrent) {
+    testID = `${testID} ${updatedLastDate}`
+  }
+
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
 
   const detailsText = getDetails(phase, t)
@@ -150,9 +163,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
       {phase === 3 && showClaimFileUploadBtn && (
         <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">
-            <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>
-              {youHaveFileRequestsText}
-            </TextView>
+            <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
           </Box>
           <Box mt={standardMarginBetween}>
             <VAButton

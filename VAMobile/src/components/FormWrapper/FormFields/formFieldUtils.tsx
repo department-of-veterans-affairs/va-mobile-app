@@ -16,8 +16,9 @@ const generateInputLabel = (
   t: TFunction,
   isHelperText: boolean,
 ): ReactElement => {
+  // Only to 'MobileBodyBold' if there is an error; otherwise 'MobileBody
   const variant = error ? 'MobileBodyBold' : 'MobileBody'
-  const color: ColorVariant = disabled ? 'placeholder' : 'primaryTitle'
+  const color: ColorVariant | undefined = disabled ? 'placeholder' : undefined
 
   const labelProps: TextViewProps = {
     color,
@@ -31,7 +32,7 @@ const generateInputLabel = (
       <Box display="flex" flexDirection="row" flexWrap="wrap" mb={isHelperText ? 0 : 8}>
         {label}
         <TextView>&nbsp;</TextView>
-        <TextView color={'inputRequired'} variant={variant}>
+        <TextView color={color} variant={variant}>
           {t('common:required')}
         </TextView>
       </Box>
@@ -52,14 +53,13 @@ export const renderInputLabelSection = (
   labelKey: string,
   t: TFunction,
   helperTextKey: string | undefined,
-  theme: VATheme,
 ): ReactElement => {
   const isHelperText = !!helperTextKey
   return (
     <Box>
       {generateInputLabel(error, disabled, isRequiredField, labelKey, t, isHelperText)}
       {isHelperText && (
-        <TextView mb={theme.dimensions.pickerLabelMargin} variant="HelperText">
+        <TextView mb={8} variant="HelperText">
           {t(helperTextKey)}
         </TextView>
       )}
@@ -104,7 +104,7 @@ export const getInputWrapperProps = (theme: VATheme, error: string | undefined, 
  */
 export const renderInputError = (theme: VATheme, error: string): ReactElement => {
   return (
-    <TextView variant="MobileBodyBold" color="error" mb={theme.dimensions.errorLabelBottomMargin}>
+    <TextView variant="MobileBodyBold" color="error" mb={3}>
       {error}
     </TextView>
   )

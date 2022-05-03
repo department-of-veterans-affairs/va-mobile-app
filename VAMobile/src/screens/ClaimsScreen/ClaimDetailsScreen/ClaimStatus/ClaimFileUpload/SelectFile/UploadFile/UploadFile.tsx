@@ -15,7 +15,7 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 
 type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
@@ -27,7 +27,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
-  const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([])
+  const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const snackbarMessages: SnackbarMessages = {
@@ -36,10 +36,16 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    setFilesList([fileUploaded])
-  }, [fileUploaded])
+    navigation.setOptions({
+      headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
+    })
+  })
 
-  const onCancel = () => {
+  useBeforeNavBackListener(navigation, (e) => {
+    if (filesList.length === 0 || filesUploadedSuccess) {
+      return
+    }
+    e.preventDefault()
     confirmAlert({
       title: t('fileUpload.discard.confirm.title'),
       message: t('fileUpload.discard.confirm.message'),
@@ -52,18 +58,16 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         {
           text: t('fileUpload.discard'),
           onPress: () => {
-            navigation.navigate('FileRequestDetails', { request })
+            navigation.dispatch(e.data.action)
           },
         },
       ],
     })
-  }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-    })
   })
+
+  const onCancel = () => {
+    navigation.navigate('FileRequestDetails', { request })
+  }
 
   useEffect(() => {
     if (fileUploadedFailure || filesUploadedSuccess) {
@@ -71,6 +75,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     }
 
     if (filesUploadedSuccess) {
+      setFilesList([])
       navigation.navigate('FileRequest', { claimID: claim?.id || '' })
     }
   }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
@@ -114,6 +119,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   const onFileDelete = () => {
+    setFilesList([])
     showSnackBar(tc('file.deleted'), dispatch, undefined, true, false, false)
     navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
   }
@@ -146,7 +152,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   return (
     <VAScrollView {...testIdProps('File-upload: Upload-file-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
       </Box>

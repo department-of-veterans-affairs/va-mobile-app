@@ -253,6 +253,7 @@ globalAny.FormData = () => ({
 
 globalAny.snackBar = {
   show: jest.fn(),
+  hideAll: jest.fn(),
 }
 
 jest.mock('@react-native-firebase/perf', () => {

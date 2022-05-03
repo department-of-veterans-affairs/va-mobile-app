@@ -14,7 +14,7 @@ const AppointmentReason: FC<AppointmentReasonProps> = ({ reason }) => {
   const theme = useTheme()
   return (
     <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+      <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('upcomingAppointmentDetails.reason')}
       </TextView>
       <TextView variant="MobileBody">{reason}</TextView>

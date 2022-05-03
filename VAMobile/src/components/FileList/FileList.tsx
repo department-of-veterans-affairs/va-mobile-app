@@ -25,7 +25,7 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
   const listObjs: Array<DefaultListItemObj> = files.map((file) => {
     const { fileName, fileSize: formattedFileSize } = getFileDisplay(file, t, false)
 
-    const textLines: Array<TextLine> = [{ text: fileName, variant: 'MobileBodyBold', color: 'primaryTitle' }, { text: formattedFileSize }]
+    const textLines: Array<TextLine> = [{ text: fileName, variant: 'MobileBodyBold' }, { text: formattedFileSize }]
 
     const fileButton: DefaultListItemObj = {
       textLines,

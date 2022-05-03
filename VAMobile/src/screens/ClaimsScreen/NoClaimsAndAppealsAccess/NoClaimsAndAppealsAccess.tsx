@@ -13,12 +13,12 @@ const NoClaimsAndAppealsAccess: FC = () => {
   return (
     <VAScrollView {...testIdProps('Claims: No-claims-and-appeals-page')}>
       <Box my={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-        <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-          {t('claims:claimsAndAppeals.noClaimsAndAppealsAccess.title')}
-        </TextView>
+        <TextView variant="BitterBoldHeading">{t('claims:claimsAndAppeals.noClaimsAndAppealsAccess.title')}</TextView>
       </Box>
       <TextArea>
-        <TextView {...testIdProps(t('claims:claimsAndAppeals.noClaimsAndAppealsAccess.body.a11yLabel'))}>{t('claims:claimsAndAppeals.noClaimsAndAppealsAccess.body')}</TextView>
+        <TextView variant="MobileBody" {...testIdProps(t('claims:claimsAndAppeals.noClaimsAndAppealsAccess.body.a11yLabel'))}>
+          {t('claims:claimsAndAppeals.noClaimsAndAppealsAccess.body')}
+        </TextView>
         <ClickToCallPhoneNumber phone={t('common:8008271000')} displayedText={t('common:8008271000.displayText')} />
       </TextArea>
     </VAScrollView>

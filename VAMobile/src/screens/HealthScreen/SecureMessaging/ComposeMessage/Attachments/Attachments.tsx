@@ -39,7 +39,6 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
   const { origin, attachmentsList, messageID } = route.params
-  const { messagePhotoAttachmentMaxHeight } = theme.dimensions
 
   useEffect(() => {
     navigation.setOptions({
@@ -121,14 +120,14 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
     const text = [fileName, formattedFileSize].join(' ').trim()
     return (
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} mb={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
         {text}
       </TextView>
     )
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
-  const imageMaxWidthAndHeight = getMaxWidthAndHeightOfImage(image, messagePhotoAttachmentMaxHeight)
+  const imageMaxWidthAndHeight = getMaxWidthAndHeightOfImage(image, 300)
   const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   return (
@@ -139,7 +138,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
             <AlertBox text={error} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>

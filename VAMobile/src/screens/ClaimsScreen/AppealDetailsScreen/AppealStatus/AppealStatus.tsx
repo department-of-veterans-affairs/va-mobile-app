@@ -33,7 +33,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
     return (
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appealDetails.appealsAheadOfYou')}
           </TextView>
           <TextView variant="MobileBody">{numAppealsAhead.toLocaleString()}</TextView>

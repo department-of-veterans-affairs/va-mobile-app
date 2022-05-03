@@ -71,6 +71,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
     errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
   }
+  const saveSnackbarMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.draft.saved'),
+    errorMsg: t('secureMessaging.draft.saved.error'),
+  }
 
   const {
     hasLoadedRecipients,
@@ -368,7 +372,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, messageID, isReplyDraft, replyToID))
+      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       navigation.navigate('SendConfirmation', {
@@ -413,9 +417,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             </Box>
             <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
               <TextView>
-                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                  {t('secureMessaging.composeMessage.important')}
-                </TextView>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
             </Box>
@@ -425,13 +427,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           {message && isReplyDraft && (
             <>
               <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
+              <TextView variant="MobileBodyBold" accessible={true}>
                 {message?.recipientName}
               </TextView>
               <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
                 {t('secureMessaging.formMessage.subject')}
               </TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
+              <TextView variant="MobileBodyBold" accessible={true}>
                 {subjectHeader}
               </TextView>
             </>
@@ -474,16 +476,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'} color={'primaryTitle'}>
+          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
             {t('secureMessaging.reply.messageThread')}
           </TextView>
         </Box>
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-                {subjectHeader}
-              </TextView>
+              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messagesById, messageThread)}
           </Box>

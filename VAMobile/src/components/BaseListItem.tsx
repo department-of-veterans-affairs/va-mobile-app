@@ -75,19 +75,9 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
     case ButtonDecoratorType.Switch:
       return <SwitchComponent onPress={onPress} {...decoratorProps} />
     case ButtonDecoratorType.SelectedItem:
-      return (
-        <VAIcon
-          name={'CheckMark'}
-          height={theme.dimensions.pickerModalSelectedIconHeight}
-          width={theme.dimensions.pickerModalSelectedIconWidth}
-          fill={theme.colors.icon.pickerIcon}
-          {...decoratorProps}
-        />
-      )
+      return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
     case ButtonDecoratorType.Delete:
-      return (
-        <VAIcon name={'TrashSolid'} height={theme.dimensions.listTrashIconHeight} width={theme.dimensions.listTrashIconWidth} fill={theme.colors.icon.error} {...decoratorProps} />
-      )
+      return <VAIcon name={'TrashSolid'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
     default:
       return (
         <VAIcon

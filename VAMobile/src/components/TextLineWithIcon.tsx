@@ -21,9 +21,9 @@ export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, v
 
   return (
     <Box flexDirection={'row'}>
-      <Box ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft} mt={themes.dimensions.navigationBarIconMarginTop} mr={themes.dimensions.condensedMarginBetween}>
+      <Box ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft} mt={7} mr={themes.dimensions.condensedMarginBetween}>
         {iconProps && <VAIcon name={iconProps.name} width={iconProps.width} height={iconProps.height} fill={iconProps.fill} />}
-        {!iconProps && <Box mr={themes.dimensions.messageIconLeftMargin} />}
+        {!iconProps && <Box mr={16} />}
       </Box>
       {iconNotOwnRow && (
         <TextView flex={1} variant={variant} textAlign={textAlign} color={color}>

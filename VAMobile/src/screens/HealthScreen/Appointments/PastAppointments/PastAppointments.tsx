@@ -141,8 +141,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       }
 
       textLines.push(
-        { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', color: 'primaryTitle' },
-        { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', color: 'primaryTitle' },
+        { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+        { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         {
           text: tc('text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
           iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),

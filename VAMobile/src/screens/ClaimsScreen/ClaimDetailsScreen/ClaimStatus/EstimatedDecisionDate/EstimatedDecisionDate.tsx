@@ -69,9 +69,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
     <TextArea>
       <Box {...testIdProps(`${t('claimDetails.estimatedDecisionDate')} ${displayDate}`)} accessible={true}>
         <TextView variant="MobileBody">{t('claimDetails.estimatedDecisionDate')}</TextView>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-          {displayDate}
-        </TextView>
+        <TextView variant="MobileBodyBold">{displayDate}</TextView>
       </Box>
       {!!maxEstDate && !maxEstDateIsMoreThanTwoYearsOut && (
         <Box {...testIdProps(subText)} accessible={true}>

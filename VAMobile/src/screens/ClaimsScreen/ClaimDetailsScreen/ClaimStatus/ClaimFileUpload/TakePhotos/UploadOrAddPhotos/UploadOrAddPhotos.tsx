@@ -30,11 +30,11 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { bytesToFinalSizeDisplay } from 'utils/common'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
@@ -46,6 +46,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const showActionSheetWithOptions = useShowActionSheet()
   const { request: originalRequest, firstImageResponse } = route.params
   const dispatch = useDispatch()
+  const isPortrait = useOrientation()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
@@ -62,7 +63,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   })
 
-  const onCancel = () => {
+  useBeforeNavBackListener(navigation, (e) => {
+    if (imagesList?.length === 0 || filesUploadedSuccess) {
+      return
+    }
+    e.preventDefault()
     confirmAlert({
       title: t('fileUpload.discard.confirm.title.photos'),
       message: t('fileUpload.discard.confirm.message.photos'),
@@ -72,15 +77,19 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         {
           text: tc('cancel'),
         },
+
         {
           text: t('fileUpload.discard.photos'),
           onPress: () => {
-            snackBar.hideAll()
-            navigation.navigate('FileRequestDetails', { request })
+            navigation.dispatch(e.data.action)
           },
         },
       ],
     })
+  })
+
+  const onCancel = () => {
+    navigation.navigate('FileRequestDetails', { request })
   }
 
   useEffect(() => {
@@ -89,6 +98,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
 
     if (filesUploadedSuccess) {
+      setImagesList([])
       navigation.navigate('FileRequest', { claimID: claim?.id || '' })
     }
   }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
@@ -159,14 +169,15 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const displayImages = (): ReactElement => {
     const { condensedMarginBetween, gutter } = theme.dimensions
     /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
-    const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
+    const calculatedWidth = ((isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height) - 2 * gutter - 2 * condensedMarginBetween) / 3
 
     const uploadedImages = (): ReactElement[] => {
       return _.map(imagesList || [], (asset, index) => {
         return (
           /** Rightmost photo doesn't need right margin b/c of gutter margins
            * Every 3rd photo, right margin is changed to zero*/
-          <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index}>
+
+          <Box mt={condensedMarginBetween} mr={condensedMarginBetween} key={index}>
             <PhotoPreview
               width={calculatedWidth}
               height={calculatedWidth}
@@ -186,7 +197,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
 
     return (
-      <Box display="flex" flexDirection="row" flexWrap="wrap" mx={theme.dimensions.gutter}>
+      <Box display="flex" flexDirection="row" flexWrap="wrap" pl={gutter} pr={condensedMarginBetween}>
         {uploadedImages()}
         {(!imagesList || imagesList.length < MAX_NUM_PHOTOS) && (
           <Box mt={condensedMarginBetween}>
@@ -227,6 +238,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
+      setImagesList([])
       showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
       navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
     } else {
@@ -239,7 +251,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         }
       })
       setTotalBytesUsed(bytesUsed)
-      snackBar.hideAll()
       showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
     }
   }
@@ -252,7 +263,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
             <AlertBox title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
           {request.displayName}
         </TextView>
         <Box
@@ -275,10 +286,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.condensedMarginBetween}
           mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="HelperText" color="bodyText">
-            {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
-          </TextView>
-          <TextView variant="HelperText" color="bodyText">
+          <TextView variant="HelperText">{t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}</TextView>
+          <TextView
+            variant="HelperText"
+            accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>
         </Box>
