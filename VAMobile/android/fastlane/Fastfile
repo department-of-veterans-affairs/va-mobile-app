@@ -45,7 +45,7 @@ platform :android do
     bundle("Release")
     upload("Pre-Prod Stash")
     tag_build
-    message = "New Production build successfully uploaded to Pre=Prod Stash Track on Google Play"
+    message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
 
@@ -58,12 +58,20 @@ platform :android do
   lane :on_demand do |options|
     puts "on demand run"
     notes = options[:notes]
+    ps_track = options[:psTrack].empty? ? "Development Team" : options[:psTrack] 
+
+    datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
     update_version_and_build(options[:version ])
     bundle("Release")
-    puts options[:psTrack]
-    upload(options[:psTrack])
+    puts ps_track
+    upload(ps_track)
     bundle("Debug")
-    notes = "New On Demand version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
+
+    if notes.to_s.empty?
+      notes = "New On Demand QA version for " + datetime
+    elsif notes.start_with?("feature-build-")
+      notes = "Feature Build: #{notes.gsub('feature-build-','').gsub('-',' ')} - " + datetime
+    end
     puts notes
     distribute_to_firebase(notes, "qa")
     tag_build
@@ -95,6 +103,7 @@ platform :android do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
+    puts exception
     slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 

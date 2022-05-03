@@ -1,5 +1,6 @@
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
+import { logNonFatalErrorToFirebase } from './analytics'
 import { refreshAccessToken } from 'store/slices/authSlice'
 import RNFetchBlob, { FetchBlobResponse, RNFetchBlobConfig } from 'rn-fetch-blob'
 
@@ -7,6 +8,8 @@ const DocumentDirectoryPath = `${RNFetchBlob.fs.dirs.DocumentDir}/`
 
 // TODO: verify this time on the service side and match
 const FETCH_TIMEOUT_MS = 60000
+
+const fileSystemFatalErrorString = 'File System Error'
 
 /**
  * writes to file local filesystem for each mobile platform
@@ -53,7 +56,7 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
         throw error
       }
     }
-
+    logNonFatalErrorToFirebase(e, `downloadFile: ${fileSystemFatalErrorString} retries ${retries}`)
     console.error(`Error downloading letter: ${e}`)
     /**
      * On a request failure/timeout we get an exception thrown so we don't assume this is a network error
@@ -102,7 +105,9 @@ export const getBase64ForUri = async (uri: string): Promise<string | undefined> 
     uri = uri.substring(filePrefix.length)
     try {
       uri = decodeURI(uri)
-    } catch (e) {}
+    } catch (e) {
+      logNonFatalErrorToFirebase(e, `getBase64ForUri: ${fileSystemFatalErrorString}`)
+    }
   }
 
   return await RNFetchBlob.fs.readFile(uri, 'base64')

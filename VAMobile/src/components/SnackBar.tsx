@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
@@ -8,7 +8,7 @@ import { Box } from 'components'
 import { BoxProps } from './Box'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import TextView from './TextView'
-import VAIcon from './VAIcon'
+import VAIcon, { VAIconProps } from './VAIcon'
 import colors from '../styles/themes/VAColors'
 
 export type SnackbarMessages = {
@@ -24,57 +24,55 @@ export type SnackbarMessages = {
 const SnackBar: FC<ToastProps> = (toast) => {
   const { message, data } = toast
   const { onActionPressed, isError, actionBtnText, isUndo } = data || {}
-  const { dimensions, colors: themeColor } = useTheme()
+  const { colors: themeColor } = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   useFocusEffect(setFocus)
 
-  const styles = StyleSheet.create({
-    safeView: {
-      flex: 1,
-      marginBottom: dimensions.snackBarMarginBottom,
-      marginLeft: dimensions.snackBarMarginLeft,
-      marginRight: dimensions.snackBarMarginRight,
-    },
-  })
+  const safeViewStyle: StyleProp<ViewStyle> = {
+    flex: 1,
+    marginBottom: 0,
+    marginLeft: 10,
+    marginRight: 10,
+  }
 
   const confirmBtnStlye: StyleProp<ViewStyle> = {
-    marginLeft: dimensions.snackBarBetweenSpace,
+    marginLeft: 8,
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: dimensions.snackBarButtonTopBottomMargin,
-    marginRight: dimensions.snackBarConfirmBtnMarginRight,
-    marginBottom: dimensions.snackBarButtonTopBottomMargin,
+    marginTop: 5,
+    marginRight: 15,
+    marginBottom: 5,
   }
 
   const dismissBtnStlye: StyleProp<ViewStyle> = {
-    marginLeft: dimensions.snackBarBetweenSpace,
+    marginLeft: 8,
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: dimensions.snackBarButtonTopBottomMargin,
-    marginBottom: dimensions.snackBarButtonTopBottomMargin,
+    marginTop: 5,
+    marginBottom: 5,
   }
 
   const mainContainerProps: BoxProps = {
     minWidth: '100%',
-    p: dimensions.snackBarPadding,
+    p: 15,
     backgroundColor: 'snackbar',
-    borderRadius: dimensions.snackBarBorderRadius,
+    borderRadius: 4,
     flexDirection: 'row',
     flexWrap: 'wrap',
     display: 'flex',
     style: {
       shadowColor: colors.black,
-      shadowOffset: { width: dimensions.snackBarShadowX, height: dimensions.snackBarShadowY },
-      shadowOpacity: dimensions.snackBarShadowOpacity,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.6,
     },
   }
 
   const messageContainerProps: BoxProps = {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    mt: dimensions.snackBarButtonTopBottomMargin,
-    mb: dimensions.snackBarButtonTopBottomMargin,
+    mt: 5,
+    mb: 5,
     alignItems: 'center',
   }
 
@@ -91,20 +89,28 @@ const SnackBar: FC<ToastProps> = (toast) => {
     toast.onHide()
   }
 
+  const snackBarIconProps: VAIconProps = {
+    name: isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark',
+    fill: themeColor.icon.snackBarIcon,
+    height: 18,
+    width: 18,
+  }
+
+  const iconWrapperBoxProps: BoxProps = {
+    mr: 8,
+    alignSelf: 'flex-start',
+    mt: 2,
+  }
+
   return (
-    <SafeAreaView edges={['left', 'right']} style={styles.safeView}>
+    <SafeAreaView edges={['left', 'right']} style={{ ...safeViewStyle }}>
       <Box {...mainContainerProps}>
         <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
           <Box {...messageContainerProps}>
-            <Box mr={dimensions.snackBarBetweenSpace} alignSelf="flex-start" mt={dimensions.snackBarIconTopMargin}>
-              <VAIcon
-                name={isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark'}
-                fill={themeColor.text.snackBarText}
-                height={dimensions.snackBarIconSize}
-                width={dimensions.snackBarIconSize}
-              />
+            <Box {...iconWrapperBoxProps}>
+              <VAIcon {...snackBarIconProps} />
             </Box>
-            <TextView variant={'HelperText'} color={'snackBarText'}>
+            <TextView variant={'HelperText'} color={'snackBarTxt'}>
               {message}
             </TextView>
           </Box>
@@ -112,15 +118,13 @@ const SnackBar: FC<ToastProps> = (toast) => {
         <Box {...btnContainerProps}>
           {!isUndo && (
             <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
-              <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'} display={'flex'}>
+              <TextView variant={'SnackBarBtnText'} display={'flex'}>
                 {actionBtnText || isError ? 'Retry' : 'Undo'}
               </TextView>
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={() => toast.onHide()} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
-            <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'}>
-              {'Dismiss'}
-            </TextView>
+            <TextView variant={'SnackBarBtnText'}>{'Dismiss'}</TextView>
           </TouchableOpacity>
         </Box>
       </Box>

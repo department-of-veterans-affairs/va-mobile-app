@@ -7,6 +7,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getDateFromString } from 'utils/formattingUtils'
 import { isErrorObject } from 'utils/common'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { max } from 'underscore'
 
 export type MilitaryServiceState = {
@@ -41,6 +42,7 @@ export const getServiceHistory =
       dispatch(dispatchFinishGetHistory({ serviceHistory: mshData?.data.attributes.serviceHistory }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, 'getServiceHistory: Military Service Error')
         dispatch(dispatchFinishGetHistory({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }

@@ -43,7 +43,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
           </Box>
         )}
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {header}
           </TextView>
           <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.standardMarginBetween}>

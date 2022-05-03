@@ -63,7 +63,7 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
             {getBranchSeal()}
           </Box>
         )}
-        <Box ml={theme.dimensions.textXPadding} flex={1}>
+        <Box ml={20} flex={1}>
           <TextView
             textTransform="capitalize"
             mb={theme.dimensions.textIconMargin}

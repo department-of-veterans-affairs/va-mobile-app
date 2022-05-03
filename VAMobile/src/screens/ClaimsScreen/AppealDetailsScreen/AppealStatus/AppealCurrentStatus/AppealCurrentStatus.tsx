@@ -323,9 +323,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
                 {details[0]}
               </TextView>
               <TextView variant="MobileBody" mt={marginTop}>
-                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                  {details[1]}
-                </TextView>
+                <TextView variant="MobileBodyBold">{details[1]}</TextView>
                 {details[2]}
               </TextView>
             </Box>
@@ -353,7 +351,6 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             text: details[4],
             linkToRedirect: LINK_URL_DECISION_REVIEWS,
             variant: 'MobileBodyLink',
-            color: 'link',
           },
         ]
         return (
@@ -377,9 +374,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             </TextView>
             <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
               <TextView variant="MobileBody">{details[1]}</TextView>
-              <TextView variant="MobileBodyLink" color="link">
-                {details[2]}
-              </TextView>
+              <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
             </TextView>
           </Box>
@@ -392,11 +387,9 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             </TextView>
             <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
               <TextView variant="MobileBody">{details[1]}</TextView>
-              <TextView variant="MobileBodyLink" color="link">
-                {details[2]}
-              </TextView>
+              <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
-              <TextView variant="MobileBodyLink" color="link" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
+              <TextView variant="MobileBodyLink" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
                 {details[4]}
               </TextView>
               <TextView variant="MobileBody">.</TextView>
@@ -515,7 +508,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
               <TextView variant="MobileBody" mt={marginTop}>
                 {details[3]}
               </TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop}>
+              <TextView variant="MobileBodyBold" mt={marginTop}>
                 {details[1]}
               </TextView>
               <TextView variant="MobileBody">{details[2]}</TextView>
@@ -527,7 +520,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop}>
+            <TextView variant="MobileBodyBold" mt={marginTop}>
               {details[1]}
             </TextView>
             <TextView variant="MobileBody">{details[2]}</TextView>
@@ -583,10 +576,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
 
   return (
     <TextArea>
-      <TextView variant="BitterBoldHeading" color={'primaryTitle'} accessibilityRole="header">
+      <TextView variant="BitterBoldHeading" accessibilityRole="header">
         {t('appealDetails.currentStatus')}
       </TextView>
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={marginTop} accessibilityRole="header">
+      <TextView variant="MobileBodyBold" mt={marginTop} accessibilityRole="header">
         {statusHeadingAndTitle.title}
       </TextView>
       {renderStatusDetails()}

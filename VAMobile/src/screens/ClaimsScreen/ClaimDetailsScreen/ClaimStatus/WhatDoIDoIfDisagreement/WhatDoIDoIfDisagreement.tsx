@@ -41,13 +41,12 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
     <VAScrollView {...testIdProps(generateTestID(t('claimDetails.whatDoIDoIfDisagreement.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('claimsDetails.whatDoIDoIfDisagreement.header')}
           </TextView>
           <TextView variant="MobileBody">{t('claimsDetails.whatDoIDoIfDisagreement.content')}</TextView>
           <TextView
             variant="MobileBodyLink"
-            color="link"
             mt={theme.dimensions.standardMarginBetween}
             accessibilityRole="link"
             {...a11yHintProp(`${text} ${tc('mobileBodyLink.a11yHint')}`)}

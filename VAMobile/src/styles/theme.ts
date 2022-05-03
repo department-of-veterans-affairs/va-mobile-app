@@ -37,9 +37,7 @@ export type VATextColors = {
   footerButtonActive: string
   navBar: string
   primary: string
-  primaryTitle: string
   primaryContrast: string
-  primaryContrastDisabled: string
   secondary: string
   link: string
   error: string
@@ -49,14 +47,15 @@ export type VATextColors = {
   claimPhase: string
   input: string
   inputFocused: string
-  inputRequired: string
   brandedPrimaryText: string
   segmentControllerActive: string
   segmentControllerInactive: string
   snackBarBtn: string
-  backButton: string
-  snackBarText: string
+  snackBarTxt: string
+  actionBar: string
+  actionBarDisabled: string
   bodyText: string
+  defaultMenuItem: string
 }
 
 export type VAIconColors = {
@@ -77,7 +76,6 @@ export type VAIconColors = {
   checkboxDisabled: string
   checkboxDisabledContrast: string
   spinner: string
-  dark: string
   covid19Vaccinations: string
   photoAdd: string
   pickerIcon: string
@@ -87,6 +85,9 @@ export type VAIconColors = {
   webviewReload: string
   backButton: string
   unreadMessage: string
+  veteransCrisisLineArrow: string
+  snackBarIcon: string
+  defaultMenuItem: string
 }
 
 export type VATypographyThemeVariants = {
@@ -150,7 +151,7 @@ export type VABorderColors = {
   phaseIndicatorUpcoming: string
   success: string
   primaryDarkest: string
-  photoAdd: string
+  photoAdd: string // todo rename photoAdd border color to be more abstract (talk to design)
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string
@@ -189,104 +190,37 @@ export type VAColorScheme = {
 export type VATheme = {
   colors: VAColorScheme
   dimensions: {
-    keyboardManagerDistanceFromTextField: number
+    attachmentIconTopMargin: number
     borderWidth: number
     focusedInputBorderWidth: number
     buttonBorderWidth: number
     gutter: number
     textIconMargin: number
-    textXPadding: number
     contentMarginTop: number
     contentMarginBottom: number
     standardMarginBetween: number
     condensedMarginBetween: number
     cardPadding: number
-    cardMargin: number
     buttonPadding: number
     alertBorderWidth: number
-    alertPaddingY: number
-    alertPaddingX: number
     listItemDecoratorMarginLeft: number
-    messagesDecoratorMarginLeft: number
-    noLettersPaddingY: number
-    datePickerArrowsPaddingRight: number
-    pickerLabelMargin: number
-    checkboxLabelMargin: number
-    navigationBarIconMarginTop: number
     touchableMinHeight: number
-    textAreaHeight: number
-    headerButtonMargin: number
-    headerButtonPadding: number
-    textInputLabelMarginBottom: number
-    phaseIndicatorRightMargin: number
-    phaseIndicatorDiameter: number
-    phaseIndicatorBorderWidth: number
-    phaseIndicatorIconWidth: number
-    phaseIndicatorIconHeight: number
-    bulletMargin: number
     textAndButtonLargeMargin: number
-    fileUploadMargin: number
-    biometricsPreferenceMarginTop: number
-    carouselProgressDotsMargin: number
     headerHeight: number
-    textInputMargin: number
     formMarginBetween: number
-    tagCountMinWidth: number
-    tagCountCurvedBorder: number
-    tagCountTopPadding: number
-    messagePhotoAttachmentMaxHeight: number
-    messageIconLeftMargin: number
-    messageIconWidth: number
-    messageIconHeight: number
+    tagMinWidth: number
+    tagCurvedBorder: number
+    tagTopPadding: number
+    tagHorizontalPadding: number
     maxNumMessageAttachments: number
-    paginationButtonPadding: number
-    photoPreviewIconSize: number
-    photoPreviewBorderRadius: number
-    photoPreviewIconPadding: number
-    pickerModalTopPadding: number
-    pickerModalSelectedIconWidth: number
-    pickerModalSelectedIconHeight: number
-    messageSentReadLeftMargin: number
-    syncLogoSpacing: number
     navBarHeight: number
     paginationTopPadding: number
-    collapsibleIconMargin: number
-    loginContentMarginBottom: number
-    webviewReloadButtonHeight: number
-    webviewReloadButtonSize: number
-    webviewButtonSize: number
-    webviewButtona11ySize: number
-    errorLabelBottomMargin: number
-    selectorWidth: number
-    selectorHeight: number
-    snackBarPadding: number
-    snackBarMarginBottom: number
-    snackBarMarginRight: number
-    snackBarMarginLeft: number
-    snackBarVerticalMargin: number
-    snackBarBorderRadius: number
-    snackBarBetweenSpace: number
-    snackBarShadowX: number
-    snackBarShadowY: number
-    snackBarShadowOpacity: number
-    snackBarIconSize: number
     snackBarBottomOffset: number
     snackBarBottomOffsetWithNav: number
-    snackBarButtonTopBottomMargin: number
-    snackBarConfirmBtnMarginRight: number
-    snackBarIconTopMargin: number
-    menuShadowX: number
-    menuShadowY: number
-    menuShadowOpacity: number
-    menuShadowRadius: number
-    menuOpacity: number
-    menuBorderRadius: number
-    menuItemMinWidth: number
-    menuElevation: number
     chevronListItemWidth: number
     chevronListItemHeight: number
-    listTrashIconWidth: number
-    listTrashIconHeight: number
+    headerButtonSpacing: number
+    headerLeftButtonFromTextPadding: number
   }
   fontFace: {
     regular: string

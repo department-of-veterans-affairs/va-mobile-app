@@ -37,7 +37,7 @@ const DirectDepositScreen: FC = () => {
   )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {
-    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
         textLines.push({ text: t('directDeposit.dynamicField', { field: bankData.financialInstitutionName }) })
@@ -97,9 +97,7 @@ const DirectDepositScreen: FC = () => {
       <Box accessible={true}>
         <Box mx={gutter} mt={condensedMarginBetween}>
           <TextView>
-            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-              {t('directDeposit.bankFraudNote') + ' '}
-            </TextView>
+            <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
             <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
           </TextView>
         </Box>

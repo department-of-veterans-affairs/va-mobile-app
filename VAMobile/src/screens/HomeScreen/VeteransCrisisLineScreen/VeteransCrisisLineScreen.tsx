@@ -35,7 +35,7 @@ const VeteransCrisisLineScreen: FC = () => {
     <VAScrollView {...testIdProps('Veterans-Crisis-Line-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
             {t('veteransCrisisLine.weAreHereForYou')}
           </TextView>
           <Box mt={standardMarginBetween}>
@@ -71,7 +71,7 @@ const VeteransCrisisLineScreen: FC = () => {
             />
           </Box>
           <Box mt={standardMarginBetween}>
-            <TextView color="primary" variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
+            <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
               {t('contactVA.tty.body')}
             </TextView>
             <ClickForActionLink
@@ -84,7 +84,7 @@ const VeteransCrisisLineScreen: FC = () => {
             />
           </Box>
           <Box mt={standardMarginBetween}>
-            <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
               {t('veteransCrisisLine.getMoreResources')}
             </TextView>
           </Box>

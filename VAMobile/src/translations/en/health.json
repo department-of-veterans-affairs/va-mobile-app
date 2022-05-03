@@ -160,6 +160,8 @@
   "secureMessaging.composeMessage.to.fieldError": "To is required",
   "secureMessaging.composeMessage.whenWillIGetAReply": "When will I get a reply?",
   "secureMessaging.composeMessage.whenWillIGetAReplyA11yHint": "When should I expect a response?",
+  "secureMessaging.draft.saved": "Draft saved",
+  "secureMessaging.draft.saved.error": "Draft could not be saved",
   "secureMessaging.drafts.edit": "Edit Draft",
   "secureMessaging.deleteDraft.menuBtnA11y": "Delete Draft",
   "secureMessaging.deleteDraft.areYouSure": "Are you sure you want to delete this draft?",

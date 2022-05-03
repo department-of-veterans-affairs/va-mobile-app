@@ -8,6 +8,7 @@ import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
@@ -28,14 +29,12 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
     display: 'flex',
     flexDirection: 'row',
     mr: dimensions.textIconMargin,
-    height: dimensions.webviewReloadButtonHeight,
+    height: isIOS() ? 64 : 45, // this is done due to position difference between IOS and Android
   }
 
   return (
     <Box {...reloadBoxProps}>
       <WebviewControlButton
-        width={dimensions.webviewReloadButtonSize}
-        height={dimensions.webviewReloadButtonSize}
         onPress={reloadPressed}
         disabled={false}
         icon={'WebviewRefresh'}

@@ -37,7 +37,7 @@ export type MessageListProps = {
  */
 const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const themes = useTheme()
+
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { inlineTextWithIcons, testId, ...listItemObj } = item
@@ -50,12 +50,12 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
     const content = (
       // Package individual textLineWithIcon components together into one message
       <Box flex={1}>
-        <Box flexDirection="column" mb={themes.dimensions.navigationBarIconMarginTop}>
+        <Box flexDirection="column" mb={7}>
           {inlineTextWithIcons?.map((textObj: InlineTextWithIconsProps, index: number) => {
             return <InlineTextWithIcons key={index} {...textObj} />
           })}
           {isSentReadTag && (
-            <Box ml={themes.dimensions.messageSentReadLeftMargin} mt={themes.dimensions.navigationBarIconMarginTop}>
+            <Box ml={23} mt={7}>
               <MessagesSentReadTag text={t('secureMessaging.folders.read.tag')} />
             </Box>
           )}

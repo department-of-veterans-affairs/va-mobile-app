@@ -31,7 +31,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
   const navigateTo = useRouteNavigation()
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
     const textLines: Array<TextLine> = [
-      { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold', color: 'primaryTitle' },
+      { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
       { text: formatDateMMMMDDYYYY(vaccine.attributes?.date || '') },
     ]
 

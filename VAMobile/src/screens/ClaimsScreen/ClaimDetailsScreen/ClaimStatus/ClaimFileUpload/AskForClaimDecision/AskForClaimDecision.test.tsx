@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { context, mockNavProps, mockStore, render } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
 import AskForClaimDecision from './AskForClaimDecision'
@@ -8,7 +8,6 @@ import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialSta
 import { AlertBox, VASelector, ErrorComponent, VAButton, TextView } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { RenderAPI } from '@testing-library/react-native'
 

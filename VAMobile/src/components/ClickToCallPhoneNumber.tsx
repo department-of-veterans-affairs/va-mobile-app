@@ -46,19 +46,13 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     <Box alignItems={center ? 'center' : undefined} mt={theme.dimensions.standardMarginBetween}>
       <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
       <Box accessible={true}>
-        <TextView
-          textAlign={center ? 'center' : undefined}
-          color="primary"
-          variant="MobileBody"
-          my={theme.dimensions.condensedMarginBetween}
-          focusable={true}
-          importantForAccessibility="yes">
+        <TextView textAlign={center ? 'center' : undefined} variant="MobileBody" my={theme.dimensions.condensedMarginBetween} focusable={true} importantForAccessibility="yes">
           {t('contactVA.tty.body')}
         </TextView>
       </Box>
       <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
       <Box accessible={true}>
-        <TextView textAlign={center ? 'center' : undefined} color="primary" variant="HelperText" mt={theme.dimensions.condensedMarginBetween}>
+        <TextView textAlign={center ? 'center' : undefined} variant="HelperText" mt={theme.dimensions.condensedMarginBetween}>
           {t('contactVA.tty.hintText')}
         </TextView>
       </Box>

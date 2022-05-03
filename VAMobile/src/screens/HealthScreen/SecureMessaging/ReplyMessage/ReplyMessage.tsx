@@ -29,6 +29,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SecureMessagingState, dispatchSetActionStart, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
@@ -67,6 +68,11 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverName = message ? message.senderName : ''
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.draft.saved'),
+    errorMsg: t('secureMessaging.draft.saved.error'),
+  }
 
   const goToCancel = () => {
     replyCancelConfirmation({
@@ -180,7 +186,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, savedDraftID, true, messageID))
+      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
     } else {
       receiverID &&
         navigation.navigate('SendConfirmation', {
@@ -212,23 +218,23 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           </Box>
           <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
             <TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                {t('secureMessaging.composeMessage.important')}
-              </TextView>
+              <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
               <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
             </TextView>
           </Box>
         </CollapsibleView>
       </Box>
       <TextArea>
-        <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
+        <TextView variant="MobileBody" accessible={true}>
+          {t('secureMessaging.formMessage.to')}
+        </TextView>
+        <TextView variant="MobileBodyBold" accessible={true}>
           {receiverName}
         </TextView>
-        <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true}>
           {t('secureMessaging.formMessage.subject')}
         </TextView>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
+        <TextView variant="MobileBodyBold" accessible={true}>
           {subjectHeader}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -261,16 +267,14 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'} color={'primaryTitle'}>
+          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
             {t('secureMessaging.reply.messageThread')}
           </TextView>
         </Box>
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-                {subjectHeader}
-              </TextView>
+              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messagesById, thread)}
           </Box>
