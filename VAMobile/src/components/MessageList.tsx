@@ -7,7 +7,6 @@ import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { READ } from '../constants/secureMessaging'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
-import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import MessagesSentReadTag from './MessagesSentReadTag'
 
