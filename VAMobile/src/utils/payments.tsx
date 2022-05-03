@@ -16,7 +16,7 @@ import { getTestIDFromTextLines } from './accessibility'
  */
 export const groupPaymentsByDate = (paymentsList?: PaymentsList): PaymentsByDate => {
   const paymentsByDate = groupBy(paymentsList || [], (payment) => {
-    return getFormattedDate(payment.attributes.date, 'yyyy-MM-dd')
+    return DateTime.fromISO(payment.attributes.date).toUTC().toFormat('yyyy-MM-dd')
   })
 
   return paymentsByDate
