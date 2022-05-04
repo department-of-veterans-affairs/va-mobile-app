@@ -1,7 +1,6 @@
 import { Pressable, PressableProps } from 'react-native'
 import React, { FC } from 'react'
 
-import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -26,7 +25,7 @@ const TrackingCard: FC<TrackingCardProps> = ({ onPress, a11yHint, title, dateShi
   const pressableProps: PressableProps = {
     onPress,
     accessibilityRole: 'button',
-    ...a11yHintProp(a11yHint || ''),
+    accessibilityHint: a11yHint || '',
   }
 
   const boxProps: BoxProps = {
