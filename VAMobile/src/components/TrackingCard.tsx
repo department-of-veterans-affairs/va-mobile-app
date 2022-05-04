@@ -1,8 +1,9 @@
 import { Pressable, PressableProps } from 'react-native'
-import { a11yHintProp } from '../utils/accessibility'
-import { useTheme, useTranslation } from '../utils/hooks'
-import Box, { BoxProps } from './Box'
 import React, { FC } from 'react'
+
+import { a11yHintProp } from 'utils/accessibility'
+import { useTheme, useTranslation } from 'utils/hooks'
+import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 
 export type TrackingCardProps = {
