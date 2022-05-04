@@ -50,6 +50,7 @@ export const lightTheme = {
     confirmation: colors.goldLight,
     footerButton: colors.grayLight,
     menuDivider: colors.grayLight,
+    trackingCard: colors.grayDark,
   },
   icon: {
     footerButton: colors.primary,
@@ -202,6 +203,7 @@ export const darkTheme = {
     confirmation: colors.gold,
     footerButton: colors.darkmodeBorder,
     menuDivider: colors.darkmodeBorder,
+    trackingCard: colors.darkmodeBorder,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
