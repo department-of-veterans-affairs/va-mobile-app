@@ -156,6 +156,7 @@ export type VABorderColors = {
   confirmation: string
   footerButton: string
   menuDivider: string
+  trackingCard: string
 }
 
 export type VAFontSizes = {
