@@ -16,6 +16,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Tag branch
         run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
           TAG="test-$(date +%m%d%y-%H%M)"
           git tag -a "$TAG" -m test
           git push origin "$TAG"
