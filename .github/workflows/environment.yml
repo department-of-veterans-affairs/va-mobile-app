@@ -12,6 +12,14 @@ jobs:
     steps:
       - name: Test output
         run: echo "Commands run here"
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Tag branch
+        run: |
+          TAG="test-$(date +%m%d%y-%H%M)"
+          git tag -a "$TAG" -m test
+          git push origin "$TAG"
+
 
   qa:
     runs-on: ubuntu-latest
