@@ -319,6 +319,12 @@ jobs:
           lane: "release"
       - ios_fastlane:
           lane: "release"
+  sleep:
+    executor: default
+    steps:
+      - run: |
+          sleep 20
+          echo "wait over"
 
 workflows:
   pr:
@@ -388,3 +394,9 @@ workflows:
           filters:
             tags:
               only: /^test-.+/
+      - sleep:
+          requires:
+            - run
+      - run:
+          requires:
+            - sleep
