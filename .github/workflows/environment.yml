@@ -23,7 +23,6 @@ jobs:
           git push origin "$TAG"
       - name: Build Feature Build for branch
         id: build-feature-branch
-        run: echo "Run build and stuff before QA build here"
         uses: circleci/trigger_circleci_pipeline@v1.0
         env:
           CCI_TOKEN: $CCI_TOKEN
@@ -33,7 +32,7 @@ jobs:
     needs: approve
     environment: xl-qa-review
     steps:
-      - run: echo "Approved by QA" 
+      - run: echo "Approved by QA"
 
 
 
