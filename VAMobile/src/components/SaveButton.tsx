@@ -21,7 +21,7 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const color = disabled ? 'primaryContrastDisabled' : 'primaryContrast'
+  const color = disabled ? 'actionBarDisabled' : 'actionBar'
 
   const props: TouchableWithoutFeedbackProps = {
     onPress: onSave,

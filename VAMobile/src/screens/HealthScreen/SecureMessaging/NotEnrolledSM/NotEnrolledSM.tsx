@@ -46,19 +46,17 @@ const NotEnrolledSM: FC = () => {
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme.dimensions.gutter} mb={standardMarginBetween}>
-          <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-            {t('notEnrolledSM.title')}
-          </TextView>
+          <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
         </Box>
         <Box>
           <TextArea>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
+            <TextView variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
               {t('notEnrolledSM.withSM')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
             <Box mb={standardMarginBetween}>
@@ -75,9 +73,7 @@ const NotEnrolledSM: FC = () => {
             </Box>
             <Box mb={standardMarginBetween}>
               <TextView>
-                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                  {tc('note') + ' '}
-                </TextView>
+                <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
               </TextView>
             </Box>

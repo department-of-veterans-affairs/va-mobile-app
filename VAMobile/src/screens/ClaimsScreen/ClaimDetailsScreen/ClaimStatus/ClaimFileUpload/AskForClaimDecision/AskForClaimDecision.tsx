@@ -103,7 +103,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mb={standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
             {t('askForClaimDecision.title')}
           </TextView>
           <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>

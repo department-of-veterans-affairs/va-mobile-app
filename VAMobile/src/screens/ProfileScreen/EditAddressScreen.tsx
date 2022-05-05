@@ -266,6 +266,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     const addressValidationProps = {
       addressEntered: getAddressValues(),
       addressId: profile?.[addressType]?.id || 0,
+      snackbarMessages: snackbarMessages,
     }
     return <AddressValidation {...addressValidationProps} />
   }

@@ -47,6 +47,7 @@ export const SnackBarConstants: {
 const screensToCloseSnackbarOnNavigation = [
   'TakePhotos',
   'SelectFile',
+  'UploadFile',
   'UploadOrAddPhotos',
   'ClaimDetails',
   'FolderMessages',
@@ -55,6 +56,10 @@ const screensToCloseSnackbarOnNavigation = [
   'PersonalInformation',
   'DirectDeposit',
   'EditDirectDeposit',
+  'FileRequest',
+  'AppealDetailsScreen',
+  'ClaimDetailsScreen',
+  'AskForClaimDecision',
 ]
 
 export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {

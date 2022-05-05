@@ -19,18 +19,14 @@ import { useSelector } from 'react-redux'
 export type AddressValidationProps = {
   addressEntered: AddressData
   addressId: number
+  snackbarMessages: SnackbarMessages
 }
 
-const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId }) => {
+const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId, snackbarMessages }) => {
   const dispatch = useAppDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
   const theme = useTheme()
-
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.residentialAddress.saved'),
-    errorMsg: t('personalInformation.residentialAddress.saved.error'),
-  }
 
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const { validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
@@ -140,16 +136,12 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
 
   const accordionHeader = (): ReactNode => {
-    return (
-      <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-        {getAlertTitle()}
-      </TextView>
-    )
+    return <TextView variant="MobileBodyBold">{getAlertTitle()}</TextView>
   }
 
   const getAlert = (): ReactNode => {
     return (
-      <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
+      <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
         {getAlertBody()}
       </TextView>
     )

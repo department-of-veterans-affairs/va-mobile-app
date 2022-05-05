@@ -82,12 +82,22 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
       </Box>
     )
 
+    const labelProps = testID
+      ? {
+          accessibilityLabel: testID,
+        }
+      : {}
+
     if (hideArrow) {
-      return <Box {...testIdProps(testID || '')}>{data}</Box>
+      return (
+        <Box {...labelProps} accessible={true}>
+          {data}
+        </Box>
+      )
     }
 
     return (
-      <Pressable {...pressableProps} {...testIdProps(testID || '')} ref={headerRef}>
+      <Pressable {...pressableProps} {...labelProps} ref={headerRef}>
         {data}
       </Pressable>
     )

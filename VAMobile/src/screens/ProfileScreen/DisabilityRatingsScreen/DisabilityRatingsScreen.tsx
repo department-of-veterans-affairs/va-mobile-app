@@ -69,7 +69,6 @@ const DisabilityRatingsScreen: FC = () => {
       textLines.push({
         text: percentageText,
         variant: 'MobileBodyBold',
-        color: 'primaryTitle',
       })
     }
 
@@ -112,7 +111,7 @@ const DisabilityRatingsScreen: FC = () => {
         <TextArea>
           <Box accessible={true}>
             {combinedPercentText && (
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="text">
+              <TextView variant="MobileBodyBold" accessibilityRole="text">
                 {combinedPercentText}
               </TextView>
             )}
@@ -129,7 +128,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>
@@ -147,7 +146,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('disabilityRatingDetails.needHelp')}
           </TextView>
         </Box>
@@ -190,7 +189,6 @@ const DisabilityRatingsScreen: FC = () => {
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
-    color: 'primaryTitle',
     mx: gutter,
     mb: condensedMarginBetween,
     mt: standardMarginBetween,
