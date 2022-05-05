@@ -405,7 +405,7 @@ workflows:
 
   env_test:
     when:
-      equal: [build-feature-branch, <<pipeline.parameters.GHA_Event>>]
+      equal: [ build-feature-branch, <<pipeline.parameters.GHA_Event>> ]
     jobs:
       - sleep:
           requires:
