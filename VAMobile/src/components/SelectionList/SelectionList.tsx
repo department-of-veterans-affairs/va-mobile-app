@@ -41,6 +41,7 @@ const SelectionList: FC<SelectionListProps> = ({ items }) => {
       updateSelectionValForIdx(id)
     }
 
+    // Add an initial value so the key can be picked up by select all
     if (selectionVals[id] === undefined) {
       selectionVals[id] = false
     }
