@@ -12,3 +12,11 @@ jobs:
     steps:
       - name: Test output
         run: echo "Commands run here"
+
+  qa:
+    runs-on: ubuntu-latest
+    needs: approve
+    environment: xl-qa-review
+    steps:
+      - name: Test QA Output
+        run: echo "Run build and stuff before QA build here"
