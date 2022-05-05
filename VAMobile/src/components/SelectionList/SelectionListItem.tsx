@@ -33,20 +33,22 @@ const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn,
 
   const getIcon = () => {
     let name: keyof typeof VA_ICON_MAP
-    let fill = 'checkboxDisabled'
+    let fill = 'checkboxEnabledPrimary'
+    let stroke = 'checkboxEnabledPrimary'
 
     if (isSelected) {
       name = 'FilledCheckBox'
     } else {
       name = 'EmptyCheckBox'
       fill = 'checkboxDisabledContrast'
+      stroke = 'checkboxDisabled'
     }
 
     const iconProps: VAIconProps = {
       name,
       width: 20,
       height: 20,
-      stroke: 'checkboxDisabled',
+      stroke,
       fill,
       ml: 20,
       pt: 5,

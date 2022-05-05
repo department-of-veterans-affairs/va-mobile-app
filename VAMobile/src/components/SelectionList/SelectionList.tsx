@@ -74,7 +74,8 @@ const SelectionList: FC<SelectionListProps> = ({ items }) => {
 
   const getSelectAllIcon = () => {
     let name: keyof typeof VA_ICON_MAP
-    let fill = 'checkboxDisabled'
+    let fill = 'checkboxEnabledPrimary'
+    let stroke = 'checkboxEnabledPrimary'
 
     if (numSelected === items.length) {
       name = 'FilledCheckBox'
@@ -83,13 +84,14 @@ const SelectionList: FC<SelectionListProps> = ({ items }) => {
     } else {
       name = 'EmptyCheckBox'
       fill = 'checkboxDisabledContrast'
+      stroke = 'checkboxDisabled'
     }
 
     const iconProps: VAIconProps = {
       name,
       width: 20,
       height: 20,
-      stroke: 'checkboxDisabled',
+      stroke,
       fill,
       ml: 20,
     }
@@ -98,7 +100,8 @@ const SelectionList: FC<SelectionListProps> = ({ items }) => {
   }
 
   const headerWrapperProps: BoxProps = {
-    borderWidth: theme.dimensions.borderWidth,
+    borderTopWidth: theme.dimensions.borderWidth,
+    borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     px: theme.dimensions.gutter,
