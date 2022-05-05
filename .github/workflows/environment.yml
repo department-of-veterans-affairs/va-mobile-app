@@ -23,9 +23,9 @@ jobs:
           git push origin "$TAG"
       - name: Build Feature Build for branch
         id: build-feature-branch
-        uses: circleci/trigger_circleci_pipeline@v1.0
+        uses: circleci/trigger_circleci_pipeline@v1.0.4
         env:
-          CCI_TOKEN: $CCI_TOKEN
+          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
 
   build:
     runs-on: ubuntu-latest

@@ -336,6 +336,7 @@ jobs:
   sleep:
     executor: default
     steps:
+      - run: echo ${CIRCLE_BRANCH}
       - run: |
           sleep 30
           echo "wait over"
@@ -406,7 +407,6 @@ workflows:
     when:
       equal: [build-feature-branch, <<pipeline.parameters.GHA_Event>>]
     jobs:
-      - run
       - sleep:
           requires:
             - run
