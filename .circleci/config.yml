@@ -1,4 +1,18 @@
 version: 2.1
+parameters:
+  GHA_Event:
+    type: string
+    default: ""
+  GHA_Actor:
+    type: string
+    default: ""
+  GHA_Action:
+    type: string
+    default: ""
+  GHA_Meta:
+    type: string
+    default: ""
+
 executors:
   default:
     docker:
@@ -389,13 +403,10 @@ workflows:
       - run_release_lanes
 
   env_test:
+    when:
+      equal: [build-feature-branch, <<pipeline.parameters.GHA_Event>>]
     jobs:
-      - run:
-          filters:
-            tags:
-              only: /^test-.+/
-            branches:
-              ignore: /.*/
+      - run
       - sleep:
           requires:
             - run

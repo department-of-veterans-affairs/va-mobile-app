@@ -21,20 +21,19 @@ jobs:
           TAG="test-$(date +%m%d%y-%H%M)"
           git tag -a "$TAG" -m test
           git push origin "$TAG"
-
+      - name: Build Feature Build for branch
+        id: build-feature-branch
+        run: echo "Run build and stuff before QA build here"
+        uses: circleci/trigger_circleci_pipeline@v1.0
+        env:
+          CCI_TOKEN: $CCI_TOKEN
 
   build:
     runs-on: ubuntu-latest
     needs: approve
-    environment: CICD
-    steps:
-      - name: Test Build Output
-        run: echo "Run build and stuff before QA build here"
-  qa:
-    runs-on: ubuntu-latest
-    needs: build
     environment: xl-qa-review
     steps:
-      - name: Test QA Output
-        run: echo "Run build and stuff before QA build here"
+      - run: echo "Approved by QA" 
+
+
 
