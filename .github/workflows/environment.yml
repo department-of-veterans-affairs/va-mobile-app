@@ -6,7 +6,7 @@ on:
       - feature/spike-xl-workflows
 
 jobs:
-  approve:
+  approve_and_build:
     runs-on: ubuntu-latest
     environment: xl-code-review
     steps:
@@ -27,12 +27,13 @@ jobs:
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
 
-  build:
+  qa_review:
     runs-on: ubuntu-latest
     needs: approve
     environment: xl-qa-review
     steps:
       - run: echo "Approved by QA"
+      - run: echo "merge commands would go here"
 
 
 
