@@ -18,7 +18,7 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          TAG="v0.0.0-$(date +%m%d%y-%H%M)"
+          TAG="test-$(date +%m%d%y-%H%M)"
           git tag -a "$TAG" -m test
           git push origin "$TAG"
 

@@ -381,3 +381,10 @@ workflows:
               only: main
     jobs:
       - run_release_lanes
+
+  test:
+    jobs:
+      - run:
+          filters:
+            tags:
+              only: /^test-.+/
