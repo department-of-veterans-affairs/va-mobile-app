@@ -323,7 +323,7 @@ jobs:
     executor: default
     steps:
       - run: |
-          sleep 20
+          sleep 30
           echo "wait over"
 
 workflows:
