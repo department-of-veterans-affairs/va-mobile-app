@@ -1,4 +1,4 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, AppState, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
@@ -490,4 +490,27 @@ export function useBeforeNavBackListener(
 
     return unsubscribe
   })
+}
+
+/**
+ * Hook that is called when app moves from the background to the foreground
+ *
+ * @param callback - function to execute when app is back in the foreground
+ */
+export function useOnResumeForeground(callback: () => void): void {
+  const appState = useRef(AppState.currentState)
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        // App has come back to the foreground!
+        callback()
+      }
+
+      appState.current = nextAppState
+    })
+
+    return () => {
+      subscription.remove()
+    }
+  }, [callback])
 }
