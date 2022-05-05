@@ -1,0 +1,14 @@
+name: Test approvals
+
+on:
+  push:
+    branches:
+      - feature/spike-xl-workflows
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    environment: xl-code-review
+    steps:
+      - name: Test output
+        run: echo "Commands run here"
