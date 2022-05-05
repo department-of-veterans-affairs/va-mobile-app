@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import { TextView } from './index'
 import { isIOS } from 'utils/platform'
 import Box, { BoxProps } from './Box'
-import RNDateTimePicker, { AndroidEvent, Event } from '@react-native-community/datetimepicker'
+import RNDateTimePicker, { DateTimePickerEvent, Event } from '@react-native-community/datetimepicker'
 import React, { FC, useState } from 'react'
 import theme from 'styles/themes/standardTheme'
 
@@ -83,7 +83,7 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
             value={selectedDate}
             mode={'date'}
             display={display}
-            onChange={(event: Event | AndroidEvent, date?: Date): void => {
+            onChange={(event: Event | DateTimePickerEvent, date?: Date): void => {
               setShow(isIOS())
               setValue(date ? DateTime.fromJSDate(date).toLocaleString() : defaultString)
               setSelectedDate(date ? date : new Date())

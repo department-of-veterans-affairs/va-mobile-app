@@ -53,6 +53,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const onLetters = navigateTo('LettersOverview')
   const onHealthCare = navigateTo('HealthTab')
   const onPayments = navigateTo('Payments')
+  const onCalendarDTP = navigateTo('CalendarDTP')
 
   const buttonDataList: Array<SimpleListItemObj> = [
     {
@@ -90,6 +91,15 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           </TextView>
         </Box>
         <Box mx={theme.dimensions.gutter}>
+          <LargeNavButton
+            title={'CalendarDTP'}
+            subText={'Testing calendar'}
+            onPress={onCalendarDTP}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
             subText={t('claimsAndAppeals.subText')}

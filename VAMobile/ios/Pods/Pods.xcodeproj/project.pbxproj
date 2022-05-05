@@ -27078,31 +27078,6 @@
 			};
 			name = Debug;
 		};
-		16D61C63EC4F61F23C08EA61333A9BE5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 312442217728F23CF59298647703CFB3 /* RNDateTimePicker.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/RNDateTimePicker/RNDateTimePicker-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = RNDateTimePicker;
-				PRODUCT_NAME = RNDateTimePicker;
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		19A0E299B05901B24D0FF5C90CC98234 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5D6BBCC7848227183AED8DD117485B64 /* react-native-image-picker.debug.xcconfig */;
@@ -27611,6 +27586,31 @@
 			};
 			name = Debug;
 		};
+		36490FAF677B32E2FE2C2C990C93B127 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 312442217728F23CF59298647703CFB3 /* RNDateTimePicker.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/RNDateTimePicker/RNDateTimePicker-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = RNDateTimePicker;
+				PRODUCT_NAME = RNDateTimePicker;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		36860E30D098A2801425647E9FF6E536 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 90C828AAE7124E46E39BDE20B16AB1C6 /* React-Core.debug.xcconfig */;
@@ -28003,32 +28003,6 @@
 			};
 			name = Release;
 		};
-		4B136371CD4A9982AF109A948789DFA2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6E7F3B80D14154401BA7B3EC6522A7E7 /* RNDateTimePicker.release.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/RNDateTimePicker/RNDateTimePicker-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = RNDateTimePicker;
-				PRODUCT_NAME = RNDateTimePicker;
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		4BD42B1AE2EE3932767C56F00004603C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D847EEF0C7EFF99E0BB6A8B2984FF7AA /* React-logger.debug.xcconfig */;
@@ -28078,6 +28052,32 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		4D53AE0D63FA8B2A3C8469B3FB83A557 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6E7F3B80D14154401BA7B3EC6522A7E7 /* RNDateTimePicker.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/RNDateTimePicker/RNDateTimePicker-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = RNDateTimePicker;
+				PRODUCT_NAME = RNDateTimePicker;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
 		};
 		4F8A84BEDEEF10A3127F78CC577F8FB2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -31226,8 +31226,8 @@
 		52B0F1B8DDE4DE697B9187AA55300248 /* Build configuration list for PBXNativeTarget "RNDateTimePicker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				16D61C63EC4F61F23C08EA61333A9BE5 /* Debug */,
-				4B136371CD4A9982AF109A948789DFA2 /* Release */,
+				36490FAF677B32E2FE2C2C990C93B127 /* Debug */,
+				4D53AE0D63FA8B2A3C8469B3FB83A557 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
