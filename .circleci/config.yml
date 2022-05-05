@@ -394,6 +394,8 @@ workflows:
           filters:
             tags:
               only: /^test-.+/
+            branches:
+              ignore: /.*/
       - sleep:
           requires:
             - run
