@@ -397,6 +397,3 @@ workflows:
       - sleep:
           requires:
             - run
-      - run:
-          requires:
-            - sleep
