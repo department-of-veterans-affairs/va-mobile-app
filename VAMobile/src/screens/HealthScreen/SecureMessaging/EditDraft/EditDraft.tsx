@@ -69,6 +69,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
     errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
   }
+  const saveSnackbarMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.draft.saved'),
+    errorMsg: t('secureMessaging.draft.saved.error'),
+  }
 
   const {
     hasLoadedRecipients,
@@ -366,7 +370,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, messageID, isReplyDraft, replyToID))
+      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       navigation.navigate('SendConfirmation', {
