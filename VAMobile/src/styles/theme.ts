@@ -87,6 +87,7 @@ export type VAIconColors = {
   webviewReload: string
   backButton: string
   unreadMessage: string
+  infoIcon: string
 }
 
 export type VATypographyThemeVariants = {
@@ -157,6 +158,7 @@ export type VABorderColors = {
   footerButton: string
   menuDivider: string
   trackingCard: string
+  trackingCardActive: string
 }
 
 export type VAFontSizes = {
