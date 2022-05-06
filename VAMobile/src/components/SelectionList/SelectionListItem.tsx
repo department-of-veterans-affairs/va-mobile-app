@@ -26,9 +26,7 @@ const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn,
     borderStyle: 'solid',
     px: theme.dimensions.gutter,
     py: 16,
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: 'list',
+    backgroundColor: isSelected ? 'buttonSecondaryActive' : 'list',
   }
 
   const getIcon = () => {
@@ -59,12 +57,12 @@ const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn,
 
   return (
     <Box {...boxProps}>
-      <Box flex={1}>{content}</Box>
-      <Box>
-        <Pressable onPress={setSelectedFn} accessibilityState={{ checked: isSelected }} accessibilityRole={'checkbox'}>
+      <Pressable onPress={setSelectedFn} accessibilityState={{ checked: isSelected }} accessibilityRole={'checkbox'}>
+        <Box display={'flex'} flexDirection={'row'}>
+          <Box flex={1}>{content}</Box>
           {getIcon()}
-        </Pressable>
-      </Box>
+        </Box>
+      </Pressable>
     </Box>
   )
 }
