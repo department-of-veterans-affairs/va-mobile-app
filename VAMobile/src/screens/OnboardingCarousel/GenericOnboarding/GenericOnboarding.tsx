@@ -1,9 +1,10 @@
-import { ViewStyle } from 'react-native'
+import { View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useFocusEffect } from '@react-navigation/native'
 
 export type GenericOnboardingProps = {
   header: string
@@ -19,6 +20,9 @@ export type GenericOnboardingProps = {
 
 const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
   const theme = useTheme()
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
+
+  useFocusEffect(setFocus)
 
   const headerProps: TextViewProps = {
     variant: 'MobileBodyBold',
@@ -42,9 +46,11 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
           </Box>
         )}
         <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
-          <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
-            {header}
-          </TextView>
+          <View ref={focusRef} accessible={true}>
+            <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
+              {header}
+            </TextView>
+          </View>
         </Box>
         {text && (
           <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>

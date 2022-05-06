@@ -118,7 +118,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
       <Box flexDirection={'row'} importantForAccessibility={'no-hide-descendants'}>
         <PhaseIndicator phase={phase} current={current} />
         <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
-          <TextView variant={'MobileBodyBold'} color={'primaryTitle'} selectable={!phaseLessThanEqualToCurrent}>
+          <TextView variant={'MobileBodyBold'} selectable={!phaseLessThanEqualToCurrent}>
             {heading}
           </TextView>
           {phaseLessThanEqualToCurrent && <TextView variant={'MobileBody'}>{updatedLastDate}</TextView>}
@@ -161,9 +161,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
       {phase === 3 && showClaimFileUploadBtn && (
         <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">
-            <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>
-              {youHaveFileRequestsText}
-            </TextView>
+            <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
           </Box>
           <Box mt={standardMarginBetween}>
             <VAButton

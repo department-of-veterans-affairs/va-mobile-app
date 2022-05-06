@@ -23,7 +23,7 @@ const IndividualMessageErrorComponent: FC = () => {
           text={tc('errors.callHelpCenter.sorryWithRefresh')}
           border="error">
           <Box>
-            <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+            <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}
             </TextView>
             <ClickToCallPhoneNumber displayedText={t('common:8773270022.displayText')} phone={t('common:8773270022')} />

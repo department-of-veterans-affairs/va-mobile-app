@@ -125,7 +125,7 @@ const VASelector: FC<VASelectorProps> = ({
         <Box flexDirection="row">
           <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
           <Box {...selectorBoxProps}>
-            <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'primary'}>
+            <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'bodyText'}>
               {t(labelKey, labelArgs)}
             </TextView>
           </Box>

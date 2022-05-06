@@ -17,12 +17,10 @@ const TermsAndConditions: FC = () => {
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <Box {...testIdProps(t('termsAndConditions.title'))} accessibilityRole="header" accessible={true} mx={gutter} mb={standardMarginBetween}>
-          <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-            {t('termsAndConditions.title')}
-          </TextView>
+          <TextView variant="BitterBoldHeading">{t('termsAndConditions.title')}</TextView>
         </Box>
         <TextArea>
-          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
+          <TextView variant="MobileBody" mb={standardMarginBetween} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
             {t('termsAndConditions.toAccept')}
           </TextView>
           <Box mb={standardMarginBetween}>
@@ -36,9 +34,7 @@ const TermsAndConditions: FC = () => {
             />
           </Box>
           <TextView>
-            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-              {tc('note') + ' '}
-            </TextView>
+            <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
             <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
           </TextView>
         </TextArea>
