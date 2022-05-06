@@ -33,7 +33,7 @@ jobs:
     environment: xl-qa-review
     steps:
       - run: echo "Approved by QA"
-      - run: echo "merge commands would go here"
+      - run: echo "merge commands would go here."
 
 
 
