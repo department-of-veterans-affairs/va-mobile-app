@@ -54,6 +54,7 @@ import EmptyRadio from './svgs/radio/radioEmpty.svg'
 import ErrorCheckBox from './svgs/checkbox/checkBoxError.svg'
 import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
+import IntermediateCheckBox from './svgs/checkbox/checkBoxIntermediate.svg'
 
 // Misc
 
@@ -112,6 +113,7 @@ export const VA_ICON_MAP = {
   Directions,
   EmptyCheckBox,
   FilledCheckBox,
+  IntermediateCheckBox,
   FolderSolid,
   EmptyRadio,
   EllipsisSolid,
