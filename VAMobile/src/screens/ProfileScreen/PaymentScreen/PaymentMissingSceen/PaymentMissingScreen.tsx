@@ -13,7 +13,7 @@ type PaymentMissingScreenProps = StackScreenProps<ProfileStackParamList, 'Paymen
 const PaymentMissing: FC<PaymentMissingScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { contentMarginTop, noLettersPaddingY } = theme.dimensions
+  const { contentMarginTop } = theme.dimensions
 
   useEffect(() => {
     navigation.setOptions({
@@ -32,7 +32,7 @@ const PaymentMissing: FC<PaymentMissingScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
             {t('payments.ifIAmMissingPayemt')}
           </TextView>
-          <TextView variant="MobileBody" py={noLettersPaddingY}>
+          <TextView variant="MobileBody" py={6}>
             {t('payments.missingPayments.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('common:8008271000')} displayedText={t('common:8008271000.displayText')} />

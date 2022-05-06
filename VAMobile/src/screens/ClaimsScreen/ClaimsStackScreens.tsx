@@ -76,24 +76,7 @@ export const getClaimsScreens = (t: TFunction): Array<ReactNode> => {
     <ClaimsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />,
     <ClaimsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />,
     <ClaimsStack.Screen key={'AppealDetailsScreen'} name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('statusDetails.title') }} />,
-    <ClaimsStack.Screen
-      key={'FileRequest'}
-      name="FileRequest"
-      component={FileRequest}
-      options={{ title: t('fileRequest.title') }}
-      listeners={{
-        // hides it when user hits go back or swipes to close the page for this screen
-        transitionStart: (e) => {
-          if (e.data.closing) {
-            snackBar.hideAll()
-          }
-        },
-        // hides it if you click a button that takes you to another page for this screen
-        blur: () => {
-          snackBar.hideAll()
-        },
-      }}
-    />,
+    <ClaimsStack.Screen key={'FileRequest'} name="FileRequest" component={FileRequest} options={{ title: t('fileRequest.title') }} />,
     <ClaimsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} options={{ title: t('askForClaimDecision.pageTitle') }} />,
     <ClaimsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ title: stringToTitleCase(t('fileUpload.takeOrSelectPhotos')) }} />,
     <ClaimsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />,

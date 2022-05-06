@@ -23,7 +23,7 @@ import performance from '@react-native-firebase/perf'
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
-import { EnvironmentTypesConstants } from 'constants/common'
+import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
@@ -67,7 +67,7 @@ const RootNavStack = createStackNavigator<RootNavStackParamList>()
 // configuring KeyboardManager styling for iOS
 if (isIOS()) {
   KeyboardManager.setEnable(true)
-  KeyboardManager.setKeyboardDistanceFromTextField(theme.dimensions.keyboardManagerDistanceFromTextField)
+  KeyboardManager.setKeyboardDistanceFromTextField(45)
   KeyboardManager.setEnableAutoToolbar(false)
 }
 
@@ -285,7 +285,19 @@ export const AuthedApp: FC = () => {
 
   return (
     <>
-      <RootNavStack.Navigator screenOptions={{ ...headerStyles, detachPreviousScreen: false }} initialRouteName="Tabs">
+      <RootNavStack.Navigator
+        screenOptions={{ ...headerStyles, detachPreviousScreen: false }}
+        initialRouteName="Tabs"
+        screenListeners={{
+          transitionStart: (e) => {
+            if (e.data.closing) {
+              CloseSnackbarOnNavigation(e.target)
+            }
+          },
+          blur: (e) => {
+            CloseSnackbarOnNavigation(e.target)
+          },
+        }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />

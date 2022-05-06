@@ -115,7 +115,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
 
   const getPhaseHeader = (): ReactNode => {
     return (
-      <Box flexDirection={'row'}>
+      <Box flexDirection={'row'} importantForAccessibility={'no-hide-descendants'}>
         <PhaseIndicator phase={phase} current={current} />
         <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
           <TextView variant={'MobileBodyBold'} color={'primaryTitle'} selectable={!phaseLessThanEqualToCurrent}>
@@ -135,7 +135,20 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
     )
   }
 
-  const testID = phaseLessThanEqualToCurrent ? `${heading} ${updatedLastDate}` : heading
+  let status = ''
+
+  if (phase === current) {
+    status = t('claimPhase.heading.a11y.current')
+  } else if (phase < current) {
+    status = t('claimPhase.heading.a11y.completed')
+  }
+
+  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${status} ${heading}`
+
+  if (phaseLessThanEqualToCurrent) {
+    testID = `${testID} ${updatedLastDate}`
+  }
+
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
 
   const detailsText = getDetails(phase, t)

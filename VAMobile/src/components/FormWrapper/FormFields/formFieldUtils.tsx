@@ -52,14 +52,13 @@ export const renderInputLabelSection = (
   labelKey: string,
   t: TFunction,
   helperTextKey: string | undefined,
-  theme: VATheme,
 ): ReactElement => {
   const isHelperText = !!helperTextKey
   return (
     <Box>
       {generateInputLabel(error, disabled, isRequiredField, labelKey, t, isHelperText)}
       {isHelperText && (
-        <TextView mb={theme.dimensions.pickerLabelMargin} variant="HelperText">
+        <TextView mb={8} variant="HelperText">
           {t(helperTextKey)}
         </TextView>
       )}
@@ -104,7 +103,7 @@ export const getInputWrapperProps = (theme: VATheme, error: string | undefined, 
  */
 export const renderInputError = (theme: VATheme, error: string): ReactElement => {
   return (
-    <TextView variant="MobileBodyBold" color="error" mb={theme.dimensions.errorLabelBottomMargin}>
+    <TextView variant="MobileBodyBold" color="error" mb={3}>
       {error}
     </TextView>
   )
