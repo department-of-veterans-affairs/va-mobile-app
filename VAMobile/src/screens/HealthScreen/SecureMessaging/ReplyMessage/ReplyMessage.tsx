@@ -52,10 +52,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const { messageID, attachmentFileToAdd } = route.params
-  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const replyCancelConfirmation = useComposeCancelConfirmation()
 
@@ -199,14 +198,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const renderForm = (): ReactNode => (
     <Box>
-      <MessageAlert
-        hasValidationError={formContainsError}
-        saveDraftAttempted={onSaveDraftClicked}
-        saveDraftComplete={saveDraftComplete}
-        saveDraftFailed={saveDraftFailed}
-        savingDraft={savingDraft}
-        sendMessageFailed={sendMessageFailed}
-      />
+      <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <CollapsibleView
           text={t('secureMessaging.composeMessage.whenWillIGetAReply')}

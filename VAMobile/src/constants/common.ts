@@ -50,6 +50,7 @@ const screensToCloseSnackbarOnNavigation = [
   'UploadFile',
   'UploadOrAddPhotos',
   'ClaimDetails',
+  'EditDraft',
   'FolderMessages',
   'ViewMessage',
   'SecureMessaging',

@@ -393,33 +393,4 @@ context('ComposeMessage', () => {
       })
     })
   })
-
-  describe('when message send fails', () => {
-    beforeEach(() => {
-      // Give a different screenID so it won't display the error screen instead
-      initializeTestInstance(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID, false, true)
-    })
-
-    it('should display error alert', async () => {
-      await waitFor(() => {
-        expect(testInstance.findByType(AlertBox)).toBeTruthy()
-      })
-    })
-    describe('when the My HealtheVet phone number link is clicked', () => {
-      it('should call Linking open url with the parameter tel:8773270022', async () => {
-        await waitFor(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-        })
-      })
-    })
-    describe('when the call TTY phone link is clicked', () => {
-      it('should call Linking open url with the parameter tel:711', async () => {
-        await waitFor(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:711')
-        })
-      })
-    })
-  })
 })
