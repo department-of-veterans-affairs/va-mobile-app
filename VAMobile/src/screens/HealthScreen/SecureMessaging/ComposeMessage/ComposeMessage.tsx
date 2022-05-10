@@ -36,7 +36,17 @@ import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secu
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { SecureMessagingState, getMessageRecipients, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import {
+  SecureMessagingState,
+  getMessageRecipients,
+  getMessageSignature,
+  resetHasLoadedRecipients,
+  resetSendMessageComplete,
+  resetSendMessageFailed,
+  saveDraft,
+  sendMessage,
+  updateSecureMessagingTab,
+} from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
@@ -57,9 +67,15 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     errorMsg: t('secureMessaging.draft.saved.error'),
   }
 
-  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const snackbarSentMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.composeMessage.sent'),
+    errorMsg: t('secureMessaging.composeMessage.sent.error'),
+  }
+
+  const { sendingMessage, sendMessageComplete, savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
 
   const [to, setTo] = useState('')
@@ -149,6 +165,15 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }, [saveDraftComplete, navigation, dispatch])
 
+  useEffect(() => {
+    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
+    if (sendMessageComplete) {
+      dispatch(resetSendMessageComplete())
+      dispatch(resetHasLoadedRecipients())
+      navigation.navigate('SecureMessaging')
+    }
+  }, [sendMessageComplete, dispatch, navigation])
+
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
@@ -156,6 +181,10 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature) {
     const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.formMessage.composeMessage.loading')
     return <LoadingComponent text={text} />
+  }
+
+  if (sendingMessage) {
+    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
   }
 
   const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
@@ -280,11 +309,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, snackbarMessages, savedDraftID))
     } else {
-      navigation.navigate('SendConfirmation', {
-        originHeader: t('secureMessaging.composeMessage.compose'),
-        messageData,
-        uploads: attachmentsList,
-      })
+      dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }
   }
 

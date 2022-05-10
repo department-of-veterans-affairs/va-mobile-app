@@ -27,7 +27,16 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
-import { SecureMessagingState, dispatchSetActionStart, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import {
+  SecureMessagingState,
+  dispatchSetActionStart,
+  getMessageSignature,
+  resetSendMessageComplete,
+  resetSendMessageFailed,
+  saveDraft,
+  sendMessage,
+  updateSecureMessagingTab,
+} from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
@@ -52,9 +61,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const { messageID, attachmentFileToAdd } = route.params
-  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const { sendMessageComplete, sendingMessage, savedDraftID, messagesById, threads, loading, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const replyCancelConfirmation = useComposeCancelConfirmation()
 
@@ -70,6 +80,11 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
     errorMsg: t('secureMessaging.draft.saved.error'),
+  }
+
+  const snackbarSentMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.composeMessage.sent'),
+    errorMsg: t('secureMessaging.composeMessage.sent.error'),
   }
 
   const goToCancel = () => {
@@ -134,11 +149,24 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
   }, [saveDraftComplete, navigation, dispatch])
 
+  useEffect(() => {
+    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
+    if (sendMessageComplete) {
+      dispatch(resetSendMessageComplete())
+      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+      navigation.navigate('SecureMessaging')
+    }
+  }, [sendMessageComplete, dispatch, navigation])
+
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   if (loading || savingDraft || loadingSignature || !isTransitionComplete) {
     const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.viewMessage.loading')
     return <LoadingComponent text={text} />
+  }
+
+  if (sendingMessage) {
+    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
   }
 
   const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
@@ -186,13 +214,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
     } else {
-      receiverID &&
-        navigation.navigate('SendConfirmation', {
-          originHeader: t('secureMessaging.reply'),
-          messageData,
-          uploads: attachmentsList,
-          replyToID: messageID,
-        })
+      receiverID && dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, messageID))
     }
   }
 
