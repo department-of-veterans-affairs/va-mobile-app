@@ -2,12 +2,12 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import ComposeMessage from './ComposeMessage'
-import { InteractionManager, Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
+import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
@@ -347,15 +347,6 @@ context('ComposeMessage', () => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
           expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
         })
-      })
-    })
-  })
-
-  describe('when form fields are filled out correctly and saved', () => {
-    it('should call navigateSpy', async () => {
-      await waitFor(() => {
-        testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(navigateSpy).toHaveBeenCalledWith( 'SendConfirmation', {'messageData': {'body': '', 'category': '', 'recipient_id': NaN, 'subject': ''}, 'originHeader': 'Compose', 'uploads': []})
       })
     })
   })
