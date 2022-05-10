@@ -51,6 +51,7 @@ export const lightTheme = {
     footerButton: colors.grayLight,
     menuDivider: colors.grayLight,
     trackingCard: colors.grayDark,
+    trackingCardActive: colors.grayLight,
   },
   icon: {
     footerButton: colors.primary,
@@ -82,6 +83,7 @@ export const lightTheme = {
     overflowMenuDefault: colors.black,
     unreadMessage: colors.primary,
     buttonWithIcon: colors.black,
+    infoIcon: colors.grayMedium,
   },
   text: {
     footerButton: colors.primary,
@@ -204,6 +206,7 @@ export const darkTheme = {
     footerButton: colors.darkmodeBorder,
     menuDivider: colors.darkmodeBorder,
     trackingCard: colors.darkmodeBorder,
+    trackingCardActive: colors.grayLight,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
@@ -235,6 +238,7 @@ export const darkTheme = {
     overflowMenuDefault: colors.grayLightest,
     unreadMessage: colors.darkmodeLightBlue,
     buttonWithIcon: colors.grayLightest,
+    infoIcon: colors.grayLight,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,

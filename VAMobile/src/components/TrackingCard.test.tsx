@@ -1,11 +1,11 @@
 import 'react-native'
 import React from 'react'
-
-import TrackingCard from './TrackingCard'
-import { context, render, RenderAPI } from 'testUtils'
-import Mock = jest.Mock;
-import {  ReactTestInstance } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
+import Mock = jest.Mock
 import { Pressable } from 'react-native'
+
+import { context, render, RenderAPI } from 'testUtils'
+import TrackingCard from './TrackingCard'
 
 context('TrackingCard', () => {
   let component: RenderAPI
@@ -16,8 +16,7 @@ context('TrackingCard', () => {
   const initializeTestInstance = (title: string = 'Acetaminophen 25MG TAB', dateShipped: string = '01/01/2022') => {
     onPressSpy = jest.fn()
     component = render(<TrackingCard title={title} dateShipped={dateShipped} onPress={onPressSpy}/>)
-
-    return component.container
+    testInstance = component.container
   }
 
   it('initializes correctly', async () => {
@@ -27,7 +26,7 @@ context('TrackingCard', () => {
 
   describe('when card is pressed', () => {
     it('should call onPress', async () => {
-      testInstance = initializeTestInstance()
+      initializeTestInstance()
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(onPressSpy).toBeCalled()
     })
