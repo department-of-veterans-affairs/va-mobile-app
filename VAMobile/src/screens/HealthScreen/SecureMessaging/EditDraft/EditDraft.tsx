@@ -42,6 +42,7 @@ import {
   getMessage,
   getMessageRecipients,
   getThread,
+  resetSaveDraftFailed,
   resetSendMessageFailed,
   saveDraft,
   updateSecureMessagingTab,
@@ -106,6 +107,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
+    dispatch(resetSaveDraftFailed())
     dispatch(dispatchResetDeleteDraftFailed())
 
     if (messageID) {

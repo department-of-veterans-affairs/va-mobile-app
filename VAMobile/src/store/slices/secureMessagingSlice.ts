@@ -883,6 +883,7 @@ const secureMessagingSlice = createSlice({
         ...state,
         savedDraftID: messageID,
         error,
+        saveDraftFailed: !!error,
         saveDraftComplete: !error,
         savingDraft: false,
       }
@@ -891,6 +892,11 @@ const secureMessagingSlice = createSlice({
     resetSaveDraftComplete: (state) => {
       state.savedDraftID = undefined
       state.saveDraftComplete = false
+    },
+
+    resetSaveDraftFailed: (state) => {
+      state.saveDraftComplete = false
+      state.saveDraftFailed = false
     },
 
     dispatchStartSendMessage: (state) => {
@@ -993,6 +999,7 @@ export const {
   dispatchFinishSaveDraft,
   dispatchStartSaveDraft,
   resetSaveDraftComplete,
+  resetSaveDraftFailed,
   dispatchFinishSendMessage,
   dispatchStartSendMessage,
   resetSendMessageComplete,

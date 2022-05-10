@@ -2,7 +2,7 @@ import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
-import { resetHasLoadedRecipients, resetSaveDraftComplete, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { useDestructiveAlert, useRouteNavigation, useTranslation } from 'utils/hooks'
 import { useDispatch } from 'react-redux'
 
@@ -37,7 +37,9 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
     const isEditDraft = origin === FormHeaderTypeConstants.draft
 
     const resetAlerts = () => {
+      dispatch(resetSendMessageFailed())
       dispatch(resetSaveDraftComplete())
+      dispatch(resetSaveDraftFailed())
       dispatch(resetHasLoadedRecipients())
     }
 
