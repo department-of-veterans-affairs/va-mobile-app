@@ -54,6 +54,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const onHealthCare = navigateTo('HealthTab')
   const onPayments = navigateTo('Payments')
   const onCalendarDTP = navigateTo('CalendarDTP')
+  const onCalendarWix = navigateTo('CalendarWix')
+  const onCustomCalendar = navigateTo('CustomCalendar')
 
   const buttonDataList: Array<SimpleListItemObj> = [
     {
@@ -92,9 +94,27 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         </Box>
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
+            title={'CalendarWix'}
+            subText={'Testing calendar'}
+            onPress={onCalendarWix}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
+          <LargeNavButton
             title={'CalendarDTP'}
             subText={'Testing calendar'}
             onPress={onCalendarDTP}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
+          <LargeNavButton
+            title={'Custom Calendar'}
+            subText={'Testing calendar'}
+            onPress={onCustomCalendar}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
