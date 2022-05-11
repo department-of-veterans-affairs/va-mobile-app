@@ -16,7 +16,7 @@ import {
   VAButton,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getTranslation } from '../../../../utils/formattingUtils'
+import { getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
