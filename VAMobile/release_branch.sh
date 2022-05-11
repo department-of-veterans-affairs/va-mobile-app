@@ -73,6 +73,14 @@ then
   git push -u origin release/"$next"
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
+
+  echo "Tag branch for Release Candidate build"
+  TAG="RC-$next-$(date +%m%d%y-%H%M)"
+  git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
+  git push origin "$TAG"
+
+  echo "Successfully tagged for Release Candidate builds"
+  echo "Exit"
 else
   echo "Not scheduled for new release branch this week. Exiting."
   exit 0
