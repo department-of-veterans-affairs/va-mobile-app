@@ -20,8 +20,8 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text }) => {
   }
 
   const spinnerStyle: ViewStyle = {
-    height: 53,
-    width: 53,
+    height: 50,
+    width: 50,
     alignContent: 'center',
   }
 
