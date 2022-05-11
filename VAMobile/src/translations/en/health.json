@@ -159,8 +159,6 @@
   "secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel": "It can take up to three business days to receive a response from a member of your health care team or the administrative V-A staff member you contacted.",
   "secureMessaging.composeMessage.to.fieldError": "To is required",
   "secureMessaging.composeMessage.whenWillIGetAReply": "When will I get a reply?",
-  "secureMessaging.draft.saved": "Draft saved",
-  "secureMessaging.draft.saved.error": "Draft could not be saved",
   "secureMessaging.drafts.edit": "Edit Draft",
   "secureMessaging.deleteDraft.menuBtnA11y": "Delete Draft",
   "secureMessaging.deleteDraft.areYouSure": "Are you sure you want to delete this draft?",
