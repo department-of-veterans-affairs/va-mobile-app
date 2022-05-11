@@ -1,11 +1,11 @@
-import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
+import { Linking, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Box, BoxProps } from 'components'
+import { Box, BoxProps, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
@@ -46,17 +46,19 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
 }
 
 const WebviewLoading: FC = ({}) => {
-  const activitySpinnerStyle: StyleProp<ViewStyle> = {
+  const spinnerStyle: ViewStyle = {
     position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
   }
 
-  return <ActivityIndicator style={activitySpinnerStyle} size="large" />
+  return (
+    <Box style={spinnerStyle}>
+      <LoadingComponent />
+    </Box>
+  )
 }
 
 export type WebviewStackParams = {
