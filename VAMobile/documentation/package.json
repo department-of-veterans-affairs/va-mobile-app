@@ -22,7 +22,6 @@
     "bootstrap": "5.1.3",
     "clsx": "^1.1.1",
     "docusaurus-plugin-react-docgen-typescript": "^0.1.0",
-    "docusaurus-plugin-relative-paths": "^1.0.0",
     "file-loader": "^6.2.0",
     "mdx-mermaid": "^1.2.1",
     "mermaid": "^8.13.10",
