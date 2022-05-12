@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScrollView } from 'components'
@@ -8,12 +9,12 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { cancelAppointment } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme } from 'utils/hooks'
 
 type AppointmentCancellationConfirmationProps = StackScreenProps<HealthStackParamList, 'AppointmentCancellationConfirmation'>
 
 const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmationProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
   const { cancelID, appointmentID } = route.params

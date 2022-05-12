@@ -1,11 +1,12 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AppointmentAddress, AppointmentLocation, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
-import { useTranslation } from 'utils/hooks'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
   return (
@@ -25,7 +26,7 @@ type AppointmentAddressAndNumberProps = {
 }
 
 const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone, isCovidVaccine }) => {
-  const t = useTranslation()
+  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas

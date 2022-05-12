@@ -2,6 +2,7 @@ import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { isEmpty, map } from 'underscore'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextView, TextViewProps, VAModalPicker, VAModalPickerProps, VAScrollView } from 'components'
@@ -13,14 +14,14 @@ import { RootState } from 'store'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentScreenProps = StackScreenProps<ProfileStackParamList, 'Payments'>
 
 const PaymentScreen: FC<PaymentScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.PROFILE)
-  const tc = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()

@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
@@ -14,13 +15,14 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useBeforeNavBackListener, useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 
 type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
 
 const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
@@ -51,7 +53,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('fileUpload.discard'),
@@ -106,7 +108,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('fileUpload.submit'),
@@ -118,7 +120,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   const onFileDelete = () => {
     setFilesList([])
-    showSnackBar(t('common:file.deleted'), dispatch, undefined, true, false, false)
+    showSnackBar(tc('file.deleted'), dispatch, undefined, true, false, false)
     navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
   }
 
@@ -133,7 +135,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         isRequiredField: true,
         disabled: false,
       },
-      fieldErrorMessage: t('claims:fileUpload.documentType.fieldError'),
+      fieldErrorMessage: t('fileUpload.documentType.fieldError'),
     },
     {
       fieldType: FieldType.Selector,
