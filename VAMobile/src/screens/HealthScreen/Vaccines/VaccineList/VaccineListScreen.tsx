@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAScrollView } from 'components'
@@ -12,7 +13,7 @@ import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
@@ -25,7 +26,8 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
   const dispatch = useAppDispatch()
   const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
     const textLines: Array<TextLine> = [
@@ -37,7 +39,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
       textLines,
       onPress: navigateTo('VaccineDetails', { vaccineId: vaccine.id }),
       a11yHintText: t('vaccines.list.a11y'),
-      a11yValue: t('common:listPosition', { position: index + 1, total: vaccines.length }),
+      a11yValue: tc('listPosition', { position: index + 1, total: vaccines.length }),
       testId: getA11yLabelText(textLines),
     }
 

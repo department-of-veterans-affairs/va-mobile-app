@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { ButtonDecoratorType, List, ListItemObj, VAIconProps } from 'components'
@@ -5,7 +6,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components/TextLineWithIcon'
 import { TextLines } from 'components/TextLines'
-import { useTranslation } from 'utils/hooks'
 
 /**
  * Signifies each item in the list of items in {@link PickerListProps}
@@ -35,7 +35,7 @@ export type PickerListProps = {
  * Display a list of buttons with text and optional actions
  */
 const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const listItemObjs: Array<ListItemObj> = items.map((item: PickerListItemObj, index) => {
     // Move all of the properties except text lines to the standard list item object

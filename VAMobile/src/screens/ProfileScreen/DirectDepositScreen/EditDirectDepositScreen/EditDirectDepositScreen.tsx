@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
 import { AccessibilityState, DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
@@ -27,8 +28,9 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
+import { getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 const MAX_ROUTING_DIGITS = 9
@@ -41,8 +43,8 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
  */
 const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.PROFILE)
-  const tc = useTranslation()
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
@@ -65,7 +67,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     // translate key
     return {
       value: option.value,
-      label: tc(option.label),
+      label: getTranslation(option.label, tc),
     }
   })
 

@@ -1,6 +1,6 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react'
-
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
@@ -16,7 +16,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useRouteNavigation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -29,8 +29,9 @@ const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 
 const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tFunction = useTranslation()
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t: tFunction } = useTranslation()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
@@ -174,7 +175,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
             />
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton
-                label={t('common:cancel')}
+                label={tc('cancel')}
                 onPress={() => navigation.goBack()}
                 buttonType={ButtonTypesConstants.buttonSecondary}
                 a11yHint={t('secureMessaging.composeMessage.attach.cancel.a11yHint')}

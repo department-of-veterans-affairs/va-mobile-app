@@ -1,5 +1,6 @@
 import { InteractionManager } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
@@ -50,14 +51,14 @@ import {
 import { SnackbarMessages } from 'components/SnackBar'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useError, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useError, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
 const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -307,7 +308,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       messageData.draft_id = savedDraftID
     }
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID))
+      dispatch(saveDraft(messageData, savedDraftID))
     } else {
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }
