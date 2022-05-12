@@ -23,6 +23,7 @@ import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } f
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SnackbarMessages } from '../../../../components/SnackBar'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -67,8 +68,18 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     setSaveDisabled(formContainsError)
   }, [formContainsError])
 
+  const saveSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.emailAddress.saved'),
+    errorMsg: t('personalInformation.emailAddress.not.saved'),
+  }
+
   const saveEmail = (): void => {
-    dispatch(updateEmail(email, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
+    dispatch(updateEmail(saveSnackbarMessages, email, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
+  }
+
+  const removeSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.emailAddress.removed'),
+    errorMsg: t('personalInformation.emailAddress.not.removed'),
   }
 
   const onDelete = (): void => {
@@ -80,7 +91,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     }
 
     setDeleting(true)
-    dispatch(deleteEmail(originalEmail, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
+    dispatch(deleteEmail(removeSnackbarMessages, originalEmail, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
   }
 
   if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
