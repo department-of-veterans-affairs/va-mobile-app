@@ -23,7 +23,7 @@ import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } f
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SnackbarMessages } from '../../../../components/SnackBar'
+import { SnackbarMessages } from 'components/SnackBar'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'

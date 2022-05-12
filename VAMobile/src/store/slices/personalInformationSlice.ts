@@ -289,9 +289,6 @@ export const updateEmail =
       showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
       if (isErrorObject(err)) {
-        console.log('email validation error')
-        console.log(JSON.stringify(err))
-
         logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
