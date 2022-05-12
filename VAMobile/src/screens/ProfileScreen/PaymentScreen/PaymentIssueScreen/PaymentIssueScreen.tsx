@@ -13,7 +13,7 @@ type PaymentIssueScreenProps = StackScreenProps<ProfileStackParamList, 'PaymentI
 const PaymentIssue: FC<PaymentIssueScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { contentMarginTop, noLettersPaddingY } = theme.dimensions
+  const { contentMarginTop } = theme.dimensions
 
   useEffect(() => {
     navigation.setOptions({
@@ -29,10 +29,10 @@ const PaymentIssue: FC<PaymentIssueScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps('payment-issue-page')}>
       <Box mt={contentMarginTop}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('payments.ifMyPaymentDoesNotLookRight')}
           </TextView>
-          <TextView variant="MobileBody" py={noLettersPaddingY}>
+          <TextView variant="MobileBody" py={6}>
             {t('paymentIssues.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('common:8008271000')} displayedText={t('common:8008271000.displayText')} />

@@ -35,8 +35,8 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
   const theme = useTheme()
 
   fill = fill || theme.colors.icon.active
-  width = width || theme.dimensions.webviewReloadButtonSize
-  height = height || theme.dimensions.webviewReloadButtonSize
+  width = width || 17
+  height = height || 17
 
   const touchableOpacityProps: TouchableOpacityProps = {
     disabled,
@@ -50,7 +50,7 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
   }
 
   const controlBoxProps: BoxProps = {
-    p: (theme.dimensions.webviewButtona11ySize - width) / 2,
+    p: (44 - width) / 2,
   }
 
   return (

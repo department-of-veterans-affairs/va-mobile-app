@@ -11,7 +11,6 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -48,7 +47,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (deleteDraftComplete) {
-      showSnackBar(t('secureMessaging.deleteDraft.snackBarMessage'), dispatch, undefined, true, false, true)
       dispatch(dispatchResetDeleteDraftComplete())
     }
   }, [deleteDraftComplete, dispatch, t])
@@ -67,7 +65,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
         <BackButton
           onPress={() => {
             navigation.goBack()
-            snackBar.hideAll()
           }}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.back}

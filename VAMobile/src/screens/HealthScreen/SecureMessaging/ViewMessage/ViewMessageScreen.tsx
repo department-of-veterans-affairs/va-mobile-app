@@ -7,12 +7,14 @@ import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
+import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { SecureMessagingState, getMessage, getThread, moveMessage, moveMessageToTrash } from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
+import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject, getfolderName } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -100,7 +102,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       let label = folder.attributes.name
 
       const icon = {
-        fill: 'dark',
+        fill: 'defaultMenuItem',
         height: theme.fontSizes.MobileBody.fontSize,
         width: theme.fontSizes.MobileBody.fontSize,
         name: 'FolderSolid',
@@ -114,7 +116,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       }
 
       if (label === FolderNameTypeConstants.inbox) {
-        icon.fill = 'dark'
+        icon.fill = 'defaultMenuItem'
         icon.name = 'InboxSolid'
       }
 
@@ -138,7 +140,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         <BackButton
           onPress={() => {
             navigation.goBack()
-            snackBar.hideAll()
           }}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.back}
@@ -197,14 +198,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
     const withNavBar = replyExpired ? false : true
+    const snackbarMessages: SnackbarMessages = {
+      successMsg: GenerateFolderMessage(t, newFolder, folders, false, false),
+      errorMsg: GenerateFolderMessage(t, newFolder, folders, false, true),
+      undoMsg: GenerateFolderMessage(t, currentFolder, folders, true, false),
+      undoErrorMsg: GenerateFolderMessage(t, currentFolder, folders, true, true),
+    }
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
-      if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
-        dispatch(moveMessageToTrash(messageID, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
-      } else {
-        dispatch(moveMessage(messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
-      }
+      dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
     }
   }
 
@@ -213,7 +216,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       <VAScrollView {...testIdProps('ViewMessage-page')} scrollViewRef={scrollRef}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-            <TextView variant="BitterBoldHeading" color={'primaryTitle'} accessibilityRole={'header'}>
+            <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
               {formatSubject(category, subject, t)}
             </TextView>
           </Box>

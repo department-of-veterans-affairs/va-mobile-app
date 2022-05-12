@@ -76,30 +76,22 @@ export type BaseListItemProps = {
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
   const theme = useTheme()
+  const radioBtnWidth = 22
+  const radioBtnHeight = 22
 
   switch (decorator) {
     case ButtonDecoratorType.Switch:
       return <SwitchComponent onPress={onPress} {...decoratorProps} />
     case ButtonDecoratorType.SelectedItem:
-      return (
-        <VAIcon
-          name={'CheckMark'}
-          height={theme.dimensions.pickerModalSelectedIconHeight}
-          width={theme.dimensions.pickerModalSelectedIconWidth}
-          fill={theme.colors.icon.pickerIcon}
-          {...decoratorProps}
-        />
-      )
+      return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
     case ButtonDecoratorType.Delete:
-      return (
-        <VAIcon name={'TrashSolid'} height={theme.dimensions.listTrashIconHeight} width={theme.dimensions.listTrashIconWidth} fill={theme.colors.icon.error} {...decoratorProps} />
-      )
+      return <VAIcon name={'TrashSolid'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
     case ButtonDecoratorType.FilledRadio:
       return (
         <VAIcon
           name={'FilledRadio'}
-          height={theme.dimensions.selectorHeight}
-          width={theme.dimensions.selectorWidth}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
           fill={theme.colors.icon.checkboxEnabledPrimary}
           stroke={theme.colors.icon.checkboxEnabledPrimary}
           {...decoratorProps}
@@ -109,8 +101,8 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
       return (
         <VAIcon
           name={'EmptyRadio'}
-          height={theme.dimensions.selectorHeight}
-          width={theme.dimensions.selectorWidth}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
           fill={theme.colors.icon.checkboxDisabledContrast}
           stroke={theme.colors.icon.checkboxDisabled}
           {...decoratorProps}
@@ -120,8 +112,8 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
       return (
         <VAIcon
           name={'DisabledRadio'}
-          height={theme.dimensions.selectorHeight}
-          width={theme.dimensions.selectorWidth}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
           fill={theme.colors.icon.checkboxDisabledContrast}
           stroke={theme.colors.icon.checkboxDisabled}
           {...decoratorProps}

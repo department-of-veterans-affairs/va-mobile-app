@@ -19,6 +19,7 @@ import {
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { MockUsersEmail } from 'constants/common'
+import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
 import { dispatchUpdateCerner } from './patientSlice'
@@ -31,8 +32,8 @@ import {
   getValidationKey,
   showValidationScreen,
 } from 'utils/personalInformation'
-import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString } from 'utils/common'
-import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString, showSnackBar } from 'utils/common'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -69,6 +70,8 @@ export const initialPersonalInformationState: PersonalInformationState = {
   preloadComplete: false,
   phoneNumberSaved: false,
 }
+
+const personalInformationNonFatalErrorString = 'Personal Information Service Error'
 
 const PhoneTypeToFormattedNumber: {
   [key in PhoneType]: ProfileFormattedFieldType
@@ -115,6 +118,7 @@ export const getProfileInfo =
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getProfileInfo: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishGetProfileInfo({ error }))
         dispatch(dispatchUpdateAuthorizedServices({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
@@ -160,13 +164,13 @@ export const editUsersNumber =
       }
 
       if (createEntry) {
-        await api.post<api.EditResponseData>('/v1/user/phones', updatedPhoneData as unknown as api.Params)
+        await api.post<api.EditResponseData>('/v0/user/phones', updatedPhoneData as unknown as api.Params)
       } else {
         const updatedPutPhoneData = {
           ...updatedPhoneData,
           id: numberId,
         }
-        await api.put<api.EditResponseData>('/v1/user/phones', updatedPutPhoneData as unknown as api.Params)
+        await api.put<api.EditResponseData>('/v0/user/phones', updatedPutPhoneData as unknown as api.Params)
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
@@ -178,6 +182,7 @@ export const editUsersNumber =
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
@@ -227,7 +232,7 @@ export const deleteUsersNumber =
         }
       }
 
-      await api.del<api.EditResponseData>('/v1/user/phones', deletePhoneData as unknown as api.Params)
+      await api.del<api.EditResponseData>('/v0/user/phones', deletePhoneData as unknown as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
@@ -235,6 +240,7 @@ export const deleteUsersNumber =
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
@@ -264,13 +270,13 @@ export const updateEmail =
       const createEntry = !getState().personalInformation.profile?.contactEmail?.emailAddress
 
       if (createEntry) {
-        await api.post<api.EditResponseData>('/v1/user/emails', { emailAddress: email } as unknown as api.Params)
+        await api.post<api.EditResponseData>('/v0/user/emails', { emailAddress: email } as unknown as api.Params)
       } else {
         const emailUpdateData = {
           id: emailId,
           emailAddress: email,
         }
-        await api.put<api.EditResponseData>('/v1/user/emails', emailUpdateData as unknown as api.Params)
+        await api.put<api.EditResponseData>('/v0/user/emails', emailUpdateData as unknown as api.Params)
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
@@ -282,6 +288,7 @@ export const updateEmail =
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -304,7 +311,7 @@ export const deleteEmail =
         emailAddress: email,
       }
 
-      await api.del<api.EditResponseData>('/v1/user/emails', emailDeleteData as unknown as api.Params)
+      await api.del<api.EditResponseData>('/v0/user/emails', emailDeleteData as unknown as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
@@ -312,6 +319,7 @@ export const deleteEmail =
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
@@ -329,10 +337,11 @@ export const finishEditEmail = (): AppThunk => async (dispatch) => {
  * Redux action to make the API call to update a users address
  */
 export const updateAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+    const retryFunction = () => dispatch(updateAddress(addressData, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSaveAddress())
@@ -346,9 +355,9 @@ export const updateAddress =
 
       if (createEntry) {
         const postAddressDataPayload = omit(addressData, 'id')
-        await api.post<api.EditResponseData>('/v1/user/addresses', postAddressDataPayload as unknown as api.Params)
+        await api.post<api.EditResponseData>('/v0/user/addresses', postAddressDataPayload as unknown as api.Params)
       } else {
-        await api.put<api.EditResponseData>('/v1/user/addresses', addressData as unknown as api.Params)
+        await api.put<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
       }
 
       dispatch(getProfileInfo(screenID))
@@ -360,10 +369,13 @@ export const updateAddress =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveAddress())
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -372,24 +384,28 @@ export const updateAddress =
  * Remove a users address
  */
 export const deleteAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
+    const retryFunction = () => dispatch(deleteAddress(addressData, messages, screenID))
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteAddress(addressData, screenID))))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSaveAddress())
 
-      await api.del<api.EditResponseData>('/v1/user/addresses', addressData as unknown as api.Params)
+      await api.del<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveAddress(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -398,14 +414,15 @@ export const deleteAddress =
  * Redux action to make the API call to validate a users address
  */
 export const validateAddress =
-  (addressData: AddressData, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(validateAddress(addressData, screenID))))
+    const retryFunction = () => dispatch(validateAddress(addressData, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartValidateAddress())
-      const validationResponse = await api.post<api.AddressValidationData>('/v1/user/addresses/validate', addressData as unknown as api.Params)
+      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params)
       const suggestedAddresses = getSuggestedAddresses(validationResponse)
       const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)
       const validationKey = getValidationKey(suggestedAddresses)
@@ -419,11 +436,12 @@ export const validateAddress =
         if (suggestedAddresses) {
           const address = getAddressDataFromSuggestedAddress(suggestedAddresses[0], addressData.id)
           addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
-          await dispatch(updateAddress(address, screenID))
+          await dispatch(updateAddress(address, messages, screenID))
         }
       }
     } catch (err) {
       if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `validateAddress: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishValidateAddress(undefined))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }

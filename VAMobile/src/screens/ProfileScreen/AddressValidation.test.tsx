@@ -4,12 +4,13 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockStore, render, findByTestID, RenderAPI } from 'testUtils'
+import { context, render, findByTestID, RenderAPI } from 'testUtils'
 import AddressValidation from './AddressValidation'
 import { AddressData, AddressValidationScenarioTypes, AddressValidationScenarioTypesConstants } from 'store/api/types'
-import { AccordionCollapsible, TextView, VASelector } from 'components'
+import { AccordionCollapsible, TextView } from 'components'
 import { updateAddress, initialPersonalInformationState, InitialState } from 'store/slices'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
+import { Pressable } from 'react-native'
+import { SnackbarMessages } from 'components/SnackBar'
 
 const mockAddress: AddressData = {
   addressLine1: '2248 San Miguel Ave.',
@@ -20,6 +21,11 @@ const mockAddress: AddressData = {
   countryCodeIso3: 'USA',
   stateCode: 'CA',
   zipCode: '95403',
+}
+
+const snackbarMessages : SnackbarMessages = {
+  successMsg: 'address saved',
+  errorMsg: 'address could not be saved',
 }
 
 const mockedNavigate = jest.fn()
@@ -57,7 +63,7 @@ context('AddressValidation', () => {
   let testInstance: ReactTestInstance
 
   const prepInstanceWithStore = (addressValidationScenario: AddressValidationScenarioTypes = AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE) => {
-    component = render(<AddressValidation addressEntered={mockAddress} addressId={12345} />, {
+    component = render(<AddressValidation addressEntered={mockAddress} addressId={12345} snackbarMessages={snackbarMessages} />, {
       preloadedState: {
         ...InitialState,
         personalInformation: {

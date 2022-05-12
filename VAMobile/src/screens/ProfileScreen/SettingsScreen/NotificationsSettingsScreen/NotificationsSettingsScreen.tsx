@@ -3,7 +3,7 @@ import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices'
 import { RootState } from 'store'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useOnResumeForeground, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -17,6 +17,10 @@ const NotificationsSettingsScreen: FC = () => {
   }
 
   const dispatch = useAppDispatch()
+
+  useOnResumeForeground(() => {
+    dispatch(loadPushPreferences())
+  })
 
   useEffect(() => {
     dispatch(loadPushPreferences())
@@ -70,7 +74,7 @@ const NotificationsSettingsScreen: FC = () => {
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         {!systemNotificationsOn && alert()}
-        <TextView variant={'MobileBodyBold'} color={'primaryTitle'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
           {t('notifications.settings.personalize.heading')}
         </TextView>
         <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>

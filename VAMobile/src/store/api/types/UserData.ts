@@ -1,16 +1,18 @@
 import { AddressData } from './AddressData'
 import { PhoneData } from './PhoneData'
 
-export type SigninServiceTypes = 'IDME' | 'DSL' | 'MHV'
+export type SigninServiceTypes = 'IDME' | 'DSL' | 'MHV' | 'LOGINGOV'
 
 export const SigninServiceTypesConstants: {
   IDME: SigninServiceTypes
   DSL: SigninServiceTypes
   MHV: SigninServiceTypes
+  LOGINGOV: SigninServiceTypes
 } = {
   IDME: 'IDME',
   DSL: 'DSL',
   MHV: 'MHV',
+  LOGINGOV: 'LOGINGOV',
 }
 
 export type UserDataProfile = {
@@ -54,6 +56,7 @@ export type VAServices =
   | 'appointments'
   | 'claims'
   | 'directDepositBenefits'
+  | 'directDepositBenefitsUpdate'
   | 'lettersAndDocuments'
   | 'militaryServiceHistory'
   | 'userProfileUpdate'
@@ -64,6 +67,7 @@ export const VAServicesConstants: {
   Appointments: VAServices
   Claims: VAServices
   DirectDepositBenefits: VAServices
+  DirectDepositBenefitsUpdate: VAServices
   LettersAndDocuments: VAServices
   MilitaryServiceHistory: VAServices
   UserProfileUpdate: VAServices
@@ -73,6 +77,7 @@ export const VAServicesConstants: {
   Appointments: 'appointments',
   Claims: 'claims',
   DirectDepositBenefits: 'directDepositBenefits',
+  DirectDepositBenefitsUpdate: 'directDepositBenefitsUpdate',
   LettersAndDocuments: 'lettersAndDocuments',
   MilitaryServiceHistory: 'militaryServiceHistory',
   UserProfileUpdate: 'userProfileUpdate',

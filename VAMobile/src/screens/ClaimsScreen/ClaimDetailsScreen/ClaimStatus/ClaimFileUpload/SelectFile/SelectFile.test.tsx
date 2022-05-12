@@ -40,7 +40,7 @@ context('SelectFile', () => {
   }
 
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
+    props = mockNavProps(undefined, {addListener: jest.fn(), setOptions: jest.fn() }, { params: { request } })
 
     component = render(<SelectFile {...props} />)
 
@@ -62,7 +62,7 @@ context('SelectFile', () => {
       expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
 
       const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0]
-      expect(actionSheetConfig.options).toEqual(['File folder', 'Cancel'])
+      expect(actionSheetConfig.options).toEqual(['File Folder', 'Cancel'])
     })
   })
 })
