@@ -32,6 +32,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
+  const onPharmacy = navigateTo('Pharmacy')
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
@@ -55,6 +56,17 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps('Health-care-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+        <LargeNavButton
+          title={t('pharmacy.title')}
+          subText={t('pharmacy.subText')}
+          subTextA11yLabel={t('pharmacy.subText.a11yLabel')}
+          a11yHint={t('pharmacy.a11yHint')}
+          onPress={onPharmacy}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+        />
         <LargeNavButton
           title={t('appointments.title')}
           subText={t('appointments.subText')}
