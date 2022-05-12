@@ -59,6 +59,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         <LargeNavButton
           title={t('pharmacy.title')}
           subText={t('pharmacy.subText')}
+          subTextA11yLabel={t('pharmacy.subText.a11yLabel')}
           a11yHint={t('pharmacy.a11yHint')}
           onPress={onPharmacy}
           borderWidth={theme.dimensions.buttonBorderWidth}
