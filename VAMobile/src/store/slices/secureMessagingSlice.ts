@@ -454,7 +454,7 @@ export const saveDraft =
  * Redux action to send message
  */
 export const sendMessage =
-  (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AppThunk =>
+  (messageData: SecureMessagingFormData, messages: SnackbarMessages, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AppThunk =>
   async (dispatch, getState) => {
     let formData: FormData
     let postData
@@ -496,7 +496,8 @@ export const sendMessage =
     } else {
       postData = messageData
     }
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
+    const retryFunction = () => dispatch(sendMessage(messageData, messages, uploads, replyToID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
       await api.post<SecureMessagingMessageData>(
@@ -513,10 +514,12 @@ export const sendMessage =
       await registerReviewEvent()
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage(undefined))
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `sendMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSendMessage(error))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }

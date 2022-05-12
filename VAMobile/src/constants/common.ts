@@ -52,6 +52,7 @@ const screensToCloseSnackbarOnNavigation = [
   'ClaimDetails',
   'EditDraft',
   'FolderMessages',
+  'SecureMessaging',
   'ViewMessage',
   'SecureMessaging',
   'PersonalInformation',

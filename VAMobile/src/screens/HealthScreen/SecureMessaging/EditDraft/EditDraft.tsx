@@ -43,8 +43,10 @@ import {
   getMessageRecipients,
   getThread,
   resetSaveDraftFailed,
+  resetSendMessageComplete,
   resetSendMessageFailed,
   saveDraft,
+  sendMessage,
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -74,10 +76,24 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     errorMsg: t('secureMessaging.draft.saved.error'),
   }
 
-  const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, savingDraft, threads, deleteDraftComplete, deletingDraft } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const snackbarSentMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.composeMessage.sent'),
+    errorMsg: t('secureMessaging.composeMessage.sent.error'),
+  }
+
+  const {
+    sendingMessage,
+    sendMessageComplete,
+    hasLoadedRecipients,
+    loading,
+    messagesById,
+    recipients,
+    saveDraftComplete,
+    savingDraft,
+    threads,
+    deleteDraftComplete,
+    deletingDraft,
+  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const destructiveAlert = useDestructiveAlert()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
@@ -144,6 +160,19 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       goToDraftFolder(false)
     }
   }, [saveDraftComplete, navigation, deleteDraftComplete, goToDraftFolder, dispatch])
+
+  useEffect(() => {
+    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
+    if (sendMessageComplete) {
+      dispatch(resetSendMessageComplete())
+      navigation.navigate('SecureMessaging')
+      navigation.navigate('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: false,
+      })
+    }
+  }, [sendMessageComplete, dispatch, navigation])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -242,6 +271,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft) {
     const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : deletingDraft ? t('secureMessaging.deleteDraft.loading') : undefined
     return <LoadingComponent text={text} />
+  }
+
+  if (sendingMessage) {
+    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
@@ -364,12 +397,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
-      navigation.navigate('SendConfirmation', {
-        originHeader: t('secureMessaging.drafts.edit'),
-        messageData,
-        uploads: attachmentsList,
-        replyToID, // any message in the thread that isn't the draft can be replied to
-      })
+      dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, replyToID))
     }
   }
 
