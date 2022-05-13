@@ -259,11 +259,11 @@ export const finishEditPhoneNumber = (): AppThunk => async (dispatch) => {
  * Redux action to make the API call to update a users email
  */
 export const updateEmail =
-  (email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
+  (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     try {
       dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(email, emailId, screenID))))
+      dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(messages, email, emailId, screenID))))
       dispatch(dispatchStartSaveEmail())
 
       // if it doesnt exist call post endpoint instead
@@ -286,11 +286,18 @@ export const updateEmail =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveEmail())
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        // The email is not validating for a reason our front end validation does not know about, so it will always fail
+        if (err.status === 400) {
+          showSnackBar(messages.errorMsg, dispatch, undefined, true, true)
+        } else {
+          showSnackBar(messages.errorMsg, dispatch, undefined, false, true)
+        }
       }
     }
   }
@@ -299,11 +306,11 @@ export const updateEmail =
  * Redux action to make the API call to delete a users email
  */
 export const deleteEmail =
-  (email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
+  (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     try {
       dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteEmail(email, emailId, screenID))))
+      dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteEmail(messages, email, emailId, screenID))))
       dispatch(dispatchStartSaveEmail())
 
       const emailDeleteData = {
@@ -317,11 +324,13 @@ export const deleteEmail =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, undefined, false, true)
       }
     }
   }
