@@ -1,5 +1,6 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
