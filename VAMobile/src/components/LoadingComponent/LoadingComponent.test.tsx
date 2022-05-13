@@ -6,7 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import LoadingComponent from './LoadingComponent'
-import { ActivityIndicator } from 'react-native'
+import LottieView from 'lottie-react-native'
 import { TextView } from 'components'
 
 context('LoadingComponent', () => {
@@ -21,7 +21,7 @@ context('LoadingComponent', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-    expect(testInstance.findAllByType(ActivityIndicator).length > 0)
+    expect(testInstance.findAllByType(LottieView).length > 0)
     expect(testInstance.findAllByType(TextView).length > 0)
   })
 })

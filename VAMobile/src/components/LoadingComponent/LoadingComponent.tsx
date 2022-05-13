@@ -1,15 +1,23 @@
-import { ActivityIndicator, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
+import LottieView from 'lottie-react-native'
+import React, { FC } from 'react'
+
 import { Box, TextView, VAScrollView } from 'components'
 import { useTheme } from 'utils/hooks'
-import React, { FC } from 'react'
 
 export type LoadingComponentProps = {
   /**Text to be shown under the spinner */
   text?: string
+  /** show only the spinner without the text */
+  justSpinner?: boolean
+  /** spinner height*/
+  spinnerHeight?: number
+  /** spinner width */
+  spinnerWidth?: number
 }
 
 /**A common component to show a loading spinner */
-const LoadingComponent: FC<LoadingComponentProps> = ({ text }) => {
+const LoadingComponent: FC<LoadingComponentProps> = ({ text, justSpinner, spinnerHeight, spinnerWidth }) => {
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
@@ -17,17 +25,35 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text }) => {
     justifyContent: 'center',
   }
 
+  const spinnerStyle: ViewStyle = {
+    height: spinnerHeight || 50,
+    width: spinnerWidth || 50,
+    alignContent: 'center',
+  }
+
+  const getSpinner = () => {
+    return <LottieView source={require('./va-spinner.json')} autoPlay loop style={spinnerStyle} speed={0.8} />
+  }
+
   return (
-    <VAScrollView contentContainerStyle={scrollStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView textAlign={'center'} variant="MobileBody">
-            {text}
-          </TextView>
+    <>
+      {justSpinner ? (
+        <Box alignItems="center" justifyContent="center">
+          {getSpinner()}
         </Box>
-      </Box>
-    </VAScrollView>
+      ) : (
+        <VAScrollView contentContainerStyle={scrollStyles}>
+          <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+            {getSpinner()}
+            <Box mt={theme.dimensions.condensedMarginBetween}>
+              <TextView textAlign={'center'} variant="MobileBody">
+                {text}
+              </TextView>
+            </Box>
+          </Box>
+        </VAScrollView>
+      )}
+    </>
   )
 }
 

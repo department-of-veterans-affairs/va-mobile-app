@@ -1,8 +1,9 @@
-import { AccessibilityProps, ActivityIndicator, Pressable, PressableProps } from 'react-native'
+import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
+import LoadingComponent from './LoadingComponent'
 import React, { FC } from 'react'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -52,7 +53,7 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, onPress,
         <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} accessible={true}>
           {text}
         </TextView>
-        {load && <ActivityIndicator accessible={true} size="small" color={theme.colors.icon.spinner} />}
+        {load && <LoadingComponent justSpinner={true} spinnerHeight={24} spinnerWidth={24} />}
       </Box>
     </Pressable>
   )

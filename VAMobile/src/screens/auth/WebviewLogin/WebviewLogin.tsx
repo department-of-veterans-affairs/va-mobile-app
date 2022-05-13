@@ -1,7 +1,8 @@
+import { StyleProp, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
+import { useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, sendLoginStartAnalytics, setPKCEParams } from 'store/slices/authSlice'
 import { Box, LoadingComponent } from 'components'
@@ -14,7 +15,6 @@ import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 import qs from 'querystringify'
 
@@ -75,8 +75,8 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   }, [authParamsLoadingState, codeChallenge, authorizeStateParam, dispatch, navigation])
 
   const loadingSpinner: ReactElement = (
-    <Box display="flex" height="100%" width="100%" justifyContent="center" alignItems="center">
-      <ActivityIndicator size="large" />
+    <Box display="flex" height="100%" width="100%">
+      <LoadingComponent />
     </Box>
   )
 

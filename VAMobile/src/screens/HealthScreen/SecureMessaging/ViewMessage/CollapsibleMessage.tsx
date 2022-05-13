@@ -1,8 +1,8 @@
-import { ActivityIndicator, View } from 'react-native'
+import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref } from 'react'
 
-import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView, VAIcon } from 'components'
+import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -57,7 +57,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           </TextView>
           {loadingAttachments && !attachments?.length && attachment && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-              <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
+              <LoadingComponent justSpinner={true} />
             </Box>
           )}
         </Box>
