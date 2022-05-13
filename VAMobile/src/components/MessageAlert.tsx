@@ -1,10 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box } from './index'
 import { ClickToCallPhoneNumber, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type MessageAlertProps = {
   /**sets if there is validation errors */
@@ -24,8 +25,8 @@ export type MessageAlertProps = {
 /**Common component to show a message alert when saving or sending a secure message */
 const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const th = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON])
 
   let title
   let text
@@ -42,7 +43,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
     textA11yLabel = t('secureMessaging.sendError.ifTheAppStill.a11y')
   } else if (saveDraftFailed) {
     title = t('secureMessaging.formMessage.saveDraft.failed.title')
-    text = t(t('secureMessaging.formMessage.saveDraft.failed.text'))
+    text = t('secureMessaging.formMessage.saveDraft.failed.text')
   } else if (saveDraftComplete) {
     title = t('secureMessaging.formMessage.saveDraft.success.title')
   } else {
@@ -52,7 +53,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   return (
     <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
       <AlertBox border={saveDraftComplete ? 'success' : 'error'} title={title} text={text} textA11yLabel={textA11yLabel} titleRole={'header'}>
-        {sendMessageFailed && <ClickToCallPhoneNumber phone={t('common:8773270022.displayText')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
+        {sendMessageFailed && <ClickToCallPhoneNumber phone={tc('common:8773270022.displayText')} {...a11yHintProp(tc('home:veteransCrisisLine.callA11yHint'))} />}
       </AlertBox>
     </Box>
   )

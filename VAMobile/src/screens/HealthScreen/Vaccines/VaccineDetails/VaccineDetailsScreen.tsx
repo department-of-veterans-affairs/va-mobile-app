@@ -1,5 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { every } from 'underscore'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
@@ -10,8 +12,7 @@ import { RootState } from 'store'
 import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
 
@@ -22,14 +23,15 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const { vaccineId } = route.params
   const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
   const dispatch = useAppDispatch()
 
   const vaccine = vaccinesById[vaccineId]
   const location = vaccineLocationsById[vaccineId]
 
-  const placeHolder = t('common:noneNoted')
+  const placeHolder = tc('noneNoted')
 
   useEffect(() => {
     if (vaccine && !vaccineLocationsById[vaccineId]) {

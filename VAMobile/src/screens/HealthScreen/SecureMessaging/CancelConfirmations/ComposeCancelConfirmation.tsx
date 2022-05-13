@@ -1,9 +1,11 @@
+import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
-import { useDestructiveAlert, useRouteNavigation, useTranslation } from 'utils/hooks'
-import { useDispatch } from 'react-redux'
+import { useDestructiveAlert, useRouteNavigation } from 'utils/hooks'
 
 type ComposeCancelConfirmationProps = {
   /** Contents of the message */
@@ -18,7 +20,8 @@ type ComposeCancelConfirmationProps = {
   draftMessageID?: number
 }
 export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmationProps) => void {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveAlert()
@@ -63,7 +66,7 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('secureMessaging.composeMessage.cancel.discard'),

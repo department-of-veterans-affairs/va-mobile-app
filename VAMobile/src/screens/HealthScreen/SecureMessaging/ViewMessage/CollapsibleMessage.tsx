@@ -1,4 +1,5 @@
 import { View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
@@ -9,7 +10,7 @@ import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'sto
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay } from 'utils/common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
@@ -24,9 +25,9 @@ export type ThreadMessageProps = {
 
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tCom = useTranslation(NAMESPACE.COMMON)
-  const tFunction = useTranslation()
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tCom } = useTranslation(NAMESPACE.COMMON)
+  const { t: tFunction } = useTranslation()
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message

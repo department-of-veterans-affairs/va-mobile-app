@@ -1,4 +1,5 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
@@ -10,7 +11,7 @@ import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from './CernerAlert'
 import getEnv from 'utils/env'
@@ -22,7 +23,8 @@ type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
@@ -34,7 +36,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onVaVaccines = navigateTo('VaccineList')
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov') })
   }
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
@@ -113,7 +115,7 @@ const HealthScreenStack = createStackNavigator()
  * Stack screen for the Health tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const HealthStackScreen: FC<HealthStackScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const headerStyles = useHeaderStyles()
 
   return (

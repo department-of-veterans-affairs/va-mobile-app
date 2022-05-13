@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView, VAScrollView } from 'components'
@@ -7,12 +8,12 @@ import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 
 const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   useEffect(() => {

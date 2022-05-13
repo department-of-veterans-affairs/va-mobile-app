@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { ButtonTypesConstants } from './VAButton'
@@ -5,12 +6,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VAButton } from './index'
 import { logout } from 'store/slices/authSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useTranslation } from 'utils/hooks'
+import { useDestructiveAlert } from 'utils/hooks'
 import { useDispatch } from 'react-redux'
 
 /**Common component for the sign out button */
 const SignoutButton: FC = ({}) => {
-  const t = useTranslation(NAMESPACE.SETTINGS)
+  const { t } = useTranslation(NAMESPACE.SETTINGS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const signOutAlert = useDestructiveAlert()
   const _logout = () => {
@@ -24,7 +26,7 @@ const SignoutButton: FC = ({}) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('logout.title'),
