@@ -61,7 +61,6 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   }
 
   return (
-    // ios set to a different padding due to the header set to transparent true for ios preventing the header flash
     <Box flex={1} backgroundColor={'main'} pt={condensedMarginBetween}>
       <VAScrollView>
         <TextView mx={gutter} mb={isError ? standardMarginBetween : contentMarginBottom} variant={'BitterBoldHeading'} accessibilityRole={'header'}>

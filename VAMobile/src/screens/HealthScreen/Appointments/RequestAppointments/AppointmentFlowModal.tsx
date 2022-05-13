@@ -40,7 +40,6 @@ const AppointmentFlowModal: FC = () => {
             navigation.goBack()
           }}
           a11yHint={t('appointments.closeAppointmentRequestModal')}
-          //This is done due IOS having a delay and not announcing the button on modal launch
         />
         <Box
           mr={20}
