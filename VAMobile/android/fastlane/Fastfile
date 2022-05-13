@@ -87,7 +87,6 @@ platform :android do
     rcVersion = "#{Gem::Version.new(ENV['VERSION_NAME']).bump}.0"
     notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
     distribute_to_firebase(notes, "qa")
-    tag_build
     message = "New RC for #{rcVersion} successfully uploaded to Firebase Distribution"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Release Candidate", message, "Android")
   end
