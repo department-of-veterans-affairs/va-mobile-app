@@ -1,9 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAButton, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { isIOS } from 'utils/platform'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import CloseButton from 'components/CloseButton'
 
 type AppointmentFlowLayoutProps = {
@@ -22,7 +23,9 @@ type AppointmentFlowLayoutProps = {
 /** Component for the common sections for the appointment flow modal steps */
 const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({ onClose, firstActionButtonPress, secondActionButtonPress, disableFirstAction, disableSecondAction, children }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+
   const { contentMarginBottom, gutter, contentMarginTop, standardMarginBetween, textIconMargin } = theme.dimensions
 
   const getButtonSection = () => {
@@ -31,10 +34,10 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({ onClose, firstA
       return (
         <Box flexDirection="row">
           <Box flex={1} mr={10}>
-            <VAButton onPress={firstActionPress} label={t('common:back')} buttonType={'buttonPrimary'} disabled={disableFirstAction} />
+            <VAButton onPress={firstActionPress} label={tc('back')} buttonType={'buttonPrimary'} disabled={disableFirstAction} />
           </Box>
           <Box flex={1}>
-            <VAButton onPress={secondActionButtonPress} label={t('common:continue')} buttonType={'buttonPrimary'} disabled={disableSecondAction} />
+            <VAButton onPress={secondActionButtonPress} label={tc('continue')} buttonType={'buttonPrimary'} disabled={disableSecondAction} />
           </Box>
         </Box>
       )

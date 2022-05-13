@@ -1,10 +1,11 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useAccessibilityFocus, useTheme, useTranslation } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 
@@ -24,7 +25,7 @@ export type CloseButtonProps = {
  * Button used by the stack request appointment modal
  */
 export const CloseButton: FC<CloseButtonProps> = ({ onPress, a11yHint, focusOnButton }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
