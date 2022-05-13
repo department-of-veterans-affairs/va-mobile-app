@@ -1,4 +1,6 @@
 import { ViewStyle } from 'react-native'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AuthState, AuthorizedServicesState, completeSync, logInDemoMode } from 'store/slices'
@@ -8,8 +10,7 @@ import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, 
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 const SyncScreen: FC<SyncScreenProps> = () => {
@@ -20,7 +21,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -31,7 +32,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     (state) => state.authorizedServices,
   )
 
-  const [displayMessage, setDisplayMessage] = useState()
+  const [displayMessage, setDisplayMessage] = useState('')
 
   useEffect(() => {
     dispatch(checkForDowntimeErrors())
@@ -69,7 +70,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
         setDisplayMessage(t('sync.progress.disabilityRating'))
       }
     } else {
-      setDisplayMessage(t(''))
+      setDisplayMessage('')
     }
 
     const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
@@ -82,8 +83,8 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
         <VAIcon name={'Logo'} />
-        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={theme.dimensions.syncLogoSpacing}>
-          <TextView justifyContent={'center'} color={'primaryContrast'} alignItems={'center'} textAlign={'center'}>
+        <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>
+          <TextView variant={'MobileBody'} justifyContent={'center'} color={'primaryContrast'} alignItems={'center'} textAlign={'center'}>
             {displayMessage}
           </TextView>
         </Box>

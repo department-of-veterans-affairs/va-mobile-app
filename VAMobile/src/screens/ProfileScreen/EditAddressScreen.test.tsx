@@ -5,16 +5,22 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { UserDataProfile } from 'store/api/types'
-import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton, BackButton } from 'components'
+import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { validateAddress, ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
+import { SnackbarMessages } from 'components/SnackBar'
+
+const snackbarMessages : SnackbarMessages = {
+  successMsg: 'Mailing address saved',
+  errorMsg: 'Mailing address could not be saved',
+}
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -769,6 +775,7 @@ context('EditAddressScreen', () => {
             zipCode: '',
             province: 'Ontario',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
@@ -813,6 +820,7 @@ context('EditAddressScreen', () => {
             zipCode: '94920',
             internationalPostalCode: '',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
@@ -856,6 +864,7 @@ context('EditAddressScreen', () => {
             stateCode: 'AP',
             zipCode: '96278',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })

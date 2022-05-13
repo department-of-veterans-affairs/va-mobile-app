@@ -80,7 +80,7 @@ context('Attachments', () => {
         expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
 
         const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0]
-        expect(actionSheetConfig.options).toEqual(['Camera', 'Photo gallery', 'File folder', 'Cancel'])
+        expect(actionSheetConfig.options).toEqual(['Camera', 'Photo Gallery', 'File Folder', 'Cancel'])
       })
     })
   })

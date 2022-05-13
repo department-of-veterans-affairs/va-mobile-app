@@ -21,13 +21,15 @@ import { downloadDemoFile, downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getSubstringBeforeChar } from 'utils/formattingUtils'
 import { isErrorObject, sortByDate } from 'utils/common'
-import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
 
 const DOWNLOAD_LETTER_RETRIES = 3
+
+const lettersNonFatalErrorString = 'Letters Service Error'
 
 export type LettersState = {
   loading: boolean
@@ -62,6 +64,7 @@ export const getLetters =
       dispatch(dispatchFinishGetLetters({ letters: letters?.data.attributes.letters }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getLetters: ${lettersNonFatalErrorString}`)
         dispatch(dispatchFinishGetLetters({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -83,6 +86,7 @@ export const getLetterBeneficiaryData =
       dispatch(dispatchFinishGetLetterBeneficiaryData({ letterBeneficiaryData: letterBeneficiaryData?.data.attributes }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getLetterBeneficiaryData: ${lettersNonFatalErrorString}`)
         dispatch(dispatchFinishGetLetterBeneficiaryData({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -131,6 +135,7 @@ export const downloadLetter =
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `downloadLetter: ${lettersNonFatalErrorString}`)
         /**
          * For letters we show a special screen regardless of the error. All download errors will be caught
          * here so there is no special path for network connection errors

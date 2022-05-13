@@ -22,10 +22,10 @@ This is an example of a string in the `claims` namespace. The key is `claimPhase
 
 ## Using Translations
 
-Translation values are accessed via the `useTranslation` hook. This hook creates a translation function for a namespace constant provided as an argument. If no namespace is provided, it will default to `common`. 
+Translation values are accessed via the `useTranslation` hook. This hook creates a translation function for a namespace or list of namespaces provided as an argument.
 
 ```
-const t = useTranslation(NAMESPACE.CLAIMS)
+const { t } = useTranslation(NAMESPACE.CLAIMS)
 ```
 
 For basic usage, the translation function takes in the desired key as the only argument and will resolve to the display value associated with that key.
@@ -67,15 +67,20 @@ This allows this translation to take in two values, position and total that will
 t('listPosition', { position: myPosition, total: totalEntries })
 ```
 
-### Crossing Namespaces
+### Multiple Namespaces
 
-If a component needs strings from multiple namespaces, you can create translation functions for each namespace:
+To use multiple namespaces, either create another function with the desired namespace
 
 ```
-const t = useTranslation(NAMESPACE.CLAIMS)
-const tCommon = useTranslation(NAMESPACE.COMMON)
+const { t } = useTranslation(NAMESPACE.CLAIMS)
+const { t: tCommon } = useTranslation(NAMESPACE.COMMON)
 ```
 
-Alternatively, you can cross namespaces by prefixing the key with the namespace like
+or create one translation function for multiple namespaces where the usage will be prefixed with the desired namespace
 
-```t('common:next')```
+```
+const { t } = useTranslation([NAMESPACE.CLAIMS, NAMESPACE.COMMON])
+
+const myClaimsString = t('claims:key.in.claims')
+const myCommonString = t('common:key.in.common')
+```

@@ -1,5 +1,6 @@
 import { map } from 'underscore'
 import { useNavigation } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
 import { AccordionCollapsible, Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
@@ -7,9 +8,10 @@ import { AddressData, AddressValidationScenarioTypesConstants, ScreenIDTypesCons
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { ViewStyle } from 'react-native'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 /**
@@ -18,11 +20,12 @@ import { useSelector } from 'react-redux'
 export type AddressValidationProps = {
   addressEntered: AddressData
   addressId: number
+  snackbarMessages: SnackbarMessages
 }
 
-const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId }) => {
+const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId, snackbarMessages }) => {
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
   const theme = useTheme()
 
@@ -77,7 +80,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       address.validationKey = validationKey
     }
 
-    dispatch(updateAddress(address, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    dispatch(updateAddress(address, snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   const getSuggestedAddressLabelArgs = (address: SuggestedAddress | AddressData): { [key: string]: string } => {
@@ -134,16 +137,12 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
 
   const accordionHeader = (): ReactNode => {
-    return (
-      <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-        {getAlertTitle()}
-      </TextView>
-    )
+    return <TextView variant="MobileBodyBold">{getAlertTitle()}</TextView>
   }
 
   const getAlert = (): ReactNode => {
     return (
-      <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
+      <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
         {getAlertBody()}
       </TextView>
     )

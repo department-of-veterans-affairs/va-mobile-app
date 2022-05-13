@@ -1,5 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { testIdProps } from 'utils/accessibility'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
@@ -7,15 +9,14 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SecureMessagingState, resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store/slices'
-import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { testIdProps } from 'utils/accessibility'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
-import React, { FC, ReactNode, useEffect } from 'react'
 
 type SendConfirmationProps = StackScreenProps<HealthStackParamList, 'SendConfirmation'>
 
 const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const { originHeader, messageData, uploads, replyToID } = route.params
   const navigateTo = useRouteNavigation()

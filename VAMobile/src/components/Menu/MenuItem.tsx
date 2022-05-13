@@ -32,9 +32,10 @@ export const MenuItem = ({
 }: PropsWithChildren<MenuItemViewProps>): JSX.Element => {
   const touchableInitialStyle: StyleProp<ViewStyle> = {
     justifyContent: 'center',
-    minWidth: theme.dimensions.menuItemMinWidth,
+    minWidth: 191,
     flexWrap: 'wrap',
   }
+
   return (
     <TouchableHighlight disabled={disabled} onPress={onPress} style={[touchableInitialStyle, touchableStyle]} underlayColor={underlayColor} importantForAccessibility={'no'}>
       <View style={[viewStyle, disabled && disabledStyle]}>{children}</View>

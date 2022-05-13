@@ -1,18 +1,20 @@
+import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode, useEffect } from 'react'
+
 import { AlertBox, BackButton, Box, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
-import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { updateSecureMessagingTab } from 'store/slices'
-import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import React, { FC, ReactNode, useEffect } from 'react'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type SuccessfulSendScreenProps = StackScreenProps<HealthStackParamList, 'SuccessfulSendScreen'>
 
 const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -40,7 +42,7 @@ const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => 
           text={t('secureMessaging.sent.threeBusinessDays')}
           textA11yLabel={t('secureMessaging.sent.threeBusinessDays.a11y')}>
           <Box {...testIdProps(t('secureMessaging.composeMessage.important'))} accessibilityRole={'header'} accessible={true}>
-            <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
               {t('secureMessaging.composeMessage.important')}
             </TextView>
           </Box>

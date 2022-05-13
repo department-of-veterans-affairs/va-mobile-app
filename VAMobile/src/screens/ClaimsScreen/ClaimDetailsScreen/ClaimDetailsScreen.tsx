@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton, Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
@@ -13,7 +14,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
@@ -27,16 +28,23 @@ type ClaimDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'ClaimDeta
 const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
   const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType, focusOnSnackbar } = route.params
-  const { claim, loadingClaim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
+
+  useBeforeNavBackListener(navigation, () => {
+    // if claim is still loading cancel it
+    if (loadingClaim) {
+      cancelLoadingDetailScreen?.abort()
+    }
+  })
 
   useEffect(() => {
     navigation.setOptions({
@@ -44,7 +52,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
         <BackButton
           onPress={() => {
             navigation.goBack()
-            snackBar.hideAll()
           }}
           focusOnButton={focusOnSnackbar ? false : true}
           canGoBack={props.canGoBack}
@@ -78,7 +85,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     <VAScrollView {...testIdProps('Your-claim: Claim-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
-          <TextView variant="BitterBoldHeading" color={'primaryTitle'} mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
+          <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>

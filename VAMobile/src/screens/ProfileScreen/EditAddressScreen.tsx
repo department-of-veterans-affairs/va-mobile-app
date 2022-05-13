@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
@@ -22,16 +23,18 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
+import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/slices'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
 import HeaderTitle from 'components/HeaderTitle'
@@ -80,7 +83,8 @@ type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const { profile, addressSaved, savingAddress, showValidation } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
@@ -92,6 +96,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const addressLine3Ref = useRef<TextInput>(null)
   const zipCodeRef = useRef<TextInput>(null)
   const cityRef = useRef<TextInput>(null)
+
+  const snackbarMessages: SnackbarMessages = GenerateAddressMessages(t, addressType)
+
+  const removalSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.residentialAddress.removed'),
+    errorMsg: t('personalInformation.residentialAddress.removed.error'),
+  }
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = profile?.[addressType]?.[itemToGet]
@@ -121,7 +132,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('editAddress.validation.cancelConfirm.confirm'),
@@ -173,7 +184,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
 
     setDeleting(true)
-    dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    dispatch(deleteAddress(currentAddressData, removalSnackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   const getAddressValues = (): AddressData => {
@@ -213,7 +224,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const onSave = (): void => {
-    dispatch(validateAddress(getAddressValues(), ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    dispatch(validateAddress(getAddressValues(), snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -257,6 +268,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     const addressValidationProps = {
       addressEntered: getAddressValues(),
       addressId: profile?.[addressType]?.id || 0,
+      snackbarMessages: snackbarMessages,
     }
     return <AddressValidation {...addressValidationProps} />
   }
@@ -477,10 +489,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
-          text: t('common:remove'),
+          text: tc('remove'),
           onPress: onDelete,
         },
       ],

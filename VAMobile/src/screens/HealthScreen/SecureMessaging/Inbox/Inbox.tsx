@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
@@ -8,7 +9,7 @@ import { SecureMessagingState, fetchInboxMessages } from 'store/slices'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
@@ -17,7 +18,7 @@ type InboxProps = Record<string, unknown>
 const Inbox: FC<InboxProps> = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]

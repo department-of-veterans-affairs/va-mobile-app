@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 import _ from 'underscore'
 
@@ -47,11 +48,12 @@ import {
   saveDraft,
   updateSecureMessagingTab,
 } from 'store/slices'
+import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
@@ -59,11 +61,16 @@ import MenuView, { MenuViewActionsType } from 'components/Menu'
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
 const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
+    errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
+  }
 
   const {
     hasLoadedRecipients,
@@ -180,12 +187,12 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
-          text: t('common:delete'),
+          text: tc('delete'),
           onPress: () => {
-            dispatch(deleteDraft(messageID))
+            dispatch(deleteDraft(messageID, snackbarMessages))
           },
         },
       ],
@@ -194,7 +201,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const MenViewActions: MenuViewActionsType = [
     {
-      actionText: t('common:save'),
+      actionText: tc('save'),
       addDivider: true,
       iconName: 'FolderSolid',
       accessibilityLabel: t('secureMessaging.saveDraft.menuBtnA11y'),
@@ -204,7 +211,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       },
     },
     {
-      actionText: t('common:delete'),
+      actionText: tc('delete'),
       addDivider: false,
       iconName: 'TrashSolid',
       accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
@@ -406,9 +413,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             </Box>
             <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
               <TextView>
-                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                  {t('secureMessaging.composeMessage.important')}
-                </TextView>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
             </Box>
@@ -418,13 +423,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           {message && isReplyDraft && (
             <>
               <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
+              <TextView variant="MobileBodyBold" accessible={true}>
                 {message?.recipientName}
               </TextView>
               <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
                 {t('secureMessaging.formMessage.subject')}
               </TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={true}>
+              <TextView variant="MobileBodyBold" accessible={true}>
                 {subjectHeader}
               </TextView>
             </>
@@ -467,16 +472,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'} color={'primaryTitle'}>
+          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
             {t('secureMessaging.reply.messageThread')}
           </TextView>
         </Box>
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-                {subjectHeader}
-              </TextView>
+              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messagesById, messageThread)}
           </Box>

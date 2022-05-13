@@ -13,7 +13,6 @@ import ClaimDetails from './ClaimDetails/ClaimDetails'
 import { claim } from '../claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { InteractionManager } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack'
 
 jest.mock('@react-navigation/native', () => {
@@ -32,19 +31,23 @@ context('ClaimDetailsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
   let navHeaderSpy: any
-  let navigateToSpy: jest.Mock
+  let goBack: jest.Mock
+  let abortLoadSpy: jest.Mock
 
   const initializeTestInstance = (loadingClaim = false, errorsState: ErrorsState = initialErrorsState) => {
+    goBack = jest.fn()
+    abortLoadSpy = jest.fn()
     props = mockNavProps(
       undefined,
       {
         navigate: jest.fn(),
+        addListener: jest.fn(),
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
           }
         },
-        goBack: jest.fn(),
+        goBack,
       },
       { params: { claimID: '0', claimType: 'ACTIVE' } },
     )
@@ -56,6 +59,9 @@ context('ClaimDetailsScreen', () => {
           ...initialClaimsAndAppealsState,
           loadingClaim,
           claim: claim,
+          cancelLoadingDetailScreen: {
+            abort: abortLoadSpy
+          }
         },
         errors: errorsState,
       },
@@ -86,7 +92,7 @@ context('ClaimDetailsScreen', () => {
     it('should display the ClaimStatus component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/0`)
+          .calledWith(`/v0/claim/0`, {}, expect.anything())
           .mockResolvedValue({ data: claim })
         initializeTestInstance()
       })
@@ -102,7 +108,7 @@ context('ClaimDetailsScreen', () => {
     it('should display the ClaimDetails component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/0`)
+          .calledWith(`/v0/claim/0`, {}, expect.anything())
           .mockResolvedValue({ data: claim })
         initializeTestInstance()
       })

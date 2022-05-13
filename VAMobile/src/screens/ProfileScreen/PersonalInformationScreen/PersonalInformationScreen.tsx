@@ -2,6 +2,7 @@ import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
@@ -15,13 +16,13 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
-  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
 
   if (profile && profile.birthDate) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
@@ -59,9 +60,9 @@ const getPhoneNumberData = (
   onWorkPhone: () => void,
   onCellPhone: () => void,
 ): Array<DefaultListItemObj> => {
-  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
-  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
-  let cellText: Array<TextLine> = [{ text: t('personalInformation.mobile'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold' }]
+  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold' }]
+  let cellText: Array<TextLine> = [{ text: t('personalInformation.mobile'), variant: 'MobileBodyBold' }]
 
   homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homePhoneNumber', t))
   workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workPhoneNumber', t))
@@ -75,7 +76,7 @@ const getPhoneNumberData = (
 }
 
 const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
-  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold', color: 'primaryTitle' }]
+  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold' }]
 
   if (profile?.contactEmail?.emailAddress) {
     textLines.push({ text: t('personalInformation.dynamicField', { field: profile.contactEmail.emailAddress }) })
@@ -90,7 +91,7 @@ type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'P
 
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 

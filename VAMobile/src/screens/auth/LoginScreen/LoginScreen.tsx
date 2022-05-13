@@ -1,4 +1,5 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
@@ -7,14 +8,14 @@ import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation([NAMESPACE.LOGIN, NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
@@ -81,7 +82,7 @@ const LoginScreen: FC = () => {
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween}>
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.loginContentMarginBottom}>
+        <Box mx={theme.dimensions.gutter} mb={80}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}
