@@ -101,6 +101,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
         textLines,
         decorator: disabled ? ButtonDecoratorType.DisabledRadio : selected ? ButtonDecoratorType.FilledRadio : ButtonDecoratorType.EmptyRadio,
         onPress: onSelectorChange,
+        minHeight: 64,
       }
 
       return radioButton

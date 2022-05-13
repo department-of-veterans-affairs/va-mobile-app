@@ -47,12 +47,14 @@ export type VAButtonProps = {
   accessibilityState?: AccessibilityState
   /** props for optional icon to display before text */
   iconProps?: VAIconProps
+  /** props for optional min height */
+  minHeight?: number
 }
 
 /**
  * A common component to show a button that takes the full width of the view with gutters
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps, minHeight }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
@@ -102,6 +104,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
     p: theme.dimensions.buttonPadding,
     borderWidth: hideButtonBorder ? undefined : theme.dimensions.buttonBorderWidth,
     borderColor: hideButtonBorder ? undefined : getBorderOrBackgroundColor(),
+    minHeight: minHeight || undefined,
   }
 
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
