@@ -2,7 +2,6 @@ import { Pressable, PressableProps } from 'react-native'
 import React, { FC, useState } from 'react'
 
 import { VAIconColors, VATextColors } from 'styles/theme'
-import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
@@ -85,14 +84,14 @@ const ButtonWithIcon: FC<ButtonWithIconProps> = ({
       flexDirection: 'row',
     },
     onPress,
-    accessible: true,
     accessibilityRole: 'button',
     onPressIn,
     onPressOut,
+    accessibilityLabel: buttonText,
+    accessibilityHint: a11yHint || '',
   }
 
   const boxProps: BoxProps = {
-    mx: theme.dimensions.gutter,
     flexDirection: 'row',
     flexGrow: 1,
     alignItems: 'center',
@@ -126,7 +125,7 @@ const ButtonWithIcon: FC<ButtonWithIconProps> = ({
   }
 
   return (
-    <Pressable {...presableProps} {...a11yHintProp(a11yHint || '')}>
+    <Pressable {...presableProps}>
       <Box {...boxProps}>
         <VAIcon {...leftIconProps} />
         <TextView {...buttonTextProps}>{buttonText}</TextView>
