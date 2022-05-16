@@ -3,18 +3,19 @@ import React, { FC } from 'react'
 
 import { AppointmentFlowModalStackParamList } from '../AppointmentFlowModal'
 import AppointmentFlowLayout from './AppointmentFlowLayout'
+import AppointmentFlowTitleSection from './AppointmentFlowTitleSection'
 
 type AppointmentFlowStep2Props = StackScreenProps<AppointmentFlowModalStackParamList, 'AppointmentFlowStep2'>
 
 const AppointmentFlowStep2: FC<AppointmentFlowStep2Props> = ({ navigation }) => {
   return (
     <AppointmentFlowLayout
-      pageTitle="Page 2"
       firstActionButtonPress={() => {
         navigation.goBack()
       }}
-      secondActionButtonPress={() => {}}
-    />
+      secondActionButtonPress={() => {}}>
+      <AppointmentFlowTitleSection title="Page 2" />
+    </AppointmentFlowLayout>
   )
 }
 

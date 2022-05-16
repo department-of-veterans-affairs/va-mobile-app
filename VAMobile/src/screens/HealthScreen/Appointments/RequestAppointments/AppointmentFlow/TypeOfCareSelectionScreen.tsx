@@ -8,6 +8,7 @@ import { RadioGroup, radioOption } from 'components'
 import { TYPE_OF_CARE } from 'store/api'
 import { useRouteNavigation } from 'utils/hooks'
 import AppointmentFlowLayout from './AppointmentFlowLayout'
+import AppointmentFlowTitleSection from './AppointmentFlowTitleSection'
 
 type TypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'TypeOfCareSelectionScreen'>
 
@@ -53,13 +54,11 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
 
   return (
     <AppointmentFlowLayout
-      pageTitle={t('requestAppointment.whatTypeOfCare')}
-      isError={nonSelectedError}
-      errorMessage={t('requestAppointment.typeOfCareNotSelectedError')}
       secondActionButtonPress={onContinue}
       firstActionButtonPress={() => {
         navigation.goBack()
       }}>
+      <AppointmentFlowTitleSection title={t('requestAppointment.whatTypeOfCare')} error={nonSelectedError} errorMessage={t('requestAppointment.typeOfCareNotSelectedError')} />
       <RadioGroup options={getTypesOfCare()} onChange={onSetSelectedTypeOfCare} value={selectedTypeOfCare} isRadioList={true} />
     </AppointmentFlowLayout>
   )

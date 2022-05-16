@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, TextView, VAButton, VAScrollView } from 'components'
+import { Box, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -14,25 +14,10 @@ type AppointmentFlowLayoutProps = {
   disableFirstAction?: boolean
   /** Optional boolean to disable second action button  */
   disableSecondAction?: boolean
-  /** Optional boolean to disable second action button  */
-  pageTitle: string
-  /** shows the error alert  */
-  isError?: boolean
-  /** alert error message */
-  errorMessage?: string
 }
 
 /** Component for the common sections for the appointment flow modal steps */
-const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
-  firstActionButtonPress,
-  secondActionButtonPress,
-  disableFirstAction,
-  disableSecondAction,
-  children,
-  isError,
-  pageTitle,
-  errorMessage,
-}) => {
+const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({ firstActionButtonPress, secondActionButtonPress, disableFirstAction, disableSecondAction, children }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
@@ -62,17 +47,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
 
   return (
     <Box flex={1} backgroundColor={'main'} pt={condensedMarginBetween}>
-      <VAScrollView>
-        <TextView mx={gutter} mb={isError ? standardMarginBetween : contentMarginBottom} variant={'BitterBoldHeading'} accessibilityRole={'header'}>
-          {pageTitle}
-        </TextView>
-        {isError && (
-          <Box mx={gutter} mb={standardMarginBetween}>
-            <AlertBox border={'error'} title={errorMessage} />
-          </Box>
-        )}
-        {children}
-      </VAScrollView>
+      <VAScrollView>{children}</VAScrollView>
       <Box mb={contentMarginBottom} mx={gutter} mt={contentMarginTop}>
         <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" mb={standardMarginBetween} />
         {getButtonSection()}
