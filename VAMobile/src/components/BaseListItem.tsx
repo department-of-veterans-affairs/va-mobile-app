@@ -72,6 +72,9 @@ export type BaseListItemProps = {
 
   /** Optional file request if file was loaded to show check mark */
   fileUploaded?: boolean
+
+  /** Optional min height */
+  minHeight?: number
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
@@ -151,6 +154,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     activeBackgroundColor,
     claimsRequestNumber,
     fileUploaded,
+    minHeight,
   } = props
   const theme = useTheme()
 
@@ -198,7 +202,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
 
   const boxProps: BoxProps = {
     width: '100%',
-    minHeight: theme.dimensions.touchableMinHeight,
+    minHeight: minHeight || theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.gutter,
     borderBottomWidth: theme.dimensions.borderWidth,
