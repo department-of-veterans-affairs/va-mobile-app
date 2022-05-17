@@ -25,6 +25,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t: th } = useTranslation(NAMESPACE.HOME)
   const dispatch = useAppDispatch()
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
@@ -36,7 +37,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onVaVaccines = navigateTo('VaccineList')
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov') })
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.covidUpdates.loading') })
   }
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 

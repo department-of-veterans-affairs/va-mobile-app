@@ -76,7 +76,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
 
   const loadingSpinner: ReactElement = (
     <Box display="flex" height="100%" width="100%">
-      <LoadingComponent />
+      <LoadingComponent text="" />
     </Box>
   )
 
