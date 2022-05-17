@@ -1,10 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type AppVersionAndBuildProps = {
   /** color of the text */
@@ -17,7 +18,7 @@ export type AppVersionAndBuildProps = {
  * Common component to display the apps version and build number
  */
 const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'bodyText', textWeight = 'MobileBody' }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [versionName, setVersionName] = useState<string>()
   const [buildNumber, setBuildNumber] = useState<number>()

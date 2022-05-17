@@ -1,5 +1,6 @@
 import { PixelRatio, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
@@ -15,9 +16,9 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject, getfolderName } from 'utils/secureMessaging'
+import { formatSubject } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import ReplyMessageFooter from '../ReplyMessageFooter/ReplyMessageFooter'
@@ -61,7 +62,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const folderWhereMessageIs = useRef(currentFolderIdParam.toString())
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -171,15 +172,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }
 
   if (loading || movingMessage) {
-    return (
-      <LoadingComponent
-        text={
-          movingMessage
-            ? t('secureMessaging.movingMessage', { folderName: getfolderName(!isUndo ? newCurrentFolderID : folderWhereMessagePreviousewas.current, folders) })
-            : t('secureMessaging.viewMessage.loading')
-        }
-      />
-    )
+    return <LoadingComponent text={movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')} />
   }
 
   if (!message || !messagesById || !thread) {

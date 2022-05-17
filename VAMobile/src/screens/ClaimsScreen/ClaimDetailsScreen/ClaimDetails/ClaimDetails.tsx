@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextArea, TextView, VABulletList } from 'components'
@@ -5,7 +6,7 @@ import { ClaimData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type ClaimDetailsProps = {
   claim: ClaimData
@@ -18,7 +19,7 @@ type ClaimDetailsProps = {
  * @returns ClaimDetails component displaying claim data
  */
 const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const { attributes } = claim
 

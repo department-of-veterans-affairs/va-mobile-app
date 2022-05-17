@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { InteractionManager } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
@@ -28,18 +29,17 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SecureMessagingState, dispatchSetActionStart, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
-import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -67,11 +67,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverName = message ? message.senderName : ''
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
-
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.draft.saved'),
-    errorMsg: t('secureMessaging.draft.saved.error'),
-  }
 
   const goToCancel = () => {
     replyCancelConfirmation({
@@ -185,7 +180,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
+      dispatch(saveDraft(messageData, savedDraftID, true, messageID))
     } else {
       receiverID &&
         navigation.navigate('SendConfirmation', {

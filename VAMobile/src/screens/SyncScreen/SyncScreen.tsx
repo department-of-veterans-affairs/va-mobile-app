@@ -1,4 +1,6 @@
 import { ViewStyle } from 'react-native'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AuthState, AuthorizedServicesState, completeSync, logInDemoMode } from 'store/slices'
@@ -8,8 +10,7 @@ import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, 
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 const SyncScreen: FC<SyncScreenProps> = () => {
@@ -20,7 +21,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -31,7 +32,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     (state) => state.authorizedServices,
   )
 
-  const [displayMessage, setDisplayMessage] = useState()
+  const [displayMessage, setDisplayMessage] = useState('')
 
   useEffect(() => {
     dispatch(checkForDowntimeErrors())
@@ -57,19 +58,13 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
   useEffect(() => {
     if (syncing) {
-      if (!loggedIn) {
+      if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
-      } else if (loggingOut) {
+      } else {
         setDisplayMessage(t('sync.progress.signout'))
-      } else if (!personalInformationLoaded) {
-        setDisplayMessage(t('sync.progress.personalInfo'))
-      } else if (!militaryHistoryLoaded) {
-        setDisplayMessage(t('sync.progress.military'))
-      } else if (!disabilityRatingLoaded) {
-        setDisplayMessage(t('sync.progress.disabilityRating'))
       }
     } else {
-      setDisplayMessage(t(''))
+      setDisplayMessage('')
     }
 
     const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)

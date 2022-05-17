@@ -1,15 +1,16 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_MY_HEALTHEVET } = getEnv()
 const TermsAndConditions: FC = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tc = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme.dimensions
 

@@ -1,11 +1,13 @@
+import { Pressable, PressableProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode, useState } from 'react'
+
 import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { Pressable, PressableProps } from 'react-native'
 import { TextView } from 'components'
 import { VABorderColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
-import React, { FC, ReactNode, useState } from 'react'
+import { useTheme } from 'utils/hooks'
 import TextArea from './TextArea'
 
 export type CollapsibleAlertProps = {
@@ -20,7 +22,7 @@ export type CollapsibleAlertProps = {
 }
 
 const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, testID }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
 

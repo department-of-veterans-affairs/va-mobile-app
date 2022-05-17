@@ -1,4 +1,5 @@
 import { AccessibilityProps, KeyboardTypeOptions, Pressable, TextInput, TextInputProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
 import { Box, BoxProps, ValidationFunctionItems } from '../../index'
@@ -14,7 +15,7 @@ import {
 } from './formFieldUtils'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
 
@@ -72,7 +73,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     isTextArea,
     setInputCursorToBeginning,
   } = props
-  const t = useTranslation()
+  const { t } = useTranslation()
   const theme = useTheme()
   const startTextPositon = { start: 0, end: 0 }
   const [focusUpdated, setFocusUpdated] = useState(false)

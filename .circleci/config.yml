@@ -319,7 +319,28 @@ jobs:
           lane: "release"
       - ios_fastlane:
           lane: "release"
-
+  build_android_release_candidate:
+    executor: android
+    steps:
+      - checkout
+      - install_deps
+      - create_keys_directory
+      - decode_android_keys
+      - bundle_app:
+          os: "android"
+      - android_fastlane:
+          lane: "rc"
+  build_ios_release_candidate:
+    executor: ios
+    steps:
+      - checkout
+      - install_deps
+      - decode_ios_keys
+      - install_pods
+      - bundle_app:
+          os: "ios"
+      - ios_fastlane:
+          lane: "rc"
 workflows:
   pr:
     jobs:
@@ -361,6 +382,20 @@ workflows:
           filters:
             tags:
               only: /^feature-build-.+/
+            branches:
+              ignore: /.*/
+  release_candidate_build:
+    jobs:
+      - build_android_release_candidate:
+          filters:
+            tags:
+              only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
+            branches:
+              ignore: /.*/
+      - build_ios_release_candidate:
+          filters:
+            tags:
+              only: /^^RC-v\d+\.\d+\.\d+-\d+-\d+$/
             branches:
               ignore: /.*/
   new_release_branch:

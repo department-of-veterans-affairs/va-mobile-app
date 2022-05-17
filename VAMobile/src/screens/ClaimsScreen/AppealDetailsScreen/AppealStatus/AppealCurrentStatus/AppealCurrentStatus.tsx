@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import _ from 'underscore'
@@ -17,7 +18,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
@@ -301,7 +302,7 @@ type AppealCurrentStatusProps = {
 
 const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const launchExternalLink = useExternalLink()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import _ from 'underscore'
@@ -6,7 +7,7 @@ import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type AppealDecisionProps = {
   issues: Array<AppealStatusDetailsIssue>
@@ -16,7 +17,7 @@ type AppealDecisionProps = {
 }
 
 const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecision }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
 
   const getIssuesByDisposition = (stringToCompare: string): Array<AppealStatusDetailsIssue> => {
