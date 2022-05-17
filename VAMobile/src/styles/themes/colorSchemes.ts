@@ -110,6 +110,7 @@ export const lightTheme = {
     backButton: colors.white,
     snackBarText: colors.white,
     bodyText: colors.grayDark,
+    showAll: colors.primary,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -265,6 +266,7 @@ export const darkTheme = {
     backButton: colors.darkmodeLightBlue,
     snackBarText: colors.grayDark,
     bodyText: colors.grayLighter,
+    showAll: colors.darkmodeLightBlue,
   },
   buttonBackground: {
     buttonPrimary: colors.darkmodeLightBlue,
