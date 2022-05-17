@@ -58,16 +58,10 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
   useEffect(() => {
     if (syncing) {
-      if (!loggedIn) {
+      if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
-      } else if (loggingOut) {
+      } else {
         setDisplayMessage(t('sync.progress.signout'))
-      } else if (!personalInformationLoaded) {
-        setDisplayMessage(t('sync.progress.personalInfo'))
-      } else if (!militaryHistoryLoaded) {
-        setDisplayMessage(t('sync.progress.military'))
-      } else if (!disabilityRatingLoaded) {
-        setDisplayMessage(t('sync.progress.disabilityRating'))
       }
     } else {
       setDisplayMessage('')

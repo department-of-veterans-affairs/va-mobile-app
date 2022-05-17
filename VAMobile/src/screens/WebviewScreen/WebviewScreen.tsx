@@ -46,7 +46,11 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   )
 }
 
-const WebviewLoading: FC = ({}) => {
+type WebviewLoadingProps = {
+  loadingMessage?: string
+}
+
+const WebviewLoading: FC<WebviewLoadingProps> = ({ loadingMessage }) => {
   const spinnerStyle: ViewStyle = {
     position: 'absolute',
     left: 0,
@@ -57,7 +61,7 @@ const WebviewLoading: FC = ({}) => {
 
   return (
     <Box style={spinnerStyle}>
-      <LoadingComponent />
+      <LoadingComponent text={loadingMessage} />
     </Box>
   )
 }
@@ -68,6 +72,8 @@ export type WebviewStackParams = {
     url: string
     /** Text to appear with a lock icon in the header */
     displayTitle: string
+    /** Text to appear with a lock icon in the header */
+    loadingMessage?: string
   }
 }
 
@@ -83,7 +89,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
 
-  const { url, displayTitle } = route.params
+  const { url, displayTitle, loadingMessage } = route.params
 
   const onReloadPressed = (): void => {
     webviewRef?.current.reload()
@@ -141,7 +147,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
     <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
       <WebView
         startInLoadingState
-        renderLoading={(): ReactElement => <WebviewLoading />}
+        renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}
         source={{ uri: url }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
         ref={webviewRef}
