@@ -43,6 +43,6 @@
   "sync.progress.disabilityRating": "Retrieving your disability ratings...",
   "sync.progress.military": "Retrieving your military history...",
   "sync.progress.personalInfo": "Loading your profile...",
-  "sync.progress.signin": "Signing in...",
-  "sync.progress.signout": "Signing out..."
+  "sync.progress.signin": "Signing you in...",
+  "sync.progress.signout": "Signing you out..."
 }

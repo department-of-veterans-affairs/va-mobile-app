@@ -48,10 +48,10 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   const onClaimsAndAppeals = navigateTo('ClaimsTab')
   const onContactVA = navigateTo('ContactVA')
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov') })
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.valocation.loading') })
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov') })
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
