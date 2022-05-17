@@ -1,4 +1,4 @@
-import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
+import { Linking, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import { useTranslation } from 'react-i18next'
@@ -6,7 +6,7 @@ import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef
 
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Box, BoxProps } from 'components'
+import { Box, BoxProps, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
@@ -46,18 +46,24 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   )
 }
 
-const WebviewLoading: FC = ({}) => {
-  const activitySpinnerStyle: StyleProp<ViewStyle> = {
+type WebviewLoadingProps = {
+  loadingMessage?: string
+}
+
+const WebviewLoading: FC<WebviewLoadingProps> = ({ loadingMessage }) => {
+  const spinnerStyle: ViewStyle = {
     position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
   }
 
-  return <ActivityIndicator style={activitySpinnerStyle} size="large" />
+  return (
+    <Box style={spinnerStyle}>
+      <LoadingComponent text={loadingMessage} />
+    </Box>
+  )
 }
 
 export type WebviewStackParams = {
@@ -66,6 +72,8 @@ export type WebviewStackParams = {
     url: string
     /** Text to appear with a lock icon in the header */
     displayTitle: string
+    /** Text to appear with a lock icon in the header */
+    loadingMessage?: string
   }
 }
 
@@ -81,7 +89,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
 
-  const { url, displayTitle } = route.params
+  const { url, displayTitle, loadingMessage } = route.params
 
   const onReloadPressed = (): void => {
     webviewRef?.current.reload()
@@ -139,7 +147,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
     <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
       <WebView
         startInLoadingState
-        renderLoading={(): ReactElement => <WebviewLoading />}
+        renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}
         source={{ uri: url }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
         ref={webviewRef}

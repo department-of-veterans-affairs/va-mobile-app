@@ -247,7 +247,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft) {
-    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : deletingDraft ? t('secureMessaging.deleteDraft.loading') : undefined
+    const text = savingDraft
+      ? t('secureMessaging.formMessage.saveDraft.loading')
+      : deletingDraft
+      ? t('secureMessaging.deleteDraft.loading')
+      : loading
+      ? t('secureMessaging.draft.loading')
+      : undefined
     return <LoadingComponent text={text} />
   }
 

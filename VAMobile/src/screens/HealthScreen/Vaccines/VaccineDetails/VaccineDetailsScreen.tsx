@@ -48,7 +48,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   }
 
   if (detailsLoading) {
-    return <LoadingComponent text={t('vaccines.loading')} />
+    return <LoadingComponent text={t('vaccines.details.loading')} />
   }
 
   const displayDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes.date) : placeHolder

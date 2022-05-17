@@ -16,7 +16,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject, getfolderName } from 'utils/secureMessaging'
+import { formatSubject } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -172,15 +172,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }
 
   if (loading || movingMessage) {
-    return (
-      <LoadingComponent
-        text={
-          movingMessage
-            ? t('secureMessaging.movingMessage', { folderName: getfolderName(!isUndo ? newCurrentFolderID : folderWhereMessagePreviousewas.current, folders) })
-            : t('secureMessaging.viewMessage.loading')
-        }
-      />
-    )
+    return <LoadingComponent text={movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')} />
   }
 
   if (!message || !messagesById || !thread) {
