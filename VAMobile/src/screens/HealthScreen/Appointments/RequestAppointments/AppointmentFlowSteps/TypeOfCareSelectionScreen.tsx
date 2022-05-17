@@ -2,13 +2,12 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
+import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../AppointmentFlowModal'
 import { NAMESPACE } from 'constants/namespaces'
 import { RadioGroup, radioOption } from 'components'
 import { TYPE_OF_CARE } from 'store/api'
 import { useRouteNavigation } from 'utils/hooks'
-import AppointmentFlowLayout from './AppointmentFlowLayout'
-import AppointmentFlowTitleSection from './AppointmentFlowTitleSection'
 
 type TypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'TypeOfCareSelectionScreen'>
 
@@ -17,13 +16,13 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
   const [selectedTypeOfCare, setSelectedTypeOfCare] = useState<string>()
-  const [nonSelectedError, SetNonSelectedError] = useState(false)
+  const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
 
-  const navigateToReason = navigateTo('AppointmentFlowStep2')
+  const navigateToReason = navigateTo('ReasonForAppointmentScreen')
 
   const onSetSelectedTypeOfCare = (type: string): void => {
     if (type) {
-      SetNonSelectedError(false)
+      setNoTypeSelectedError(false)
       setSelectedTypeOfCare(type)
     }
   }
@@ -46,7 +45,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
 
   const onContinue = () => {
     if (!selectedTypeOfCare) {
-      SetNonSelectedError(true)
+      setNoTypeSelectedError(true)
     } else {
       navigateToReason()
     }
@@ -58,7 +57,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
       firstActionButtonPress={() => {
         navigation.goBack()
       }}>
-      <AppointmentFlowTitleSection title={t('requestAppointment.whatTypeOfCare')} error={nonSelectedError} errorMessage={t('requestAppointment.typeOfCareNotSelectedError')} />
+      <AppointmentFlowTitleSection title={t('requestAppointment.whatTypeOfCare')} error={noTypeSelectedError} errorMessage={t('requestAppointment.typeOfCareNotSelectedError')} />
       <RadioGroup options={getTypesOfCare()} onChange={onSetSelectedTypeOfCare} value={selectedTypeOfCare} isRadioList={true} />
     </AppointmentFlowLayout>
   )
