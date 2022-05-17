@@ -261,9 +261,10 @@ export const finishEditPhoneNumber = (): AppThunk => async (dispatch) => {
 export const updateEmail =
   (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
+    const retryFunction = () => dispatch(updateEmail(messages, email, emailId, screenID))
     try {
       dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(messages, email, emailId, screenID))))
+      dispatch(dispatchSetTryAgainFunction(retryFunction))
       dispatch(dispatchStartSaveEmail())
 
       // if it doesnt exist call post endpoint instead
@@ -296,7 +297,7 @@ export const updateEmail =
         if (err.status === 400) {
           showSnackBar(messages.errorMsg, dispatch, undefined, true, true)
         } else {
-          showSnackBar(messages.errorMsg, dispatch, undefined, false, true)
+          showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
         }
       }
     }
@@ -308,9 +309,11 @@ export const updateEmail =
 export const deleteEmail =
   (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
+    const retryFunction = () => dispatch(deleteEmail(messages, email, emailId, screenID))
+
     try {
       dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteEmail(messages, email, emailId, screenID))))
+      dispatch(dispatchSetTryAgainFunction(retryFunction))
       dispatch(dispatchStartSaveEmail())
 
       const emailDeleteData = {
@@ -330,7 +333,7 @@ export const deleteEmail =
         logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, undefined, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
