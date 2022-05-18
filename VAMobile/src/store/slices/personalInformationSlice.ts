@@ -17,6 +17,7 @@ import {
   get,
 } from '../api'
 import { AppThunk } from 'store'
+import { ErrorObject } from 'store/api'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { MockUsersEmail } from 'constants/common'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -133,13 +134,16 @@ export const getProfileInfo =
  * @param phoneNumber - string of numbers signifying area code and phone number
  * @param extension - string of numbers signifying extension number
  * @param numberId - number indicating the id of the phone number
+ * @param messages - messages to show in success and error snackbars
  * @param screenID - ID used to compare within the component to see if an error component needs to be rendered
  */
 export const editUsersNumber =
-  (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: ScreenIDTypes): AppThunk =>
+  (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, screenID))))
+
+    const retryFunction = () => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSavePhoneNumber())
@@ -180,12 +184,14 @@ export const editUsersNumber =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSavePhoneNumber())
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -194,10 +200,12 @@ export const editUsersNumber =
  * Redux action for deleting number
  */
 export const deleteUsersNumber =
-  (phoneType: PhoneType, screenID?: ScreenIDTypes): AppThunk =>
+  (phoneType: PhoneType, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteUsersNumber(phoneType, screenID))))
+
+    const retryFunction = () => dispatch(deleteUsersNumber(phoneType, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSavePhoneNumber())
@@ -238,13 +246,15 @@ export const deleteUsersNumber =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
-        console.error(err)
-        dispatch(dispatchFinishSavePhoneNumber(err))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-      }
+      // if (isErrorObject(err)) {
+      logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
+      console.error(err)
+      dispatch(dispatchFinishSavePhoneNumber(err as ErrorObject))
+      dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err as ErrorObject), screenID }))
+      showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+      // }
     }
   }
 

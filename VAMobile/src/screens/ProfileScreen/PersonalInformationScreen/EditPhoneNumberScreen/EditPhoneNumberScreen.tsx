@@ -22,6 +22,7 @@ import { PersonalInformationState, deleteUsersNumber, editUsersNumber, finishEdi
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SnackbarMessages } from '../../../../components/SnackBar'
 import { dispatchClearErrors } from 'store/slices/errorSlice'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
@@ -43,6 +44,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useDestructiveAlert()
 
+  console.log(phoneType + ' ' + displayTitle)
+
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const [formContainsError, setFormContainsError] = useState(false)
@@ -59,16 +62,26 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     }
   }, [phoneNumberSaved, navigation, dispatch])
 
+  const saveSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.phoneNumber.saved', { type: displayTitle }),
+    errorMsg: t('personalInformation.phoneNumber.not.saved', { type: displayTitle }),
+  }
+
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const numberId = phoneData && phoneData.id ? phoneData.id : 0
 
-    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, saveSnackbarMessages, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+  }
+
+  const removeSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.phoneNumber.removed', { type: displayTitle }),
+    errorMsg: t('personalInformation.phoneNumber.not.removed', { type: displayTitle }),
   }
 
   const onDelete = (): void => {
     setDeleting(true)
-    dispatch(deleteUsersNumber(phoneType, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    dispatch(deleteUsersNumber(phoneType, removeSnackbarMessages, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
