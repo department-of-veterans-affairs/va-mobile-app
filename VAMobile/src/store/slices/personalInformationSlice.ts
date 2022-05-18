@@ -248,13 +248,13 @@ export const deleteUsersNumber =
       dispatch(dispatchFinishSavePhoneNumber())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
-      // if (isErrorObject(err)) {
-      logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
-      console.error(err)
-      dispatch(dispatchFinishSavePhoneNumber(err as ErrorObject))
-      dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err as ErrorObject), screenID }))
-      showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
-      // }
+      if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
+        console.error(err)
+        dispatch(dispatchFinishSavePhoneNumber(err))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+      }
     }
   }
 
