@@ -17,7 +17,6 @@ import {
   get,
 } from '../api'
 import { AppThunk } from 'store'
-import { ErrorObject } from 'store/api'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { MockUsersEmail } from 'constants/common'
 import { SnackbarMessages } from 'components/SnackBar'
