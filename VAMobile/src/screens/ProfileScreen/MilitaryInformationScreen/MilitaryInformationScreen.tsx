@@ -38,7 +38,6 @@ const MilitaryInformationScreen: FC = () => {
       {
         text: branch,
         variant: 'MobileBodyBold',
-        color: 'primaryTitle',
       },
       {
         text: t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate }),

@@ -27,9 +27,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
       <Box backgroundColor={'alertBox'} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <Box accessible={true} accessibilityRole={'header'}>
-            <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>
-              {t('secureMessaging.attachments.FAQ.howCanIAttach')}
-            </TextView>
+            <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.howCanIAttach')}</TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VABulletList
@@ -42,9 +40,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                {t('secureMessaging.attachments.FAQ.note') + ' '}
-              </TextView>
+              <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
               <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
             </TextView>
             <Box mt={theme.dimensions.standardMarginBetween}>
