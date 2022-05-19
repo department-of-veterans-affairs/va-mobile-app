@@ -1,14 +1,17 @@
-import { AlertBox, Box, ButtonDecoratorType, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton, VAScrollView } from 'components'
 import { Linking } from 'react-native'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+
+import { AlertBox, Box, ButtonDecoratorType, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices'
 import { RootState } from 'store'
-import { useAppDispatch, useOnResumeForeground, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useOnResumeForeground, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 const NotificationsSettingsScreen: FC = () => {
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: ts } = useTranslation(NAMESPACE.SETTINGS)
   const theme = useTheme()
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const { preferences, loadingPreferences, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>((state) => state.notifications)
@@ -39,11 +42,11 @@ const NotificationsSettingsScreen: FC = () => {
   }
 
   if (loadingPreferences) {
-    return <LoadingComponent text={'Loading your preferences'} />
+    return <LoadingComponent text={ts('notifications.loading')} />
   }
 
   if (settingPreference) {
-    return <LoadingComponent text={'Changing you preference with VA'} />
+    return <LoadingComponent text={ts('notifications.saving')} />
   }
 
   const personalizeText = systemNotificationsOn

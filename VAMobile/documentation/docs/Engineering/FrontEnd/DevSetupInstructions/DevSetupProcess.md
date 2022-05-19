@@ -31,7 +31,7 @@
 
 #### On your bash_profile or .zprofile add the following:
 
-- **`JAVA_HOME` varibale pointing to the java installed above example:**
+- **`JAVA_HOME` variable pointing to the java installed above example:**
 
  `export JAVA_HOME=$(/usr/libexec/java_home -v 15.0.2)` make sure you use the version you installed.
 
@@ -68,7 +68,7 @@
 
 - Verify you have access to the [VAMobile](https://github.com/department-of-veterans-affairs/va-mobile-app) repo.
 
-- Make sure you have the SSH Github setup on your machine if not follow these instruction [Connect With SSH](https://docs.github.com/en/enterprise-server@3.0/authentication/connecting-to-github-with-ssh/about-ssh).
+- Make sure you have the SSH Github setup on your machine if not follow these instruction [Connect With SSH](https://docs.github.com/en/enterprise-server@3.5/authentication/connecting-to-github-with-ssh/about-ssh).
 
 - Create a folder where you wish to clone the repo to. Example (`/Users/(your user folder/Workspace`).
 

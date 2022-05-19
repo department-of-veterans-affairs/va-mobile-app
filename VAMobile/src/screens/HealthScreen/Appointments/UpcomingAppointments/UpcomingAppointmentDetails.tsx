@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import {
@@ -36,8 +37,8 @@ import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { getEpochSecondsOfDate } from 'utils/formattingUtils'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
@@ -55,7 +56,7 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -112,7 +113,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
     metaData: {
-      title: t(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType]),
+      title: getTranslation(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType], t),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
@@ -137,11 +138,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const getVideoInstructionsTranslationID = (): string => {
     switch (appointmentType) {
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-        return 'upcomingAppointmentDetails.howToJoinInstructionsVALocation'
+        return t('upcomingAppointmentDetails.howToJoinInstructionsVALocation')
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-        return 'upcomingAppointmentDetails.howToJoinInstructionsVADevice'
+        return t('upcomingAppointmentDetails.howToJoinInstructionsVADevice')
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-        return 'upcomingAppointmentDetails.howToJoinInstructionsAtlas'
+        return t('upcomingAppointmentDetails.howToJoinInstructionsAtlas')
       default:
         return ''
     }
@@ -157,7 +158,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
-          <TextView variant="MobileBody">{t(getVideoInstructionsTranslationID())}</TextView>
+          <TextView variant="MobileBody">{getVideoInstructionsTranslationID()}</TextView>
         </Box>
       )
     }

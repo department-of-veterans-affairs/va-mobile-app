@@ -1,10 +1,11 @@
+import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
-import { SnackbarMessages } from 'components/SnackBar'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
-import { useDestructiveAlert, useRouteNavigation, useTranslation } from 'utils/hooks'
-import { useDispatch } from 'react-redux'
+import { useDestructiveAlert, useRouteNavigation } from 'utils/hooks'
 
 type ComposeCancelConfirmationProps = {
   /** Contents of the message */
@@ -18,18 +19,13 @@ type ComposeCancelConfirmationProps = {
   /** id of draft message */
   draftMessageID?: number
 }
-
 export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmationProps) => void {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveAlert()
   const goToDrafts = useGoToDrafts()
-
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.draft.saved'),
-    errorMsg: t('secureMessaging.draft.saved.error'),
-  }
 
   return (props: ComposeCancelConfirmationProps) => {
     const { replyToID, messageData, draftMessageID, isFormValid, origin } = props
@@ -47,7 +43,7 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       if (!isFormValid) {
         navigateTo('ComposeMessage', { saveDraftConfirmFailed: true })()
       } else {
-        dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
+        dispatch(saveDraft(messageData, draftMessageID, !!replyToID, replyToID, true))
         dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
       }
     }
@@ -70,7 +66,7 @@ export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmatio
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('secureMessaging.composeMessage.cancel.discard'),

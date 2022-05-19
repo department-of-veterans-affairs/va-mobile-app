@@ -1,15 +1,17 @@
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
+import { getTranslation } from 'utils/formattingUtils'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */
@@ -89,7 +91,7 @@ export type ClaimPhaseProps = {
  * Component for rendering each phase of a claim's lifetime.
  */
 const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -154,7 +156,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const detailsText = getDetails(phase, t)
   const detailsA11yLabel = phase === 1 ? t('claimPhase.details.phaseOneA11yLabel') : detailsText
   const youHaveFileRequestsText = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })
-  const youHaveFileRequestsTextA11yHint = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}A11yHint`, { numberOfRequests })
+  const youHaveFileRequestsTextA11yHint = getTranslation(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}A11yHint`, t, { numberOfRequests })
 
   return (
     <AccordionCollapsible noBorder={true} header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>

@@ -1,5 +1,5 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
-
 import _ from 'underscore'
 
 import { AddressData, UserDataProfile, addressTypeFields } from 'store/api/types'
@@ -12,7 +12,6 @@ import { RootState } from 'store'
 import { TFunction } from 'i18next'
 import { generateTestID, getAllFieldsThatExist } from 'utils/common'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -120,7 +119,7 @@ export type AddressSummaryProps = {
 
 const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
 
   const data = getAddressData(profile, t, addressData)
 

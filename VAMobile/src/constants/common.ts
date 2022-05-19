@@ -62,6 +62,7 @@ const screensToCloseSnackbarOnNavigation = [
   'AppealDetailsScreen',
   'ClaimDetailsScreen',
   'AskForClaimDecision',
+  'EditPhoneNumber',
 ]
 
 export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {

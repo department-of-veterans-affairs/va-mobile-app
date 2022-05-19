@@ -38,5 +38,8 @@
   "settings.backButton.a11yHint": "Go back to settings",
   "shareApp.a11yHint": "Opens your device's share sheet with a link to download the app",
   "shareApp.title": "Share the app",
-  "shareApp.text": "Download the VA: Health and Benefits on the App Store: {{appleStoreLink}} or on Google Play: {{googlePlayLink}}"
+  "shareApp.text": "Download the VA: Health and Benefits on the App Store: {{appleStoreLink}} or on Google Play: {{googlePlayLink}}",
+  "notifications.loading" : "Loading your notification preferences...",
+  "notifications.saving" : "Saving your notification preferences..."
+
 }

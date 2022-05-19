@@ -296,3 +296,13 @@ export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TF
       return ''
   }
 }
+
+/**
+ * Get a translation without using a type safe key, used when building keys programmatically.
+ * @param key - translation key to translate
+ * @param t - translation function
+ * @param options - optional param for variables in interpolated translations
+ */
+export const getTranslation = (key: string, t: TFunction, options?: object): string => {
+  return options ? t(key, options) : t(key)
+}
