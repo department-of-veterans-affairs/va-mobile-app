@@ -299,6 +299,8 @@
   "personalInformation.thisIsEmailWeUseToContactNote": "This is the email we’ll use to contact you. Your contact email may be different than the email you use to sign in.",
   "personalInformation.work": "Work",
   "personalInformation.workPhoneNumber": "work phone number",
+  "personalInformation.loading": "Loading your personal information...",
+  "profile.loading": "Loading your profile...",
   "settings.a11yHint": "Go the settings page",
   "settings.title": "Settings",
   "title": "Profile"

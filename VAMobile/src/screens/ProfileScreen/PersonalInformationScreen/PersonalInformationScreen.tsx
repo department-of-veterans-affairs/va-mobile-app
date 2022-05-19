@@ -167,7 +167,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     return (
       <React.Fragment>
         <ProfileBanner />
-        <LoadingComponent />
+        <LoadingComponent text={t('personalInformation.loading')} />
       </React.Fragment>
     )
   }
