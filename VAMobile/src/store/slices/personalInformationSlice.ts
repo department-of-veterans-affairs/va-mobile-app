@@ -133,13 +133,16 @@ export const getProfileInfo =
  * @param phoneNumber - string of numbers signifying area code and phone number
  * @param extension - string of numbers signifying extension number
  * @param numberId - number indicating the id of the phone number
+ * @param messages - messages to show in success and error snackbars
  * @param screenID - ID used to compare within the component to see if an error component needs to be rendered
  */
 export const editUsersNumber =
-  (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: ScreenIDTypes): AppThunk =>
+  (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, screenID))))
+
+    const retryFunction = () => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSavePhoneNumber())
@@ -180,12 +183,14 @@ export const editUsersNumber =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSavePhoneNumber())
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -194,10 +199,12 @@ export const editUsersNumber =
  * Redux action for deleting number
  */
 export const deleteUsersNumber =
-  (phoneType: PhoneType, screenID?: ScreenIDTypes): AppThunk =>
+  (phoneType: PhoneType, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteUsersNumber(phoneType, screenID))))
+
+    const retryFunction = () => dispatch(deleteUsersNumber(phoneType, messages, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSavePhoneNumber())
@@ -238,12 +245,14 @@ export const deleteUsersNumber =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -259,11 +268,12 @@ export const finishEditPhoneNumber = (): AppThunk => async (dispatch) => {
  * Redux action to make the API call to update a users email
  */
 export const updateEmail =
-  (email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
+  (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
+    const retryFunction = () => dispatch(updateEmail(messages, email, emailId, screenID))
     try {
       dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(email, emailId, screenID))))
+      dispatch(dispatchSetTryAgainFunction(retryFunction))
       dispatch(dispatchStartSaveEmail())
 
       // if it doesnt exist call post endpoint instead
@@ -286,11 +296,18 @@ export const updateEmail =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveEmail())
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        // The email is not validating for a reason our front end validation does not know about, so it will always fail
+        if (err.status === 400) {
+          showSnackBar(messages.errorMsg, dispatch, undefined, true, true)
+        } else {
+          showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        }
       }
     }
   }
@@ -299,11 +316,13 @@ export const updateEmail =
  * Redux action to make the API call to delete a users email
  */
 export const deleteEmail =
-  (email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
+  (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
+    const retryFunction = () => dispatch(deleteEmail(messages, email, emailId, screenID))
+
     try {
       dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteEmail(email, emailId, screenID))))
+      dispatch(dispatchSetTryAgainFunction(retryFunction))
       dispatch(dispatchStartSaveEmail())
 
       const emailDeleteData = {
@@ -317,11 +336,13 @@ export const deleteEmail =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveEmail(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }

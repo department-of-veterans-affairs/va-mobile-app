@@ -81,7 +81,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }
 
   if (loading) {
-    const text = draftSaved ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.messages.loading')
+    const text = t('secureMessaging.messages.loading')
     return <LoadingComponent text={text} />
   }
 

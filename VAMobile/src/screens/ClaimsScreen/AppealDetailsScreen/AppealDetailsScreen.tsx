@@ -92,7 +92,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   }
 
   if (loadingAppeal || !isTransitionComplete) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('appealDetails.loading')} />
   }
 
   const formattedUpdatedDate = formatDateMMMMDDYYYY(updated || '')

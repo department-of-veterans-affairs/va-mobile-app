@@ -171,7 +171,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <React.Fragment>
         <ProfileBanner showRating={false} />
-        <LoadingComponent />
+        <LoadingComponent text={t('disabilityRating.loading')} />
       </React.Fragment>
     )
   }
