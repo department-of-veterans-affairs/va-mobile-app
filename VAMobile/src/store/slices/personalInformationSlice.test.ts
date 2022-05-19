@@ -144,7 +144,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(deleteUsersNumber('HOME'))
+      await store.dispatch(deleteUsersNumber('HOME', snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER })
@@ -177,7 +177,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
+      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER })
@@ -207,7 +207,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore()
-      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
+      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER })
@@ -241,7 +241,7 @@ context('personalInformation', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
+      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER })
