@@ -4,20 +4,23 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { useTheme } from 'utils/hooks'
+import colors from 'styles/themes/VAColors'
 
 export type LoadingComponentProps = {
   /**Text to be shown under the spinner */
   text?: string
-  /** show only the spinner without the text */
-  justSpinner?: boolean
+  /** Param to show the spinner icon only and not the full page with text */
+  justTheSpinnerIcon?: boolean
   /** spinner height*/
   spinnerHeight?: number
   /** spinner width */
   spinnerWidth?: number
+  /** Hex string to set the spinner color*/
+  spinnerColor?: string
 }
 
 /**A common component to show a loading spinner */
-const LoadingComponent: FC<LoadingComponentProps> = ({ text, justSpinner, spinnerHeight, spinnerWidth }) => {
+const LoadingComponent: FC<LoadingComponentProps> = ({ text, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor }) => {
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
@@ -32,12 +35,30 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text, justSpinner, spinne
   }
 
   const getSpinner = () => {
-    return <LottieView source={require('./va-spinner.json')} autoPlay loop style={spinnerStyle} speed={0.8} />
+    return (
+      <LottieView
+        source={require('./va-spinner.json')}
+        autoPlay
+        loop
+        style={spinnerStyle}
+        speed={0.8}
+        colorFilters={[
+          {
+            keypath: 'Shape Layer 9',
+            color: spinnerColor || colors.primary,
+          },
+          {
+            keypath: 'Shape Layer 11',
+            color: spinnerColor || colors.primary,
+          },
+        ]}
+      />
+    )
   }
 
   return (
     <>
-      {justSpinner ? (
+      {justTheSpinnerIcon ? (
         <Box alignItems="center" justifyContent="center">
           {getSpinner()}
         </Box>

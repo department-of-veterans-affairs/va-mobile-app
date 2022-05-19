@@ -57,7 +57,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           </TextView>
           {loadingAttachments && !attachments?.length && attachment && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-              <LoadingComponent justSpinner={true} />
+              <LoadingComponent justTheSpinnerIcon={true} />
             </Box>
           )}
         </Box>
