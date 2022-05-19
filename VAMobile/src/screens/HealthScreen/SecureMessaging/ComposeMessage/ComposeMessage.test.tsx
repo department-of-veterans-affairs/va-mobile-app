@@ -2,12 +2,12 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import ComposeMessage from './ComposeMessage'
-import { InteractionManager, Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
+import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
@@ -351,15 +351,6 @@ context('ComposeMessage', () => {
     })
   })
 
-  describe('when form fields are filled out correctly and saved', () => {
-    it('should call navigateSpy', async () => {
-      await waitFor(() => {
-        testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(navigateSpy).toHaveBeenCalledWith( 'SendConfirmation', {'messageData': {'body': '', 'category': '', 'recipient_id': NaN, 'subject': ''}, 'originHeader': 'Compose', 'uploads': []})
-      })
-    })
-  })
-
   describe('when the subject changes from general to another option', () => {
     it('should clear all field errors', async () => {
       await waitFor(() => {
@@ -390,35 +381,6 @@ context('ComposeMessage', () => {
       await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
         expect(navigateToAddToFilesSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('when message send fails', () => {
-    beforeEach(() => {
-      // Give a different screenID so it won't display the error screen instead
-      initializeTestInstance(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID, false, true)
-    })
-
-    it('should display error alert', async () => {
-      await waitFor(() => {
-        expect(testInstance.findByType(AlertBox)).toBeTruthy()
-      })
-    })
-    describe('when the My HealtheVet phone number link is clicked', () => {
-      it('should call Linking open url with the parameter tel:8773270022', async () => {
-        await waitFor(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-        })
-      })
-    })
-    describe('when the call TTY phone link is clicked', () => {
-      it('should call Linking open url with the parameter tel:711', async () => {
-        await waitFor(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:711')
-        })
       })
     })
   })

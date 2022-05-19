@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { BackButton, Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -21,7 +21,7 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
 const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
-  const { folderID, folderName, draftSaved } = route.params
+  const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
@@ -126,11 +126,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <>
       <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
-        {draftSaved && (
-          <Box mt={theme.dimensions.contentMarginTop}>
-            <MessageAlert saveDraftComplete={draftSaved} />
-          </Box>
-        )}
         <MessageList
           items={getMessagesListItems(messages, t, onMessagePress, folderName)}
           title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}
