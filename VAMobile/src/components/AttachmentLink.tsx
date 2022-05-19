@@ -53,7 +53,7 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, onPress,
         <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} accessible={true}>
           {text}
         </TextView>
-        {load && <LoadingComponent justSpinner={true} spinnerHeight={24} spinnerWidth={24} />}
+        {load && <LoadingComponent justTheSpinnerIcon={true} spinnerHeight={24} spinnerWidth={24} />}
       </Box>
     </Pressable>
   )
