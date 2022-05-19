@@ -21,7 +21,7 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
 const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
-  const { folderID, folderName, draftSaved } = route.params
+  const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
