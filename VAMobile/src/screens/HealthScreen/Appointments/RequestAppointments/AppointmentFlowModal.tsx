@@ -1,19 +1,17 @@
 import { StackNavigationOptions, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import CloseModalButton from 'components/CloseModalButton'
 import React, { FC } from 'react'
 
-import { Box, VAIcon } from 'components'
+import { Box, CloseModalButton, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ReasonForAppointmentScreen, TypeOfCareSelectionScreen } from './AppointmentFlowSteps'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { useTheme } from 'utils/hooks'
-import AppointmentFlowStep2 from './AppointmentFlow/AppointmentFlowStep2'
-import TypeOfCareSelectionScreen from './AppointmentFlow/TypeOfCareSelectionScreen'
 
 export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   TypeOfCareSelectionScreen: undefined
-  AppointmentFlowStep2: undefined
+  ReasonForAppointmentScreen: undefined
 }
 
 const Stack = createStackNavigator<AppointmentFlowModalStackParamList>()
@@ -55,7 +53,7 @@ const AppointmentFlowModal: FC = () => {
       </Box>
       <Stack.Navigator initialRouteName="TypeOfCareSelectionScreen" screenOptions={{ ...headerStyles }}>
         <Stack.Screen name="TypeOfCareSelectionScreen" component={TypeOfCareSelectionScreen} />
-        <Stack.Screen name="AppointmentFlowStep2" component={AppointmentFlowStep2} />
+        <Stack.Screen name="ReasonForAppointmentScreen" component={ReasonForAppointmentScreen} />
       </Stack.Navigator>
     </Box>
   )

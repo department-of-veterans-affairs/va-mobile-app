@@ -206,3 +206,45 @@ export const AUDIOLOGY_TYPES_OF_CARE: Array<TypeOfCareObjectType> = [
     specialties: ['231H00000X', '237600000X'],
   },
 ]
+
+export type reasonForAppointmentIdTypes = 'routine-follow-up' | 'new-issue' | 'medication-concern' | 'other'
+
+export type reasonForAppointmentShortNameTypes = 'Follow-up/Routine' | 'New issue' | 'Medication concern' | 'My reason isn’t listed'
+
+export type reasonForAppointmentLabelTypes = 'Routine or follow-up visit' | 'New medical issue' | 'Concern or question about medication' | 'Other (please explain)'
+
+export type reasonForAppointmentServiceNameTypes = 'Routine Follow-up' | 'New Issue' | 'Medication Concern' | 'Other'
+
+export type reasonForAppointmentObjectType = {
+  id: reasonForAppointmentIdTypes
+  short: reasonForAppointmentShortNameTypes
+  label: reasonForAppointmentLabelTypes
+  serviceName: reasonForAppointmentServiceNameTypes
+}
+
+export const PURPOSE_TEXT: Array<reasonForAppointmentObjectType> = [
+  {
+    id: 'routine-follow-up',
+    short: 'Follow-up/Routine',
+    label: 'Routine or follow-up visit',
+    serviceName: 'Routine Follow-up',
+  },
+  {
+    id: 'new-issue',
+    short: 'New issue',
+    label: 'New medical issue',
+    serviceName: 'New Issue',
+  },
+  {
+    id: 'medication-concern',
+    short: 'Medication concern',
+    label: 'Concern or question about medication',
+    serviceName: 'Medication Concern',
+  },
+  {
+    id: 'other',
+    short: 'My reason isn’t listed',
+    label: 'Other (please explain)',
+    serviceName: 'Other',
+  },
+]

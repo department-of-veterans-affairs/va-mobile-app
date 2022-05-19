@@ -56,6 +56,7 @@ export type VATextColors = {
   actionBarDisabled: string
   bodyText: string
   defaultMenuItem: string
+  AppointmentRequestCtaBtnText: string
 }
 
 export type VAIconColors = {
@@ -106,6 +107,7 @@ export type VATypographyThemeVariants = {
   HelperText: string
   HelperTextBold: string
   SnackBarBtnText: string
+  AppointmentRequestCtaBtnText: string
 }
 
 export type VABackgroundColors = {

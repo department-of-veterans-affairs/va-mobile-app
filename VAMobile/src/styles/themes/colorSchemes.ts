@@ -106,6 +106,7 @@ export const lightTheme = {
     actionBarDisabled: colors.grayLight,
     defaultMenuItem: primaryTextColor,
     bodyText: primaryTextColor,
+    AppointmentRequestCtaBtnText: primaryTextColor,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -257,6 +258,7 @@ export const darkTheme = {
     actionBarDisabled: colors.grayLight,
     defaultMenuItem: colors.grayLighter,
     bodyText: colors.grayLighter,
+    AppointmentRequestCtaBtnText: colors.grayDark,
   },
   buttonBackground: {
     buttonPrimary: colors.darkmodeLightBlue,

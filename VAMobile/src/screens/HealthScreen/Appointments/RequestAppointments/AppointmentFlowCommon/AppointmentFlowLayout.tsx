@@ -21,7 +21,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({ firstActionButt
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { contentMarginBottom, gutter, contentMarginTop, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
 
   const getButtonSection = () => {
     const firstActionPress = firstActionButtonPress ? firstActionButtonPress : () => {}
@@ -48,8 +48,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({ firstActionButt
   return (
     <Box flex={1} backgroundColor={'main'} pt={condensedMarginBetween}>
       <VAScrollView>{children}</VAScrollView>
-      <Box mb={contentMarginBottom} mx={gutter} mt={contentMarginTop}>
-        <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" mb={standardMarginBetween} />
+      <Box mb={contentMarginBottom} mx={gutter} mt={30}>
         {getButtonSection()}
       </Box>
     </Box>

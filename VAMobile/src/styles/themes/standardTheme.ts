@@ -96,6 +96,10 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
+  AppointmentRequestCtaBtnText: {
+    fontSize: 18,
+    lineHeight: 25,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -128,6 +132,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
+    AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
   }
 }
 
