@@ -213,7 +213,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, savedDraftID, true, messageID))
+      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
     } else {
       receiverID && dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, messageID))
     }

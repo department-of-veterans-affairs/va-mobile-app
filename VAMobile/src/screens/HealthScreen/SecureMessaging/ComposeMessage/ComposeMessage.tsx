@@ -308,7 +308,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       messageData.draft_id = savedDraftID
     }
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, savedDraftID))
+      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID))
     } else {
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }
