@@ -3,10 +3,10 @@ import React, { FC, useState } from 'react'
 import { Box, SelectorType, TextView, VAScrollView } from 'components'
 
 import { Alert, Button } from 'react-native'
-import { isAndroid, isIOS } from '../../utils/platform'
+import { isAndroid, isIOS } from '../../../utils/platform'
 import DateTimePicker, { AndroidNativeProps, DateTimePickerEvent } from '@react-native-community/datetimepicker'
-import RadioGroup from '../../components/FormWrapper/FormFields/RadioGroup'
-import VASelector from '../../components/FormWrapper/FormFields/VASelector'
+import RadioGroup from '../../../components/FormWrapper/FormFields/RadioGroup'
+import VASelector from '../../../components/FormWrapper/FormFields/VASelector'
 
 /**
  *

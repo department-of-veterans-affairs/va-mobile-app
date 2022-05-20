@@ -5,8 +5,8 @@ import { Box, SelectorType, VAScrollView } from 'components'
 import { Agenda, AgendaEntry, AgendaSchedule, CalendarList, DateData } from 'react-native-calendars'
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { DateTime } from 'luxon'
-import RadioGroup from '../../components/FormWrapper/FormFields/RadioGroup'
-import VASelector from '../../components/FormWrapper/FormFields/VASelector'
+import RadioGroup from '../../../components/FormWrapper/FormFields/RadioGroup'
+import VASelector from '../../../components/FormWrapper/FormFields/VASelector'
 
 const INITIAL_DATE = DateTime.now().toUTC().toFormat('MM/dd/yyyy')
 const minDate = DateTime.now().plus({ days: 5 }).toUTC().toFormat('MM/dd/yyyy')
