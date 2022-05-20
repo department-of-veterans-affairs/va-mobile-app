@@ -67,7 +67,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     SecureMessagingState
   >((state) => state.secureMessaging)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
-  const replyCancelConfirmation = useComposeCancelConfirmation()
+  const [isDiscarded, replyCancelConfirmation] = useComposeCancelConfirmation()
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -161,8 +161,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  if (loading || savingDraft || loadingSignature || !isTransitionComplete) {
-    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.viewMessage.loading')
+  if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
+    const text = savingDraft
+      ? t('secureMessaging.formMessage.saveDraft.loading')
+      : isDiscarded
+      ? t('secureMessaging.deletingChanges.loading')
+      : t('secureMessaging.viewMessage.loading')
     return <LoadingComponent text={text} />
   }
 
