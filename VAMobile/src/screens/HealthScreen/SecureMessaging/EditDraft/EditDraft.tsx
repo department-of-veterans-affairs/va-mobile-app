@@ -120,7 +120,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
 
-  const editCancelConfirmation = useComposeCancelConfirmation()
+  const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
@@ -270,14 +270,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : deletingDraft
       ? t('secureMessaging.deleteDraft.loading')
-      : loading
-      ? t('secureMessaging.draft.loading')
-      : undefined
+      : isDiscarded
+      ? t('secureMessaging.deletingChanges.loading')
+      : t('secureMessaging.draft.loading')
     return <LoadingComponent text={text} />
   }
 

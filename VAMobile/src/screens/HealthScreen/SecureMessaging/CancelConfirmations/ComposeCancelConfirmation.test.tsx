@@ -92,7 +92,7 @@ context('useComposeCancelConfirmation', () => {
       .mockReturnValue(navigateToDraftFolderNotSavedSpy)
 
     const TestComponent: React.FC = () => {
-      const alert = useComposeCancelConfirmation()
+      const [_, alert] = useComposeCancelConfirmation()
       alert({
         messageData,
         draftMessageID,

@@ -72,7 +72,7 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
+    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
   }
 })
 
@@ -103,10 +103,13 @@ context('ComposeMessage', () => {
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('Attachments', { origin: 'Compose', attachmentsList: [] }).mockReturnValue(navigateToAddToFilesSpy)
-        .calledWith( 'AttachmentsFAQ', { originHeader: 'Compose' }).mockReturnValue(navigateToHowToAttachSpy)
-        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteransCrisisLineSpy)
+      .mockReturnValue(() => {})
+      .calledWith('Attachments', { origin: 'Compose', attachmentsList: [] })
+      .mockReturnValue(navigateToAddToFilesSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Compose' })
+      .mockReturnValue(navigateToHowToAttachSpy)
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteransCrisisLineSpy)
 
     props = mockNavProps(
       undefined,

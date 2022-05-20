@@ -73,7 +73,7 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
+    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
     useGoToDrafts: () => mockUseGoToDraftSpy,
   }
 })
