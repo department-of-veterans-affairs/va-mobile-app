@@ -2,9 +2,11 @@ import { DateTime } from 'luxon'
 import React, { FC, useState } from 'react'
 
 import { Box, TextView, TextViewProps } from 'components'
-import { Button, Pressable, PressableProps, Text, TextProps, View, ViewProps } from 'react-native'
+import { Button, Pressable, PressableProps, View, ViewProps } from 'react-native'
+import { useTheme } from 'utils/hooks'
 
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+// TODO translation
+const WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
 // TODO make more flexible
 export enum DISABLED_WEEKDAYS {
@@ -36,6 +38,7 @@ export type CustomCalendarProps = {
  * Returns Custom Calendar component
  */
 const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, latestDay, onSelected, disableWeekdays }) => {
+  const theme = useTheme()
   const [activeDate, setActiveDate] = useState(initialDate || DateTime.now())
   const [selectedDate, setSelectedDate] = useState<DateTime | null>(null)
   const now = DateTime.now()
@@ -99,6 +102,12 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
     let counter = 1
     for (let row = 1; row < 7; row++) {
       matrix[row] = []
+
+      // skip making the last row if we already hit max days
+      if (counter >= maxDays) {
+        continue
+      }
+
       for (let col = 0; col < 7; col++) {
         matrix[row][col] = -1
 
@@ -123,21 +132,18 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
       const rowItems = row.map((item, colIndex) => {
         // Header ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         if (rowIndex === 0) {
-          const headerStyle = {
+          const headerTextProps: TextViewProps = {
             flex: 1,
             height: 18,
             textAlign: 'center',
-            // Highlight header
-            backgroundColor: '#ddd',
-            // Highlight Sundays
-            color: colIndex === 0 ? '#a00' : '#000',
-          } as TextProps['style']
+            variant: 'HelperText',
+          }
           // Explict so we know its a string
           const weekday = item as string
           return (
-            <Text key={`${rowIndex}_${colIndex}`} style={headerStyle}>
+            <TextView key={`${rowIndex}_${colIndex}`} {...headerTextProps}>
               {weekday}
-            </Text>
+            </TextView>
           )
         }
 
@@ -173,14 +179,14 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
         }
 
         const dayTextViewProps: TextViewProps = {
-          variant: isCurrentDay ? 'MobileBodyBold' : 'MobileBody', // current day
+          variant: isCurrentDay ? 'HelperTextBold' : 'HelperText', // current day
           color: disabled ? 'actionBarDisabled' : 'bodyText',
           accessible,
         }
 
         return (
           <Pressable key={`${rowIndex}_${colIndex}`} {...pressableProps}>
-            <Box alignItems={'center'} height={30}>
+            <Box alignItems={'center'} height={22}>
               <TextView {...dayTextViewProps}>{day !== -1 ? day : ''}</TextView>
             </Box>
           </Pressable>
@@ -190,7 +196,7 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
       const viewStyle = {
         flex: 1,
         flexDirection: 'row',
-        padding: 15,
+        paddingVertical: 15,
         justifyContent: 'space-around',
         alignItems: 'center',
       } as ViewProps['style']
@@ -211,20 +217,22 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
 
   return (
     <>
-      <Box flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-        <Button
-          title={'Prev'}
-          onPress={() => {
-            changeMonth(-1)
-          }}
-        />
-        <TextView>{`${activeDate.monthShort} ${activeDate.year}`}</TextView>
-        <Button
-          title={'Next'}
-          onPress={() => {
-            changeMonth(1)
-          }}
-        />
+      <Box flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} px={theme.dimensions.gutter}>
+        <TextView variant="MobileBody">{`${activeDate.monthLong} ${activeDate.year}`}</TextView>
+        <Box flexDirection="row">
+          <Button
+            title={'Last'}
+            onPress={() => {
+              changeMonth(-1)
+            }}
+          />
+          <Button
+            title={'Next'}
+            onPress={() => {
+              changeMonth(1)
+            }}
+          />
+        </Box>
       </Box>
       {renderMonth()}
     </>
