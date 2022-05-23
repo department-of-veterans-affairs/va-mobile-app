@@ -41,12 +41,6 @@ jest.mock('store/slices', () => {
         payload: '',
       }
     }),
-    resetSendMessageFailed: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
     resetHasLoadedRecipients: jest.fn(() => {
       return {
         type: '',
@@ -54,12 +48,6 @@ jest.mock('store/slices', () => {
       }
     }),
     resetSaveDraftComplete: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    resetSaveDraftFailed: jest.fn(() => {
       return {
         type: '',
         payload: '',
@@ -104,7 +92,7 @@ context('useComposeCancelConfirmation', () => {
       .mockReturnValue(navigateToDraftFolderNotSavedSpy)
 
     const TestComponent: React.FC = () => {
-      const alert = useComposeCancelConfirmation()
+      const [_, alert] = useComposeCancelConfirmation()
       alert({
         messageData,
         draftMessageID,

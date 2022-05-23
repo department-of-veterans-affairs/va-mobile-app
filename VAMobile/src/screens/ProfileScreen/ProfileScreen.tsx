@@ -137,7 +137,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     return (
       <React.Fragment>
         <ProfileBanner />
-        <LoadingComponent />
+        <LoadingComponent text={t('profile.loading')} />
       </React.Fragment>
     )
   }
