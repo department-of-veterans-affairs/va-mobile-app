@@ -46,11 +46,15 @@ context('HealthScreen', () => {
     mockNavigateToSecureMessagingSpy = jest.fn()
     mockNavigateToVAVaccinesSpy = jest.fn()
     when(mockNavigateToSpy)
-        .mockReturnValue(() => {})
-        .calledWith('VeteransCrisisLine').mockReturnValue(mockNavigateToCrisisLineSpy)
-        .calledWith('Appointments').mockReturnValue(mockNavigateToAppointmentSpy)
-        .calledWith('SecureMessaging').mockReturnValue(mockNavigateToSecureMessagingSpy)
-        .calledWith('VaccineList').mockReturnValue(mockNavigateToVAVaccinesSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(mockNavigateToCrisisLineSpy)
+      .calledWith('Appointments')
+      .mockReturnValue(mockNavigateToAppointmentSpy)
+      .calledWith('SecureMessaging')
+      .mockReturnValue(mockNavigateToSecureMessagingSpy)
+      .calledWith('VaccineList')
+      .mockReturnValue(mockNavigateToVAVaccinesSpy)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
@@ -132,6 +136,7 @@ context('HealthScreen', () => {
         const expectNavArgs = {
           url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
           displayTitle: 'va.gov',
+          loadingMessage: 'Loading VA COVID-19 updates...',
         }
         expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
       })
