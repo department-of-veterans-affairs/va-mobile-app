@@ -218,9 +218,8 @@ commands:
             bash <<parameters.script_name>> <<parameters.script_options>>
   test_env_fl:
     steps:
-      - run:
-          working_directory: ~/project/VAMobile/android
-          command: bundle exec fastlane demo
+      - android_fastlane:
+          lane: demo
   test_env_bash:
     steps:
       - run:
