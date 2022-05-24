@@ -222,8 +222,8 @@ commands:
           lane: demo
   test_env_bash:
     steps:
-      - run:
-          command: echo $MY_ENV_VAR
+      - android_fastlane:
+          lane: reply
 jobs:
   test_env:
     executor: default

@@ -92,8 +92,24 @@ platform :android do
   end
 
   lane :demo do
-    sh("echo \'export MY_ENV_VAR=\"FOO\"\' >> $BASH_ENV")
+    release_thread = post_to_slack(
+      message: "Build Bot Test :dancing_box_robot:",
+      channel: "#va-mobile-app",
+      default_payloads: []
+    )
+    release_thread_ts = release_thread[:json]["ts"]
+    command = "echo \'export MY_ENV_VAR=\"#{release_thread_ts}\"\' >> $BASH_ENV"
+    sh(command)
     sh("echo $MY_ENV_VAR")
+  end
+
+  lane :reply do
+    post_to_slack(
+          message: "Build Bot Reply Test :wave:",
+          channel: "#va-mobile-app",
+          default_payloads: [],
+          thread_ts: ENV['MY_ENV_VAR']
+        )
   end
   desc "add a tester to Firebase Distribution. options.emails is a comma-separated string of emails to add to testers. Once added, they will need to be added to the QA team in Firebase Distribution console."
   lane :firebase_app_dist_add_testers do |options|
@@ -120,7 +136,7 @@ platform :android do
   error do |lane, exception, options|
     puts("ERROR REPORT")
     puts exception
-    slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+#     slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
 # method to update the version and build in the repo
