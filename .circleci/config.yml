@@ -216,7 +216,21 @@ commands:
           command: |
             chmod +x <<parameters.script_name>>
             bash <<parameters.script_name>> <<parameters.script_options>>
+  test_env_fl:
+    steps:
+      - run:
+          working_directory: ./android
+          command: fastlane demo
+  test_env_bash:
+    steps:
+      - run:
+          command: echo $MY_ENV_VAR
 jobs:
+  test_env:
+    executor: default
+    steps:
+      - test_env_fl
+      - test_env_bash
   test:
     executor: default
     steps:
@@ -416,3 +430,6 @@ workflows:
               only: main
     jobs:
       - run_release_lanes
+  env_test:
+    jobs:
+      - test_env

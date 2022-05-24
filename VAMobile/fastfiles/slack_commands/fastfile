@@ -88,3 +88,11 @@ def slack_firebase_dist_error(os, e)
     }
   )
 end
+
+def slack_test()
+  slack(
+     message: "Build Bot Test :dancing_box_robot:",
+     channel: "#va-mobile-app",
+     default_payloads: [],
+  )
+end
