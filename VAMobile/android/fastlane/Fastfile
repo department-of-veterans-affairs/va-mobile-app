@@ -92,7 +92,7 @@ platform :android do
   end
 
   lane :demo do
-    sh("export MY_ENV_VAR=\"FOO\" ")
+    sh("echo 'export MY_ENV_VAR="FOO"' >> $BASH_ENV")
     sh("echo $MY_ENV_VAR")
   end
   desc "add a tester to Firebase Distribution. options.emails is a comma-separated string of emails to add to testers. Once added, they will need to be added to the QA team in Firebase Distribution console."
