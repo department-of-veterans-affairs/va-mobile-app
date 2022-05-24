@@ -219,7 +219,7 @@ commands:
   test_env_fl:
     steps:
       - run:
-          working_directory: ./android
+          working_directory: ~/project/VAMobile/android
           command: bundle exec fastlane demo
   test_env_bash:
     steps:
