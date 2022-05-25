@@ -56,6 +56,7 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
     keyboardType: 'default',
     autoFocus: true,
     style: { fontSize: 20, color: theme.colors.text.primary },
+    disableFullscreenUI: true,
   }
 
   return (
