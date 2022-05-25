@@ -1,11 +1,12 @@
 import { Pressable, PressableProps, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { VABorderColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */
@@ -49,7 +50,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   a11yHint,
   headerRef,
 }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
@@ -82,12 +83,22 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
       </Box>
     )
 
+    const labelProps = testID
+      ? {
+          accessibilityLabel: testID,
+        }
+      : {}
+
     if (hideArrow) {
-      return <Box {...testIdProps(testID || '')}>{data}</Box>
+      return (
+        <Box {...labelProps} accessible={true}>
+          {data}
+        </Box>
+      )
     }
 
     return (
-      <Pressable {...pressableProps} {...testIdProps(testID || '')} ref={headerRef}>
+      <Pressable {...pressableProps} {...labelProps} ref={headerRef}>
         {data}
       </Pressable>
     )

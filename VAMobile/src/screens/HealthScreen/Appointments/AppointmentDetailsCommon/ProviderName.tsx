@@ -1,10 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentPractitioner, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAllFieldsThatExist } from 'utils/common'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type ProviderNameProps = {
   /* The type of appointment */
@@ -16,7 +17,7 @@ type ProviderNameProps = {
 }
 
 const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, healthcareProvider }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   let practitionerName = ''
 
@@ -32,7 +33,7 @@ const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, he
     <>
       {!!practitionerName && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.provider')}
           </TextView>
           <TextView variant="MobileBody">{practitionerName}</TextView>

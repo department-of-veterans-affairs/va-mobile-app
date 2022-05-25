@@ -4,6 +4,7 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import Mock = jest.Mock
+import LottieView from 'lottie-react-native'
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import { TextView } from './index'
@@ -42,8 +43,8 @@ context('AttachmentLink', () => {
     expect(texts[0].props.children).toBe('Test.png (234 KB)')
   })
 
-  it('should render ActivityIndicator if load is true', async () => {
-    const loader = testInstance.findAllByType(ActivityIndicator)
+  it('should render va spinner if load is true', async () => {
+    const loader = testInstance.findAllByType(LottieView)
     expect(loader.length).toBe(1)
   })
 })

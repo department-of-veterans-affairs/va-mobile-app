@@ -1,10 +1,11 @@
 import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import TextView from './TextView'
 
 type SaveButtonProps = {
@@ -18,10 +19,10 @@ type SaveButtonProps = {
 
 /**A common component for the save button located at the header. */
 const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const color = disabled ? 'primaryContrastDisabled' : 'primaryContrast'
+  const color = disabled ? 'actionBarDisabled' : 'actionBar'
 
   const props: TouchableWithoutFeedbackProps = {
     onPress: onSave,

@@ -28,6 +28,7 @@ import gov.va.mobileapp.native_modules.RNReviewPackage;
 import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
 import gov.va.mobileapp.notifications.VAPushNotifications;
 import com.facebook.react.bridge.JSIModulePackage;
+import com.airbnb.android.react.lottie.LottiePackage;
 
 public class MainApplication extends Application implements ReactApplication, INotificationsApplication {
 
@@ -50,6 +51,7 @@ public class MainApplication extends Application implements ReactApplication, IN
             packages.add(new RNNotificationPrefsPackage());
             packages.add(new RNSecureRandomPackage());
             packages.add(new RNReviewPackage());
+            packages.add(new LottiePackage());
 
             return packages;
         }

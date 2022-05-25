@@ -166,16 +166,6 @@ context('FolderMessages', () => {
     })
   })
 
-  describe('when a draft is saved and redirected here', () => {
-    it('should show a success message', async () => {
-      await waitFor(() => {
-        initializeTestInstance(undefined, undefined, undefined, true)
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Draft successfully saved')).toBeTruthy()
-      })
-    })
-  })
-
   describe('pagination', () => {
     it('should call listFolderMessages for previous arrow', async () => {
       await waitFor(() => {
