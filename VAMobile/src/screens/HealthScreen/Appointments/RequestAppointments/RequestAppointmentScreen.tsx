@@ -1,4 +1,4 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
@@ -39,7 +39,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
           onPress={navigateTo('GeneralHelpScreen')}
         />
       </Box>
-      <Stack.Navigator initialRouteName="TypeOfCareSelectionScreen" screenOptions={{ headerShown: false, detachPreviousScreen: false }}>
+      <Stack.Navigator initialRouteName="TypeOfCareSelectionScreen" screenOptions={{ headerShown: false, detachPreviousScreen: false, ...TransitionPresets.SlideFromRightIOS }}>
         <Stack.Screen name="TypeOfCareSelectionScreen" component={TypeOfCareSelectionScreen} />
         <Stack.Screen name="ReasonForAppointmentScreen" component={ReasonForAppointmentScreen} />
         <Stack.Screen name="SubTypeOfCareSelectionScreen" component={SubTypeOfCareSelectionScreen} />
