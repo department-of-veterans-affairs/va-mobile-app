@@ -33,6 +33,7 @@ export const lightTheme = {
     pickerControls: colors.grayLightest,
     menu: colors.white,
     alertBox: colors.white,
+    calendarDaySelected: colors.primary,
   },
   border: {
     primary: colors.grayLight,
@@ -50,6 +51,7 @@ export const lightTheme = {
     confirmation: colors.goldLight,
     footerButton: colors.grayLight,
     menuDivider: colors.grayLight,
+    calendarDaySelected: colors.primary,
   },
   icon: {
     footerButton: colors.primary,
@@ -81,6 +83,7 @@ export const lightTheme = {
     unreadMessage: colors.primary,
     veteransCrisisLineArrow: colors.grayLightest,
     snackBarIcon: colors.grayLighter,
+    calendarArrow: colors.base,
   },
   text: {
     footerButton: colors.primary,
@@ -106,6 +109,9 @@ export const lightTheme = {
     actionBarDisabled: colors.grayLight,
     defaultMenuItem: primaryTextColor,
     bodyText: primaryTextColor,
+    calendarDay: primaryTextColor,
+    calendarDaySelected: colors.white,
+    calendarDayDisabled: colors.grayMedium,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -184,6 +190,7 @@ export const darkTheme = {
     pickerControls: colors.darkmodeGrayWarmDark,
     alertBox: colors.base,
     menu: colors.darkmodeGrayWarmDark,
+    calendarDaySelected: colors.darkmodeLightBlue,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -201,6 +208,7 @@ export const darkTheme = {
     confirmation: colors.gold,
     footerButton: colors.darkmodeBorder,
     menuDivider: colors.darkmodeBorder,
+    calendarDaySelected: colors.primary,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
@@ -232,6 +240,7 @@ export const darkTheme = {
     unreadMessage: colors.darkmodeLightBlue,
     veteransCrisisLineArrow: colors.grayLightest,
     snackBarIcon: colors.grayDark,
+    calendarArrow: colors.white,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,
@@ -257,6 +266,9 @@ export const darkTheme = {
     actionBarDisabled: colors.grayLight,
     defaultMenuItem: colors.grayLighter,
     bodyText: colors.grayLighter,
+    calendarDay: colors.grayLightest,
+    calendarDaySelected: colors.base,
+    calendarDayDisabled: colors.grayLight,
   },
   buttonBackground: {
     buttonPrimary: colors.darkmodeLightBlue,

@@ -56,6 +56,9 @@ export type VATextColors = {
   actionBarDisabled: string
   bodyText: string
   defaultMenuItem: string
+  calendarDay: string
+  calendarDaySelected: string
+  calendarDayDisabled: string
 }
 
 export type VAIconColors = {
@@ -88,6 +91,7 @@ export type VAIconColors = {
   veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
+  calendarArrow: string
 }
 
 export type VATypographyThemeVariants = {
@@ -139,6 +143,7 @@ export type VABackgroundColors = {
   pickerControls: string
   menu: string
   alertBox: string
+  calendarDaySelected: string
 }
 
 export type VABorderColors = {
@@ -157,6 +162,7 @@ export type VABorderColors = {
   confirmation: string
   footerButton: string
   menuDivider: string
+  calendarDaySelected: string
 }
 
 export type VAFontSizes = {

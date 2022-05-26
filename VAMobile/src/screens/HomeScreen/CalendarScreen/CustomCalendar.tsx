@@ -1,12 +1,11 @@
 import { DateTime } from 'luxon'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { Box, TextView, TextViewProps } from 'components'
-import { Button, Pressable, PressableProps, View, ViewProps } from 'react-native'
+import { Box, BoxProps, TextView, TextViewProps, VAIcon } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { Pressable, PressableProps } from 'react-native'
 import { useTheme } from 'utils/hooks'
-
-// TODO translation
-const WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
 // TODO make more flexible
 export enum DISABLED_WEEKDAYS {
@@ -21,6 +20,8 @@ export enum DISABLED_WEEKDAYS {
   WEEKDAY,
 }
 
+// TODO add support for hints ex(current day, selected day, etc..)
+
 export type CustomCalendarProps = {
   /** currently selected date */
   onSelected?: (selectedDate: DateTime) => void
@@ -31,6 +32,7 @@ export type CustomCalendarProps = {
   /** optional latest day for selection based on current day, any latest are disabled */
   latestDay?: number
   disableWeekdays?: DISABLED_WEEKDAYS
+  // TODO add support to disable specific dates
 }
 
 /**
@@ -39,9 +41,14 @@ export type CustomCalendarProps = {
  */
 const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, latestDay, onSelected, disableWeekdays }) => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [activeDate, setActiveDate] = useState(initialDate || DateTime.now())
   const [selectedDate, setSelectedDate] = useState<DateTime | null>(null)
   const now = DateTime.now()
+
+  const preventScaling = true
+
+  const WEEKDAYS = [t('weekdays.sun'), t('weekdays.mon'), t('weekdays.tue'), t('weekdays.wed'), t('weekdays.thu'), t('weekdays.fri'), t('weekdays.sat')]
 
   const isWeekdayDisabled = (colIdx: number) => {
     const chosenDisabledDays = disableWeekdays
@@ -134,14 +141,15 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
         if (rowIndex === 0) {
           const headerTextProps: TextViewProps = {
             flex: 1,
-            height: 18,
+            mb: theme.dimensions.condensedMarginBetween,
             textAlign: 'center',
             variant: 'HelperText',
+            color: 'calendarDay',
           }
           // Explict so we know its a string
           const weekday = item as string
           return (
-            <TextView key={`${rowIndex}_${colIndex}`} {...headerTextProps}>
+            <TextView allowFontScaling={!preventScaling} key={`${rowIndex}_${colIndex}`} {...headerTextProps}>
               {weekday}
             </TextView>
           )
@@ -163,7 +171,6 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
           disabled: disabled, // IOS dem button?
           onPress: () => {
             const newSelectedDay = activeDate.set({ day })
-            // console.log(newSelectedDay.toFormat('DD'))
             setSelectedDate(newSelectedDay)
 
             if (onSelected) {
@@ -172,70 +179,111 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
           },
           style: {
             flex: 1,
-            backgroundColor: isSelected ? '#ADD8E6' : 'white',
+            justifyContent: 'center',
+            minHeight: theme.dimensions.touchableMinHeight,
           },
           accessible,
           importantForAccessibility: day === -1 ? 'no' : 'yes', // Android a11y - so it does not read empty days
         }
 
+        // TODO support labels or hints for selected day or current day
         const dayTextViewProps: TextViewProps = {
-          variant: isCurrentDay ? 'HelperTextBold' : 'HelperText', // current day
-          color: disabled ? 'actionBarDisabled' : 'bodyText',
+          variant: disabled ? 'HelperText' : 'HelperTextBold', // current day
+          color: disabled ? 'calendarDayDisabled' : isSelected ? 'calendarDaySelected' : 'calendarDay',
           accessible,
+          allowFontScaling: !preventScaling,
+        }
+
+        // Need to handle larger scale
+        const commonCircleProps: BoxProps = {
+          borderWidth: 1,
+          borderRadius: 50,
+          width: '44px',
+          height: '44px',
+          position: 'absolute',
+          top: '-50%',
+        }
+
+        const currenDayCircleProps: BoxProps = {
+          ...commonCircleProps,
+          borderColor: 'calendarDaySelected',
+        }
+
+        const selectedDayCircleProps: BoxProps = {
+          ...commonCircleProps,
+          borderWidth: undefined,
+          backgroundColor: 'calendarDaySelected',
         }
 
         return (
           <Pressable key={`${rowIndex}_${colIndex}`} {...pressableProps}>
-            <Box alignItems={'center'} height={22}>
+            <Box position="relative" alignItems={'center'}>
+              {isCurrentDay && <Box {...currenDayCircleProps} />}
+              {isSelected && <Box {...selectedDayCircleProps} />}
               <TextView {...dayTextViewProps}>{day !== -1 ? day : ''}</TextView>
             </Box>
           </Pressable>
         )
       })
 
-      const viewStyle = {
+      const monthView: BoxProps = {
         flex: 1,
         flexDirection: 'row',
-        paddingVertical: 15,
-        justifyContent: 'space-around',
         alignItems: 'center',
-      } as ViewProps['style']
+        mx: -15, // TODO align with headers and arrows portrait and landscape
+      }
 
       return (
-        <View key={rowIndex} style={viewStyle}>
+        <Box key={rowIndex} {...monthView}>
           {rowItems}
-        </View>
+        </Box>
       )
     })
 
     return rows
   }
 
+  const prevButtonProps: PressableProps = {
+    accessibilityRole: 'button',
+    onPress: () => {
+      changeMonth(-1)
+    },
+    style: {
+      justifyContent: 'center',
+      minHeight: theme.dimensions.touchableMinHeight,
+    },
+  }
+
+  const nextButtonProps: PressableProps = {
+    accessibilityRole: 'button',
+    onPress: () => {
+      changeMonth(1)
+    },
+    style: {
+      justifyContent: 'center',
+      minHeight: theme.dimensions.touchableMinHeight,
+    },
+  }
   const changeMonth = (n: number) => {
     setActiveDate(activeDate.plus({ month: n }))
   }
 
   return (
-    <>
-      <Box flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} px={theme.dimensions.gutter}>
-        <TextView variant="MobileBody">{`${activeDate.monthLong} ${activeDate.year}`}</TextView>
+    <Box mx={theme.dimensions.gutter}>
+      <Box flexDirection={'row'} flexWrap={'wrap'} justifyContent={'space-between'} alignItems={'center'} mb={13}>
+        <TextView allowFontScaling={!preventScaling} variant={'MobileBody'} color={'calendarDay'}>{`${activeDate.monthLong} ${activeDate.year}`}</TextView>
         <Box flexDirection="row">
-          <Button
-            title={'Last'}
-            onPress={() => {
-              changeMonth(-1)
-            }}
-          />
-          <Button
-            title={'Next'}
-            onPress={() => {
-              changeMonth(1)
-            }}
-          />
+          <Pressable {...prevButtonProps}>
+            <VAIcon preventScaling={preventScaling} name={'ArrowLeft'} width={14} height={16} fill={'calendarArrow'} />
+          </Pressable>
+          <Box mr={24} />
+          <Pressable {...nextButtonProps}>
+            <VAIcon preventScaling={preventScaling} name={'ArrowRight'} width={14} height={16} fill={'calendarArrow'} />
+          </Pressable>
         </Box>
       </Box>
       {renderMonth()}
-    </>
+    </Box>
   )
 }
 
