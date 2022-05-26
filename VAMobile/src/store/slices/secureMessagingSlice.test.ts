@@ -404,7 +404,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for sending attachment-less message', async () => {
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, []))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, []))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/messages', messageData, undefined)
@@ -433,7 +433,7 @@ context('secureMessaging', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, []))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, []))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_SEND_MESSAGE })
@@ -451,7 +451,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for sending message with attachments', async () => {
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, uploads))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, uploads))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/messages', expect.anything(), contentTypes.multipart)
@@ -481,7 +481,7 @@ context('secureMessaging', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, uploads))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, uploads))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_SEND_MESSAGE })
@@ -499,7 +499,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for sending attachment-less reply', async () => {
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, [], 1))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, [], 1))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/messages/1/reply', messageData, undefined)
@@ -528,7 +528,7 @@ context('secureMessaging', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, [], 1))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, [], 1))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_SEND_MESSAGE })
@@ -546,7 +546,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for sending reply with attachments', async () => {
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, uploads, 1))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, uploads, 1))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/messages/1/reply', expect.anything(), contentTypes.multipart)
@@ -576,7 +576,7 @@ context('secureMessaging', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, uploads, 1))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, uploads, 1))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_SEND_MESSAGE })

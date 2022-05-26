@@ -1,6 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
@@ -11,13 +12,13 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<ClaimsStackParamList, 'FileRequest'>
 
 const FileRequest: FC<FileRequestProps> = ({ route }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params
   const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)

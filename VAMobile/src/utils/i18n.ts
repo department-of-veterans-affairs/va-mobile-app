@@ -15,7 +15,7 @@ import i18n from 'i18next'
 const fallbackLanguage = { languageTag: 'en', isRTL: false }
 const defaultLanguage = RNLocalize.findBestAvailableLanguage(['en']) || fallbackLanguage
 
-const resources = {
+export const resources = {
   en: {
     common: commonEN,
     health: healthEN,
@@ -25,13 +25,15 @@ const resources = {
     profile: profileEN,
     settings: settingsEN,
   },
-}
+} as const
+
+export const defaultNS = NAMESPACE.COMMON
 
 // Initialize the internationalization library
 i18n.use(initReactI18next).init({
   lng: defaultLanguage.languageTag,
   resources,
-  defaultNS: NAMESPACE.COMMON,
+  defaultNS,
   nsSeparator: ':',
   keySeparator: false,
   fallbackLng: 'en',

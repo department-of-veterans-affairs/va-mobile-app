@@ -1,4 +1,5 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
@@ -11,7 +12,7 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { ProfileStackParamList } from './ProfileStackScreens'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ProfileBanner from './ProfileBanner'
 
@@ -44,7 +45,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
 
   /**
@@ -111,7 +113,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const getMiddleSection = (): Array<SimpleListItemObj> => {
     return [
       { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: navigateTo('LettersOverview') },
-      { text: t('home:payments.title'), a11yHintText: t('payments.a11yHint'), onPress: navigateTo('Payments') },
+      { text: th('payments.title'), a11yHintText: t('payments.a11yHint'), onPress: navigateTo('Payments') },
     ]
   }
 
@@ -135,7 +137,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     return (
       <React.Fragment>
         <ProfileBanner />
-        <LoadingComponent />
+        <LoadingComponent text={t('profile.loading')} />
       </React.Fragment>
     )
   }
@@ -167,7 +169,7 @@ const ProfileScreenStack = createStackNavigator()
  * Stack screen for the Profile tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const headerStyles = useHeaderStyles()
 
   return (

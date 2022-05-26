@@ -16,7 +16,7 @@ import { getTestIDFromTextLines } from './accessibility'
  */
 export const groupPaymentsByDate = (paymentsList?: PaymentsList): PaymentsByDate => {
   const paymentsByDate = groupBy(paymentsList || [], (payment) => {
-    return getFormattedDate(payment.attributes.date, 'yyyy-MM-dd')
+    return DateTime.fromISO(payment.attributes.date).toUTC().toFormat('yyyy-MM-dd')
   })
 
   return paymentsByDate
@@ -134,10 +134,7 @@ const getListItemsForPayments = (
     const { paymentType, amount } = payment.attributes
     const textLines: Array<TextLineWithIconProps> = []
 
-    textLines.push(
-      { text: tc('text.raw', { text: paymentType }), variant: 'MobileBodyBold', color: 'primaryTitle' },
-      { text: tc('text.raw', { text: amount }), variant: 'MobileBody', color: 'primaryTitle' },
-    )
+    textLines.push({ text: tc('text.raw', { text: paymentType }), variant: 'MobileBodyBold' }, { text: tc('text.raw', { text: amount }), variant: 'MobileBody' })
 
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = tc('listPosition', { position, total: totalEntries })

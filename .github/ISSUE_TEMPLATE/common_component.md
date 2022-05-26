@@ -24,7 +24,10 @@ assignees:
 <!-- Are there accessibility requirements you want to point out? How should the component behave to be accessible to all? -->
 
 ### Best Practices
-<!-- Guidelines to follow for content, edge cases, etc -->
+<!-- Guidelines that give more context, edge cases, etc. Example: Component should use established color patterns. -->
+
+### Content Guideline
+<!-- Guidelines to follow for content. Example: Use a single word to describe the status of an object.-->
 
 ### Example
 <!-- Screen shot of example screen from the VA mobile app using the component -->

@@ -1,14 +1,16 @@
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
+
 import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useSelector } from 'react-redux'
-import { useTheme, useTranslation } from 'utils/hooks'
-import React, { FC } from 'react'
+import { useTheme } from 'utils/hooks'
 
 const IndividualMessageErrorComponent: FC = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tc = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { tryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
 
@@ -23,10 +25,10 @@ const IndividualMessageErrorComponent: FC = () => {
           text={tc('errors.callHelpCenter.sorryWithRefresh')}
           border="error">
           <Box>
-            <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+            <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}
             </TextView>
-            <ClickToCallPhoneNumber displayedText={t('common:8773270022.displayText')} phone={t('common:8773270022')} />
+            <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
             {tryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <VAButton

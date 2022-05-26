@@ -1,7 +1,9 @@
 import { Pressable, PressableProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { useTheme, useTranslation } from 'utils/hooks'
+import { NAMESPACE } from 'constants/namespaces'
+import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -22,7 +24,7 @@ export type TrackingCardProps = {
  */
 const TrackingCard: FC<TrackingCardProps> = ({ onPress, a11yHint, title, dateShipped }) => {
   const theme = useTheme()
-  const t = useTranslation()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [buttonPressed, setButtonPressed] = useState(false)
 
   const onPressIn = (): void => {
@@ -75,7 +77,7 @@ const TrackingCard: FC<TrackingCardProps> = ({ onPress, a11yHint, title, dateShi
         </Box>
         <Box py={8} px={16}>
           <TextView variant="HelperText">
-            <TextView variant="HelperTextBold">{t('common:dateShipped')}: </TextView>
+            <TextView variant="HelperTextBold">{t('dateShipped')}: </TextView>
             {dateShipped}
           </TextView>
         </Box>

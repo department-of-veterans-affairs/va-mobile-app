@@ -1,11 +1,13 @@
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
+
 import { Box, ButtonWithIcon, TextArea, TextView, TrackingCard, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme, useTranslation } from 'utils/hooks'
-import React, { FC } from 'react'
+import { useTheme } from 'utils/hooks'
 
 const Pharmacy: FC = ({}) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
 
   const condensedMarginBetween = theme.dimensions.condensedMarginBetween
 

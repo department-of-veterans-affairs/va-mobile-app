@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import {
@@ -24,13 +25,14 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<ClaimsStackParamList, 'AskForClaimDecision'>
 
 const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
   const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
@@ -74,7 +76,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('askForClaimDecision.alertBtnTitle'),
@@ -103,7 +105,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mb={standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
             {t('askForClaimDecision.title')}
           </TextView>
           <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>

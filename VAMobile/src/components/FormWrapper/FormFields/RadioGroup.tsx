@@ -1,9 +1,11 @@
 import { isEqual, map } from 'underscore'
+import { useTranslation } from 'react-i18next'
 import React, { ReactElement, useEffect } from 'react'
 
 import { Box, SelectorType, TextView, VASelector } from '../../index'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { getTranslation } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
   /** translated labelKey displayed next to the checkbox/radio */
@@ -33,7 +35,7 @@ export type RadioGroupProps<T> = {
 /**A common component to display radio button selectors for a list of selectable items*/
 const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const hasSingleOption = options.length === 1
 
   useEffect(() => {
@@ -48,11 +50,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
 
     // Render option as simple text
     if (hasSingleOption) {
-      return (
-        <TextView variant="VASelector" color="primary">
-          {t(labelKey, labelArgs)}
-        </TextView>
-      )
+      return <TextView variant="VASelector">{getTranslation(labelKey, t, labelArgs)}</TextView>
     }
 
     const selected = isEqual(option.value, value)
@@ -70,7 +68,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
         <Box key={index}>
           {headerText && (
             <Box>
-              <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {headerText}
               </TextView>
             </Box>

@@ -1,9 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
@@ -14,7 +15,8 @@ type NeedHelpDataProps = {
 
 const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const AppealData = (): ReactElement => {
     if (!isAppeal) {
@@ -42,15 +44,15 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
   }
 
   const clickToCallProps: LinkButtonProps = {
-    displayedText: t('common:8008271000.displayText'),
-    numberOrUrlLink: t('common:8008271000'),
+    displayedText: tc('8008271000.displayText'),
+    numberOrUrlLink: tc('8008271000'),
     linkType: LinkTypeOptionsConstants.call,
   }
 
   return (
     <TextArea>
       <Box {...testIdProps(t('claimDetails.needHelp'))} accessible={true}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('claimDetails.needHelp')}
         </TextView>
       </Box>

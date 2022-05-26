@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView, VAScrollView } from 'components'
@@ -7,12 +8,12 @@ import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 
 const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
     <VAScrollView {...testIdProps(generateTestID(t('prepareForVideoVisit.title'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('prepareForVideoVisit.beforeYourAppointment')}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
@@ -42,7 +43,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
             {t('prepareForVideoVisit.joinBy')}
           </TextView>
 
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.toHaveBestExperience')}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
@@ -55,7 +56,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
             {t('prepareForVideoVisit.connectWithWifi')}
           </TextView>
 
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.medicationReview')}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
