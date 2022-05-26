@@ -68,7 +68,7 @@ export type TypeOfCareSpecialtiesTypes =
 export type TypeOfCareLabelTypes = 'Audiology and speech (including hearing aid support)' | 'Podiatry (only available online for Community Care appointments)'
 
 export type TypeOfCareObjectType = {
-  id?: TypeOfCareIdTypes
+  id: TypeOfCareIdTypes
   idV2?: TypeOfCareIdV2Types
   name: TypeOfCareNameTypes
   group?: TypeOfCareGroupTypes
@@ -76,6 +76,28 @@ export type TypeOfCareObjectType = {
   cceType?: TypeOfCareCceTypes
   specialties?: Array<TypeOfCareSpecialtiesTypes>
   label?: TypeOfCareLabelTypes
+}
+
+export type TypeOfEyeCareObjectType = {
+  id: TypeOfCareIdTypes
+  idV2: TypeOfCareIdV2Types
+  name: TypeOfCareNameTypes
+  cceType?: TypeOfCareCceTypes
+  ccId?: TypeOfCareCcIdTypes | Array<TypeOfCareCcIdTypes>
+  specialties?: Array<TypeOfCareSpecialtiesTypes>
+}
+
+export type TypeOfSleepCareObjectType = {
+  id: TypeOfCareIdTypes
+  idV2: TypeOfCareIdV2Types
+  name: TypeOfCareNameTypes
+}
+
+export type TypeOfAudiologyCareObjectType = {
+  ccId: TypeOfCareCcIdTypes
+  idV2: TypeOfCareIdV2Types
+  name: TypeOfCareNameTypes
+  specialties?: Array<TypeOfCareSpecialtiesTypes>
 }
 
 export const TYPE_OF_CARE: Array<TypeOfCareObjectType> = [
@@ -163,7 +185,7 @@ export const TYPE_OF_CARE: Array<TypeOfCareObjectType> = [
   },
 ]
 
-export const TYPES_OF_SLEEP_CARE: Array<TypeOfCareObjectType> = [
+export const TYPES_OF_SLEEP_CARE: Array<TypeOfSleepCareObjectType> = [
   {
     id: '349',
     idV2: 'cpap',
@@ -176,7 +198,7 @@ export const TYPES_OF_SLEEP_CARE: Array<TypeOfCareObjectType> = [
   },
 ]
 
-export const TYPES_OF_EYE_CARE: Array<TypeOfCareObjectType> = [
+export const TYPES_OF_EYE_CARE: Array<TypeOfEyeCareObjectType> = [
   {
     id: '408',
     idV2: 'optometry',
@@ -192,7 +214,7 @@ export const TYPES_OF_EYE_CARE: Array<TypeOfCareObjectType> = [
   },
 ]
 
-export const AUDIOLOGY_TYPES_OF_CARE: Array<TypeOfCareObjectType> = [
+export const AUDIOLOGY_TYPES_OF_CARE: Array<TypeOfAudiologyCareObjectType> = [
   {
     ccId: 'CCAUDRTNE',
     idV2: 'audiology-routine exam',
@@ -248,3 +270,31 @@ export const PURPOSE_TEXT: Array<reasonForAppointmentObjectType> = [
     serviceName: 'Other',
   },
 ]
+
+export const typeOfCareWithSubCareId = ['203', 'EYE', 'SLEEP'] as const
+
+export type TypeOfCareWithSubCareIdType = typeof typeOfCareWithSubCareId[number]
+
+export type SubCareTitleMappingType = 'eye care' | 'audiology and speech care' | 'sleep medicine care'
+
+export const SubCareTitleMapping: {
+  '203': SubCareTitleMappingType
+  EYE: SubCareTitleMappingType
+  SLEEP: SubCareTitleMappingType
+} = {
+  SLEEP: 'sleep medicine care',
+  '203': 'audiology and speech care',
+  EYE: 'eye care',
+}
+
+export type SubCareDataMappingType = Array<TypeOfAudiologyCareObjectType> | Array<TypeOfEyeCareObjectType> | Array<TypeOfSleepCareObjectType>
+
+export const SubCareDataMapping: {
+  '203': SubCareDataMappingType
+  EYE: SubCareDataMappingType
+  SLEEP: SubCareDataMappingType
+} = {
+  SLEEP: TYPES_OF_SLEEP_CARE,
+  '203': AUDIOLOGY_TYPES_OF_CARE,
+  EYE: TYPES_OF_EYE_CARE,
+}

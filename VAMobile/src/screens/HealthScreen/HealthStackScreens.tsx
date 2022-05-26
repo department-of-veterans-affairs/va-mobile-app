@@ -7,8 +7,9 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
+
+import { GeneralHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
-import AppointmentFlowModal from './Appointments/RequestAppointments/AppointmentFlowModal'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
@@ -19,6 +20,7 @@ import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointm
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
+import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import SecureMessaging from './SecureMessaging'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
@@ -98,7 +100,8 @@ export type HealthStackParamList = WebviewStackParams & {
   VaccineDetails: {
     vaccineId: string
   }
-  AppointmentFlowModal: undefined
+  RequestAppointmentScreen: undefined
+  GeneralHelpScreen: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -138,11 +141,18 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
     <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
+    <HealthStack.Screen key={'RequestAppointmentScreen'} name="RequestAppointmentScreen" component={RequestAppointmentScreen} options={{ headerShown: false }} />,
     <HealthStack.Screen
-      key={'AppointmentFlowModal'}
-      name="AppointmentFlowModal"
-      component={AppointmentFlowModal}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+      key={'GeneralHelpScreen'}
+      name="GeneralHelpScreen"
+      component={GeneralHelpScreen}
+      options={{
+        presentation: 'modal',
+        ...TransitionPresets.ModalTransition,
+        headerShown: true,
+        title: t('requestAppointments.generalHelpPageTitle'),
+        headerMode: 'screen',
+      }}
     />,
   ]
 }

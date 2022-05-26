@@ -26,6 +26,9 @@ export type ListItemObj = {
 
   /** request file if file was loaded */
   fileUploaded?: boolean
+
+  /** optional accessibility label */
+  accessibilityLabel?: string
 } & Partial<BaseListItemProps>
 
 /**

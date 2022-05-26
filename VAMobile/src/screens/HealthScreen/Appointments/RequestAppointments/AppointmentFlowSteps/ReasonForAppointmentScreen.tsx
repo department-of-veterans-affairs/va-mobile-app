@@ -4,7 +4,7 @@ import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, RadioGroup, TextView, VATextInput, radioOption } from 'components'
 import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
-import { AppointmentFlowModalStackParamList } from '../AppointmentFlowModal'
+import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { PURPOSE_TEXT } from 'store/api'
 import { useTheme } from 'utils/hooks'

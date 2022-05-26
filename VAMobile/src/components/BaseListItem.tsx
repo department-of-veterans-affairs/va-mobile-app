@@ -75,6 +75,9 @@ export type BaseListItemProps = {
 
   /** Optional min height */
   minHeight?: number
+
+  /** Optional accessibility label */
+  accessibilityLabel?: string
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
@@ -155,6 +158,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     claimsRequestNumber,
     fileUploaded,
     minHeight,
+    accessibilityLabel,
   } = props
   const theme = useTheme()
 
@@ -219,6 +223,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     ...a11yHintProp(a11yHint),
     ...a11yValueProp(a11yValue ? { text: a11yValue } : {}),
     accessibilityState: a11yState ? a11yState : {},
+    accessibilityLabel,
   }
 
   if (isSwitchRow && decoratorProps) {

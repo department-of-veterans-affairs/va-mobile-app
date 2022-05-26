@@ -40,6 +40,7 @@ export type RadioGroupProps<T> = {
 const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const hasSingleOption = options.length === 1
 
   useEffect(() => {
@@ -88,7 +89,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
 
   /** creates the radio group with a optional title and the radio buttons in a list with the radio button ot the far right */
   const getRadioGroupList = () => {
-    const listItems: Array<DefaultListItemObj> = options.map((option) => {
+    const listItems: Array<DefaultListItemObj> = options.map((option, index) => {
       const selected = isEqual(option.value, value)
       const onSelectorChange = (): void => {
         if (!disabled) {
@@ -102,6 +103,9 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
         decorator: disabled ? ButtonDecoratorType.DisabledRadio : selected ? ButtonDecoratorType.FilledRadio : ButtonDecoratorType.EmptyRadio,
         onPress: onSelectorChange,
         minHeight: 64,
+        a11yValue: selected ? tc('selected') : undefined,
+        a11yRole: 'radio',
+        accessibilityLabel: `${option.labelKey} ${tc('option', { count: index + 1, totalOptions: options.length })}`,
       }
 
       return radioButton

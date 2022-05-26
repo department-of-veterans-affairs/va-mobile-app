@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
-import { AppointmentFlowModalStackParamList } from '../AppointmentFlowModal'
+import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { RadioGroup, radioOption } from 'components'
-import { TYPE_OF_CARE } from 'store/api'
+import { TYPE_OF_CARE, TypeOfCareWithSubCareIdType, typeOfCareWithSubCareId } from 'store/api'
 import { useRouteNavigation } from 'utils/hooks'
 
 type TypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'TypeOfCareSelectionScreen'>
@@ -19,6 +19,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
   const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
 
   const navigateToReason = navigateTo('ReasonForAppointmentScreen')
+  const navigateToSubType = navigateTo('SubTypeOfCareSelectionScreen', { selectedTypeOfCareId: selectedTypeOfCare })
 
   const onSetSelectedTypeOfCare = (type: string): void => {
     if (type) {
@@ -26,6 +27,8 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
       setSelectedTypeOfCare(type)
     }
   }
+
+  const hasSubType = (x: TypeOfCareWithSubCareIdType): x is TypeOfCareWithSubCareIdType => typeOfCareWithSubCareId.includes(x)
 
   const getTypesOfCare = () => {
     const typesOfCareOptions: Array<radioOption<string>> = []
@@ -36,7 +39,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
 
     for (const typesOfCare of TYPE_OF_CARE) {
       typesOfCareOptions.push({
-        value: typesOfCare.id ? typesOfCare.id : typesOfCare.name,
+        value: typesOfCare.id,
         labelKey: typesOfCare.label ? typesOfCare.label : typesOfCare.name,
       })
     }
@@ -47,7 +50,11 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
     if (!selectedTypeOfCare) {
       setNoTypeSelectedError(true)
     } else {
-      navigateToReason()
+      if (hasSubType(selectedTypeOfCare as TypeOfCareWithSubCareIdType)) {
+        navigateToSubType()
+      } else {
+        navigateToReason()
+      }
     }
   }
 
