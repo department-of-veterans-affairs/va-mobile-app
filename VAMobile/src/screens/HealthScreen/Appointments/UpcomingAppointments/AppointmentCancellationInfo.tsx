@@ -1,4 +1,3 @@
-import { useRouteNavigation } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -16,9 +15,9 @@ import {
   VAButton,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getTranslation } from 'utils/formattingUtils'
 import { cancelAppointment } from 'store/slices'
 import { formatDateMMDDYYYY } from 'utils/formattingUtils'
+import { getTranslation } from 'utils/formattingUtils'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
