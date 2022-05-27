@@ -213,9 +213,6 @@ export type VATheme = {
     headerHeight: number
     formMarginBetween: number
     tagMinWidth: number
-    tagCurvedBorder: number
-    tagTopPadding: number
-    tagHorizontalPadding: number
     maxNumMessageAttachments: number
     navBarHeight: number
     paginationTopPadding: number

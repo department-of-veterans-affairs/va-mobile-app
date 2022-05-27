@@ -27,9 +27,9 @@ const LabelTag: FC<LabelTagProps> = ({ text, backgroundColor, color, variant }) 
       justifyContent={'center'}
       alignSelf={'flex-start'}
       backgroundColor={backgroundColor || 'unreadMessagesTag'}
-      borderRadius={theme.dimensions.tagCurvedBorder}
+      borderRadius={3}
       {...testIdProps(text)}>
-      <TextView flexWrap={'wrap'} color={color || 'primaryContrast'} variant={variant || 'LabelTag'} px={theme.dimensions.tagHorizontalPadding}>
+      <TextView flexWrap={'wrap'} color={color || 'primaryContrast'} variant={variant || 'LabelTag'} px={12} py={4}>
         {text}
       </TextView>
     </Box>

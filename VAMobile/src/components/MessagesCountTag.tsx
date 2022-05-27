@@ -18,10 +18,10 @@ const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
       justifyContent={'center'}
       alignSelf={'center'}
       backgroundColor="unreadMessagesTag"
-      borderRadius={theme.dimensions.tagCurvedBorder}
+      borderRadius={2}
       {...testIdProps(unread.toString())}
       accessible={true}>
-      <TextView flexWrap={'wrap'} variant="UnreadMessagesTag" px={theme.dimensions.tagHorizontalPadding} pt={theme.dimensions.tagTopPadding}>
+      <TextView flexWrap={'wrap'} variant="UnreadMessagesTag" px={10} pt={3}>
         {unread}
       </TextView>
     </Box>
