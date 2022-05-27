@@ -105,7 +105,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
         minHeight: 64,
         a11yValue: selected ? tc('selected') : undefined,
         a11yRole: 'radio',
-        accessibilityLabel: `${option.labelKey} ${tc('option', { count: index + 1, totalOptions: options.length })}`,
+        testId: `${option.labelKey} ${tc('option', { count: index + 1, totalOptions: options.length })}`,
       }
 
       return radioButton
