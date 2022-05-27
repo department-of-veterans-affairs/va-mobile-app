@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  slack: circleci/slack@4.10.1
 executors:
   default:
     docker:
@@ -228,10 +230,22 @@ jobs:
   test_env:
     executor: default
     steps:
-      - checkout
-      - install_deps
-      - test_env_fl
-      - test_env_bash
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
   test:
     executor: default
     steps:
