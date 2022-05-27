@@ -1,10 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box } from 'components'
 import { ClaimAttributesData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useTranslation } from 'utils/hooks'
 import ClaimPhase from './ClaimPhase'
 import theme from 'styles/themes/standardTheme'
 
@@ -20,7 +20,7 @@ export type ClaimTimelineProps = {
 
 /** component that renders the complete timeline of a claim */
 const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline)
   const itemsNeededFromVet = needItemsFromVet(attributes)

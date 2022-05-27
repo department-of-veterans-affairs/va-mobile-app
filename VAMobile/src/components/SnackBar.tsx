@@ -77,7 +77,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const messageProp: TextViewProps = {
     variant: 'HelperText',
-    color: 'snackBarText',
+    color: 'snackBarTxt',
   }
 
   // adjust style depending on if there are 1 or 2 buttons
@@ -107,7 +107,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const snackBarIconProps: VAIconProps = {
     name: isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark',
-    fill: themeColor.text.snackBarText,
+    fill: themeColor.icon.snackBarIcon,
     height: 18,
     width: 18,
   }
@@ -132,15 +132,13 @@ const SnackBar: FC<ToastProps> = (toast) => {
         <Box {...btnContainerProps}>
           {!isUndo && (
             <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
-              <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'} display={'flex'}>
+              <TextView variant={'SnackBarBtnText'} display={'flex'}>
                 {actionBtnText || isError ? 'Retry' : 'Undo'}
               </TextView>
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={() => toast.onHide()} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
-            <TextView variant={'SnackBarBtnText'} color={'snackBarBtn'}>
-              {'Dismiss'}
-            </TextView>
+            <TextView variant={'SnackBarBtnText'}>{'Dismiss'}</TextView>
           </TouchableOpacity>
         </Box>
       </Box>

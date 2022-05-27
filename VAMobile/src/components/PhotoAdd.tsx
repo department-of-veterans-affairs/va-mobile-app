@@ -1,8 +1,10 @@
+import { Pressable, PressableProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
+
 import { Box, BoxProps, VAIcon } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { Pressable, PressableProps } from 'react-native'
-import { useTheme, useTranslation } from 'utils/hooks'
-import React, { FC } from 'react'
+import { useTheme } from 'utils/hooks'
 import TextView, { TextViewProps } from './TextView'
 
 type PhotoAddProps = {
@@ -16,7 +18,7 @@ type PhotoAddProps = {
 
 const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
   const { colors: themeColor } = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
   const pressableProps: PressableProps = {
     onPress,

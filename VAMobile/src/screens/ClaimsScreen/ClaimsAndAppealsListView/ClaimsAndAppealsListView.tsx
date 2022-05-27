@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
@@ -7,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
@@ -26,8 +27,8 @@ type ClaimsAndAppealsListProps = {
 }
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
-  const tc = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -58,12 +59,12 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [
-        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold', color: 'primaryTitle' },
+        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
       const position = (currentPage - 1) * perPage + index + 1
-      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+      const a11yValue = tc('listPosition', { position, total: totalEntries })
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
       listItems.push({
         textLines,

@@ -1,4 +1,5 @@
 import { Pressable } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
@@ -8,7 +9,7 @@ import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getFileDisplay } from 'utils/common'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
   /** header for page title display */
@@ -26,8 +27,8 @@ export type FormAttachmentsProps = {
 /**A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button. */
 const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList, a11yHint }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.COMMON)
-  const tFunction = useTranslation()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const { t: tFunction } = useTranslation()
   const navigateTo = useRouteNavigation()
 
   const renderFileNames = (): ReactNode => {
@@ -46,7 +47,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
           key={index}>
           <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
             <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
-            <TextView variant="MobileBodyBold" color={'primaryTitle'} ml={theme.dimensions.textIconMargin}>
+            <TextView variant="MobileBodyBold" ml={theme.dimensions.textIconMargin}>
               {text}
             </TextView>
           </Box>

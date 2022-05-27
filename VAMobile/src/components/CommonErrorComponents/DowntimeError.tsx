@@ -1,4 +1,5 @@
 import { ViewStyle } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
@@ -7,7 +8,7 @@ import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { useSelector } from 'react-redux'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
@@ -16,7 +17,7 @@ export type DowntimeErrorProps = {
 
 /**Common component to show an alert when the service is down*/
 const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {

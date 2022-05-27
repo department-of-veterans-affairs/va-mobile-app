@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon } from 'components'
@@ -7,8 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
-import { useSelector } from 'react-redux'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
@@ -20,7 +21,7 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
 
   const theme = useTheme()
 

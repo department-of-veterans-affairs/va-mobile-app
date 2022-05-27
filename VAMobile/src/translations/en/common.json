@@ -101,5 +101,6 @@
   "KB": "KB",
   "KB.a11y": "kilobytes",
   "Bytes": "Bytes",
-  "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})"
+  "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})",
+  "webview.preLogin.message": "Loading sign in options..."
 }

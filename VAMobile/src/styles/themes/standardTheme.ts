@@ -27,6 +27,7 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
   theme = {
     ...theme,
     colors: { ...colorScheme },
+    typography: buildTypography(colorScheme),
   }
 }
 
@@ -114,6 +115,27 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
   return styles.join(';\n')
 }
 
+const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
+  return {
+    BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
+    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
+    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
+    LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
+    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold, scheme.text.primaryContrast),
+    TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
+    TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
+    TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
+    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, scheme.text.link, true),
+    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
+    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
+    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
+    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
+    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
+  }
+}
+
 let theme: VATheme = {
   colors: {
     ...colorScheme,
@@ -172,25 +194,7 @@ let theme: VATheme = {
     LabelTag: fontSizes.LabelTag,
     LabelTagBold: fontSizes.LabelTagBold,
   },
-
-  typography: {
-    BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
-    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
-    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
-    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
-    TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
-    TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
-    TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
-    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
-    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
-    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
-    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
-    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
-    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold),
-    LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag),
-    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold),
-    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
-  },
+  typography: buildTypography(colorScheme),
 }
 
 export default theme

@@ -155,7 +155,7 @@ context('PastAppointmentDetails', () => {
     it('should show loading component', async () => {
       await waitFor(() => {
         initializeTestInstance()
-        expect(testInstance.findByType(TextView).props.children).toEqual("We're loading your appointment details")
+        expect(testInstance.findByType(TextView).props.children).toEqual('Loading your appointment details...')
       })
     })
   })
