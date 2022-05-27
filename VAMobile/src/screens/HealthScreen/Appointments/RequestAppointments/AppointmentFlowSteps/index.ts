@@ -2,3 +2,5 @@ export { default as ReasonForAppointmentScreen } from './ReasonForAppointmentScr
 export * from './ReasonForAppointmentScreen'
 export { default as TypeOfCareSelectionScreen } from './TypeOfCareSelectionScreen'
 export * from './TypeOfCareSelectionScreen'
+export { default as SubTypeOfCareSelectionScreen } from './SubTypeOfCareSelectionScreen'
+export * from './SubTypeOfCareSelectionScreen'

@@ -12,10 +12,15 @@ import {
   AppointmentsList,
   AppointmentsMetaPagination,
 } from 'store/api'
-import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
+import { Box, CloseModalButton, DefaultList, DefaultListItemObj, TextLineWithIconProps, TextView, VAIconProps } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { StackNavigationOptions } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
 import { getTestIDFromTextLines } from './accessibility'
+import { isIOS } from './platform'
+import { useTheme } from './hooks'
+import { useTranslation } from 'react-i18next'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -202,4 +207,34 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   })
 
   return yearToSortedMonths
+}
+
+/** Header style for the modals in the request appointment flow */
+export const useRequestAppointmentModalHeaderStyles = (): StackNavigationOptions => {
+  const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+
+  const headerStyles: StackNavigationOptions = {
+    headerStyle: {
+      height: 60,
+      backgroundColor: theme.colors.background.main,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.background.shadow,
+    },
+
+    headerLeft: (props) => (
+      <CloseModalButton
+        buttonText={t('requestAppointment.closeModalBtnTitle')}
+        onPress={props.onPress}
+        a11yHint={t('requestAppointments.closeModalBtnHint')}
+        focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
+      />
+    ),
+    headerTitle: (header) => (
+      <TextView variant="MobileBodyBold" allowFontScaling={false}>
+        {header.children}
+      </TextView>
+    ),
+  }
+  return headerStyles
 }

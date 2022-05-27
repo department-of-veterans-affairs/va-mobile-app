@@ -288,7 +288,7 @@ export const AuthedApp: FC = () => {
   return (
     <>
       <RootNavStack.Navigator
-        screenOptions={{ ...headerStyles, detachPreviousScreen: false }}
+        screenOptions={{ ...headerStyles, detachPreviousScreen: false, headerMode: 'screen' }}
         initialRouteName="Tabs"
         screenListeners={{
           transitionStart: (e) => {

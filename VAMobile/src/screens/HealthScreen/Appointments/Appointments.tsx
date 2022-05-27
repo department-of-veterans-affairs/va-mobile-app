@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, SegmentedControl, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, VAScrollView } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -105,25 +105,30 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   }
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
-      <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+    <>
+      <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
+        <Box flex={1} justifyContent="flex-start">
+          <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <SegmentedControl
+              values={controlValues}
+              titles={controlValues}
+              onChange={setSelectedTab}
+              selected={controlValues.indexOf(selectedTab)}
+              accessibilityHints={a11yHints}
+            />
+          </Box>
+          {serviceErrorAlert()}
+          <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
+            <CernerAlert />
+          </Box>
+          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+            {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
+            {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
+          </Box>
         </Box>
-        {serviceErrorAlert()}
-        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
-          <CernerAlert />
-        </Box>
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
-          {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
-        </Box>
-      </Box>
-      {/* TODO: Needs to be removed and replace with the actual button per design */}
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <VAButton onPress={navigateTo('AppointmentFlowModal')} label={'Request Appointment'} buttonType={ButtonTypesConstants.buttonPrimary} />
-      </Box>
-    </VAScrollView>
+      </VAScrollView>
+      <FooterButton onPress={navigateTo('RequestAppointmentScreen')} text={t('requestAppointments.launchModalBtnTitle')} />
+    </>
   )
 }
 
