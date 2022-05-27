@@ -1,7 +1,10 @@
 # sends a success message to the build slack
-def slack_build_success (buildNum, version, buildType, message, os)
+def slack_build_success (buildNum, version, buildType, message, os, thread_ts = nil)
  puts "Send slack success message"
- slack(
+ post_to_slack(
+   channel: "#va-mobile-app-automation-test-channel",
+   username: "VA App Builder",
+   icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/build_bot.png?raw=true",
    message: message,
    success: true,
    default_payloads: [],
@@ -12,14 +15,17 @@ def slack_build_success (buildNum, version, buildType, message, os)
        {title: "Build Number", value: buildNum.to_s},
        {title: "Build Version", value: version}
      ]
-   }
+   },
+   thread_ts: thread_ts
  )
 end
 
-def slack_build_error (e, buildType, message, os)
+def slack_build_error (e, buildType, message, os, thread_ts = nil)
   puts "Send slack build error message"
-  slack(
-    slack_url: ENV['SLACK_URL'],
+  post_to_slack(
+    channel: "#va-mobile-app-automation-test-channel",
+    username: "VA App Builder",
+    icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
     message: message,
     success: false,
     default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
@@ -29,14 +35,17 @@ def slack_build_error (e, buildType, message, os)
         {title: "Build Type", value: buildType},
         {title: "Exception", value: e}
       ]
-    }
+    },
+    thread_ts: thread_ts
   )
 end
 
-def slack_github_error(e, message, os)
+def slack_github_error(e, message, os, thread_ts = nil)
   puts "Send slack GitHub error message"
-  slack(
-    slack_url: ENV['SLACK_URL'],
+  post_to_slack(
+    channel: "#va-mobile-app-automation-test-channel",
+    username: "VA App Builder",
+    icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
     message: message,
     success: false,
     default_payloads: [:git_branch],
@@ -45,22 +54,30 @@ def slack_github_error(e, message, os)
         {title: "OS", value: os},
         {title: "Exception", value: e}
       ]
-    }
+    },
+    thread_ts: thread_ts
   )
 end
 
-def slack_release_success(version, os)
+def slack_release_success(version, os, thread_ts = nil)
   puts "Send slack message to indicate release is live"
-  slack(
-     message: "Version #{version} is now live for #{os}",
+  post_to_slack(
+     channel: "#va-mobile-app-automation-test-channel",
+     username: "VA App Ground Control",
+     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/launch_icon.jpeg?raw=true",
+     message: "Version #{version} is now live for #{os} :rocket: :raised_hands:",
      success: true,
      default_payloads: [],
+     thread_ts: thread_ts
   )
 end
 
-def slack_release_error(version, os, e)
+def slack_release_error(version, os, e, thread_ts = nil)
   puts "Send slack message to indicate release promotion had errors"
-  slack(
+  post_to_slack(
+     channel: "#va-mobile-app-automation-test-channel",
+     username: "VA App Ground Control",
+     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
      message: "Version #{version} release failed for #{os}",
      success: true,
      default_payloads: [],
@@ -70,13 +87,17 @@ def slack_release_error(version, os, e)
         {title: "Version", value: version},
         {title: "Exception", value: e}
       ]
-    }
+    },
+    thread_ts: thread_ts
   )
 end
 
-def slack_firebase_dist_error(os, e)
+def slack_firebase_dist_error(os, e, thread_ts = nil)
   puts "Send slack message to indicate Firebase Distribution error"
-  slack(
+  post_to_slack(
+     channel: "#va-mobile-app-automation-test-channel",
+     username: "VA App Builders",
+     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
      message: "Firebase Distribution failed for #{os}",
      success: true,
      default_payloads: [],
@@ -85,7 +106,36 @@ def slack_firebase_dist_error(os, e)
         {title: "OS", value: os},
         {title: "Exception", value: e}
       ]
-    }
+    },
+    thread_ts: thread_ts
+  )
+end
+
+def slack_sent_for_review(buildNum, version, message, os, thread_ts = nil)
+  puts "Send slack message to indicate next production version has been sent for review"
+  post_to_slack(
+   channel: "#va-mobile-app-automation-test-channel",
+   username: "VA App Delivery Services",
+   icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/delivered.jpeg?raw=true",
+   message: message,
+   success: true,
+   default_payloads: [],
+   attachment_properties: {
+     fields: [
+       {title: "OS", value: os},
+       {title: "Build Number", value: buildNum.to_s},
+       {title: "Build Version", value: version}
+     ]
+   },
+   thread_ts: thread_ts
+  )
+end
+
+def slack_test()
+  slack(
+     message: "Build Bot Test :dancing_box_robot:",
+     channel: "#va-mobile-app",
+     default_payloads: [],
   )
 end
 
