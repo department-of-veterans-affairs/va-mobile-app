@@ -246,6 +246,8 @@ jobs:
                 }
               ]
             }
+      - run:
+          command: echo $SLACK_SENT_RESPONSE
   test:
     executor: default
     steps:
