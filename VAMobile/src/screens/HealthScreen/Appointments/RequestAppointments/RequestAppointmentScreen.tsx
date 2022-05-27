@@ -1,9 +1,10 @@
 import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import { Box, CloseModalButton, HeaderIconBtn } from 'components'
+import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ReasonForAppointmentScreen, SubTypeOfCareSelectionScreen, TypeOfCareSelectionScreen } from './AppointmentFlowSteps'
@@ -27,11 +28,18 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const inset = useSafeAreaInsets()
+  const [forceFocus, setForceFocus] = useState<string>()
 
   return (
     <Box flex={1} backgroundColor="main">
       <Box alignItems="center" justifyContent="space-between" flexDirection="row" mt={inset.top}>
-        <CloseModalButton buttonText={t('requestAppointment.closeModalBtnTitle')} onPress={navigation.goBack} a11yHint={t('requestAppointments.closeModalBtnHint')} />
+        <CloseModalButton
+          key={forceFocus} // force buton to rerender so the reader can focus on it
+          buttonText={t('requestAppointment.closeModalBtnTitle')}
+          onPress={navigation.goBack}
+          a11yHint={t('requestAppointments.closeModalBtnHint')}
+          focusOnButton={true}
+        />
         <HeaderIconBtn
           iconName="QuestionMark"
           accessibilityHint={t('requestAppointments.helpBtnHint')}
@@ -39,7 +47,19 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
           onPress={navigateTo('GeneralHelpScreen')}
         />
       </Box>
-      <Stack.Navigator initialRouteName="TypeOfCareSelectionScreen" screenOptions={{ headerShown: false, detachPreviousScreen: false, ...TransitionPresets.SlideFromRightIOS }}>
+      <Stack.Navigator
+        initialRouteName="TypeOfCareSelectionScreen"
+        screenOptions={{ headerShown: false, detachPreviousScreen: false, ...TransitionPresets.SlideFromRightIOS }}
+        screenListeners={{
+          transitionStart: (e) => {
+            if (e.data) {
+              setForceFocus(DateTime.now().toString())
+            }
+          },
+          blur: (e) => {
+            setForceFocus(DateTime.now().toString())
+          },
+        }}>
         <Stack.Screen name="TypeOfCareSelectionScreen" component={TypeOfCareSelectionScreen} />
         <Stack.Screen name="ReasonForAppointmentScreen" component={ReasonForAppointmentScreen} />
         <Stack.Screen name="SubTypeOfCareSelectionScreen" component={SubTypeOfCareSelectionScreen} />
