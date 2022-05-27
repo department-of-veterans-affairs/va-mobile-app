@@ -231,6 +231,7 @@ jobs:
     executor: default
     steps:
       - slack/notify:
+          debug: true
           custom: |
             {
               "blocks": [
