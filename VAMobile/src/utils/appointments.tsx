@@ -54,7 +54,7 @@ export const getAppointmentLocation = (appointmentType: AppointmentType, locatio
  * @returns VAIconProps or undefoned
  */
 export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
-  const iconProp = { fill: theme.colors.icon.dark, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
+  const iconProp = { fill: theme.colors.icon.defaultMenuItem, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
 
   if (appointmentType.includes('VIDEO')) {
     return { ...iconProp, name: 'VideoCamera' }
@@ -177,7 +177,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
 
   // pending appointments
   if (isPendingAppointment) {
-    textLines.push({ text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', color: 'primaryTitle' })
+    textLines.push({ text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold' })
     switch (appointmentType) {
       case AppointmentTypeConstants.COMMUNITY_CARE:
         if (healthcareProvider) {
@@ -194,8 +194,8 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
     }
   } else {
     textLines.push(
-      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', color: 'primaryTitle' },
-      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', color: 'primaryTitle' },
+      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       {
         text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),

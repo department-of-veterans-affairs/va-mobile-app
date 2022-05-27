@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import {
@@ -26,7 +27,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import ProfileBanner from '../ProfileBanner'
@@ -35,7 +36,8 @@ import getEnv from 'utils/env'
 const DisabilityRatingsScreen: FC = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation([NAMESPACE.CLAIMS, NAMESPACE.COMMON])
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
@@ -69,7 +71,6 @@ const DisabilityRatingsScreen: FC = () => {
       textLines.push({
         text: percentageText,
         variant: 'MobileBodyBold',
-        color: 'primaryTitle',
       })
     }
 
@@ -112,7 +113,7 @@ const DisabilityRatingsScreen: FC = () => {
         <TextArea>
           <Box accessible={true}>
             {combinedPercentText && (
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="text">
+              <TextView variant="MobileBodyBold" accessibilityRole="text">
                 {combinedPercentText}
               </TextView>
             )}
@@ -129,7 +130,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>
@@ -147,17 +148,17 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('disabilityRatingDetails.needHelp')}
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claims:claimDetails.callVA.a11yLabel')}>
-            {t('claims:claimDetails.callVA')}
+          <TextView variant="MobileBody" selectable={false} accessibilityLabel={tc('claims:claimDetails.callVA.a11yLabel')}>
+            {tc('claims:claimDetails.callVA')}
           </TextView>
         </Box>
 
-        <ClickToCallPhoneNumber phone={t('common:8008271000.displayText')} />
+        <ClickToCallPhoneNumber phone={tc('common:8008271000.displayText')} />
       </TextArea>
     )
   }
@@ -170,7 +171,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <React.Fragment>
         <ProfileBanner showRating={false} />
-        <LoadingComponent />
+        <LoadingComponent text={t('disabilityRating.loading')} />
       </React.Fragment>
     )
   }
@@ -190,7 +191,6 @@ const DisabilityRatingsScreen: FC = () => {
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
-    color: 'primaryTitle',
     mx: gutter,
     mb: condensedMarginBetween,
     mt: standardMarginBetween,

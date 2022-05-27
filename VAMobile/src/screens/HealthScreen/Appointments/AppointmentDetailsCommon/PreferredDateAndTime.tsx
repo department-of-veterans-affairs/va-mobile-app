@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes } from 'store/api'
@@ -5,7 +6,7 @@ import { AppointmentProposedTimesPeriodConstant } from 'store/api/types/Appointm
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type PreferredDateAndTimeProps = {
   attributes: AppointmentAttributes
@@ -13,7 +14,7 @@ type PreferredDateAndTimeProps = {
 
 const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   const { proposedTimes } = attributes || ({} as AppointmentAttributes)
@@ -25,7 +26,7 @@ const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => 
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('appointments.pending.preferredDateAndTime')}
         </TextView>
         {filteredTimes?.map(({ date, time }, index) => {

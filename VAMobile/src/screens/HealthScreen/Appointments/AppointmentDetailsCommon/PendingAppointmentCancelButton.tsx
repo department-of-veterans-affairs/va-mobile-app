@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes } from 'store/api'
@@ -8,7 +9,7 @@ import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
@@ -17,7 +18,8 @@ type PendingAppointmentCancelButtonProps = {
 
 const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = ({ attributes, appointmentID }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
@@ -41,7 +43,7 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
     ]
     const iosButtons = [
       {
-        text: t('common:cancel'),
+        text: tc('cancel'),
       },
       {
         text: t('appointments.pending.cancelRequest.yes'),

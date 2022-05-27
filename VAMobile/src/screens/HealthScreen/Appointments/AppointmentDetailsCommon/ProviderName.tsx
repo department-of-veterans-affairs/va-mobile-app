@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
@@ -5,14 +6,14 @@ import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAllFieldsThatExist } from 'utils/common'
 import { isAPendingAppointment } from '../../../../utils/appointments'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type ProviderNameProps = {
   attributes: AppointmentAttributes
 }
 
 const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)
 
@@ -32,7 +33,7 @@ const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
     // default to VA appointments
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {header}
         </TextView>
       </Box>
@@ -53,7 +54,7 @@ const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
     <>
       {!!practitionerName && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.provider')}
           </TextView>
           <TextView variant="MobileBody">{practitionerName}</TextView>

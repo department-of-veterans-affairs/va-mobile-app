@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import {
@@ -43,9 +44,9 @@ import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { getEpochSecondsOfDate } from 'utils/formattingUtils'
+import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
@@ -55,7 +56,7 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -112,7 +113,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
     metaData: {
-      title: t(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType]),
+      title: getTranslation(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType], t),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
@@ -124,7 +125,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.specialInstructions')}
           </TextView>
           <TextView variant="MobileBody">{comment}</TextView>
@@ -138,11 +139,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const getVideoInstructionsTranslationID = (): string => {
     switch (appointmentType) {
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-        return 'upcomingAppointmentDetails.howToJoinInstructionsVALocation'
+        return t('upcomingAppointmentDetails.howToJoinInstructionsVALocation')
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-        return 'upcomingAppointmentDetails.howToJoinInstructionsVADevice'
+        return t('upcomingAppointmentDetails.howToJoinInstructionsVADevice')
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-        return 'upcomingAppointmentDetails.howToJoinInstructionsAtlas'
+        return t('upcomingAppointmentDetails.howToJoinInstructionsAtlas')
       default:
         return ''
     }
@@ -155,10 +156,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (isVideoAppt && !isAppointmentCanceled) {
       return (
         <Box mb={isGFE ? 0 : theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
-          <TextView variant="MobileBody">{t(getVideoInstructionsTranslationID())}</TextView>
+          <TextView variant="MobileBody">{getVideoInstructionsTranslationID()}</TextView>
         </Box>
       )
     }
@@ -193,14 +194,13 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       const prepareForVideoVisitLinkProps: TextViewProps = {
         py: theme.dimensions.buttonPadding,
         variant: 'MobileBodyLink',
-        color: 'link',
         onPress: onPrepareForVideoVisit,
         accessibilityRole: 'link',
       }
 
       return (
         <Box>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoinVirtualSession')}
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
@@ -223,7 +223,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.appointmentCode', { code: code })}
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.useCode')}</TextView>

@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useState } from 'react'
 import _ from 'underscore'
 
@@ -13,15 +14,15 @@ import { deepCopyObject } from 'utils/common'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToSortedMonths, isAPendingAppointment } from 'utils/appointments'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = Record<string, unknown>
 
 const PastAppointments: FC<PastAppointmentsProps> = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tc = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -133,7 +134,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
 
       const position = (currentPage - 1) * perPage + index + 1
-      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+      const a11yValue = tc('listPosition', { position, total: totalEntries })
 
       listItems.push({
         textLines,

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
@@ -6,10 +7,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 const NoClaimsAndAppeals: FC = () => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
@@ -27,7 +28,7 @@ const NoClaimsAndAppeals: FC = () => {
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Claims: No-claims-page')} alignItems="center">
       <Box {...testIdProps(header)} accessible={true}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign="center" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {header}
         </TextView>
       </Box>

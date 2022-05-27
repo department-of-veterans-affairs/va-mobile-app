@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes } from 'store/api'
@@ -5,7 +6,7 @@ import { AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type PreferredAppointmentTypeProps = {
   attributes: AppointmentAttributes
@@ -13,7 +14,7 @@ type PreferredAppointmentTypeProps = {
 
 const PreferredAppointmentType: FC<PreferredAppointmentTypeProps> = ({ attributes }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   const { appointmentType, phoneOnly } = attributes || ({} as AppointmentAttributes)
@@ -36,7 +37,7 @@ const PreferredAppointmentType: FC<PreferredAppointmentTypeProps> = ({ attribute
     }
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('appointments.pending.preferredTypeOfAppointment')}
         </TextView>
         <TextView variant="MobileBody">{preferredTypeofAppointment}</TextView>

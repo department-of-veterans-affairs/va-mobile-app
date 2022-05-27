@@ -16,8 +16,9 @@ const generateInputLabel = (
   t: TFunction,
   isHelperText: boolean,
 ): ReactElement => {
+  // Only to 'MobileBodyBold' if there is an error; otherwise 'MobileBody
   const variant = error ? 'MobileBodyBold' : 'MobileBody'
-  const color: ColorVariant = disabled ? 'placeholder' : 'primaryTitle'
+  const color: ColorVariant | undefined = disabled ? 'placeholder' : undefined
 
   const labelProps: TextViewProps = {
     color,
@@ -31,7 +32,7 @@ const generateInputLabel = (
       <Box display="flex" flexDirection="row" flexWrap="wrap" mb={isHelperText ? 0 : 8}>
         {label}
         <TextView>&nbsp;</TextView>
-        <TextView color={'inputRequired'} variant={variant}>
+        <TextView color={color} variant={variant}>
           {t('common:required')}
         </TextView>
       </Box>

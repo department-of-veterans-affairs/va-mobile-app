@@ -1,5 +1,6 @@
 import { InteractionManager } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
@@ -36,18 +37,28 @@ import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secu
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { SecureMessagingState, getMessageRecipients, getMessageSignature, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import {
+  SecureMessagingState,
+  getMessageRecipients,
+  getMessageSignature,
+  resetHasLoadedRecipients,
+  resetSendMessageComplete,
+  resetSendMessageFailed,
+  saveDraft,
+  sendMessage,
+  updateSecureMessagingTab,
+} from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useError, useMessageWithSignature, useRouteNavigation, useTheme, useTranslation, useValidateMessageWithSignature } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useError, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
 const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -57,7 +68,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     errorMsg: t('secureMessaging.draft.saved.error'),
   }
 
-  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, loadingSignature, signature } = useSelector<
+  const snackbarSentMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.composeMessage.sent'),
+    errorMsg: t('secureMessaging.composeMessage.sent.error'),
+  }
+
+  const { sendingMessage, sendMessageComplete, savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<
     RootState,
     SecureMessagingState
   >((state) => state.secureMessaging)
@@ -75,7 +91,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
-  const composeCancelConfirmation = useComposeCancelConfirmation()
+  const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
@@ -150,13 +166,30 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }, [saveDraftComplete, navigation, dispatch])
 
+  useEffect(() => {
+    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
+    if (sendMessageComplete) {
+      dispatch(resetSendMessageComplete())
+      dispatch(resetHasLoadedRecipients())
+      navigation.navigate('SecureMessaging')
+    }
+  }, [sendMessageComplete, dispatch, navigation])
+
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature) {
-    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.formMessage.composeMessage.loading')
+  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
+    const text = savingDraft
+      ? t('secureMessaging.formMessage.saveDraft.loading')
+      : isDiscarded
+      ? t('secureMessaging.deleteDraft.loading')
+      : t('secureMessaging.formMessage.composeMessage.loading')
     return <LoadingComponent text={text} />
+  }
+
+  if (sendingMessage) {
+    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
   }
 
   const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
@@ -281,11 +314,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, snackbarMessages, savedDraftID))
     } else {
-      navigation.navigate('SendConfirmation', {
-        originHeader: t('secureMessaging.composeMessage.compose'),
-        messageData,
-        uploads: attachmentsList,
-      })
+      dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }
   }
 
@@ -308,13 +337,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert
-          hasValidationError={formContainsError}
-          saveDraftAttempted={onSaveDraftClicked}
-          saveDraftFailed={saveDraftFailed}
-          savingDraft={savingDraft}
-          sendMessageFailed={sendMessageFailed}
-        />
+        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
@@ -322,9 +345,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             </Box>
             <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
               <TextView>
-                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                  {t('secureMessaging.composeMessage.important')}
-                </TextView>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
             </Box>

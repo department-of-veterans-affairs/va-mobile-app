@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
@@ -16,9 +17,10 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
 import { formatDateMMDDYYYY } from 'utils/formattingUtils'
+import { getTranslation } from 'utils/formattingUtils'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -29,7 +31,8 @@ type AppointmentCancellationInfoProps = {
 }
 
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()
@@ -63,8 +66,10 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
         title = t('upcomingAppointmentDetails.doYouNeedToCancel')
-        body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
-        bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
+        body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) })
+        bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', {
+          appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t),
+        })
         break
       case AppointmentTypeConstants.COMMUNITY_CARE:
         title = t('upcomingAppointmentDetails.doYouNeedToCancel')
@@ -106,7 +111,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     ]
     const iosButtons = [
       {
-        text: t('common:cancel'),
+        text: tc('cancel'),
       },
       {
         text: t('upcomingAppointmentDetails.cancelAppointment.yesCancelAppointment'),
@@ -128,7 +133,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
 
   return (
     <TextArea>
-      <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
+      <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
         {title}
       </TextView>
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween}>
@@ -146,7 +151,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         </Box>
       ) : (
         <>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" {...testIdProps(name)} mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)} mt={theme.dimensions.standardMarginBetween}>
             {name}
           </TextView>
           {linkOrPhone}

@@ -1,12 +1,13 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 const NoInboxMessages: FC = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   return (
@@ -18,7 +19,7 @@ const NoInboxMessages: FC = () => {
       alignItems="center"
       mt={theme.dimensions.standardMarginBetween}>
       <Box accessible={true} accessibilityRole={'header'}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} textAlign="center" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {t('secureMessaging.inbox.noMessages.title')}
         </TextView>
       </Box>

@@ -119,8 +119,8 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
         <View key={index}>
           <View accessibilityLabel={accessibilityLabel ? accessibilityLabel : actionText} accessibilityRole={'button'} accessible={true}>
             <MenuItem onPress={onPressMenu} viewStyle={menuStyle} underlayColor={currentTheme.colors.buttonBackground.overFlowMenuButton}>
-              {iconName && <VAIcon name={iconName} fill={iconColor ? iconColor : 'overflowMenuDefault'} height={24} width={24} />}
-              <TextView ml={10} color={textColor ? textColor : undefined} accessible={false}>
+              {iconName && <VAIcon name={iconName} fill={iconColor ? iconColor : 'defaultMenuItem'} height={24} width={24} />}
+              <TextView variant={'MobileBody'} ml={10} color={textColor ? textColor : undefined} accessible={false}>
                 {actionText}
               </TextView>
             </MenuItem>

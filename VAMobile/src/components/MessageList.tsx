@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { ButtonDecoratorType } from 'components'
@@ -6,7 +7,6 @@ import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { READ } from '../constants/secureMessaging'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
-import { useTranslation } from 'utils/hooks'
 import Box from './Box'
 import LabelTag from './LabelTag'
 
@@ -35,7 +35,7 @@ export type MessageListProps = {
  * Display a list of buttons with text and optional actions
  */
 const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { inlineTextWithIcons, testId, ...listItemObj } = item

@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
@@ -12,18 +13,19 @@ import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { RootState } from 'store'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type PaymentDetailsScreenProps = StackScreenProps<ProfileStackParamList, 'PaymentDetails'>
 
 const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
   const { paymentID } = route.params
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
-  const placeHolder = t('common:noneNoted')
+  const placeHolder = tc('noneNoted')
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, gutter } = theme.dimensions
   const { payment } = useSelector<RootState, PaymentState>((state) => state.payments)
   const { date, paymentType, paymentMethod, bank, account, amount } = payment?.attributes || ({} as PaymentsAttributeData)
@@ -59,21 +61,19 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
     <VAScrollView {...testIdProps('payments-details-page')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
-          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+          <TextView variant="MobileBody" mb={standardMarginBetween}>
             {getFormattedDate(date, 'MMMM d, yyyy')}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-            <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-              {paymentType}
-            </TextView>
+            <TextView variant="BitterBoldHeading">{paymentType}</TextView>
           </Box>
-          <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>
+          <TextView variant="MobileBodyBold" selectable={true}>
             {t('paymentDetails.amount')}
           </TextView>
           <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
             {amount}
           </TextView>
-          <TextView variant="MobileBodyBold" selectable={true} color={'primaryTitle'}>
+          <TextView variant="MobileBodyBold" selectable={true}>
             {t('paymentDetails.method')}
           </TextView>
           <TextView variant="MobileBody" selectable={true}>
@@ -81,15 +81,13 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
           </TextView>
           {isDirectDeposit && (
             <>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={standardMarginBetween}>
+              <TextView variant="MobileBodyBold" mt={standardMarginBetween}>
                 {t('paymentDetails.bank')}
               </TextView>
               <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
                 {bank || placeHolder}
               </TextView>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                {t('paymentDetails.account')}
-              </TextView>
+              <TextView variant="MobileBodyBold">{t('paymentDetails.account')}</TextView>
               <TextView variant="MobileBody" selectable={true}>
                 {hasAcccountInfo ? account : placeHolder}
               </TextView>

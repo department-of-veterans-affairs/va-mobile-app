@@ -45,22 +45,19 @@ export const getMessagesListItems = (
           }),
           variant: 'MobileBodyBold',
           textAlign: 'left',
-          color: 'primary',
         },
         leftIconProps: unreadIconProps,
         rightTextProps: {
           text: t('common:text.raw', { text: getFormattedMessageTime(sentDate) }),
           variant: 'MobileBody',
           textAlign: 'right',
-          color: 'primary',
         },
       },
       {
         leftTextProps: {
-          text: t('common:text.raw', { text: formatSubject(category, subject, t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }),
+          text: t('common:text.raw', { text: formatSubject(category, subject, t) }),
           variant: 'MobileBody',
           textAlign: 'left',
-          color: 'primary',
         },
         leftIconProps: paperClipProps,
         rightIconProps: {

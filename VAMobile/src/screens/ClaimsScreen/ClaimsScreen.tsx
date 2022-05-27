@@ -1,5 +1,6 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { ViewStyle } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
@@ -9,7 +10,7 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHeaderStyles, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
@@ -17,7 +18,7 @@ import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppe
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 
 const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
@@ -140,7 +141,7 @@ const ClaimsScreenStack = createStackNavigator()
  * Stack screen for the claims tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const ClaimsStackScreen: FC<ClaimsStackScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const headerStyles = useHeaderStyles()
 
   return (
