@@ -56,7 +56,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
               setForceFocus(DateTime.now().toString())
             }
           },
-          blur: (e) => {
+          blur: () => {
             setForceFocus(DateTime.now().toString())
           },
         }}>
