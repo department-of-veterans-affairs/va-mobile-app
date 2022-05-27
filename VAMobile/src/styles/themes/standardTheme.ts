@@ -161,9 +161,6 @@ let theme: VATheme = {
     headerHeight: 64,
     formMarginBetween: 30,
     tagMinWidth: 29,
-    tagCurvedBorder: 2,
-    tagTopPadding: 3,
-    tagHorizontalPadding: 10,
     maxNumMessageAttachments: 4,
     paginationTopPadding: 40,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
