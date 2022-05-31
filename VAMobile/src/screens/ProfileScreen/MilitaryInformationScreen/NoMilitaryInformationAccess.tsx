@@ -1,14 +1,15 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 const NoMilitaryInformationAccess: FC = () => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
 
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">

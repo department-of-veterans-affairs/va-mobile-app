@@ -4,16 +4,10 @@ import React from 'react'
 import { context, render, RenderAPI } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import {
-  initialAuthorizedServicesState,
-  initialAuthState,
-  initialDisabilityRatingState,
-  initialMilitaryServiceState,
-  initialPersonalInformationState
-} from 'store/slices'
-import {SyncScreen} from './index'
+import { initialAuthorizedServicesState, initialAuthState, initialDisabilityRatingState, initialMilitaryServiceState, initialPersonalInformationState } from 'store/slices'
+import { SyncScreen } from './index'
 import TextView from '../../components/TextView'
-import {completeSync, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
+import { completeSync, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -22,25 +16,25 @@ jest.mock('store/slices', () => {
     completeSync: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
     }),
     getProfileInfo: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
     }),
     getServiceHistory: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
     }),
     getDisabilityRating: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
     }),
   }
@@ -53,10 +47,10 @@ context('SyncScreen', () => {
 
   const initializeTestInstance = (militaryLoading = true, profileLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false, syncing = true): void => {
     store = {
-      auth: {...initialAuthState, loggedIn, loggingOut, syncing},
-      disabilityRating: {...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading},
+      auth: { ...initialAuthState, loggedIn, loggingOut, syncing },
+      disabilityRating: { ...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading },
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
-      personalInformation: {...initialPersonalInformationState, preloadComplete: !profileLoading },
+      personalInformation: { ...initialPersonalInformationState, preloadComplete: !profileLoading },
       authorizedServices: {
         ...initialAuthorizedServicesState,
         militaryServiceHistory: true,
@@ -64,7 +58,7 @@ context('SyncScreen', () => {
       },
     }
 
-    component = render(<SyncScreen/>, { preloadedState: store })
+    component = render(<SyncScreen />, { preloadedState: store })
 
     testInstance = component.container
   }
@@ -80,34 +74,19 @@ context('SyncScreen', () => {
   describe('loading text', () => {
     it('should show the signing in text', async () => {
       initializeTestInstance()
-      expect(testInstance.findByType(TextView).props.children).toEqual('Signing in...')
-    })
-
-    it('should show loading the profile text', async () => {
-      initializeTestInstance(true, true, true, true, false)
-      expect(testInstance.findByType(TextView).props.children).toEqual('Loading your profile...')
-    })
-
-    it('should show loading military info text', async () => {
-      initializeTestInstance(true, false, true, true, false)
-      expect(testInstance.findByType(TextView).props.children).toEqual('Retrieving your military history...')
-    })
-
-    it('should show loading military info text', async () => {
-      initializeTestInstance(false, false, true, true, false)
-      expect(testInstance.findByType(TextView).props.children).toEqual('Retrieving your disability ratings...')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Signing you in...')
     })
   })
 
   describe('sign out', () => {
     it('should show sign out text', async () => {
       initializeTestInstance(false, false, false, true, true)
-      expect(testInstance.findByType(TextView).props.children).toEqual('Signing out...')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Signing you out...')
     })
 
     it('should show sign out text even if data is not loaded', async () => {
       initializeTestInstance(true, true, true, true, true)
-      expect(testInstance.findByType(TextView).props.children).toEqual('Signing out...')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Signing you out...')
     })
   })
 

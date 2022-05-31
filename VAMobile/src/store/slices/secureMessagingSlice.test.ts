@@ -21,6 +21,7 @@ import {
 } from './secureMessagingSlice'
 import { initialAuthState } from './authSlice'
 import { initialErrorsState } from './errorSlice'
+import { SnackbarMessages } from 'components/SnackBar'
 
 export const ActionTypes: {
   SECURE_MESSAGING_UPDATE_TAB: string
@@ -52,6 +53,11 @@ export const ActionTypes: {
   SECURE_MESSAGING_FINISH_SEND_MESSAGE: 'secureMessaging/dispatchFinishSendMessage',
   SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: 'secureMessaging/resetSendMessageComplete',
   SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR: 'secureMessaging/resetReplyTriageError',
+}
+
+const snackbarMessages: SnackbarMessages = {
+  successMsg: 'success',
+  errorMsg: 'failure',
 }
 
 context('secureMessaging', () => {
@@ -276,7 +282,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for saving a new draft', async () => {
       const store = realStore()
-      await store.dispatch(saveDraft(messageData))
+      await store.dispatch(saveDraft(messageData, snackbarMessages))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/message_drafts', messageData)
@@ -299,7 +305,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for saving a new reply draft', async () => {
       const store = realStore()
-      await store.dispatch(saveDraft(messageData, undefined, true, 1234))
+      await store.dispatch(saveDraft(messageData, snackbarMessages, undefined, true, 1234))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/message_drafts/1234/replydraft', messageData)
@@ -323,7 +329,7 @@ context('secureMessaging', () => {
     it('should dispatch the correct action for saving an existing draft', async () => {
       const messageID = 12345
       const store = realStore()
-      await store.dispatch(saveDraft(messageData, messageID))
+      await store.dispatch(saveDraft(messageData, snackbarMessages, messageID))
 
       when(api.put as jest.Mock)
         .calledWith(`/v0/messaging/health/message_drafts/${messageID}`, messageData, undefined)
@@ -346,7 +352,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for saving an existing reply draft', async () => {
       const store = realStore()
-      await store.dispatch(saveDraft(messageData, 5678, true, 1234))
+      await store.dispatch(saveDraft(messageData, snackbarMessages, 5678, true, 1234))
 
       when(api.put as jest.Mock)
         .calledWith('/v0/messaging/health/message_drafts/1234/replydraft/5678', messageData)
@@ -369,7 +375,7 @@ context('secureMessaging', () => {
 
     it('should call to update folder metadata', async () => {
       const store = realStore()
-      await store.dispatch(saveDraft(messageData, 5678, true, 1234))
+      await store.dispatch(saveDraft(messageData, snackbarMessages, 5678, true, 1234))
 
       expect(api.get as jest.Mock).toBeCalledWith('/v0/messaging/health/folders', { useCache: `${false}` })
     })
@@ -398,7 +404,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for sending attachment-less message', async () => {
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, []))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, []))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/messages', messageData, undefined)
@@ -427,7 +433,7 @@ context('secureMessaging', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, []))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, []))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_SEND_MESSAGE })
@@ -445,7 +451,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for sending message with attachments', async () => {
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, uploads))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, uploads))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/messages', expect.anything(), contentTypes.multipart)
@@ -475,7 +481,7 @@ context('secureMessaging', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, uploads))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, uploads))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_SEND_MESSAGE })
@@ -493,7 +499,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for sending attachment-less reply', async () => {
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, [], 1))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, [], 1))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/messages/1/reply', messageData, undefined)
@@ -522,7 +528,7 @@ context('secureMessaging', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, [], 1))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, [], 1))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_SEND_MESSAGE })
@@ -540,7 +546,7 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct action for sending reply with attachments', async () => {
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, uploads, 1))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, uploads, 1))
 
       when(api.post as jest.Mock)
         .calledWith('/v0/messaging/health/messages/1/reply', expect.anything(), contentTypes.multipart)
@@ -570,7 +576,7 @@ context('secureMessaging', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData, uploads, 1))
+      await store.dispatch(sendMessage(messageData, snackbarMessages, uploads, 1))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_SEND_MESSAGE })

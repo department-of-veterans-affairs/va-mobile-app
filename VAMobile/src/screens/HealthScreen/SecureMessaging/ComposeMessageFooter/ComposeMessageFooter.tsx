@@ -1,11 +1,12 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { FooterButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTranslation } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
 
 const ComposeMessageFooter: FC = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
   const onPress = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })

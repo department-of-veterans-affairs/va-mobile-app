@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
@@ -10,9 +11,9 @@ import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useBeforeNavBackListener, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
@@ -22,7 +23,7 @@ type AppealDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'AppealDe
 const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
   const controlValues = [t('claimDetails.status'), t('appealDetails.issuesTab')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
@@ -64,7 +65,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
       appealType = AppealTypesConstants.appeal
     }
 
-    return t(`appealDetails.${appealType}`)
+    return getTranslation(`appealDetails.${appealType}`, t)
   }
 
   const getSubmittedDate = (): string => {
@@ -91,7 +92,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   }
 
   if (loadingAppeal || !isTransitionComplete) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('appealDetails.loading')} />
   }
 
   const formattedUpdatedDate = formatDateMMMMDDYYYY(updated || '')

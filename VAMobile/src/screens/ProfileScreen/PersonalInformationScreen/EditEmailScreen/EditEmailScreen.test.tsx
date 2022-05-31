@@ -138,7 +138,7 @@ context('EditEmailScreen', () => {
         navHeaderSpy.save.props.onSave()
       })
 
-      expect(updateEmail).toHaveBeenCalledWith('my@email.com', '0', 'EDIT_EMAIL_SCREEN')
+      expect(updateEmail).toHaveBeenCalledWith({"errorMsg": "Email address could not be saved", "successMsg": "Email address saved"}, 'my@email.com', '0', 'EDIT_EMAIL_SCREEN')
     })
   })
 

@@ -61,7 +61,7 @@ export const lightTheme = {
     disclosure: colors.grayLight,
     success: colors.green, //'#2E8540',
     error: colors.secondaryDark, //'#CD2026',
-    active: colors.primaryDarker, //'#003E73',
+    active: colors.primary,
     inactive: colors.primary,
     contrast: colors.white,
     expandCollapse: colors.black,
@@ -124,7 +124,7 @@ export const lightTheme = {
   },
   buttonText: {
     buttonPrimary: colors.white,
-    buttonSecondary: colors.primaryDarker,
+    buttonSecondary: colors.primary,
     buttonDisabled: colors.white,
     buttonImportant: colors.secondaryDark,
     buttonWhite: colors.primaryDarker,
@@ -132,7 +132,7 @@ export const lightTheme = {
   },
   buttonBorder: {
     buttonSecondary: colors.primary,
-    buttonSecondaryActive: colors.primaryDarkest,
+    buttonSecondaryActive: colors.primary,
     buttonImportant: colors.secondaryDark,
     buttonImportantActive: colors.secondaryDarkest,
     brandedPrimary: colors.primary,

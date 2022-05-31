@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 import _ from 'underscore'
 
@@ -43,8 +44,10 @@ import {
   getMessageRecipients,
   getThread,
   resetSaveDraftFailed,
+  resetSendMessageComplete,
   resetSendMessageFailed,
   saveDraft,
+  sendMessage,
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -52,7 +55,7 @@ import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
@@ -60,7 +63,8 @@ import MenuView, { MenuViewActionsType } from 'components/Menu'
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
 const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -69,16 +73,25 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
     errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
   }
+  const saveSnackbarMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.draft.saved'),
+    errorMsg: t('secureMessaging.draft.saved.error'),
+  }
+
+  const snackbarSentMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.composeMessage.sent'),
+    errorMsg: t('secureMessaging.composeMessage.sent.error'),
+  }
 
   const {
+    sendingMessage,
+    sendMessageComplete,
     hasLoadedRecipients,
     loading,
     messagesById,
     recipients,
     saveDraftComplete,
-    saveDraftFailed,
     savingDraft,
-    sendMessageFailed,
     threads,
     deleteDraftComplete,
     deletingDraft,
@@ -107,7 +120,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
 
-  const editCancelConfirmation = useComposeCancelConfirmation()
+  const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
@@ -150,6 +163,19 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     }
   }, [saveDraftComplete, navigation, deleteDraftComplete, goToDraftFolder, dispatch])
 
+  useEffect(() => {
+    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
+    if (sendMessageComplete) {
+      dispatch(resetSendMessageComplete())
+      navigation.navigate('SecureMessaging')
+      navigation.navigate('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: false,
+      })
+    }
+  }, [sendMessageComplete, dispatch, navigation])
+
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
@@ -185,10 +211,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
-          text: t('common:delete'),
+          text: tc('delete'),
           onPress: () => {
             dispatch(deleteDraft(messageID, snackbarMessages))
           },
@@ -199,7 +225,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const MenViewActions: MenuViewActionsType = [
     {
-      actionText: t('common:save'),
+      actionText: tc('save'),
       addDivider: true,
       iconName: 'FolderSolid',
       accessibilityLabel: t('secureMessaging.saveDraft.menuBtnA11y'),
@@ -209,7 +235,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       },
     },
     {
-      actionText: t('common:delete'),
+      actionText: tc('delete'),
       addDivider: false,
       iconName: 'TrashSolid',
       accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
@@ -244,9 +270,19 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft) {
-    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : deletingDraft ? t('secureMessaging.deleteDraft.loading') : undefined
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft || isDiscarded) {
+    const text = savingDraft
+      ? t('secureMessaging.formMessage.saveDraft.loading')
+      : deletingDraft
+      ? t('secureMessaging.deleteDraft.loading')
+      : isDiscarded
+      ? t('secureMessaging.deletingChanges.loading')
+      : t('secureMessaging.draft.loading')
     return <LoadingComponent text={text} />
+  }
+
+  if (sendingMessage) {
+    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
@@ -366,15 +402,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, messageID, isReplyDraft, replyToID))
+      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
-      navigation.navigate('SendConfirmation', {
-        originHeader: t('secureMessaging.drafts.edit'),
-        messageData,
-        uploads: attachmentsList,
-        replyToID, // any message in the thread that isn't the draft can be replied to
-      })
+      dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, replyToID))
     }
   }
 
@@ -397,13 +428,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert
-          hasValidationError={formContainsError}
-          saveDraftAttempted={onSaveDraftClicked}
-          saveDraftFailed={saveDraftFailed}
-          savingDraft={savingDraft}
-          sendMessageFailed={sendMessageFailed}
-        />
+        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>

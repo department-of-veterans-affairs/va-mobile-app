@@ -414,9 +414,10 @@ export const getMessageSignature =
  * Redux action to save draft
  */
 export const saveDraft =
-  (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AppThunk =>
+  (messageData: SecureMessagingFormData, messages: SnackbarMessages, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AppThunk =>
   async (dispatch, getState) => {
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
+    const retryFunction = () => dispatch(saveDraft(messageData, messages, messageID, isReply, replyID, refreshFolder))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartSaveDraft())
     try {
       let response
@@ -439,10 +440,12 @@ export const saveDraft =
         dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       }
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `saveDraft: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSaveDraft({ error }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -451,7 +454,7 @@ export const saveDraft =
  * Redux action to send message
  */
 export const sendMessage =
-  (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AppThunk =>
+  (messageData: SecureMessagingFormData, messages: SnackbarMessages, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AppThunk =>
   async (dispatch, getState) => {
     let formData: FormData
     let postData
@@ -493,7 +496,8 @@ export const sendMessage =
     } else {
       postData = messageData
     }
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
+    const retryFunction = () => dispatch(sendMessage(messageData, messages, uploads, replyToID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
       await api.post<SecureMessagingMessageData>(
@@ -510,10 +514,12 @@ export const sendMessage =
       await registerReviewEvent()
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage(undefined))
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `sendMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSendMessage(error))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }

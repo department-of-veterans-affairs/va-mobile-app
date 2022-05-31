@@ -107,7 +107,7 @@ platform :ios do
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-RC")
     sign
-    build(config: "RC")
+    build("RC")
     rcVersion = "#{Gem::Version.new(lane_context[SharedValues::VERSION_NUMBER]).bump}.0"
     notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
     upload_tf(notes, "Development Team")
