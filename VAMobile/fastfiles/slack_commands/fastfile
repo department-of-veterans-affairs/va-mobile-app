@@ -138,11 +138,3 @@ def slack_test()
      default_payloads: [],
   )
 end
-
-def slack_test()
-  slack(
-     message: "Build Bot Test :dancing_box_robot:",
-     channel: "#va-mobile-app",
-     default_payloads: [],
-  )
-end
