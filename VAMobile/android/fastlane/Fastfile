@@ -92,16 +92,6 @@ platform :android do
   end
 
   lane :demo do
-    slack_build_success("buildNum", "version", "buildType", "message", "os", ENV['SLACK_THREAD_TS'])
-  end
-
-  lane :reply do
-    post_to_slack(
-          message: "Build Bot Reply Test :wave:",
-          channel: "#va-mobile-app",
-          default_payloads: [],
-          thread_ts: ENV['MY_ENV_VAR']
-        )
   end
   desc "add a tester to Firebase Distribution. options.emails is a comma-separated string of emails to add to testers. Once added, they will need to be added to the QA team in Firebase Distribution console."
   lane :firebase_app_dist_add_testers do |options|
