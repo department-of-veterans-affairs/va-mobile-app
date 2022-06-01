@@ -233,10 +233,10 @@ commands:
               https://slack.com/api/conversations.list\?limit=1000 |
               jq '.channels[] | .name as $data | select($data == "va-mobile-app-automation-test-channel").id' )
             echo $id
-            export SLACK_CHANNEL_ID=$id
+            export SLACK_CHANNEL_ID=${id}
             echo '$SLACK_CHANNEL_ID' >> $BASH_ENV
       - run:
-          command: echo $SLACK_CHANNEL_ID
+          command: echo ${SLACK_CHANNEL_ID}
       - run:
           command: echo $channel_id >> $BASH_ENV
 
