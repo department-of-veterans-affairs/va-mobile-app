@@ -258,6 +258,8 @@ jobs:
       - start_slack_thread:
           channelId: ${SLACK_CHANNEL_ID}
           message: "this is a test message from circle ci"
+      - checkout
+      - install_deps
       - android_fastlane:
           lane: demo
   test:
