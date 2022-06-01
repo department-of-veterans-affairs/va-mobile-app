@@ -245,7 +245,7 @@ commands:
             echo <<parameters.channelId>>
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/json' \
-              --data '{"channel":"C03H1SMQTT6","text":"<<parameters.message>>"}' \
+              --data '{"channel":<<parameters.channelId>>,"text":"<<parameters.message>>"}' \
               https://slack.com/api/chat.postMessage)
             echo $ts
             echo "export SLACK_THREAD_TS=${ts}" >> $BASH_ENV
