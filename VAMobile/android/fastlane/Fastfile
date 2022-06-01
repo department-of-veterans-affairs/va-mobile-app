@@ -92,7 +92,7 @@ platform :android do
   end
 
   lane :demo do
-    slack_build_success("buildNum", "version", "buildType", "message", "os")
+    slack_build_success("buildNum", "version", "buildType", "message", "os", ENV['SLACK_THREAD_TS'])
   end
 
   lane :reply do
