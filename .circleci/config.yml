@@ -228,11 +228,9 @@ commands:
     steps:
       - run:
           command: |
-            echo $SLACK_API_TOKEN &&
-            channel_id=$(curl -X GET -H 'Authorization: Bearer <<parameters.token>>' \
+            curl -X GET -H 'Authorization: Bearer <<parameters.token>>' \
               -H 'Content-type: application/x-www-form-urlencoded' \
-              https://slack.com/api/conversations.list\?limit=1000 |
-              jq '.channels[] | .name as $data | select($data == "<<parameters.channelName>>").id' )
+              https://slack.com/api/conversations.list\?limit=1000 .id' )
       - run:
           command: echo $channel_id
       - run:
