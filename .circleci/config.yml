@@ -225,6 +225,7 @@ commands:
         type: string
     steps:
       - run:
+          name: "Find the right channel id since it can sometimes change"
           command: |
             id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/x-www-form-urlencoded' \
@@ -241,6 +242,7 @@ commands:
         type: string
     steps:
       - run:
+          name: "Post message to slack"
           command: |
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/json' \
