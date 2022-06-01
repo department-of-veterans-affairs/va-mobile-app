@@ -242,7 +242,7 @@ jobs:
     executor: default
     steps:
       - get_slack_channel_id:
-          channelName: 'va-mobile-app-automation-test-channel'
+          channelName: "va-mobile-app-automation-test-channel"
           token: ${SLACK_API_TOKEN}
       - run:
           command: echo $channel_id
