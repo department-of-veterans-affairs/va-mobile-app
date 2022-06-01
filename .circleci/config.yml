@@ -232,7 +232,7 @@ commands:
               -H 'Content-type: application/x-www-form-urlencoded' \
               https://slack.com/api/conversations.list\?limit=1000 |
               jq '.channels[] | .name as $data | select($data == "va-mobile-app-automation-test-channel").id' )
-            echo 'export $SLACK_CHANNEL_ID=$id' >> $BASH_ENV
+            echo 'export SLACK_CHANNEL_ID=$id' >> $BASH_ENV
       - run:
           command: echo $SLACK_CHANNEL_ID
       - run:
