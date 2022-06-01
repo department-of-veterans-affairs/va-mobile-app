@@ -228,7 +228,7 @@ commands:
     steps:
       - run:
           command: |
-            channel_id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            echo $(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/x-www-form-urlencoded' \
               https://slack.com/api/conversations.list\?limit=1000 |
               jq '.channels[] | .name as $data | select($data == "va-mobile-app-automation-test-channel").id' )
