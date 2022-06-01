@@ -228,12 +228,12 @@ commands:
     steps:
       - run:
           command: |
-            echo $(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            echo 'export SLACK_CHANNEL_ID=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/x-www-form-urlencoded' \
               https://slack.com/api/conversations.list\?limit=1000 |
-              jq '.channels[] | .name as $data | select($data == "va-mobile-app-automation-test-channel").id' )
+              jq '.channels[] | .name as $data | select($data == "va-mobile-app-automation-test-channel").id' )' >> $BASH_ENV
       - run:
-          command: echo $channel_id
+          command: echo $SLACK_CHANNEL_ID
       - run:
           command: echo $channel_id >> $BASH_ENV
 
@@ -245,7 +245,7 @@ jobs:
           channelName: "va-mobile-app-automation-test-channel"
           token: $SLACK_API_TOKEN
       - run:
-          command: echo $channel_id
+          command: echo $SLACK_CHANNEL_ID
   test:
     executor: default
     steps:
