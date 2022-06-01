@@ -255,7 +255,6 @@ jobs:
     steps:
       - get_slack_channel_id:
           channelName: "va-mobile-app-automation-test-channel"
-          token: $SLACK_API_TOKEN
       - start_slack_thread:
           channelId: ${SLACK_CHANNEL_ID}
           message: "this is a test message from circle ci"
