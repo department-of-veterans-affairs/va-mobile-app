@@ -252,18 +252,6 @@ commands:
             echo "export SLACK_THREAD_TS=${ts}" >> $BASH_ENV
 
 jobs:
-  test_env:
-    executor: default
-    steps:
-      - get_slack_channel_id:
-          channelName: "va-mobile-app-automation-test-channel"
-      - start_slack_thread:
-          channelId: ${SLACK_CHANNEL_ID}
-          message: "this is a test message from circle ci"
-      - checkout
-      - install_deps
-      - android_fastlane:
-          lane: demo
   test:
     executor: default
     steps:
@@ -463,6 +451,3 @@ workflows:
               only: main
     jobs:
       - run_release_lanes
-  env_test:
-    jobs:
-      - test_env
