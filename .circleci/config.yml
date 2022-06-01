@@ -223,8 +223,6 @@ commands:
     parameters:
       channelName:
         type: string
-      token:
-        type: string
     steps:
       - run:
           command: |
@@ -233,8 +231,23 @@ commands:
               https://slack.com/api/conversations.list\?limit=1000 |
               jq '.channels[] | .name as $data | select($data == "<<parameters.channelName>>").id' )
             echo "export SLACK_CHANNEL_ID=${id}" >> $BASH_ENV
+
+  start_slack_thread:
+    description: 'starts a slack thread in the specified channel and sets the SLACK_THREAD_TS env var'
+    parameters:
+      channelId:
+        type: string
+      message:
+        type: string
+    steps:
       - run:
-          command: echo ${SLACK_CHANNEL_ID}
+          command: |
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/json' \
+              --data '{"channel":"<<parameters.channelId>>","text":"<<parameters.message>>"}' \
+              https://slack.com/api/chat.postMessage)
+            echo $ts
+            echo "export SLACK_THREAD_TS=${ts}" >> $BASH_ENV
 
 jobs:
   test_env:
@@ -243,8 +256,11 @@ jobs:
       - get_slack_channel_id:
           channelName: "va-mobile-app-automation-test-channel"
           token: $SLACK_API_TOKEN
+      - start_slack_thread:
+          channelId: ${SLACK_CHANNEL_ID}
+          message: "this is a test message from circle ci"
       - run:
-          command: echo $SLACK_CHANNEL_ID
+          command: echo $SLACK_THREAD_TS
   test:
     executor: default
     steps:
