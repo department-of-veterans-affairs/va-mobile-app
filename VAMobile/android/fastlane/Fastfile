@@ -92,15 +92,7 @@ platform :android do
   end
 
   lane :demo do
-    release_thread = post_to_slack(
-      message: "Build Bot Test :dancing_box_robot:",
-      channel: "#va-mobile-app",
-      default_payloads: []
-    )
-    release_thread_ts = release_thread[:json]["ts"]
-    command = "echo \'export MY_ENV_VAR=\"#{release_thread_ts}\"\' >> $BASH_ENV"
-    sh(command)
-    sh("echo $MY_ENV_VAR")
+    slack_build_success("buildNum", "version", "buildType", "message", "os")
   end
 
   lane :reply do
@@ -136,7 +128,7 @@ platform :android do
   error do |lane, exception, options|
     puts("ERROR REPORT")
     puts exception
-#     slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+    slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
 # method to update the version and build in the repo
