@@ -218,37 +218,27 @@ commands:
           command: |
             chmod +x <<parameters.script_name>>
             bash <<parameters.script_name>> <<parameters.script_options>>
-  test_env_fl:
+  get_slack_channel_id:
+    description: 'checks DSVA slack to get the channel id from a channel name'
+    parameters:
+      channelName:
+        type: string
     steps:
-      - android_fastlane:
-          lane: demo
-  test_env_bash:
-    steps:
-      - android_fastlane:
-          lane: reply
+      - run:
+          command: |
+            channel_id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"'' \
+            -H 'Content-type: application/x-www-form-urlencoded' \
+            https://slack.com/api/conversations.list\?limit=1000 |
+            jq '.channels[] | .name as $data | select($data == "'<<parameters.channelName>>'").id' )
+
 jobs:
   test_env:
     executor: default
     steps:
-      - slack/notify:
-          debug: true
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
+      - get_slack_channel_id:
+          channelName: 'va-mobile-app-automation-test-channel'
       - run:
-          command: echo $SLACK_SENT_RESPONSE
+          command: $echo channel_id
   test:
     executor: default
     steps:
