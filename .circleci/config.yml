@@ -229,8 +229,11 @@ commands:
             export channel_id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"'' \
             -H 'Content-type: application/x-www-form-urlencoded' \
             https://slack.com/api/conversations.list\?limit=1000 |
-            jq '.channels[] | .name as $data | select($data == "'<<parameters.channelName>>'").id' ) &&
-            echo $channel_id >> $BASH_ENV
+            jq '.channels[] | .name as $data | select($data == "'<<parameters.channelName>>'").id' )
+      - run:
+          command: echo $channel_id
+      - run:
+          command: echo $channel_id >> $BASH_ENV
 
 jobs:
   test_env:
