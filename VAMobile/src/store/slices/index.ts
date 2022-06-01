@@ -16,6 +16,7 @@ import { initialNotificationsState } from 'store/slices/notificationSlice'
 import { initialPatientState } from 'store/slices/patientSlice'
 import { initialPaymentsState } from 'store/slices/paymentsSlice'
 import { initialPersonalInformationState } from 'store/slices/personalInformationSlice'
+import { initialPrescriptionState } from './prescriptionSlice'
 import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
 import { initialVaccineState } from 'store/slices/vaccineSlice'
@@ -59,4 +60,5 @@ export const InitialState: RootState = {
   patient: initialPatientState,
   snackBar: initialSnackBarState,
   payments: initialPaymentsState,
+  prescriptions: initialPrescriptionState,
 }

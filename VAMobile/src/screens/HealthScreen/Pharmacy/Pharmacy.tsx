@@ -3,11 +3,12 @@ import React, { FC } from 'react'
 
 import { Box, ButtonWithIcon, TextArea, TextView, TrackingCard, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const Pharmacy: FC = ({}) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const navigateTo = useRouteNavigation()
 
   const condensedMarginBetween = theme.dimensions.condensedMarginBetween
 
@@ -16,7 +17,12 @@ const Pharmacy: FC = ({}) => {
       <Box mt={40}>
         <TextView variant="MobileBodyBold">{t('pharmacy.tools')}</TextView>
         <Box my={condensedMarginBetween}>
-          <ButtonWithIcon onPress={() => {}} buttonText={t('pharmacy.tools.myMedicationsList')} iconName="ListSolid" a11yHint={t('pharmacy.tools.myMedicationsList.a11yHint')} />
+          <ButtonWithIcon
+            onPress={navigateTo('PrescriptionHistory')}
+            buttonText={t('pharmacy.tools.myMedicationsList')}
+            iconName="ListSolid"
+            a11yHint={t('pharmacy.tools.myMedicationsList.a11yHint')}
+          />
         </Box>
         <Box mb={condensedMarginBetween}>
           <ButtonWithIcon onPress={() => {}} buttonText={t('pharmacy.tools.renewalRequest')} iconName="CommentSolid" a11yHint={t('pharmacy.tools.renewalRequest.a11yHint')} />
