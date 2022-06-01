@@ -242,6 +242,7 @@ commands:
     steps:
       - run:
           command: |
+            echo <<parameters.channelId>>
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/json' \
               --data '{"channel":"<<parameters.channelId>>","text":"<<parameters.message>>"}' \
