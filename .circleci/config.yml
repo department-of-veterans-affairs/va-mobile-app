@@ -238,7 +238,7 @@ jobs:
       - get_slack_channel_id:
           channelName: 'va-mobile-app-automation-test-channel'
       - run:
-          command: $echo channel_id
+          command: echo $channel_id
   test:
     executor: default
     steps:
