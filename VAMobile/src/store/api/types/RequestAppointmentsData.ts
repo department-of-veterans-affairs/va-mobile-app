@@ -298,3 +298,23 @@ export const SubCareDataMapping: {
   '203': AUDIOLOGY_TYPES_OF_CARE,
   EYE: TYPES_OF_EYE_CARE,
 }
+
+export type facilityTypeLabelTypes = 'VA medical center or clinic' | 'Community care'
+
+export type facilityTypeValueTypes = 'va' | 'cc'
+
+export type facilityTypeObjectType = {
+  label: facilityTypeLabelTypes
+  value: string
+}
+
+export const FACILITY_TYPE: Array<facilityTypeObjectType> = [
+  {
+    label: 'VA medical center or clinic',
+    value: 'va',
+  },
+  {
+    label: 'Community care',
+    value: 'cc',
+  },
+]
