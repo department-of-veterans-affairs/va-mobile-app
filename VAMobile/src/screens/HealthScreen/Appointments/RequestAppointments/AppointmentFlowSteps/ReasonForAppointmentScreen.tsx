@@ -7,11 +7,12 @@ import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhit
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { PURPOSE_TEXT } from 'store/api'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ReasonForAppointmentScreen = StackScreenProps<AppointmentFlowModalStackParamList, 'ReasonForAppointmentScreen'>
 
 const ReasonForAppointmentScreen: FC<ReasonForAppointmentScreen> = ({ navigation }) => {
+  const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
@@ -21,6 +22,8 @@ const ReasonForAppointmentScreen: FC<ReasonForAppointmentScreen> = ({ navigation
   const [additionalDetails, setAdditionalDetails] = useState<string>()
   const [noReasonSelectedError, setNoReasonSelectedError] = useState(false)
   const [noDetailsAddedError, setNoDetailsAddedError] = useState(false)
+
+  const navigateToFacilityType = navigateTo('FacilityTypeSelectionScreen')
 
   const onSetSelectedReason = (type: string): void => {
     if (type) {
@@ -55,6 +58,10 @@ const ReasonForAppointmentScreen: FC<ReasonForAppointmentScreen> = ({ navigation
 
     if (!additionalDetails) {
       setNoDetailsAddedError(true)
+    }
+
+    if (selectedReason && additionalDetails) {
+      navigateToFacilityType()
     }
   }
 
