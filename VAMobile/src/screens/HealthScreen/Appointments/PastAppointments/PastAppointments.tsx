@@ -144,7 +144,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         {
-          text: tc('text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
+          text: tc('text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
           iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
         },
       )

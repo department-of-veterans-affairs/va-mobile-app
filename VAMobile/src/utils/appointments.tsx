@@ -3,15 +3,7 @@ import { TFunction } from 'i18next'
 import React, { ReactNode } from 'react'
 import _ from 'underscore'
 
-import {
-  AppointmentStatusConstants,
-  AppointmentType,
-  AppointmentTypeConstants,
-  AppointmentTypeToID,
-  AppointmentsGroupedByYear,
-  AppointmentsList,
-  AppointmentsMetaPagination,
-} from 'store/api'
+import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMetaPagination } from 'store/api'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
@@ -26,20 +18,25 @@ export type YearsToSortedMonths = { [key: string]: Array<string> }
  * @param locationName - string name of the location of the appointment
  * @param translate - function the translate function
  * @param phoneOnly - boolean tells if the appointment is a phone call
- * @param isCovidVaccine - boolean or undefined tells if the appointment is a covid
  *
  * @returns string of the location name
  */
-export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean, isCovidVaccine?: boolean): string => {
-  if (phoneOnly) {
-    return translate('upcomingAppointments.phoneOnly')
-  } else if (isCovidVaccine) {
-    return translate('upcomingAppointments.covidVaccine')
-  } else if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE || appointmentType === AppointmentTypeConstants.VA) {
-    return locationName
+export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean): string => {
+  switch (appointmentType) {
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
+      return translate('appointmentList.connectAtAtlas')
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
+      return translate('appointmentList.connectAtHome')
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
+      return translate('appointmentList.connectOnsite')
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
+      return translate('appointmentList.connectGFE')
+    case AppointmentTypeConstants.VA:
+      return phoneOnly ? translate('appointmentList.phoneOnly') : translate('appointmentList.inPerson')
+    case AppointmentTypeConstants.COMMUNITY_CARE:
+    default:
+      return phoneOnly ? translate('appointmentList.phoneOnly') : locationName
   }
-
-  return translate(AppointmentTypeToID[appointmentType])
 }
 
 /**
@@ -49,18 +46,23 @@ export const getAppointmentLocation = (appointmentType: AppointmentType, locatio
  * @param phoneOnly - boolean tells if the appointment is a phone call
  * @param theme - type VATheme, the theme object to set some properties
  *
- * @returns VAIconProps or undefoned
+ * @returns VAIconProps or undefined
  */
 export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
   const iconProp = { fill: theme.colors.icon.defaultMenuItem, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
 
-  if (appointmentType.includes('VIDEO')) {
-    return { ...iconProp, name: 'VideoCamera' }
-  } else if (phoneOnly) {
-    return { ...iconProp, name: 'PhoneSolid' }
+  switch (appointmentType) {
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
+      return { ...iconProp, name: 'VideoCamera' }
+    case AppointmentTypeConstants.VA:
+      return phoneOnly ? { ...iconProp, name: 'PhoneSolid' } : { ...iconProp, name: 'BuildingSolid' }
+    case AppointmentTypeConstants.COMMUNITY_CARE:
+    default:
+      return phoneOnly ? { ...iconProp, name: 'PhoneSolid' } : undefined
   }
-
-  return undefined
 }
 
 /**
@@ -138,7 +140,7 @@ const getListItemsForAppointments = (
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
-    const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine } = attributes
+    const { startDateUtc, timeZone, appointmentType, location, phoneOnly } = attributes
     const textLines: Array<TextLineWithIconProps> = []
 
     if (attributes.status === AppointmentStatusConstants.CANCELLED) {
@@ -149,7 +151,7 @@ const getListItemsForAppointments = (
       { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       {
-        text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
+        text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
       },
     )
