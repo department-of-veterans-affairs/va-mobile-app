@@ -303,18 +303,54 @@ export type facilityTypeLabelTypes = 'VA medical center or clinic' | 'Community 
 
 export type facilityTypeValueTypes = 'va' | 'cc'
 
+export const FacilityTypeValueMapping: {
+  VA: facilityTypeValueTypes
+  CC: facilityTypeValueTypes
+} = {
+  VA: 'va',
+  CC: 'cc',
+}
+
 export type facilityTypeObjectType = {
   label: facilityTypeLabelTypes
   value: string
+  a11yLabel?: string
 }
 
+// TODO move label to translations?
 export const FACILITY_TYPE: Array<facilityTypeObjectType> = [
   {
     label: 'VA medical center or clinic',
     value: 'va',
+    a11yLabel: 'V-A medical center or clinic',
   },
   {
     label: 'Community care',
     value: 'cc',
+  },
+]
+
+export type visitTypeLabelTypes = 'In person' | 'Phone call' | 'Telehealth (through VA Video Connect)'
+
+export type visitTypeObjectType = {
+  label: visitTypeLabelTypes
+  value: string
+  a11yLabel?: string
+}
+
+// TODO move label to translations?
+export const VISIT_TYPE: Array<visitTypeObjectType> = [
+  {
+    label: 'In person',
+    value: 'clinic',
+  },
+  {
+    label: 'Phone call',
+    value: 'phone',
+  },
+  {
+    label: 'Telehealth (through VA Video Connect)',
+    value: 'telehealth',
+    a11yLabel: 'Telehealth (through V-A Video Connect)',
   },
 ]
