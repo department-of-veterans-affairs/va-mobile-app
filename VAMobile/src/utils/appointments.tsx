@@ -12,16 +12,16 @@ import { getTestIDFromTextLines } from './accessibility'
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
 /**
- * Returns returns the appointment location
+ * Returns returns the appointment type icon text
  *
  * @param appointmentType - type AppointmentType, to describe the type of appointment
  * @param locationName - string name of the location of the appointment
  * @param translate - function the translate function
  * @param phoneOnly - boolean tells if the appointment is a phone call
  *
- * @returns string of the location name
+ * @returns string of the appointment type icon
  */
-export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean): string => {
+export const getAppointmentTypeIconText = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean): string => {
   switch (appointmentType) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
       return translate('appointmentList.connectAtAtlas')
@@ -35,7 +35,7 @@ export const getAppointmentLocation = (appointmentType: AppointmentType, locatio
       return phoneOnly ? translate('appointmentList.phoneOnly') : translate('appointmentList.inPerson')
     case AppointmentTypeConstants.COMMUNITY_CARE:
     default:
-      return phoneOnly ? translate('appointmentList.phoneOnly') : locationName
+      return phoneOnly ? translate('appointmentList.phoneOnly') : ''
   }
 }
 
@@ -140,7 +140,7 @@ const getListItemsForAppointments = (
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
-    const { startDateUtc, timeZone, appointmentType, location, phoneOnly } = attributes
+    const { healthcareProvider, startDateUtc, timeZone, appointmentType, location, phoneOnly } = attributes
     const textLines: Array<TextLineWithIconProps> = []
 
     if (attributes.status === AppointmentStatusConstants.CANCELLED) {
@@ -151,10 +151,17 @@ const getListItemsForAppointments = (
       { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       {
-        text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
-        iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+        text: tc('common:text.raw', { text: healthcareProvider || location.name }),
       },
     )
+
+    // do not show appointment icon with text if this is true
+    if (appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE && !phoneOnly) {
+      textLines.push({
+        text: t('common:text.raw', { text: getAppointmentTypeIconText(appointmentType, location.name, t, phoneOnly) }),
+        iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+      })
+    }
 
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = tc('common:listPosition', { position, total: totalEntries })
