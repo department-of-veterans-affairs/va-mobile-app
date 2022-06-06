@@ -5,7 +5,7 @@ import React, { FC, useState } from 'react'
 
 import { Box, CloseModalButton, HeaderIconBtn } from 'components'
 import { DateTime } from 'luxon'
-import { FacilityTypeSelectionScreen, ReasonForAppointmentScreen, SubTypeOfCareSelectionScreen, TypeOfCareSelectionScreen } from './AppointmentFlowSteps'
+import { FacilityTypeSelectionScreen, ReasonForAppointmentScreen, SubTypeOfCareSelectionScreen, TypeOfCareSelectionScreen, VisitTypeSelectionScreen } from './AppointmentFlowSteps'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
@@ -18,6 +18,7 @@ export type AppointmentFlowModalStackParamList = WebviewStackParams & {
     selectedTypeOfCareId: string
   }
   FacilityTypeSelectionScreen: undefined
+  VisitTypeSelectionScreen: undefined
 }
 
 type RequestAppointmentScreenProps = StackScreenProps<HealthStackParamList, 'RequestAppointmentScreen'>
@@ -65,6 +66,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
         <Stack.Screen name="ReasonForAppointmentScreen" component={ReasonForAppointmentScreen} />
         <Stack.Screen name="SubTypeOfCareSelectionScreen" component={SubTypeOfCareSelectionScreen} />
         <Stack.Screen name="FacilityTypeSelectionScreen" component={FacilityTypeSelectionScreen} />
+        <Stack.Screen name="VisitTypeSelectionScreen" component={VisitTypeSelectionScreen} />
       </Stack.Navigator>
     </Box>
   )

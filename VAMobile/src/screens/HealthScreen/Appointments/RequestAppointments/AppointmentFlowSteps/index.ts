@@ -6,3 +6,5 @@ export { default as TypeOfCareSelectionScreen } from './TypeOfCareSelectionScree
 export * from './TypeOfCareSelectionScreen'
 export { default as SubTypeOfCareSelectionScreen } from './SubTypeOfCareSelectionScreen'
 export * from './SubTypeOfCareSelectionScreen'
+export { default as VisitTypeSelectionScreen } from './VisitTypeSelectionScreen'
+export * from './VisitTypeSelectionScreen'

@@ -8,7 +8,7 @@ import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
-  /** translated labelKey displayed next to the checkbox/radio */
+  /** translated text displayed next to the checkbox/radio */
   labelKey: string
   /** optional arguments to pass in with the labelKey during translation */
   labelArgs?: { [key: string]: string }
@@ -16,6 +16,8 @@ export type radioOption<T> = {
   value: T
   /** string for the header if one needed */
   headerText?: string
+  /** optional accessibilityLabel */
+  a11yLabel?: string
 }
 
 /**
@@ -51,11 +53,15 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
   }, [hasSingleOption, value, options, onChange])
 
   const getOption = (option: radioOption<T>): ReactElement => {
-    const { labelKey, labelArgs } = option
+    const { labelKey, labelArgs, a11yLabel } = option
 
     // Render option as simple text
     if (hasSingleOption) {
-      return <TextView variant="VASelector">{getTranslation(labelKey, t, labelArgs)}</TextView>
+      return (
+        <TextView accessibilityLabel={a11yLabel || getTranslation(labelKey, t, labelArgs)} variant="VASelector">
+          {getTranslation(labelKey, t, labelArgs)}
+        </TextView>
+      )
     }
 
     const selected = isEqual(option.value, value)
@@ -63,7 +69,17 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
       onChange(option.value)
     }
 
-    return <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} labelKey={labelKey} labelArgs={labelArgs} disabled={disabled} />
+    return (
+      <VASelector
+        selectorType={SelectorType.Radio}
+        selected={selected}
+        onSelectionChange={onVASelectorChange}
+        labelKey={labelKey}
+        labelArgs={labelArgs}
+        disabled={disabled}
+        a11yLabel={a11yLabel}
+      />
+    )
   }
 
   /** creates the radio group with an optiona title and the radio button on the left side */
@@ -105,7 +121,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
         minHeight: 64,
         a11yValue: selected ? tc('selected') : undefined,
         a11yRole: 'radio',
-        testId: `${option.labelKey} ${tc('option', { count: index + 1, totalOptions: options.length })}`,
+        testId: `${option.a11yLabel || option.labelKey} ${tc('option', { count: index + 1, totalOptions: options.length })}`,
       }
 
       return radioButton
