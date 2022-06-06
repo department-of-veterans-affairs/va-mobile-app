@@ -8,3 +8,5 @@ export { default as SubTypeOfCareSelectionScreen } from './SubTypeOfCareSelectio
 export * from './SubTypeOfCareSelectionScreen'
 export { default as VisitTypeSelectionScreen } from './VisitTypeSelectionScreen'
 export * from './VisitTypeSelectionScreen'
+export { default as EmergencyAndCrisisScreen } from './EmergencyAndCrisisScreen'
+export * from './EmergencyAndCrisisScreen'
