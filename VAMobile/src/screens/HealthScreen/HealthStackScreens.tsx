@@ -5,10 +5,9 @@ import React, { ReactNode } from 'react'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
+import { GeneralHelpScreen, SubTypeHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-
-import { GeneralHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -102,6 +101,9 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   RequestAppointmentScreen: undefined
   GeneralHelpScreen: undefined
+  SubTypeHelpScreen: {
+    careTypeId: string
+  }
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -142,17 +144,29 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
     <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
     <HealthStack.Screen key={'RequestAppointmentScreen'} name="RequestAppointmentScreen" component={RequestAppointmentScreen} options={{ headerShown: false }} />,
-    <HealthStack.Screen
-      key={'GeneralHelpScreen'}
-      name="GeneralHelpScreen"
-      component={GeneralHelpScreen}
-      options={{
+    <HealthStack.Group
+      key={'ModalsScreens'}
+      screenOptions={{
         presentation: 'modal',
         ...TransitionPresets.ModalTransition,
         headerShown: true,
-        title: t('requestAppointments.generalHelpPageTitle'),
-        headerMode: 'screen',
-      }}
-    />,
+      }}>
+      <HealthStack.Screen
+        key={'GeneralHelpScreen'}
+        name="GeneralHelpScreen"
+        component={GeneralHelpScreen}
+        options={{
+          title: t('requestAppointments.generalHelpPageTitle'),
+        }}
+      />
+      <HealthStack.Screen
+        key={'SubTypeHelpScreen'}
+        name="SubTypeHelpScreen"
+        component={SubTypeHelpScreen}
+        options={{
+          title: t('requestAppointment.modalNeedHelpChoosingLinkTitle'),
+        }}
+      />
+    </HealthStack.Group>,
   ]
 }
