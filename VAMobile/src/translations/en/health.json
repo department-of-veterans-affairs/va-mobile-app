@@ -10,6 +10,7 @@
   "appointments.canceled.whoCanceled": "{{whoCanceled}} canceled this appointment",
   "appointments.canceled.whoCanceled.you": "You",
   "appointments.canceled.whoCanceled.facility": "Facility",
+  "appointments.confirmed": "CONFIRMED",
   "appointments.loadingAppointments": "Loading your appointments...",
   "appointments.subText": "Review your upcoming appointments",
   "appointments.title": "Appointments",

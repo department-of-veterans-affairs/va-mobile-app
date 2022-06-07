@@ -28,6 +28,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const navigateTo = useRouteNavigation()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const newCurrentPageAppointmentsByYear = deepCopyObject<CurrentPageAppointmentsByYear>(currentPageAppointmentsByYear)
+  const marginBetween10 = theme.dimensions.condensedMarginBetween
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -131,27 +132,51 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment, index) => {
       const {
-        attributes: { appointmentType, healthcareProvider, startDateUtc, timeZone, phoneOnly, location, status },
+        attributes: { appointmentType, healthcareProvider, startDateUtc, timeZone, phoneOnly, location, status, typeOfCare, isCovidVaccine },
       } = appointment
 
       const textLines: Array<TextLineWithIconProps> = []
 
       if (status === AppointmentStatusConstants.CANCELLED) {
-        textLines.push({ text: t('appointments.canceled'), isTextTag: true })
+        textLines.push({ text: t('appointments.canceled'), textTag: { backgroundColor: 'inactiveTag', variant: 'LabelTagBold' }, mb: 14 })
+      } else if (status === AppointmentStatusConstants.BOOKED) {
+        textLines.push({ text: t('appointments.confirmed'), textTag: { backgroundColor: 'activeTag', variant: 'LabelTagBold' }, mb: 14 })
       }
 
-      textLines.push(
-        { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-        { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-        {
-          text: tc('text.raw', { text: healthcareProvider || location.name }),
-        },
-      )
+      // if isCovidVaccine is true then make it the bold header, else if typeOfCare exist make it the bold header otherwise make the date/time bold header
+      if (isCovidVaccine) {
+        textLines.push(
+          { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
+          { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
+          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: marginBetween10 },
+        )
+      } else if (typeOfCare) {
+        textLines.push(
+          { text: tc('text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
+          { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
+          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: marginBetween10 },
+        )
+      } else {
+        textLines.push(
+          { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: 5 },
+        )
+      }
 
-      if (appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE && !phoneOnly) {
+      const isVideoOrVAAppointment = appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE
+      const isCCAppointmentAndPhoneOnly = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && phoneOnly
+      const showAppointmentTypeIcon = isVideoOrVAAppointment || isCCAppointmentAndPhoneOnly
+      textLines.push({
+        text: tc('text.raw', { text: healthcareProvider || location.name }),
+        variant: 'HelperText',
+        mb: showAppointmentTypeIcon ? marginBetween10 : 0,
+      })
+
+      if (showAppointmentTypeIcon) {
         textLines.push({
           text: tc('text.raw', { text: getAppointmentTypeIconText(appointmentType, location.name, t, phoneOnly) }),
           iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+          variant: 'HelperText',
         })
       }
 

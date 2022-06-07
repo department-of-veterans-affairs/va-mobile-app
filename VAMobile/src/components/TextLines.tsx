@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { TextLine } from './types'
 import Box from './Box'
-import MessagesSentReadTag from './MessagesSentReadTag'
+import LabelTag from './LabelTag'
 import TextLineWithIcon, { TextLineWithIconProps } from './TextLineWithIcon'
 import TextView from './TextView'
 
@@ -22,12 +22,16 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
           if ('iconProps' in textObj && textObj.iconProps !== undefined) {
             return <TextLineWithIcon key={index} {...textObj} />
           } else {
-            const { text, variant = 'MobileBody', color, textAlign = 'left', isTextTag = false } = textObj
-            if (isTextTag) {
-              return <MessagesSentReadTag text={text} key={index} />
+            const { text, variant = 'MobileBody', color, textAlign = 'left', textTag, mb } = textObj
+            if (textTag) {
+              return (
+                <Box mb={mb} key={index}>
+                  <LabelTag text={text} key={index} backgroundColor={textTag.backgroundColor} color={textTag.color} variant={textTag.variant} />
+                </Box>
+              )
             }
             return (
-              <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable}>
+              <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable} mb={mb}>
                 {text}
               </TextView>
             )
