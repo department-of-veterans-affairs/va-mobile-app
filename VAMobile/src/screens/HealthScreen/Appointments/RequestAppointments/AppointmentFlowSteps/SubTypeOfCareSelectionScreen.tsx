@@ -21,7 +21,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
   const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
 
   const navigateToReason = navigateTo('ReasonForAppointmentScreen')
-  const navigateToHelpScreen = navigateTo('SubTypeHelpScreen', { careTypeId: 'nothing' })
+  const navigateToHelpScreen = navigateTo('SubTypeHelpScreen', { careTypeId: selectedTypeOfCareId })
 
   const onSetSelectedTypeOfCare = (type: string): void => {
     if (type) {
