@@ -148,7 +148,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         },
       )
 
-      // do not show appointment icon with text if this is true
       if (appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE && !phoneOnly) {
         textLines.push({
           text: tc('text.raw', { text: getAppointmentTypeIconText(appointmentType, location.name, t, phoneOnly) }),
