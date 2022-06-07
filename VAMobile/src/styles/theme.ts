@@ -161,11 +161,19 @@ export type VABorderColors = {
   menuDivider: string
   trackingCard: string
   trackingCardActive: string
+  prescriptionDivider: string
 }
 
 export type VAFontSizes = {
   fontSize: number
   lineHeight: number
+}
+
+export type VAListTagColors = {
+  tagActive: string
+  tagExpired: string
+  tagSuspended: string
+  tagInProgress: string
 }
 
 export type VAColorScheme = {
@@ -177,6 +185,7 @@ export type VAColorScheme = {
   buttonText: VAButtonTextColors
   buttonBorder: VAButtonBorderColors
   selectCopyText: string
+  listTag: VAListTagColors
 
   control: {
     tintColor: string

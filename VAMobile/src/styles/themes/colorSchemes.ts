@@ -52,6 +52,7 @@ export const lightTheme = {
     menuDivider: colors.grayLight,
     trackingCard: colors.grayDark,
     trackingCardActive: colors.grayLight,
+    prescriptionDivider: colors.grayLighter,
   },
   icon: {
     footerButton: colors.primary,
@@ -157,6 +158,12 @@ export const lightTheme = {
     buttonInactive: colors.grayLighter,
   },
   selectCopyText: colors.primaryAltLight,
+  listTag: {
+    tagActive: colors.primary,
+    tagExpired: colors.grayMedium,
+    tagSuspended: colors.gold,
+    tagInProgress: colors.greenDarker,
+  },
 }
 
 export const darkTheme = {
@@ -210,6 +217,7 @@ export const darkTheme = {
     menuDivider: colors.darkmodeBorder,
     trackingCard: colors.darkmodeBorder,
     trackingCardActive: colors.grayLight,
+    prescriptionDivider: colors.darkmodeBorder,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
@@ -313,4 +321,10 @@ export const darkTheme = {
     buttonInactive: colors.darkmodeGrayWarmDark,
   },
   selectCopyText: colors.primaryAltLight,
+  listTag: {
+    tagActive: colors.primaryDarker2,
+    tagExpired: colors.darkmodeBorder,
+    tagSuspended: colors.gold,
+    tagInProgress: colors.greenDarker,
+  },
 }
