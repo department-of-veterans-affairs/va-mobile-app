@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useState } from 'react'
 import _ from 'underscore'
 
-import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
+import { AppointmentStatusConstants, AppointmentTypeConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, CurrentPageAppointmentsByYear, getAppointmentsInDateRange } from 'store/slices'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLineWithIconProps, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,7 +11,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { deepCopyObject } from 'utils/common'
-import { getAppointmentLocation, getAppointmentTypeIcon, getGroupedAppointments, getYearsToSortedMonths } from 'utils/appointments'
+import { getAppointmentTypeIcon, getAppointmentTypeIconText, getGroupedAppointments, getYearsToSortedMonths } from 'utils/appointments'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -131,7 +131,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment, index) => {
       const {
-        attributes: { appointmentType, startDateUtc, timeZone, phoneOnly, location, status, isCovidVaccine },
+        attributes: { appointmentType, healthcareProvider, startDateUtc, timeZone, phoneOnly, location, status },
       } = appointment
 
       const textLines: Array<TextLineWithIconProps> = []
@@ -144,10 +144,16 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
         {
-          text: tc('text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
-          iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+          text: tc('text.raw', { text: healthcareProvider || location.name }),
         },
       )
+
+      if (appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE && !phoneOnly) {
+        textLines.push({
+          text: tc('text.raw', { text: getAppointmentTypeIconText(appointmentType, location.name, t, phoneOnly) }),
+          iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+        })
+      }
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = tc('listPosition', { position, total: totalEntries })
