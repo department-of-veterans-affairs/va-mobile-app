@@ -16,11 +16,12 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { selectedTypeOfCareId } = route.params
-
+  const subTypeName = SubCareTitleMapping[selectedTypeOfCareId as TypeOfCareWithSubCareIdType]
   const [selectedSubTypeOfCare, setSelectedSubTypeOfCare] = useState<string>()
   const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
 
   const navigateToReason = navigateTo('ReasonForAppointmentScreen')
+  const navigateToHelpScreen = navigateTo('SubTypeHelpScreen', { careTypeId: selectedTypeOfCareId })
 
   const onSetSelectedTypeOfCare = (type: string): void => {
     if (type) {
@@ -30,12 +31,10 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
   }
 
   const getSubTypeTitle = () => {
-    const subTypeName = SubCareTitleMapping[selectedTypeOfCareId as TypeOfCareWithSubCareIdType]
     return t('requestAppointment.whatSubTypeOfCare', { subTypeName })
   }
 
   const getSubTypeErrorMessage = () => {
-    const subTypeName = SubCareTitleMapping[selectedTypeOfCareId as TypeOfCareWithSubCareIdType]
     return t('requestAppointment.whatSubTypeOfCareNotSelectedError', { subTypeName })
   }
 
@@ -66,7 +65,8 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
       firstActionButtonPress={() => {
         navigation.goBack()
       }}
-      linkText={t('requestAppointment.modalNeedHelpChoosingLinkTitle')}>
+      linkText={t('requestAppointment.modalNeedHelpChoosingLinkTitle')}
+      onLinkPress={navigateToHelpScreen}>
       <AppointmentFlowTitleSection title={getSubTypeTitle()} error={noTypeSelectedError} errorMessage={getSubTypeErrorMessage()} />
       <RadioGroup options={getTypesOfSubCare()} onChange={onSetSelectedTypeOfCare} value={selectedSubTypeOfCare} isRadioList={true} />
     </AppointmentFlowLayout>
