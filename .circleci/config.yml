@@ -231,7 +231,7 @@ commands:
               jq '.channels[] | .name as $data | select($data == "<<parameters.channelName>>").id' )
             echo "export SLACK_CHANNEL_ID=${id}" >> $BASH_ENV
 
-  start_slack_thread:
+  send_slack_message:
     description: 'starts a slack thread in the specified channel and sets the SLACK_THREAD_TS env var'
     parameters:
       channelId:
@@ -269,7 +269,7 @@ jobs:
     steps:
       - get_slack_channel_id:
           channelName: "va-mobile-build-alerts"
-      - start_slack_thread:
+      - send_slack_message:
           message: << parameters.message >>
           channelId: ${SLACK_CHANNEL_ID}
   build_ios_qa:
