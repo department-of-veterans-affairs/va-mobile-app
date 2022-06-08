@@ -232,7 +232,7 @@ commands:
             echo "export SLACK_CHANNEL_ID=${id}" >> $BASH_ENV
 
   send_slack_message:
-    description: 'starts a slack thread in the specified channel and sets the SLACK_THREAD_TS env var'
+    description: 'Sends a slack message in the specified channel and sets the SLACK_THREAD_TS env var'
     parameters:
       channelId:
         type: string
