@@ -7,9 +7,9 @@ export type AppointmentFlowWhiteCtaButtonProps = {
   onPress: () => void
   /** sets the button text */
   text: string
-  /** sets the button label defaults to crsisis line label */
+  /** sets the button label defaults to crisis line label */
   label?: string
-  /** sets the button hint defaults to crsisis line hint */
+  /** sets the button hint defaults to crisis line hint */
   hint?: string
 } & BoxProps
 
