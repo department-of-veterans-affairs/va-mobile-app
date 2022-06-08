@@ -5,7 +5,14 @@ import React, { FC, useState } from 'react'
 
 import { Box, CloseModalButton, HeaderIconBtn } from 'components'
 import { DateTime } from 'luxon'
-import { FacilityTypeSelectionScreen, ReasonForAppointmentScreen, SubTypeOfCareSelectionScreen, TypeOfCareSelectionScreen, VisitTypeSelectionScreen } from './AppointmentFlowSteps'
+import {
+  EmergencyAndCrisisScreen,
+  FacilityTypeSelectionScreen,
+  ReasonForAppointmentScreen,
+  SubTypeOfCareSelectionScreen,
+  TypeOfCareSelectionScreen,
+  VisitTypeSelectionScreen,
+} from './AppointmentFlowSteps'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
@@ -19,6 +26,7 @@ export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   }
   FacilityTypeSelectionScreen: undefined
   VisitTypeSelectionScreen: undefined
+  EmergencyAndCrisisScreen: undefined
 }
 
 type RequestAppointmentScreenProps = StackScreenProps<HealthStackParamList, 'RequestAppointmentScreen'>
@@ -50,7 +58,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
         />
       </Box>
       <Stack.Navigator
-        initialRouteName="TypeOfCareSelectionScreen"
+        initialRouteName="EmergencyAndCrisisScreen"
         screenOptions={{ headerShown: false, detachPreviousScreen: false, ...TransitionPresets.SlideFromRightIOS }}
         screenListeners={{
           transitionStart: (e) => {
@@ -62,6 +70,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
             setForceFocus(DateTime.now().toString())
           },
         }}>
+        <Stack.Screen name="EmergencyAndCrisisScreen" component={EmergencyAndCrisisScreen} />
         <Stack.Screen name="TypeOfCareSelectionScreen" component={TypeOfCareSelectionScreen} />
         <Stack.Screen name="ReasonForAppointmentScreen" component={ReasonForAppointmentScreen} />
         <Stack.Screen name="SubTypeOfCareSelectionScreen" component={SubTypeOfCareSelectionScreen} />

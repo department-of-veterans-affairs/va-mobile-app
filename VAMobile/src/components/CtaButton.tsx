@@ -22,7 +22,7 @@ export type CtaButtonProps = {
  *
  * @returns CtaButton component
  */
-const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, children, px, py, alignItems, justifyContent }) => {
+const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, children, px, py, alignItems, justifyContent, accessibilityLabel, accessibilityHint }) => {
   const { t } = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
 
@@ -44,7 +44,11 @@ const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, ch
   }
 
   return (
-    <TouchableWithoutFeedback onPress={onPress} {...touchableProps} {...testIdProps('talk-to-the-veterans-crisis-line-now')} {...a11yHintProp(t('component.crisisLine.hint'))}>
+    <TouchableWithoutFeedback
+      onPress={onPress}
+      {...touchableProps}
+      {...testIdProps(accessibilityLabel || t('component.crisisLine.label'))}
+      {...a11yHintProp(accessibilityHint || t('component.crisisLine.hint'))}>
       <Box {...boxProps}>
         <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
           {children}

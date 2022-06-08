@@ -71,12 +71,12 @@ const ReasonForAppointmentScreen: FC<ReasonForAppointmentScreen> = ({ navigation
         navigation.goBack()
       }}
       secondActionButtonPress={onContinue}>
-      <Box mx={10}>
-        <AppointmentFlowWhiteCtaButton
-          onPress={() => {}}
-          text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
-        />
-      </Box>
+      <AppointmentFlowWhiteCtaButton
+        mx={10}
+        onPress={() => {}}
+        text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
+      />
+
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} error={noReasonSelectedError} errorMessage={t('requestAppointment.reasonNotSelectedError')} />
       <Box mb={contentMarginBottom}>
         <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={selectedReason} isRadioList={true} />
