@@ -3,10 +3,11 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ViewStyle } from 'react-native'
 import { useTheme } from 'utils/hooks'
 
 type AppointmentFlowLayoutProps = {
-  /** Optional action for the back or submit button */
+  /** Optional action for the back or single button */
   firstActionButtonPress?: () => void
   /** Optional action for the continue button*/
   secondActionButtonPress?: () => void
@@ -18,12 +19,18 @@ type AppointmentFlowLayoutProps = {
   linkText?: string
   /** optional action for when the link is pressed */
   onLinkPress?: () => void
+  /** Optional name for the back or single button */
+  firstActionButtonTitle?: string
+  /** Optional name for continue button */
+  secondActionButtonTitle?: string
 }
 
 /** Component for the common sections for the appointment flow modal steps */
 const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   firstActionButtonPress,
+  firstActionButtonTitle,
   secondActionButtonPress,
+  secondActionButtonTitle,
   disableFirstAction,
   disableSecondAction,
   linkText,
@@ -43,7 +50,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
           <Box flex={1} mr={10}>
             <VAButton
               onPress={firstActionPress}
-              label={tc('back')}
+              label={firstActionButtonTitle || tc('back')}
               buttonType={'buttonSecondary'}
               disabled={disableFirstAction}
               a11yHint={t('requestAppointment.backBtnA11yHint')}
@@ -52,7 +59,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
           <Box flex={1}>
             <VAButton
               onPress={secondActionButtonPress}
-              label={tc('continue')}
+              label={secondActionButtonTitle || tc('continue')}
               buttonType={'buttonPrimary'}
               disabled={disableSecondAction}
               minHeight={53}
@@ -64,15 +71,19 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
     } else {
       return (
         <Box>
-          <VAButton onPress={firstActionPress} label={t('appointments.submitAppointmentRequest')} buttonType={'buttonPrimary'} />
+          <VAButton onPress={firstActionPress} label={firstActionButtonTitle || t('appointments.submitAppointmentRequest')} buttonType={'buttonPrimary'} />
         </Box>
       )
     }
   }
 
+  const scrollViewStyle: ViewStyle = {
+    flexGrow: 1,
+  }
+
   return (
     <Box flex={1} backgroundColor={'main'} pt={condensedMarginBetween}>
-      <VAScrollView>{children}</VAScrollView>
+      <VAScrollView contentContainerStyle={scrollViewStyle}>{children}</VAScrollView>
       <Box mb={contentMarginBottom} mx={gutter} mt={30}>
         {!!linkText && (
           <TextView variant="MobileBodyLink" onPress={onLinkPress} mb={contentMarginBottom}>
