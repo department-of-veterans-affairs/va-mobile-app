@@ -427,8 +427,9 @@ workflows:
     jobs:
       - start_slack_thread:
           message: "On-demand feature build process starting. Please see :thread: for results. This process may take a while."
-          tags:
-            only: /^feature-build-.+/
+          filters:
+            tags:
+              only: /^feature-build-.+/
             branches:
               ignore: /.*/
       - feature_build_android:
