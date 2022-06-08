@@ -7,7 +7,8 @@ import { context, render, RenderAPI } from 'testUtils'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import AppointmentReason from './AppointmentReason'
-import { AppointmentMessages } from 'store/api'
+import { AppointmentMessages, AppointmentType } from 'store/api'
+import { AppointmentTypeConstants, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 
 context('AppointmentReason', () => {
   let component: RenderAPI
@@ -38,10 +39,12 @@ context('AppointmentReason', () => {
   ]
 
 
-  const initializeTestInstance = (reason: string | null, messages?: Array<AppointmentMessages>): void => {
+  const initializeTestInstance = (isPendingAppointment?: boolean, reason?: string , messages?: Array<AppointmentMessages>): void => {
     props = {
       attributes: {
-        reason: reason,
+        status: !!isPendingAppointment ?  AppointmentStatusConstants.SUBMITTED : AppointmentStatusConstants.BOOKED,
+        isPending: !!isPendingAppointment,
+        reason: reason || null,
       },
       messages
     }
@@ -56,34 +59,46 @@ context('AppointmentReason', () => {
   }
 
   it('initializes correctly', async () => {
-    initializeTestInstance(reasonText)
+    initializeTestInstance()
     expect(component).toBeTruthy()
   })
 
-  describe('when reason and messages does not exist', () => {
-    it('should not render TextView', async () => {
-      initializeTestInstance(null)
-      const texts = testInstance.findAllByType(TextView)
-      expect(texts.length).toBe(0)
+  describe('Confirmed/Canceled Confirm Appointments', () => {
+    describe('when no reason is provided', () => {
+      it('should not display any text', async () => {
+        initializeTestInstance(false)
+        const texts = testInstance.findAllByType(TextView)
+        expect(texts.length).toBe(0)
+      })
+    })
+
+    describe('when a reason is provided', () => {
+      it('should display reason', async () => {
+        initializeTestInstance(false, reasonText)
+        const texts = testInstance.findAllByType(TextView)
+        expect(texts[0].props.children).toBe('You shared these details about your concern')
+        expect(texts[1].props.children).toBe(reasonText)
+      })
     })
   })
 
-  describe('when reason exists', () => {
-    it('should render a TextView with the reason text', async () => {
-      initializeTestInstance(reasonText)
-      const texts = testInstance.findAllByType(TextView)
-      expect(texts[0].props.children).toBe('You shared these details about your concern')
-      expect(texts[1].props.children).toBe(reasonText)
+  describe('Pending Appointment', () => {
+    describe('when no message is provided', () => {
+      it('should not display any text', async () => {
+        initializeTestInstance(true, undefined, [])
+        const texts = testInstance.findAllByType(TextView)
+        expect(texts.length).toBe(0)
+      })
     })
-  })
 
-  describe('when reason exists and is a pending appointment', () => {
-    it('should render a TextView with the reason and message text', async () => {
-      initializeTestInstance(reasonText, messages)
-      const texts = testInstance.findAllByType(TextView)
-      const messageText = messages[0].attributes.messageText
-      expect(texts[0].props.children).toBe('You shared these details about your concern')
-      expect(texts[1].props.children).toBe(`${reasonText}: ${messageText}`)
+    describe('when a message is provided', () => {
+      it('should display message', async () => {
+        initializeTestInstance(true, undefined, messages)
+        const texts = testInstance.findAllByType(TextView)
+        const messageText = messages[0].attributes.messageText
+        expect(texts[0].props.children).toBe('You shared these details about your concern')
+        expect(texts[1].props.children).toBe(messageText)
+      })
     })
   })
 })

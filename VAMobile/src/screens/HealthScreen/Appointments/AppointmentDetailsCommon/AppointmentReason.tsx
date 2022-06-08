@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentMessages } from 'store/api'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'
 
 type AppointmentReasonProps = {
@@ -14,23 +15,32 @@ type AppointmentReasonProps = {
 const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-
   const { reason } = attributes || ({} as AppointmentAttributes)
+  const isPendingAppointment = isAPendingAppointment(attributes)
 
-  if (!reason && !messages?.length) {
-    return <></>
+  let text
+  if (isPendingAppointment) {
+    // Pending appointments(submitted or submitted canceled)
+    // Only use the first index as the remaining items are just the doctors response to the user's concern
+    const message = messages?.length && messages?.[0].attributes?.messageText
+    if (!message) {
+      return <></>
+    }
+    text = message
+  } else {
+    // Confirmed appointments that are either booked or canceled
+    if (!reason) {
+      return <></>
+    }
+    text = reason
   }
-
-  // Only use the first index as the remaining items are just the doctors response to the user's concern
-  let messageText = !messages?.length ? '' : messages?.[0].attributes?.messageText
-  messageText = messageText ? ': ' + messageText : ''
 
   return (
     <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('upcomingAppointmentDetails.reason')}
       </TextView>
-      <TextView variant="MobileBody">{`${reason || ''}${messageText}`}</TextView>
+      <TextView variant="MobileBody">{text}</TextView>
     </Box>
   )
 }
