@@ -431,13 +431,13 @@ workflows:
       - setter:
           filters:
             branches:
-              only: use-workspaces
+              only: feature/use-workspaces
       - getter:
           requires:
             - setter
           filters:
             branches:
-              only: use-workspaces
+              only: feature/use-workspaces
   pr:
     jobs:
       - test
