@@ -277,7 +277,7 @@ commands:
               echo `cat /tmp/workspace/<< parameters.path >>`
               var=$(cat /tmp/workspace/<< parameters.path >>)
               echo "export ENV_VAR=${var}" >> $BASH_ENV
-      - run: echo $VAR
+      - run: echo ENV_VAR
 jobs:
   setter:
     executor: default
