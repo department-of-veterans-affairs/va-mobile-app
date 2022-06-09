@@ -145,6 +145,7 @@ commands:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}
           paths:
             - VAMobile/ios/vendor/bundle
+      - get_slack_thread
       - run:
           working_directory: ~/project/VAMobile/ios
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" tfGroup:"<<parameters.tf_group>>"
@@ -197,6 +198,7 @@ commands:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}
           paths:
             - VAMobile/android/vendor/bundle
+      - get_slack_thread
       - run:
           working_directory: ~/project/VAMobile/android
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" psTrack:"<<parameters.ps_track>>"
@@ -277,26 +279,17 @@ commands:
               echo `cat /tmp/workspace/<< parameters.path >>`
               var=$(cat /tmp/workspace/<< parameters.path >>)
               echo "export <<parameters.envVar>>=${var}" >> $BASH_ENV
-jobs:
-  setter:
-    executor: default
+  save_slack_thread:
     steps:
-      - get_slack_channel_id:
-          channelName: "va-mobile-app-automation-test-channel"
-      - send_slack_message:
-          message: "testing workspaces"
-          channelId: ${SLACK_CHANNEL_ID}
       - persist_env:
           envVar:  ${SLACK_THREAD_TS}
           path: "threadTs"
-      - run: echo `cat /workspace/akdskfj`
-  getter:
-    executor: android
+  get_slack_thread:
     steps:
       - retrieve_persisted_env:
           envVar: "SLACK_THREAD_TS"
           path: "threadTs"
-      - run: echo $SLACK_THREAD_TS
+jobs:
   test:
     executor: default
     steps:
@@ -319,6 +312,7 @@ jobs:
       - send_slack_message:
           message: << parameters.message >>
           channelId: ${SLACK_CHANNEL_ID}
+      - save_slack_thread
   build_ios_qa:
     executor: ios
     steps:
@@ -433,18 +427,6 @@ jobs:
       - ios_fastlane:
           lane: "rc"
 workflows:
-  env_test:
-    jobs:
-      - setter:
-          filters:
-            branches:
-              only: feature/use-workspaces
-      - getter:
-          requires:
-            - setter
-          filters:
-            branches:
-              only: feature/use-workspaces
   pr:
     jobs:
       - test
@@ -459,8 +441,12 @@ workflows:
     jobs:
       - start_slack_thread:
           message: "QA build process starting. Please see :thread: for results. This process may take a while."
-      - build_android_qa
-      - build_ios_qa
+      - build_android_qa:
+          requires:
+            - start_slack_thread
+      - build_ios_qa:
+          requires:
+            - start_slack_thread
   release_build:
     jobs:
       - start_slack_thread:
@@ -471,12 +457,16 @@ workflows:
             branches:
               ignore: /.*/
       - build_android_release:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+/
             branches:
               ignore: /.*/
       - build_ios_release:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+/
@@ -492,12 +482,16 @@ workflows:
             branches:
               ignore: /.*/
       - feature_build_android:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^feature-build-.+/
             branches:
               ignore: /.*/
       - feature_build_ios:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^feature-build-.+/
@@ -513,12 +507,16 @@ workflows:
             branches:
               ignore: /.*/
       - build_android_release_candidate:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
             branches:
               ignore: /.*/
       - build_ios_release_candidate:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^^RC-v\d+\.\d+\.\d+-\d+-\d+$/
