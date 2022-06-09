@@ -96,6 +96,14 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
+  LabelTag: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  LabelTagBold: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -128,6 +136,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
+    LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
+    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold, scheme.text.primaryContrast),
   }
 }
 
@@ -156,9 +166,6 @@ let theme: VATheme = {
     headerHeight: 64,
     formMarginBetween: 30,
     tagMinWidth: 29,
-    tagCurvedBorder: 2,
-    tagTopPadding: 3,
-    tagHorizontalPadding: 10,
     maxNumMessageAttachments: 4,
     paginationTopPadding: 40,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
@@ -187,6 +194,9 @@ let theme: VATheme = {
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
+    HelperText: fontSizes.HelperText,
+    LabelTag: fontSizes.LabelTag,
+    LabelTagBold: fontSizes.LabelTagBold,
   },
   typography: buildTypography(colorScheme),
 }

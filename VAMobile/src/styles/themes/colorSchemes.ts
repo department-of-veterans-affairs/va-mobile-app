@@ -33,6 +33,8 @@ export const lightTheme = {
     pickerControls: colors.grayLightest,
     menu: colors.white,
     alertBox: colors.white,
+    inactiveTag: colors.grayMedium,
+    activeTag: colors.greenDarker,
   },
   border: {
     primary: colors.grayLight,
@@ -184,6 +186,8 @@ export const darkTheme = {
     pickerControls: colors.darkmodeGrayWarmDark,
     alertBox: colors.base,
     menu: colors.darkmodeGrayWarmDark,
+    inactiveTag: colors.grayMedium,
+    activeTag: colors.greenDarker,
   },
   border: {
     primary: colors.darkmodeBorder,
