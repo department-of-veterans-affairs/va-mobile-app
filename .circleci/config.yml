@@ -257,24 +257,25 @@ commands:
         type: string
     steps:
       - run: mkdir -p workspace
-      - run: echo << parameters.envVar >> > workspace/<< partameters.path >>
+      - run: echo << parameters.envVar >> > workspace/<< parameters.path >>
       - persist_to_workspace:
           root: workspace
           paths:
-            - << partameters.path >>
+            - << parameters.path >>
   retrieve_persisted_env:
     description: "retrieves an env from the workspace"
     parameters:
       envVar:
         type: string
-        path:
-          type: string
+      path:
+        type: string
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: |
-        var=`cat /tmp/workspace/<< parameters.path >>`
-        echo `export ENV_VAR=${var}` >> $BASH_ENV
+      - run:
+          command: |
+              var=`cat /tmp/workspace/<< parameters.path >>`
+              echo `export ENV_VAR=${var}` >> $BASH_ENV
       - run: echo $VAR
 jobs:
   setter:
