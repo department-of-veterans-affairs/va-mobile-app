@@ -106,6 +106,8 @@ export type VATypographyThemeVariants = {
   HelperText: string
   HelperTextBold: string
   SnackBarBtnText: string
+  LabelTag: string
+  LabelTagBold: string
 }
 
 export type VABackgroundColors = {
@@ -139,6 +141,8 @@ export type VABackgroundColors = {
   pickerControls: string
   menu: string
   alertBox: string
+  inactiveTag: string
+  activeTag: string
 }
 
 export type VABorderColors = {
@@ -209,9 +213,6 @@ export type VATheme = {
     headerHeight: number
     formMarginBetween: number
     tagMinWidth: number
-    tagCurvedBorder: number
-    tagTopPadding: number
-    tagHorizontalPadding: number
     maxNumMessageAttachments: number
     navBarHeight: number
     paginationTopPadding: number
@@ -239,6 +240,9 @@ export type VATheme = {
     MobileBodyLink: VAFontSizes
     ClaimPhase: VAFontSizes
     VASelector: VAFontSizes
+    HelperText: VAFontSizes
+    LabelTag: VAFontSizes
+    LabelTagBold: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }

@@ -49,7 +49,7 @@ export const getAppointmentTypeIconText = (appointmentType: AppointmentType, loc
  * @returns VAIconProps or undefined
  */
 export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
-  const iconProp = { fill: theme.colors.icon.defaultMenuItem, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
+  const iconProp = { fill: theme.colors.icon.defaultMenuItem, height: theme.fontSizes.HelperText.fontSize, width: theme.fontSizes.HelperText.fontSize } as VAIconProps
 
   switch (appointmentType) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
@@ -137,28 +137,53 @@ const getListItemsForAppointments = (
   const listItems: Array<DefaultListItemObj> = []
   const { t, tc } = translations
   const { currentPage, perPage, totalEntries } = upcomingPageMetaData
+  const { condensedMarginBetween } = theme.dimensions
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
-    const { healthcareProvider, startDateUtc, timeZone, appointmentType, location, phoneOnly } = attributes
+    const { healthcareProvider, startDateUtc, timeZone, appointmentType, location, phoneOnly, typeOfCare, isCovidVaccine } = attributes
     const textLines: Array<TextLineWithIconProps> = []
 
     if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      textLines.push({ text: t('appointments.canceled'), isTextTag: true })
+      textLines.push({ text: t('appointments.canceled'), textTag: { backgroundColor: 'inactiveTag', variant: 'LabelTagBold' }, mb: 14 })
+    } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
+      textLines.push({ text: t('appointments.confirmed'), textTag: { backgroundColor: 'activeTag', variant: 'LabelTagBold' }, mb: 14 })
     }
 
-    textLines.push(
-      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-      {
-        text: tc('common:text.raw', { text: healthcareProvider || location.name }),
-      },
-    )
+    // if isCovidVaccine is true then make it the bold header, else if typeOfCare exist make it the bold header otherwise make the date/time bold header
+    if (isCovidVaccine) {
+      textLines.push(
+        { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
+        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
+      )
+    } else if (typeOfCare) {
+      textLines.push(
+        { text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
+        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
+      )
+    } else {
+      textLines.push(
+        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: 5 },
+      )
+    }
 
-    if (appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE && !phoneOnly) {
+    const isVideoOrVAAppointment = appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE
+    const isCCAppointmentAndPhoneOnly = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && phoneOnly
+    const showAppointmentTypeIcon = isVideoOrVAAppointment || isCCAppointmentAndPhoneOnly
+    textLines.push({
+      text: tc('common:text.raw', { text: healthcareProvider || location.name }),
+      variant: 'HelperText',
+      mb: showAppointmentTypeIcon ? condensedMarginBetween : 0,
+    })
+
+    if (showAppointmentTypeIcon) {
       textLines.push({
         text: t('common:text.raw', { text: getAppointmentTypeIconText(appointmentType, location.name, t, phoneOnly) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+        variant: 'HelperText',
       })
     }
 

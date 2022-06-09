@@ -127,6 +127,7 @@ export type AppointmentAttributes = {
   phoneOnly: boolean
   reason: string | null
   isCovidVaccine: boolean
+  typeOfCare?: string // field for pending appointments, unclear if this always undefined for confirmed appointments
 }
 
 export type AppointmentData = {
