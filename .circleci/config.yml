@@ -276,22 +276,27 @@ commands:
           command: |
               echo `cat /tmp/workspace/<< parameters.path >>`
               var=$(cat /tmp/workspace/<< parameters.path >>)
-              echo "export ENV_VAR=${var}" >> $BASH_ENV
-      - run: echo $ENV_VAR
+              echo "export <<parameters.envVar>>=${var}" >> $BASH_ENV
 jobs:
   setter:
     executor: default
     steps:
+      - get_slack_channel_id:
+          channelName: "va-mobile-app-automation-test-channel"
+      - send_slack_message:
+          message: "testing workspaces"
+          channelId: ${SLACK_CHANNEL_ID}
       - persist_env:
-          envVar: "hhhhhh"
-          path: "akdskfj"
+          envVar:  ${SLACK_THREAD_TS}
+          path: "threadTs"
       - run: echo `cat /workspace/akdskfj`
   getter:
     executor: android
     steps:
       - retrieve_persisted_env:
-          envVar: "hhhhhh"
-          path: "akdskfj"
+          envVar: "SLACK_THREAD_TS"
+          path: "threadTs"
+      - run: echo $SLACK_THREAD_TS
   test:
     executor: default
     steps:
