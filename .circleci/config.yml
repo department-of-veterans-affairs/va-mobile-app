@@ -284,6 +284,7 @@ jobs:
       - persist_env:
           envVar: "hhhhhh"
           path: "akdskfj"
+      - run: echo `cat /workspace/akdskfj`
   getter:
     executor: android
     steps:
