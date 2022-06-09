@@ -15,6 +15,7 @@ import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/Atta
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
@@ -104,6 +105,7 @@ export type HealthStackParamList = WebviewStackParams & {
   SubTypeHelpScreen: {
     careTypeId: string
   }
+  NoRequestAppointmentAccess: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -144,6 +146,12 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
     <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
     <HealthStack.Screen key={'RequestAppointmentScreen'} name="RequestAppointmentScreen" component={RequestAppointmentScreen} options={{ headerShown: false }} />,
+    <HealthStack.Screen
+      key={'NoRequestAppointmentAccess'}
+      name="NoRequestAppointmentAccess"
+      component={NoRequestAppointmentAccess}
+      options={{ title: t('appointments.appointments') }}
+    />,
     <HealthStack.Group
       key={'ModalsScreens'}
       screenOptions={{
