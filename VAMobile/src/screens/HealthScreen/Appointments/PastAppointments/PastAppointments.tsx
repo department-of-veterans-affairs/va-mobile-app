@@ -28,7 +28,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const navigateTo = useRouteNavigation()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const newCurrentPageAppointmentsByYear = deepCopyObject<CurrentPageAppointmentsByYear>(currentPageAppointmentsByYear)
-  const marginBetween10 = theme.dimensions.condensedMarginBetween
+  const { condensedMarginBetween } = theme.dimensions
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -148,13 +148,13 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines.push(
           { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
           { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: marginBetween10 },
+          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
         )
       } else if (typeOfCare) {
         textLines.push(
           { text: tc('text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
           { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: marginBetween10 },
+          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
         )
       } else {
         textLines.push(
@@ -169,7 +169,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       textLines.push({
         text: tc('text.raw', { text: healthcareProvider || location.name }),
         variant: 'HelperText',
-        mb: showAppointmentTypeIcon ? marginBetween10 : 0,
+        mb: showAppointmentTypeIcon ? condensedMarginBetween : 0,
       })
 
       if (showAppointmentTypeIcon) {

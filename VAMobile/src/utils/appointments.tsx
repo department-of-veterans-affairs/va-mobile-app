@@ -137,7 +137,7 @@ const getListItemsForAppointments = (
   const listItems: Array<DefaultListItemObj> = []
   const { t, tc } = translations
   const { currentPage, perPage, totalEntries } = upcomingPageMetaData
-  const marginBetween10 = theme.dimensions.condensedMarginBetween
+  const { condensedMarginBetween } = theme.dimensions
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
@@ -155,13 +155,13 @@ const getListItemsForAppointments = (
       textLines.push(
         { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: marginBetween10 },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
       )
     } else if (typeOfCare) {
       textLines.push(
         { text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: marginBetween10 },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
       )
     } else {
       textLines.push(
@@ -176,7 +176,7 @@ const getListItemsForAppointments = (
     textLines.push({
       text: tc('common:text.raw', { text: healthcareProvider || location.name }),
       variant: 'HelperText',
-      mb: showAppointmentTypeIcon ? marginBetween10 : 0,
+      mb: showAppointmentTypeIcon ? condensedMarginBetween : 0,
     })
 
     if (showAppointmentTypeIcon) {
