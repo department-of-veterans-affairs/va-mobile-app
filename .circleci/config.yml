@@ -248,8 +248,47 @@ commands:
               https://slack.com/api/chat.postMessage|
               jq -r '.ts')
             echo "export SLACK_THREAD_TS=${ts}" >> $BASH_ENV
-
+  persist_env:
+    description: "Persist a bash env to the workspace for other jobs"
+    parameters:
+      envVar:
+        type: string
+      path:
+        type: string
+    steps:
+      - run: mkdir -p workspace
+      - run: echo << parameters.envVar >> > workspace/<< partameters.path >>
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - << partameters.path >>
+  retrieve_persisted_env:
+    description: "retrieves an env from the workspace"
+    parameters:
+      envVar:
+        type: string
+        path:
+          type: string
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: |
+        var=`cat /tmp/workspace/<< parameters.path >>`
+        echo `export ENV_VAR=${var}` >> $BASH_ENV
+      - run: echo $VAR
 jobs:
+  setter:
+    executor: default
+    steps:
+      - persist_env:
+          envVar: "hhhhhh"
+          path: "akdskfj"
+  getter:
+    executor: android
+    steps:
+      - retrieve_persisted_env:
+          envVar: "hhhhhh"
+          path: "akdskfj"
   test:
     executor: default
     steps:
@@ -386,6 +425,18 @@ jobs:
       - ios_fastlane:
           lane: "rc"
 workflows:
+  env_test:
+    jobs:
+      - setter:
+          filters:
+            branches:
+              only: use-workspaces
+      - getter:
+          requires:
+            - setter
+          filters:
+            branches:
+              only: use-workspaces
   pr:
     jobs:
       - test
