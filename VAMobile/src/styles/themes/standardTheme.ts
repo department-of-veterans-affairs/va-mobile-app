@@ -188,6 +188,8 @@ let theme: VATheme = {
     ClaimPhase: fontSizes.ClaimPhase,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     VASelector: fontSizes.VASelector,
+    HelperText: fontSizes.HelperText,
+    HelperTextBold: fontSizes.HelperTextBold,
     LabelTag: fontSizes.LabelTag,
     LabelTagBold: fontSizes.LabelTagBold,
   },

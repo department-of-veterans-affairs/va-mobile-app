@@ -29,6 +29,9 @@ export type TextLine = {
     /** optional variant for tag text */
     variant?: FontVariant
   }
+
+  /** set margin bottom of this component*/
+  mb?: number | string // same as in Box.tsx
 }
 
 export type InlineText = {

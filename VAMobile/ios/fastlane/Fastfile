@@ -42,7 +42,7 @@ platform :ios do
     upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New QA build successfully uploaded to TestFlight Group - Development Team"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Push new demo version to TestFlight"
@@ -60,7 +60,7 @@ platform :ios do
     upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New Production build successfully uploaded to App Store for review"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Production", message, "iOS")
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Production", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Promote the release Awaiting Developer Release to App Store"
@@ -98,7 +98,7 @@ platform :ios do
     upload_tf(notes, tf_group)
     upload_deobfuscation_file
     message = "New On Demand build successfully uploaded to TestFlight Group " + tf_group
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS")
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Deploy a RC new version to TestFlight"
@@ -114,7 +114,7 @@ platform :ios do
     upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New RC for #{rcVersion} successfully uploaded to TestFlight Group - Development Team"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Release Candidate", message, "iOS")
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Release Candidate", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   after_all do |lane, options|
@@ -123,7 +123,7 @@ platform :ios do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
+    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS", ENV['SLACK_THREAD_TS'])
   end
 
 
@@ -167,7 +167,7 @@ platform :ios do
       push_git_tags
     rescue => e
         puts e.to_s
-      slack_github_error(e, "Error tagging iOS build", "iOS")
+      slack_github_error(e, "Error tagging iOS build", "iOS", ENV['SLACK_THREAD_TS'])
     end
   end
 

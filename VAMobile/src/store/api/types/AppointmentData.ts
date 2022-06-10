@@ -150,7 +150,7 @@ export type AppointmentAttributes = {
   isCovidVaccine: boolean
   // pending appointment props
   isPending: boolean
-  typeOfCare?: string
+  typeOfCare?: string // unclear if this always undefined for confirmed appointments that was a pending appointment
   friendlyLocationName?: string
   proposedTimes?: AppointmentProposedTimes
   patientPhoneNumber?: string

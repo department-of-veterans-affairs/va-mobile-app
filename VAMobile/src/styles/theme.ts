@@ -143,6 +143,7 @@ export type VABackgroundColors = {
   alertBox: string
   warningTag: string
   inactiveTag: string
+  activeTag: string
 }
 
 export type VABorderColors = {
@@ -241,6 +242,8 @@ export type VATheme = {
     VASelector: VAFontSizes
     LabelTag: VAFontSizes
     LabelTagBold: VAFontSizes
+    HelperText: VAFontSizes
+    HelperTextBold: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }

@@ -35,6 +35,7 @@ export const lightTheme = {
     alertBox: colors.white,
     warningTag: colors.gold,
     inactiveTag: colors.grayMedium,
+    activeTag: colors.greenDarker,
   },
   border: {
     primary: colors.grayLight,
@@ -189,6 +190,7 @@ export const darkTheme = {
     menu: colors.darkmodeGrayWarmDark,
     warningTag: colors.gold,
     inactiveTag: colors.grayMedium,
+    activeTag: colors.greenDarker,
   },
   border: {
     primary: colors.darkmodeBorder,
