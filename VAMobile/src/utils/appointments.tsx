@@ -24,13 +24,12 @@ export type YearsToSortedMonths = { [key: string]: Array<string> }
  * Returns returns the appointment type icon text
  *
  * @param appointmentType - type AppointmentType, to describe the type of appointment
- * @param locationName - string name of the location of the appointment
  * @param translate - function the translate function
  * @param phoneOnly - boolean tells if the appointment is a phone call
  *
  * @returns string of the appointment type icon
  */
-export const getAppointmentTypeIconText = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean): string => {
+export const getAppointmentTypeIconText = (appointmentType: AppointmentType, translate: TFunction, phoneOnly: boolean): string => {
   switch (appointmentType) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
       return translate('appointmentList.connectAtAtlas')
@@ -45,6 +44,32 @@ export const getAppointmentTypeIconText = (appointmentType: AppointmentType, loc
     case AppointmentTypeConstants.COMMUNITY_CARE:
     default:
       return phoneOnly ? translate('appointmentList.phoneOnly') : ''
+  }
+}
+
+/**
+ * Returns returns the request type text for pending appointments
+ *
+ * @param appointmentType - type AppointmentType, to describe the type of appointment
+ * @param translate - function the translate function
+ * @param phoneOnly - boolean tells if the appointment is a phone call
+ *
+ * @returns string of the appointment type icon
+ */
+export const getPendingAppointmentRequestTypeText = (appointmentType: AppointmentType, translate: TFunction, phoneOnly: boolean): string => {
+  switch (appointmentType) {
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
+      return translate('appointmentList.connectAtAtlas')
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
+      return translate('appointmentList.connectAtHome')
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
+      return translate('appointmentList.connectOnsite')
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
+      return translate('appointmentList.connectGFE')
+    case AppointmentTypeConstants.VA:
+    case AppointmentTypeConstants.COMMUNITY_CARE:
+    default:
+      return phoneOnly ? translate('appointmentList.phoneOnly') : translate('appointmentList.inPerson')
   }
 }
 
@@ -190,7 +215,6 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   // pending appointments
   if (isPendingAppointment) {
     textLines.push({ text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 })
-    const youRequestedText = getAppointmentTypeIconText(appointmentType, location.name, t, phoneOnly)
     switch (appointmentType) {
       case AppointmentTypeConstants.COMMUNITY_CARE:
         if (healthcareProvider) {
@@ -204,16 +228,14 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
         textLines.push({
           text: t('common:text.raw', { text: location.name }),
           variant: 'HelperText',
-          mb: youRequestedText ? condensedMarginBetween : 0,
+          mb: condensedMarginBetween,
         })
     }
-
-    if (youRequestedText) {
-      textLines.push({
-        text: t('appointmentList.youRequested', { typeOfVisit: youRequestedText }),
-        variant: 'HelperText',
-      })
-    }
+    const youRequestedText = getPendingAppointmentRequestTypeText(appointmentType, t, phoneOnly)
+    textLines.push({
+      text: t('appointmentList.youRequested', { typeOfVisit: youRequestedText }),
+      variant: 'HelperText',
+    })
   } else {
     // if isCovidVaccine is true then make it the bold header, else if typeOfCare exist make it the bold header otherwise make the date/time bold header
     if (isCovidVaccine) {
@@ -246,7 +268,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
 
     if (showAppointmentTypeIcon) {
       textLines.push({
-        text: t('common:text.raw', { text: getAppointmentTypeIconText(appointmentType, location.name, t, phoneOnly) }),
+        text: t('common:text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
         variant: 'HelperText',
       })
