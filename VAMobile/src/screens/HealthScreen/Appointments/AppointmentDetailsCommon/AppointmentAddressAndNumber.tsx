@@ -7,6 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
+import { isAPendingAppointment } from 'utils/appointments'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
   return (
@@ -22,7 +23,7 @@ type AppointmentAddressAndNumberProps = {
 
 const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes }) => {
   const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
-  const { appointmentType, healthcareService, location, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, isCovidVaccine, healthcareProvider } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
@@ -55,35 +56,60 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
 
   const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
+  const hasNoProvider = !healthcareProvider && !location.name
+  const isPendingAppointment = isAPendingAppointment(attributes)
+
+  const getLocationName = () => {
+    // hide location.name for pending appointments if its already being shown in `ProviderName.tsx`
+    const dontShowForPendingAppt = isPendingAppointment && !healthcareProvider
+
+    if (dontShowForPendingAppt || appointmentIsAtlas || !location?.name) {
+      return <></>
+    }
+
+    return (
+      <TextView variant="MobileBody" selectable={true}>
+        {location.name}
+      </TextView>
+    )
+  }
+
+  const getAddressInformation = () => {
+    if (isPendingAppointment && hasNoProvider) {
+      return <></>
+    }
+
+    return (
+      <>
+        <Box {...testIdProps(testId)} accessible={true}>
+          {getLocationName()}
+          {!!address?.street && (
+            <TextView variant="MobileBody" selectable={true}>
+              {address.street}
+            </TextView>
+          )}
+          {!!address?.city && address?.state && address?.zipCode && (
+            <TextView variant="MobileBody" selectable={true}>
+              {cityStateZip}
+            </TextView>
+          )}
+        </Box>
+        <Box>
+          <ClickForActionLink
+            displayedText={`${t('common:directions')}`}
+            linkType={'directions'}
+            numberOrUrlLink={getDirectionsUrl(location)}
+            {...a11yHintProp(t('common:directions.a11yHint'))}
+          />
+        </Box>
+        {!appointmentIsAtlas && phone && <ClickToCallPhoneNumber phone={phone} />}
+      </>
+    )
+  }
   return (
     <Box>
       {getHealthServiceHeaderSection()}
-      <Box {...testIdProps(testId)} accessible={true}>
-        {!appointmentIsAtlas && !!location?.name && (
-          <TextView variant="MobileBody" selectable={true}>
-            {location.name}
-          </TextView>
-        )}
-        {!!address?.street && (
-          <TextView variant="MobileBody" selectable={true}>
-            {address.street}
-          </TextView>
-        )}
-        {!!address?.city && address?.state && address?.zipCode && (
-          <TextView variant="MobileBody" selectable={true}>
-            {cityStateZip}
-          </TextView>
-        )}
-      </Box>
-      <Box>
-        <ClickForActionLink
-          displayedText={`${t('common:directions')}`}
-          linkType={'directions'}
-          numberOrUrlLink={getDirectionsUrl(location)}
-          {...a11yHintProp(t('common:directions.a11yHint'))}
-        />
-      </Box>
-      {!appointmentIsAtlas && phone && <ClickToCallPhoneNumber phone={phone} />}
+      {getAddressInformation()}
     </Box>
   )
 }
