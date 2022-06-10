@@ -6,10 +6,10 @@ import React, { FC } from 'react'
 import { Box, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getPrescriptions } from 'store/slices/prescriptionSlice'
+import { RefillTag } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { StyleProp, ViewStyle } from 'react-native'
-import { useAppDispatch, useTheme } from 'utils/hooks'
-import RefillTag from './RefillTag'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 const PrescriptionHistory: FC = ({}) => {
   const dispatch = useAppDispatch()
@@ -17,6 +17,7 @@ const PrescriptionHistory: FC = ({}) => {
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     dispatch(getPrescriptions())
@@ -29,7 +30,7 @@ const PrescriptionHistory: FC = ({}) => {
   const getListItemsForPrescriptions = () => {
     const listItems: Array<ListItemObj> = (prescriptions || []).map((prescription) => {
       return {
-        onPress: () => {},
+        onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
         content: (
           <Box flex={1}>
             <Box borderBottomWidth={1} borderBottomColor={'prescriptionDivider'}>

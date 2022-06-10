@@ -72,3 +72,7 @@ export type PrescriptionData = {
 export type PrescriptionsGetData = {
   data: PrescriptionsList
 }
+
+export type PrescriptionsMap = {
+  [key: string]: PrescriptionData
+}

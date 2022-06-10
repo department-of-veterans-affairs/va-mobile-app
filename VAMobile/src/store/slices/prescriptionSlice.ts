@@ -2,17 +2,20 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from '../api'
 import { AppThunk } from 'store'
-import { PrescriptionsGetData, PrescriptionsList, ScreenIDTypes } from '../api'
+import { PrescriptionsGetData, PrescriptionsList, PrescriptionsMap, ScreenIDTypes } from '../api'
 import { dispatchClearErrors } from './errorSlice'
+import { indexBy } from 'underscore'
 
 export type PrescriptionState = {
   loading: boolean
   prescriptions?: PrescriptionsList
   error?: api.APIError
+  prescriptionsById: PrescriptionsMap
 }
 
 export const initialPrescriptionState: PrescriptionState = {
   loading: false,
+  prescriptionsById: {} as PrescriptionsMap,
 }
 
 export const getPrescriptions =
@@ -46,7 +49,7 @@ export const getPrescriptions =
         },
         {
           type: 'Prescription',
-          id: '13650544',
+          id: '13650545',
           attributes: {
             refillStatus: 'active',
             refillSubmitDate: '2022-10-28T04:00:00.000Z',
@@ -67,7 +70,7 @@ export const getPrescriptions =
         },
         {
           type: 'Prescription',
-          id: '13650544',
+          id: '13650546',
           attributes: {
             refillStatus: 'discontinued',
             refillSubmitDate: '2022-10-28T04:00:00.000Z',
@@ -88,7 +91,7 @@ export const getPrescriptions =
         },
         {
           type: 'Prescription',
-          id: '13650544',
+          id: '13650547',
           attributes: {
             refillStatus: 'expired',
             refillSubmitDate: '2022-10-28T04:00:00.000Z',
@@ -109,7 +112,7 @@ export const getPrescriptions =
         },
         {
           type: 'Prescription',
-          id: '13650544',
+          id: '13650548',
           attributes: {
             refillStatus: 'hold',
             refillSubmitDate: '2022-10-28T04:00:00.000Z',
@@ -130,7 +133,7 @@ export const getPrescriptions =
         },
         {
           type: 'Prescription',
-          id: '13650544',
+          id: '13650549',
           attributes: {
             refillStatus: 'activeParked',
             refillSubmitDate: '2022-10-28T04:00:00.000Z',
@@ -151,7 +154,7 @@ export const getPrescriptions =
         },
         {
           type: 'Prescription',
-          id: '13650544',
+          id: '13650550',
           attributes: {
             refillStatus: 'unknown',
             refillSubmitDate: '2022-10-28T04:00:00.000Z',
@@ -188,9 +191,11 @@ const prescriptionSlice = createSlice({
     dispatchFinishGetPrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData }>) => {
       const { prescriptionData } = action.payload
       const { data: prescriptions } = prescriptionData || ({} as PrescriptionsGetData)
+      const prescriptionsById = indexBy(prescriptions || [], 'id')
 
       state.prescriptions = prescriptions
       state.loading = false
+      state.prescriptionsById = prescriptionsById
     },
   },
 })
