@@ -42,9 +42,11 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
-  const { appointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { appointments, scheduleAppointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const hasCernerFacilities = useHasCernerFacilities()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const navigateToRequestAppointments = navigateTo('RequestAppointmentScreen')
+  const navigateToNoRequestAppointmentAccess = navigateTo('NoRequestAppointmentAccess')
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -104,6 +106,10 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     flexGrow: 1,
   }
 
+  const onRequestAppointmentPress = () => {
+    scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
+  }
+
   return (
     <>
       <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
@@ -127,7 +133,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
           </Box>
         </Box>
       </VAScrollView>
-      <FooterButton onPress={navigateTo('RequestAppointmentScreen')} text={t('requestAppointments.launchModalBtnTitle')} />
+      <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />
     </>
   )
 }
