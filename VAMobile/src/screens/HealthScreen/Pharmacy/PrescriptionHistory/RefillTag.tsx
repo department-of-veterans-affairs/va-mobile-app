@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon, VAIconProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RefillStatus, RefillStatusConstants } from 'store/api'
+import { RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
