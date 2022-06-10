@@ -5,7 +5,7 @@ import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAllFieldsThatExist } from 'utils/common'
-import { isAPendingAppointment } from '../../../../utils/appointments'
+import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'
 
 type ProviderNameProps = {
@@ -17,17 +17,13 @@ const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
   const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)
 
-  const { appointmentType, practitioner, healthcareProvider, friendlyLocationName } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location } = attributes || ({} as AppointmentAttributes)
 
   // pending appointments
   if (isAppointmentPending) {
     let header = friendlyLocationName
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE) {
-      header = healthcareProvider
-        ? getAllFieldsThatExist([healthcareProvider, practitioner?.firstName || '', practitioner?.middleName || '', practitioner?.lastName || ''])
-            .join(' ')
-            .trim()
-        : t('appointments.noProviderSelected')
+      header = healthcareProvider || location.name || t('appointments.noProviderSelected')
     }
 
     // default to VA appointments
