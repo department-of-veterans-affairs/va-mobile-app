@@ -8,7 +8,7 @@ jobs:
   test_rails:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@integrate-testrail-automation
     with:
-      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+      version: "0.0.0"
       releaseDate: "06/22/2022"
       ticketNumber: "3315"
     secrets:
