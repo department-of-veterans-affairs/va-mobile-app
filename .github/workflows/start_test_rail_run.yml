@@ -50,8 +50,7 @@ jobs:
         run: |
           name='Regression pass for ${{inputs.version}} ${{inputs.date}} release'
           desc='QA Regression pass for ${{inputs.version}} ${{inputs.date}} release'
-          echo "::set-output name=url::$(curl -X POST -H 'Content-Type: application/json' \
+          echo $(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}"':'"${{secrets.TEST_RAIL_KEY}}" \
                 	-d '{"project_id": 29,"suite_id": 92,"name": ${name},"refs": ${{inputs.ticketNumber}},"description": ${desc}}' \
-                	"https://dsvavsp.testrail.io//index.php?/api/v2/add_run"|
-                    jq '.id')"
+                	"https://dsvavsp.testrail.io//index.php?/api/v2/add_run")
