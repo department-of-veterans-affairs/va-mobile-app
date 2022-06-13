@@ -56,4 +56,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test_rails, release_ticket]
     steps:
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - run: gh auth login --with-token < token.txt
       - run: gh issue comment ${{needs.release_ticket.outputs.ticketNumber}} -b "[RC Testrail Pass](${{needs.test_rails.outputs.testrailUrl}})"
