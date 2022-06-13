@@ -10,7 +10,7 @@ jobs:
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
       releaseDate: "06/22/2022"
-      ticketNumber: "3315"
+      ticketNumber: 3315
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
