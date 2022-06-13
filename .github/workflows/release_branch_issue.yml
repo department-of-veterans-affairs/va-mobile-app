@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       ticketNumber: ${{steps.create-issue.outputs.number}}
+      versionNumber: ${{env.VERSION}}
     steps:
       - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
@@ -46,7 +47,7 @@ jobs:
     needs: release_ticket
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-      releaseDate: ${{ env.RELEASE_DATE }}
+      releaseDate: ${{ needs.release_ticket.outputs.versionNumber }}
       ticketNumber: ${{ needs.release_ticket.outputs.ticketNumber }}
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
