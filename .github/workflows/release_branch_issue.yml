@@ -1,7 +1,9 @@
 name: "Create Release Branch Ticket"
 
 on:
-  create:
+  push:
+    branches:
+      - integrate-testrail-automation
 jobs:
   release_ticket:
     if: ${{ contains(github.ref, 'refs/heads/release/') }}
@@ -40,7 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
   test_rails:
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@develop
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@integrate-testrail-automation
     needs: release_ticket
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
