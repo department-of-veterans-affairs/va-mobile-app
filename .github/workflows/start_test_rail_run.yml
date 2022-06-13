@@ -15,9 +15,6 @@ on:
         description: "Issue number for release ticket (eg. 3333)"
         type: string
         required: true
-    outputs:
-      testrailUrl:
-        value: ${{jobs.start_run.outputs.testrailUrl}}
     secrets:
       TEST_RAIL_USER:
         description: "Testrail robot userid"
@@ -25,6 +22,9 @@ on:
       TEST_RAIL_KEY:
         description: "Testrail api key"
         required: true
+    outputs:
+      testrailUrl:
+        value: ${{jobs.start_run.outputs.testrailUrl}}
   workflow_dispatch:
     inputs:
       version:
