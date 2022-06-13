@@ -16,7 +16,7 @@ jobs:
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
   update_ticket:
     runs-on: ubuntu-latest
-    needs: [ test_rails, release_ticket ]
+    needs: test_rails
     steps:
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
