@@ -44,6 +44,7 @@ jobs:
         id: create-issue
   test_rails:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@integrate-testrail-automation
+    needs: release_ticket
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
       releaseDate: ${{ needs.release_ticket.outputs.versionNumber }}
@@ -53,7 +54,7 @@ jobs:
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
   update_ticket:
     runs-on: ubuntu-latest
-    needs: test_rails
+    needs: [release_ticket, test_rails]
     steps:
       - uses: actions/checkout@v2
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
