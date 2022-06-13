@@ -48,6 +48,8 @@ jobs:
       - name: 'Add RC run in testrail'
         id: add_run
         run: |
+          echo ${{inputs.ticketNumber}}
+          echo '{"suite_id": 92,"name": "${name}","refs": ${{inputs.ticketNumber}},"description": "${desc}"}'
           name='Regression pass for ${{inputs.version}} ${{inputs.date}} release'
           desc='QA Regression pass for ${{inputs.version}} ${{inputs.date}} release'
           echo $(curl -X POST -H 'Content-Type: application/json' \
