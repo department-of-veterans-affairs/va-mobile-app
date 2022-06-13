@@ -39,6 +39,7 @@ export * from './secureMessagingSlice'
 export * from './snackBarSlice'
 export * from './vaccineSlice'
 export * from './paymentsSlice'
+export * from './prescriptionSlice'
 
 export const InitialState: RootState = {
   auth: initialAuthState,

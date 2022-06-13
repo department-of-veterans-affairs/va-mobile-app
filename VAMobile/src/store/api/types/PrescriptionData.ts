@@ -12,6 +12,7 @@ export const RefillStatusConstants: {
   SUSPENDED: RefillStatus
   UNKNOWN: RefillStatus
   ACTIVE_PARKED: RefillStatus
+  TRANSFERRED: RefillStatus
 } = {
   ACTIVE: 'active',
   DELETED: 'deleted',
@@ -26,6 +27,7 @@ export const RefillStatusConstants: {
   SUSPENDED: 'suspended',
   UNKNOWN: 'unknown',
   ACTIVE_PARKED: 'activeParked',
+  TRANSFERRED: 'transferred',
 }
 
 export type RefillStatus =
@@ -42,6 +44,7 @@ export type RefillStatus =
   | 'suspended'
   | 'unknown'
   | 'activeParked'
+  | 'transferred'
 
 export type PrescriptionAttributeData = {
   refillStatus: RefillStatus
@@ -71,6 +74,27 @@ export type PrescriptionData = {
 
 export type PrescriptionsGetData = {
   data: PrescriptionsList
+  links: PrescriptionsPaginationLinks
+  meta: PrescriptionsGetMeta
+}
+
+export type PrescriptionsGetMeta = {
+  pagination: PrescriptionsPaginationData
+}
+
+export type PrescriptionsPaginationData = {
+  currentPage: number
+  perPage: number
+  totalPages: number
+  totalEntries: number
+}
+
+export type PrescriptionsPaginationLinks = {
+  self: string
+  first: string
+  prev: string | null
+  next: string | null
+  last: string
 }
 
 export type PrescriptionsMap = {

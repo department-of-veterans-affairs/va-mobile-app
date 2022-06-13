@@ -1,27 +1,39 @@
-import { useEffect } from 'react'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
+import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getPrescriptions } from 'store/slices/prescriptionSlice'
 import { RefillTag } from '../PrescriptionCommon'
 import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StyleProp, ViewStyle } from 'react-native'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 const PrescriptionHistory: FC = ({}) => {
   const dispatch = useAppDispatch()
-  const { prescriptions, loading } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { prescriptions, loading, prescriptionPagination } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
+  const requestPage = useCallback(
+    (requestedPage: number) => {
+      dispatch(getPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID, requestedPage))
+    },
+    [dispatch],
+  )
+
   useEffect(() => {
-    dispatch(getPrescriptions())
-  }, [dispatch])
+    requestPage(1)
+  }, [requestPage])
+
+  if (useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+  }
 
   if (loading) {
     return <LoadingComponent text={t('prescriptions.loading')} />
@@ -61,12 +73,21 @@ const PrescriptionHistory: FC = ({}) => {
     flexGrow: 1,
   }
 
-  const paginationProps: PaginationProps = {
-    onNext: () => {},
-    onPrev: () => {},
-    totalEntries: 7,
-    pageSize: 5,
-    page: 1,
+  const renderPagination = (): ReactNode => {
+    const page = prescriptionPagination?.currentPage || 1
+    const paginationProps: PaginationProps = {
+      onNext: () => {
+        requestPage(page + 1)
+      },
+      onPrev: () => {
+        requestPage(page - 1)
+      },
+      totalEntries: prescriptionPagination?.totalEntries || 0,
+      pageSize: prescriptionPagination?.perPage || 0,
+      page,
+    }
+
+    return <Pagination {...paginationProps} />
   }
 
   return (
@@ -74,14 +95,14 @@ const PrescriptionHistory: FC = ({}) => {
       <Box mx={theme.dimensions.gutter}>
         <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
         <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-          {t('prescription.history.list.title', { count: prescriptions?.length })}
+          {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
         </TextView>
       </Box>
       <VAScrollView contentContainerStyle={mainViewStyle}>
         <Box mb={theme.dimensions.contentMarginBottom}>
           <List items={getListItemsForPrescriptions()} />
           <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-            <Pagination {...paginationProps} />
+            {renderPagination()}
           </Box>
         </Box>
       </VAScrollView>

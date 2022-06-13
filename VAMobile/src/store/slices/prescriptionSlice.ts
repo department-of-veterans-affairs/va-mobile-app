@@ -1,14 +1,21 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from '../api'
+import { APIError, PrescriptionsGetData, PrescriptionsList, PrescriptionsPaginationData, ScreenIDTypes, get, PrescriptionsMap } from '../api'
 import { AppThunk } from 'store'
-import { PrescriptionsGetData, PrescriptionsList, PrescriptionsMap, ScreenIDTypes } from '../api'
-import { dispatchClearErrors } from './errorSlice'
 import { indexBy } from 'underscore'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { dispatchClearErrors, dispatchSetError } from './errorSlice'
+import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject } from 'utils/common'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
+
+const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
 export type PrescriptionState = {
   loading: boolean
   prescriptions?: PrescriptionsList
+  prescriptionPagination: PrescriptionsPaginationData
   error?: api.APIError
   prescriptionsById: PrescriptionsMap
 }
@@ -16,169 +23,29 @@ export type PrescriptionState = {
 export const initialPrescriptionState: PrescriptionState = {
   loading: false,
   prescriptionsById: {} as PrescriptionsMap,
+  prescriptionPagination: {} as PrescriptionsPaginationData,
 }
 
 export const getPrescriptions =
-  (screenID?: ScreenIDTypes): AppThunk =>
+  (screenID?: ScreenIDTypes, page = 1): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchStartGetPrescriptions())
 
-    const prescriptionData: PrescriptionsGetData = {
-      data: [
-        {
-          type: 'Prescription',
-          id: '13650544',
-          attributes: {
-            refillStatus: 'refillinprocess',
-            refillSubmitDate: '2022-10-28T04:00:00.000Z',
-            refillDate: '2022-10-28T04:00:00.000Z',
-            refillRemaining: 5,
-            facilityName: 'DAYT29',
-            isRefillable: false,
-            isTrackable: false,
-            orderedDate: '2022-10-28T04:00:00.000Z',
-            quantity: 10,
-            expirationDate: '2022-10-28T04:00:00.000Z',
-            prescriptionNumber: '2719536',
-            prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
-            instructions: 'TAKE 1 TABLET WITH FOOD 3 TIMES A DAY',
-            dispensedDate: '2022-10-28T04:00:00.000Z',
-            stationNumber: '989',
-          },
-        },
-        {
-          type: 'Prescription',
-          id: '13650545',
-          attributes: {
-            refillStatus: 'active',
-            refillSubmitDate: '2022-10-28T04:00:00.000Z',
-            refillDate: '2022-10-28T04:00:00.000Z',
-            refillRemaining: 5,
-            facilityName: 'DAYT29',
-            isRefillable: false,
-            isTrackable: false,
-            orderedDate: '2022-10-28T04:00:00.000Z',
-            quantity: 10,
-            expirationDate: '2022-10-28T04:00:00.000Z',
-            prescriptionNumber: '2719536',
-            prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
-            instructions: 'TAKE 1 TABLET WITH FOOD 3 TIMES A DAY',
-            dispensedDate: '2022-10-28T04:00:00.000Z',
-            stationNumber: '989',
-          },
-        },
-        {
-          type: 'Prescription',
-          id: '13650546',
-          attributes: {
-            refillStatus: 'discontinued',
-            refillSubmitDate: '2022-10-28T04:00:00.000Z',
-            refillDate: '2022-10-28T04:00:00.000Z',
-            refillRemaining: 5,
-            facilityName: 'DAYT29',
-            isRefillable: false,
-            isTrackable: false,
-            orderedDate: '2022-10-28T04:00:00.000Z',
-            quantity: 10,
-            expirationDate: '2022-10-28T04:00:00.000Z',
-            prescriptionNumber: '2719536',
-            prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
-            instructions: 'TAKE 1 TABLET WITH FOOD 3 TIMES A DAY',
-            dispensedDate: '2022-10-28T04:00:00.000Z',
-            stationNumber: '989',
-          },
-        },
-        {
-          type: 'Prescription',
-          id: '13650547',
-          attributes: {
-            refillStatus: 'expired',
-            refillSubmitDate: '2022-10-28T04:00:00.000Z',
-            refillDate: '2022-10-28T04:00:00.000Z',
-            refillRemaining: 5,
-            facilityName: 'DAYT29',
-            isRefillable: false,
-            isTrackable: false,
-            orderedDate: '2022-10-28T04:00:00.000Z',
-            quantity: 10,
-            expirationDate: '2022-10-28T04:00:00.000Z',
-            prescriptionNumber: '2719536',
-            prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
-            instructions: 'INJECT 1MG INTO THE MUSCLE WEEKLY FOR 30 DAYS',
-            dispensedDate: '2022-10-28T04:00:00.000Z',
-            stationNumber: '989',
-          },
-        },
-        {
-          type: 'Prescription',
-          id: '13650548',
-          attributes: {
-            refillStatus: 'hold',
-            refillSubmitDate: '2022-10-28T04:00:00.000Z',
-            refillDate: '2022-10-28T04:00:00.000Z',
-            refillRemaining: 5,
-            facilityName: 'DAYT29',
-            isRefillable: false,
-            isTrackable: false,
-            orderedDate: '2022-10-28T04:00:00.000Z',
-            quantity: 10,
-            expirationDate: '2022-10-28T04:00:00.000Z',
-            prescriptionNumber: '2719536',
-            prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
-            instructions: 'TAKE 1 TABLET WITH FOOD 3 TIMES A DAY',
-            dispensedDate: '2022-10-28T04:00:00.000Z',
-            stationNumber: '989',
-          },
-        },
-        {
-          type: 'Prescription',
-          id: '13650549',
-          attributes: {
-            refillStatus: 'activeParked',
-            refillSubmitDate: '2022-10-28T04:00:00.000Z',
-            refillDate: '2022-10-28T04:00:00.000Z',
-            refillRemaining: 5,
-            facilityName: 'DAYT29',
-            isRefillable: false,
-            isTrackable: false,
-            orderedDate: '2022-10-28T04:00:00.000Z',
-            quantity: 10,
-            expirationDate: '2022-10-28T04:00:00.000Z',
-            prescriptionNumber: '2719536',
-            prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
-            instructions: 'TAKE 1 TABLET WITH FOOD 3 TIMES A DAY',
-            dispensedDate: '2022-10-28T04:00:00.000Z',
-            stationNumber: '989',
-          },
-        },
-        {
-          type: 'Prescription',
-          id: '13650550',
-          attributes: {
-            refillStatus: 'unknown',
-            refillSubmitDate: '2022-10-28T04:00:00.000Z',
-            refillDate: '2022-10-28T04:00:00.000Z',
-            refillRemaining: 5,
-            facilityName: 'DAYT29',
-            isRefillable: false,
-            isTrackable: false,
-            orderedDate: '2022-10-28T04:00:00.000Z',
-            quantity: 10,
-            expirationDate: '2022-10-28T04:00:00.000Z',
-            prescriptionNumber: '2719536',
-            prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
-            instructions: 'TAKE 1 TABLET WITH FOOD 3 TIMES A DAY',
-            dispensedDate: '2022-10-28T04:00:00.000Z',
-            stationNumber: '989',
-          },
-        },
-      ],
-    }
+    try {
+      const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', {
+        'page[number]': page.toString(),
+        'page[size]': DEFAULT_PAGE_SIZE.toString(),
+      })
 
-    setTimeout(() => {
       dispatch(dispatchFinishGetPrescriptions({ prescriptionData }))
-    }, 500)
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getVaccines: ${prescriptionNonFatalErrorString}`)
+        dispatch(dispatchFinishGetPrescriptions({ prescriptionData: undefined, error }))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
+      }
+    }
   }
 
 const prescriptionSlice = createSlice({
@@ -188,13 +55,14 @@ const prescriptionSlice = createSlice({
     dispatchStartGetPrescriptions: (state) => {
       state.loading = true
     },
-    dispatchFinishGetPrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData }>) => {
+    dispatchFinishGetPrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>) => {
       const { prescriptionData } = action.payload
-      const { data: prescriptions } = prescriptionData || ({} as PrescriptionsGetData)
+      const { data: prescriptions, meta } = prescriptionData || ({} as PrescriptionsGetData)
       const prescriptionsById = indexBy(prescriptions || [], 'id')
 
       state.prescriptions = prescriptions
       state.loading = false
+      state.prescriptionPagination = { ...meta?.pagination }
       state.prescriptionsById = prescriptionsById
     },
   },
