@@ -5,50 +5,12 @@ on:
     branches:
       - integrate-testrail-automation
 jobs:
-  release_ticket:
-
-    runs-on: ubuntu-latest
-    outputs:
-      ticketNumber: ${{steps.create-issue.outputs.number}}
-      versionNumber: ${{env.VERSION}}
-    steps:
-      - run: echo "VERSION=0.0.0" >> $GITHUB_ENV
-      - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      - run: echo "PROD_DUE_DATE=$(date -d "+5 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      - run: gh auth login --with-token < token.txt
-      - run: |
-          sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-          sev2=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-          header='| Issue | Title | Notes |
-          |-------|-------|-------|
-          '
-          table="${header}${sev1}${sev2}"
-          echo 'TABLE<<EOF' >> $GITHUB_ENV
-          echo "${table}" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-      - uses: JasonEtco/create-an-issue@v2
-        with:
-          filename: .github/ISSUE_TEMPLATE/release_ticket.md
-        env:
-          versionNumber: ${{ env.VERSION }}
-          qaDueDate: ${{env.QA_DUE_DATE}}
-          prodDueDate: ${{env.PROD_DUE_DATE}}
-          vaDueDate: ${{env.VA_DUE_DATE}}
-          releaseDate: ${{ env.RELEASE_DATE }}
-          issues: ${{ env.TABLE }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: create-issue
   test_rails:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@integrate-testrail-automation
-    needs: release_ticket
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-      releaseDate: ${{ needs.release_ticket.outputs.versionNumber }}
-      ticketNumber: ${{ needs.release_ticket.outputs.ticketNumber }}
+      releaseDate: "06/22/2022"
+      ticketNumber: "3315"
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
@@ -58,4 +20,4 @@ jobs:
     steps:
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
-      - run: gh issue comment ${{needs.release_ticket.outputs.ticketNumber}} -b "[RC Testrail Pass](${{needs.test_rails.outputs.testrailUrl}})"
+      - run: gh issue comment 3315} -b "[RC Testrail Pass](${{needs.test_rails.outputs.testrailUrl}})"
