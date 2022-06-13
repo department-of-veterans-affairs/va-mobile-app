@@ -1,11 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from '../api'
-import { APIError, PrescriptionsGetData, PrescriptionsList, PrescriptionsPaginationData, ScreenIDTypes, get } from '../api'
+import { APIError, PrescriptionsGetData, PrescriptionsList, PrescriptionsMap, PrescriptionsPaginationData, ScreenIDTypes, get } from '../api'
 import { AppThunk } from 'store'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { dispatchClearErrors, dispatchSetError } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { indexBy } from 'underscore'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
@@ -16,10 +17,12 @@ export type PrescriptionState = {
   prescriptions?: PrescriptionsList
   prescriptionPagination: PrescriptionsPaginationData
   error?: api.APIError
+  prescriptionsById: PrescriptionsMap
 }
 
 export const initialPrescriptionState: PrescriptionState = {
   loading: false,
+  prescriptionsById: {} as PrescriptionsMap,
   prescriptionPagination: {} as PrescriptionsPaginationData,
 }
 
@@ -55,10 +58,12 @@ const prescriptionSlice = createSlice({
     dispatchFinishGetPrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>) => {
       const { prescriptionData } = action.payload
       const { data: prescriptions, meta } = prescriptionData || ({} as PrescriptionsGetData)
+      const prescriptionsById = indexBy(prescriptions || [], 'id')
 
       state.prescriptions = prescriptions
       state.loading = false
       state.prescriptionPagination = { ...meta?.pagination }
+      state.prescriptionsById = prescriptionsById
     },
   },
 })

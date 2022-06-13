@@ -96,3 +96,7 @@ export type PrescriptionsPaginationLinks = {
   next: string | null
   last: string
 }
+
+export type PrescriptionsMap = {
+  [key: string]: PrescriptionData
+}

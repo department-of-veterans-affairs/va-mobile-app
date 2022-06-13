@@ -17,6 +17,7 @@ import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PharmacyScreen from './Pharmacy'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
+import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
@@ -101,6 +102,9 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   Pharmacy: undefined
   PrescriptionHistory: undefined
+  PrescriptionDetails: {
+    prescriptionId: string
+  }
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -142,5 +146,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
     <HealthStack.Screen key={'Pharmacy'} name="Pharmacy" component={PharmacyScreen} options={{ title: t('pharmacy.title') }} />,
     <HealthStack.Screen key={'PrescriptionHistory'} name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />,
+    <HealthStack.Screen key={'PrescriptionDetails'} name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />,
   ]
 }
