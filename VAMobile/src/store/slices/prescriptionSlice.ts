@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from '../api'
-import { APIError, PrescriptionsGetData, PrescriptionsList, PrescriptionsPaginationData, ScreenIDTypes, get, PrescriptionsMap } from '../api'
+import { APIError, PrescriptionsGetData, PrescriptionsList, PrescriptionsMap, PrescriptionsPaginationData, ScreenIDTypes, get } from '../api'
 import { AppThunk } from 'store'
-import { indexBy } from 'underscore'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { dispatchClearErrors, dispatchSetError } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { indexBy } from 'underscore'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
