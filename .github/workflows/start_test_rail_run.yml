@@ -56,4 +56,4 @@ jobs:
                     -u "${{secrets.TEST_RAIL_USER}}"':'"${{secrets.TEST_RAIL_KEY}}" \
                 	-d '{"suite_id": 92,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'"}'\
                 	"https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29"|
-                    jq '.id')"
+                    jq '.url')"
