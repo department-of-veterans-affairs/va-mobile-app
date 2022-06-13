@@ -1,0 +1,58 @@
+name: "Start Release Candidate Testrail run for a release ticket"
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        type: string
+        required: true
+      releaseDate:
+        description: "Go-live date for release (eg. 06/21/2022)"
+        type: string
+        required: true
+      ticketNumber:
+        description: "Issue number for release ticket (eg. 3333)"
+        type: string
+        required: true
+    outputs:
+      testrailUrl:
+        value: ${{jobs.start_run.outputs.testrailUrl}}
+    secrets:
+      TEST_RAIL_USER:
+        description: "Testrail robot userid"
+        required: true
+      TEST_RAIL_KEY:
+        description: "Testrail api key"
+        required: true
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        required: true
+        type: string
+      releaseDate:
+        description: "Go-live date for release (eg. 06/21/2022)"
+        type: string
+        required: true
+      ticketNumber:
+        description: "Issue number for release ticket (eg. 3333)"
+        type: string
+        required: true
+jobs:
+  start_run:
+    outputs:
+      testrailUrl: ${{steps.add_run.outputs.url}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Add RC run in testrail'
+        id: add_run
+        run: |
+          name='Regression pass for ${{inputs.version}} ${{inputs.date}} release'
+          desc='QA Regression pass for ${{inputs.version}} ${{inputs.date}} release'
+          url=$(curl -H 'Content-Type: application/json' \
+                    -u "${{secrets.TEST_RAIL_USER}}"':'"${{secrets.TEST_RAIL_KEY}}" \
+                	-d '{"suite_id": 92,"name": "${name}","refs": ${{inputs.ticketNumber}},"description": ${desc}}' \
+                	"https://dsvavsp.testrail.io//index.php?/api/v2/add_run" |
+                    jq '.id')
+          echo "::set-output name=url::${{url}}"
