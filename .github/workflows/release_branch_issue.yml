@@ -20,4 +20,4 @@ jobs:
     steps:
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
-      - run: gh issue comment 3315} -b "[RC Testrail Pass](${{needs.test_rails.outputs.testrailUrl}})"
+      - run: gh issue comment 3315 -b "[RC Testrail Pass](${{needs.test_rails.outputs.testrailUrl}})"
