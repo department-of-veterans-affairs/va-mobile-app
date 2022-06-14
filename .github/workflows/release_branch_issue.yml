@@ -11,6 +11,7 @@ jobs:
     outputs:
       ticketNumber: ${{steps.create-issue.outputs.number}}
       versionNumber: ${{env.VERSION}}
+      releaseDate: ${{env.RELEASE_DATE}}
     steps:
       - run: echo "VERSION=0.0.0" >> $GITHUB_ENV
       - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
@@ -46,8 +47,8 @@ jobs:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@integrate-testrail-automation
     needs: release_ticket
     with:
-      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-      releaseDate: ${{ needs.release_ticket.outputs.versionNumber }}
+      version: ${{ needs.release_ticket.outputs.versionNumber }}
+      releaseDate: ${{ needs.release_ticket.outputs.releaseDate }}
       ticketNumber: ${{ needs.release_ticket.outputs.ticketNumber }}
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
