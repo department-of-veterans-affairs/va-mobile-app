@@ -43,7 +43,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
   test_rails:
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@integrate-testrail-automation
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@develop
     needs: release_ticket
     with:
       version: ${{ needs.release_ticket.outputs.versionNumber }}
