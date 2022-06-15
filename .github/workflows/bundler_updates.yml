@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1' 
+          ruby-version: '3.1'
       - name: 'Run update script for android files'
         run: |
           bundle update --all
@@ -35,6 +35,8 @@ jobs:
     needs: update_bundler
     if: ${{needs.update_bundler.outputs.clean == 'false' }}
     steps:
+      - name: 'Checkout repo'
+        uses: actions/checkout@v3
       - run: echo 'There are changes in git'
       - run: git status --porcelain
 
