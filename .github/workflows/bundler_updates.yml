@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: 'Checkout repo'
         uses: actions/checkout@v2
+      - name: 'Install bundler'
+        run: gem install bundler
       - name: 'Run update script for android files'
         run: |
           bundle update --all
