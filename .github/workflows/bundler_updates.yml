@@ -25,8 +25,7 @@ jobs:
           bundle update --all
           bundle exec fastlane update_plugins
         working-directory: VAMobile/ios/
-      - name: 'Set git status flag'
-        id: git_status
+      - name: 'Push any changes to remote'
         run: |
           if [[ -n $(git status --porcelain --untracked-files=no) ]]
           then
