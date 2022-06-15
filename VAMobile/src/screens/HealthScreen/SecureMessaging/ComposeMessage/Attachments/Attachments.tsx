@@ -61,7 +61,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     const listOfFileSizes = _.map(attachmentsList, (attachment) => {
       let fileSize = 0
       if ('assets' in attachment) {
-        fileSize = attachment.assets ? attachment.assets[0].fileSize || 0 : 0
+        fileSize = attachment.assets ? attachment.assets[0]?.fileSize || 0 : 0
       } else if ('size' in attachment) {
         fileSize = attachment.size
       }

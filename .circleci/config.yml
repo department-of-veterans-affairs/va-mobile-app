@@ -216,6 +216,39 @@ commands:
           command: |
             chmod +x <<parameters.script_name>>
             bash <<parameters.script_name>> <<parameters.script_options>>
+  get_slack_channel_id:
+    description: 'checks DSVA slack to get the channel id from a channel name'
+    parameters:
+      channelName:
+        type: string
+    steps:
+      - run:
+          name: "Find the right channel id since it can sometimes change"
+          command: |
+            id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/x-www-form-urlencoded' \
+              https://slack.com/api/conversations.list\?limit=1000 |
+              jq '.channels[] | .name as $data | select($data == "<<parameters.channelName>>").id' )
+            echo "export SLACK_CHANNEL_ID=${id}" >> $BASH_ENV
+
+  start_slack_thread:
+    description: 'starts a slack thread in the specified channel and sets the SLACK_THREAD_TS env var'
+    parameters:
+      channelId:
+        type: string
+      message:
+        type: string
+    steps:
+      - run:
+          name: "Post message to slack"
+          command: |
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/json' \
+              --data '{"channel":"'<<parameters.channelId>>'","text":"<<parameters.message>>"}' \
+              https://slack.com/api/chat.postMessage|
+              jq -r '.ts')
+            echo "export SLACK_THREAD_TS=${ts}" >> $BASH_ENV
+
 jobs:
   test:
     executor: default
