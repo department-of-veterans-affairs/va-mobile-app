@@ -1,9 +1,7 @@
 name: "Create Release Branch Ticket"
 
 on:
-  push:
-    branches:
-      - integrate-testrail-automation
+  create:
 jobs:
   release_ticket:
     runs-on: ubuntu-latest
