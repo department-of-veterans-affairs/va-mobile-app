@@ -6,14 +6,13 @@ on:
       - integrate-testrail-automation
 jobs:
   release_ticket:
-    if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     outputs:
       ticketNumber: ${{steps.create-issue.outputs.number}}
       versionNumber: ${{env.VERSION}}
       releaseDate: ${{env.RELEASE_DATE}}
     steps:
-      - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - run: echo "VERSION=0.0.0" >> $GITHUB_ENV
       - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "PROD_DUE_DATE=$(date -d "+5 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
