@@ -52,10 +52,6 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 20,
   },
-  SentMessagesReadTag: {
-    fontSize: 16,
-    lineHeight: 16,
-  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -88,19 +84,19 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
-  HelperTextBold: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  SnackBarBtnText: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
   LabelTag: {
     fontSize: 16,
     lineHeight: 22,
   },
   LabelTagBold: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  HelperTextBold: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  SnackBarBtnText: {
     fontSize: 16,
     lineHeight: 22,
   },
@@ -125,7 +121,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
-    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag, scheme.text.primaryContrast),
+    LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
+    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold, scheme.text.primaryContrast),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
@@ -136,8 +133,6 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
-    LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
-    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold, scheme.text.primaryContrast),
   }
 }
 
@@ -192,9 +187,9 @@ let theme: VATheme = {
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
-    SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
     HelperText: fontSizes.HelperText,
+    HelperTextBold: fontSizes.HelperTextBold,
     LabelTag: fontSizes.LabelTag,
     LabelTagBold: fontSizes.LabelTagBold,
   },
