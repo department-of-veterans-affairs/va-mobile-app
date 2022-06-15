@@ -17,13 +17,13 @@ jobs:
       - name: 'Run update script for android files'
         run: |
           bundle update --all
-          fastlane update_plugins
-        working-directory: ~/VAMobile/android/
+          bundle exec fastlane update_plugins
+        working-directory: VAMobile/android/
       - name: 'Run update script for ios files'
         run: |
           bundle update --all
-          fastlane update_plugins
-        working-directory: ~/VAMobile/ios/
+          bundle exec fastlane update_plugins
+        working-directory: VAMobile/ios/
       - name: 'Set git status flag'
         id: git_status
         run: if [[ -n $(git status --porcelain --untracked-files=no) ]]; then echo "::set-output name=clean::false"; else echo "::set-output name=clean::true"; fi;
