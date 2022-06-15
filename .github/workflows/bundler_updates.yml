@@ -9,8 +9,6 @@ on:
 jobs:
   update_bundler:
     runs-on: ubuntu-latest
-    outputs:
-      clean: ${{steps.git_status.outputs.clean}}
     steps:
       - name: 'Checkout repo'
         uses: actions/checkout@v3
@@ -29,14 +27,12 @@ jobs:
         working-directory: VAMobile/ios/
       - name: 'Set git status flag'
         id: git_status
-        run: if [[ -n $(git status --porcelain --untracked-files=no) ]]; then echo "::set-output name=clean::false"; else echo "::set-output name=clean::true"; fi;
-  commit_changes:
-    runs-on: ubuntu-latest
-    needs: update_bundler
-    if: ${{needs.update_bundler.outputs.clean == 'false' }}
-    steps:
-      - name: 'Checkout repo'
-        uses: actions/checkout@v3
-      - run: echo 'There are changes in git'
-      - run: git status --porcelain
+        run: |
+          if [[ -n $(git status --porcelain --untracked-files=no) ]]
+          then
+            echo 'There are changes in git'
+            git status --porcelain
+          else
+            echo 'There are no changes to the lock files or plugins'
+          fi
 
