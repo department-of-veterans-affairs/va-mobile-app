@@ -48,12 +48,24 @@ jobs:
       - name: 'Add RC run in testrail'
         id: add_run
         run: |
-          echo ${{inputs.ticketNumber}}
+          echo "" >> input.json
+          for ((i=0; ; i+=250)); do
+            echo "i = $i"
+            resp=$(curl -X GET -H 'Content-Type: application/json' \
+                    -u "$TEST_RAIL_USER"':'"$TEST_RAIL_KEY" \
+                    "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29&offset=$i")
+            echo $(jq --compact-output '.cases | map(select(.custom_release_candidate_test_case == true)) | map(.id)' <<< "$resp") >> input.json
+            if [[ $(jq '._links.next == null' <<< "$resp") == 'true' ]];
+            then
+              break
+            fi
+          done
+          jq --compact-output -s 'add' input.json
           name='Regression pass for ${{inputs.version}} ${{inputs.releaseDate}} release'
           desc='QA Regression pass for ${{inputs.version}} ${{inputs.releaseDate}} release'
-          echo '{"suite_id": 92,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'"}'
+          echo '{"suite_id": 92,"include_all": false,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'"}'
           echo "::set-output name=url::$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}"':'"${{secrets.TEST_RAIL_KEY}}" \
-                	-d '{"suite_id": 92,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'"}'\
+                	-d '{"suite_id": 92,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'","case_ids": '$(jq --compact-output -s 'add' input.json)'}'\
                 	"https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29"|
                     jq '.url')"
