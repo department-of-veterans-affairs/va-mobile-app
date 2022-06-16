@@ -13,9 +13,11 @@ import VAIcon, { VAIconProps, VA_ICON_MAP } from '../VAIcon'
 export type SelectionListProps = {
   /** list of items to show */
   items: Array<SelectionListItemObj>
+  /** method to be triggered when the selected value change */
+  onSelectionChange?: (totalSelected: Record<string, boolean>) => void
 }
 
-const SelectionList: FC<SelectionListProps> = ({ items }) => {
+const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => {
   const [numSelected, setNumSelected] = useState(0)
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -24,9 +26,11 @@ const SelectionList: FC<SelectionListProps> = ({ items }) => {
 
   useEffect(() => {
     const selections = values(selectionVals)
-
+    if (onSelectionChange) {
+      onSelectionChange(selectionVals)
+    }
     setNumSelected(selections.filter(Boolean).length)
-  }, [selectionVals])
+  }, [selectionVals, onSelectionChange])
 
   const updateSelectionValForIdx = (id: string) => {
     const newSelectionVals = { ...selectionVals }

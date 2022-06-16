@@ -5,8 +5,8 @@ import React, { FC } from 'react'
 
 import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, getPrescriptions } from 'store/slices/prescriptionSlice'
-import { RefillTag } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StyleProp, ViewStyle } from 'react-native'
@@ -14,7 +14,7 @@ import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/ho
 
 const PrescriptionHistory: FC = ({}) => {
   const dispatch = useAppDispatch()
-  const { prescriptions, loading, prescriptionPagination } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { prescriptions, loadingHisory, prescriptionPagination } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -35,7 +35,7 @@ const PrescriptionHistory: FC = ({}) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
   }
 
-  if (loading) {
+  if (loadingHisory) {
     return <LoadingComponent text={t('prescriptions.loading')} />
   }
 
@@ -43,26 +43,7 @@ const PrescriptionHistory: FC = ({}) => {
     const listItems: Array<ListItemObj> = (prescriptions || []).map((prescription) => {
       return {
         onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
-        content: (
-          <Box flex={1}>
-            <Box borderBottomWidth={1} borderBottomColor={'prescriptionDivider'}>
-              <RefillTag status={prescription.attributes.refillStatus} />
-              <TextView mt={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-                {prescription.attributes.prescriptionName}
-              </TextView>
-              <TextView my={theme.dimensions.condensedMarginBetween}>{prescription.attributes.instructions}</TextView>
-            </Box>
-            <TextView mt={theme.dimensions.condensedMarginBetween}>
-              {t('prescription.history.refill')} <TextView variant={'MobileBodyBold'}>{prescription.attributes.refillRemaining}</TextView>
-            </TextView>
-            <TextView mt={theme.dimensions.condensedMarginBetween}>
-              {t('prescription.history.facility')} <TextView variant={'MobileBodyBold'}>{prescription.attributes.facilityName}</TextView>
-            </TextView>
-            <TextView mt={theme.dimensions.condensedMarginBetween}>
-              {t('prescription.history.prescriptionNumber')} <TextView variant={'MobileBodyBold'}>{prescription.attributes.prescriptionNumber}</TextView>
-            </TextView>
-          </Box>
-        ),
+        content: <PrescriptionListItem prescription={prescription.attributes} />,
       }
     })
 

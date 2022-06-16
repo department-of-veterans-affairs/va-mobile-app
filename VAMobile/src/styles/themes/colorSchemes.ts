@@ -33,6 +33,9 @@ export const lightTheme = {
     pickerControls: colors.grayLightest,
     menu: colors.white,
     alertBox: colors.white,
+    tabSelectorInactive: colors.grayLightest,
+    tabSelectorActive: colors.primaryAltLightest,
+    modalHeader: colors.white,
   },
   border: {
     primary: colors.grayLight,
@@ -53,6 +56,8 @@ export const lightTheme = {
     trackingCard: colors.grayDark,
     trackingCardActive: colors.grayLight,
     prescriptionDivider: colors.grayLighter,
+    tabSelectorInactive: colors.grayLight,
+    tabSelectorActive: colors.primary,
   },
   icon: {
     footerButton: colors.primary,
@@ -198,6 +203,9 @@ export const darkTheme = {
     pickerControls: colors.darkmodeGrayWarmDark,
     alertBox: colors.base,
     menu: colors.darkmodeGrayWarmDark,
+    tabSelectorInactive: colors.darkmodeGrayDark,
+    tabSelectorActive: colors.base,
+    modalHeader: colors.darkmodeGrayDark,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -218,6 +226,8 @@ export const darkTheme = {
     trackingCard: colors.darkmodeBorder,
     trackingCardActive: colors.grayLight,
     prescriptionDivider: colors.darkmodeBorder,
+    tabSelectorInactive: colors.darkmodeBorder,
+    tabSelectorActive: colors.primaryDarker2,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,

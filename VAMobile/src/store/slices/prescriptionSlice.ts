@@ -13,17 +13,26 @@ import { logNonFatalErrorToFirebase } from 'utils/analytics'
 const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
 export type PrescriptionState = {
-  loading: boolean
+  loadingHisory: boolean
   prescriptions?: PrescriptionsList
   prescriptionPagination: PrescriptionsPaginationData
   error?: api.APIError
   prescriptionsById: PrescriptionsMap
+  refillableCount?: number
+  nonRefillableCount?: number
+  refillablePrescriptions?: PrescriptionsList
+  nonRefillablePrescriptions?: PrescriptionsList
+  needsRefillableLoaded?: boolean
+  loadingRefillable: boolean
 }
 
 export const initialPrescriptionState: PrescriptionState = {
-  loading: false,
+  loadingHisory: false,
   prescriptionsById: {} as PrescriptionsMap,
   prescriptionPagination: {} as PrescriptionsPaginationData,
+  refillableCount: 0,
+  nonRefillableCount: 0,
+  loadingRefillable: false,
 }
 
 export const getPrescriptions =
@@ -41,7 +50,25 @@ export const getPrescriptions =
       dispatch(dispatchFinishGetPrescriptions({ prescriptionData }))
     } catch (error) {
       if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getVaccines: ${prescriptionNonFatalErrorString}`)
+        logNonFatalErrorToFirebase(error, `getPrescriptions: ${prescriptionNonFatalErrorString}`)
+        dispatch(dispatchFinishGetPrescriptions({ prescriptionData: undefined, error }))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
+      }
+    }
+  }
+export const getRefillablePrescriptions =
+  (screenID?: ScreenIDTypes): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchStartGetAllPrescriptions())
+
+    try {
+      const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions?page[size]=100')
+
+      dispatch(dispatchFinishGetAllPrescriptions({ prescriptionData }))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getPrescriptions: ${prescriptionNonFatalErrorString}`)
         dispatch(dispatchFinishGetPrescriptions({ prescriptionData: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
       }
@@ -53,7 +80,7 @@ const prescriptionSlice = createSlice({
   initialState: initialPrescriptionState,
   reducers: {
     dispatchStartGetPrescriptions: (state) => {
-      state.loading = true
+      state.loadingHisory = true
     },
     dispatchFinishGetPrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>) => {
       const { prescriptionData } = action.payload
@@ -61,12 +88,33 @@ const prescriptionSlice = createSlice({
       const prescriptionsById = indexBy(prescriptions || [], 'id')
 
       state.prescriptions = prescriptions
-      state.loading = false
+      state.loadingHisory = false
       state.prescriptionPagination = { ...meta?.pagination }
       state.prescriptionsById = prescriptionsById
+    },
+    dispatchStartGetRefillablePrescriptions: (state) => {
+      state.loadingRefillable = true
+    },
+    dispatchFinishGetRefillablePrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>) => {
+      const { prescriptionData, error } = action.payload
+      const { data: prescriptions } = prescriptionData || ({} as PrescriptionsGetData)
+      const refillable = prescriptions.filter((item) => item.attributes.isRefillable === true)
+      const nonRefillable = prescriptions.filter((item) => item.attributes.isRefillable === false)
+
+      state.loadingRefillable = false
+      state.refillablePrescriptions = refillable
+      state.refillableCount = refillable.length
+      state.nonRefillablePrescriptions = nonRefillable
+      state.nonRefillableCount = nonRefillable.length
+      state.needsRefillableLoaded = !!error
     },
   },
 })
 
-export const { dispatchStartGetPrescriptions, dispatchFinishGetPrescriptions } = prescriptionSlice.actions
+export const {
+  dispatchStartGetPrescriptions,
+  dispatchFinishGetPrescriptions,
+  dispatchFinishGetRefillablePrescriptions: dispatchFinishGetAllPrescriptions,
+  dispatchStartGetRefillablePrescriptions: dispatchStartGetAllPrescriptions,
+} = prescriptionSlice.actions
 export default prescriptionSlice.reducer

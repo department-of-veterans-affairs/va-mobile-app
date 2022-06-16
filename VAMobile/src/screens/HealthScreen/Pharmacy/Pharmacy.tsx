@@ -1,14 +1,29 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonWithIcon, TextArea, TextView, TrackingCard, VAButton, VAScrollView } from 'components'
+import { Box, ButtonWithIcon, LoadingComponent, TextArea, TextView, TrackingCard, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { PrescriptionState, getRefillablePrescriptions } from 'store/slices/prescriptionSlice'
+import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 const Pharmacy: FC = ({}) => {
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
+
+  const { refillableCount, loadingRefillable } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+
+  useEffect(() => {
+    dispatch(getRefillablePrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
+  }, [dispatch])
+
+  if (loadingRefillable) {
+    return <LoadingComponent text={t('prescriptions.loading')} />
+  }
 
   const condensedMarginBetween = theme.dimensions.condensedMarginBetween
 
@@ -62,9 +77,9 @@ const Pharmacy: FC = ({}) => {
             {t('pharmacy.textArea.title')}
           </TextView>
           <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-            {t('pharmacy.textArea.prescriptionRefill', { count: 1 })}
+            {t('pharmacy.textArea.prescriptionRefill', { count: refillableCount })}
           </TextView>
-          <VAButton onPress={() => {}} label={t('pharmacy.textArea.button', { count: 1 })} buttonType="brandedPrimary" />
+          <VAButton onPress={navigateTo('RefillScreen')} label={t('pharmacy.textArea.button', { count: 1 })} buttonType="brandedPrimary" />
         </TextArea>
         <Box mt={condensedMarginBetween} mx={theme.dimensions.gutter}>
           <TextView variant="HelperText">
