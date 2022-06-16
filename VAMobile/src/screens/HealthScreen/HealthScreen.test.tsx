@@ -48,23 +48,12 @@ context('HealthScreen', () => {
     mockNavigateToVAVaccinesSpy = jest.fn()
     mockNavigateToPharmacySpy = jest.fn()
     when(mockNavigateToSpy)
-// <<<<<<< HEAD
         .mockReturnValue(() => {})
         .calledWith('VeteransCrisisLine').mockReturnValue(mockNavigateToCrisisLineSpy)
         .calledWith('Appointments').mockReturnValue(mockNavigateToAppointmentSpy)
         .calledWith('SecureMessaging').mockReturnValue(mockNavigateToSecureMessagingSpy)
         .calledWith('VaccineList').mockReturnValue(mockNavigateToVAVaccinesSpy)
         .calledWith('Pharmacy').mockReturnValue(mockNavigateToPharmacySpy)
-// =======
-//       .mockReturnValue(() => {})
-//       .calledWith('VeteransCrisisLine')
-//       .mockReturnValue(mockNavigateToCrisisLineSpy)
-//       .calledWith('Appointments')
-//       .mockReturnValue(mockNavigateToAppointmentSpy)
-//       .calledWith('SecureMessaging')
-//       .mockReturnValue(mockNavigateToSecureMessagingSpy)
-//       .calledWith('VaccineList')
-//       .mockReturnValue(mockNavigateToVAVaccinesSpy)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 

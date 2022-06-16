@@ -6,14 +6,14 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
 import TextView from './TextView'
-import MessagesSentReadTag from './MessagesSentReadTag'
+import LabelTag from './LabelTag'
 
-context('MessagesSentReadTag', () => {
+context('LabelTag', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    component = render(<MessagesSentReadTag text={'READ'} />)
+    component = render(<LabelTag text={'READ'} />)
     testInstance = component.container
   })
 
