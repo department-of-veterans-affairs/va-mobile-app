@@ -20,6 +20,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
@@ -337,7 +338,7 @@ export function useMessageWithSignature(): [string, React.Dispatch<React.SetStat
   const { signature, loadingSignature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const [message, setMessage] = useState('')
   useEffect(() => {
-    if (signature && signature.includeSignature) {
+    if (PREPOPULATE_SIGNATURE && signature && signature.includeSignature) {
       setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
     }
   }, [loadingSignature, signature])
