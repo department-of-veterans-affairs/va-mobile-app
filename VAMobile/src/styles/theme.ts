@@ -146,6 +146,9 @@ export type VABackgroundColors = {
   warningTag: string
   inactiveTag: string
   activeTag: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
+  modalHeader: string
 }
 
 export type VABorderColors = {
@@ -167,6 +170,8 @@ export type VABorderColors = {
   trackingCard: string
   trackingCardActive: string
   prescriptionDivider: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
 }
 
 export type VAFontSizes = {
