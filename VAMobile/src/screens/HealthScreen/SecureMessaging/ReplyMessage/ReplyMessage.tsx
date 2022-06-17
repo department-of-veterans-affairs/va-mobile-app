@@ -23,7 +23,7 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -99,7 +99,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
-    if (!signature) {
+    if (PREPOPULATE_SIGNATURE && !signature) {
       dispatch(getMessageSignature())
     }
     InteractionManager.runAfterInteractions(() => {
