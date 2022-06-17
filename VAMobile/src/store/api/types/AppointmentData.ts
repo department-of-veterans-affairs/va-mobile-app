@@ -19,9 +19,13 @@ export const AppointmentTimeZoneConstants: {
 export const AppointmentStatusConstants: {
   BOOKED: AppointmentStatus
   CANCELLED: AppointmentStatus
+  SUBMITTED: AppointmentStatus
+  HIDDEN: AppointmentStatus
 } = {
   BOOKED: 'BOOKED',
   CANCELLED: 'CANCELLED',
+  SUBMITTED: 'SUBMITTED',
+  HIDDEN: 'HIDDEN',
 }
 
 export const AppointmentStatusDetailTypeConsts: {
@@ -103,11 +107,28 @@ export type AppointmentLocation = {
 
 export type AppointmentTimeZone = 'Pacific/Honolulu' | 'America/Anchorage' | 'America/Los_Angeles' | 'America/Phoenix' | 'America/Denver' | 'America/Chicago' | 'America/New_York'
 
-export type AppointmentStatus = 'BOOKED' | 'CANCELLED'
+export type AppointmentStatus = 'BOOKED' | 'CANCELLED' | 'SUBMITTED' | 'HIDDEN'
 
 export type AppointmentStatusDetailType = 'CANCELLED BY CLINIC & AUTO RE-BOOK' | 'CANCELLED BY CLINIC' | 'CANCELLED BY PATIENT & AUTO-REBOOK' | 'CANCELLED BY PATIENT'
 
 export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE' | 'VA_VIDEO_CONNECT_GFE'
+
+export type AppointmentProposedTimesPeriodType = 'AM' | 'PM'
+
+export const AppointmentProposedTimesPeriodConstant: {
+  AM: AppointmentProposedTimesPeriodType
+  PM: AppointmentProposedTimesPeriodType
+} = {
+  AM: 'AM',
+  PM: 'PM',
+}
+
+export type AppointmentProposedTimesItem = {
+  date: string | null
+  time: AppointmentProposedTimesPeriodType | null
+}
+
+export type AppointmentProposedTimes = Array<AppointmentProposedTimesItem>
 
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
@@ -127,6 +148,14 @@ export type AppointmentAttributes = {
   phoneOnly: boolean
   reason: string | null
   isCovidVaccine: boolean
+  // pending appointment props
+  isPending: boolean
+  typeOfCare?: string // unclear if this always undefined for confirmed appointments that was a pending appointment
+  friendlyLocationName?: string
+  proposedTimes?: AppointmentProposedTimes
+  patientPhoneNumber?: string
+  patientEmail?: string
+  bestTimeToCall?: Array<string>
 }
 
 export type AppointmentData = {
@@ -197,4 +226,25 @@ export const AppointmentCancellationStatusConstants: {
 } = {
   SUCCESS: 'SUCCESS',
   FAIL: 'FAIL',
+}
+
+export type AppointmentMessageAttributes = {
+  messageText?: string | null
+  messageDateTime?: string | null
+  appointmentRequestId?: string | null
+  date?: string | null
+}
+
+export type AppointmentMessages = {
+  id?: string | null
+  type?: string | null
+  attributes?: AppointmentMessageAttributes
+}
+
+export type AppointmentGetMessagesData = {
+  data: Array<AppointmentMessages>
+}
+
+export type AppointmentMessagesMap = {
+  [key: string]: Array<AppointmentMessages>
 }

@@ -104,7 +104,7 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
   return (
     <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
       <Box {...tagBoxProps}>
-        <TextView variant={'MobileBodyBold'} color={getTextColor()} flexWrap={'wrap'} px={theme.dimensions.tagHorizontalPadding} pt={theme.dimensions.tagTopPadding}>
+        <TextView variant={'MobileBodyBold'} color={getTextColor()} flexWrap={'wrap'} px={10} pt={3}>
           {getTagText()}
         </TextView>
       </Box>

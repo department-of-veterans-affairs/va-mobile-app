@@ -52,10 +52,6 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 20,
   },
-  SentMessagesReadTag: {
-    fontSize: 16,
-    lineHeight: 16,
-  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -88,6 +84,14 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
+  LabelTag: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  LabelTagBold: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
   HelperTextBold: {
     fontSize: 16,
     lineHeight: 22,
@@ -117,7 +121,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
-    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag, scheme.text.primaryContrast),
+    LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
+    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold, scheme.text.primaryContrast),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
@@ -156,9 +161,6 @@ let theme: VATheme = {
     headerHeight: 64,
     formMarginBetween: 30,
     tagMinWidth: 29,
-    tagCurvedBorder: 2,
-    tagTopPadding: 3,
-    tagHorizontalPadding: 10,
     maxNumMessageAttachments: 4,
     paginationTopPadding: 40,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
@@ -185,8 +187,11 @@ let theme: VATheme = {
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
-    SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
+    HelperText: fontSizes.HelperText,
+    HelperTextBold: fontSizes.HelperTextBold,
+    LabelTag: fontSizes.LabelTag,
+    LabelTagBold: fontSizes.LabelTagBold,
   },
   typography: buildTypography(colorScheme),
 }
