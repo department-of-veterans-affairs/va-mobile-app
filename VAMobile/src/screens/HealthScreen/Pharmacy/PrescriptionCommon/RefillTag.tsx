@@ -29,7 +29,6 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
       case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
       case RefillStatusConstants.DISCONTINUED_EDIT:
       case RefillStatusConstants.EXPIRED:
-      case RefillStatusConstants.NON_VERIFIED:
       case RefillStatusConstants.UNKNOWN:
       case RefillStatusConstants.ACTIVE:
       case RefillStatusConstants.REFILL_IN_PROCESS:
@@ -38,6 +37,7 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
       case RefillStatusConstants.PROVIDER_HOLD:
       case RefillStatusConstants.SUSPENDED:
       case RefillStatusConstants.ACTIVE_PARKED:
+      case RefillStatusConstants.NON_VERIFIED:
         return 'primary'
       default:
         return 'primary'
@@ -53,13 +53,13 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
       case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
       case RefillStatusConstants.DISCONTINUED_EDIT:
       case RefillStatusConstants.EXPIRED:
-      case RefillStatusConstants.NON_VERIFIED:
       case RefillStatusConstants.UNKNOWN:
         return 'tagExpired'
       case RefillStatusConstants.HOLD:
       case RefillStatusConstants.PROVIDER_HOLD:
       case RefillStatusConstants.SUSPENDED:
       case RefillStatusConstants.ACTIVE_PARKED:
+      case RefillStatusConstants.NON_VERIFIED:
         return 'tagSuspended'
       case RefillStatusConstants.REFILL_IN_PROCESS:
         return 'tagInProgress'
@@ -85,8 +85,9 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
         return t('prescription.history.tag.active.parked')
       case RefillStatusConstants.REFILL_IN_PROCESS:
         return t('prescription.history.tag.active.inProgress')
-      case RefillStatusConstants.DELETED:
       case RefillStatusConstants.NON_VERIFIED:
+        return t('prescription.history.tag.nonVerified')
+      case RefillStatusConstants.DELETED:
       case RefillStatusConstants.UNKNOWN:
         return t('prescription.history.tag.unknown')
     }

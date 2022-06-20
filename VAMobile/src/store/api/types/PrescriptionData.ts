@@ -45,6 +45,8 @@ export type RefillStatus =
   | 'unknown'
   | 'activeParked'
   | 'transferred'
+  | 'submitted'
+  | 'dateOfDeathEntered'
 
 export type PrescriptionAttributeData = {
   refillStatus: RefillStatus
