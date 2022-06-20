@@ -32,12 +32,14 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
       case RefillStatusConstants.UNKNOWN:
       case RefillStatusConstants.ACTIVE:
       case RefillStatusConstants.REFILL_IN_PROCESS:
+      case RefillStatusConstants.TRANSFERRED:
         return 'primaryContrast'
       case RefillStatusConstants.HOLD:
       case RefillStatusConstants.PROVIDER_HOLD:
       case RefillStatusConstants.SUSPENDED:
       case RefillStatusConstants.ACTIVE_PARKED:
       case RefillStatusConstants.NON_VERIFIED:
+      case RefillStatusConstants.SUBMITTED:
         return 'primary'
       default:
         return 'primary'
@@ -54,12 +56,14 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
       case RefillStatusConstants.DISCONTINUED_EDIT:
       case RefillStatusConstants.EXPIRED:
       case RefillStatusConstants.UNKNOWN:
+      case RefillStatusConstants.TRANSFERRED:
         return 'tagExpired'
       case RefillStatusConstants.HOLD:
       case RefillStatusConstants.PROVIDER_HOLD:
       case RefillStatusConstants.SUSPENDED:
       case RefillStatusConstants.ACTIVE_PARKED:
       case RefillStatusConstants.NON_VERIFIED:
+      case RefillStatusConstants.SUBMITTED:
         return 'tagSuspended'
       case RefillStatusConstants.REFILL_IN_PROCESS:
         return 'tagInProgress'
@@ -87,6 +91,10 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
         return t('prescription.history.tag.active.inProgress')
       case RefillStatusConstants.NON_VERIFIED:
         return t('prescription.history.tag.nonVerified')
+      case RefillStatusConstants.TRANSFERRED:
+        return t('prescription.history.tag.transferred')
+      case RefillStatusConstants.SUBMITTED:
+        return t('prescription.history.tag.submitted')
       case RefillStatusConstants.DELETED:
       case RefillStatusConstants.UNKNOWN:
         return t('prescription.history.tag.unknown')
