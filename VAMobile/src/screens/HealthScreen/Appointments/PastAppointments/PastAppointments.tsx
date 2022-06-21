@@ -3,16 +3,16 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useState } from 'react'
 import _ from 'underscore'
 
-import { AppointmentStatusConstants, AppointmentTypeConstants, AppointmentsList } from 'store/api/types'
+import { AppointmentsList } from 'store/api/types'
 import { AppointmentsState, CurrentPageAppointmentsByYear, getAppointmentsInDateRange } from 'store/slices'
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLineWithIconProps, VAModalPicker } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { deepCopyObject } from 'utils/common'
-import { getAppointmentTypeIcon, getAppointmentTypeIconText, getGroupedAppointments, getYearsToSortedMonths } from 'utils/appointments'
-import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { getFormattedDate } from 'utils/formattingUtils'
+import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToSortedMonths, isAPendingAppointment } from 'utils/appointments'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -28,7 +28,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const navigateTo = useRouteNavigation()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const newCurrentPageAppointmentsByYear = deepCopyObject<CurrentPageAppointmentsByYear>(currentPageAppointmentsByYear)
-  const { condensedMarginBetween } = theme.dimensions
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -131,54 +130,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment, index) => {
-      const {
-        attributes: { appointmentType, healthcareProvider, startDateUtc, timeZone, phoneOnly, location, status, typeOfCare, isCovidVaccine },
-      } = appointment
-
-      const textLines: Array<TextLineWithIconProps> = []
-
-      if (status === AppointmentStatusConstants.CANCELLED) {
-        textLines.push({ text: t('appointments.canceled'), textTag: { backgroundColor: 'inactiveTag', variant: 'LabelTagBold' }, mb: 14 })
-      } else if (status === AppointmentStatusConstants.BOOKED) {
-        textLines.push({ text: t('appointments.confirmed'), textTag: { backgroundColor: 'activeTag', variant: 'LabelTagBold' }, mb: 14 })
-      }
-
-      // if isCovidVaccine is true then make it the bold header, else if typeOfCare exist make it the bold header otherwise make the date/time bold header
-      if (isCovidVaccine) {
-        textLines.push(
-          { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
-          { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
-        )
-      } else if (typeOfCare) {
-        textLines.push(
-          { text: tc('text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
-          { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
-        )
-      } else {
-        textLines.push(
-          { text: tc('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-          { text: tc('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: 5 },
-        )
-      }
-
-      const isVideoOrVAAppointment = appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE
-      const isCCAppointmentAndPhoneOnly = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && phoneOnly
-      const showAppointmentTypeIcon = isVideoOrVAAppointment || isCCAppointmentAndPhoneOnly
-      textLines.push({
-        text: tc('text.raw', { text: healthcareProvider || location.name }),
-        variant: 'HelperText',
-        mb: showAppointmentTypeIcon ? condensedMarginBetween : 0,
-      })
-
-      if (showAppointmentTypeIcon) {
-        textLines.push({
-          text: tc('text.raw', { text: getAppointmentTypeIconText(appointmentType, location.name, t, phoneOnly) }),
-          iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
-          variant: 'HelperText',
-        })
-      }
+      const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
+      const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = tc('listPosition', { position, total: totalEntries })
@@ -187,7 +140,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines,
         a11yValue,
         onPress: () => onPastAppointmentPress(appointment.id),
-        a11yHintText: t('appointments.viewDetails'),
+        a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
         testId: getTestIDFromTextLines(textLines),
       })
     })

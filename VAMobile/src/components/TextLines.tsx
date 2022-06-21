@@ -30,6 +30,7 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
                 </Box>
               )
             }
+
             return (
               <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable} mb={mb}>
                 {text}

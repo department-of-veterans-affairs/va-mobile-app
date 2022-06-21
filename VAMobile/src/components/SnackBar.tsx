@@ -4,7 +4,7 @@ import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toas
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
-import { Box } from 'components'
+import { Box, TextViewProps } from 'components'
 import { BoxProps } from './Box'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import TextView from './TextView'
@@ -70,10 +70,26 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const messageContainerProps: BoxProps = {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     mt: 5,
     mb: 5,
     alignItems: 'center',
+  }
+
+  const messageProp: TextViewProps = {
+    variant: 'HelperText',
+    color: 'snackBarTxt',
+  }
+
+  // adjust style depending on if there are 1 or 2 buttons
+  // 1 inline
+  // 2 its own row align to the right
+  if (!isUndo) {
+    // 2
+    messageContainerProps.minWidth = '100%'
+    messageProp.flex = 1
+  } else {
+    // 1
+    messageContainerProps.flexWrap = 'wrap'
   }
 
   const btnContainerProps: BoxProps = {
@@ -110,9 +126,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
             <Box {...iconWrapperBoxProps}>
               <VAIcon {...snackBarIconProps} />
             </Box>
-            <TextView variant={'HelperText'} color={'snackBarTxt'}>
-              {message}
-            </TextView>
+            <TextView {...messageProp}>{message}</TextView>
           </Box>
         </View>
         <Box {...btnContainerProps}>
