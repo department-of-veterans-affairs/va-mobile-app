@@ -1,0 +1,30 @@
+name: "Create Testrail Milestone"
+
+on:
+  workflow_call:
+    secrets:
+      TEST_RAIL_USER:
+        description: "Testrail robot userid"
+        required: true
+      TEST_RAIL_KEY:
+        description: "Testrail api key"
+        required: true
+    outputs:
+      milestoneId:
+        value: ${{jobs.create_milestone.outputs.milestoneId}}
+
+jobs:
+  create_milestone:
+    outputs:
+      milestoneId: ${{steps.add_milestone.outputs.milestoneId}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Add new sprint milestone in Testrail'
+        id: add_milestone
+        run: |
+          dateRange="$(date '+%B %-d') - $(date -v +13d '+%B %-d')"
+          echo "::set-output name=milestoneId::$(curl -X POST -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}"':'"${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/add_milestone/29" \
+            -d '{"name": "Sprint: '$dateRange'", "description": "Milestone for all testing performed during Sprint: '$dateRange'", "start_on": '$(date +%s)', "due_on": '$(date -v +13d +%s)' }' |
+            jq '.id')"
