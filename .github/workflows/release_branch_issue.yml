@@ -42,7 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
   create_testrail_milestone:
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@develop
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@develop
     needs: release_ticket
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
@@ -66,5 +66,9 @@ jobs:
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
       - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
-      - run: gh issue comment ${{ needs.release_ticket.outputs.ticketNumber }} -b "[RC Testrail Pass](${{needs.start_testrail_run.outputs.testrailUrl}})"
+      - run: |
+        RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
+        OLD_BODY=$(echo $(gh issue view 3359 --json body | jq -r '.body')
+        NEW_BODY=$(echo "$BODY" | sed -e "s/\^\^\^Testrail-url\^\^\^/$RUN_URL/g")
+        gh issue edit ${{ needs.release_ticket.outputs.ticketNumber }} -b $NEW_BODY
 
