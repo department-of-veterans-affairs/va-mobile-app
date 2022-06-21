@@ -13,6 +13,7 @@ export const RefillStatusConstants: {
   UNKNOWN: RefillStatus
   ACTIVE_PARKED: RefillStatus
   TRANSFERRED: RefillStatus
+  SUBMITTED: RefillStatus
 } = {
   ACTIVE: 'active',
   DELETED: 'deleted',
@@ -28,6 +29,7 @@ export const RefillStatusConstants: {
   UNKNOWN: 'unknown',
   ACTIVE_PARKED: 'activeParked',
   TRANSFERRED: 'transferred',
+  SUBMITTED: 'submitted',
 }
 
 export type RefillStatus =
@@ -45,6 +47,8 @@ export type RefillStatus =
   | 'unknown'
   | 'activeParked'
   | 'transferred'
+  | 'submitted'
+  | 'dateOfDeathEntered'
 
 export type PrescriptionAttributeData = {
   refillStatus: RefillStatus

@@ -63,7 +63,9 @@ export const getRefillablePrescriptions =
     dispatch(dispatchStartGetAllPrescriptions())
 
     try {
-      const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions?page[size]=100')
+      const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', {
+        'page[size]': '100',
+      })
 
       dispatch(dispatchFinishGetAllPrescriptions({ prescriptionData }))
     } catch (error) {
