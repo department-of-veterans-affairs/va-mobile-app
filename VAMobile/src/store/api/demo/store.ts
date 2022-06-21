@@ -141,7 +141,6 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
       return getPaymentsHistory(store, params, endpoint)
     }
     case '/v0/health/rx/prescriptions': {
-      console.log('----------- in mock store')
       return getPrescriptions(store, params, endpoint)
     }
     default: {
