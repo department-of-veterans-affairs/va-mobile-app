@@ -6,6 +6,10 @@ jobs:
   release_ticket:
     if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
+    outputs:
+      ticketNumber: ${{steps.create-issue.outputs.number}}
+      versionNumber: ${{env.VERSION}}
+      releaseDate: ${{env.RELEASE_DATE}}
     steps:
       - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
@@ -36,3 +40,35 @@ jobs:
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create-issue
+  create_testrail_milestone:
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@develop
+    needs: release_ticket
+    secrets:
+      TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
+      TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
+  start_testrail_run:
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@develop
+    needs: [release_ticket, create_testrail_milestone]
+    with:
+      version: ${{ needs.release_ticket.outputs.versionNumber }}
+      releaseDate: ${{ needs.release_ticket.outputs.releaseDate }}
+      ticketNumber: ${{ needs.release_ticket.outputs.ticketNumber }}
+      milestoneID: ${{ needs.create_testrail_milestone.outputs.milestoneId }}
+    secrets:
+      TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}z
+      TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
+  update_ticket:
+    runs-on: ubuntu-latest
+    needs: [release_ticket, create_testrail_milestone, start_testrail_run]
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - run: gh auth login --with-token < token.txt
+      - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
+      - run: |
+          RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
+          OLD_BODY=$(echo $(gh issue view 3359 --json body | jq -r '.body')
+          NEW_BODY=$(echo "$BODY" | sed -e "s/\^\^\^Testrail-url\^\^\^/$RUN_URL/g")
+          gh issue edit ${{ needs.release_ticket.outputs.ticketNumber }} -b $NEW_BODY
+
