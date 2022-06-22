@@ -1,43 +1,41 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 
 import { InitialState } from 'store/slices'
 import { ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'
-import { AppointmentAddress } from 'store/api/types'
+import {AppointmentAttributes, AppointmentStatusConstants, AppointmentTypeConstants} from 'store/api/types'
 
 context('AppointmentAddressAndNumber', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
-  let addressData = {
-    street: '5901 East 7th Street',
-    city: 'Long Beach',
-    state: 'CA',
-    zipCode: '90822',
-  }
-
-  const initializeTestInstance = async (appointmentType: string, address: AppointmentAddress | undefined): Promise<void> => {
-    props = mockNavProps({
-      appointmentType,
+  const initializeTestInstance = async (attributes?: Partial<AppointmentAttributes>): Promise<void> => {
+    props = {
       healthcareService: 'Rehabilitation Clinic',
       location: {
         name: 'VA Long Beach Healthcare System',
+        address: {
+          street: '5901 East 7th Street',
+          city: 'Long Beach',
+          state: 'CA',
+          zipCode: '90822',
+        },
+        phone: {
+          areaCode: '123',
+          number: '456-7890',
+          extension: '',
+        },
       },
-      address,
-      phone: {
-        areaCode: '123',
-        number: '456-7890',
-        extension: '',
-      },
-    })
+      ...(attributes || {})
+    } as AppointmentAttributes
 
     await waitFor(() => {
-      component = render(<AppointmentAddressAndNumber {...props} />, {
+      component = render(<AppointmentAddressAndNumber attributes={props} />, {
         preloadedState: {
           ...InitialState,
         },
@@ -48,7 +46,10 @@ context('AppointmentAddressAndNumber', () => {
   }
 
   beforeEach(async () => {
-    await initializeTestInstance('VA', addressData)
+    await initializeTestInstance({
+      appointmentType: AppointmentTypeConstants.VA,
+    })
+
   })
 
   it('initializes correctly', async () => {
@@ -57,7 +58,9 @@ context('AppointmentAddressAndNumber', () => {
 
   describe('when the appointment type is not VA/CC/at VA location/ATLAS', () => {
     it('should not render any TextViews', async () => {
-      await initializeTestInstance('VA_VIDEO_CONNECT_HOME', addressData)
+      await initializeTestInstance({
+        appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
+      })
       expect(testInstance.findAllByType(TextView).length).toEqual(0)
     })
   })
@@ -70,7 +73,9 @@ context('AppointmentAddressAndNumber', () => {
 
   describe('when the appointmentType is VA_VIDEO_CONNECT_ONSITE', () => {
     it('should display the healthcareService', async () => {
-      await initializeTestInstance('VA_VIDEO_CONNECT_ONSITE', addressData)
+      await initializeTestInstance({
+        appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
+      })
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Rehabilitation Clinic')
     })
   })
@@ -97,7 +102,18 @@ context('AppointmentAddressAndNumber', () => {
 
   describe('when the address does not exist', () => {
     it('should not display the address TextViews', async () => {
-      await initializeTestInstance('VA', undefined)
+      await initializeTestInstance({
+        appointmentType: AppointmentTypeConstants.VA,
+        location: {
+          name: 'VA Long Beach Healthcare System',
+          address: undefined,
+          phone: {
+            areaCode: '123',
+            number: '456-7890',
+            extension: '',
+          },
+        },
+      })
       expect(testInstance.findAllByType(TextView).length).toEqual(7)
     })
   })
@@ -105,6 +121,35 @@ context('AppointmentAddressAndNumber', () => {
   describe('default', () => {
     it('should render the Get Directions component', async () => {
       expect(testInstance.findAllByType(ClickForActionLink).length).toBeTruthy()
+    })
+  })
+
+  describe('Pending Appointments', () => {
+    describe('when no healthcareProvider and location.name is given', () => {
+      it('should not display any address information ', async () => {
+        await initializeTestInstance({
+          appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
+          status: AppointmentStatusConstants.SUBMITTED,
+          isPending: true,
+          healthcareProvider: null,
+          location: {
+            name: ''
+          }
+        })
+        expect(testInstance.findAllByType(TextView).length).toEqual(0)
+      })
+    })
+
+    describe('when healthcareProvider is given', () => {
+      it('should display location name ', async () => {
+        await initializeTestInstance({
+          appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
+          status: AppointmentStatusConstants.SUBMITTED,
+          isPending: true,
+          healthcareProvider: 'Health Care Provider',
+        })
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Long Beach Healthcare System')
+      })
     })
   })
 })

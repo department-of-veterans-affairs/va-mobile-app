@@ -3,15 +3,33 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import {
-  AlertBox,
+  AppointmentAddressAndNumber,
+  AppointmentAlert,
+  AppointmentReason,
+  AppointmentTypeAndDate,
+  ContactInformation,
+  PendingAppointmentCancelButton,
+  PreferredAppointmentType,
+  PreferredDateAndTime,
+  ProviderName,
+} from '../AppointmentDetailsCommon'
+import {
+  AppointmentAttributes,
+  AppointmentCancellationStatusConstants,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentTypeConstants,
+  AppointmentTypeToID,
+} from 'store/api/types'
+import { AppointmentsState, clearAppointmentCancellation, getAppointmentMessages, trackAppointmentDetail } from 'store/slices'
+import {
   BackButton,
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
-  ClickToCallPhoneNumber,
   LinkButtonProps,
   LinkTypeOptionsConstants,
-  LinkUrlIconType,
   LoadingComponent,
   TextArea,
   TextView,
@@ -20,17 +38,6 @@ import {
   VAButtonProps,
   VAScrollView,
 } from 'components'
-import {
-  AppointmentAttributes,
-  AppointmentCancellationStatusConstants,
-  AppointmentData,
-  AppointmentLocation,
-  AppointmentStatusConstants,
-  AppointmentStatusDetailTypeConsts,
-  AppointmentTypeConstants,
-  AppointmentTypeToID,
-} from 'store/api/types'
-import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { InteractionManager } from 'react-native'
@@ -38,17 +45,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
+import { isAPendingAppointment } from 'utils/appointments'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
-import AppointmentReason from '../AppointmentDetailsCommon/AppointmentReason'
-import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
-import ProviderName from '../AppointmentDetailsCommon/ProviderName'
-import getEnv from 'utils/env'
-
-const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
-
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
@@ -61,46 +61,46 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus, appointmentMessagesById } = useSelector<RootState, AppointmentsState>(
+    (state) => state.appointments,
+  )
 
   const appointment = upcomingAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const {
-    appointmentType,
-    healthcareService,
-    location,
-    startDateUtc,
-    minutesDuration,
-    timeZone,
-    comment,
-    practitioner,
-    status,
-    statusDetail,
-    reason,
-    isCovidVaccine,
-    healthcareProvider,
-  } = attributes || ({} as AppointmentAttributes)
-  const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
+  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
+  const { name, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
+  const pendingAppointment = isAPendingAppointment(attributes)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
-
-  const whoCanceled =
-    statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
-      ? t('appointments.canceled.whoCanceled.facility')
-      : t('appointments.canceled.whoCanceled.you')
+  const messages = appointmentMessagesById[appointmentID]
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail())
+    dispatch(trackAppointmentDetail(pendingAppointment))
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
-  }, [dispatch, appointmentID])
+  }, [dispatch, appointmentID, pendingAppointment])
+
+  useEffect(() => {
+    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
+      dispatch(getAppointmentMessages(appointmentID))
+    }
+  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton onPress={goBack} canGoBack={true} label={BackButtonLabelConstants.back} showCarat={true} />,
     })
   })
+
+  useEffect(() => {
+    if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
+      dispatch(clearAppointmentCancellation())
+    } else if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.SUCCESS) {
+      dispatch(clearAppointmentCancellation())
+      navigation.goBack()
+    }
+  }, [appointmentCancellationStatus, dispatch, navigation])
 
   const goBack = (): void => {
     dispatch(clearAppointmentCancellation())
@@ -120,6 +120,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     },
   }
 
+  // TODO abstract some of these render functions into their own components - too many in one file
   const CommunityCare_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
       return (
@@ -234,7 +235,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const AddToCalendar = (): ReactElement => {
-    if (!isAppointmentCanceled) {
+    if (!isAppointmentCanceled && !pendingAppointment) {
       return (
         <Box my={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
@@ -245,49 +246,24 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const renderCancellationAlert = (): ReactElement => {
-    if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.SUCCESS) {
-      return (
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox title={t('upcomingAppointmentDetails.cancelAppointmentSuccess.title')} text={t('upcomingAppointmentDetails.cancelAppointmentSuccess.body')} border="success" />
-        </Box>
-      )
-    } else if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
-      const areaCode = phone?.areaCode
-      const phoneNumber = phone?.number
-      const findYourVALocationProps: LinkButtonProps = {
-        displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
-        linkType: LinkTypeOptionsConstants.url,
-        linkUrlIconType: LinkUrlIconType.Arrow,
-        numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-        testID: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
-        accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
-      }
-
-      return (
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox title={t('upcomingAppointmentDetails.cancelAppointmentFail.title')} text={t('upcomingAppointmentDetails.cancelAppointmentFail.body')} border="error">
-            <Box my={theme.dimensions.standardMarginBetween}>
-              <TextView variant="MobileBodyBold" {...testIdProps(location.name)}>
-                {location.name}
-              </TextView>
-            </Box>
-            {areaCode && phoneNumber && (
-              <Box>
-                <ClickToCallPhoneNumber displayedText={areaCode + '-' + phoneNumber} phone={areaCode + '-' + phoneNumber} />
-              </Box>
-            )}
-            {!phone && (
-              <Box>
-                <ClickForActionLink {...findYourVALocationProps} />
-              </Box>
-            )}
-          </AlertBox>
-        </Box>
-      )
+  const readerCancelInformation = (): ReactElement => {
+    if (pendingAppointment) {
+      return <></>
     }
 
-    return <></>
+    return (
+      <Box mt={theme.dimensions.condensedMarginBetween}>
+        {!isAppointmentCanceled ? (
+          <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
+        ) : (
+          <TextArea>
+            <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+              {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
+            </TextView>
+          </TextArea>
+        )}
+      </Box>
+    )
   }
 
   if (loadingAppointmentCancellation || !isTransitionComplete) {
@@ -297,51 +273,30 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   return (
     <VAScrollView {...testIdProps('Appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        {renderCancellationAlert()}
+        <AppointmentAlert attributes={attributes} />
         <TextArea>
-          <AppointmentTypeAndDate
-            timeZone={timeZone}
-            startDateUtc={startDateUtc}
-            appointmentType={appointmentType}
-            isAppointmentCanceled={isAppointmentCanceled}
-            whoCanceled={whoCanceled}
-            isCovidVaccine={isCovidVaccine}
-          />
+          <AppointmentTypeAndDate attributes={attributes} />
           <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
 
           <VAVCAtHome_AppointmentData />
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} healthcareProvider={healthcareProvider} />
+          <ProviderName attributes={attributes} />
 
-          <AppointmentAddressAndNumber
-            appointmentType={appointmentType}
-            healthcareService={healthcareService}
-            address={address}
-            location={location}
-            phone={phone}
-            isCovidVaccine={isCovidVaccine}
-          />
+          <AppointmentAddressAndNumber attributes={attributes} />
 
           <Atlas_AppointmentData />
-
           <CommunityCare_AppointmentData />
 
-          {reason && <AppointmentReason reason={reason} />}
+          <PreferredDateAndTime attributes={attributes} />
+          <PreferredAppointmentType attributes={attributes} />
+          <AppointmentReason attributes={attributes} messages={messages} />
+          <ContactInformation attributes={attributes} />
+          <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointment?.id} />
         </TextArea>
 
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          {!isAppointmentCanceled ? (
-            <AppointmentCancellationInfo appointment={appointment} />
-          ) : (
-            <TextArea>
-              <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
-                {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
-              </TextView>
-            </TextArea>
-          )}
-        </Box>
+        {readerCancelInformation()}
       </Box>
     </VAScrollView>
   )

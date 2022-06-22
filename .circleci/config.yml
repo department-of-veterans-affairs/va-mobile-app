@@ -12,7 +12,7 @@ executors:
       xcode: 13.1.0
 commands:
   install_deps:
-    description: "Install dependencies"
+    description: 'Install dependencies'
     parameters:
       environment:
         type: string
@@ -38,7 +38,7 @@ commands:
             echo INSTALLING BUNDLER
             sudo gem install bundler
   bundle_app:
-    description: "Bundles the app for the OS specified"
+    description: 'Bundles the app for the OS specified'
     parameters:
       os:
         type: string
@@ -47,14 +47,14 @@ commands:
           working_directory: ~/project/VAMobile
           command: yarn bundle:<<parameters.os>>
   lint:
-    description: "Run lint"
+    description: 'Run lint'
     steps:
       - run:
           working_directory: ~/project/VAMobile
           command: yarn lint:ci
           when: always
   jest:
-    description: "Run jest"
+    description: 'Run jest'
     steps:
       - run:
           working_directory: ~/project/VAMobile
@@ -63,7 +63,7 @@ commands:
       - store_test_results:
           path: VAMobile/coverage/junit/
   install_pods:
-    description: "install cocoa pods"
+    description: 'install cocoa pods'
     steps:
       - restore_cache:
           key: pods-v1-{{ checksum "VAMobile/ios/Podfile.lock" }}-{{ arch }}
@@ -77,12 +77,12 @@ commands:
           paths:
             - VAMobile/ios/Pods
   create_keys_directory:
-    description: "create directory for google keys"
+    description: 'create directory for google keys'
     steps:
       - run:
           command: mkdir VAMobile/android/keys
   decode_file:
-    description: "Decode a base64 string saves to destination"
+    description: 'Decode a base64 string saves to destination'
     parameters:
       workingDir:
         type: string
@@ -97,26 +97,26 @@ commands:
             # decode base64 secret string
             echo <<parameters.secretString>> | base64 --decode | tee <<parameters.destination>> >/dev/null
   decode_ios_keys:
-    description: "Decodes all of the ios files needed to upload to Test Flight"
+    description: 'Decodes all of the ios files needed to upload to Test Flight'
     steps:
       - decode_file:
-          workingDir: "~/project/VAMobile/ios"
+          workingDir: '~/project/VAMobile/ios'
           secretString: ${IOS_CERTIFICATE_BASE64}
           destination: ${IOS_CERTIFICATE_PATH}
       - decode_file:
-          workingDir: "~/project/VAMobile/ios"
+          workingDir: '~/project/VAMobile/ios'
           secretString: ${IOS_PROVISIONING_BASE64}
           destination: ${IOS_PROVISIONING_PATH}
       - decode_file:
-          workingDir: "~/project/VAMobile/ios"
+          workingDir: '~/project/VAMobile/ios'
           secretString: ${APPSTORE_CONNECT_BASE64}
           destination: ${APPSTORE_CONNECT_FILEPATH}
       - decode_file:
-          workingDir: "~/project/VAMobile/ios"
+          workingDir: '~/project/VAMobile/ios'
           secretString: ${IOS_GS_PLIST_BASE64}
           destination: ${IOS_GS_PLIST_PATH}
   ios_fastlane:
-    description: "Builds and deploys for iOS to the specified lane and version."
+    description: 'Builds and deploys for iOS to the specified lane and version.'
     parameters:
       version:
         type: string
@@ -145,30 +145,31 @@ commands:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}
           paths:
             - VAMobile/ios/vendor/bundle
+      - get_slack_thread
       - run:
           working_directory: ~/project/VAMobile/ios
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" tfGroup:"<<parameters.tf_group>>"
   decode_android_keys:
-    description: "Decodes all the keys needed to build and upload to google play"
+    description: 'Decodes all the keys needed to build and upload to google play'
     steps:
       - decode_file:
-          workingDir: "~/project/VAMobile/android/keys"
+          workingDir: '~/project/VAMobile/android/keys'
           secretString: ${GOOGLE_KS}
           destination: ${GOOGLE_KS_PATH}
       - decode_file:
-          workingDir: "~/project/VAMobile/android/keys"
+          workingDir: '~/project/VAMobile/android/keys'
           secretString: ${GOOGLE_SA_JSON}
           destination: ${GOOGLE_SA_PATH}
       - decode_file:
-          workingDir: "~/project/VAMobile/android/app"
+          workingDir: '~/project/VAMobile/android/app'
           secretString: ${GOOGLE_SERVICES_JSON}
           destination: ${GOOGLE_SERVICES_PATH}
       - decode_file:
-          workingDir: "~/project/VAMobile/android/keys"
+          workingDir: '~/project/VAMobile/android/keys'
           secretString: ${FIREBASE_DIST_FILE_BASE64}
           destination: ${FIREBASE_DIST_DECODE_PATH}
   android_fastlane:
-    description: "Builds and deploys for Android to the specified lane and version."
+    description: 'Builds and deploys for Android to the specified lane and version.'
     parameters:
       version:
         type: string
@@ -197,11 +198,12 @@ commands:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}
           paths:
             - VAMobile/android/vendor/bundle
+      - get_slack_thread
       - run:
           working_directory: ~/project/VAMobile/android
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" psTrack:"<<parameters.ps_track>>"
   run_script:
-    description: "Runs a bash script. Takes the working directory, script name and script options as params"
+    description: 'Runs a bash script. Takes the working directory, script name and script options as params'
     parameters:
       workingDir:
         type: string
@@ -216,6 +218,77 @@ commands:
           command: |
             chmod +x <<parameters.script_name>>
             bash <<parameters.script_name>> <<parameters.script_options>>
+  get_slack_channel_id:
+    description: 'checks DSVA slack to get the channel id from a channel name'
+    parameters:
+      channelName:
+        type: string
+    steps:
+      - run:
+          name: 'Find the right channel id since it can sometimes change'
+          command: |
+            id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/x-www-form-urlencoded' \
+              https://slack.com/api/conversations.list\?limit=1000 |
+              jq '.channels[] | .name as $data | select($data == "<<parameters.channelName>>").id' )
+            echo "export SLACK_CHANNEL_ID=${id}" >> $BASH_ENV
+
+  send_slack_message:
+    description: 'Sends a slack message in the specified channel and sets the SLACK_THREAD_TS env var'
+    parameters:
+      channelId:
+        type: string
+      message:
+        type: string
+    steps:
+      - run:
+          name: 'Post message to slack'
+          command: |
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/json' \
+              --data '{"channel":"'<<parameters.channelId>>'","text":"<<parameters.message>>"}' \
+              https://slack.com/api/chat.postMessage|
+              jq -r '.ts')
+            echo "export SLACK_THREAD_TS=${ts}" >> $BASH_ENV
+  persist_env:
+    description: 'Persist a bash env to the workspace for other jobs'
+    parameters:
+      envVar:
+        type: string
+      path:
+        type: string
+    steps:
+      - run: mkdir -p workspace
+      - run: echo << parameters.envVar >> > workspace/<< parameters.path >>
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - << parameters.path >>
+  retrieve_persisted_env:
+    description: 'retrieves an env from the workspace'
+    parameters:
+      envVar:
+        type: string
+      path:
+        type: string
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run:
+          command: |
+            echo `cat /tmp/workspace/<< parameters.path >>`
+            var=$(cat /tmp/workspace/<< parameters.path >>)
+            echo "export <<parameters.envVar>>=${var}" >> $BASH_ENV
+  save_slack_thread:
+    steps:
+      - persist_env:
+          envVar: ${SLACK_THREAD_TS}
+          path: 'threadTs'
+  get_slack_thread:
+    steps:
+      - retrieve_persisted_env:
+          envVar: 'SLACK_THREAD_TS'
+          path: 'threadTs'
 jobs:
   test:
     executor: default
@@ -228,6 +301,18 @@ jobs:
     executor: default
     steps:
       - run: echo "run"
+  start_slack_thread:
+    executor: default
+    parameters:
+      message:
+        type: string
+    steps:
+      - get_slack_channel_id:
+          channelName: 'va-mobile-build-alerts'
+      - send_slack_message:
+          message: << parameters.message >>
+          channelId: ${SLACK_CHANNEL_ID}
+      - save_slack_thread
   build_ios_qa:
     executor: ios
     steps:
@@ -236,7 +321,7 @@ jobs:
       - decode_ios_keys
       - install_pods
       - bundle_app:
-          os: "ios"
+          os: 'ios'
       - ios_fastlane
   build_android_qa:
     executor: android
@@ -246,7 +331,7 @@ jobs:
       - create_keys_directory
       - decode_android_keys
       - bundle_app:
-          os: "android"
+          os: 'android'
       - android_fastlane
   feature_build_ios:
     executor: ios
@@ -279,35 +364,35 @@ jobs:
     steps:
       - checkout
       - run_script:
-          script_name: "release_branch.sh"
-          script_options: ""
-          workingDir: "~/project/VAMobile"
+          script_name: 'release_branch.sh'
+          script_options: ''
+          workingDir: '~/project/VAMobile'
   build_ios_release:
     executor: ios
     steps:
       - checkout
       - install_deps:
-          environment: "production"
+          environment: 'production'
       - decode_ios_keys
       - install_pods
       - bundle_app:
-          os: "ios"
+          os: 'ios'
       - ios_fastlane:
           version: ${CIRCLE_TAG}
-          lane: "review"
+          lane: 'review'
   build_android_release:
     executor: android
     steps:
       - checkout
       - install_deps:
-          environment: "production"
+          environment: 'production'
       - create_keys_directory
       - decode_android_keys
       - bundle_app:
-          os: "android"
+          os: 'android'
       - android_fastlane:
           version: ${CIRCLE_TAG}
-          lane: "review"
+          lane: 'review'
   run_release_lanes:
     executor: default
     steps:
@@ -316,9 +401,9 @@ jobs:
       - decode_ios_keys
       - decode_android_keys
       - android_fastlane:
-          lane: "release"
+          lane: 'release'
       - ios_fastlane:
-          lane: "release"
+          lane: 'release'
   build_android_release_candidate:
     executor: android
     steps:
@@ -327,9 +412,9 @@ jobs:
       - create_keys_directory
       - decode_android_keys
       - bundle_app:
-          os: "android"
+          os: 'android'
       - android_fastlane:
-          lane: "rc"
+          lane: 'rc'
   build_ios_release_candidate:
     executor: ios
     steps:
@@ -338,9 +423,9 @@ jobs:
       - decode_ios_keys
       - install_pods
       - bundle_app:
-          os: "ios"
+          os: 'ios'
       - ios_fastlane:
-          lane: "rc"
+          lane: 'rc'
 workflows:
   pr:
     jobs:
@@ -349,22 +434,39 @@ workflows:
   qa_build:
     triggers:
       - schedule:
-          cron: "0 5 * * 1,2,3,4,5"
+          cron: '0 5 * * 1,2,3,4,5'
           filters:
             branches:
               only: develop
     jobs:
-      - build_android_qa
-      - build_ios_qa
+      - start_slack_thread:
+          message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
+      - build_android_qa:
+          requires:
+            - start_slack_thread
+      - build_ios_qa:
+          requires:
+            - start_slack_thread
   release_build:
     jobs:
+      - start_slack_thread:
+          message: 'Automation starting release build for the app. This build will be sent to the app stores for review upon completion. Please see :thread: for results. This process may take a while.'
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+/
+            branches:
+              ignore: /.*/
       - build_android_release:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+/
             branches:
               ignore: /.*/
       - build_ios_release:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+/
@@ -372,13 +474,24 @@ workflows:
               ignore: /.*/
   feature_build:
     jobs:
+      - start_slack_thread:
+          message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
+          filters:
+            tags:
+              only: /^feature-build-.+/
+            branches:
+              ignore: /.*/
       - feature_build_android:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^feature-build-.+/
             branches:
               ignore: /.*/
       - feature_build_ios:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^feature-build-.+/
@@ -386,13 +499,24 @@ workflows:
               ignore: /.*/
   release_candidate_build:
     jobs:
+      - start_slack_thread:
+          message: 'Release Candidate build process starting. This build is a staging build for QA to validate and do regression testing on. Please see :thread: for results. This process may take a while.'
+          filters:
+            tags:
+              only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
+            branches:
+              ignore: /.*/
       - build_android_release_candidate:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
             branches:
               ignore: /.*/
       - build_ios_release_candidate:
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^^RC-v\d+\.\d+\.\d+-\d+-\d+$/
@@ -401,7 +525,7 @@ workflows:
   new_release_branch:
     triggers:
       - schedule:
-          cron: "30 6 * * 3"
+          cron: '30 6 * * 3'
           filters:
             branches:
               only: develop
@@ -410,7 +534,7 @@ workflows:
   go_live:
     triggers:
       - schedule:
-          cron: "0 14 * * 2"
+          cron: '0 14 * * 2'
           filters:
             branches:
               only: main

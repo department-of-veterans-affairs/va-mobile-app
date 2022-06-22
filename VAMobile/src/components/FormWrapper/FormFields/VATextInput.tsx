@@ -119,6 +119,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     textContentType,
     keyboardType,
     maxLength,
+    disableFullscreenUI: true,
     placeholderTextColor: theme.colors.text.placeholder,
     onChangeText: (newVal) => {
       onChange(newVal)
