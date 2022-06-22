@@ -380,7 +380,7 @@ PODS:
   - React-jsinspector (0.67.1)
   - React-logger (0.67.1):
     - glog
-  - react-native-cookies (6.0.11):
+  - react-native-cookies (6.2.1):
     - React-Core
   - react-native-document-picker (8.0.0):
     - React-Core
@@ -466,7 +466,7 @@ PODS:
     - SDWebImageWebPCoder
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCAsyncStorage (1.15.17):
+  - RNCAsyncStorage (1.17.6):
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
@@ -785,7 +785,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 1af5de75a4c834c05d53a77c1512e5aa6c18412f
   React-jsinspector: ab80bcdb02f28cdfc0dbbaea6db1241565d59002
   React-logger: b08f354e4c928ff794ca477347fea0922aaf11c3
-  react-native-cookies: cd92f3824ed1e32a20802e8185101e14bb5b76da
+  react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
   react-native-document-picker: 429972f7ece4463aa5bcdd789622b3a674a3c5d1
   react-native-image-picker: 5fe0a96bef4935bbdfb02f59b910bf40d5526109
   react-native-notifications: 805108822ceff3440644d5701944f0cda35f5b4b
@@ -806,7 +806,7 @@ SPEC CHECKSUMS:
   ReactNativeKeyboardManager: 4fb4d82d670ec6c00e9a2d2cc576f7cbb14975d6
   ReactNativeWebPFormat: 4275844b80c2c385a10ab64f50264d720f2d691c
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCAsyncStorage: 6bd5a7ba3dde1c3facba418aa273f449bdc5437a
+  RNCAsyncStorage: 466b9df1a14bccda91da86e0b7d9a345d78e1673
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12

@@ -51,5 +51,15 @@ module.exports = {
         memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
       },
     ],
+    /** 
+     * This is a new rule added to prevent creating a component inside another component render. This is the warning you get if not turned off
+     * 21:22  warning  Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and 
+     * state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component “NeedHelpData” 
+     * and pass data as props  react/no-unstable-nested-components 
+     * If we want to keep this rule we would have to set the rule to warn and set allowAsProps to true to allow setting a component as props on the react navigation set.options. Than we would have to 
+     * go to any component that is creating a component inside another and abstract that out to it own component file or in the same file outside the parent component. 
+     * "react/no-unstable-nested-components": [ "warn",{ "allowAsProps": true }]
+     * */
+    'react/no-unstable-nested-components':'off'
   },
 }
