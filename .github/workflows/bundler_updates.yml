@@ -32,7 +32,7 @@ jobs:
             git config --global user.email 'va-mobileapp@adhocteam.us'
             git add -A
             git commit -m "Automated bundler and fastlane updates"
-            git push -u origin feature/bundler-auto-updates
+            git push -u origin develop
           else
             echo 'There are no changes to the lock files or plugins'
           fi
