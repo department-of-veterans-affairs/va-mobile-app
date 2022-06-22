@@ -72,6 +72,13 @@ if (isIOS()) {
   KeyboardManager.setEnableAutoToolbar(false)
 }
 
+/**
+ * (https://github.com/react-native-webview/react-native-webview/issues/575)
+ * Potential fix for an Android specific crash issue related to react-navigation animations when
+ * transitioning to a webview
+ */
+const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
+
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
   EditEmail: undefined
@@ -252,7 +259,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: th('veteransCrisisLine.title') }} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
-        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin') }} />
+        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin'), animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
       </Stack.Navigator>
     )
@@ -288,7 +295,7 @@ export const AuthedApp: FC = () => {
   return (
     <>
       <RootNavStack.Navigator
-        screenOptions={{ ...headerStyles, detachPreviousScreen: false, headerMode: 'screen' }}
+        screenOptions={{ ...headerStyles, detachPreviousScreen: false }}
         initialRouteName="Tabs"
         screenListeners={{
           transitionStart: (e) => {

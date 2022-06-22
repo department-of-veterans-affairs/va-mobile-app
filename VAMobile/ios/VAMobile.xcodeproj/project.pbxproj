@@ -840,8 +840,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-QA";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = W2VK9K4NG2;
@@ -902,7 +902,7 @@
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-DQA";
 				PRODUCT_BUNDLE_IDENTIFIER = gov.va.vamobileapp;
 				PRODUCT_NAME = VAMobile;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development gov.va.vamobileapp 1626208452";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore gov.va.vamobileapp";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -995,8 +995,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-RC";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = W2VK9K4NG2;
@@ -1057,7 +1057,7 @@
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-DRC";
 				PRODUCT_BUNDLE_IDENTIFIER = gov.va.vamobileapp;
 				PRODUCT_NAME = VAMobile;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development gov.va.vamobileapp 1626208452";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore gov.va.vamobileapp";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

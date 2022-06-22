@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { READ } from '../constants/secureMessaging'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
 import Box from './Box'
-import MessagesSentReadTag from './MessagesSentReadTag'
+import LabelTag from './LabelTag'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}
@@ -54,7 +54,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
           })}
           {isSentReadTag && (
             <Box ml={23} mt={7}>
-              <MessagesSentReadTag text={t('secureMessaging.folders.read.tag')} />
+              <LabelTag text={t('secureMessaging.folders.read.tag')} />
             </Box>
           )}
         </Box>

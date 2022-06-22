@@ -33,7 +33,7 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypesConstants,
 } from 'store/api/types'
-import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -96,7 +96,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
 
-    if (!signature) {
+    if (PREPOPULATE_SIGNATURE && !signature) {
       dispatch(getMessageSignature())
     }
     InteractionManager.runAfterInteractions(() => {
