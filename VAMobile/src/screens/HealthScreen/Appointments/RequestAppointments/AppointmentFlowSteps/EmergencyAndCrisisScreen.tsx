@@ -1,12 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { getUserEligibility, getUserFacilities } from 'store/slices/requestAppointmentSlice'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type EmergencyAndCrisisScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'EmergencyAndCrisisScreen'>
 
@@ -16,8 +17,14 @@ const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigatio
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const launchExternalLink = useExternalLink()
+  const dispatch = useAppDispatch()
 
   const navigateToCrisisLine = navigateTo('VeteransCrisisLine')
+
+  useEffect(() => {
+    dispatch(getUserEligibility())
+    dispatch(getUserFacilities())
+  }, [dispatch])
 
   const onCrisisLinePressed = () => {
     navigation.getParent()?.goBack()
