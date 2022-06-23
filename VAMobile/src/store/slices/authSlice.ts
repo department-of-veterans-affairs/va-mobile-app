@@ -561,8 +561,7 @@ export const handleTokenCallbackUrl =
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
-      const { code, state } = parseCallbackUrlParams(url)
-      debugger
+      const { code } = parseCallbackUrlParams(url)
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
       await CookieManager.clearAll()
