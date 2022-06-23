@@ -14,4 +14,4 @@ jobs:
       - name: 'print payload'
         env:
           GH_EVENT: ${{ toJson(github.event) }}
-      - run: echo $GH_EVENT
+        run: echo $GH_EVENT
