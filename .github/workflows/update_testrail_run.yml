@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Received web hook"
-      - run: echo ${{github.event}}
+      - run: echo ${{github.event}} | jq -r '.'
