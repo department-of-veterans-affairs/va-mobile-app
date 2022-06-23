@@ -2,6 +2,7 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Dimensions } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
@@ -33,12 +34,13 @@ import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/comm
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useOrientation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>
 
 const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const showActionSheetWithOptions = useShowActionSheet()
@@ -61,31 +63,29 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   })
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (imagesList?.length === 0 || filesUploadedSuccess) {
-        return
-      }
-      e.preventDefault()
-      confirmAlert({
-        title: t('fileUpload.discard.confirm.title.photos'),
-        message: t('fileUpload.discard.confirm.message.photos'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('common:cancel'),
+  useBeforeNavBackListener(navigation, (e) => {
+    if (imagesList?.length === 0 || filesUploadedSuccess) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('fileUpload.discard.confirm.title.photos'),
+      message: t('fileUpload.discard.confirm.message.photos'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: tc('cancel'),
+        },
+
+        {
+          text: t('fileUpload.discard.photos'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
           },
-          {
-            text: t('fileUpload.discard.photos'),
-            onPress: () => {
-              navigation.dispatch(e.data.action)
-            },
-          },
-        ],
-      })
+        },
+      ],
     })
-    return unsubscribe
   })
 
   const onCancel = () => {
@@ -131,7 +131,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('fileUpload.submit'),
@@ -152,7 +152,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         isRequiredField: true,
         disabled: false,
       },
-      fieldErrorMessage: t('claims:fileUpload.documentType.fieldError'),
+      fieldErrorMessage: t('fileUpload.documentType.fieldError'),
     },
     {
       fieldType: FieldType.Selector,
@@ -263,7 +263,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
             <AlertBox title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
           {request.displayName}
         </TextView>
         <Box
@@ -286,12 +286,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.condensedMarginBetween}
           mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="HelperText" color="bodyText">
-            {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
-          </TextView>
+          <TextView variant="HelperText">{t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}</TextView>
           <TextView
             variant="HelperText"
-            color="bodyText"
             accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>

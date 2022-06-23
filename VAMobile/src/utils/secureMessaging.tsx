@@ -34,13 +34,8 @@ export const getMessagesListItems = (
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps =
-      readReceipt !== READ && !isOutbound
-        ? ({ name: 'UnreadIcon', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight, fill: theme.colors.icon.unreadMessage } as VAIconProps)
-        : undefined
-    const paperClipProps = attachment
-      ? ({ name: 'PaperClip', fill: 'spinner', width: theme.dimensions.messageIconWidth, height: theme.dimensions.messageIconHeight } as VAIconProps)
-      : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
+    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {
@@ -50,22 +45,19 @@ export const getMessagesListItems = (
           }),
           variant: 'MobileBodyBold',
           textAlign: 'left',
-          color: 'primary',
         },
         leftIconProps: unreadIconProps,
         rightTextProps: {
           text: t('common:text.raw', { text: getFormattedMessageTime(sentDate) }),
           variant: 'MobileBody',
           textAlign: 'right',
-          color: 'primary',
         },
       },
       {
         leftTextProps: {
-          text: t('common:text.raw', { text: formatSubject(category, subject, t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }),
+          text: t('common:text.raw', { text: formatSubject(category, subject, t) }),
           variant: 'MobileBody',
           textAlign: 'left',
-          color: 'primary',
         },
         leftIconProps: paperClipProps,
         rightIconProps: {

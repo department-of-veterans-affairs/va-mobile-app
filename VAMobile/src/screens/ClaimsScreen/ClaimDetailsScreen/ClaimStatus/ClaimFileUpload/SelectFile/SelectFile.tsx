@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
@@ -9,7 +10,7 @@ import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useShowActionSheet, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -17,7 +18,8 @@ const { IS_TEST } = getEnv()
 type SelectFilesProps = StackScreenProps<ClaimsStackParamList, 'SelectFile'>
 
 const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
@@ -76,7 +78,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       return
     }
 
-    const options = [t('fileUpload.fileFolder'), t('common:cancel')]
+    const options = [t('fileUpload.fileFolder'), tc('cancel')]
 
     showActionSheet(
       {
@@ -105,21 +107,21 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           </Box>
         )}
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.pleaseRequestFromPhoneFiles')}
-            <TextView variant="MobileBodyBold" color={'primaryTitle'}>
+            <TextView variant="MobileBodyBold">
               {t('fileUpload.pleaseRequestFromPhoneFiles.bolded')}
               <TextView variant="MobileBody">{t('fileUpload.pleaseRequestFromPhoneFiles.pt2')}</TextView>
             </TextView>
           </TextView>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.50MB')}</TextView>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.acceptedFileTypes')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>

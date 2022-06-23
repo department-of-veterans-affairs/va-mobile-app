@@ -1,8 +1,9 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type RemoveDataProps = {
   /** text to show in the initial button that displays the alert  */
@@ -15,7 +16,8 @@ type RemoveDataProps = {
 
 const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const [displayAlert, setDisplayAlert] = useState(false)
 
   if (!displayAlert) {
@@ -23,7 +25,7 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
       <VAButton
         onPress={() => setDisplayAlert(true)}
         label={t('personalInformation.removeData', { pageName: pageName.toLowerCase() })}
-        buttonType={ButtonTypesConstants.buttonImportant}
+        buttonType={ButtonTypesConstants.buttonDestructive}
         a11yHint={t('personalInformation.removeData.a11yHint', { pageName })}
       />
     )
@@ -45,9 +47,9 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <VAButton
             onPress={() => setDisplayAlert(false)}
-            label={t('common:cancel')}
+            label={tc('cancel')}
             buttonType={ButtonTypesConstants.buttonSecondary}
-            a11yHint={t('common:cancel.continueEditing.a11yHint')}
+            a11yHint={tc('cancel.continueEditing.a11yHint')}
           />
         </Box>
       </Box>

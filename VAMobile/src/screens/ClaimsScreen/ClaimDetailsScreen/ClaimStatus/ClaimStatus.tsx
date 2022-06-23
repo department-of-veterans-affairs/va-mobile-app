@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
@@ -6,7 +7,7 @@ import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/Cl
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 import NeedHelpData from 'screens/ClaimsScreen/NeedHelpData/NeedHelpData'
@@ -26,7 +27,7 @@ type ClaimStatusProps = {
  */
 const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
 
   const ActiveClaimStatusDetails = (): ReactElement => {
@@ -70,9 +71,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <Box {...testIdProps(claimWasClosedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                {claimWasClosedOn}
-              </TextView>
+              <TextView variant="MobileBodyBold">{claimWasClosedOn}</TextView>
             </Box>
             <Box {...testIdProps(t('claimDetails.decisionPacketMailed'))} accessible={true}>
               <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>

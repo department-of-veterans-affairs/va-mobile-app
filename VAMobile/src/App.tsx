@@ -10,6 +10,7 @@ import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toas
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import { enableScreens } from 'react-native-screens'
+import { useTranslation } from 'react-i18next'
 import { utils } from '@react-native-firebase/app'
 import KeyboardManager from 'react-native-keyboard-manager'
 import React, { FC, useEffect, useRef, useState } from 'react'
@@ -38,7 +39,7 @@ import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -67,9 +68,16 @@ const RootNavStack = createStackNavigator<RootNavStackParamList>()
 // configuring KeyboardManager styling for iOS
 if (isIOS()) {
   KeyboardManager.setEnable(true)
-  KeyboardManager.setKeyboardDistanceFromTextField(theme.dimensions.keyboardManagerDistanceFromTextField)
+  KeyboardManager.setKeyboardDistanceFromTextField(45)
   KeyboardManager.setEnableAutoToolbar(false)
 }
+
+/**
+ * (https://github.com/react-native-webview/react-native-webview/issues/575)
+ * Potential fix for an Android specific crash issue related to react-navigation animations when
+ * transitioning to a webview
+ */
+const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
@@ -152,7 +160,8 @@ export const AuthGuard: FC = () => {
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const { t: th } = useTranslation(NAMESPACE.HOME)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
@@ -248,9 +257,9 @@ export const AuthGuard: FC = () => {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
-        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('home:veteransCrisisLine.title') }} />
+        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: th('veteransCrisisLine.title') }} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
-        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin') }} />
+        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin'), animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
       </Stack.Navigator>
     )
@@ -260,7 +269,7 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const t = useTranslation()
+  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
 
   return (
     <>
@@ -275,13 +284,13 @@ export const AppTabs: FC = () => {
 }
 
 export const AuthedApp: FC = () => {
-  const t = useTranslation()
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const headerStyles = useHeaderStyles()
 
-  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME))
-  const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE))
-  const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS))
-  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH))
+  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME).t)
+  const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE).t)
+  const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS).t)
+  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
 
   return (
     <>
@@ -300,10 +309,10 @@ export const AuthedApp: FC = () => {
         }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
-        <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />
+        <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
         <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
-        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: t('profile:directDeposit.title') }} />
+        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
         {homeScreens}
         {profileScreens}
         {claimsScreens}

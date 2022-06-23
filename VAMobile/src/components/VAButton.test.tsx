@@ -137,30 +137,30 @@ context('VAButton', () => {
       })
     })
 
-    describe('when the button type is buttonImportant', () => {
-      it('should set the text color to buttonImportant', async () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonImportant)
-        expect(testInstance.findByType(TextView).props.color).toEqual('buttonImportant')
+    describe('when the button type is buttonDestructive', () => {
+      it('should set the text color to buttonDestructive', async () => {
+        initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
+        expect(testInstance.findByType(TextView).props.color).toEqual('buttonDestructive')
       })
 
-      it('should set the background color to buttonImportant', async () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonImportant)
-        expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonImportant')
+      it('should set the background color to buttonDestructive', async () => {
+        initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
+        expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonDestructive')
       })
 
-      it('should set the border color to buttonImportant', async () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonImportant)
-        expect(testInstance.findByType(Box).props.borderColor).toEqual('buttonImportant')
+      it('should set the border color to buttonDestructive', async () => {
+        initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
+        expect(testInstance.findByType(Box).props.borderColor).toEqual('buttonDestructive')
       })
 
       describe('when the button is pressed in', () => {
-        it('should set the backgroundColor to buttonImportantActive', async () => {
+        it('should set the backgroundColor to buttonDestructiveActive', async () => {
           await waitFor(() => {
-            initializeTestInstance(false, ButtonTypesConstants.buttonImportant)
+            initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
             testInstance.findByType(Pressable).props.onPressIn()
-            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonImportantActive')
+            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonDestructiveActive')
             testInstance.findByType(Pressable).props.onPressOut()
-            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonImportant')
+            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonDestructive')
           })
         })
       })

@@ -62,6 +62,10 @@ export const generateTestIDForInlineTextIconList = (listOfText: Array<InlineText
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
     listOfTextID.push(listOfTextItem.leftTextProps.text)
+
+    if (listOfTextItem.rightTextProps?.text) {
+      listOfTextID.push(listOfTextItem.rightTextProps.text)
+    }
   })
 
   return listOfTextID.join(' ')

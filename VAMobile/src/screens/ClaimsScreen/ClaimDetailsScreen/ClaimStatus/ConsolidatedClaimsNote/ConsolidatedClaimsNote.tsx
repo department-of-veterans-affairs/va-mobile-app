@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView, VAScrollView } from 'components'
@@ -7,12 +8,12 @@ import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type ConsolidatedClaimsNoteProps = StackScreenProps<ClaimsStackParamList, 'ConsolidatedClaimsNote'>
 
 const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = ({ navigation })
     <VAScrollView {...testIdProps(generateTestID(t('claimDetails.consolidatedClaims.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('claimDetails.consolidatedClaims.noteHeader')}
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.consolidatedClaims.noteContent')}</TextView>

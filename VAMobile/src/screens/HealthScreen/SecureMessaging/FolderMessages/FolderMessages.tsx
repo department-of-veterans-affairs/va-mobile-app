@@ -1,7 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { BackButton, Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -12,7 +13,7 @@ import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessa
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
@@ -20,9 +21,9 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
 const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
-  const { folderID, folderName, draftSaved } = route.params
+  const { folderID, folderName } = route.params
 
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
@@ -80,7 +81,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }
 
   if (loading) {
-    const text = draftSaved ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.messages.loading')
+    const text = t('secureMessaging.messages.loading')
     return <LoadingComponent text={text} />
   }
 
@@ -125,11 +126,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <>
       <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
-        {draftSaved && (
-          <Box mt={theme.dimensions.contentMarginTop}>
-            <MessageAlert saveDraftComplete={draftSaved} />
-          </Box>
-        )}
         <MessageList
           items={getMessagesListItems(messages, t, onMessagePress, folderName)}
           title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}

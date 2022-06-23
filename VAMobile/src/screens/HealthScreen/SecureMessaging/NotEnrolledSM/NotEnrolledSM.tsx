@@ -1,16 +1,17 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
 const NotEnrolledSM: FC = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tc = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
   const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
@@ -46,19 +47,17 @@ const NotEnrolledSM: FC = () => {
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme.dimensions.gutter} mb={standardMarginBetween}>
-          <TextView variant="BitterBoldHeading" color={'primaryTitle'}>
-            {t('notEnrolledSM.title')}
-          </TextView>
+          <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
         </Box>
         <Box>
           <TextArea>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
+            <TextView variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
               {t('notEnrolledSM.withSM')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
             <Box mb={standardMarginBetween}>
@@ -75,9 +74,7 @@ const NotEnrolledSM: FC = () => {
             </Box>
             <Box mb={standardMarginBetween}>
               <TextView>
-                <TextView variant="MobileBodyBold" color={'primaryTitle'}>
-                  {tc('note') + ' '}
-                </TextView>
+                <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
               </TextView>
             </Box>

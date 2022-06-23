@@ -1,5 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { ViewStyle } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
@@ -11,7 +12,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
@@ -28,7 +29,7 @@ export const getInboxUnreadCount = (state: RootState): number => {
 }
 
 const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]

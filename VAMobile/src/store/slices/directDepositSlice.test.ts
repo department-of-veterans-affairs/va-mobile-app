@@ -4,6 +4,7 @@ import { APIError, DirectDepositData } from '../api'
 import { finishEditBankInfo, getBankData, updateBankInfo } from './directDepositSlice'
 import { find } from 'underscore'
 import { DirectDepositErrors } from 'constants/errors'
+import { SnackbarMessages } from 'components/SnackBar'
 
 export const ActionTypes: {
   DIRECT_DEPOSIT_START_SAVE_BANK_INFO: string
@@ -20,6 +21,8 @@ export const ActionTypes: {
   DIRECT_DEPOSIT_FINISH_EDIT_BANK_INFO: 'directDeposit/dispatchFinishEditBankInfo',
   ERRORS_SET_ERROR: 'error/dispatchSetError',
 }
+
+const snackbarMessages: SnackbarMessages = { errorMsg: 'Direct deposit information could not be saved', successMsg: 'Direct deposit information saved' }
 
 context('directDeposit', () => {
   describe('getBankData', () => {
@@ -117,7 +120,7 @@ context('directDeposit', () => {
         .mockResolvedValue(mockBankInfoPayload)
 
       const store = realStore()
-      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType))
+      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType, snackbarMessages))
 
       const actions = store.getActions()
 
@@ -149,7 +152,7 @@ context('directDeposit', () => {
         .mockRejectedValue(error)
 
       const store = realStore()
-      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType))
+      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType, snackbarMessages))
 
       const actions = store.getActions()
 
@@ -201,7 +204,7 @@ context('directDeposit', () => {
         .mockRejectedValue(invalidRoutingNumberError)
 
       const store = realStore()
-      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType))
+      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType, snackbarMessages))
 
       const actions = store.getActions()
 
