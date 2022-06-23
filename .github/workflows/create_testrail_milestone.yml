@@ -12,17 +12,6 @@ on:
     outputs:
       milestoneId:
         value: ${{jobs.create_milestone.outputs.milestoneId}}
-  workflow_dispatch:
-    secrets:
-      TEST_RAIL_USER:
-        description: "Testrail robot userid"
-        required: true
-      TEST_RAIL_KEY:
-        description: "Testrail api key"
-        required: true
-    outputs:
-      milestoneId:
-        value: ${{jobs.create_milestone.outputs.milestoneId}}
 jobs:
   create_milestone:
     outputs:
