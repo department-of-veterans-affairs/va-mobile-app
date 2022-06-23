@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useLayoutEffect } from 'react'
 
 import { Box, TextView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -26,7 +26,7 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
   const { gutter, contentMarginTop } = theme.dimensions
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       ...headerStyle,
     })

@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useLayoutEffect } from 'react'
 
 import { Box, TextView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -24,7 +24,7 @@ const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation }) => {
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.valocation.loading') })
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       ...headerStyle,
     })

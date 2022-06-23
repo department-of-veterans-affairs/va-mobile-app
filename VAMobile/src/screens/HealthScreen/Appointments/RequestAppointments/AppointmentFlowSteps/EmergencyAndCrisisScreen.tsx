@@ -6,15 +6,29 @@ import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhit
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type EmergencyAndCrisisScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'EmergencyAndCrisisScreen'>
 
-const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = () => {
+const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
+  const launchExternalLink = useExternalLink()
+
+  const navigateToCrisisLine = navigateTo('VeteransCrisisLine')
+
+  const onCrisisLinePressed = () => {
+    navigation.getParent()?.goBack()
+    navigateToCrisisLine()
+  }
+
+  const on911Pressed = () => {
+    navigation.getParent()?.goBack()
+    const open911 = 'tel:911'
+    launchExternalLink(open911)
+  }
 
   return (
     <AppointmentFlowLayout firstActionButtonPress={navigateTo('TypeOfCareSelectionScreen')} firstActionButtonTitle={t('requestAppointment.continueToRequestBtn')}>
@@ -25,7 +39,7 @@ const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = () => {
         </TextView>
         <AppointmentFlowWhiteCtaButton
           mx={10}
-          onPress={() => {}}
+          onPress={on911Pressed}
           text={t('requestAppointments.call911BtnTitle')}
           label={t('requestAppointments.call911Btnlabel')}
           hint={t('requestAppointments.call911BtnHint')}
@@ -35,7 +49,7 @@ const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = () => {
         </TextView>
         <AppointmentFlowWhiteCtaButton
           mx={10}
-          onPress={() => {}}
+          onPress={onCrisisLinePressed}
           text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
         />
       </Box>

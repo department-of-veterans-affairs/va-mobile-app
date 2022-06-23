@@ -138,7 +138,7 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
     <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
-    <HealthStack.Screen key={'RequestAppointmentScreen'} name="RequestAppointmentScreen" component={RequestAppointmentScreen} options={{ headerShown: false }} />,
+
     <HealthStack.Screen
       key={'NoRequestAppointmentAccess'}
       name="NoRequestAppointmentAccess"
@@ -167,6 +167,12 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
         options={{
           title: t('requestAppointment.modalNeedHelpChoosingLinkTitle'),
         }}
+      />
+      <HealthStack.Screen
+        key={'RequestAppointmentScreen'}
+        name="RequestAppointmentScreen"
+        component={RequestAppointmentScreen}
+        options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </HealthStack.Group>,
   ]
