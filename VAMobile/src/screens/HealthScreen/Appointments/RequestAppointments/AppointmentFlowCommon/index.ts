@@ -4,3 +4,5 @@ export { default as AppointmentFlowTitleSection } from './AppointmentFlowTitleSe
 export * from './AppointmentFlowTitleSection'
 export { default as AppointmentFlowWhiteCtaButton } from './AppointmentFlowWhiteCtaButton'
 export * from './AppointmentFlowWhiteCtaButton'
+export { default as AddPreferenceComponent } from './AddPreferenceComponent'
+export * from './AddPreferenceComponent'
