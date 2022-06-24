@@ -1,0 +1,17 @@
+name: "Update Testrail Run"
+
+on:
+  repository_dispatch:
+    types:
+      - update_testrail_run
+
+
+jobs:
+  update_run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Received web hook"
+      - name: 'print payload'
+        env:
+          GH_EVENT: ${{ toJson(github.event) }}
+        run: echo $GH_EVENT
