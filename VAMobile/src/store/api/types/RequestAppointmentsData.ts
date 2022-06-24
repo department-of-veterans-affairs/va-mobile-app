@@ -354,3 +354,41 @@ export const VISIT_TYPE: Array<visitTypeObjectType> = [
     a11yLabel: 'Telehealth (through V-A Video Connect)',
   },
 ]
+
+export type UserEligibilityAttributes = {
+  services: Array<UserEligibilityService>
+}
+export type UserEligibilityService = {
+  name: string
+  requestEligibleFacilities: Array<string>
+  directEligibleFacilities: Array<string>
+}
+
+export type UserEligibilityData = {
+  data: {
+    type: string
+    id: string
+    attributes: UserEligibilityAttributes
+  }
+}
+
+export type UserFacilitiesAttributes = {
+  facilities: Array<UserFacilityInfo>
+}
+export type UserFacilityInfo = {
+  id: string
+  name: string
+  city: string
+  state: string
+  cerner: boolean
+  miles: string
+  clinics: Array<Record<string, unknown>> // Todo find out the object structure for clinics
+}
+
+export type UserFacilitiesData = {
+  data: {
+    type: string
+    id: string
+    attributes: UserFacilitiesAttributes
+  }
+}

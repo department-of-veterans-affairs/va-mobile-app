@@ -30,6 +30,7 @@ import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 import vaccineReducer from 'store/slices/vaccineSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
+import requestAppoitnmentReducer from 'store/slices/requestAppointmentSlice'
 import { InitialState } from 'store/slices'
 import theme from 'styles/themes/standardTheme'
 
@@ -146,6 +147,7 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       snackBar: snackbarReducer,
       vaccine: vaccineReducer,
       payments: paymentsReducer,
+      requestAppointment: requestAppoitnmentReducer,
     },
     middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
     preloadedState: { ...state },
