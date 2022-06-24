@@ -100,6 +100,9 @@ export type TypeOfAudiologyCareObjectType = {
   specialties?: Array<TypeOfCareSpecialtiesTypes>
 }
 
+// Array for the type of care to always show on the select type of care screen on the request appointment flow
+export const ALWAYS_SHOW_CARE_LIST: Array<TypeOfCareNameTypes> = ['Eye care', 'Primary care', 'Nutrition and food', 'COVID-19 vaccine', 'Podiatry', 'Sleep medicine']
+
 export const TYPE_OF_CARE: Array<TypeOfCareObjectType> = [
   {
     id: '323',

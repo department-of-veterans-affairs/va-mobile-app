@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
-import { GeneralHelpScreen, SubTypeHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
+import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Appointments from './Appointments'
@@ -105,6 +105,7 @@ export type HealthStackParamList = WebviewStackParams & {
     careTypeId: string
   }
   NoRequestAppointmentAccess: undefined
+  TypeOfCareNotListedHelpScreen: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -166,6 +167,14 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
         component={SubTypeHelpScreen}
         options={{
           title: t('requestAppointment.modalNeedHelpChoosingLinkTitle'),
+        }}
+      />
+      <HealthStack.Screen
+        key={'TypeOfCareNotListedHelpScreen'}
+        name="TypeOfCareNotListedHelpScreen"
+        component={TypeOfCareNotListedHelpScreen}
+        options={{
+          title: t('requestAppointment.typeOfCareNotListedModalTitle'),
         }}
       />
       <HealthStack.Screen
