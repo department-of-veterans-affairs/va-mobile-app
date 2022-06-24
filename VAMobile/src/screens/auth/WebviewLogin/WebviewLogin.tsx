@@ -28,16 +28,19 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const params = qs.stringify({
-    client_id: AUTH_CLIENT_ID,
-    redirect_uri: AUTH_REDIRECT_URL,
-    scope: AUTH_SCOPES,
-    response_type: 'code',
-    response_mode: 'query',
-    code_challenge_method: 'S256',
+    application: 'vamobile',
+    oauth: 'true',
     code_challenge: codeChallenge,
-    state: authorizeStateParam,
+    code_challenge_method: 'S256',
+    // client_id: AUTH_CLIENT_ID,
+    // redirect_uri: AUTH_REDIRECT_URL,
+    // scope: AUTH_SCOPES,
+    // response_type: 'code',
+    // response_mode: 'query',
+    // state: authorizeStateParam,
   })
   const webLoginUrl = `${AUTH_ENDPOINT}?${params}`
+  // console.log(webLoginUrl)
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
     position: 'absolute',
@@ -57,6 +60,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     const iosAuth = async () => {
       try {
         const callbackUrl = await startIosAuthSession(codeChallenge || '', authorizeStateParam || '')
+        console.log(callbackUrl)
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'

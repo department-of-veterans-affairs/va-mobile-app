@@ -15,7 +15,7 @@ echo "" > .env
 if [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
-  AUTH_PREFIX="sqa."
+  AUTH_PREFIX="staging."
   API_PREFIX="staging-api."
   echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=true" >> .env
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET
@@ -32,10 +32,11 @@ fi
 echo "ENVIRONMENT=$environment" >> .env
 # set api endpoints
 echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
- AUTH_ROOT="https://${AUTH_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
-echo "AUTH_ENDPOINT=${AUTH_ROOT}/authorize" >> .env
-echo "AUTH_TOKEN_EXCHANGE_URL=${AUTH_ROOT}/token" >> .env
-echo "AUTH_REVOKE_URL=${AUTH_ROOT}/revoke" >> .env
+ AUTH_ROOT="https://${AUTH_PREFIX}va.gov"
+echo "AUTH_ENDPOINT=${AUTH_ROOT}/sign-in" >> .env
+echo "AUTH_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
+echo "AUTH_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
+echo "AUTH_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 if [[ $showDebug == 'true' ]]
 then
   echo true

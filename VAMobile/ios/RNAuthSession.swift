@@ -33,14 +33,14 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
     let items = [
         URLQueryItem(name: "application", value: "vamobile"),
         URLQueryItem(name: "oauth", value: "true"),
-        URLQueryItem(name: "client_id", value: clientId),
-        URLQueryItem(name: "redirect_uri", value: redirectUri),
-        URLQueryItem(name: "scope", value: scope),
-        URLQueryItem(name: "response_type", value: "code"),
-        URLQueryItem(name: "response_mode", value: "query"),
+        // URLQueryItem(name: "client_id", value: clientId),
+        // URLQueryItem(name: "redirect_uri", value: redirectUri),
+        // URLQueryItem(name: "scope", value: scope),
+        // URLQueryItem(name: "response_type", value: "code"),
+        // URLQueryItem(name: "response_mode", value: "query"),
         URLQueryItem(name: "code_challenge_method", value: "S256"),
         URLQueryItem(name: "code_challenge", value: codeChallenge),
-        URLQueryItem(name: "state", value: state)
+        // URLQueryItem(name: "state", value: state)
     ]
     guard var comps = URLComponents(string: authUrl) else {
       return nil
