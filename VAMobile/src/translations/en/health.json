@@ -175,6 +175,8 @@
   "prescriptions.refill.noRrefillableTabValue": "Non-Refillable",
   "prescriptions.refill.weWillMailText": "We'll mail your refills to the address on file at your local VA Pharmacy.",
   "prescriptions.refill.pageHeaderTitle": "Refill",
+  "prescriptions.refill.submit_one": "Submitting {{ count }} out of {{total}} refill request...",
+  "prescriptions.refill.submit_other": "Submitting {{ count }} out of {{total}} refill requests...",
   "secureMessaging.a11yHint": "go to Secure Messaging tool",
   "secureMessaging.attachments": "Attachments",
   "secureMessaging.attachments.acceptedFileTypes": "doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.",
