@@ -13,5 +13,35 @@ jobs:
       - run: echo "Received web hook"
       - name: 'print payload'
         env:
-          GH_EVENT: ${{ toJson(github.event) }}
-        run: echo $GH_EVENT
+          NAME: ${{ github.event.client_payload.name }}
+          STATS: ${{ github.event.client_payload.stats }}
+          REF: ${{ github.event.client_payload.refs }}
+          URL: ${{ github.event.client_payload.name }}
+        run: |
+            echo $NAME
+            echo $REF
+            echo $URL
+            echo $STATS
+
+            s=${STATS##[}
+            s=${s%]}
+            IFS=', ' read -r -a stats <<< $s
+
+            NEW_CHART=$(cat << EOM
+            pie showData
+              title ${NAME}
+              "Passed": ${stats[0]}
+              "Blocked": ${stats[1]}
+              "Retest": ${stats[3]}
+              "Failed": ${stats[4]}
+              "Untested": ${stats[2]}
+            EOM)
+
+            echo "$NEW_CHART"
+      - uses: actions/checkout@v2
+      - run: |
+          OLD_BODY=$(gh issue view 3359 --json body | jq -r '.body')
+          NEW_BODY=$(echo "$OLD_BODY" | sed -e '/<!--start-mermaid-->/,/<!--end-mermaid-->/!b;//!d;/<!--start-mermaid-->/!i\ '${NEW_CHART}'')
+          echo $NEW_BODY
+          gh issue edit 3359 -b $NEW_BODY
+        shell: bash
