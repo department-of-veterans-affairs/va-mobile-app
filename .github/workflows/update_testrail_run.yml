@@ -33,7 +33,7 @@ jobs:
               \"Retest\": ${stats[3]}
               \"Failed\": ${stats[4]}
               \"Untested\": ${stats[2]}
-          "
+            "
 
 
             echo "$NEW_CHART"
