@@ -43,10 +43,10 @@ jobs:
           '
 
           echo $NEW_CHART
-          OLD_BODY=$(gh issue view 3359 --json body | jq -r '.body')
+          OLD_BODY=$(gh issue view $REF --json body | jq -r '.body')
           echo $OLD_BODY >> body.txt
           perl -i -0777 -pe 's/(?<=pie showData\s).*?(?=```)/\n'"${NEW_CHART}"'/s' body.txt
           NEW_BODY=`cat body.txt`
           echo $NEW_BODY
-          gh issue edit 3359 -b "${NEW_BODY}"
+          gh issue edit $REF -b "${NEW_BODY}"
         shell: bash
