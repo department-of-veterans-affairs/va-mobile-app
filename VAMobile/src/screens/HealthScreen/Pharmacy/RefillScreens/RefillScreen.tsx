@@ -7,9 +7,9 @@ import { Box, FooterButton, LoadingComponent, TabsControl, TabsValuesType, TextV
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionState, getRefillablePrescriptions } from 'store/slices/prescriptionSlice'
+import { PrescriptionState, getRefillablePrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
+import { PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { useAppDispatch, useDestructiveAlert, useModalHeaderStyles, useTheme } from 'utils/hooks'
 import SelectionList from 'components/SelectionList'
@@ -27,10 +27,10 @@ const RefillScreen: FC<RefillcreenProps> = ({ navigation }) => {
 
   const [selecteTab, setSelectedTab] = useState(0)
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
+  const [totalPrescriptionsToRefill, setTotalPrescriptionsToRefill] = useState(0)
 
-  const { loadingRefillable, refillableCount, nonRefillableCount, refillablePrescriptions, needsRefillableLoaded } = useSelector<RootState, PrescriptionState>(
-    (s) => s.prescriptions,
-  )
+  const { loadingRefillable, loadingRequestRefills, refillableCount, nonRefillableCount, refillablePrescriptions, needsRefillableLoaded, submittedRequestRefillCount } =
+    useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []
 
   const tabs: TabsValuesType = [
@@ -70,7 +70,18 @@ const RefillScreen: FC<RefillcreenProps> = ({ navigation }) => {
         },
         {
           text: t('prescriptions.refill.RequestRefillButtonTitle', { plural: '' }),
-          onPress: () => {},
+          onPress: () => {
+            const prescriptionsToRefill: PrescriptionsList = []
+            // todo add params
+            Object.values(selectedValues).forEach((isSelected, index) => {
+              if (isSelected) {
+                prescriptionsToRefill.push(refillable[index])
+              }
+            })
+
+            setTotalPrescriptionsToRefill(prescriptionsToRefill.length)
+            dispatch(requestRefills(prescriptionsToRefill))
+          },
         },
       ],
     })
@@ -89,6 +100,12 @@ const RefillScreen: FC<RefillcreenProps> = ({ navigation }) => {
 
     return listItems
   }
+
+  if (loadingRequestRefills) {
+    // TODO update count to be the count actually submitted not selected
+    return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: totalPrescriptionsToRefill })} />
+  }
+
   return (
     <>
       <VAScrollView>
