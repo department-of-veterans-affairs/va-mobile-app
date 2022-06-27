@@ -8,7 +8,7 @@ on:
 
 jobs:
   update_run:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - run: echo "Received web hook"
       - name: 'print payload'
@@ -41,9 +41,10 @@ jobs:
       - uses: actions/checkout@v2
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
+      - run: brew install gnu-sed
       - run: |
           OLD_BODY=$(gh issue view 3359 --json body | jq -r '.body')
-          NEW_BODY=$(echo "$OLD_BODY" | sed -e '/<!--start-mermaid-->/,/<!--end-mermaid-->/!b;//!d;/<!--start-mermaid-->/!i\ '${NEW_CHART}'')
+          NEW_BODY=$(echo "$OLD_BODY" | gsed -e '/<!--start-mermaid-->/,/<!--end-mermaid-->/!b;//!d;/<!--start-mermaid-->/!i\ '${NEW_CHART}'')
           echo $NEW_BODY
           gh issue edit 3359 -b $NEW_BODY
         shell: bash
