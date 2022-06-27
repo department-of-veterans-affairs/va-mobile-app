@@ -9,6 +9,10 @@ on:
 jobs:
   update_run:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl-version:
+          - 'latest'
     steps:
       - run: echo "Received web hook"
       - name: 'print payload'
@@ -34,7 +38,6 @@ jobs:
               \"Failed\": ${stats[4]}
               \"Untested\": ${stats[2]}
             "
-
 
             echo "$NEW_CHART"
       - uses: actions/checkout@v2
