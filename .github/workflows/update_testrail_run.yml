@@ -33,8 +33,8 @@ jobs:
               \"Retest\": ${stats[3]}
               \"Failed\": ${stats[4]}
               \"Untested\": ${stats[2]}
+          "
 
-            EOM)
 
             echo "$NEW_CHART"
       - uses: actions/checkout@v2
