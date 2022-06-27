@@ -9,9 +9,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PURPOSE_TEXT } from 'store/api'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type ReasonForAppointmentScreen = StackScreenProps<AppointmentFlowModalStackParamList, 'ReasonForAppointmentScreen'>
+type VAReasonForAppointmentScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAReasonForAppointmentScreen'>
 
-const ReasonForAppointmentScreen: FC<ReasonForAppointmentScreen> = ({ navigation }) => {
+const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
@@ -96,4 +96,4 @@ const ReasonForAppointmentScreen: FC<ReasonForAppointmentScreen> = ({ navigation
   )
 }
 
-export default ReasonForAppointmentScreen
+export default VAReasonForAppointmentScreen

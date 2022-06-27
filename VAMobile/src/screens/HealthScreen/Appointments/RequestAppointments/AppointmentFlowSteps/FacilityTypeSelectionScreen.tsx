@@ -11,14 +11,17 @@ import { useTranslation } from 'react-i18next'
 
 type FacilityTypeSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'FacilityTypeSelectionScreen'>
 
-const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ navigation }) => {
+const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
+  const { selectedTypeOfCareId } = route.params
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
   const [selectedFacilityType, setSelectedFacilityType] = useState<string>()
   const [noFacilityTypeSelectedError, setFacilityTypeSelectedError] = useState(false)
 
-  const navigateToVisitType = navigateTo('VisitTypeSelectionScreen')
+  const navigateToVAReason = navigateTo('VAReasonForAppointmentScreen')
+  const navigateToCCReason = navigateTo('CCReasonForAppointmentScreen')
+  const navigateToSubType = navigateTo('SubTypeOfCareSelectionScreen', { selectedTypeOfCareId })
 
   const onSelectedFacilityType = (type: string): void => {
     if (type) {
@@ -33,7 +36,13 @@ const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ nav
     } else {
       // TODO add logic for cc
       if (selectedFacilityType === FacilityTypeValueMapping.VA) {
-        navigateToVisitType()
+        navigateToVAReason()
+      } else {
+        if (selectedTypeOfCareId === 'audiology') {
+          navigateToSubType()
+        } else {
+          navigateToCCReason()
+        }
       }
     }
   }

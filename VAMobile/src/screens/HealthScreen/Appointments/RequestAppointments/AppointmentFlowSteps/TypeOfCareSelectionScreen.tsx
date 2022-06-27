@@ -2,29 +2,28 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { ALWAYS_SHOW_CARE_LIST, TYPE_OF_CARE, TypeOfCareWithSubCareIdType, typeOfCareWithSubCareId } from 'store/api'
+import { ALWAYS_SHOW_CARE_LIST, TYPE_OF_CARE, TypeOfCareObjectType, TypeOfCareWithSubCareIdType } from 'store/api/types'
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { RadioGroup, radioOption } from 'components'
-import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
-import { RootState } from 'store'
+import { hasSubType, useCheckEligibilityAndRouteUser, useSetIsVAEligible } from 'utils/requestAppointments'
 import { useRouteNavigation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 
 type TypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'TypeOfCareSelectionScreen'>
 
 const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
-
+  const setIsVaEligible = useSetIsVAEligible<TypeOfCareObjectType>()
+  const checkEligibility = useCheckEligibilityAndRouteUser<TypeOfCareObjectType>()
   const [selectedTypeOfCare, setSelectedTypeOfCare] = useState<string>()
   const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
 
-  const navigateToReason = navigateTo('ReasonForAppointmentScreen')
+  let careListData: Array<TypeOfCareObjectType> = []
+
   const navigateToTypeOfCareNotListed = navigateTo('TypeOfCareNotListedHelpScreen')
   const navigateToSubType = navigateTo('SubTypeOfCareSelectionScreen', { selectedTypeOfCareId: selectedTypeOfCare })
-  const { eligibleTypeOfCares } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
 
   const onSetSelectedTypeOfCare = (type: string): void => {
     if (type) {
@@ -33,26 +32,21 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
     }
   }
 
-  const hasSubType = (x: TypeOfCareWithSubCareIdType): x is TypeOfCareWithSubCareIdType => typeOfCareWithSubCareId.includes(x)
-
-  const getTypesOfCare = () => {
+  const getTypesOfCareOptions = () => {
     const typesOfCareOptions: Array<radioOption<string>> = []
 
-    TYPE_OF_CARE.sort((a, b) => {
-      return a.name.toLocaleUpperCase() > b.name.toLocaleUpperCase() ? 1 : -1
-    })
+    // Get only the type of cares that are always shown and the ones that the user is eligible for sorted
+    careListData = setIsVaEligible(TYPE_OF_CARE)
+      .filter((care) => {
+        return ALWAYS_SHOW_CARE_LIST.includes(care.idV2) || care.isVaEligible
+      })
+      .sort((a, b) => {
+        return a.name.toLocaleUpperCase() > b.name.toLocaleUpperCase() ? 1 : -1
+      })
 
-    // Get only the type of cares that are always shown and the ones that the user is eligible for
-    const eligibleCares = TYPE_OF_CARE.filter((care) => {
-      const careItem = eligibleTypeOfCares.find((item) => item.name === care.idV2)
-
-      // if it is one of the always shown care or has a facility in the request or direct eligibility list
-      return ALWAYS_SHOW_CARE_LIST.includes(care.name) || (careItem && (careItem.requestEligibleFacilities.length > 0 || careItem.directEligibleFacilities.length > 0))
-    })
-
-    for (const typesOfCare of eligibleCares) {
+    for (const typesOfCare of careListData) {
       typesOfCareOptions.push({
-        value: typesOfCare.id,
+        value: typesOfCare.idV2,
         labelKey: typesOfCare.label ? typesOfCare.label : typesOfCare.name,
       })
     }
@@ -63,10 +57,11 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
     if (!selectedTypeOfCare) {
       setNoTypeSelectedError(true)
     } else {
-      if (hasSubType(selectedTypeOfCare as TypeOfCareWithSubCareIdType)) {
+      // if it has subtype but is not audiology send to subtype page
+      if (hasSubType(selectedTypeOfCare as TypeOfCareWithSubCareIdType) && selectedTypeOfCare !== 'audiology') {
         navigateToSubType()
       } else {
-        navigateToReason()
+        checkEligibility(selectedTypeOfCare, careListData)
       }
     }
   }
@@ -80,7 +75,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
       linkText={t('requestAppointment.typeOfCareNotListedModalTitle')}
       onLinkPress={navigateToTypeOfCareNotListed}>
       <AppointmentFlowTitleSection title={t('requestAppointment.whatTypeOfCare')} error={noTypeSelectedError} errorMessage={t('requestAppointment.typeOfCareNotSelectedError')} />
-      <RadioGroup options={getTypesOfCare()} onChange={onSetSelectedTypeOfCare} value={selectedTypeOfCare} isRadioList={true} />
+      <RadioGroup options={getTypesOfCareOptions()} onChange={onSetSelectedTypeOfCare} value={selectedTypeOfCare} isRadioList={true} />
     </AppointmentFlowLayout>
   )
 }

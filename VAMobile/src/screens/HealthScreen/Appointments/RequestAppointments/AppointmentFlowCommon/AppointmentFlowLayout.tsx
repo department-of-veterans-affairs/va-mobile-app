@@ -1,10 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, TextView, VAButton, VAScrollView } from 'components'
+import { Box, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
+import { RootState } from 'store'
 import { ViewStyle } from 'react-native'
+import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
+import colors from 'styles/themes/VAColors'
 
 type AppointmentFlowLayoutProps = {
   /** Optional action for the back or single button */
@@ -41,6 +45,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
+  const { loadingCCEligibility } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
 
   const getButtonSection = () => {
     const firstActionPress = firstActionButtonPress ? firstActionButtonPress : () => {}
@@ -57,14 +62,20 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
             />
           </Box>
           <Box flex={1}>
-            <VAButton
-              onPress={secondActionButtonPress}
-              label={secondActionButtonTitle || tc('continue')}
-              buttonType={'buttonPrimary'}
-              disabled={disableSecondAction}
-              minHeight={53}
-              a11yHint={t('requestAppointment.continueBtnA11yHint')}
-            />
+            {loadingCCEligibility ? (
+              <Box minHeight={53} backgroundColor="buttonPrimary" justifyContent="center" borderRadius={6}>
+                <LoadingComponent justTheSpinnerIcon={true} spinnerColor={colors.grayLightest} spinnerHeight={24} spinnerWidth={24} />
+              </Box>
+            ) : (
+              <VAButton
+                onPress={secondActionButtonPress}
+                label={secondActionButtonTitle || tc('continue')}
+                buttonType={'buttonPrimary'}
+                disabled={disableSecondAction}
+                minHeight={53}
+                a11yHint={t('requestAppointment.continueBtnA11yHint')}
+              />
+            )}
           </Box>
         </Box>
       )

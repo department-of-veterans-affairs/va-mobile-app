@@ -3,28 +3,33 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { CloseModalButton, HeaderIconBtn } from 'components'
-import { DateTime } from 'luxon'
 import {
+  CCReasonForAppointmentScreen,
   EmergencyAndCrisisScreen,
   FacilityTypeSelectionScreen,
-  ReasonForAppointmentScreen,
   SubTypeOfCareSelectionScreen,
   TypeOfCareSelectionScreen,
+  VAReasonForAppointmentScreen,
   VisitTypeSelectionScreen,
 } from './AppointmentFlowSteps'
+import { CloseModalButton, HeaderIconBtn } from 'components'
+import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { TypeOfCareIdV2Types } from 'store/api'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   TypeOfCareSelectionScreen: undefined
-  ReasonForAppointmentScreen: undefined
+  VAReasonForAppointmentScreen: undefined
+  CCReasonForAppointmentScreen: undefined
   SubTypeOfCareSelectionScreen: {
-    selectedTypeOfCareId: string
+    selectedTypeOfCareId: TypeOfCareIdV2Types
   }
-  FacilityTypeSelectionScreen: undefined
+  FacilityTypeSelectionScreen: {
+    selectedTypeOfCareId: TypeOfCareIdV2Types
+  }
   VisitTypeSelectionScreen: undefined
   EmergencyAndCrisisScreen: undefined
 }
@@ -90,7 +95,8 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
       }}>
       <Stack.Screen name="EmergencyAndCrisisScreen" component={EmergencyAndCrisisScreen} />
       <Stack.Screen name="TypeOfCareSelectionScreen" component={TypeOfCareSelectionScreen} />
-      <Stack.Screen name="ReasonForAppointmentScreen" component={ReasonForAppointmentScreen} />
+      <Stack.Screen name="VAReasonForAppointmentScreen" component={VAReasonForAppointmentScreen} />
+      <Stack.Screen name="CCReasonForAppointmentScreen" component={CCReasonForAppointmentScreen} />
       <Stack.Screen name="SubTypeOfCareSelectionScreen" component={SubTypeOfCareSelectionScreen} />
       <Stack.Screen name="FacilityTypeSelectionScreen" component={FacilityTypeSelectionScreen} />
       <Stack.Screen name="VisitTypeSelectionScreen" component={VisitTypeSelectionScreen} />

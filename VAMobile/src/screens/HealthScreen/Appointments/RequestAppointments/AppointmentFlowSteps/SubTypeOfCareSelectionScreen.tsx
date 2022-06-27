@@ -6,7 +6,8 @@ import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../Appointme
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { RadioGroup, radioOption } from 'components'
-import { SubCareDataMapping, SubCareTitleMapping, TypeOfCareWithSubCareIdType } from 'store/api'
+import { SetIsVAEligibleType, useCheckEligibilityAndRouteUser, useSetIsVAEligible } from 'utils/requestAppointments'
+import { SubCareDataMapping, TypeOfCareWithSubCareIdType } from 'store/api/types'
 import { useRouteNavigation } from 'utils/hooks'
 
 type SubTypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'SubTypeOfCareSelectionScreen'>
@@ -16,11 +17,14 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { selectedTypeOfCareId } = route.params
-  const subTypeName = SubCareTitleMapping[selectedTypeOfCareId as TypeOfCareWithSubCareIdType]
   const [selectedSubTypeOfCare, setSelectedSubTypeOfCare] = useState<string>()
   const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
 
-  const navigateToReason = navigateTo('ReasonForAppointmentScreen')
+  let subTypeCareData: Array<SetIsVAEligibleType> = []
+  const setIsVAEligible = useSetIsVAEligible()
+  const checkEligibility = useCheckEligibilityAndRouteUser()
+
+  const navigateToReasonCC = navigateTo('CCReasonForAppointmentScreen')
   const navigateToHelpScreen = navigateTo('SubTypeHelpScreen', { careTypeId: selectedTypeOfCareId })
 
   const onSetSelectedTypeOfCare = (type: string): void => {
@@ -30,17 +34,25 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
     }
   }
 
-  const getSubTypeTitle = () => {
-    return t('requestAppointment.whatSubTypeOfCare', { subTypeName })
-  }
+  const getSubCareText = (returnErrorText = false) => {
+    const subTypeTitles: Record<TypeOfCareWithSubCareIdType, string> = {
+      sleepParentCare: t('requestAppointment.sleepSubCareTypeText'),
+      audiology: t('requestAppointment.audiologySubCareTypeText'),
+      eyeParentCare: t('requestAppointment.eyeSubCareTypeText'),
+    }
+    const subTypeName = subTypeTitles[selectedTypeOfCareId as TypeOfCareWithSubCareIdType]
 
-  const getSubTypeErrorMessage = () => {
-    return t('requestAppointment.whatSubTypeOfCareNotSelectedError', { subTypeName })
+    if (returnErrorText) {
+      return t('requestAppointment.whatSubTypeOfCareNotSelectedError', { subTypeName })
+    }
+
+    return t('requestAppointment.whatSubTypeOfCare', { subTypeName })
   }
 
   const getTypesOfSubCare = () => {
     const typesOfCareOptions: Array<radioOption<string>> = []
-    const subTypeCareData = SubCareDataMapping[selectedTypeOfCareId as TypeOfCareWithSubCareIdType]
+
+    subTypeCareData = setIsVAEligible(SubCareDataMapping[selectedTypeOfCareId as TypeOfCareWithSubCareIdType])
 
     for (const subCareData of subTypeCareData) {
       typesOfCareOptions.push({
@@ -55,7 +67,11 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
     if (!selectedSubTypeOfCare) {
       setNoTypeSelectedError(true)
     } else {
-      navigateToReason()
+      if (selectedTypeOfCareId === 'audiology') {
+        navigateToReasonCC()
+      } else {
+        checkEligibility(selectedSubTypeOfCare, subTypeCareData)
+      }
     }
   }
 
@@ -67,7 +83,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
       }}
       linkText={t('requestAppointment.modalNeedHelpChoosingLinkTitle')}
       onLinkPress={navigateToHelpScreen}>
-      <AppointmentFlowTitleSection title={getSubTypeTitle()} error={noTypeSelectedError} errorMessage={getSubTypeErrorMessage()} />
+      <AppointmentFlowTitleSection title={getSubCareText()} error={noTypeSelectedError} errorMessage={getSubCareText(true)} />
       <RadioGroup options={getTypesOfSubCare()} onChange={onSetSelectedTypeOfCare} value={selectedSubTypeOfCare} isRadioList={true} />
     </AppointmentFlowLayout>
   )

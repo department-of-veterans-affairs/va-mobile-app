@@ -6,7 +6,7 @@ import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhit
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getUserEligibility, getUserFacilities } from 'store/slices/requestAppointmentSlice'
+import { getUserFacilities, getUserVAEligibility } from 'store/slices/requestAppointmentSlice'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type EmergencyAndCrisisScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'EmergencyAndCrisisScreen'>
@@ -22,7 +22,7 @@ const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigatio
   const navigateToCrisisLine = navigateTo('VeteransCrisisLine')
 
   useEffect(() => {
-    dispatch(getUserEligibility())
+    dispatch(getUserVAEligibility())
     dispatch(getUserFacilities())
   }, [dispatch])
 
