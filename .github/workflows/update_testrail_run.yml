@@ -8,7 +8,7 @@ on:
 
 jobs:
   update_run:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - run: echo "Received web hook"
       - name: 'print payload'
@@ -27,14 +27,13 @@ jobs:
             s=${s%]}
             IFS=', ' read -r -a stats <<< $s
 
-            NEW_CHART=$(cat << EOM
-            pie showData
-              title ${NAME}
-              "Passed": ${stats[0]}
-              "Blocked": ${stats[1]}
-              "Retest": ${stats[3]}
-              "Failed": ${stats[4]}
-              "Untested": ${stats[2]}
+            NEW_CHART="title ${NAME}
+              \"Passed\": ${stats[0]}
+              \"Blocked\": ${stats[1]}
+              \"Retest\": ${stats[3]}
+              \"Failed\": ${stats[4]}
+              \"Untested\": ${stats[2]}
+
             EOM)
 
             echo "$NEW_CHART"
@@ -44,7 +43,8 @@ jobs:
       - run: brew install gnu-sed
       - run: |
           OLD_BODY=$(gh issue view 3359 --json body | jq -r '.body')
-          NEW_BODY=$(echo "$OLD_BODY" | gsed -e '/<!--start-mermaid-->/,/<!--end-mermaid-->/!b;//!d;/<!--start-mermaid-->/!i\ '${NEW_CHART}'')
-          echo $NEW_BODY
+          echo $OLD_BODY >> body.txt
+          perl -i -0777 -pe 's/(?<=pie showData\s).*?(?=```)/\n'$NEW_CHART'/s' body.txt
+          $NEW_BODY=`cat body.txt`
           gh issue edit 3359 -b $NEW_BODY
         shell: bash
