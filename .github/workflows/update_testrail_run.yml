@@ -34,7 +34,7 @@ jobs:
           s=${s%]}
           IFS=', ' read -r -a stats <<< $s
 
-          NEW_CHART='title '${NAME}'
+          NEW_CHART='title '$(echo $d | sed -e 's/\//-/g')'
             "Passed": '${stats[0]}'
             "Blocked": '${stats[1]}'
             "Retest": '${stats[3]}'
