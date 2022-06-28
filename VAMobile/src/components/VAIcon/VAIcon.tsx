@@ -56,6 +56,10 @@ import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 import IntermediateCheckBox from './svgs/checkbox/checkBoxIntermediate.svg'
 
+// white icons with changeable filled circle
+import WhiteCheckCircle from './svgs/circleWhiteIcon/white-check-circle.svg'
+import WhiteCloseCircle from './svgs/circleWhiteIcon/white-close-circle.svg'
+
 // Misc
 
 import { AccessibilityState } from 'store/slices'
@@ -151,6 +155,8 @@ export const VA_ICON_MAP = {
   ListSolid,
   InfoIcon,
   BuildingSolid,
+  WhiteCheckCircle,
+  WhiteCloseCircle,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
