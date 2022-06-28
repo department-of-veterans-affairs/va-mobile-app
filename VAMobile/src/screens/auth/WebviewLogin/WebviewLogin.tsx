@@ -23,7 +23,12 @@ import qs from 'querystringify'
 type WebviewLoginProps = StackScreenProps<WebviewStackParams, 'Webview'>
 const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const { AUTH_CLIENT_ID, AUTH_REDIRECT_URL, AUTH_SCOPES, AUTH_ENDPOINT } = getEnv()
+  const {
+    // AUTH_CLIENT_ID,
+    // AUTH_REDIRECT_URL,
+    // AUTH_SCOPES,
+    AUTH_ENDPOINT,
+  } = getEnv()
   const { codeChallenge, authorizeStateParam, authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -40,7 +45,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     // state: authorizeStateParam,
   })
   const webLoginUrl = `${AUTH_ENDPOINT}?${params}`
-  // console.log(webLoginUrl)
+  console.log(`WebviewLogin.tsx webLoginUrl: ${webLoginUrl}`)
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
     position: 'absolute',

@@ -57,6 +57,7 @@ const doRequest = async function (
     credentials: 'include',
     headers: {
       authorization: `Bearer ${_token}`,
+      'Authentication-Method': 'SIS',
       'X-Key-Inflection': 'camel',
     },
     ...({ signal: abortSignal } || {}),

@@ -46,7 +46,7 @@ const {
   AUTH_ENDPOINT,
   AUTH_REDIRECT_URL,
   AUTH_REVOKE_URL,
-  AUTH_SCOPES,
+  // AUTH_SCOPES,
   AUTH_TOKEN_EXCHANGE_URL,
   AUTH_TOKEN_REFRESH_URL,
   ENVIRONMENT,
@@ -610,18 +610,20 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.
   const params = qs.stringify({
-    client_id: AUTH_CLIENT_ID,
-    redirect_uri: AUTH_REDIRECT_URL,
-    scope: AUTH_SCOPES,
-    response_type: 'code',
-    response_mode: 'query',
+    // TODO: Re-add these params if we're using IAM
+    // client_id: AUTH_CLIENT_ID,
+    // redirect_uri: AUTH_REDIRECT_URL,
+    // scope: AUTH_SCOPES,
+    // response_type: 'code',
+    // response_mode: 'query',
+    // state: '12345',
     code_challenge_method: 'S256',
     code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
-    state: '12345',
     application: 'vamobile',
     oauth: 'true',
   })
   const url = `${AUTH_ENDPOINT}?${params}`
+  console.log(`authSlice.ts startWebLogin URL: ${url}`)
   dispatch(dispatchShowWebLogin(url))
 }
 
