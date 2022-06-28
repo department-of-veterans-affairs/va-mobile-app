@@ -1,17 +1,17 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { ALWAYS_SHOW_CARE_LIST, TYPE_OF_CARE, TypeOfCareObjectType, TypeOfCareWithSubCareIdType } from 'store/api/types'
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
-import { NAMESPACE } from 'constants/namespaces'
 import { LoadingComponent, RadioGroup, radioOption } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { RequestAppointmentState, getUserFacilities, getUserVAEligibility } from 'store/slices/requestAppointmentSlice'
+import { RootState } from 'store'
 import { hasSubType, useCheckEligibilityAndRouteUser, useSetIsVAEligible } from 'utils/requestAppointments'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { RootState } from 'store'
-import { getUserFacilities, getUserVAEligibility, RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 
 type TypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'TypeOfCareSelectionScreen'>
 

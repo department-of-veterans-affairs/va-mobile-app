@@ -4,14 +4,14 @@ import React, { FC, useState } from 'react'
 
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
-import { NAMESPACE } from 'constants/namespaces'
 import { LoadingComponent, RadioGroup, radioOption } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
+import { RootState } from 'store'
 import { SetIsVAEligibleType, useCheckEligibilityAndRouteUser, useSetIsVAEligible } from 'utils/requestAppointments'
 import { SubCareDataMapping, TypeOfCareWithSubCareIdType } from 'store/api/types'
 import { useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { RootState } from 'store'
-import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 
 type SubTypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'SubTypeOfCareSelectionScreen'>
 
