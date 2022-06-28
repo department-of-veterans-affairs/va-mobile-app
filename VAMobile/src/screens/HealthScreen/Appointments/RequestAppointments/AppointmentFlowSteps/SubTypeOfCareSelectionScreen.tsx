@@ -5,10 +5,13 @@ import React, { FC, useState } from 'react'
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { RadioGroup, radioOption } from 'components'
+import { LoadingComponent, RadioGroup, radioOption } from 'components'
 import { SetIsVAEligibleType, useCheckEligibilityAndRouteUser, useSetIsVAEligible } from 'utils/requestAppointments'
 import { SubCareDataMapping, TypeOfCareWithSubCareIdType } from 'store/api/types'
 import { useRouteNavigation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
+import { RootState } from 'store'
+import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 
 type SubTypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'SubTypeOfCareSelectionScreen'>
 
@@ -19,6 +22,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
   const { selectedTypeOfCareId } = route.params
   const [selectedSubTypeOfCare, setSelectedSubTypeOfCare] = useState<string>()
   const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
+  const { loadingCCEligibility } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
 
   let subTypeCareData: Array<SetIsVAEligibleType> = []
   const setIsVAEligible = useSetIsVAEligible()
@@ -83,8 +87,14 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
       }}
       linkText={t('requestAppointment.modalNeedHelpChoosingLinkTitle')}
       onLinkPress={navigateToHelpScreen}>
-      <AppointmentFlowTitleSection title={getSubCareText()} error={noTypeSelectedError} errorMessage={getSubCareText(true)} />
-      <RadioGroup options={getTypesOfSubCare()} onChange={onSetSelectedTypeOfCare} value={selectedSubTypeOfCare} isRadioList={true} />
+      {loadingCCEligibility ? (
+        <LoadingComponent />
+      ) : (
+        <>
+          <AppointmentFlowTitleSection title={getSubCareText()} error={noTypeSelectedError} errorMessage={getSubCareText(true)} />
+          <RadioGroup options={getTypesOfSubCare()} onChange={onSetSelectedTypeOfCare} value={selectedSubTypeOfCare} isRadioList={true} />
+        </>
+      )}
     </AppointmentFlowLayout>
   )
 }

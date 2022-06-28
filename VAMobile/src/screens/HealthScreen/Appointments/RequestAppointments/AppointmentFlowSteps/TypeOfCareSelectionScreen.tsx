@@ -1,29 +1,39 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { ALWAYS_SHOW_CARE_LIST, TYPE_OF_CARE, TypeOfCareObjectType, TypeOfCareWithSubCareIdType } from 'store/api/types'
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { RadioGroup, radioOption } from 'components'
+import { LoadingComponent, RadioGroup, radioOption } from 'components'
 import { hasSubType, useCheckEligibilityAndRouteUser, useSetIsVAEligible } from 'utils/requestAppointments'
-import { useRouteNavigation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
+import { RootState } from 'store'
+import { getUserFacilities, getUserVAEligibility, RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 
 type TypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'TypeOfCareSelectionScreen'>
 
 const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const dispatch = useAppDispatch()
   const setIsVaEligible = useSetIsVAEligible<TypeOfCareObjectType>()
   const checkEligibility = useCheckEligibilityAndRouteUser<TypeOfCareObjectType>()
   const [selectedTypeOfCare, setSelectedTypeOfCare] = useState<string>()
   const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
+  const { loadingCCEligibility, loadingUserFacilities, loadingVAEligibility } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
 
   let careListData: Array<TypeOfCareObjectType> = []
 
   const navigateToTypeOfCareNotListed = navigateTo('TypeOfCareNotListedHelpScreen')
   const navigateToSubType = navigateTo('SubTypeOfCareSelectionScreen', { selectedTypeOfCareId: selectedTypeOfCare })
+
+  useEffect(() => {
+    dispatch(getUserVAEligibility())
+    dispatch(getUserFacilities())
+  }, [dispatch])
 
   const onSetSelectedTypeOfCare = (type: string): void => {
     if (type) {
@@ -74,8 +84,18 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
       }}
       linkText={t('requestAppointment.typeOfCareNotListedModalTitle')}
       onLinkPress={navigateToTypeOfCareNotListed}>
-      <AppointmentFlowTitleSection title={t('requestAppointment.whatTypeOfCare')} error={noTypeSelectedError} errorMessage={t('requestAppointment.typeOfCareNotSelectedError')} />
-      <RadioGroup options={getTypesOfCareOptions()} onChange={onSetSelectedTypeOfCare} value={selectedTypeOfCare} isRadioList={true} />
+      {loadingCCEligibility || loadingUserFacilities || loadingVAEligibility ? (
+        <LoadingComponent />
+      ) : (
+        <>
+          <AppointmentFlowTitleSection
+            title={t('requestAppointment.whatTypeOfCare')}
+            error={noTypeSelectedError}
+            errorMessage={t('requestAppointment.typeOfCareNotSelectedError')}
+          />
+          <RadioGroup options={getTypesOfCareOptions()} onChange={onSetSelectedTypeOfCare} value={selectedTypeOfCare} isRadioList={true} />
+        </>
+      )}
     </AppointmentFlowLayout>
   )
 }
