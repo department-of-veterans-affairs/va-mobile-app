@@ -9,7 +9,7 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices'
 import { RootState } from 'store'
-import { useRequestAppointmentModalHeaderStyles } from 'utils/appointments'
+import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 import getEnv from 'utils/env'
@@ -30,7 +30,7 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.valocation.loading') })
 
   const headerStyle = useRequestAppointmentModalHeaderStyles()
-  const { eligibleTypeOfCares } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
+  const { vaEligibleTypeOfCares } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -45,10 +45,10 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
 
     // gets the type of care the user is not eligible for and are not in the list of always shown
     const nonEligibleCares = TYPE_OF_CARE.filter((care) => {
-      const careItem = eligibleTypeOfCares.find((item) => item.name === care.idV2)
+      const careItem = vaEligibleTypeOfCares.find((item) => item.name === care.idV2)
       // if it is not one of the always show care and has no facility in the request and direct eligibility list
       return (
-        !ALWAYS_SHOW_CARE_LIST.includes(care.name) && (!careItem || (careItem && careItem.requestEligibleFacilities.length === 0 && careItem.directEligibleFacilities.length === 0))
+        !ALWAYS_SHOW_CARE_LIST.includes(care.idV2) && (!careItem || (careItem && careItem.requestEligibleFacilities.length === 0 && careItem.directEligibleFacilities.length === 0))
       )
     })
 

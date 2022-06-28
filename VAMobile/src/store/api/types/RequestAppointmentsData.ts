@@ -38,6 +38,8 @@ export type TypeOfCareIdV2Types =
   | 'ophthalmology'
   | 'audiology-routine exam'
   | 'audiology-hearing aid support'
+  | 'eyeParentCare'
+  | 'sleepParentCare'
 
 export type TypeOfCareGroupTypes = 'primary' | 'mentalHealth' | 'specialty'
 
@@ -69,13 +71,14 @@ export type TypeOfCareLabelTypes = 'Audiology and speech (including hearing aid 
 
 export type TypeOfCareObjectType = {
   id: TypeOfCareIdTypes
-  idV2?: TypeOfCareIdV2Types
+  idV2: TypeOfCareIdV2Types
   name: TypeOfCareNameTypes
   group?: TypeOfCareGroupTypes
   ccId?: TypeOfCareCcIdTypes | Array<TypeOfCareCcIdTypes>
   cceType?: TypeOfCareCceTypes
   specialties?: Array<TypeOfCareSpecialtiesTypes>
   label?: TypeOfCareLabelTypes
+  isVaEligible?: boolean
 }
 
 export type TypeOfEyeCareObjectType = {
@@ -85,12 +88,14 @@ export type TypeOfEyeCareObjectType = {
   cceType?: TypeOfCareCceTypes
   ccId?: TypeOfCareCcIdTypes | Array<TypeOfCareCcIdTypes>
   specialties?: Array<TypeOfCareSpecialtiesTypes>
+  isVaEligible?: boolean
 }
 
 export type TypeOfSleepCareObjectType = {
   id: TypeOfCareIdTypes
   idV2: TypeOfCareIdV2Types
   name: TypeOfCareNameTypes
+  isVaEligible?: boolean
 }
 
 export type TypeOfAudiologyCareObjectType = {
@@ -98,10 +103,11 @@ export type TypeOfAudiologyCareObjectType = {
   idV2: TypeOfCareIdV2Types
   name: TypeOfCareNameTypes
   specialties?: Array<TypeOfCareSpecialtiesTypes>
+  isVaEligible?: boolean
 }
 
 // Array for the type of care to always show on the select type of care screen on the request appointment flow
-export const ALWAYS_SHOW_CARE_LIST: Array<TypeOfCareNameTypes> = ['Eye care', 'Primary care', 'Nutrition and food', 'COVID-19 vaccine', 'Podiatry', 'Sleep medicine']
+export const ALWAYS_SHOW_CARE_LIST: Array<TypeOfCareIdV2Types> = ['eyeParentCare', 'primaryCare', 'foodAndNutrition', 'covid', 'sleepParentCare', 'audiology', 'podiatry']
 
 export const TYPE_OF_CARE: Array<TypeOfCareObjectType> = [
   {
@@ -174,11 +180,13 @@ export const TYPE_OF_CARE: Array<TypeOfCareObjectType> = [
   {
     id: 'SLEEP',
     name: 'Sleep medicine',
+    idV2: 'sleepParentCare',
     group: 'specialty',
   },
   {
     id: 'EYE',
     name: 'Eye care',
+    idV2: 'eyeParentCare',
     group: 'specialty',
   },
   {
@@ -274,32 +282,20 @@ export const PURPOSE_TEXT: Array<reasonForAppointmentObjectType> = [
   },
 ]
 
-export const typeOfCareWithSubCareId = ['203', 'EYE', 'SLEEP'] as const
+export const typeOfCareWithSubCareId = ['audiology', 'eyeParentCare', 'sleepParentCare'] as const
 
 export type TypeOfCareWithSubCareIdType = typeof typeOfCareWithSubCareId[number]
-
-export type SubCareTitleMappingType = 'eye care' | 'audiology and speech care' | 'sleep medicine care'
-
-export const SubCareTitleMapping: {
-  '203': SubCareTitleMappingType
-  EYE: SubCareTitleMappingType
-  SLEEP: SubCareTitleMappingType
-} = {
-  SLEEP: 'sleep medicine care',
-  '203': 'audiology and speech care',
-  EYE: 'eye care',
-}
 
 export type SubCareDataMappingType = Array<TypeOfAudiologyCareObjectType> | Array<TypeOfEyeCareObjectType> | Array<TypeOfSleepCareObjectType>
 
 export const SubCareDataMapping: {
-  '203': SubCareDataMappingType
-  EYE: SubCareDataMappingType
-  SLEEP: SubCareDataMappingType
+  audiology: SubCareDataMappingType
+  eyeParentCare: SubCareDataMappingType
+  sleepParentCare: SubCareDataMappingType
 } = {
-  SLEEP: TYPES_OF_SLEEP_CARE,
-  '203': AUDIOLOGY_TYPES_OF_CARE,
-  EYE: TYPES_OF_EYE_CARE,
+  sleepParentCare: TYPES_OF_SLEEP_CARE,
+  audiology: AUDIOLOGY_TYPES_OF_CARE,
+  eyeParentCare: TYPES_OF_EYE_CARE,
 }
 
 export type facilityTypeLabelTypes = 'VA medical center or clinic' | 'Community care'
@@ -358,26 +354,29 @@ export const VISIT_TYPE: Array<visitTypeObjectType> = [
   },
 ]
 
-export type UserEligibilityAttributes = {
-  services: Array<UserEligibilityService>
+export const AVAILABLE_FOR_CC: Array<TypeOfCareIdV2Types> = ['primaryCare', 'optometry', 'audiology', 'podiatry', 'foodAndNutrition']
+
+export type UserVAEligibilityAttributes = {
+  services: Array<UserVAEligibilityService>
 }
-export type UserEligibilityService = {
+export type UserVAEligibilityService = {
   name: string
   requestEligibleFacilities: Array<string>
   directEligibleFacilities: Array<string>
 }
 
-export type UserEligibilityData = {
+export type UserVAEligibilityData = {
   data: {
     type: string
     id: string
-    attributes: UserEligibilityAttributes
+    attributes: UserVAEligibilityAttributes
   }
 }
 
 export type UserFacilitiesAttributes = {
   facilities: Array<UserFacilityInfo>
 }
+
 export type UserFacilityInfo = {
   id: string
   name: string
@@ -393,5 +392,17 @@ export type UserFacilitiesData = {
     type: string
     id: string
     attributes: UserFacilitiesAttributes
+  }
+}
+
+export type UserCCEligibilityAttributes = {
+  eligible: boolean
+}
+
+export type UserCCEligibilityData = {
+  data: {
+    type: string
+    id: string
+    attributes: UserCCEligibilityAttributes
   }
 }

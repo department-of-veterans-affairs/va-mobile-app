@@ -5,7 +5,7 @@ import React, { FC, useLayoutEffect } from 'react'
 import { Box, TextView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRequestAppointmentModalHeaderStyles } from 'utils/appointments'
+import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 

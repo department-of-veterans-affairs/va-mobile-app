@@ -6,7 +6,7 @@ import { Box, TextView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { TypeOfCareWithSubCareIdType } from 'store/api'
-import { useRequestAppointmentModalHeaderStyles } from 'utils/appointments'
+import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
 import { useTheme } from 'utils/hooks'
 
 type SubTypeHelpScreenProps = StackScreenProps<HealthStackParamList, 'SubTypeHelpScreen'>
@@ -33,7 +33,7 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
   }, [navigation, headerStyle])
 
   const subcareHelptext: Record<TypeOfCareWithSubCareIdType, BodyTextType> = {
-    '203': [
+    audiology: [
       {
         header: t('requestAppointments.audiologyCareRoutineHeader'),
         description: t('requestAppointments.audiologyCareRoutineText'),
@@ -43,7 +43,7 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
         description: t('requestAppointments.audiologyCareHelpHearingAidsText'),
       },
     ],
-    EYE: [
+    eyeParentCare: [
       {
         header: t('requestAppointments.eyeCareHelpOptometryHeader'),
         description: t('requestAppointments.eyeCareHelpOptometryText'),
@@ -53,7 +53,7 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
         description: t('requestAppointments.eyeCareHelpOphthalmologyText'),
       },
     ],
-    SLEEP: [
+    sleepParentCare: [
       {
         header: t('requestAppointments.sleepCareHelpCpapHeader'),
         description: t('requestAppointments.sleepCareHelpCpapText'),
