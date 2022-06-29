@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  queue: eddiewebb/queue@1.7.0
 executors:
   default:
     docker:
@@ -291,16 +289,6 @@ commands:
       - retrieve_persisted_env:
           envVar: "SLACK_THREAD_TS"
           path: "threadTs"
-  queue_ios_build:
-    steps:
-      - queue/until_front_of_line:
-          job-regex: '^build_ios_*'
-          time: '120'
-  queue_android_build:
-    steps:
-      - queue/until_front_of_line:
-          job-regex: '^build_android_*'
-          time: '120'
 jobs:
   test:
     executor: default
@@ -328,7 +316,6 @@ jobs:
   build_ios_qa:
     executor: ios
     steps:
-      - queue_ios_build
       - checkout
       - install_deps
       - decode_ios_keys
@@ -339,7 +326,6 @@ jobs:
   build_android_qa:
     executor: android
     steps:
-      - queue_android_build
       - checkout
       - install_deps
       - create_keys_directory
@@ -350,7 +336,6 @@ jobs:
   build_ios_feature:
     executor: ios
     steps:
-      - queue_ios_build
       - checkout
       - install_deps
       - decode_ios_keys
@@ -364,7 +349,6 @@ jobs:
   build_android_feature:
     executor: android
     steps:
-      - queue_android_build
       - checkout
       - install_deps
       - create_keys_directory
@@ -386,7 +370,6 @@ jobs:
   build_ios_release:
     executor: ios
     steps:
-      - queue_ios_build
       - checkout
       - install_deps:
           environment: "production"
@@ -400,7 +383,6 @@ jobs:
   build_android_release:
     executor: android
     steps:
-      - queue_android_build
       - checkout
       - install_deps:
           environment: "production"
@@ -425,7 +407,6 @@ jobs:
   build_android_release_candidate:
     executor: android
     steps:
-      - queue_android_build
       - checkout
       - install_deps
       - create_keys_directory
@@ -437,7 +418,6 @@ jobs:
   build_ios_release_candidate:
     executor: ios
     steps:
-      - queue_ios_build
       - checkout
       - install_deps
       - decode_ios_keys
@@ -446,6 +426,10 @@ jobs:
           os: "ios"
       - ios_fastlane:
           lane: "rc"
+  queue_work:
+    executor: default
+    steps:
+      - run: echo "${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
 workflows:
   pr:
     jobs:
@@ -560,3 +544,9 @@ workflows:
               only: main
     jobs:
       - run_release_lanes
+  queue_workflow:
+    jobs:
+      - queue_work:
+          filters:
+            branches:
+              only: feature/queue-builds
