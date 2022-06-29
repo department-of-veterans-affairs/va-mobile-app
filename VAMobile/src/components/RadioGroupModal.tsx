@@ -58,9 +58,9 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({ groups, buttonText, headerT
   }
 
   const getGroups = () =>
-    groups.map((group) => {
+    groups.map((group, idx) => {
       return (
-        <Box>
+        <Box key={idx}>
           <RadioGroup options={group.items} onChange={group.onSetOption} isRadioList={true} radioListTitle={group.title} value={group.selectedValue} />
         </Box>
       )
