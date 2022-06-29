@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: 'Checkout repo'
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_ACTIONS_PAT }}
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
