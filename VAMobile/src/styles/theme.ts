@@ -5,8 +5,8 @@ export type VAButtonBackgroundColors = {
   buttonSecondaryActive: string
   buttonDisabled: string
   buttonSecondaryDisabled: string
-  buttonImportant: string
-  buttonImportantActive: string
+  buttonDestructive: string
+  buttonDestructiveActive: string
   buttonWhite: string
   buttonWhiteActive: string
   brandedPrimary: string
@@ -17,8 +17,8 @@ export type VAButtonBackgroundColors = {
 export type VAButtonBorderColors = {
   buttonSecondary: string
   buttonSecondaryActive: string
-  buttonImportant: string
-  buttonImportantActive: string
+  buttonDestructive: string
+  buttonDestructiveActive: string
   brandedPrimary: string
   brandedPrimaryActive: string
 }
@@ -27,7 +27,7 @@ export type VAButtonTextColors = {
   buttonPrimary: string
   buttonSecondary: string
   buttonDisabled: string
-  buttonImportant: string
+  buttonDestructive: string
   buttonWhite: string
   brandedPrimary: string
 }
@@ -56,6 +56,7 @@ export type VATextColors = {
   actionBarDisabled: string
   bodyText: string
   defaultMenuItem: string
+  warningTag: string
 }
 
 export type VAIconColors = {
@@ -95,7 +96,6 @@ export type VATypographyThemeVariants = {
   MobileBody: string
   MobileBodyBold: string
   UnreadMessagesTag: string
-  SentMessagesReadTag: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -106,6 +106,8 @@ export type VATypographyThemeVariants = {
   HelperText: string
   HelperTextBold: string
   SnackBarBtnText: string
+  LabelTag: string
+  LabelTagBold: string
 }
 
 export type VABackgroundColors = {
@@ -139,6 +141,9 @@ export type VABackgroundColors = {
   pickerControls: string
   menu: string
   alertBox: string
+  warningTag: string
+  inactiveTag: string
+  activeTag: string
 }
 
 export type VABorderColors = {
@@ -209,9 +214,6 @@ export type VATheme = {
     headerHeight: number
     formMarginBetween: number
     tagMinWidth: number
-    tagCurvedBorder: number
-    tagTopPadding: number
-    tagHorizontalPadding: number
     maxNumMessageAttachments: number
     navBarHeight: number
     paginationTopPadding: number
@@ -232,13 +234,16 @@ export type VATheme = {
     MobileBody: VAFontSizes
     MobileBodyBold: VAFontSizes
     UnreadMessagesTag: VAFontSizes
-    SentMessagesReadTag: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
     MobileBodyLink: VAFontSizes
     ClaimPhase: VAFontSizes
     VASelector: VAFontSizes
+    LabelTag: VAFontSizes
+    LabelTagBold: VAFontSizes
+    HelperText: VAFontSizes
+    HelperTextBold: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }

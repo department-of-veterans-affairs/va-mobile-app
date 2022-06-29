@@ -62,6 +62,7 @@ import { RootState } from 'store'
 import { updateFontScale } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
 import Add from './svgs/add.svg'
+import BuildingSolid from './svgs/buildingSolid.svg'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
@@ -141,6 +142,7 @@ export const VA_ICON_MAP = {
   ExclamationTriangleSolid,
   TrashSolid,
   InboxSolid,
+  BuildingSolid,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

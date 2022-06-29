@@ -34,7 +34,7 @@ platform :android do
     distribute_to_firebase(notes, "qa")
     tag_build
     message = "New QA build successfully uploaded to Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
   # review lane uploads to beta track for promotion to the store on release date
@@ -46,7 +46,7 @@ platform :android do
     upload("Pre-Prod Stash")
     tag_build
     message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Promote the release in Pre-Prod stash to Production"
@@ -76,7 +76,7 @@ platform :android do
     distribute_to_firebase(notes, "qa")
     tag_build
     message = "New On Demand build successfully uploaded to Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On-Demand", message, "Android")
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On-Demand", message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Deploy a RC new version to Firebase Distribution"
@@ -88,10 +88,11 @@ platform :android do
     notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
     distribute_to_firebase(notes, "qa")
     message = "New RC for #{rcVersion} successfully uploaded to Firebase Distribution"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Release Candidate", message, "Android")
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Release Candidate", message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
   lane :demo do
+     slack_build_success("buildNum", "version", "buildType", "message", "os", ENV['SLACK_THREAD_TS'])
   end
   desc "add a tester to Firebase Distribution. options.emails is a comma-separated string of emails to add to testers. Once added, they will need to be added to the QA team in Firebase Distribution console."
   lane :firebase_app_dist_add_testers do |options|
@@ -118,7 +119,7 @@ platform :android do
   error do |lane, exception, options|
     puts("ERROR REPORT")
     puts exception
-    slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+#     slack_build_error(exception, options[:version], "Android Build Failed", "Android", ENV['SLACK_THREAD_TS'])
   end
 
 # method to update the version and build in the repo
@@ -177,7 +178,7 @@ platform :android do
       add_git_tag(tag: tag)
       push_git_tags
     rescue => e
-      slack_github_error(e, "Error tagging Android build", "Android")
+      slack_github_error(e, "Error tagging Android build", "Android", ENV['SLACK_THREAD_TS'])
     end
   end
 
@@ -216,7 +217,7 @@ platform :android do
           android_artifact_type: "AAB"
       )
     rescue => e
-      slack_firebase_dist_error("Android", e)
+      slack_firebase_dist_error("Android", e, ENV['SLACK_THREAD_TS'])
     end
   end
 end

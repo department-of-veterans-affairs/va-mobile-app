@@ -507,7 +507,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
             <VAButton
               onPress={onDeletePressed}
               label={t('personalInformation.removeData', { pageName: lowerCaseTitle })}
-              buttonType={ButtonTypesConstants.buttonImportant}
+              buttonType={ButtonTypesConstants.buttonDestructive}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
             />
           </Box>
