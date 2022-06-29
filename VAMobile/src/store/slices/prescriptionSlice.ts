@@ -25,6 +25,7 @@ export type PrescriptionState = {
   needsRefillableLoaded?: boolean
   loadingRefillable: boolean
   loadingRequestRefills: boolean
+  showLoadingScreenRequestRefills: boolean
   submittedRequestRefillCount: number
 }
 
@@ -36,6 +37,7 @@ export const initialPrescriptionState: PrescriptionState = {
   nonRefillableCount: 0,
   loadingRefillable: false,
   loadingRequestRefills: false,
+  showLoadingScreenRequestRefills: false,
   submittedRequestRefillCount: 0,
 }
 
@@ -89,13 +91,13 @@ export const requestRefills =
     try {
       // TODO integrate with real endpoint
       const totalPrescriptions = prescriptions.length
-      let x = 0
+      let x = 1
       const intervalID = setInterval(() => {
         if (x++ < totalPrescriptions) {
           dispatch(dispatchContinueRequestRefills())
         }
 
-        if (x === totalPrescriptions) {
+        if (x >= totalPrescriptions) {
           clearInterval(intervalID)
           dispatch(dispatchFinishRequestRefills())
         }
@@ -143,6 +145,7 @@ const prescriptionSlice = createSlice({
     },
     dispatchStartRequestRefills: (state) => {
       state.loadingRequestRefills = true
+      state.showLoadingScreenRequestRefills = true
       state.submittedRequestRefillCount = 1
     },
     dispatchContinueRequestRefills: (state) => {
@@ -150,7 +153,10 @@ const prescriptionSlice = createSlice({
     },
     dispatchFinishRequestRefills: (state) => {
       state.loadingRequestRefills = false
+    },
+    dispatchClearLoadingRequestRefills: (state) => {
       state.submittedRequestRefillCount = 0
+      state.showLoadingScreenRequestRefills = false
     },
   },
 })
@@ -163,5 +169,6 @@ export const {
   dispatchStartRequestRefills,
   dispatchContinueRequestRefills,
   dispatchFinishRequestRefills,
+  dispatchClearLoadingRequestRefills,
 } = prescriptionSlice.actions
 export default prescriptionSlice.reducer

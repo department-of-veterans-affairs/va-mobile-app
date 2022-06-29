@@ -18,7 +18,7 @@ import PharmacyScreen from './Pharmacy'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
-import RefillScreen from './Pharmacy/RefillScreens/RefillScreen'
+import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import SecureMessaging from './SecureMessaging'
@@ -105,7 +105,7 @@ export type HealthStackParamList = WebviewStackParams & {
   PrescriptionDetails: {
     prescriptionId: string
   }
-  RefillScreen: undefined
+  RefillScreenModal: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -143,10 +143,10 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'PrescriptionHistory'} name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />,
     <HealthStack.Screen key={'PrescriptionDetails'} name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />,
     <HealthStack.Screen
-      key={'RefillScreen'}
-      name="RefillScreen"
-      component={RefillScreen}
-      options={{ title: t('prescriptions.refill.pageHeaderTitle'), presentation: 'modal', ...TransitionPresets.ModalTransition }}
+      key={'RefillScreenModal'}
+      name="RefillScreenModal"
+      component={RefillScreenModal}
+      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
     />,
   ]
 }
