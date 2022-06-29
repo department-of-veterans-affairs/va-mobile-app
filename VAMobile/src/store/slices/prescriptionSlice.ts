@@ -24,6 +24,9 @@ export type PrescriptionState = {
   nonRefillablePrescriptions?: PrescriptionsList
   needsRefillableLoaded?: boolean
   loadingRefillable: boolean
+  loadingRequestRefills: boolean
+  showLoadingScreenRequestRefills: boolean
+  submittedRequestRefillCount: number
 }
 
 export const initialPrescriptionState: PrescriptionState = {
@@ -33,6 +36,9 @@ export const initialPrescriptionState: PrescriptionState = {
   refillableCount: 0,
   nonRefillableCount: 0,
   loadingRefillable: false,
+  loadingRequestRefills: false,
+  showLoadingScreenRequestRefills: false,
+  submittedRequestRefillCount: 0,
 }
 
 export const getPrescriptions =
@@ -70,13 +76,40 @@ export const getRefillablePrescriptions =
       dispatch(dispatchFinishGetAllPrescriptions({ prescriptionData }))
     } catch (error) {
       if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getPrescriptions: ${prescriptionNonFatalErrorString}`)
+        logNonFatalErrorToFirebase(error, `getRefillablePrescriptions: ${prescriptionNonFatalErrorString}`)
         dispatch(dispatchFinishGetPrescriptions({ prescriptionData: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
       }
     }
   }
 
+export const requestRefills =
+  (prescriptions: PrescriptionsList): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchStartRequestRefills())
+
+    try {
+      // TODO integrate with real endpoint
+      const totalPrescriptions = prescriptions.length
+      let x = 1
+      const intervalID = setInterval(() => {
+        if (x++ < totalPrescriptions) {
+          dispatch(dispatchContinueRequestRefills())
+        }
+
+        if (x >= totalPrescriptions) {
+          clearInterval(intervalID)
+          dispatch(dispatchFinishRequestRefills())
+        }
+      }, 3000)
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
+        // TODO add code to handle error
+        // dispatch(dispatchFinishRequestRefills({ prescriptionData: undefined, error }))
+      }
+    }
+  }
 const prescriptionSlice = createSlice({
   name: 'prescriptions',
   initialState: initialPrescriptionState,
@@ -110,6 +143,21 @@ const prescriptionSlice = createSlice({
       state.nonRefillableCount = nonRefillable.length
       state.needsRefillableLoaded = !!error
     },
+    dispatchStartRequestRefills: (state) => {
+      state.loadingRequestRefills = true
+      state.showLoadingScreenRequestRefills = true
+      state.submittedRequestRefillCount = 1
+    },
+    dispatchContinueRequestRefills: (state) => {
+      state.submittedRequestRefillCount += 1
+    },
+    dispatchFinishRequestRefills: (state) => {
+      state.loadingRequestRefills = false
+    },
+    dispatchClearLoadingRequestRefills: (state) => {
+      state.submittedRequestRefillCount = 0
+      state.showLoadingScreenRequestRefills = false
+    },
   },
 })
 
@@ -118,5 +166,9 @@ export const {
   dispatchFinishGetPrescriptions,
   dispatchFinishGetRefillablePrescriptions: dispatchFinishGetAllPrescriptions,
   dispatchStartGetRefillablePrescriptions: dispatchStartGetAllPrescriptions,
+  dispatchStartRequestRefills,
+  dispatchContinueRequestRefills,
+  dispatchFinishRequestRefills,
+  dispatchClearLoadingRequestRefills,
 } = prescriptionSlice.actions
 export default prescriptionSlice.reducer

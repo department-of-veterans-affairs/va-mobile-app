@@ -79,7 +79,7 @@ const Pharmacy: FC = ({}) => {
           <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
             {t('pharmacy.textArea.prescriptionRefill', { count: refillableCount })}
           </TextView>
-          <VAButton onPress={navigateTo('RefillScreen')} label={t('pharmacy.textArea.button', { count: 1 })} buttonType="brandedPrimary" />
+          <VAButton onPress={navigateTo('RefillScreenModal')} label={t('pharmacy.textArea.button', { count: 1 })} buttonType="brandedPrimary" />
         </TextArea>
         <Box mt={condensedMarginBetween} mx={theme.dimensions.gutter}>
           <TextView variant="HelperText">
