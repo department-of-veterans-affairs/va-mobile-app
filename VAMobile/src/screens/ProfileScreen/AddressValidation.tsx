@@ -13,6 +13,7 @@ import { ViewStyle } from 'react-native'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import CollapsibleAlert from 'components/CollapsibleAlert'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
@@ -210,7 +211,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1}>
         <Box mt={contentMarginTop}>
-          <AccordionCollapsible expandedContent={getAlert()} header={accordionHeader()} alertBorder={'warning'} testID={getAlertTitle()} />
+          <CollapsibleAlert border="warning" headerText={getAlertTitle()} body={getAlert()} />
         </Box>
         <Box mt={contentMarginTop}>{getSuggestedAddresses()}</Box>
       </Box>

@@ -6,7 +6,6 @@ import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { VABorderColors } from 'styles/theme'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import TextArea from './TextArea'
 
@@ -17,11 +16,11 @@ export type CollapsibleAlertProps = {
   headerText: string
   /** accordion Body text */
   body: ReactNode
-  /** testID for the header*/
-  testID?: string
+  /** acccessibilityHint */
+  a11yHint?: string
 }
 
-const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, testID }) => {
+const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yHint }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
@@ -33,7 +32,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
-    accessibilityHint: t('viewMoreDetails'),
+    accessibilityHint: a11yHint ? a11yHint : t('viewMoreDetails'),
     accessibilityRole: 'spinbutton',
   }
 
@@ -51,11 +50,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
       </Box>
     )
 
-    return (
-      <Pressable {...pressableProps} {...testIdProps(testID || '')}>
-        {data}
-      </Pressable>
-    )
+    return <Pressable {...pressableProps}>{data}</Pressable>
   }
 
   const leftBorderProps = {
@@ -70,7 +65,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   }
 
   return (
-    <Box {...boxProps} {...testIdProps('Collapsible-Alert', true)} importantForAccessibility={'no'}>
+    <Box {...boxProps}>
       <TextArea>
         {accordionHeader()}
         {expanded && body}

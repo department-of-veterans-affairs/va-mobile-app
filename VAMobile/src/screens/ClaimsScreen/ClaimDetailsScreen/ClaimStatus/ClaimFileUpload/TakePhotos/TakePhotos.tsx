@@ -87,12 +87,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         </Box>
       )}
       <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
-        <CollapsibleAlert
-          border="informational"
-          headerText={t('fileUpload.accessibilityAlert.title')}
-          body={collapsibleContent()}
-          testID={t('fileUpload.accessibilityAlert.title')}
-        />
+        <CollapsibleAlert border="informational" headerText={t('fileUpload.accessibilityAlert.title')} body={collapsibleContent()} />
       </Box>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
