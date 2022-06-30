@@ -1,32 +1,17 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
-import { AlertBox, AlertBoxProps, Box, BoxProps, CloseModalButton, TextArea, TextView, VAButton, VAIcon, VAIconProps, VAScrollView } from 'components'
+import { AlertBox, AlertBoxProps, Box, BoxProps, CloseModalButton, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PrescriptionState, requestRefills } from 'store/slices'
+import { PrescriptionsList } from 'store/api'
 import { RefillStackParamList } from './RefillScreen'
-import { isIOS } from '../../../../utils/platform'
-import { useModalHeaderStyles, useTheme } from 'utils/hooks'
+import { RootState } from 'store'
+import { isIOS } from 'utils/platform'
+import { useAppDispatch, useModalHeaderStyles, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 type RefillRequestSummaryProps = StackScreenProps<RefillStackParamList, 'RefillRequestSummary'>
-
-// todo replace with real data
-const mockSubmitted = [
-  {
-    submitted: false,
-    name: 'PREDNISONE 10MG TAB',
-    rxId: 'Rx #: 2757929503',
-  },
-  {
-    submitted: true,
-    name: 'PREDNISONE 11MG TAB',
-    rxId: 'Rx #: 2757929504',
-  },
-  {
-    submitted: true,
-    name: 'PREDNISONE 12MG TAB',
-    rxId: 'Rx #: 2757929505',
-  },
-]
 
 const enum REQUEST_STATUS {
   FAILED,
@@ -37,27 +22,29 @@ const enum REQUEST_STATUS {
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
   const headerStyle = useModalHeaderStyles()
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
-  const [requestFailed, setRequestFailed] = useState<Array<{ submitted: boolean; name: string; rxId: string }>>([])
+  const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
+  const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry, submittedRequestRefillCount } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   useEffect(() => {
     const requestSubmittedItems = []
-    const requestFailedItems: Array<{ submitted: boolean; name: string; rxId: string }> = []
-    mockSubmitted.forEach((item) => {
-      item.submitted ? requestSubmittedItems.push(item) : requestFailedItems.push(item)
+    const requestFailedItems: PrescriptionsList = []
+    refillRequestSummaryItems.forEach((item) => {
+      item.submitted ? requestSubmittedItems.push(item.data) : requestFailedItems.push(item.data)
     })
 
-    if (requestFailed.length === mockSubmitted.length) {
+    if (requestFailed.length === refillRequestSummaryItems.length) {
       setStatus(REQUEST_STATUS.FAILED)
-    } else if (requestSubmittedItems.length === mockSubmitted.length) {
+    } else if (requestSubmittedItems.length === refillRequestSummaryItems.length) {
       setStatus(REQUEST_STATUS.SUCCESS)
     } else {
       setStatus(REQUEST_STATUS.MIX)
     }
     setRequestFailed(requestFailedItems)
-  }, [tc, requestFailed.length])
+  }, [refillRequestSummaryItems, tc, requestFailed.length])
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -94,7 +81,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       default:
         alertBoxProps = {
           border: 'error',
-          title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length, total: mockSubmitted.length }),
+          title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length, total: refillRequestSummaryItems.length }),
           text: t('prescriptions.refillRequestSummary.tryAgain'),
           textA11yLabel: t('prescriptions.refillRequestSummary.tryAgain.a11yLabel'),
         }
@@ -105,7 +92,14 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         <AlertBox {...alertBoxProps}>
           {status !== REQUEST_STATUS.SUCCESS && (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <VAButton onPress={() => {}} label={tc('tryAgain')} buttonType="buttonPrimary" />
+              <VAButton
+                onPress={() => {
+                  dispatch(requestRefills(requestFailed))
+                }}
+                label={tc('tryAgain')}
+                buttonType="buttonPrimary"
+                a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
+              />
             </Box>
           )}
         </AlertBox>
@@ -121,7 +115,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   }
 
   const getRequestSummaryItem = () => {
-    return mockSubmitted.map((request, index) => {
+    return refillRequestSummaryItems.map((request, index) => {
       const vaIconProps: VAIconProps = {
         name: request.submitted ? 'WhiteCheckCircle' : 'WhiteCloseCircle',
         width: 20,
@@ -133,21 +127,24 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        mb: index < mockSubmitted.length - 1 ? theme.dimensions.condensedMarginBetween : 0,
+        mb: index < refillRequestSummaryItems.length - 1 ? theme.dimensions.condensedMarginBetween : 0,
       }
 
+      const { prescriptionName, prescriptionNumber } = request.data.attributes
       const a11yProps = {
-        accessibilityLabel: `${request.name} ${request.rxId} ${
+        accessibilityLabel: `${prescriptionName} ${prescriptionNumber} ${
           request.submitted ? t('prescriptions.refillRequestSummary.reviewRefills.requestSubmitted') : t('prescriptions.refillRequestSummary.reviewRefills.requestFailed')
         }`,
-        accessibilityValue: { text: tc('listPosition', { position: index + 1, total: mockSubmitted.length }) },
+        accessibilityValue: { text: tc('listPosition', { position: index + 1, total: refillRequestSummaryItems.length }) },
         accessible: true,
       }
       return (
         <Box key={index} {...boxProps} {...a11yProps}>
           <Box flex={1}>
-            <TextView variant="MobileBodyBold">{request.name}</TextView>
-            <TextView variant="HelperText">{request.rxId}</TextView>
+            <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
+            <TextView variant="HelperText">
+              {t('prescription.prescriptionNumber')} {prescriptionNumber}
+            </TextView>
           </Box>
           <VAIcon {...vaIconProps} />
         </Box>
@@ -186,14 +183,13 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBody">{yourRefillText}</TextView>
         </Box>
-        <VAButton
-          onPress={() => {}}
-          label={t('prescriptions.refillRequestSummary.reviewRefills')}
-          buttonType="buttonSecondary"
-          a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
-        />
+        <VAButton onPress={() => {}} label={t('prescriptions.refillRequestSummary.reviewRefills')} buttonType="buttonSecondary" />
       </Box>
     )
+  }
+
+  if (showLoadingScreenRequestRefillsRetry) {
+    return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: requestFailed.length })} />
   }
 
   return (

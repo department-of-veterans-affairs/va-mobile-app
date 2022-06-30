@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect, useState } from 'react'
 
-import { Box, FooterButton, LoadingComponent, TabsControl, TabsValuesType, TextView, VAScrollView } from 'components'
+import { AlertBox, Box, FooterButton, LoadingComponent, TabsControl, TabsValuesType, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, getRefillablePrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
@@ -26,12 +26,13 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const [selecteTab, setSelectedTab] = useState(0)
+  const [showAlert, setAlert] = useState(false)
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
-  const [totalPrescriptionsToRefill, setTotalPrescriptionsToRefill] = useState(0)
+  const [selectedPrescriptionsCount, setSelectedPrescriptionsCount] = useState(0)
 
   const {
     loadingRefillable,
-    loadingRequestRefills,
+    submittingRequestRefills,
     refillableCount,
     nonRefillableCount,
     refillablePrescriptions,
@@ -40,7 +41,7 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     submittedRequestRefillCount,
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []
-  const prevLoadingRequestRefills = usePrevious<boolean>(loadingRequestRefills)
+  const prevLoadingRequestRefills = usePrevious<boolean>(submittingRequestRefills)
 
   const tabs: TabsValuesType = [
     {
@@ -66,10 +67,10 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }, [dispatch, needsRefillableLoaded])
 
   useEffect(() => {
-    if (prevLoadingRequestRefills && prevLoadingRequestRefills !== loadingRequestRefills) {
+    if (prevLoadingRequestRefills && prevLoadingRequestRefills !== submittingRequestRefills) {
       navigation.navigate('RefillRequestSummary')
     }
-  }, [navigation, loadingRequestRefills, prevLoadingRequestRefills])
+  }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
 
   if (loadingRefillable) {
     return <LoadingComponent text={t('prescriptions.loading')} />
@@ -77,14 +78,14 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const onSubmitPressed = () => {
     submitRefillAlert({
-      title: t('prescriptions.refill.confirmationTitle', { plural: getSelectedPrescriptionsCount() > 1 ? 's' : '' }),
+      title: t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
       cancelButtonIndex: 0,
       buttons: [
         {
           text: tc('cancel'),
         },
         {
-          text: t('prescriptions.refill.RequestRefillButtonTitle', { plural: '' }),
+          text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }),
           onPress: () => {
             const prescriptionsToRefill: PrescriptionsList = []
             // todo add params
@@ -94,16 +95,11 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
               }
             })
 
-            setTotalPrescriptionsToRefill(prescriptionsToRefill.length)
             dispatch(requestRefills(prescriptionsToRefill))
           },
         },
       ],
     })
-  }
-
-  const getSelectedPrescriptionsCount = () => {
-    return Object.values(selectedValues).reduce((acc, item) => (item === true ? ++acc : acc), 0)
   }
 
   const getListItems = () => {
@@ -117,27 +113,47 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (showLoadingScreenRequestRefills) {
-    // TODO update count to be the count actually submitted not selected
-    return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: totalPrescriptionsToRefill })} />
+    return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: selectedPrescriptionsCount })} />
   }
 
   return (
     <>
       <VAScrollView>
         <TabsControl onChange={setSelectedTab} tabs={tabs} selected={selecteTab} />
-
+        {showAlert && (
+          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
+          </Box>
+        )}
         <TextView mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
           {t('prescriptions.refill.weWillMailText')}
         </TextView>
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <SelectionList items={getListItems()} onSelectionChange={setSelectedValues} />
+          <SelectionList
+            items={getListItems()}
+            onSelectionChange={(items) => {
+              const newSelectedCount = Object.values(items).reduce((acc, item) => (item === true ? ++acc : acc), 0)
+              // only update if the count changes
+              if (selectedPrescriptionsCount !== newSelectedCount) {
+                setAlert(false)
+                setSelectedPrescriptionsCount(newSelectedCount)
+                setSelectedValues(items)
+              }
+            }}
+          />
         </Box>
       </VAScrollView>
       <FooterButton
-        text={t('prescriptions.refill.RequestRefillButtonTitle', { plural: getSelectedPrescriptionsCount() > 1 ? 's' : '' })}
+        text={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
         backGroundColor="buttonPrimary"
         textColor={'navBar'}
-        onPress={onSubmitPressed}
+        onPress={() => {
+          if (selectedPrescriptionsCount === 0) {
+            setAlert(true)
+            return
+          }
+          onSubmitPressed()
+        }}
       />
     </>
   )
