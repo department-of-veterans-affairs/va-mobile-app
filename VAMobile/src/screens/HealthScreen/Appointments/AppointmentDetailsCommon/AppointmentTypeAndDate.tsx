@@ -37,7 +37,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
     const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
     const title = appointmentCanceled ? 'appointments.pending.cancelled.pendingRequestTypeOfCare' : 'appointments.pending.submitted.pendingRequestTypeOfCare'
     content = (
-      <TextView variant={'BitterBoldHeading'} selectable={true}>
+      <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} selectable={true}>
         {t(title, { typeOfCare })}
       </TextView>
     )
