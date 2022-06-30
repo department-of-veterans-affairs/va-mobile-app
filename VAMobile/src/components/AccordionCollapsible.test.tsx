@@ -63,19 +63,4 @@ context('AccordionCollapsible', () => {
       expect(testInstance.container.findAllByType(TextView)[1].props.children).toEqual('COLLAPSED')
     })
   })
-
-  describe('when an alert border is set', () => {
-    it('it should have a border', async () => {
-      initializeTestInstance(false, true)
-      const wrapperBox = await testInstance.findByTestId('accordion-wrapper')
-      expect(wrapperBox.props.borderLeftColor).toBe('warning')
-    })
-  })
-
-  describe('when an alert border is not set', () => {
-    it('it should not have a border', async () => {
-      const wrapperBox = await testInstance.findByTestId('accordion-wrapper')
-      expect(wrapperBox.props.borderLeftColor).toBeFalsy()
-    })
-  })
 })
