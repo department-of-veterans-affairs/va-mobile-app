@@ -1,31 +1,32 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { ScrollView, StyleProp, ViewStyle } from 'react-native'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
+import { Box, BoxProps, ErrorComponent, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, getPrescriptions } from 'store/slices/prescriptionSlice'
 import { RefillStatusConstants } from 'store/api/types'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { StyleProp, ViewStyle } from 'react-native'
+import { getFilterArgsForFilter } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 
 const sortByOptions = [
-  { display: 'prescriptions.sort.facility', value: 'facilityName' },
-  { display: 'prescriptions.sort.fillDate', value: 'refillDate' },
-  { display: 'prescriptions.sort.medication', value: 'prescriptionName' },
-  { display: 'prescriptions.sort.refills', value: 'refillRemaining' },
+  { display: 'prescriptions.sort.facility', value: 'facility_name' },
+  { display: 'prescriptions.sort.fillDate', value: 'refill_date' },
+  { display: 'prescriptions.sort.medication', value: 'prescription_name' },
+  { display: 'prescriptions.sort.refills', value: 'refill_remaining' },
 ]
 
 const sortOrderOptions = [
-  { display: 'prescriptions.sort.atoz', value: 'asc' },
-  { display: 'prescriptions.sort.ztoa', value: 'desc' },
+  { display: 'prescriptions.sort.atoz', value: '' },
+  { display: 'prescriptions.sort.ztoa', value: '-' },
 ]
 
 const filterOptions = [
@@ -97,9 +98,12 @@ const PrescriptionHistory: FC = ({}) => {
 
   const requestPage = useCallback(
     (requestedPage: number) => {
-      dispatch(getPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID, requestedPage))
+      const filter = getFilterArgsForFilter(filterToUse)
+      const sort = sortByToUse ? `${sortOnToUse}${sortByToUse}` : ''
+
+      dispatch(getPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID, requestedPage, filter, sort))
     },
-    [dispatch],
+    [dispatch, filterToUse, sortOnToUse, sortByToUse],
   )
 
   useEffect(() => {
@@ -193,7 +197,10 @@ const PrescriptionHistory: FC = ({}) => {
       setSortOnToUse(selectedSortOn)
       setSortByToUse(selectedSortBy)
     },
-    onReset: () => {},
+    onReset: () => {
+      setSelectedSortBy('')
+      setSelectedSortOn('')
+    },
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
       setSelectedSortOn(sortOnToUse)
@@ -224,32 +231,88 @@ const PrescriptionHistory: FC = ({}) => {
     onConfirm: () => {
       setFilterToUse(selectedFilter)
     },
-    onReset: () => {},
+    onReset: () => {
+      setSelectedFilter('')
+    },
     onCancel: () => {
       setSelectedFilter(filterToUse)
     },
   }
 
+  const filterContainerProps: BoxProps = {
+    display: 'flex',
+    flexDirection: 'row',
+    px: 20,
+  }
+
+  const filterScrollWrapperProps: BoxProps = {
+    pb: 15,
+    borderBottomWidth: 1,
+    borderColor: 'primary',
+  }
+
+  const hasNoItems = prescriptions?.length === 0
+
+  const noMatchScrollStyles: ViewStyle = {
+    flexGrow: 1,
+    justifyContent: 'center',
+  }
+
+  const noMatchDisplayEl = (
+    <VAScrollView contentContainerStyle={noMatchScrollStyles}>
+      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <TextView textAlign={'center'} variant="MobileBodyBold">
+            {t('prescription.history.empty.title')}
+          </TextView>
+          <TextView textAlign={'center'} variant="MobileBody">
+            {t('prescription.history.empty.message')}
+          </TextView>
+        </Box>
+      </Box>
+    </VAScrollView>
+  )
+
+  const getContent = () => {
+    if (hasNoItems) {
+      return noMatchDisplayEl
+    } else {
+      return (
+        <>
+          <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+            <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
+            <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+              {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
+            </TextView>
+          </Box>
+          <VAScrollView contentContainerStyle={mainViewStyle}>
+            <Box mb={theme.dimensions.contentMarginBottom}>
+              <List items={getListItemsForPrescriptions()} />
+              <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+                {renderPagination()}
+              </Box>
+            </Box>
+          </VAScrollView>
+        </>
+      )
+    }
+  }
+
   return (
     <Box pt={theme.dimensions.contentMarginTop} display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
-      <Box mx={theme.dimensions.gutter}>
-        <Box>
-          <RadioGroupModal {...filterProps} />
-          <RadioGroupModal {...sortProps} />
-        </Box>
-        <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
-        <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-          {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
-        </TextView>
-      </Box>
-      <VAScrollView contentContainerStyle={mainViewStyle}>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <List items={getListItemsForPrescriptions()} />
-          <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-            {renderPagination()}
+      <Box {...filterScrollWrapperProps}>
+        <ScrollView horizontal={true}>
+          <Box {...filterContainerProps}>
+            <Box mr={8}>
+              <RadioGroupModal {...filterProps} />
+            </Box>
+            <Box>
+              <RadioGroupModal {...sortProps} />
+            </Box>
           </Box>
-        </Box>
-      </VAScrollView>
+        </ScrollView>
+      </Box>
+      {getContent()}
     </Box>
   )
 }

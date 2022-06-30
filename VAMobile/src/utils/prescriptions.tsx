@@ -31,3 +31,20 @@ export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
       return t('prescription.history.tag.unknown')
   }
 }
+
+/**
+ * Some filter values from the front end map to multiple values on the back end. This util provides the translation
+ * from value selected on the front end to the param sent to the API
+ * @param filter - value selected by the user
+ */
+export const getFilterArgsForFilter = (filter: string) => {
+  switch (filter) {
+    case RefillStatusConstants.DISCONTINUED:
+      return 'discontinued,discontinuedByProvider,discontinuedEdit'
+    case RefillStatusConstants.HOLD:
+    case RefillStatusConstants.PROVIDER_HOLD:
+      return 'hold,providerHold'
+  }
+
+  return filter
+}

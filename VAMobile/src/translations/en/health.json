@@ -152,6 +152,8 @@
   "prescription.filter.by": "Filter by",
   "prescription.filter.sort": "Sort",
   "prescription.filter.status": "Status Filter",
+  "prescription.history.empty.title": "No matches found",
+  "prescription.history.empty.message": "We can't find any VA prescriptions that match your filter selection. Try adjusting or clearing the filter.",
   "prescription.history.list.title": "VA prescriptions ({{count}})",
   "prescription.history.refill": "Refills left:",
   "prescription.history.facility": "VA facility:",
