@@ -15,11 +15,14 @@ const Pharmacy: FC = ({}) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
-  const { refillableCount, loadingRefillable } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { refillableCount, loadingRefillable, needsRefillableLoaded } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   useEffect(() => {
-    dispatch(getRefillablePrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
-  }, [dispatch])
+    // may need to reload if we submitted some refills
+    if (needsRefillableLoaded) {
+      dispatch(getRefillablePrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
+    }
+  }, [dispatch, needsRefillableLoaded])
 
   if (loadingRefillable) {
     return <LoadingComponent text={t('prescriptions.loading')} />

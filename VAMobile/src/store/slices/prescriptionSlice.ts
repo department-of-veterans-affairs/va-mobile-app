@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from '../api'
-import { APIError, PrescriptionsGetData, PrescriptionsList, PrescriptionsMap, PrescriptionsPaginationData, ScreenIDTypes, get } from '../api'
+import { APIError, PrescriptionsGetData, PrescriptionsList, PrescriptionsMap, PrescriptionsPaginationData, RefillRequestSummaryItems, ScreenIDTypes, get, put } from '../api'
 import { AppThunk } from 'store'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { dispatchClearErrors, dispatchSetError } from './errorSlice'
@@ -22,11 +22,14 @@ export type PrescriptionState = {
   nonRefillableCount?: number
   refillablePrescriptions?: PrescriptionsList
   nonRefillablePrescriptions?: PrescriptionsList
-  needsRefillableLoaded?: boolean
+  needsRefillableLoaded: boolean
   loadingRefillable: boolean
-  loadingRequestRefills: boolean
+  // Request refill (RefillScreen, RefillRequestSummary)
+  submittingRequestRefills: boolean
   showLoadingScreenRequestRefills: boolean
+  showLoadingScreenRequestRefillsRetry: boolean
   submittedRequestRefillCount: number
+  refillRequestSummaryItems: RefillRequestSummaryItems
 }
 
 export const initialPrescriptionState: PrescriptionState = {
@@ -35,10 +38,13 @@ export const initialPrescriptionState: PrescriptionState = {
   prescriptionPagination: {} as PrescriptionsPaginationData,
   refillableCount: 0,
   nonRefillableCount: 0,
+  needsRefillableLoaded: true,
   loadingRefillable: false,
-  loadingRequestRefills: false,
+  submittingRequestRefills: false,
   showLoadingScreenRequestRefills: false,
+  showLoadingScreenRequestRefillsRetry: false,
   submittedRequestRefillCount: 0,
+  refillRequestSummaryItems: [],
 }
 
 export const getPrescriptions =
@@ -119,30 +125,34 @@ export const getRefillablePrescriptions =
 
 export const requestRefills =
   (prescriptions: PrescriptionsList): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchStartRequestRefills())
-
-    try {
-      // TODO integrate with real endpoint
-      const totalPrescriptions = prescriptions.length
-      let x = 1
-      const intervalID = setInterval(() => {
-        if (x++ < totalPrescriptions) {
+    const results: RefillRequestSummaryItems = []
+    for (const p of prescriptions) {
+      try {
+        // return 204 on success, we just care if it succeed as any failures will go to the catch
+        await put(`/v0/health/rx/prescriptions/${p.id}/refill`)
+        results.push({
+          submitted: true,
+          data: p,
+        })
+      } catch (error) {
+        if (isErrorObject(error)) {
+          logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
+        }
+        results.push({
+          submitted: false,
+          data: p,
+        })
+      } finally {
+        const { submittedRequestRefillCount } = getState().prescriptions
+        if (submittedRequestRefillCount < prescriptions.length) {
           dispatch(dispatchContinueRequestRefills())
         }
-
-        if (x >= totalPrescriptions) {
-          clearInterval(intervalID)
-          dispatch(dispatchFinishRequestRefills())
-        }
-      }, 3000)
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
-        // TODO add code to handle error
-        // dispatch(dispatchFinishRequestRefills({ prescriptionData: undefined, error }))
       }
     }
+
+    dispatch(dispatchFinishRequestRefills({ refillRequestSummaryItems: results }))
   }
 const prescriptionSlice = createSlice({
   name: 'prescriptions',
@@ -178,19 +188,44 @@ const prescriptionSlice = createSlice({
       state.needsRefillableLoaded = !!error
     },
     dispatchStartRequestRefills: (state) => {
-      state.loadingRequestRefills = true
+      // RefillScreen
+      state.submittingRequestRefills = true
       state.showLoadingScreenRequestRefills = true
+
+      // RefillRequestSummary
+      state.showLoadingScreenRequestRefillsRetry = true
+
+      // Both
       state.submittedRequestRefillCount = 1
     },
     dispatchContinueRequestRefills: (state) => {
       state.submittedRequestRefillCount += 1
     },
-    dispatchFinishRequestRefills: (state) => {
-      state.loadingRequestRefills = false
+    dispatchFinishRequestRefills: (state, action: PayloadAction<{ refillRequestSummaryItems: RefillRequestSummaryItems }>) => {
+      const { refillRequestSummaryItems } = action.payload
+      // RefillScreen
+      state.submittingRequestRefills = false
+
+      // RefillRequestSummary
+      state.showLoadingScreenRequestRefillsRetry = false
+
+      // Both
+      state.refillRequestSummaryItems = refillRequestSummaryItems
+      // do a reload on refill data if some successfully submitted
+      state.needsRefillableLoaded = refillRequestSummaryItems.some((item) => item.submitted)
     },
     dispatchClearLoadingRequestRefills: (state) => {
+      // Both
       state.submittedRequestRefillCount = 0
+
+      // RefillScreen
       state.showLoadingScreenRequestRefills = false
+
+      // RefillRequestSummary
+      state.showLoadingScreenRequestRefillsRetry = false
+    },
+    dispatchClearPrescriptionLogout: () => {
+      return { ...initialPrescriptionState }
     },
   },
 })
@@ -204,5 +239,6 @@ export const {
   dispatchContinueRequestRefills,
   dispatchFinishRequestRefills,
   dispatchClearLoadingRequestRefills,
+  dispatchClearPrescriptionLogout,
 } = prescriptionSlice.actions
 export default prescriptionSlice.reducer

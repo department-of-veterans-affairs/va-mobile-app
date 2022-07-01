@@ -104,3 +104,5 @@ export type PrescriptionsPaginationLinks = {
 export type PrescriptionsMap = {
   [key: string]: PrescriptionData
 }
+
+export type RefillRequestSummaryItems = Array<{ submitted: boolean; data: PrescriptionData }>

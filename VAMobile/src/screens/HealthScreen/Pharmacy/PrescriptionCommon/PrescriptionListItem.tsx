@@ -37,7 +37,7 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, sho
         {t('prescription.history.facility')} <TextView variant={'MobileBodyBold'}>{facilityName}</TextView>
       </TextView>
       <TextView mt={condensedMarginBetween}>
-        {t('prescription.history.prescriptionNumber')} <TextView variant={'MobileBodyBold'}>{prescriptionNumber}</TextView>
+        {t('prescription.prescriptionNumber')} <TextView variant={'MobileBodyBold'}>{prescriptionNumber}</TextView>
       </TextView>
     </Box>
   )
