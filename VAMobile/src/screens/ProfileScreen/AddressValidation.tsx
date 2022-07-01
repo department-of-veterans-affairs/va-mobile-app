@@ -3,8 +3,8 @@ import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
-import { AccordionCollapsible, Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
 import { AddressData, AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
+import { Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
 import { RootState } from 'store'
@@ -135,10 +135,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       default:
         return getAlertBody()
     }
-  }
-
-  const accordionHeader = (): ReactNode => {
-    return <TextView variant="MobileBodyBold">{getAlertTitle()}</TextView>
   }
 
   const getAlert = (): ReactNode => {
