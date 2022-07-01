@@ -149,6 +149,7 @@ export type VABackgroundColors = {
   tabSelectorInactive: string
   tabSelectorActive: string
   modalHeader: string
+  modalButton: string
 }
 
 export type VABorderColors = {
@@ -172,6 +173,7 @@ export type VABorderColors = {
   prescriptionDivider: string
   tabSelectorInactive: string
   tabSelectorActive: string
+  modalButton: string
 }
 
 export type VAFontSizes = {
