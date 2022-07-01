@@ -5,18 +5,15 @@ import React from 'react'
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import AccordionCollapsible from './AccordionCollapsible'
 import TextView from './TextView'
-import { VABorderColors } from 'styles/theme'
 
 context('AccordionCollapsible', () => {
   let component: RenderAPI
   let testInstance: RenderAPI
 
-  const initializeTestInstance = (hideArrow = false, alertBorder = false) => {
-    const borderProps = alertBorder ? { alertBorder: 'warning' as keyof VABorderColors } : {}
+  const initializeTestInstance = (hideArrow = false) => {
 
     component = render(
       <AccordionCollapsible
-        {...borderProps}
         hideArrow={hideArrow}
         header={<TextView>HEADER</TextView>}
         expandedContent={<TextView>EXPANDED</TextView>}

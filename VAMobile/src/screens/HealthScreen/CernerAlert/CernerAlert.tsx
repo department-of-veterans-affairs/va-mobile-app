@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
+import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
 import { Facility } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { PatientState } from 'store/slices'
@@ -9,7 +9,6 @@ import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useHasCernerFacilities, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import CollapsibleAlert from 'components/CollapsibleAlert'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
