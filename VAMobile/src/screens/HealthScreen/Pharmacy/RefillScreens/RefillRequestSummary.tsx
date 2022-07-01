@@ -143,7 +143,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           <Box flex={1}>
             <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
             <TextView variant="HelperText">
-              {t('prescription.prescriptionNumber')} {prescriptionNumber}
+              {`${t('prescription.prescriptionNumber')} ${prescriptionNumber}`}
             </TextView>
           </Box>
           <VAIcon {...vaIconProps} />
