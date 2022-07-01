@@ -42,16 +42,50 @@ export const initialPrescriptionState: PrescriptionState = {
 }
 
 export const getPrescriptions =
-  (screenID?: ScreenIDTypes, page = 1): AppThunk =>
+  (screenID?: ScreenIDTypes, page = 1, filter?: string, sort?: string): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchStartGetPrescriptions())
 
+    /**
+     * Bypassing the standard parameter because of an encoding issue for the filter params. When encoded, the service
+     * throws a 400, so we are adding them as raw strings to the url because they are all known values coming from
+     * the app
+     *
+     * TODO: replace with the params arg if issue is fixed on the back end
+     **/
+    let uri = `/v0/health/rx/prescriptions?page[number]=${page.toString()}&page[size]=${DEFAULT_PAGE_SIZE.toString()}`
+
+    // const pageParams = {
+    //   'page[number]': page.toString(),
+    //   'page[size]': DEFAULT_PAGE_SIZE.toString(),
+    // }
+
+    // let filterParams = {}
+    if (filter) {
+      // filterParams = {
+      //   'filter[refill_status][eq]': filter,
+      // }
+      uri += `&filter[[refill_status][eq]]=${filter}`
+    }
+
+    // let sortParams = {}
+    if (sort) {
+      uri += `&sort=${sort}`
+      // sortParams = {
+      //   'sort': sort,
+      // }
+    }
+
+    // const params = {
+    //   ...pageParams,
+    //   ...filterParams,
+    //   ...sortParams,
+    // }
+
     try {
-      const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', {
-        'page[number]': page.toString(),
-        'page[size]': DEFAULT_PAGE_SIZE.toString(),
-      })
+      // const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
+      const prescriptionData = await get<PrescriptionsGetData>(uri)
 
       dispatch(dispatchFinishGetPrescriptions({ prescriptionData }))
     } catch (error) {

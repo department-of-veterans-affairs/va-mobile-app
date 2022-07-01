@@ -104,6 +104,16 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({ groups, buttonText, headerT
     accessible: true,
   }
 
+  const buttonDisplayProps: BoxProps = {
+    backgroundColor: 'modalButton',
+    borderWidth: 1,
+    borderColor: 'modalButton',
+    borderRadius: 20,
+    py: 8,
+    px: 15,
+    alignSelf: 'flex-start',
+  }
+
   return (
     <View>
       <Modal
@@ -136,7 +146,9 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({ groups, buttonText, headerT
         </Box>
       </Modal>
       <Pressable {...pressableProps}>
-        <TextView>{buttonText}</TextView>
+        <Box {...buttonDisplayProps}>
+          <TextView variant={'HelperText'}>{buttonText}</TextView>
+        </Box>
       </Pressable>
     </View>
   )

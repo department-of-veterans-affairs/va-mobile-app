@@ -39,6 +39,7 @@ export const lightTheme = {
     tabSelectorInactive: colors.grayLightest,
     tabSelectorActive: colors.primaryAltLightest,
     modalHeader: colors.white,
+    modalButton: colors.primaryAltLightest,
   },
   border: {
     primary: colors.grayLight,
@@ -61,6 +62,7 @@ export const lightTheme = {
     prescriptionDivider: colors.grayLighter,
     tabSelectorInactive: colors.grayLight,
     tabSelectorActive: colors.primary,
+    modalButton: colors.primary,
   },
   icon: {
     footerButton: colors.primary,
@@ -215,6 +217,7 @@ export const darkTheme = {
     tabSelectorInactive: colors.darkmodeGrayDark,
     tabSelectorActive: colors.base,
     modalHeader: colors.darkmodeGrayDark,
+    modalButton: colors.darkmodeBorder,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -237,6 +240,7 @@ export const darkTheme = {
     prescriptionDivider: colors.darkmodeBorder,
     tabSelectorInactive: colors.darkmodeBorder,
     tabSelectorActive: colors.primaryDarker2,
+    modalButton: colors.darkmodeBorder,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
