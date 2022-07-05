@@ -24,7 +24,7 @@
     "docusaurus-plugin-react-docgen-typescript": "^0.1.0",
     "file-loader": "^6.2.0",
     "mdx-mermaid": "^1.2.1",
-    "mermaid": "^8.13.10",
+    "mermaid": "^9.1.2",
     "prism-react-renderer": "^1.2.1",
     "raw-loader": "^4.0.2",
     "react": "^17.0.1",
