@@ -3,6 +3,8 @@ name: "Update Bundler"
 on:
   schedule:
     - cron: "0 7 * * 3"
+  workflow_dispatch:
+    
 jobs:
   update_bundler:
     runs-on: ubuntu-latest

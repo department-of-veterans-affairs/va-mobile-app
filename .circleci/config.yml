@@ -308,7 +308,7 @@ jobs:
         type: string
     steps:
       - get_slack_channel_id:
-          channelName: "va-mobile-build-alerts"
+          channelName: "va-mobile-app"
       - send_slack_message:
           message: << parameters.message >>
           channelId: ${SLACK_CHANNEL_ID}

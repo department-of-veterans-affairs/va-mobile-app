@@ -46,3 +46,14 @@ Indicate NA if no changes.
 
 ## Regression Testing
 [QA Testrail Regression Test Run Here](^^^Testrail-url^^^)
+
+```mermaid
+ %%{init: {'theme': 'base', 'themeVariables': { 'pie1': '#00ff00', 'pie2': '#212121', 'pie3': '#FFE000', 'pie4': '#ff0000', 'pie5': '#cccccc', 'pieLegendTextSize': '20px', 'pieLegendTextColor':'#777777', 'pieSectionTextSize': '24px', 'pieTitleTextColor': '#777777'}}}%%
+ pie showData
+title Regression pass for {{ env.versionNumber }} {{ env.releaseDate }} release
+  "Passed": 0
+  "Blocked": 0
+  "Retest": 0
+  "Failed": 0
+  "Untested": 1
+```
