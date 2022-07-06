@@ -297,13 +297,4 @@ context('UpcomingAppointmentDetails', () => {
       expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })
-
-  describe('when navigating to upcoming appointment details page', () => {
-    it('should show loading component', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-        expect(testInstance.findByType(TextView).props.children).toEqual('Loading your appointment details...')
-      })
-    })
-  })
 })
