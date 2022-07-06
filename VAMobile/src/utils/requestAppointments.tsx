@@ -6,6 +6,7 @@ import React, { useCallback, useRef } from 'react'
 
 import {
   AVAILABLE_FOR_CC,
+  ScreenIDTypes,
   TypeOfAudiologyCareObjectType,
   TypeOfCareObjectType,
   TypeOfCareWithSubCareIdType,
@@ -70,13 +71,19 @@ export function useSetIsVAEligible<T extends SetIsVAEligibleType>() {
 export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>() => {
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const { ccEligibilityChecked, ccEligible } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const isVaEligible = useRef(true)
   const selectedId = useRef<string>('')
+  const selectedName = useRef<string>('')
 
   const navigateToVAReason = navigateTo('VAReasonForAppointmentScreen')
   const navigateToCCReason = navigateTo('CCReasonForAppointmentScreen')
   const navigateToFacilityType = navigateTo('FacilityTypeSelectionScreen', { selectedTypeOfCareId: selectedId.current })
+  const navigateToSchedulingHelp = navigateTo('GeneralHelpScreen', {
+    title: t('requestAppointments.scheduleHelpHeaderTitle', { careType: selectedName.current.toLocaleLowerCase() }),
+    description: t('requestAppointments.scheduleHelpDescription'),
+  })
 
   const manageEligibilityRoute = useCallback(
     (isCommunity: boolean | undefined, isVA: boolean) => {
@@ -87,11 +94,10 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
       } else if (isCommunity && !isVA) {
         navigateToCCReason()
       } else {
-        //TODO remove when defined what todo when not eligible for either
-        console.log('Not eligible for any service')
+        navigateToSchedulingHelp()
       }
     },
-    [navigateToCCReason, navigateToFacilityType, navigateToVAReason],
+    [navigateToCCReason, navigateToFacilityType, navigateToVAReason, navigateToSchedulingHelp],
   )
 
   const routeOnEgilibiltyCheck = useCallback(() => {
@@ -103,22 +109,21 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
 
   useFocusEffect(routeOnEgilibiltyCheck)
 
-  return (selectedTypeOfCare: string, careList: Array<T>) => {
+  return (selectedTypeOfCare: string, careList: Array<T>, screenID: ScreenIDTypes) => {
     const selectedCare = careList.find((care) => care.idV2 === selectedTypeOfCare)
 
     if (selectedCare) {
       isVaEligible.current = selectedCare.isVaEligible === undefined ? false : selectedCare.isVaEligible
       selectedId.current = selectedCare.idV2
+      selectedName.current = selectedCare.name
 
       //checks if the selected care could be available in community care if yes than check for the community care eligibility
       if (AVAILABLE_FOR_CC.includes(selectedCare.idV2)) {
         // doing this due to backend not using idv2 value for nutrition
         const typeName = selectedCare.idV2 === 'foodAndNutrition' ? 'nutrition' : selectedCare.idV2
-        dispatch(getUserCommunityCareEligibility(typeName))
+        dispatch(getUserCommunityCareEligibility(typeName, screenID))
       } else {
-        if (isVaEligible.current) {
-          manageEligibilityRoute(false, isVaEligible.current)
-        }
+        manageEligibilityRoute(false, isVaEligible.current)
       }
     }
   }

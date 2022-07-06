@@ -100,7 +100,10 @@ export type HealthStackParamList = WebviewStackParams & {
     vaccineId: string
   }
   RequestAppointmentScreen: undefined
-  GeneralHelpScreen: undefined
+  GeneralHelpScreen: {
+    title: string
+    description: string
+  }
   SubTypeHelpScreen: {
     careTypeId: string
   }

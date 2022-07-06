@@ -4,13 +4,13 @@ import React, { FC, useState } from 'react'
 
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
-import { LoadingComponent, RadioGroup, radioOption } from 'components'
+import { ErrorComponent, LoadingComponent, RadioGroup, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
+import { ScreenIDTypesConstants, SubCareDataMapping, TypeOfCareWithSubCareIdType } from 'store/api/types'
 import { SetIsVAEligibleType, useCheckEligibilityAndRouteUser, useSetIsVAEligible } from 'utils/requestAppointments'
-import { SubCareDataMapping, TypeOfCareWithSubCareIdType } from 'store/api/types'
-import { useRouteNavigation } from 'utils/hooks'
+import { useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type SubTypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'SubTypeOfCareSelectionScreen'>
@@ -67,6 +67,10 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
     return typesOfCareOptions
   }
 
+  if (useError(ScreenIDTypesConstants.APPOINTMENT_REQUEST_SUB_TYPE_OF_CARE_SCREEN_ID)) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENT_REQUEST_SUB_TYPE_OF_CARE_SCREEN_ID} />
+  }
+
   const onContinue = () => {
     if (!selectedSubTypeOfCare) {
       setNoTypeSelectedError(true)
@@ -74,7 +78,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
       if (selectedTypeOfCareId === 'audiology') {
         navigateToReasonCC()
       } else {
-        checkEligibility(selectedSubTypeOfCare, subTypeCareData)
+        checkEligibility(selectedSubTypeOfCare, subTypeCareData, ScreenIDTypesConstants.APPOINTMENT_REQUEST_SUB_TYPE_OF_CARE_SCREEN_ID)
       }
     }
   }
