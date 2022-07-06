@@ -5,21 +5,26 @@ import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 import { RootState } from 'store'
 import {
   dispatchClearLoadingRequestRefills,
+  getTrackingInfo,
   initialPrescriptionState,
   requestRefills
 } from './prescriptionSlice'
-import {RefillRequestSummaryItems, RefillStatus} from '../api'
+import { RefillRequestSummaryItems } from '../api'
 
 export const ActionTypes: {
   PRESCRIPTION_START_REQUEST_REFILLS: string
   PRESCRIPTION_CONTINUE_REQUEST_REFILLS: string
   PRESCRIPTION_FINISH_REQUEST_REFILLS: string
   PRESCRIPTION_CLEAR_LOADING_REQUEST_REFILLS: string
+  PRESCRIPTION_START_GET_TRACKING_INFO: string
+  PRESCRIPTION_FINISH_GET_TRACKING_INFO: string
 } = {
   PRESCRIPTION_START_REQUEST_REFILLS: 'prescriptions/dispatchStartRequestRefills',
   PRESCRIPTION_CONTINUE_REQUEST_REFILLS: 'prescriptions/dispatchContinueRequestRefills',
   PRESCRIPTION_FINISH_REQUEST_REFILLS: 'prescriptions/dispatchFinishRequestRefills',
-  PRESCRIPTION_CLEAR_LOADING_REQUEST_REFILLS: 'prescriptions/dispatchClearLoadingRequestRefills'
+  PRESCRIPTION_CLEAR_LOADING_REQUEST_REFILLS: 'prescriptions/dispatchClearLoadingRequestRefills',
+  PRESCRIPTION_START_GET_TRACKING_INFO: 'prescriptions/dispatchStartGetTrackingInfo',
+  PRESCRIPTION_FINISH_GET_TRACKING_INFO: 'prescriptions/dispatchFinishGetTrackingInfo',
 }
 
 context('Prescription', () => {
@@ -180,6 +185,60 @@ context('Prescription', () => {
         submittingRequestRefills: false,
         showLoadingScreenRequestRefillsRetry: false
       }))
+    })
+  })
+
+  describe('getTrackingInfo', () => {
+    const mockData = {
+      "type": "PrescriptionTracking",
+      "id": "13650544",
+      "attributes": {
+        "prescriptionName": "Ibuprofen 200mg",
+        "trackingNumber": "abcdefg12345",
+        "shippedDate": "2022-10-28T04:00:00.000Z",
+        "deliveryService": "USPS",
+        "otherPrescriptions": [
+          {
+            "prescriptionName": "Ibuprofen 200mg",
+            "prescriptionNumber": "13650544"
+          }
+        ]
+      }
+    }
+
+    it('should get tracking info', async () => {
+      when(api.get as jest.Mock).calledWith(`/v0/health/rx/prescriptions/${mockData.id}/tracking`).mockResolvedValue(mockData)
+
+      const store = realStore()
+      await store.dispatch(getTrackingInfo(mockData.id))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_GET_TRACKING_INFO })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.prescriptions.loadingTrackingInfo).toBeTruthy()
+
+      const endAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_GET_TRACKING_INFO })
+      expect(endAction?.state.prescriptions.loadingTrackingInfo).toBeFalsy()
+      expect(endAction?.state.prescriptions.trackingInfo).toEqual(mockData)
+    })
+
+    it('should get error if it cant get data', async () => {
+      const error = new Error('error from backend')
+
+      when(api.get as jest.Mock).calledWith(`/v0/health/rx/prescriptions/${mockData.id}/tracking`).mockRejectedValue(error)
+
+      const store = realStore()
+      await store.dispatch(getTrackingInfo(mockData.id))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_GET_TRACKING_INFO })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.prescriptions.loadingTrackingInfo).toBeTruthy()
+
+      const endAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_GET_TRACKING_INFO })
+      expect(endAction?.state.prescriptions.loadingTrackingInfo).toBeFalsy()
+      expect(endAction?.state.prescriptions.trackingInfo).toBeUndefined()
+      expect(endAction?.state.prescriptions.error).toEqual(error)
     })
   })
 })
