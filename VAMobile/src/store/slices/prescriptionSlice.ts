@@ -220,6 +220,7 @@ const prescriptionSlice = createSlice({
 
       // RefillScreen
       state.showLoadingScreenRequestRefills = false
+      state.submittingRequestRefills = false
 
       // RefillRequestSummary
       state.showLoadingScreenRequestRefillsRetry = false
