@@ -23,17 +23,33 @@ export type RadioGroupModalProps = {
   groups: Array<RadioPickerGroup>
   /** Callback for when the input is confirmed */
   onConfirm: () => void
-  /** Callback when the reset button is pressed */
-  onReset: () => void
+  /** Callback when the upper right button is pressed */
+  onUpperRightAction: () => void
   /** Callback for cancelling the interaction */
   onCancel: () => void
-  /** Text to appear on the button that launches the modal */
-  buttonText: string
   /** Header text within the modal */
   headerText: string
+  /** Text to appear on the button that launches the modal */
+  buttonText: string
+  /** Accessibility hint for the button that launches the modal */
+  buttonA11yHint?: string
+  /** Text for the button in the upper right of the modal */
+  topRightButtonText: string
+  /** Accessibility hint for the button in the upper right */
+  topRightButtonA11yHint?: string
 }
 
-const RadioGroupModal: FC<RadioGroupModalProps> = ({ groups, buttonText, headerText, onConfirm, onReset, onCancel }) => {
+const RadioGroupModal: FC<RadioGroupModalProps> = ({
+  groups,
+  buttonText,
+  headerText,
+  onConfirm,
+  onUpperRightAction,
+  onCancel,
+  buttonA11yHint,
+  topRightButtonText,
+  topRightButtonA11yHint,
+}) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
@@ -53,8 +69,8 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({ groups, buttonText, headerT
     onConfirm()
   }
 
-  const onResetPressed = (): void => {
-    onReset()
+  const onUpperRightActionPressed = (): void => {
+    onUpperRightAction()
   }
 
   const getGroups = () =>
@@ -95,13 +111,14 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({ groups, buttonText, headerT
   const resetButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityHint: tc('done.picker.a11yHint'),
+    accessibilityHint: topRightButtonA11yHint,
   }
 
   const pressableProps: PressableProps = {
     onPress: showModal,
     accessibilityRole: 'button',
     accessible: true,
+    accessibilityHint: buttonA11yHint,
   }
 
   const buttonDisplayProps: BoxProps = {
@@ -132,12 +149,12 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({ groups, buttonText, headerT
                 <TextView {...commonButtonProps}>{tc('cancel')}</TextView>
               </Pressable>
               <Box flex={4}>
-                <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
+                <TextView variant="MobileBodyBold" accessibilityRole={'header'} textAlign={'center'} allowFontScaling={false}>
                   {headerText}
                 </TextView>
               </Box>
-              <Pressable onPress={onResetPressed} {...resetButtonProps}>
-                <TextView {...commonButtonProps}>{tc('reset')}</TextView>
+              <Pressable onPress={onUpperRightActionPressed} {...resetButtonProps}>
+                <TextView {...commonButtonProps}>{topRightButtonText}</TextView>
               </Pressable>
             </Box>
             <VAScrollView bounces={false}>{getGroups()}</VAScrollView>

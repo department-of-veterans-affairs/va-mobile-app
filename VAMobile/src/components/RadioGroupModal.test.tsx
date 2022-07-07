@@ -33,10 +33,11 @@ context('RadioGroupModal', () => {
     const modalProps: RadioGroupModalProps = {
       groups: [group1],
       onConfirm: onConfirmSpy,
-      onReset: onResetSpy,
+      onUpperRightAction: onResetSpy,
       onCancel: onCancelSpy,
       buttonText: 'modal button',
-      headerText: 'modal header'
+      headerText: 'modal header',
+      topRightButtonText: 'reset',
     }
 
     component = render(<RadioGroupModal {...modalProps} />)
@@ -50,5 +51,32 @@ context('RadioGroupModal', () => {
   it('should show the button', async () => {
     expect(findByTypeWithText(testInstance, TextView, 'modal button')).toBeTruthy()
     expect(findByOnPressFunction(testInstance, Pressable, 'showModal')).toBeTruthy()
+  })
+
+  it('should have a functional upper right button', async () => {
+    expect(findByTypeWithText(testInstance, TextView, 'reset')).toBeTruthy()
+
+    await waitFor(() => {
+      findByOnPressFunction(testInstance, Pressable, 'onUpperRightActionPressed')?.props.onPress()
+      expect(onResetSpy).toBeCalled()
+    })
+  })
+
+  it('should have a functional cancel button', async () => {
+    expect(findByTypeWithText(testInstance, TextView, 'Cancel')).toBeTruthy()
+
+    await waitFor(() => {
+      findByOnPressFunction(testInstance, Pressable, 'onCancelPressed')?.props.onPress()
+      expect(onCancelSpy).toBeCalled()
+    })
+  })
+
+  it('should call the apply callback', async () => {
+    expect(findByTypeWithText(testInstance, TextView, 'Apply')).toBeTruthy()
+
+    await waitFor(() => {
+      findByOnPressFunction(testInstance, Pressable, 'onApply')?.props.onPress()
+      expect(onConfirmSpy).toBeCalled()
+    })
   })
 })
