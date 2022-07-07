@@ -168,6 +168,8 @@
   "requestAppointments.closeModalBtnHint": "Cancel appointment request",
   "requestAppointments.generalHelpHeaderTitle": "Not finding what you need or need help with scheduling?",
   "requestAppointments.generalHelpDescription": "Call your VA health or community care facility for help with scheduling.",
+  "requestAppointments.scheduleHelpHeaderTitle": "You're not eligible to request {{careType}} online at this time.",
+  "requestAppointments.scheduleHelpDescription": "Please call your VA health facility to schedule this appointment.",
   "requestAppointments.generalHelpLinkText": "Find facility",
   "requestAppointments.generalHelpPageTitle": "Scheduling help",
   "requestAppointments.helpBtnHint": "Get scheduling help",

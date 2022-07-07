@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { ALWAYS_SHOW_CARE_LIST, TYPE_OF_CARE, TypeOfCareObjectType, TypeOfCareWithSubCareIdType } from 'store/api/types'
+import { ALWAYS_SHOW_CARE_LIST, ScreenIDTypesConstants, TYPE_OF_CARE, TypeOfCareObjectType, TypeOfCareWithSubCareIdType } from 'store/api/types'
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
-import { LoadingComponent, RadioGroup, radioOption } from 'components'
+import { ErrorComponent, LoadingComponent, RadioGroup, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, getUserFacilities, getUserVAEligibility } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { hasSubType, useCheckEligibilityAndRouteUser, useSetIsVAEligible } from 'utils/requestAppointments'
-import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
 
 type TypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'TypeOfCareSelectionScreen'>
 
@@ -31,7 +31,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
   const navigateToSubType = navigateTo('SubTypeOfCareSelectionScreen', { selectedTypeOfCareId: selectedTypeOfCare })
 
   useEffect(() => {
-    dispatch(getUserVAEligibility())
+    dispatch(getUserVAEligibility(ScreenIDTypesConstants.APPOINTMENT_REQUEST_TYPE_OF_CARE_SCREEN_ID))
     dispatch(getUserFacilities())
   }, [dispatch])
 
@@ -71,9 +71,13 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
       if (hasSubType(selectedTypeOfCare as TypeOfCareWithSubCareIdType) && selectedTypeOfCare !== 'audiology') {
         navigateToSubType()
       } else {
-        checkEligibility(selectedTypeOfCare, careListData)
+        checkEligibility(selectedTypeOfCare, careListData, ScreenIDTypesConstants.APPOINTMENT_REQUEST_TYPE_OF_CARE_SCREEN_ID)
       }
     }
+  }
+
+  if (useError(ScreenIDTypesConstants.APPOINTMENT_REQUEST_TYPE_OF_CARE_SCREEN_ID)) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENT_REQUEST_TYPE_OF_CARE_SCREEN_ID} />
   }
 
   return (

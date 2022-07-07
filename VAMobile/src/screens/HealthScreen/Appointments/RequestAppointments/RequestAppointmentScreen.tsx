@@ -73,7 +73,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
           iconName="QuestionMark"
           accessibilityHint={t('requestAppointments.helpBtnHint')}
           accessibilityLabel={t('requestAppointment.modalNeedHelpBtnTitle')}
-          onPress={navigateTo('GeneralHelpScreen')}
+          onPress={navigateTo('GeneralHelpScreen', { title: t('requestAppointments.generalHelpHeaderTitle'), description: t('requestAppointments.generalHelpDescription') })}
         />
       ),
     })
