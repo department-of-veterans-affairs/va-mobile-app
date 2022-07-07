@@ -27,6 +27,7 @@ const CernerAlert: FC = () => {
   // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
   const allCernerFacilities = facilities.length === cernerFacilities.length
   const headerText = allCernerFacilities ? t('cernerAlert.header.all') : t('cernerAlert.header.some')
+  const headerA11yLabel = allCernerFacilities ? t('cernerAlert.header.all.a11yLabel') : t('cernerAlert.header.some.a11yLabel')
 
   const accordionContent = (): ReactNode => {
     const body = cernerFacilities.map((facility: Facility) => {
@@ -55,7 +56,7 @@ const CernerAlert: FC = () => {
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBody">{t('cernerAlert.ourRecordsShow')}</TextView>
         {body}
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
           {t('cernerAlert.footer')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />
@@ -63,7 +64,7 @@ const CernerAlert: FC = () => {
     )
   }
 
-  return <CollapsibleAlert border="warning" headerText={headerText} body={accordionContent()} a11yHint={t('cernerAlert.header.a11yHint')} />
+  return <CollapsibleAlert border="warning" headerText={headerText} body={accordionContent()} a11yLabel={headerA11yLabel} />
 }
 
 export default CernerAlert
