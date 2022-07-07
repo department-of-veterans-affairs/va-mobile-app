@@ -18,6 +18,7 @@ context('CollapsibleAlert', () => {
             border="informational"
             headerText='HEADER'
             body={<TextView>EXPANDED</TextView>}
+            a11yLabel='A11YLABEL'
           />,
         )
         testInstance = component
