@@ -1,10 +1,21 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from '../api'
-import { APIError, PrescriptionsGetData, PrescriptionsList, PrescriptionsMap, PrescriptionsPaginationData, RefillRequestSummaryItems, ScreenIDTypes, get, put } from '../api'
+import {
+  APIError,
+  PrescriptionTrackingInfo,
+  PrescriptionsGetData,
+  PrescriptionsList,
+  PrescriptionsMap,
+  PrescriptionsPaginationData,
+  RefillRequestSummaryItems,
+  ScreenIDTypes,
+  get,
+  put,
+} from '../api'
 import { AppThunk } from 'store'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { dispatchClearErrors, dispatchSetError } from './errorSlice'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { indexBy } from 'underscore'
 import { isErrorObject } from 'utils/common'
@@ -24,6 +35,8 @@ export type PrescriptionState = {
   nonRefillablePrescriptions?: PrescriptionsList
   needsRefillableLoaded: boolean
   loadingRefillable: boolean
+  loadingTrackingInfo: boolean
+  trackingInfo?: PrescriptionTrackingInfo
   // Request refill (RefillScreen, RefillRequestSummary)
   submittingRequestRefills: boolean
   showLoadingScreenRequestRefills: boolean
@@ -40,6 +53,8 @@ export const initialPrescriptionState: PrescriptionState = {
   nonRefillableCount: 0,
   needsRefillableLoaded: true,
   loadingRefillable: false,
+  loadingTrackingInfo: false,
+  trackingInfo: undefined,
   submittingRequestRefills: false,
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
@@ -154,6 +169,27 @@ export const requestRefills =
 
     dispatch(dispatchFinishRequestRefills({ refillRequestSummaryItems: results }))
   }
+
+export const getTrackingInfo =
+  (id: string, screenID?: ScreenIDTypes): AppThunk =>
+  async (dispatch, _getState) => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getTrackingInfo(id, screenID))))
+
+    dispatch(dispatchStartGetTrackingInfo())
+
+    try {
+      const trackingInfo = await api.get<PrescriptionTrackingInfo>(`/v0/health/rx/prescriptions/${id}/tracking`)
+      dispatch(dispatchFinishGetTrackingInfo({ trackingInfo }))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getTrackingInfo : ${prescriptionNonFatalErrorString}`)
+        dispatch(dispatchFinishGetTrackingInfo({ trackingInfo: undefined, error }))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+      }
+    }
+  }
+
 const prescriptionSlice = createSlice({
   name: 'prescriptions',
   initialState: initialPrescriptionState,
@@ -228,6 +264,15 @@ const prescriptionSlice = createSlice({
     dispatchClearPrescriptionLogout: () => {
       return { ...initialPrescriptionState }
     },
+    dispatchStartGetTrackingInfo: (state) => {
+      state.loadingTrackingInfo = true
+    },
+    dispatchFinishGetTrackingInfo: (state, action: PayloadAction<{ trackingInfo?: PrescriptionTrackingInfo; error?: APIError }>) => {
+      const { trackingInfo, error } = action.payload
+      state.trackingInfo = trackingInfo
+      state.error = error
+      state.loadingTrackingInfo = false
+    },
   },
 })
 
@@ -241,5 +286,7 @@ export const {
   dispatchFinishRequestRefills,
   dispatchClearLoadingRequestRefills,
   dispatchClearPrescriptionLogout,
+  dispatchStartGetTrackingInfo,
+  dispatchFinishGetTrackingInfo,
 } = prescriptionSlice.actions
 export default prescriptionSlice.reducer

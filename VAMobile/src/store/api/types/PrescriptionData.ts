@@ -106,3 +106,20 @@ export type PrescriptionsMap = {
 }
 
 export type RefillRequestSummaryItems = Array<{ submitted: boolean; data: PrescriptionData }>
+
+export type PrescriptionTrackingInfoOtherItem = {
+  prescriptionName: string
+  prescriptionNumber: string
+}
+
+export type PrescriptionTrackingInfo = {
+  type: string
+  id: string
+  attributes: {
+    prescriptionName: string
+    trackingNumber: string
+    shippedDate: string
+    deliveryService: string
+    otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
+  }
+}
