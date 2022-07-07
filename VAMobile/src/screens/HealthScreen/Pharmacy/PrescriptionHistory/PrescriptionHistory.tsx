@@ -8,8 +8,8 @@ import React, { FC } from 'react'
 import { Box, BoxProps, ErrorComponent, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
+import { PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { PrescriptionState, getPrescriptions } from 'store/slices/prescriptionSlice'
-import { RefillStatusConstants } from 'store/api/types'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getFilterArgsForFilter } from 'utils/prescriptions'
@@ -18,10 +18,10 @@ import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/ho
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 
 const sortByOptions = [
-  { display: 'prescriptions.sort.facility', value: 'facility_name' },
-  { display: 'prescriptions.sort.fillDate', value: 'refill_date' },
-  { display: 'prescriptions.sort.medication', value: 'prescription_name' },
-  { display: 'prescriptions.sort.refills', value: 'refill_remaining' },
+  { display: 'prescriptions.sort.facility', value: PrescriptionSortOptionConstants.FACILITY_NAME },
+  { display: 'prescriptions.sort.fillDate', value: PrescriptionSortOptionConstants.REFILL_DATE },
+  { display: 'prescriptions.sort.medication', value: PrescriptionSortOptionConstants.PRESCRIPTION_NAME },
+  { display: 'prescriptions.sort.refills', value: PrescriptionSortOptionConstants.REFILL_REMAINING },
 ]
 
 const sortOrderOptions = [
@@ -86,14 +86,15 @@ const PrescriptionHistory: FC = ({}) => {
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const [selectedFilter, setSelectedFilter] = useState('')
-  const [selectedSortBy, setSelectedSortBy] = useState('')
+  const [selectedFilter, setSelectedFilter] = useState<RefillStatus | ''>('')
+  const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [selectedSortOn, setSelectedSortOn] = useState('')
 
-  const [filterToUse, setFilterToUse] = useState('')
-  const [sortByToUse, setSortByToUse] = useState('')
+  const [filterToUse, setFilterToUse] = useState<RefillStatus | ''>('')
+  const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState('')
 
   const requestPage = useCallback(
@@ -177,7 +178,7 @@ const PrescriptionHistory: FC = ({}) => {
       {
         items: sortByRadioOptions,
         onSetOption: (newSortBy: string) => {
-          setSelectedSortBy(newSortBy)
+          setSelectedSortBy(newSortBy as PrescriptionSortOptions | '')
         },
         selectedValue: selectedSortBy,
         title: t('prescriptions.sort.by'),
@@ -192,12 +193,15 @@ const PrescriptionHistory: FC = ({}) => {
       },
     ],
     buttonText: `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`,
+    buttonA11yHint: t('prescription.filter.sort.a11y'),
     headerText: t('prescription.filter.sort'),
+    topRightButtonText: tc('reset'),
+    topRightButtonA11yHint: t('prescription.filter.sort.reset.a11y'),
     onConfirm: () => {
       setSortOnToUse(selectedSortOn)
       setSortByToUse(selectedSortBy)
     },
-    onReset: () => {
+    onUpperRightAction: () => {
       setSelectedSortBy('')
       setSelectedSortOn('')
     },
@@ -221,17 +225,20 @@ const PrescriptionHistory: FC = ({}) => {
       {
         items: filterRadioOptions,
         onSetOption: (newFilter: string) => {
-          setSelectedFilter(newFilter)
+          setSelectedFilter(newFilter as RefillStatus | '')
         },
         selectedValue: selectedFilter,
       },
     ],
     buttonText: filterButtonText,
+    buttonA11yHint: t('prescription.filter.by.a11y'),
     headerText: t('prescription.filter.status'),
+    topRightButtonText: tc('reset'),
+    topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
     onConfirm: () => {
       setFilterToUse(selectedFilter)
     },
-    onReset: () => {
+    onUpperRightAction: () => {
       setSelectedFilter('')
     },
     onCancel: () => {
@@ -279,13 +286,13 @@ const PrescriptionHistory: FC = ({}) => {
     } else {
       return (
         <>
-          <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
-            <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-              {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
-            </TextView>
-          </Box>
           <VAScrollView contentContainerStyle={mainViewStyle}>
+            <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+              <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
+              <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+                {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
+              </TextView>
+            </Box>
             <Box mb={theme.dimensions.contentMarginBottom}>
               <List items={getListItemsForPrescriptions()} />
               <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>

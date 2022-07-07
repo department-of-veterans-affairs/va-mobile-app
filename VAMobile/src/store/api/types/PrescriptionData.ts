@@ -1,3 +1,17 @@
+export type PrescriptionSortOptions = 'facility_name' | 'refill_date' | 'prescription_name' | 'refill_remaining'
+
+export const PrescriptionSortOptionConstants: {
+  FACILITY_NAME: PrescriptionSortOptions
+  REFILL_DATE: PrescriptionSortOptions
+  PRESCRIPTION_NAME: PrescriptionSortOptions
+  REFILL_REMAINING: PrescriptionSortOptions
+} = {
+  FACILITY_NAME: 'facility_name',
+  REFILL_DATE: 'refill_date',
+  PRESCRIPTION_NAME: 'prescription_name',
+  REFILL_REMAINING: 'refill_remaining',
+}
+
 export const RefillStatusConstants: {
   ACTIVE: RefillStatus
   DELETED: RefillStatus
