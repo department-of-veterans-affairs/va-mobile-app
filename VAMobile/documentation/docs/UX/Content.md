@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2
+title: Content
+sidebar_position: 3
 ---
 
 ## Voice and tone
@@ -20,7 +21,7 @@ We follow [VA design system content rules](https://design.va.gov/content-style-g
 
 ### Capitalization
 
-- Screen names (e.g. Home, Profile, Vaccine Records) are title case. 
+- Screen names (e.g. Home, Profile, Vaccine Records) are title case. With the new navigation design we will be [moving to sentence case for screen titles](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/2575).
 - All other headings in the app are sentence case.
 
 ### Times and time zones
@@ -31,7 +32,6 @@ We follow [VA design system content rules](https://design.va.gov/content-style-g
 We generally follow [VA design rules for naming](https://design.va.gov/content-style-guide/naming-and-labels) forms and labels. 
 
 When naming components in our design library we use the [Sketch format](https://www.sketch.com/docs/designing/symbols/organizing-symbols/#how-to-create-symbol-groups): Group-name/Symbol-name. When applicable, we also include subgroup names between the group name and symbol name. 
-
 
 ## Actionable language [TK]
 
