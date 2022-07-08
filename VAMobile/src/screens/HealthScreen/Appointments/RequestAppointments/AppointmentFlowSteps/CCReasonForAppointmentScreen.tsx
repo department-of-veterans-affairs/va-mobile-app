@@ -1,12 +1,16 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { Box, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
+import { RootState } from 'store'
+import { setReasonCode } from 'utils/requestAppointments'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type CCReasonForAppointmentScreen = StackScreenProps<AppointmentFlowModalStackParamList, 'CCReasonForAppointmentScreen'>
 
@@ -15,11 +19,18 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const { gutter, condensedMarginBetween } = theme.dimensions
+  const dispatch = useAppDispatch()
 
-  const [additionalDetails, setAdditionalDetails] = useState<string>()
+  const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
+  const { text: reasonText } = appointmentFlowFormData.reasonCode || {}
+
+  useEffect(() => {
+    // set the reason code to nothing due to we do not need it for CC
+    onSetAdditionalDetails(reasonText ?? '')
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSetAdditionalDetails = (data: string) => {
-    setAdditionalDetails(data)
+    dispatch(updateFormData(setReasonCode(undefined, data)))
   }
 
   const onContinue = () => {}
@@ -41,7 +52,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
         <TextView variant="MobileBodyBold" mb={condensedMarginBetween}>
           {t('requestAppointment.additionaldetailsTitle')}
         </TextView>
-        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={additionalDetails} />
+        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={reasonText} />
       </Box>
     </AppointmentFlowLayout>
   )

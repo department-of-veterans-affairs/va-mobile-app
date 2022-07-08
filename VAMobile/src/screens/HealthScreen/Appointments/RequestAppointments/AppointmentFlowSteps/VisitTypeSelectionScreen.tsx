@@ -1,30 +1,36 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
+import { FormKindType, VISIT_TYPE } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { RadioGroup, radioOption } from 'components'
-import { VISIT_TYPE } from 'store/api'
-import { useTranslation } from 'react-i18next'
+import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
+import { RootState } from 'store'
+import { useAppDispatch } from 'utils/hooks'
 
 type VisitTypeSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VisitTypeSelectionScreen'>
 
 const VisitTypeSelectionScreen: FC<VisitTypeSelectionScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const dispatch = useAppDispatch()
+  const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
+  const { kind } = appointmentFlowFormData
 
-  const [selectedVisitType, setSelectedVisitType] = useState<string>()
   const [noVisitTypeSelectedError, setVisitTypeSelectedError] = useState(false)
 
   const onSelectedVisitType = (type: string): void => {
     if (type) {
       setVisitTypeSelectedError(false)
-      setSelectedVisitType(type)
+      dispatch(updateFormData({ kind: type as FormKindType }))
     }
   }
 
   const onContinue = () => {
-    if (!selectedVisitType) {
+    if (!kind) {
       setVisitTypeSelectedError(true)
     } else {
       // TODO add next navigation
@@ -55,7 +61,7 @@ const VisitTypeSelectionScreen: FC<VisitTypeSelectionScreenProps> = ({ navigatio
         error={noVisitTypeSelectedError}
         errorMessage={t('requestAppointment.visitTypeNotSelectedError')}
       />
-      <RadioGroup options={getVisitTypes()} onChange={onSelectedVisitType} value={selectedVisitType} isRadioList={true} />
+      <RadioGroup options={getVisitTypes()} onChange={onSelectedVisitType} value={kind} isRadioList={true} />
     </AppointmentFlowLayout>
   )
 }

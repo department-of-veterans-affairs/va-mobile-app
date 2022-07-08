@@ -16,20 +16,16 @@ import { CloseModalButton, HeaderIconBtn } from 'components'
 import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { TypeOfCareIdV2Types } from 'store/api'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { resetFormData } from 'store/slices/requestAppointmentSlice'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   TypeOfCareSelectionScreen: undefined
   VAReasonForAppointmentScreen: undefined
   CCReasonForAppointmentScreen: undefined
-  SubTypeOfCareSelectionScreen: {
-    selectedTypeOfCareId: TypeOfCareIdV2Types
-  }
-  FacilityTypeSelectionScreen: {
-    selectedTypeOfCareId: TypeOfCareIdV2Types
-  }
+  SubTypeOfCareSelectionScreen: undefined
+  FacilityTypeSelectionScreen: undefined
   VisitTypeSelectionScreen: undefined
   EmergencyAndCrisisScreen: undefined
 }
@@ -42,6 +38,7 @@ const Stack = createStackNavigator<AppointmentFlowModalStackParamList>()
 const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const inset = useSafeAreaInsets()
   const [forceFocus, setForceFocus] = useState<string>()
@@ -62,7 +59,10 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
         <CloseModalButton
           key={forceFocus} // force buton to rerender so the reader can focus on it
           buttonText={t('requestAppointment.closeModalBtnTitle')}
-          onPress={navigation.goBack}
+          onPress={() => {
+            navigation.goBack()
+            dispatch(resetFormData())
+          }}
           a11yHint={t('requestAppointments.closeModalBtnHint')}
           focusOnButton={true}
         />

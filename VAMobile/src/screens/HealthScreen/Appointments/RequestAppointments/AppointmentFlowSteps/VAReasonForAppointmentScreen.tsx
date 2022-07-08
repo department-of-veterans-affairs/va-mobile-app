@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
@@ -7,7 +8,10 @@ import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhit
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { PURPOSE_TEXT } from 'store/api'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
+import { RootState } from 'store'
+import { setReasonCode } from 'utils/requestAppointments'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type VAReasonForAppointmentScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAReasonForAppointmentScreen'>
 
@@ -15,20 +19,22 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const { gutter, contentMarginBottom, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
-  const [selectedReason, setSelectedReason] = useState<string>()
-  const [additionalDetails, setAdditionalDetails] = useState<string>()
+  const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
+  const { text: reasonText, coding: reasonCoding = [] } = appointmentFlowFormData.reasonCode || {}
+
   const [noReasonSelectedError, setNoReasonSelectedError] = useState(false)
   const [noDetailsAddedError, setNoDetailsAddedError] = useState(false)
 
-  const navigateToFacilityType = navigateTo('FacilityTypeSelectionScreen')
+  const navigateToVisitType = navigateTo('VisitTypeSelectionScreen')
 
   const onSetSelectedReason = (type: string): void => {
     if (type) {
       setNoReasonSelectedError(false)
-      setSelectedReason(type)
+      dispatch(updateFormData(setReasonCode(type, reasonText)))
     }
   }
 
@@ -36,7 +42,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
     if (data) {
       setNoDetailsAddedError(false)
     }
-    setAdditionalDetails(data)
+    dispatch(updateFormData(setReasonCode(reasonCoding[0]?.code, data)))
   }
 
   const getReasons = () => {
@@ -52,16 +58,17 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   }
 
   const onContinue = () => {
-    if (!selectedReason) {
+    if (!reasonCoding || reasonCoding.length === 0) {
       setNoReasonSelectedError(true)
     }
 
-    if (!additionalDetails) {
+    if (!reasonText) {
       setNoDetailsAddedError(true)
     }
 
-    if (selectedReason && additionalDetails) {
-      navigateToFacilityType()
+    if (reasonCoding && reasonCoding.length > 0 && reasonText) {
+      dispatch
+      navigateToVisitType()
     }
   }
 
@@ -79,7 +86,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
 
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} error={noReasonSelectedError} errorMessage={t('requestAppointment.reasonNotSelectedError')} />
       <Box mb={contentMarginBottom}>
-        <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={selectedReason} isRadioList={true} />
+        <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={reasonCoding[0]?.code} isRadioList={true} />
       </Box>
       <Box mx={gutter}>
         <TextView variant="MobileBodyBold" mb={condensedMarginBetween}>
@@ -90,7 +97,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
             <AlertBox border={'error'} title={t('requestAppointment.additionaldetailsError')} />
           </Box>
         )}
-        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={additionalDetails} />
+        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={reasonText} />
       </Box>
     </AppointmentFlowLayout>
   )
