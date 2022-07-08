@@ -22,10 +22,10 @@ const VisitTypeSelectionScreen: FC<VisitTypeSelectionScreenProps> = ({ navigatio
 
   const [noVisitTypeSelectedError, setVisitTypeSelectedError] = useState(false)
 
-  const onSelectedVisitType = (type: string): void => {
-    if (type) {
+  const onSelectedVisitType = (kind: FormKindType): void => {
+    if (kind) {
       setVisitTypeSelectedError(false)
-      dispatch(updateFormData({ kind: type as FormKindType }))
+      dispatch(updateFormData({ kind }))
     }
   }
 
@@ -38,7 +38,7 @@ const VisitTypeSelectionScreen: FC<VisitTypeSelectionScreenProps> = ({ navigatio
   }
 
   const getVisitTypes = () => {
-    const visitTypeOptions: Array<radioOption<string>> = []
+    const visitTypeOptions: Array<radioOption<FormKindType>> = []
 
     for (const visitType of VISIT_TYPE) {
       visitTypeOptions.push({

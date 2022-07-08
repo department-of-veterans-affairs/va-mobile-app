@@ -31,11 +31,10 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
   const navigateToReasonCC = navigateTo('CCReasonForAppointmentScreen')
   const navigateToHelpScreen = navigateTo('SubTypeHelpScreen', { careTypeId: typeOfCareSelected })
 
-  const onSetSelectedTypeOfCare = (type: string): void => {
-    if (type) {
+  const onSetSelectedTypeOfCare = (subCare: TypeOfCareIdV2Types): void => {
+    if (subCare) {
       setNoTypeSelectedError(false)
-      const typeSelected = type as TypeOfCareIdV2Types
-      dispatch(updateFormData({ subTypeSelected: typeSelected, serviceType: typeSelected }))
+      dispatch(updateFormData({ subTypeSelected: subCare, serviceType: subCare }))
     }
   }
 
@@ -59,7 +58,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
   }
 
   const getTypesOfSubCare = () => {
-    const typesOfCareOptions: Array<radioOption<string>> = []
+    const typesOfCareOptions: Array<radioOption<TypeOfCareIdV2Types>> = []
 
     if (typeOfCareSelected) {
       subTypeCareData = setIsVAEligible(SubCareDataMapping[typeOfCareSelected as TypeOfCareWithSubCareIdType])

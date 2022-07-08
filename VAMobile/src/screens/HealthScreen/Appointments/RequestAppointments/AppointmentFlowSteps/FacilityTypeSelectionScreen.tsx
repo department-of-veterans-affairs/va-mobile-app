@@ -27,10 +27,10 @@ const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ nav
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { typeOfCareSelected, facilitySelected, kind, subTypeSelected, serviceType } = appointmentFlowFormData
 
-  const onSelectedFacilityType = (type: string): void => {
-    if (type) {
+  const onSelectedFacilityType = (facility: facilityTypeValueTypes): void => {
+    if (facility) {
       setFacilityTypeSelectedError(false)
-      const facility = type as facilityTypeValueTypes
+
       let subtype = subTypeSelected
       let typeOfService = serviceType
 
@@ -62,7 +62,7 @@ const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ nav
   }
 
   const getFacilityTypes = () => {
-    const facilityTypeOptions: Array<radioOption<string>> = []
+    const facilityTypeOptions: Array<radioOption<facilityTypeValueTypes>> = []
 
     for (const facilityType of FACILITY_TYPE) {
       facilityTypeOptions.push({

@@ -312,7 +312,7 @@ export const FacilityTypeValueMapping: {
 
 export type facilityTypeObjectType = {
   label: facilityTypeLabelTypes
-  value: string
+  value: facilityTypeValueTypes
   a11yLabel?: string
 }
 
@@ -333,7 +333,7 @@ export type visitTypeLabelTypes = 'In person' | 'Phone call' | 'Telehealth (thro
 
 export type visitTypeObjectType = {
   label: visitTypeLabelTypes
-  value: string
+  value: FormKindType
   a11yLabel?: string
 }
 

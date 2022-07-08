@@ -37,16 +37,15 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
     dispatch(getUserFacilities())
   }, [dispatch])
 
-  const onSetSelectedTypeOfCare = (type: string): void => {
-    if (type) {
+  const onSetSelectedTypeOfCare = (care: TypeOfCareIdV2Types): void => {
+    if (care) {
       setNoTypeSelectedError(false)
-      const typeSelected = type as TypeOfCareIdV2Types
-      dispatch(updateFormData({ serviceType: typeSelected, typeOfCareSelected: typeSelected, subTypeSelected: undefined }))
+      dispatch(updateFormData({ serviceType: care, typeOfCareSelected: care, subTypeSelected: undefined }))
     }
   }
 
   const getTypesOfCareOptions = () => {
-    const typesOfCareOptions: Array<radioOption<string>> = []
+    const typesOfCareOptions: Array<radioOption<TypeOfCareIdV2Types>> = []
 
     // Get only the type of cares that are always shown and the ones that the user is VA eligible sorted
     careListData = setIsVaEligible(TYPE_OF_CARE)
