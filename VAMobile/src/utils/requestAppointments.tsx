@@ -20,7 +20,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, finishCheckingCCEligibility, getUserCommunityCareEligibility, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { isIOS } from './platform'
-import { type } from 'os'
 import { useAppDispatch, useRouteNavigation, useTheme } from './hooks'
 
 /** Header style for the modals in the request appointment flow */
