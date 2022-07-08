@@ -22,10 +22,10 @@ const VisitTypeSelectionScreen: FC<VisitTypeSelectionScreenProps> = ({ navigatio
 
   const [noVisitTypeSelectedError, setVisitTypeSelectedError] = useState(false)
 
-  const onSelectedVisitType = (kind: FormKindType): void => {
-    if (kind) {
+  const onSelectedVisitType = (kindOfVisit: FormKindType): void => {
+    if (kindOfVisit) {
       setVisitTypeSelectedError(false)
-      dispatch(updateFormData({ kind }))
+      dispatch(updateFormData({ kind: kindOfVisit }))
     }
   }
 
