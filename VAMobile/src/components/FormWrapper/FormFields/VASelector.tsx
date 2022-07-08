@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon, VAIconProps } from '../../index'
+import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
@@ -58,6 +59,7 @@ const VASelector: FC<VASelectorProps> = ({
 }) => {
   const theme = useTheme()
   const { t } = useTranslation()
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const iconWidth = 22
 
   const selectorOnPress = (): void => {
@@ -114,14 +116,10 @@ const VASelector: FC<VASelectorProps> = ({
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
   const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'radio'
   const a11yState = selectorType === SelectorType.Checkbox ? { checked: selected } : { selected }
+  const labelToUse = `${a11yLabel || getTranslation(labelKey, t, labelArgs)} ${error ? tc('error', { error }) : ''}`
 
   return (
-    <TouchableWithoutFeedback
-      onPress={selectorOnPress}
-      accessibilityState={a11yState}
-      accessibilityRole={a11yRole}
-      {...hintProp}
-      {...testIdProps(a11yLabel || getTranslation(labelKey, t, labelArgs))}>
+    <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={a11yState} accessibilityRole={a11yRole} accessibilityLabel={labelToUse} {...hintProp}>
       <Box>
         {!!error && <Box {...errorBoxProps}>{renderInputError(theme, error)}</Box>}
         <Box flexDirection="row">
