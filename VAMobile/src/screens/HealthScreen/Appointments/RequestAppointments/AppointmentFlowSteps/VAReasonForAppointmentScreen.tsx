@@ -24,7 +24,8 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const { gutter, contentMarginBottom, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
-  const { text: reasonText, coding: reasonCoding = [] } = appointmentFlowFormData.reasonCode || {}
+  const { text } = appointmentFlowFormData.reasonCode || {}
+  const { comment } = appointmentFlowFormData
 
   const [noReasonSelectedError, setNoReasonSelectedError] = useState(false)
   const [noDetailsAddedError, setNoDetailsAddedError] = useState(false)
@@ -34,7 +35,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const onSetSelectedReason = (type: string): void => {
     if (type) {
       setNoReasonSelectedError(false)
-      dispatch(updateFormData(setReasonCode(type, reasonText)))
+      dispatch(updateFormData(setReasonCode(type)))
     }
   }
 
@@ -42,7 +43,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
     if (data) {
       setNoDetailsAddedError(false)
     }
-    dispatch(updateFormData(setReasonCode(reasonCoding[0]?.code, data)))
+    dispatch(updateFormData({ comment: data }))
   }
 
   const getReasons = () => {
@@ -58,16 +59,15 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   }
 
   const onContinue = () => {
-    if (!reasonCoding || reasonCoding.length === 0) {
+    if (!text) {
       setNoReasonSelectedError(true)
     }
 
-    if (!reasonText) {
+    if (!comment) {
       setNoDetailsAddedError(true)
     }
 
-    if (reasonCoding && reasonCoding.length > 0 && reasonText) {
-      dispatch
+    if (text && comment) {
       navigateToVisitType()
     }
   }
@@ -86,7 +86,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
 
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} error={noReasonSelectedError} errorMessage={t('requestAppointment.reasonNotSelectedError')} />
       <Box mb={contentMarginBottom}>
-        <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={reasonCoding[0]?.code} isRadioList={true} />
+        <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={text} isRadioList={true} />
       </Box>
       <Box mx={gutter}>
         <TextView variant="MobileBodyBold" mb={condensedMarginBetween}>
@@ -97,7 +97,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
             <AlertBox border={'error'} title={t('requestAppointment.additionaldetailsError')} />
           </Box>
         )}
-        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={reasonText} />
+        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={comment} />
       </Box>
     </AppointmentFlowLayout>
   )

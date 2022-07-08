@@ -22,15 +22,15 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   const dispatch = useAppDispatch()
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
-  const { text: reasonText } = appointmentFlowFormData.reasonCode || {}
+  const { comment } = appointmentFlowFormData
 
   useEffect(() => {
     // set the reason code to nothing due to we do not need it for CC
-    onSetAdditionalDetails(reasonText ?? '')
+    dispatch(updateFormData(setReasonCode(undefined)))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSetAdditionalDetails = (data: string) => {
-    dispatch(updateFormData(setReasonCode(undefined, data)))
+    dispatch(updateFormData({ comment: data }))
   }
 
   const onContinue = () => {}
@@ -52,7 +52,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
         <TextView variant="MobileBodyBold" mb={condensedMarginBetween}>
           {t('requestAppointment.additionaldetailsTitle')}
         </TextView>
-        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={reasonText} />
+        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={comment} />
       </Box>
     </AppointmentFlowLayout>
   )

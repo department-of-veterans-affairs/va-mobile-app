@@ -20,6 +20,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, finishCheckingCCEligibility, getUserCommunityCareEligibility, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { isIOS } from './platform'
+import { type } from 'os'
 import { useAppDispatch, useRouteNavigation, useTheme } from './hooks'
 
 /** Header style for the modals in the request appointment flow */
@@ -134,17 +135,17 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
 export const hasSubType = (x: TypeOfCareWithSubCareIdType): x is TypeOfCareWithSubCareIdType => typeOfCareWithSubCareId.includes(x)
 
 // manages the reason data for VA or CC reason of care screen
-export const setReasonCode = (code: string | undefined, text: string | undefined): AppointmentFlowFormDataType => {
+export const setReasonCode = (data: string | undefined): AppointmentFlowFormDataType => {
   return {
-    reasonCode: {
-      coding: code
-        ? [
+    reasonCode: data
+      ? {
+          coding: [
             {
-              code,
+              code: data,
             },
-          ]
-        : [],
-      text: text ?? '',
-    },
+          ],
+          text: data,
+        }
+      : undefined,
   }
 }
