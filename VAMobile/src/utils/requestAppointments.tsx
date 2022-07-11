@@ -148,3 +148,25 @@ export const setReasonCode = (data: string | undefined): AppointmentFlowFormData
       : undefined,
   }
 }
+
+// method to create the list of languages used on the appointment request flow.
+export const usePreferredLanguageList = (): Array<string> => {
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const listOfLanguagePref = [
+    '',
+    t('requestAppointments.langPrefEnglish'),
+    t('requestAppointments.langPrefChinese'),
+    t('requestAppointments.langPrefFrench'),
+    t('requestAppointments.langPrefGerman'),
+    t('requestAppointments.langPrefItalian'),
+    t('requestAppointments.langPrefKorean'),
+    t('requestAppointments.langPrefPortuguese'),
+    t('requestAppointments.langPrefRussian'),
+    t('requestAppointments.langPrefSpanish'),
+    t('requestAppointments.langPrefTagalog'),
+    t('requestAppointments.langPrefVietnamese'),
+    t('requestAppointments.langPrefOther'),
+  ]
+
+  return listOfLanguagePref
+}
