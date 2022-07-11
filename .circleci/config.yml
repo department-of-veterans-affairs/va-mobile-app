@@ -130,6 +130,9 @@ commands:
       tf_group:
         type: string
         default: ''
+      use_slack_thread:
+        type: boolean
+        default: true
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
@@ -145,7 +148,10 @@ commands:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}
           paths:
             - VAMobile/ios/vendor/bundle
-      - get_slack_thread
+      - when:
+          condition: <<parameters.use_slack_thread>>
+          steps:
+            - get_slack_thread
       - run:
           working_directory: ~/project/VAMobile/ios
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" tfGroup:"<<parameters.tf_group>>"
@@ -183,6 +189,9 @@ commands:
       ps_track:
         type: string
         default: ''
+      use_slack_thread:
+        type: boolean
+        default: true
     steps:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
@@ -198,7 +207,10 @@ commands:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}
           paths:
             - VAMobile/android/vendor/bundle
-      - get_slack_thread
+      - when:
+          condition: <<parameters.use_slack_thread>>
+          steps:
+            - get_slack_thread
       - run:
           working_directory: ~/project/VAMobile/android
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" psTrack:"<<parameters.ps_track>>"
@@ -308,7 +320,7 @@ jobs:
         type: string
     steps:
       - get_slack_channel_id:
-          channelName: "va-mobile-build-alerts"
+          channelName: "va-mobile-app"
       - send_slack_message:
           message: << parameters.message >>
           channelId: ${SLACK_CHANNEL_ID}
@@ -402,8 +414,10 @@ jobs:
       - decode_android_keys
       - android_fastlane:
           lane: "release"
+          use_slack_thread: false
       - ios_fastlane:
           lane: "release"
+          use_slack_thread: false
   build_android_release_candidate:
     executor: android
     steps:

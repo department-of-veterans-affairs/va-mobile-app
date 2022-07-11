@@ -4,7 +4,6 @@ import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VABorderColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
@@ -27,8 +26,6 @@ export type AccordionCollapsibleProps = {
   expandedInitialValue?: boolean
   /** gets rid of border of TextArea so the top and bottom borders don't double up in message threads when accordion is opened */
   noBorder?: boolean
-  /** applies a border to create the alert effect on the view */
-  alertBorder?: keyof VABorderColors
   /** Ref for the header section */
   headerRef?: Ref<View>
 }
@@ -46,7 +43,6 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   expandedInitialValue,
   noBorder,
   children,
-  alertBorder,
   a11yHint,
   headerRef,
 }) => {
@@ -104,15 +100,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     )
   }
 
-  const leftBorderProps = alertBorder
-    ? {
-        borderLeftWidth: theme.dimensions.alertBorderWidth,
-        borderLeftColor: alertBorder,
-      }
-    : {}
-
   const boxProps: BoxProps = {
-    ...leftBorderProps,
     borderBottomColor: 'primary',
     borderBottomWidth: theme.dimensions.borderWidth,
   }

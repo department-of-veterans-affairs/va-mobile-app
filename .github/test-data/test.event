@@ -1,0 +1,9 @@
+{
+  "action": "workflow_dispatch",
+  "inputs": {
+    "version": "v1.24.0",
+    "releaseDate": "07/05/2022",
+    "ticketNumber": "3365",
+    "milestoneId": "813"
+  }
+}
