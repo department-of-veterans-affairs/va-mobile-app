@@ -201,7 +201,7 @@ context('BenefitSummaryServiceVerification', () => {
     it('should launch external link', async () => {
       await waitFor(() => {
         findByTestID(testInstance, 'send-us-a-message').props.onPress()
-        expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://ask.va.gov')
+        expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://ask.va.gov/')
       })
     })
   })
