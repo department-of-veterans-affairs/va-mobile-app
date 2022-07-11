@@ -151,7 +151,7 @@ export const formatDateMMDDYYYY = (date: string): string => {
  * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
  * @param formatString - string signifying how the date should be formatted, i.e. MMMM dd, yyyy
  *
- * @returns  date string formatted based on formatBy
+ * @returns  date string formatted based on formatString
  */
 export const formatDateUtc = (date: string, formatString: string): string => {
   return DateTime.fromISO(date).toUTC().toFormat(formatString)
