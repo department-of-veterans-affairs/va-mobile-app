@@ -6,6 +6,7 @@ import React, { useCallback, useRef } from 'react'
 
 import {
   AVAILABLE_FOR_CC,
+  AppointmentFlowFormDataType,
   ScreenIDTypes,
   TypeOfAudiologyCareObjectType,
   TypeOfCareObjectType,
@@ -16,7 +17,7 @@ import {
 } from 'store/api/types'
 import { CloseModalButton, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RequestAppointmentState, finishCheckingCCEligibility, getUserCommunityCareEligibility } from 'store/slices/requestAppointmentSlice'
+import { RequestAppointmentState, finishCheckingCCEligibility, getUserCommunityCareEligibility, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { isIOS } from './platform'
 import { useAppDispatch, useRouteNavigation, useTheme } from './hooks'
@@ -74,30 +75,31 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { ccEligibilityChecked, ccEligible } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const isVaEligible = useRef(true)
-  const selectedId = useRef<string>('')
   const selectedName = useRef<string>('')
-
-  const navigateToVAReason = navigateTo('VAReasonForAppointmentScreen')
-  const navigateToCCReason = navigateTo('CCReasonForAppointmentScreen')
-  const navigateToFacilityType = navigateTo('FacilityTypeSelectionScreen', { selectedTypeOfCareId: selectedId.current })
-  const navigateToSchedulingHelp = navigateTo('GeneralHelpScreen', {
-    title: t('requestAppointments.scheduleHelpHeaderTitle', { careType: selectedName.current.toLocaleLowerCase() }),
-    description: t('requestAppointments.scheduleHelpDescription'),
-  })
 
   const manageEligibilityRoute = useCallback(
     (isCommunity: boolean | undefined, isVA: boolean) => {
+      const navigateToVAReason = navigateTo('VAReasonForAppointmentScreen')
+      const navigateToCCReason = navigateTo('CCReasonForAppointmentScreen')
+      const navigateToFacilityType = navigateTo('FacilityTypeSelectionScreen')
+      const navigateToSchedulingHelp = navigateTo('GeneralHelpScreen', {
+        title: t('requestAppointments.scheduleHelpHeaderTitle', { careType: selectedName.current.toLocaleLowerCase() }),
+        description: t('requestAppointments.scheduleHelpDescription'),
+      })
+
       if (isCommunity && isVA) {
         navigateToFacilityType()
       } else if (!isCommunity && isVA) {
         navigateToVAReason()
       } else if (isCommunity && !isVA) {
+        // if it routes straight to CC than appointment kind is CC
+        dispatch(updateFormData({ kind: 'cc' }))
         navigateToCCReason()
       } else {
         navigateToSchedulingHelp()
       }
     },
-    [navigateToCCReason, navigateToFacilityType, navigateToVAReason, navigateToSchedulingHelp],
+    [navigateTo, t, dispatch],
   )
 
   const routeOnEgilibiltyCheck = useCallback(() => {
@@ -114,7 +116,6 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
 
     if (selectedCare) {
       isVaEligible.current = selectedCare.isVaEligible === undefined ? false : selectedCare.isVaEligible
-      selectedId.current = selectedCare.idV2
       selectedName.current = selectedCare.name
 
       //checks if the selected care could be available in community care if yes than check for the community care eligibility
@@ -131,3 +132,19 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
 
 // check if care has sub type care
 export const hasSubType = (x: TypeOfCareWithSubCareIdType): x is TypeOfCareWithSubCareIdType => typeOfCareWithSubCareId.includes(x)
+
+// manages the reason data for VA or CC reason of care screen
+export const setReasonCode = (data: string | undefined): AppointmentFlowFormDataType => {
+  return {
+    reasonCode: data
+      ? {
+          coding: [
+            {
+              code: data,
+            },
+          ],
+          text: data,
+        }
+      : undefined,
+  }
+}

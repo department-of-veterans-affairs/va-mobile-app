@@ -1,7 +1,7 @@
 import * as api from 'store/api'
 import { AppThunk } from 'store'
+import { AppointmentFlowFormDataType, ScreenIDTypes, UserCCEligibilityAttributes, UserFacilityInfo, UserVAEligibilityService } from 'store/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { ScreenIDTypes, UserCCEligibilityAttributes, UserFacilityInfo, UserVAEligibilityService } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { filter } from 'underscore'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -17,6 +17,7 @@ export type RequestAppointmentState = {
   error?: Error
   ccEligibilityChecked?: boolean
   ccEligible?: boolean
+  appointmentFlowFormData: AppointmentFlowFormDataType
 }
 
 export const initialRequestAppointmentState: RequestAppointmentState = {
@@ -27,6 +28,7 @@ export const initialRequestAppointmentState: RequestAppointmentState = {
   vaEligibleTypeOfCares: [],
   ccEligibilityChecked: false,
   ccEligible: false,
+  appointmentFlowFormData: {},
 }
 
 /** Gets the list of all the cares including sub care. Each care will include a requestEligible and directEligible
@@ -108,6 +110,15 @@ export const finishCheckingCCEligibility = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishCheckingCCEligibility())
 }
 
+export const updateFormData =
+  (data: AppointmentFlowFormDataType): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchUpdateFormData(data))
+  }
+export const resetFormData = (): AppThunk => async (dispatch) => {
+  dispatch(dispatchResetFormData())
+}
+
 const requestAppointmentSlice = createSlice({
   name: 'requestAppointment',
   initialState: initialRequestAppointmentState,
@@ -145,6 +156,12 @@ const requestAppointmentSlice = createSlice({
     dispatchFinishCheckingCCEligibility: (state) => {
       state.ccEligibilityChecked = false
     },
+    dispatchUpdateFormData: (state, action: PayloadAction<AppointmentFlowFormDataType>) => {
+      state.appointmentFlowFormData = { ...state.appointmentFlowFormData, ...action.payload }
+    },
+    dispatchResetFormData: (state) => {
+      state.appointmentFlowFormData = {}
+    },
   },
 })
 
@@ -156,5 +173,7 @@ export const {
   dispatchFinishGetCommunityCareEligibility,
   dispatchStartGetCommunityCareEligibility,
   dispatchFinishCheckingCCEligibility,
+  dispatchUpdateFormData,
+  dispatchResetFormData,
 } = requestAppointmentSlice.actions
 export default requestAppointmentSlice.reducer

@@ -312,7 +312,7 @@ export const FacilityTypeValueMapping: {
 
 export type facilityTypeObjectType = {
   label: facilityTypeLabelTypes
-  value: string
+  value: facilityTypeValueTypes
   a11yLabel?: string
 }
 
@@ -333,7 +333,7 @@ export type visitTypeLabelTypes = 'In person' | 'Phone call' | 'Telehealth (thro
 
 export type visitTypeObjectType = {
   label: visitTypeLabelTypes
-  value: string
+  value: FormKindType
   a11yLabel?: string
 }
 
@@ -406,3 +406,74 @@ export type UserCCEligibilityData = {
     attributes: UserCCEligibilityAttributes
   }
 }
+
+export type FormKindType = 'clinic' | 'cc' | 'telehealth' | 'phone'
+
+export type FormStatusType = 'proposed' | 'booked'
+
+export type CodeType = {
+  code: string
+}
+
+export type FormReasonCodeType = {
+  coding: Array<CodeType>
+  text: string
+}
+
+export type FormRequestedPeriodsType = {
+  start: string
+  end: string
+}
+
+export type MethodOfContactType = {
+  type: 'email' | 'phone'
+  value: string
+}
+
+export type ContactType = {
+  telecom: Array<MethodOfContactType>
+}
+
+export type TimesForPhoneCallType = 'Morning' | 'Afternoon' | 'Evening'
+
+export type PreferredLocationType = {
+  city: string
+  state: string
+}
+
+export type ExtensionType = {
+  desiredDate: string
+}
+
+export type SlotType = {
+  id: string
+}
+
+export type CommonFormPropType = {
+  kind: FormKindType
+  status: FormStatusType
+  locationId: string
+  comment: string
+}
+
+export type AppointmentFlowRequestDataType = {
+  serviceType: TypeOfCareIdV2Types
+  reasonCode?: FormReasonCodeType
+  requestedPeriods: Array<FormRequestedPeriodsType>
+  contact: ContactType
+  preferredTimesForPhoneCall?: TimesForPhoneCallType
+  preferredLocation?: PreferredLocationType
+  preferredLanguage?: string
+} & CommonFormPropType
+
+export type AppointmentFlowDirectDataType = {
+  extension: ExtensionType
+  slot: SlotType
+} & CommonFormPropType
+
+export type AppointmentFlowFormDataType = {
+  // helper props that are not going to be sent to backend but are use to track selected data
+  typeOfCareSelected?: TypeOfCareIdV2Types
+  subTypeSelected?: TypeOfCareIdV2Types
+  facilitySelected?: facilityTypeValueTypes
+} & Partial<AppointmentFlowDirectDataType & AppointmentFlowRequestDataType>
