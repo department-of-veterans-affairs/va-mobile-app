@@ -6,7 +6,7 @@ import React, { ReactNode } from 'react'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
 import { LoadedPayments, PaymentsByDate, PaymentsGetData, PaymentsList, PaymentsMap, PaymentsMetaPagination, PaymentsPaginationByYearAndPage } from 'store/api'
 import { VATheme } from 'styles/theme'
-import { getFormattedDate } from './formattingUtils'
+import { formatDateUtc, getFormattedDate } from './formattingUtils'
 import { getTestIDFromTextLines } from './accessibility'
 
 /**
@@ -16,7 +16,7 @@ import { getTestIDFromTextLines } from './accessibility'
  */
 export const groupPaymentsByDate = (paymentsList?: PaymentsList): PaymentsByDate => {
   const paymentsByDate = groupBy(paymentsList || [], (payment) => {
-    return DateTime.fromISO(payment.attributes.date).toUTC().toFormat('yyyy-MM-dd')
+    return formatDateUtc(payment.attributes.date, 'yyyy-MM-dd')
   })
 
   return paymentsByDate

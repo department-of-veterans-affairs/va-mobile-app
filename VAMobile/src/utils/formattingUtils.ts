@@ -146,6 +146,18 @@ export const formatDateMMDDYYYY = (date: string): string => {
 }
 
 /**
+ * Method that will format date for all time zones. Prevents the date being the day before on some time zones.
+ *
+ * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param formatBy - string signifying how the date should be formatted, i.e. MMMM dd, yyyy
+ *
+ * @returns  date string formatted based on formatBy
+ */
+export const formatDateUtc = (date: string, formatString: string): string => {
+  return DateTime.fromISO(date).toUTC().toFormat(formatString)
+}
+
+/**
  * Returns the substring of all entries before the provided character
  *
  * @param originalStr - string to be formatted
