@@ -5,18 +5,18 @@ sidebar_position: 1
 ## Our approach
 As [outlined in our project mission](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/product/Mobile-Roadmap.md#outcomes-roadmap), the VA: Health and Benefits app should be a trusted source for Veterans to quickly and easily check the status of their VA services and complete simple, transactional tasks across their health and benefits. In order to accomplish this we approach our design work by the following values:
 
-- [Accessibility](/va-mobile-app/docs/UX/Accessibility) first
+- [Accessibility](Accessibility) first
   - The VA Mobile App is an application that supports all users and their needs. This means we design all aspects of the application to be inclusive and accessible. 
 - Human centered
   -  In all aspects of the design process, we must understand and connect with Veterans on a human level. 
 
 We utilize these values in our design process that involves:
 
-- Discovery & [research](va-mobile-app/docs/UX/Research)
+- Discovery & [research](Research)
   - In order to understand a new feature or problem we interview users, go through research done by other VA teams, and/or look at other companies or applications for inspiration. 
 - Iteration cycles 
   - In most cases, we go through several iterations of a design before it is handed off to engineering. Most designs begin with sketches or low-fidelity mockups in Balsamiq.
-- [Accessibility](/va-mobile-app/docs/UX/Accessibility) & technical feasibility reviews
+- [Accessibility](Accessibility) & technical feasibility reviews
   - These reviews are conducted when appropriate and are used to clarify designs from an accessibility and engineering perspective.
 - Incorporation of standard mobile conventions 
   - In an effort to utilize components and functionality that user’s are most familiar with.
