@@ -10,16 +10,19 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { setReasonCode } from 'utils/requestAppointments'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type CCReasonForAppointmentScreen = StackScreenProps<AppointmentFlowModalStackParamList, 'CCReasonForAppointmentScreen'>
 
 const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
+  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { gutter, condensedMarginBetween } = theme.dimensions
   const dispatch = useAppDispatch()
+
+  const navigateToPreferredLanguage = navigateTo('CCPreferredLanguageScreen')
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { comment } = appointmentFlowFormData
@@ -33,7 +36,9 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
     dispatch(updateFormData({ comment: data }))
   }
 
-  const onContinue = () => {}
+  const onContinue = () => {
+    navigateToPreferredLanguage()
+  }
 
   return (
     <AppointmentFlowLayout
