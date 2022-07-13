@@ -1,16 +1,16 @@
 {
   "name": "React-Core",
-  "version": "0.67.1",
+  "version": "0.69.1",
   "summary": "The core of React Native.",
   "homepage": "https://reactnative.dev/",
   "license": "MIT",
   "authors": "Facebook, Inc. and its affiliates",
   "platforms": {
-    "ios": "11.0"
+    "ios": "12.4"
   },
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.67.1"
+    "tag": "v0.69.1"
   },
   "resource_bundles": {
     "AccessibilityResources": [
@@ -21,7 +21,7 @@
   "header_dir": "React",
   "frameworks": "JavaScriptCore",
   "pod_target_xcconfig": {
-    "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/RCT-Folly\" \"${PODS_ROOT}/Headers/Public/React-hermes\" \"${PODS_ROOT}/Headers/Public/hermes-engine\"",
+    "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/RCT-Folly\" \"${PODS_ROOT}/Headers/Public/React-hermes\" \"${PODS_ROOT}/Headers/Public/hermes-engine\" \"${PODS_ROOT}/Headers/Public/FlipperKit\" \"$(PODS_ROOT)/Headers/Public/ReactCommon\" \"$(PODS_ROOT)/Headers/Public/React-RCTFabric\"",
     "DEFINES_MODULE": "YES"
   },
   "user_target_xcconfig": {
@@ -33,16 +33,16 @@
       "2021.06.28.00-v2"
     ],
     "React-cxxreact": [
-      "0.67.1"
+      "0.69.1"
     ],
     "React-perflogger": [
-      "0.67.1"
+      "0.69.1"
     ],
     "React-jsi": [
-      "0.67.1"
+      "0.69.1"
     ],
     "React-jsiexecutor": [
-      "0.67.1"
+      "0.69.1"
     ],
     "Yoga": [
 
@@ -73,13 +73,13 @@
       ],
       "dependencies": {
         "React-Core/Default": [
-          "0.67.1"
+          "0.69.1"
         ],
         "React-Core/RCTWebSocket": [
-          "0.67.1"
+          "0.69.1"
         ],
         "React-jsinspector": [
-          "0.67.1"
+          "0.69.1"
         ]
       }
     },
@@ -88,7 +88,7 @@
       "source_files": "Libraries/WebSocket/*.{h,m}",
       "dependencies": {
         "React-Core/Default": [
-          "0.67.1"
+          "0.69.1"
         ]
       }
     },
