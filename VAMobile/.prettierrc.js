@@ -1,7 +1,7 @@
 module.exports = {
   parser:"typescript",
-  bracketSpacing: true,
   bracketSameLine: true,
+  bracketSpacing: true,
   singleQuote: true,
   trailingComma: 'all',
   semi: false,
