@@ -57,6 +57,7 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
     autoFocus: true,
     style: { fontSize: 20, color: theme.colors.text.primary },
     disableFullscreenUI: true,
+    autoCapitalize: 'none',
   }
 
   return (
