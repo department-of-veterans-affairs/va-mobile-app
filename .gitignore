@@ -94,6 +94,7 @@ node_modules
 # CocoaPods
 /template/ios/Pods/
 /template/ios/Podfile.lock
+/template/vendor/bundle/
 /packages/rn-tester/Gemfile.lock
 
 # Ignore RNTester specific Pods, but keep the __offline_mirrors__ here.
@@ -141,10 +142,10 @@ buck-out/
 # For more information about the recommended setup visit:
 # https://docs.fastlane.tools/best-practices/source-control/
 
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
-*/fastlane/README.md
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
 
 # CircleCI
   # CCI installs all the deps including yarn at the project root and we don't want to check this in
