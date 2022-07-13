@@ -23,7 +23,7 @@ const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigat
   const { preferredLanguage } = appointmentFlowFormData
   const listOfLanguagePref = usePreferredLanguageList()
 
-  const [noLanguageSelectedError, setNoLanguageSelectedError] = useState(false)
+  const [noLanguageSelectedError, setNoLanguageSelectedError] = useState('')
 
   const getPickerOptions = (): Array<PickerItem> => {
     return map(listOfLanguagePref, (language) => {
@@ -36,7 +36,7 @@ const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigat
 
   const setValuesOnPickerSelect = (selectedValue: string): void => {
     if (selectedValue) {
-      setNoLanguageSelectedError(false)
+      setNoLanguageSelectedError('')
       dispatch(updateFormData({ preferredLanguage: selectedValue }))
     }
   }
@@ -50,7 +50,7 @@ const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigat
 
   const onContinue = () => {
     if (!preferredLanguage) {
-      setNoLanguageSelectedError(true)
+      setNoLanguageSelectedError(t('requestAppointments.langPrefNoSelectedError'))
     }
   }
 
@@ -60,11 +60,7 @@ const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigat
         navigation.goBack()
       }}
       secondActionButtonPress={onContinue}>
-      <AppointmentFlowTitleSection
-        title={t('requestAppointments.langPrefPageTitle')}
-        error={noLanguageSelectedError}
-        errorMessage={t('requestAppointments.langPrefNoSelectedError')}
-      />
+      <AppointmentFlowTitleSection title={t('requestAppointments.langPrefPageTitle')} errorMessage={noLanguageSelectedError} />
       <Box mx={theme.dimensions.gutter}>
         <VAModalPicker {...pickerProps} />
       </Box>

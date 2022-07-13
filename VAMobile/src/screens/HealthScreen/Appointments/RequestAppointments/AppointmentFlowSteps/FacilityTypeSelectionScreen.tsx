@@ -18,7 +18,7 @@ const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ nav
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
-  const [noFacilityTypeSelectedError, setFacilityTypeSelectedError] = useState(false)
+  const [noFacilityTypeSelectedError, setFacilityTypeSelectedError] = useState('')
 
   const navigateToVAReason = navigateTo('VAReasonForAppointmentScreen')
   const navigateToCCReason = navigateTo('CCReasonForAppointmentScreen')
@@ -29,7 +29,7 @@ const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ nav
 
   const onSelectedFacilityType = (facility: facilityTypeValueTypes): void => {
     if (facility) {
-      setFacilityTypeSelectedError(false)
+      setFacilityTypeSelectedError('')
 
       let subtype = subTypeSelected
       let typeOfService = serviceType
@@ -47,7 +47,7 @@ const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ nav
 
   const onContinue = () => {
     if (!facilitySelected) {
-      setFacilityTypeSelectedError(true)
+      setFacilityTypeSelectedError(t('requestAppointment.facilityTypeNotSelectedError'))
     } else {
       if (facilitySelected === FacilityTypeValueMapping.VA) {
         navigateToVAReason()
@@ -80,11 +80,7 @@ const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ nav
       firstActionButtonPress={() => {
         navigation.goBack()
       }}>
-      <AppointmentFlowTitleSection
-        title={t('requestAppointment.whereFacilityType')}
-        error={noFacilityTypeSelectedError}
-        errorMessage={t('requestAppointment.facilityTypeNotSelectedError')}
-      />
+      <AppointmentFlowTitleSection title={t('requestAppointment.whereFacilityType')} errorMessage={noFacilityTypeSelectedError} />
       <RadioGroup options={getFacilityTypes()} onChange={onSelectedFacilityType} value={facilitySelected} isRadioList={true} />
     </AppointmentFlowLayout>
   )

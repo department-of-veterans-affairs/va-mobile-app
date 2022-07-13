@@ -6,6 +6,7 @@ import React, { FC, useEffect, useState } from 'react'
 import {
   CCPreferredLanguageScreen,
   CCReasonForAppointmentScreen,
+  ConfirmContactScreen,
   EmergencyAndCrisisScreen,
   FacilityTypeSelectionScreen,
   SubTypeOfCareSelectionScreen,
@@ -30,6 +31,7 @@ export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   VisitTypeSelectionScreen: undefined
   EmergencyAndCrisisScreen: undefined
   CCPreferredLanguageScreen: undefined
+  ConfirmContactScreen: undefined
 }
 
 type RequestAppointmentScreenProps = StackScreenProps<HealthStackParamList, 'RequestAppointmentScreen'>
@@ -103,6 +105,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
       <Stack.Screen name="FacilityTypeSelectionScreen" component={FacilityTypeSelectionScreen} />
       <Stack.Screen name="VisitTypeSelectionScreen" component={VisitTypeSelectionScreen} />
       <Stack.Screen name="CCPreferredLanguageScreen" component={CCPreferredLanguageScreen} />
+      <Stack.Screen name="ConfirmContactScreen" component={ConfirmContactScreen} />
     </Stack.Navigator>
   )
 }

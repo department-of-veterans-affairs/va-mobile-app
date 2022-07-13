@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { AlertBox, Box, RadioGroup, TextView, VATextInput, radioOption } from 'components'
-import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
+import { AppointmenFlowTextInputWithAlert, AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
+import { Box, RadioGroup, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PURPOSE_TEXT } from 'store/api'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
@@ -21,27 +21,27 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { gutter, contentMarginBottom, condensedMarginBetween, standardMarginBetween } = theme.dimensions
+  const { gutter, contentMarginBottom } = theme.dimensions
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { text } = appointmentFlowFormData.reasonCode || {}
   const { comment } = appointmentFlowFormData
 
-  const [noReasonSelectedError, setNoReasonSelectedError] = useState(false)
-  const [noDetailsAddedError, setNoDetailsAddedError] = useState(false)
+  const [noReasonSelectedError, setNoReasonSelectedError] = useState('')
+  const [noDetailsAddedError, setNoDetailsAddedError] = useState('')
 
   const navigateToVisitType = navigateTo('VisitTypeSelectionScreen')
 
   const onSetSelectedReason = (type: string): void => {
     if (type) {
-      setNoReasonSelectedError(false)
+      setNoReasonSelectedError('')
       dispatch(updateFormData(setReasonCode(type)))
     }
   }
 
   const onSetAdditionalDetails = (data: string) => {
     if (data) {
-      setNoDetailsAddedError(false)
+      setNoDetailsAddedError('')
     }
     dispatch(updateFormData({ comment: data }))
   }
@@ -60,11 +60,11 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
 
   const onContinue = () => {
     if (!text) {
-      setNoReasonSelectedError(true)
+      setNoReasonSelectedError(t('requestAppointment.reasonNotSelectedError'))
     }
 
     if (!comment) {
-      setNoDetailsAddedError(true)
+      setNoDetailsAddedError(t('requestAppointment.additionaldetailsError'))
     }
 
     if (text && comment) {
@@ -84,21 +84,19 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
         text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
       />
 
-      <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} error={noReasonSelectedError} errorMessage={t('requestAppointment.reasonNotSelectedError')} />
+      <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} errorMessage={noReasonSelectedError} />
       <Box mb={contentMarginBottom}>
         <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={text} isRadioList={true} />
       </Box>
-      <Box mx={gutter}>
-        <TextView variant="MobileBodyBold" mb={condensedMarginBetween}>
-          {t('requestAppointment.additionaldetailsTitle')}
-        </TextView>
-        {noDetailsAddedError && (
-          <Box mb={standardMarginBetween} mt={condensedMarginBetween}>
-            <AlertBox border={'error'} title={t('requestAppointment.additionaldetailsError')} />
-          </Box>
-        )}
-        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={comment} />
-      </Box>
+      <AppointmenFlowTextInputWithAlert
+        mx={gutter}
+        inputType={'none'}
+        inputLabel={t('requestAppointment.additionaldetailsTitle')}
+        onChange={onSetAdditionalDetails}
+        errorMessage={noDetailsAddedError}
+        value={comment}
+        isTextArea={true}
+      />
     </AppointmentFlowLayout>
   )
 }

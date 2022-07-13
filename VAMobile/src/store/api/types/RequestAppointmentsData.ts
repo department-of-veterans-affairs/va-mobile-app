@@ -425,8 +425,10 @@ export type FormRequestedPeriodsType = {
   end: string
 }
 
+export type PhoneEmailType = 'email' | 'phone'
+
 export type MethodOfContactType = {
-  type: 'email' | 'phone'
+  type: PhoneEmailType
   value: string
 }
 
@@ -461,7 +463,7 @@ export type AppointmentFlowRequestDataType = {
   reasonCode?: FormReasonCodeType
   requestedPeriods: Array<FormRequestedPeriodsType>
   contact: ContactType
-  preferredTimesForPhoneCall?: TimesForPhoneCallType
+  preferredTimesForPhoneCall?: Array<TimesForPhoneCallType>
   preferredLocation?: PreferredLocationType
   preferredLanguage?: string
 } & CommonFormPropType

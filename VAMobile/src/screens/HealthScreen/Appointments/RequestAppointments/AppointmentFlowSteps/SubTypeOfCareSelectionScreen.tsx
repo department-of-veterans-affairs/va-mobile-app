@@ -20,7 +20,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
-  const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
+  const [noTypeSelectedError, setNoTypeSelectedError] = useState('')
   const { loadingCCEligibility, appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { subTypeSelected, typeOfCareSelected } = appointmentFlowFormData
 
@@ -33,7 +33,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
 
   const onSetSelectedTypeOfCare = (subCare: TypeOfCareIdV2Types): void => {
     if (subCare) {
-      setNoTypeSelectedError(false)
+      setNoTypeSelectedError('')
       dispatch(updateFormData({ subTypeSelected: subCare, serviceType: subCare }))
     }
   }
@@ -79,7 +79,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
 
   const onContinue = () => {
     if (!subTypeSelected) {
-      setNoTypeSelectedError(true)
+      setNoTypeSelectedError(getSubCareText(true))
     } else {
       if (typeOfCareSelected === 'audiology') {
         navigateToReasonCC()
@@ -101,7 +101,7 @@ const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ n
         <LoadingComponent />
       ) : (
         <>
-          <AppointmentFlowTitleSection title={getSubCareText()} error={noTypeSelectedError} errorMessage={getSubCareText(true)} />
+          <AppointmentFlowTitleSection title={getSubCareText()} errorMessage={noTypeSelectedError} />
           <RadioGroup options={getTypesOfSubCare()} onChange={onSetSelectedTypeOfCare} value={subTypeSelected} isRadioList={true} />
         </>
       )}

@@ -10,30 +10,33 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RadioGroup, radioOption } from 'components'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
-import { useAppDispatch } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 
 type VisitTypeSelectionScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VisitTypeSelectionScreen'>
 
 const VisitTypeSelectionScreen: FC<VisitTypeSelectionScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { kind } = appointmentFlowFormData
 
-  const [noVisitTypeSelectedError, setVisitTypeSelectedError] = useState(false)
+  const [noVisitTypeSelectedError, setVisitTypeSelectedError] = useState('')
+
+  const navigateToConfirmContact = navigateTo('ConfirmContactScreen')
 
   const onSelectedVisitType = (kindOfVisit: FormKindType): void => {
     if (kindOfVisit) {
-      setVisitTypeSelectedError(false)
+      setVisitTypeSelectedError('')
       dispatch(updateFormData({ kind: kindOfVisit }))
     }
   }
 
   const onContinue = () => {
     if (!kind) {
-      setVisitTypeSelectedError(true)
+      setVisitTypeSelectedError(t('requestAppointment.visitTypeNotSelectedError'))
     } else {
-      // TODO add next navigation
+      navigateToConfirmContact()
     }
   }
 
@@ -56,11 +59,7 @@ const VisitTypeSelectionScreen: FC<VisitTypeSelectionScreenProps> = ({ navigatio
       firstActionButtonPress={() => {
         navigation.goBack()
       }}>
-      <AppointmentFlowTitleSection
-        title={t('requestAppointment.whichVisitType')}
-        error={noVisitTypeSelectedError}
-        errorMessage={t('requestAppointment.visitTypeNotSelectedError')}
-      />
+      <AppointmentFlowTitleSection title={t('requestAppointment.whichVisitType')} errorMessage={noVisitTypeSelectedError} />
       <RadioGroup options={getVisitTypes()} onChange={onSelectedVisitType} value={kind} isRadioList={true} />
     </AppointmentFlowLayout>
   )
