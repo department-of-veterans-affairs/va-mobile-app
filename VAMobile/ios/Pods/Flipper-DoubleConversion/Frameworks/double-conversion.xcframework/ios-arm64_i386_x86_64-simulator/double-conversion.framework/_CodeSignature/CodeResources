@@ -30,7 +30,7 @@
 		</data>
 		<key>Headers/double-to-string.h</key>
 		<data>
-		ZDmHXbbIkW4b29Aut3mtYUuAYpo=
+		aVJizO9wi8NRmhBhTdDf7Cbub/s=
 		</data>
 		<key>Headers/fast-dtoa.h</key>
 		<data>
@@ -42,11 +42,11 @@
 		</data>
 		<key>Headers/ieee.h</key>
 		<data>
-		k++9W05Q7hpqZsUaQs/qvj4oPzU=
+		RjgVvp5pEoVXNu6OjtfVF/bEv1U=
 		</data>
 		<key>Headers/string-to-double.h</key>
 		<data>
-		O01wDwraqk5jDisk+cnZf2oDioQ=
+		u90AhqQl5wq2JYz/lLac149m5no=
 		</data>
 		<key>Headers/strtod.h</key>
 		<data>
@@ -54,15 +54,11 @@
 		</data>
 		<key>Headers/utils.h</key>
 		<data>
-		+nfYQBx3TCRqRJdWhNjVr2uNbM4=
+		AAiItRfFuz3RDjXKryQsBBFcgRE=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		UGy9HhUtaupAiC/ekOqvzPlwQco=
-		</data>
-		<key>Modules/module.modulemap</key>
-		<data>
-		TxnrKajzB8atjcH5WUaHuEb+HAU=
+		44U3CnTrcChb/fBueWu30D97Sbw=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -137,11 +133,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ZDmHXbbIkW4b29Aut3mtYUuAYpo=
+			aVJizO9wi8NRmhBhTdDf7Cbub/s=
 			</data>
 			<key>hash2</key>
 			<data>
-			l+jjNYG31ldnn3J66C7X1aUqgI0zfTDVWqmZDdx/ADs=
+			V3zY8tUZTbLhLj1/dsA8nhA7O2A9nDJPEYJwjs+20Yw=
 			</data>
 		</dict>
 		<key>Headers/fast-dtoa.h</key>
@@ -170,22 +166,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			k++9W05Q7hpqZsUaQs/qvj4oPzU=
+			RjgVvp5pEoVXNu6OjtfVF/bEv1U=
 			</data>
 			<key>hash2</key>
 			<data>
-			CtdEKLTngdDQaiNnqt11i/roxMYegDRyYEBShhzeaOc=
+			vJpK2uSS9pLhnbnCeerFLUkz3fhyr/QwVrzu5C1lqPU=
 			</data>
 		</dict>
 		<key>Headers/string-to-double.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			O01wDwraqk5jDisk+cnZf2oDioQ=
+			u90AhqQl5wq2JYz/lLac149m5no=
 			</data>
 			<key>hash2</key>
 			<data>
-			oKaaIKeYFo+4BOvLQk147NkInDLwMISv7ioRyV6m+hc=
+			GXYxD90E47w1DF+PS0Q7oCh6u0AEsxjwSKxBYRJ45Mk=
 			</data>
 		</dict>
 		<key>Headers/strtod.h</key>
@@ -203,22 +199,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			+nfYQBx3TCRqRJdWhNjVr2uNbM4=
+			AAiItRfFuz3RDjXKryQsBBFcgRE=
 			</data>
 			<key>hash2</key>
 			<data>
-			iJz/EKGsp7wabZ4Pz+2AeD0py9xMBHp78RUogFunfgg=
-			</data>
-		</dict>
-		<key>Modules/module.modulemap</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			TxnrKajzB8atjcH5WUaHuEb+HAU=
-			</data>
-			<key>hash2</key>
-			<data>
-			wSVmrW7ZQzCyJ9OtzQ9rm8SAWRI3yhJ5yDPht9hWrak=
+			+lgDSwYn5Xda74c1O0nuDwBlIf6vhyAgNEcdrwumrVw=
 			</data>
 		</dict>
 	</dict>
