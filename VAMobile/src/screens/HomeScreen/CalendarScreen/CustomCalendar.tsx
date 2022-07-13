@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 
-import { Box, BoxProps, TextView, TextViewProps, VAIcon } from 'components'
+import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { Pressable, PressableProps } from 'react-native'
+import { Pressable, PressableProps, useWindowDimensions } from 'react-native'
 import { useTheme } from 'utils/hooks'
 
 // TODO make more flexible
@@ -49,6 +49,30 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
   const preventScaling = true
 
   const WEEKDAYS = [t('weekdays.sun'), t('weekdays.mon'), t('weekdays.tue'), t('weekdays.wed'), t('weekdays.thu'), t('weekdays.fri'), t('weekdays.sat')]
+
+  const { fontScale } = useWindowDimensions()
+  const scaleFontSize = (size: number) => {
+    let newSize = size
+
+    // if (fontScale > 1.0 && fontScale <= 2.5) {
+    //   newSize = size + size / 4
+    // } else if (fontScale > 2.5) {
+    //   newSize = size + size / 3
+    // }
+
+    // +2 + 4
+    if (fontScale > 1.0 && fontScale <= 2.5) {
+      newSize = size + 2
+    } else if (fontScale > 2.5) {
+      newSize = size + 4
+    }
+
+    // if (fontScale > 1) {
+    //   newSize = newSize * 2
+    // }
+
+    return newSize
+  }
 
   const isWeekdayDisabled = (colIdx: number) => {
     const chosenDisabledDays = disableWeekdays
@@ -102,7 +126,7 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
     }
     const maxDays = activeDate.daysInMonth
 
-    // create header
+    // create weekday header
     matrix[0] = WEEKDAYS
 
     // Adds in the days
@@ -145,7 +169,10 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
             textAlign: 'center',
             variant: 'HelperText',
             color: 'calendarDay',
+            fontSize: scaleFontSize(theme.fontSizes.HelperText.fontSize),
+            lineHeight: scaleFontSize(theme.fontSizes.HelperText.lineHeight),
           }
+
           // Explict so we know its a string
           const weekday = item as string
           return (
@@ -191,6 +218,8 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
           variant: disabled ? 'HelperText' : 'HelperTextBold', // current day
           color: disabled ? 'calendarDayDisabled' : isSelected ? 'calendarDaySelected' : 'calendarDay',
           accessible,
+          fontSize: scaleFontSize(disabled ? theme.fontSizes.HelperText.fontSize : theme.fontSizes.HelperTextBold.fontSize),
+          lineHeight: scaleFontSize(disabled ? theme.fontSizes.HelperText.lineHeight : theme.fontSizes.HelperTextBold.lineHeight),
           allowFontScaling: !preventScaling,
         }
 
@@ -198,10 +227,9 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
         const commonCircleProps: BoxProps = {
           borderWidth: 1,
           borderRadius: 50,
-          width: '44px',
-          height: '44px',
+          width: scaleFontSize(22),
+          height: scaleFontSize(22),
           position: 'absolute',
-          top: '-50%',
         }
 
         const currenDayCircleProps: BoxProps = {
@@ -230,11 +258,11 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        mx: -15, // TODO align with headers and arrows portrait and landscape
+        width: '100%',
       }
 
       return (
-        <Box key={rowIndex} {...monthView}>
+        <Box key={rowIndex} {...monthView} width={'100%'}>
           {rowItems}
         </Box>
       )
@@ -268,20 +296,50 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
     setActiveDate(activeDate.plus({ month: n }))
   }
 
-  return (
-    <Box mx={theme.dimensions.gutter}>
-      <Box flexDirection={'row'} flexWrap={'wrap'} justifyContent={'space-between'} alignItems={'center'} mb={13}>
-        <TextView allowFontScaling={!preventScaling} variant={'MobileBody'} color={'calendarDay'}>{`${activeDate.monthLong} ${activeDate.year}`}</TextView>
-        <Box flexDirection="row">
+  const renderHeader = () => {
+    const headerBox: BoxProps = {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+      mb: 13,
+    }
+
+    const monthTextProps: TextViewProps = {
+      textAlign: 'center',
+      allowFontScaling: !preventScaling,
+      variant: 'MobileBody',
+      color: 'calendarDay',
+      fontSize: scaleFontSize(theme.fontSizes.MobileBody.fontSize),
+      lineHeight: scaleFontSize(theme.fontSizes.MobileBody.lineHeight),
+    }
+
+    const commonIconProps: Partial<VAIconProps> = {
+      width: scaleFontSize(14),
+      height: scaleFontSize(16),
+      fill: 'calendarArrow',
+      preventScaling: preventScaling,
+    }
+
+    return (
+      <Box {...headerBox}>
+        <TextView {...monthTextProps}>{`${activeDate.monthLong} ${activeDate.year}`}</TextView>
+        <Box flexDirection="row" justifyContent={'center'}>
           <Pressable {...prevButtonProps}>
-            <VAIcon preventScaling={preventScaling} name={'ArrowLeft'} width={14} height={16} fill={'calendarArrow'} />
+            <VAIcon name={'ArrowLeft'} {...commonIconProps} />
           </Pressable>
           <Box mr={24} />
           <Pressable {...nextButtonProps}>
-            <VAIcon preventScaling={preventScaling} name={'ArrowRight'} width={14} height={16} fill={'calendarArrow'} />
+            <VAIcon name={'ArrowRight'} {...commonIconProps} />
           </Pressable>
         </Box>
       </Box>
+    )
+  }
+
+  return (
+    <Box mx={theme.dimensions.gutter}>
+      {renderHeader()}
       {renderMonth()}
     </Box>
   )

@@ -45,6 +45,12 @@ export type TextViewProps = AccessibilityProps &
 
     /** if set, sets the number of lines the text will render on. if the text exceeds the line amount, it will ellipsis */
     numberOfLines?: number
+
+    /** sets the fontSize of the text */
+    fontSize?: number
+
+    /** sets line height of the text */
+    lineHeight?: number
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
@@ -66,6 +72,8 @@ const StyledText = styled(Text)`
   ${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
   ${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};
   ${themeFn<TextViewProps>((theme, props) => (props.textDecorationColor ? `text-decoration-color:${getTextDecorationColor(theme, props)}` : ''))};
+  ${themeFn<TextViewProps>((theme, props) => (props.fontSize ? `font-size:${props.fontSize}px` : ''))};
+  ${themeFn<TextViewProps>((theme, props) => (props.lineHeight ? `line-height:${props.lineHeight}px` : ''))};
 `
 
 /**

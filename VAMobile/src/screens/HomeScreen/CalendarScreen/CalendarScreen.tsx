@@ -1,12 +1,15 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, useState } from 'react'
 
+import { Box, RadioGroup, SelectorType, TextView, VAScrollView, VASelector } from 'components'
 import { DateTime } from 'luxon'
 import { HomeStackParamList } from '../HomeStackScreens'
-import { RadioGroup, SelectorType, VAScrollView, VASelector } from 'components'
 import CustomCalendar, { CustomCalendarProps, DISABLED_WEEKDAYS } from './CustomCalendar'
 
 type CalendarScreenProps = StackScreenProps<HomeStackParamList, 'CustomCalendar'>
+
+import { PixelRatio, useWindowDimensions } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 /**
  * View for Calendar Spike
@@ -16,6 +19,11 @@ type CalendarScreenProps = StackScreenProps<HomeStackParamList, 'CustomCalendar'
 const CalendarScreen: FC<CalendarScreenProps> = ({}) => {
   const [disabledTypes, setDisabledTypes] = useState<string>('request')
   const [satDisabled, setSatDisabled] = useState(false)
+
+  // figuring out scaling
+  const { width, height, fontScale } = useWindowDimensions()
+  const safeAreaRightMargin = useSafeAreaInsets().right
+  const safeAreaLeftMargin = useSafeAreaInsets().left
 
   // Requested Appointment
   const requestAppointmentCalendar: CustomCalendarProps = {
@@ -66,8 +74,16 @@ const CalendarScreen: FC<CalendarScreenProps> = ({}) => {
   }
   return (
     <VAScrollView>
-      <RadioGroup {...radioOptions} />
-      <VASelector {...satDisabledCheckboxProps} />
+      {/*<RadioGroup {...radioOptions} />*/}
+      {/*<VASelector {...satDisabledCheckboxProps} />*/}
+      {/*<Box>*/}
+      {/*  <TextView>{`safeAreaRightMargin: ${safeAreaRightMargin}`}</TextView>*/}
+      {/*  <TextView>{`safeAreaLeftMargin: ${safeAreaLeftMargin}`}</TextView>*/}
+      {/*  <TextView>{`width: ${width}`}</TextView>*/}
+      {/*  <TextView>{`height: ${height}`}</TextView>*/}
+      {/*  <TextView>{`PixelRatio/Fontscale: ${PixelRatio.getFontScale()}`}</TextView>*/}
+      <TextView>{`Fontscale: ${fontScale}`}</TextView>
+      {/*</Box>*/}
       <CustomCalendar key={isRequestCalendar ? '1' : '2'} {...calendarsProps} />
     </VAScrollView>
   )

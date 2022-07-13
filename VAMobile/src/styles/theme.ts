@@ -245,6 +245,8 @@ export type VATheme = {
     MobileBodyLink: VAFontSizes
     ClaimPhase: VAFontSizes
     VASelector: VAFontSizes
+    HelperText: VAFontSizes
+    HelperTextBold: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }

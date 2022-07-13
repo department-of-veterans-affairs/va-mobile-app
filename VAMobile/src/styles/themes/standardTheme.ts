@@ -187,6 +187,8 @@ let theme: VATheme = {
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
+    HelperText: fontSizes.HelperText,
+    HelperTextBold: fontSizes.HelperTextBold,
   },
   typography: buildTypography(colorScheme),
 }
