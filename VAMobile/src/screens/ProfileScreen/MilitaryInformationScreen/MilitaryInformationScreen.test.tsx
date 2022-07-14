@@ -1,13 +1,21 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, findByTestID, mockStore, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, findByTestID, render, RenderAPI } from 'testUtils'
 
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
-import { ErrorsState, initialAuthorizedServicesState, initialAuthState, initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState } from 'store/slices'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  initialMilitaryServiceState,
+  MilitaryServiceState
+} from 'store/slices'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -27,7 +35,7 @@ context('MilitaryInformationScreen', () => {
     },
   ]
 
-  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState, needDataLoad = true) => {
+  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState, needsDataLoad = true) => {
     component = render(<MilitaryInformationScreen />, {
       preloadedState: {
         auth: { ...initialAuthState },
@@ -36,14 +44,14 @@ context('MilitaryInformationScreen', () => {
           loading,
           serviceHistory,
           mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
-          needDataLoad,
+          needsDataLoad,
         },
         authorizedServices: {
           ...initialAuthorizedServicesState,
           militaryServiceHistory: true,
         },
         errors: errorsState,
-      },
+      } as Partial<MilitaryServiceState>,
     })
 
     testInstance = component.container
