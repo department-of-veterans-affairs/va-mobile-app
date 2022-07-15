@@ -45,13 +45,13 @@ context('MilitaryInformationScreen', () => {
           serviceHistory,
           mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
           needsDataLoad,
-        },
+        } as MilitaryServiceState,
         authorizedServices: {
           ...initialAuthorizedServicesState,
           militaryServiceHistory: true,
         },
         errors: errorsState,
-      } as Partial<MilitaryServiceState>,
+      } ,
     })
 
     testInstance = component.container
