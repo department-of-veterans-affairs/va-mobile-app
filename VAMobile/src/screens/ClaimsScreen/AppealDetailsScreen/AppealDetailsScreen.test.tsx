@@ -222,33 +222,15 @@ context('AppealDetailsScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
+      when(api.get as jest.Mock)
+          .calledWith(`/v0/appeal/0`, {}, expect.anything())
+          .mockRejectedValue({ networkError: true } as api.APIError)
 
       await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+        initializeTestInstance(false)
       })
-    })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
-      })
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
   })
 })
