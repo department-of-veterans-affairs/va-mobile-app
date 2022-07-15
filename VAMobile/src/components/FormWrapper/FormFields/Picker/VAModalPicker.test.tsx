@@ -94,7 +94,7 @@ context('VAModalPicker', () => {
   describe('when labelKey exists', () => {
     it('should render a textview for the label', async () => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[7].props.children).toEqual('Number')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Number')
       expect(textViews.length).toEqual(9)
     })
   })
@@ -125,8 +125,7 @@ context('VAModalPicker', () => {
   describe('when isRequiredField is true', () => {
     it('should display (Required)', async () => {
       initializeTestInstance('email', 'label', '', '', true)
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[9].props.children).toEqual('(Required)')
+      expect(testInstance.findByType(TextView).props.children).toEqual('(Required)')
     })
   })
 
