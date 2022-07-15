@@ -202,8 +202,7 @@ context('ReplyMessage', () => {
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[12].props.children).toEqual('Message')
-      expect(textViews[14].props.children).toEqual('(Required)')
+      expect(textViews[12].props.children).toEqual('Message (Required)')
     })
   })
 
@@ -271,18 +270,18 @@ context('ReplyMessage', () => {
 
   it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
     await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[18].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[19].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[20].props.children).toBe('mock sender 2')
-      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[23].props.children).toBe('Invalid DateTime')
+      expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 1')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
+      expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 2')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
+      expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 3')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
     })
   })
 
   it("should render last accordion's body text since it should be expanded", async () => {
     await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Last accordion collapsible should be open, so the body text of this message should display')
     })
   })
 
@@ -293,11 +292,11 @@ context('ReplyMessage', () => {
           testInstance.findAllByType(Pressable)[5].props.onPress()
           testInstance.findAllByType(Pressable)[7].props.onPress()
         })
-        expect(testInstance.findAllByType(TextView)[20].props.children).toBe('message 1 body text')
+        expect(testInstance.findByType(TextView).props.children).toEqual('message 1 body text')
         // Used to display last message's contents, but now there is no textview after the date
-        expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 3')
-        expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
-        expect(testInstance.findAllByType(TextView).length).toBe(25)
+        expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 3')
+        expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
+        expect(testInstance.findByType(TextView).props.children).toEqual(25)
       })
     })
   })

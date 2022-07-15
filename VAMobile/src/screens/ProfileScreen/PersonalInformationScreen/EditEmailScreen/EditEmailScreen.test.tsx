@@ -126,7 +126,7 @@ context('EditEmailScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Enter your email address again using this format: X@X.com')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Enter your email address again using this format: X@X.com')
     })
   })
 
