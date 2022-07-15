@@ -137,7 +137,7 @@ context('UpcomingAppointmentDetails', () => {
     })
     it('should display the how to join your virtual session text', async () => {
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('How to join your virtual session')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('You can join VA Video Connect 30 minutes prior to the start time')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('You can join VA Video Connect 30 minutes prior to the start time.')
     })
 
     it('should display the join session button', async () => {

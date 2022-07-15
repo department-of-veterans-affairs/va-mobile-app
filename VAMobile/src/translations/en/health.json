@@ -290,7 +290,7 @@
   "upcomingAppointmentDetails.findYourVALocation.a11yHint": "Takes you to the V-A facility locator page. This page will open in your device's browser",
   "upcomingAppointmentDetails.howToJoin": "How to join your video appointment",
   "upcomingAppointmentDetails.howToJoinInstructionsAtlas": "You must join this video meeting from the ATLAS (non-VA) location listed below.",
-  "upcomingAppointmentDetails.howToJoinInstructionsVAAtHome": "You can join VA Video Connect 30 minutes prior to the start time",
+  "upcomingAppointmentDetails.howToJoinInstructionsVAAtHome": "You can join VA Video Connect 30 minutes prior to the start time.",
   "upcomingAppointmentDetails.howToJoinInstructionsVADevice": "To join this video appointment, you'll need to use a device we provide.",
   "upcomingAppointmentDetails.howToJoinInstructionsVALocation": "You must join this video meeting from the VA location listed below.",
   "upcomingAppointmentDetails.howToJoinVirtualSession": "How to join your virtual session",
