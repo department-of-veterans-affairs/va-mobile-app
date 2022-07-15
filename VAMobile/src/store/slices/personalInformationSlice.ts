@@ -35,6 +35,7 @@ import {
 import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString, showSnackBar } from 'utils/common'
 import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { ignoredYellowBox } from 'console'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
@@ -358,7 +359,7 @@ export const finishEditEmail = (): AppThunk => async (dispatch) => {
  * Redux action to make the API call to update a users address
  */
 export const updateAddress =
-  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes, revalidate?: boolean): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     const retryFunction = () => dispatch(updateAddress(addressData, messages, screenID))
@@ -373,6 +374,13 @@ export const updateAddress =
 
       // if address doesnt exist call post endpoint instead
       const createEntry = !(profile || {})[addressFieldType as keyof UserDataProfile]
+
+      // to revalidate address when suggested address is selected
+      if (revalidate) {
+        const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params)
+        const validationKey = getValidationKey(getSuggestedAddresses(validationResponse))
+        addressData.validationKey = validationKey
+      }
 
       if (createEntry) {
         const postAddressDataPayload = omit(addressData, 'id')

@@ -1,4 +1,4 @@
-import { map } from 'underscore'
+import { map, pick } from 'underscore'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
@@ -67,6 +67,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
 
   const onUseThisAddress = (): void => {
+    let revalidate = false
     if (!selectedSuggestedAddress) {
       return
     }
@@ -75,13 +76,20 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
     if ('attributes' in selectedSuggestedAddress) {
       address = getAddressDataFromSuggestedAddress(selectedSuggestedAddress, addressId)
+      revalidate = true
     } else {
       address = selectedSuggestedAddress
-      // overriding with an invalid address requires a validation key
-      address.validationKey = validationKey
     }
 
-    dispatch(updateAddress(address, snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    //removes null properties
+    address = pick(address, (value) => {
+      return !!value
+    }) as AddressData
+
+    // need to send validation key with all addresses
+    address.validationKey = validationKey
+
+    dispatch(updateAddress(address, snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID, revalidate))
   }
 
   const getSuggestedAddressLabelArgs = (address: SuggestedAddress | AddressData): { [key: string]: string } => {
