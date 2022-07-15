@@ -35,7 +35,6 @@ import {
 import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString, showSnackBar } from 'utils/common'
 import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { ignoredYellowBox } from 'console'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
