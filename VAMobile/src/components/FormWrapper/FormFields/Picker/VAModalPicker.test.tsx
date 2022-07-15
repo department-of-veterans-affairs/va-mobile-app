@@ -95,7 +95,7 @@ context('VAModalPicker', () => {
     it('should render a textview for the label', async () => {
       const textViews = testInstance.findAllByType(TextView)
       expect(testInstance.findByType(TextView).props.children).toEqual('Number')
-      expect(textViews.length).toEqual(9)
+      expect(textViews.length).toEqual(7)
     })
   })
 
@@ -103,7 +103,7 @@ context('VAModalPicker', () => {
     it('should render not render the label', async () => {
       initializeTestInstance('js')
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(8)
+      expect(textViews.length).toEqual(6)
     })
   })
 
