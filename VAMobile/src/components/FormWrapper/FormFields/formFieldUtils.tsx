@@ -2,29 +2,8 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { BorderColorVariant, Box, BoxProps, ColorVariant, TextView, TextViewProps, ValidationFunctionItems } from '../../index'
+import { BorderColorVariant, Box, BoxProps, TextView, ValidationFunctionItems } from '../../index'
 import { VATheme } from '../../../styles/theme'
-
-/**
- * Creates the label for the picker and text input components
- */
-// const generateInputLabel = (
-//   error: string | undefined,
-//   isRequiredField: boolean | undefined,
-//   labelKey: string,
-//   t: TFunction,
-//   isHelperText: boolean,
-// ): ReactElement => {
-//   const variant = error ? 'MobileBodyBold' : 'MobileBody'
-
-//   return (
-//     <Box display="flex" flexDirection="row" flexWrap="wrap" mb={isHelperText ? 0 : 8}>
-//       <TextView color={color} variant={variant}>
-//         {t(labelKey)} {isRequiredField ? t('common:required') : ''}
-//       </TextView>
-//     </Box>
-//   )
-// }
 
 /**
  * Renders the label section consisting of the label, potential required text, and potential helper text

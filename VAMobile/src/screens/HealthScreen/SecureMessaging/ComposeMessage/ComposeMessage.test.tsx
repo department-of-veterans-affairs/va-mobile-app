@@ -262,9 +262,7 @@ context('ComposeMessage', () => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
 
         const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[29].props.children).toEqual('Subject Line')
-        expect(textViews[30].props.children).toEqual(' ')
-        expect(textViews[31].props.children).toEqual('(Required)')
+        expect(testInstance.findByType(TextView).props.children).toEqual('Subject Line (Required)')
       })
     })
   })
@@ -374,8 +372,8 @@ context('ComposeMessage', () => {
       })
 
       textViews = testInstance.findAllByType(TextView)
-      expect(textViews[14].props.children).toEqual('')
-      expect(textViews[31].props.children).toEqual('Attachments')
+      expect(testInstance.findByType(TextView).props.children).toEqual('')
+      expect(testInstance.findByType(TextView).props.children).toEqual('Attachments')
     })
   })
 
