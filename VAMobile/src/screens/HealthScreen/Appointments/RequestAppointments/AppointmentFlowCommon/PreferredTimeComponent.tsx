@@ -24,7 +24,7 @@ const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
-  const selectedList = selectedTimes || []
+  const selectedList = new Set(selectedTimes || [])
 
   const timesList = [
     { value: t('requestAppointment.timeMorningValue'), label: t('requestAppointment.timeMorningLabel') },
@@ -35,16 +35,16 @@ const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes
   const getValueList = () => {
     const listItems: Array<DefaultListItemObj> = timesList.map((item, index) => {
       const textLines: Array<TextLine> = [{ text: item.label, variant: 'VASelector', color: 'primary' }]
-      const selected = selectedList.includes(item.value as TimesForPhoneCallType)
+      const value = item.value as TimesForPhoneCallType
+      const selected = selectedList.has(value)
 
       const onValueChanged = (): void => {
-        let newSelectedValues: Array<TimesForPhoneCallType> = []
-        if (selected) {
-          newSelectedValues = selectedList.filter((val) => val !== item.value)
+        if (!selected) {
+          selectedList.add(value)
         } else {
-          newSelectedValues = [...selectedList, item.value as TimesForPhoneCallType]
+          selectedList.delete(value)
         }
-        onChange(newSelectedValues)
+        onChange([...selectedList])
       }
 
       const checkBox: DefaultListItemObj = {
