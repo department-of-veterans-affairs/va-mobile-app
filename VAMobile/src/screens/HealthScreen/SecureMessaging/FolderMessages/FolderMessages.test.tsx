@@ -183,11 +183,11 @@ context('FolderMessages', () => {
       expect(listFolderMessages).toHaveBeenCalledWith(-1, 3, expect.anything())
     })
 
-    it('should hide pagination if it is not a system folder', async () => {
+    it('should show pagination if it is not a system folder', async () => {
       await waitFor(() => {
         initializeTestInstance(false, false, 1)
       })
-      expect(testInstance.findAllByType(Pagination).length).toEqual(0)
+      expect(testInstance.findAllByType(Pagination).length).toEqual(1)
     })
   })
 

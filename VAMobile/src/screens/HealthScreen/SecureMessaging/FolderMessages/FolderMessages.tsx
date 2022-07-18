@@ -10,7 +10,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
@@ -29,7 +28,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
-  const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
+
   const paginationMetaData = paginationMetaByFolderId?.[folderID]
 
   useEffect(() => {
@@ -97,12 +96,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     dispatch(listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }
 
-  // Render pagination for sent and drafts folderMessages only
   const renderPagination = (): ReactNode => {
-    if (!trackedPagination.includes(folderID)) {
-      return <></>
-    }
-
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {

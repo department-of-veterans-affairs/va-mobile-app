@@ -47,8 +47,6 @@ import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 
-const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
-
 const secureMessagingNonFatalErrorString = 'Secure Messaging Service Error'
 
 export type SecureMessagingState = {
@@ -717,12 +715,9 @@ const secureMessagingSlice = createSlice({
         ...state.paginationMetaByFolderId,
       }
 
-      // only track sent and drafts messages for now
-      if (trackedPagination.includes(folderID)) {
-        updatedPaginationMeta = {
-          ...state.paginationMetaByFolderId,
-          [folderID]: messageData?.meta?.pagination,
-        }
+      updatedPaginationMeta = {
+        ...state.paginationMetaByFolderId,
+        [folderID]: messageData?.meta?.pagination,
       }
 
       const messagesById = messageData
