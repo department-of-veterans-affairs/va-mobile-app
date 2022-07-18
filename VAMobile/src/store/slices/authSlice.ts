@@ -55,7 +55,8 @@ const {
 
 let inMemoryRefreshToken: string | undefined
 
-export const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
+const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
+const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
@@ -254,8 +255,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
     try {
-      await Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options)
-      await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.BIOMETRIC)
+      await storeSplitRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.BIOMETRIC)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `saveRefreshTokenWithBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
@@ -270,8 +270,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
     try {
-      await Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options)
-      await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
+      await storeSplitRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.NONE)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `saveRefreshTokenWithoutBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
@@ -282,6 +281,31 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
     console.debug('saveRefreshToken: not saving refresh token')
   }
+}
+
+/**
+ * Biometric storage has a max storage size of 384 bytes.  Because our tokens are so long, we will split the token into 3 pieces,
+ * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
+ */
+const storeSplitRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
+  console.debug('storeSplitRefreshToken')
+  const splitToken = refreshToken.split('.')
+  console.debug(splitToken)
+  await Promise.all([
+    Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1], options),
+    AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
+    AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
+  ])
+}
+
+/**
+ * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
+ */
+const getSplitRefreshToken = async (): Promise<string | undefined> => {
+  console.debug('getSplitRefreshToken')
+  const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
+  console.debug('Retrieved token components:', result)
+  return result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
 }
 
 type StringMap = { [key: string]: string | undefined }
@@ -492,8 +516,8 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   console.debug('startBiometricsLogin: starting')
   let refreshToken: string | undefined
   try {
-    const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
-    refreshToken = result ? result.password : undefined
+    refreshToken = await getSplitRefreshToken()
+    console.log('reconstructed refresh token:', refreshToken)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     if (isAndroid()) {
@@ -537,8 +561,8 @@ export const initializeAuth = (): AppThunk => async (dispatch) => {
     // if it fails, just means there was nothing there or it was corrupted
     // and we will clear it and show login again
     try {
-      const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
-      refreshToken = result ? result.password : undefined
+      refreshToken = await getSplitRefreshToken()
+      console.log('reconstructed refresh token:', refreshToken)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `initializeAuth: ${authNonFatalErrorString}`)
       console.debug('initializeAuth: Failed to get generic password from keychain')
