@@ -12,12 +12,10 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 ## Team
 
 ### VA Product Owners
-- Leanna Miller
-- Travis Newby
+- Chris Johnston
 - Martha Wilkes (part time design and accessibility)
 
 ### Product and Program Management
-- Ambika Roos - Product Leadership
 - Matt Hall - Product Leadership
 - Meko Hong - Product
 - Ayush Chakravarty - Product
@@ -29,10 +27,11 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 
 ### UX
 - Jen Ecker - UX Design Leadership
-- Meli Manak - UX Design
 - Melissa Lefevre - UX Design
 - Esther Kitavi - UX Design
 - Lauren Russell - UX Design
+- Holly Collier - UX Design
+- Brea Blackwelder - Accessibility Design
 - Misty Milliron-Grant - UX Writing
 - Liz Straghalis - Research
 - Alex Taylor - Principal UX Designer
@@ -40,16 +39,16 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 
 ### Engineering
 - Patrick Saxton - Engineer Leadership
-- Alastair Dawson - Engineer
 - Chika Adibemma - Engineer
 - Narin Ratana - Engineer
 - Jayson Perkins - Engineer
-- Teesh Shahi - Engineer
 - Raf Arroyo - Engineer
 - John Marchi - Engineer
 - Ken Li - Engineer
 - Andrew Herzberg - Engineer
 - Jon Bindbeutel - Engineer
+- Tim Roettger - Engineer
+- Jason Conigliari - Engineer
 - Ken Harrison - QA Support
 - Tom Gammons - Engineer, QA
 - Therese Dickson - Engineer, QA
