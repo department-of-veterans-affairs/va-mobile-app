@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
@@ -6,7 +5,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
-import { useDestructiveAlert, useRouteNavigation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useRouteNavigation } from 'utils/hooks'
 import { useState } from 'react'
 
 type ComposeCancelConfirmationProps = {
@@ -25,7 +24,7 @@ type ComposeCancelConfirmationProps = {
 export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void] {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveAlert()
   const goToDrafts = useGoToDrafts()
