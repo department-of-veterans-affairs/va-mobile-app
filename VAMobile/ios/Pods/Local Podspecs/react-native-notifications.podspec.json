@@ -1,19 +1,20 @@
 {
   "name": "react-native-notifications",
-  "version": "4.3.1",
+  "version": "4.1.3",
   "summary": "Advanced Push Notifications (Silent, interactive notifications) for iOS & Android",
-  "authors": "Wix.com",
-  "homepage": "https://github.com/wix/react-native-notifications",
+  "description": "Advanced Push Notifications (Silent, interactive notifications) for iOS & Android",
   "license": "MIT",
-  "platforms": {
-    "ios": "11.0"
-  },
-  "module_name": "RNNotifications",
+  "authors": "Lidan Hifi <lidan.hifi@gmail.com>",
+  "homepage": "https://github.com/wix/react-native-notifications",
   "source": {
     "git": "https://github.com/wix/react-native-notifications",
-    "tag": "4.3.1"
+    "tag": "4.1.3"
   },
+  "module_name": "RNNotifications",
   "requires_arc": true,
+  "platforms": {
+    "ios": "8.0"
+  },
   "preserve_paths": [
     "LICENSE",
     "README.md",
