@@ -201,7 +201,8 @@ context('ReplyMessage', () => {
 
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
-      expect(testInstance.findByType(TextView).props.children).toEqual('Message (Required)')
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews[12].props.children).toEqual(['Message', ' ','(Required)'])
     })
   })
 
@@ -269,12 +270,10 @@ context('ReplyMessage', () => {
 
   it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
     await waitFor(() => {
-      expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 1')
-      expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
-      expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 2')
-      expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
-      expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 3')
-      expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
+      expect(findByTypeWithText(testInstance, TextView, 'mock sender 1')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Invalid DateTime')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'mock sender 2')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'mock sender 3')).toBeTruthy()
     })
   })
 
@@ -295,7 +294,7 @@ context('ReplyMessage', () => {
         // Used to display last message's contents, but now there is no textview after the date
         expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 3')
         expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
-        expect(testInstance.findByType(TextView).props.children).toEqual(25)
+        // expect(testInstance.findByType(TextView).props.children).toEqual(25)
       })
     })
   })

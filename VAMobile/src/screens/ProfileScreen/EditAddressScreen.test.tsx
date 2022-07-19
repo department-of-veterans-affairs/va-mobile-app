@@ -699,13 +699,13 @@ context('EditAddressScreen', () => {
       act(() => {
         navHeaderSpy.save.props.onSave()
       })
+      const textViews = testInstance.findAllByType(TextView)
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Street address is required')).toBeTruthy()
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Please select a valid option')).toBeTruthy()
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Postal code is required')).toBeTruthy()
-
+      expect(textViews[238].props.children).toEqual('Street address is required')
+      expect(textViews[251].props.children).toEqual('Please select a valid option')
+      expect(textViews[261].props.children).toEqual('Please select a valid option')
+      expect(textViews[264].props.children).toEqual('Postal code is required')
     })
   })
 
@@ -720,7 +720,6 @@ context('EditAddressScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
       expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()

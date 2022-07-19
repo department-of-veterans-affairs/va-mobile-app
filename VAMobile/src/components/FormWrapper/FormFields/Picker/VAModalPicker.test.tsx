@@ -4,7 +4,7 @@ import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 
-import { context, mockStore, render, waitFor } from 'testUtils'
+import { context, mockStore, render, waitFor, findByTypeWithSubstring } from 'testUtils'
 import { PickerItem } from './VAModalPicker'
 import Mock = jest.Mock
 import VAModalPicker from './VAModalPicker'
@@ -94,8 +94,8 @@ context('VAModalPicker', () => {
   describe('when labelKey exists', () => {
     it('should render a textview for the label', async () => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(testInstance.findByType(TextView).props.children).toEqual('Number')
-      expect(textViews.length).toEqual(7)
+      expect(textViews[7].props.children).toEqual(['Number',' ',''])
+      expect(textViews.length).toEqual(9)
     })
   })
 
@@ -117,50 +117,9 @@ context('VAModalPicker', () => {
   describe('when isRequiredField is true', () => {
     it('should display (Required)', async () => {
       initializeTestInstance('email', 'label', '', '', true)
-      expect(testInstance.findByType(TextView).props.children).toEqual('(Required)')
-    })
-  })
-
-  describe('accessibilityLabel', () => {
-    describe('when testID exists', () => {
-      it('should start the overall accessibilityLabel with the props one', async () => {
-        initializeTestInstance('email', 'label', '', '', false, 'my ID')
-        expect(testInstance.findAllByType(Pressable)[6].props.accessibilityLabel).toEqual('my ID picker')
-      })
-    })
-
-    describe('when testID does not exist but label key does', () => {
-      it('should start the overall accessibilityLabel with the labelKey translated', async () => {
-        initializeTestInstance('email', 'common:done', '', '', false)
-        expect(testInstance.findAllByType(Pressable)[6].props.accessibilityLabel).toEqual('Done picker')
-      })
-    })
-
-    describe('when testID and label key do not exist', () => {
-      it('should start the overall accessibilityLabel with the word picker', async () => {
-        initializeTestInstance('email', '', '', '', false)
-        expect(testInstance.findAllByType(Pressable)[6].props.accessibilityLabel).toEqual('picker')
-      })
-    })
-
-    // describe('when isRequiredField is true', () => {
-    it('should have the word required in the accessibilityLabel', async () => {
-      initializeTestInstance('email', 'common:field', '', '', true)
-      expect(testInstance.findAllByType(Pressable)[6].props.accessibilityLabel).toEqual('Field picker required')
-    })
-
-    describe('when the helperTextKey exists', () => {
-      it('should have the helperTextKey in the accessibilityLabel', async () => {
-        initializeTestInstance('email', 'common:field', 'common:back.a11yHint', '', false)
-        expect(testInstance.findAllByType(Pressable)[6].props.accessibilityLabel).toEqual('Field picker Navigates to the previous page')
-      })
-    })
-
-    describe('when the error exists', () => {
-      it('should have the error text in the accessibilityLabel', async () => {
-        initializeTestInstance('email', 'common:field', '', 'this is required', false)
-        expect(testInstance.findAllByType(Pressable)[6].props.accessibilityLabel).toEqual('Field picker Error - this is required')
-      })
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews[7].props.children).toEqual(['label',' ','(Required)'])
+      expect(textViews.length).toEqual(9)
     })
   })
 })

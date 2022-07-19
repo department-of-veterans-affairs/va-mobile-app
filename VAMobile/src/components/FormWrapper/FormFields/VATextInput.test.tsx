@@ -105,8 +105,8 @@ context('VATextInput', () => {
 
     it('should set the border color to error and make the border thicker', async () => {
       initializeTestInstance('email', '', '', 'ERROR')
-      expect(testInstance.findByType(Box).props.borderColor).toEqual('error')
-      expect(testInstance.findByType(Box).props.borderWidth).toEqual(2)
+      expect(testInstance.findAllByType(Box)[4].props.borderColor).toEqual('error')
+      expect(testInstance.findAllByType(Box)[4].props.borderWidth).toEqual(2)
     })
   })
 })
