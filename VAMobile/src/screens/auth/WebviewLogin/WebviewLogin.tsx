@@ -27,7 +27,8 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     // AUTH_CLIENT_ID,
     // AUTH_REDIRECT_URL,
     // AUTH_SCOPES,
-    AUTH_ENDPOINT,
+    // AUTH_ENDPOINT,
+    AUTH_SIS_ENDPOINT,
   } = getEnv()
   const { codeChallenge, authorizeStateParam, authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -44,7 +45,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     // response_mode: 'query',
     // state: authorizeStateParam,
   })
-  const webLoginUrl = `${AUTH_ENDPOINT}?${params}`
+  const webLoginUrl = `${AUTH_SIS_ENDPOINT}?${params}`
   console.log(`WebviewLogin.tsx webLoginUrl: ${webLoginUrl}`)
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,

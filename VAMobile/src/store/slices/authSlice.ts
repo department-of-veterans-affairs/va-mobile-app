@@ -43,12 +43,15 @@ import getEnv from 'utils/env'
 const {
   AUTH_CLIENT_ID,
   AUTH_CLIENT_SECRET,
-  AUTH_ENDPOINT,
+  // AUTH_ENDPOINT,
+  AUTH_SIS_ENDPOINT,
   AUTH_REDIRECT_URL,
-  AUTH_REVOKE_URL,
+  // AUTH_REVOKE_URL,
+  AUTH_SIS_REVOKE_URL,
   // AUTH_SCOPES,
-  AUTH_TOKEN_EXCHANGE_URL,
-  AUTH_TOKEN_REFRESH_URL,
+  // AUTH_TOKEN_EXCHANGE_URL,
+  AUTH_SIS_TOKEN_EXCHANGE_URL,
+  AUTH_SIS_TOKEN_REFRESH_URL,
   ENVIRONMENT,
   IS_TEST,
 } = getEnv()
@@ -364,7 +367,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
   console.debug('refreshAccessToken: Refreshing access token')
   try {
     await CookieManager.clearAll()
-    const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
+    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -414,7 +417,7 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
 export const attempIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
   try {
     await CookieManager.clearAll()
-    const response = await fetch(AUTH_TOKEN_REFRESH_URL, {
+    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -467,7 +470,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
 
   try {
     await CookieManager.clearAll()
-    const response = await fetch(AUTH_REVOKE_URL, {
+    const response = await fetch(AUTH_SIS_REVOKE_URL, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${api.getAccessToken()}`,
@@ -587,9 +590,9 @@ export const handleTokenCallbackUrl =
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
-      console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
+      console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
       await CookieManager.clearAll()
-      const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
+      const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -646,7 +649,7 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
     application: 'vamobile',
     oauth: 'true',
   })
-  const url = `${AUTH_ENDPOINT}?${params}`
+  const url = `${AUTH_SIS_ENDPOINT}?${params}`
   console.log(`authSlice.ts startWebLogin URL: ${url}`)
   dispatch(dispatchShowWebLogin(url))
 }

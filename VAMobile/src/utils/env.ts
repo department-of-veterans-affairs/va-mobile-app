@@ -41,9 +41,12 @@ export type EnvVars = {
   AUTH_ENDPOINT: string
   AUTH_REDIRECT_URL: string
   AUTH_REVOKE_URL: string
+  AUTH_SIS_ENDPOINT: string
+  AUTH_SIS_REVOKE_URL: string
   AUTH_SCOPES: string
   AUTH_TOKEN_EXCHANGE_URL: string
-  AUTH_TOKEN_REFRESH_URL: string
+  AUTH_SIS_TOKEN_EXCHANGE_URL: string
+  AUTH_SIS_TOKEN_REFRESH_URL: string
   AUTH_ALLOW_NON_BIOMETRIC_SAVE: string
   SHOW_DEBUG_MENU: boolean
   IS_TEST: boolean
