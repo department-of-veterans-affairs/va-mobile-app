@@ -137,7 +137,7 @@ context('UpcomingAppointmentDetails', () => {
     })
     it('should display the how to join your virtual session text', async () => {
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('How to join your virtual session')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('You can join VA Video Connect 30 minutes prior to the start time')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('You can join VA Video Connect 30 minutes prior to the start time.')
     })
 
     it('should display the join session button', async () => {
@@ -295,15 +295,6 @@ context('UpcomingAppointmentDetails', () => {
         initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       })
       expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
-    })
-  })
-
-  describe('when navigating to upcoming appointment details page', () => {
-    it('should show loading component', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-        expect(testInstance.findByType(TextView).props.children).toEqual('Loading your appointment details...')
-      })
     })
   })
 })

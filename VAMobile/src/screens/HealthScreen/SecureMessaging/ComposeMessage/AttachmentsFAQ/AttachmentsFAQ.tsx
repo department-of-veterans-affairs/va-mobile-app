@@ -46,7 +46,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
               <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
             </TextView>
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <VABulletList listOfText={[t('secureMessaging.attachments.FAQ.note.bullet1'), t('secureMessaging.attachments.FAQ.note.bullet2')]} />
+              <VABulletList listOfText={[t('secureMessaging.attachments.FAQ.note.bullet1'), t('secureMessaging.attachments.sizeRequirements')]} />
             </Box>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>

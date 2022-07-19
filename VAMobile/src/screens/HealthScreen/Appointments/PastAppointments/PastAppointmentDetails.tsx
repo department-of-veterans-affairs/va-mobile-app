@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useEffect } from 'react'
 
 import {
   AppointmentAddressAndNumber,
@@ -14,9 +14,8 @@ import {
 } from '../AppointmentDetailsCommon'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 import { AppointmentsState, getAppointmentMessages, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
-import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
+import { Box, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
-import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { isAPendingAppointment } from '../../../../utils/appointments'
@@ -39,14 +38,10 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointmentType, status } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
   const messages = appointmentMessagesById[appointmentID]
 
   useEffect(() => {
     dispatch(trackAppointmentDetail(pendingAppointment))
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [dispatch, appointmentID, pendingAppointment])
 
   useEffect(() => {
@@ -54,10 +49,6 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
       dispatch(getAppointmentMessages(appointmentID))
     }
   }, [dispatch, appointment, appointmentID, appointmentMessagesById])
-
-  if (!isTransitionComplete) {
-    return <LoadingComponent text={t('appointmentDetails.loading')} />
-  }
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled

@@ -1,0 +1,52 @@
+name: "Update Testrail Run"
+
+on:
+  repository_dispatch:
+    types:
+      - update_testrail_run
+
+
+jobs:
+  update_run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl-version:
+          - 'latest'
+    steps:
+      - run: echo "Received web hook"
+      - uses: actions/checkout@v2
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - run: gh auth login --with-token < token.txt
+      - name: 'Update Ticket with Testrail data'
+        env:
+          NAME: ${{ github.event.client_payload.name }}
+          STATS: ${{ github.event.client_payload.stats }}
+          REF: ${{ github.event.client_payload.refs }}
+          URL: ${{ github.event.client_payload.name }}
+        run: |
+          echo $NAME
+          echo $REF
+          echo $URL
+          echo $STATS
+
+          s=${STATS##[}
+          s=${s%]}
+          IFS=', ' read -r -a stats <<< $s
+
+          NEW_CHART='title '$(echo $NAME | sed -e 's/\//-/g')'
+            "Passed": '${stats[0]}'
+            "Blocked": '${stats[1]}'
+            "Retest": '${stats[3]}'
+            "Failed": '${stats[4]}'
+            "Untested": '${stats[2]}'
+          '
+
+          echo $NEW_CHART
+          OLD_BODY=$(gh issue view $REF --json body | jq -r '.body')
+          echo $OLD_BODY >> body.txt
+          perl -i -0777 -pe 's/(?<=pie showData\s).*?(?=```)/\n'"${NEW_CHART}"'/s' body.txt
+          NEW_BODY=`cat body.txt`
+          echo $NEW_BODY
+          gh issue edit $REF -b "${NEW_BODY}"
+        shell: bash
