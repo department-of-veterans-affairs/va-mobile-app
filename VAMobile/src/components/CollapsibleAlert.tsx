@@ -1,12 +1,9 @@
 import { Pressable, PressableProps } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
-import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { VABorderColors } from 'styles/theme'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import TextArea from './TextArea'
 
@@ -17,12 +14,11 @@ export type CollapsibleAlertProps = {
   headerText: string
   /** accordion Body text */
   body: ReactNode
-  /** testID for the header*/
-  testID?: string
+  /** acccessibilityLabel needs to be provided due to accessibilityState being neccessary */
+  a11yLabel: string
 }
 
-const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, testID }) => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
+const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
 
@@ -33,7 +29,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
-    accessibilityHint: t('viewMoreDetails'),
+    accessibilityLabel: a11yLabel,
     accessibilityRole: 'spinbutton',
   }
 
@@ -51,11 +47,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
       </Box>
     )
 
-    return (
-      <Pressable {...pressableProps} {...testIdProps(testID || '')}>
-        {data}
-      </Pressable>
-    )
+    return <Pressable {...pressableProps}>{data}</Pressable>
   }
 
   const leftBorderProps = {
@@ -70,7 +62,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   }
 
   return (
-    <Box {...boxProps} {...testIdProps('Collapsible-Alert', true)} importantForAccessibility={'no'}>
+    <Box {...boxProps}>
       <TextArea>
         {accordionHeader()}
         {expanded && body}

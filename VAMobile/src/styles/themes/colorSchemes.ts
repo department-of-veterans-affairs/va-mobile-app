@@ -138,8 +138,6 @@ export const lightTheme = {
   buttonBorder: {
     buttonSecondary: colors.primary,
     buttonSecondaryActive: colors.primary,
-    buttonImportant: colors.secondaryDark,
-    buttonImportantActive: colors.secondaryDarkest,
     buttonDestructive: colors.secondaryDark,
     buttonDestructiveActive: colors.crisisLineRed,
     brandedPrimary: colors.primary,

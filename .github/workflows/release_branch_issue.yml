@@ -56,7 +56,7 @@ jobs:
       ticketNumber: ${{ needs.release_ticket.outputs.ticketNumber }}
       milestoneID: ${{ needs.create_testrail_milestone.outputs.milestoneId }}
     secrets:
-      TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}z
+      TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
   update_ticket:
     runs-on: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
       - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
       - run: |
           RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
-          OLD_BODY=$(echo $(gh issue view 3359 --json body | jq -r '.body')
+          OLD_BODY=$(echo $(gh issue view 3359 --json body | jq -r '.body'))
           NEW_BODY=$(echo "$BODY" | sed -e "s/\^\^\^Testrail-url\^\^\^/$RUN_URL/g")
           gh issue edit ${{ needs.release_ticket.outputs.ticketNumber }} -b $NEW_BODY
 
