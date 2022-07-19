@@ -308,7 +308,7 @@ commands:
           command: python queue-builds.py
 jobs:
   test:
-    executor: default
+    executor: ios
     steps:
       - queue_job:
           regex: "^test"
