@@ -1,6 +1,5 @@
 import { AccessibilityValue, AppStateStatus, NativeModules, PixelRatio } from 'react-native'
 
-// import { ThunkDispatch } from 'redux-thunk'
 import _ from 'underscore'
 
 import { TextLine } from 'components/types'
