@@ -21,7 +21,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
   const dispatch = useAppDispatch()
   const setIsVaEligible = useSetIsVAEligible<TypeOfCareObjectType>()
   const checkEligibility = useCheckEligibilityAndRouteUser<TypeOfCareObjectType>()
-  const [noTypeSelectedError, setNoTypeSelectedError] = useState(false)
+  const [noTypeSelectedError, setNoTypeSelectedError] = useState('')
   let careListData: Array<TypeOfCareObjectType> = []
 
   const navigateToTypeOfCareNotListed = navigateTo('TypeOfCareNotListedHelpScreen')
@@ -39,7 +39,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
 
   const onSetSelectedTypeOfCare = (care: TypeOfCareIdV2Types): void => {
     if (care) {
-      setNoTypeSelectedError(false)
+      setNoTypeSelectedError('')
       dispatch(updateFormData({ serviceType: care, typeOfCareSelected: care, subTypeSelected: undefined }))
     }
   }
@@ -67,7 +67,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
 
   const onContinue = () => {
     if (!typeOfCareSelected) {
-      setNoTypeSelectedError(true)
+      setNoTypeSelectedError(t('requestAppointment.typeOfCareNotSelectedError'))
     } else {
       // if it has subtype but is not audiology send to subtype page
       if (hasSubType(typeOfCareSelected as TypeOfCareWithSubCareIdType) && typeOfCareSelected !== 'audiology') {
@@ -94,11 +94,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
         <LoadingComponent />
       ) : (
         <>
-          <AppointmentFlowTitleSection
-            title={t('requestAppointment.whatTypeOfCare')}
-            error={noTypeSelectedError}
-            errorMessage={t('requestAppointment.typeOfCareNotSelectedError')}
-          />
+          <AppointmentFlowTitleSection title={t('requestAppointment.whatTypeOfCare')} errorMessage={noTypeSelectedError} />
           <RadioGroup options={getTypesOfCareOptions()} onChange={onSetSelectedTypeOfCare} value={typeOfCareSelected} isRadioList={true} />
         </>
       )}

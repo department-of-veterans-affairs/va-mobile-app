@@ -1,15 +1,14 @@
-import { AlertBox, Box, TextView } from 'components'
 import React, { FC } from 'react'
 
+import { TextView } from 'components'
 import { useTheme } from 'utils/hooks'
+import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
 type AppointmentModalTitleSectionProps = {
   /** title text */
   title: string
   /** Optional text that will appear under title*/
   extraInformationText?: string
-  /** Optional boolean show the error a;ert */
-  error?: boolean
   /** Optional text for the error alert */
   errorMessage?: string
   /** Optional value to set the title margin bottom */
@@ -19,9 +18,10 @@ type AppointmentModalTitleSectionProps = {
 /** Common component for the appointment request modal title section.
  * Will show title, optional extra information text, and an optional error alert.
  * */
-const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, error, errorMessage, titleMarginBottom }) => {
+const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, errorMessage, titleMarginBottom }) => {
   const theme = useTheme()
   const { gutter, standardMarginBetween, condensedMarginBetween, contentMarginBottom } = theme.dimensions
+  const error = !!errorMessage
 
   return (
     <>
@@ -37,11 +37,7 @@ const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ ti
           {extraInformationText}
         </TextView>
       )}
-      {error && (
-        <Box mx={gutter} mb={standardMarginBetween} mt={standardMarginBetween}>
-          <AlertBox border={'error'} title={errorMessage} />
-        </Box>
-      )}
+      <AppointmentFlowErrorAlert errorMessage={errorMessage} mx={gutter} mb={standardMarginBetween} mt={standardMarginBetween} />
     </>
   )
 }

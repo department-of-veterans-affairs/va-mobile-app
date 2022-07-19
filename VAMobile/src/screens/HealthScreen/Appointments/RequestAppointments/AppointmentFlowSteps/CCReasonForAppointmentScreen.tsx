@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
+import { AppointmenFlowTextInputWithAlert, AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
-import { Box, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
@@ -19,7 +18,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { gutter, condensedMarginBetween } = theme.dimensions
+  const { gutter } = theme.dimensions
   const dispatch = useAppDispatch()
 
   const navigateToPreferredLanguage = navigateTo('CCPreferredLanguageScreen')
@@ -51,14 +50,15 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
         onPress={() => {}}
         text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
       />
-
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} />
-      <Box mx={gutter}>
-        <TextView variant="MobileBodyBold" mb={condensedMarginBetween}>
-          {t('requestAppointment.additionaldetailsTitle')}
-        </TextView>
-        <VATextInput inputType={'none'} onChange={onSetAdditionalDetails} isTextArea={true} value={comment} />
-      </Box>
+      <AppointmenFlowTextInputWithAlert
+        mx={gutter}
+        inputType={'none'}
+        inputLabel={t('requestAppointment.additionaldetailsTitle')}
+        onChange={onSetAdditionalDetails}
+        value={comment}
+        isTextArea={true}
+      />
     </AppointmentFlowLayout>
   )
 }
