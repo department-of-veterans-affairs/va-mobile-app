@@ -46,6 +46,7 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 - Kris Pethtel, Engineer
 - Tim Roettger, Engineer
 - Raf Arroyo, Engineer
+- Jason Conigliari, Engineer
 - John Marchi, Engineer
 - Ken Li, Engineer
 - Ken Harrison - QA Support
