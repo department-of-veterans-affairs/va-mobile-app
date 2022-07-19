@@ -99,14 +99,6 @@ context('VAModalPicker', () => {
     })
   })
 
-  describe('when labelKey does not exist', () => {
-    it('should render not render the label', async () => {
-      initializeTestInstance('js')
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(6)
-    })
-  })
-
   describe('when there is helper text', () => {
     it('should display it', async () => {
       initializeTestInstance('js', 'label', 'common:back.a11yHint')

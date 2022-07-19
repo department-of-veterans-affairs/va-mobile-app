@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, findByTypeWithText, findByTypeWithSubstring, mockNavProps, render, RenderAPI } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { UserDataProfile } from 'store/api/types'
 import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
@@ -701,12 +701,11 @@ context('EditAddressScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
 
-      expect(testInstance.findByType(TextView).props.children).toEqual('Street address is required')
-      expect(testInstance.findByType(TextView).props.children).toEqual('Please select a valid option')
-      expect(testInstance.findByType(TextView).props.children).toEqual('Please select a valid option')
-      expect(testInstance.findByType(TextView).props.children).toEqual('Postal code is required')
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Street address is required')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Please select a valid option')).toBeTruthy()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Postal code is required')).toBeTruthy()
+
     })
   })
 
