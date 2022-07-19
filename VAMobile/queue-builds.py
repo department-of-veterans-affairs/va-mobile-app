@@ -1,11 +1,12 @@
 import requests
 import re
 import os
+import time
 from datetime import datetime
 
 
-ConfidenceThreshhold = 1
-thisJob = os.getenv('CIRCLE_BUILD_NUM')
+ConfidenceThreshold = 1
+thisJob = 19569 #os.getenv('CIRCLE_BUILD_NUM')
 regexTest = os.getenv('BUILD_REGEX')
 
 confidence = 0
@@ -15,7 +16,7 @@ maxTime = 3600 #1 hour in seconds
 
 print(f"Queueing all jobs that match regex {regexTest}")
 
-while true:
+while True:
   print("Fetching all running jobs for va-mobile-app")
   response = requests.get(
     'https://circleci.com/api/v1.1/project/github/department-of-veterans-affairs/va-mobile-app',
@@ -40,7 +41,6 @@ while true:
       headers={'circle-token':os.getenv('CIRCLECI_TOKEN')}
     )
     r['created_at'] = datetime.strptime(resp.json()['created_at'], '%Y-%m-%dT%H:%M:%SZ')
-    print(r['created_at'])
 
 #   sort all the running jobs by datetime
   result = list(sorted(result, key=lambda it: it['created_at']))
@@ -55,14 +55,14 @@ while true:
       confidence += 1
       print("No previous workflows, but below confidence threshold.")
       print("Rerun check in case there are queued jobs that we haven't picked up yet in the API")
-    else
+    else:
       print("Job at front of the queue, releasing container to continue")
       break
-  else
+  else:
     # not at the front of the line. reset confidence and pause before rerunning
     confidence = 0
     print(f"This build ({thisJob}) is queued, waiting for {oldestJob} fo finish")
-    print(f"totalCurrent wait time is {runningTime}" seconds )
+    print(f"totalCurrent wait time is {runningTime} seconds" )
 #   check running time to see if max allowed exceeded
   if runningTime >= maxTime:
     print("Exceeded maximum wait time, canceling build")
@@ -73,7 +73,7 @@ while true:
 #     sleep to make sure api cancels job before exiting
     time.sleep(10)
 #     todo: we should add something for slack here
-    exit 1
+    sys.exit("canceled build")
 
 #   still have time left to wait. sleep the loop and update wait time
   time.sleep(sleepTime)
