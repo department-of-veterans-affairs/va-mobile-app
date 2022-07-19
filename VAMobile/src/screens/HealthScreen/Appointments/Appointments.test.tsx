@@ -7,11 +7,23 @@ import { act } from 'react-test-renderer'
 import { TouchableOpacity } from 'react-native'
 
 import Appointments from './Appointments'
-import { InitialState, AppointmentsState, initialAppointmentsState, ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
+import {
+  InitialState,
+  AppointmentsState,
+  initialAppointmentsState,
+  ErrorsState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  prefetchAppointments
+} from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { AlertBox, ErrorComponent } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
+import {when} from "../../../testUtils";
+import * as api from "../../../store/api";
+import {claim} from "../../ClaimsScreen/claimData";
+import {AppointmentsErrorServiceTypesConstants} from "../../../store/api/types";
 
 type mockAppointmentServiceErrors = {
   pastVaServiceError?: boolean
@@ -20,11 +32,26 @@ type mockAppointmentServiceErrors = {
   upcomingCcServiceError?: boolean
 }
 
+// jest.mock('store/slices', () => {
+//   let actual = jest.requireActual('store/slices')
+//   return {
+//     ...actual,
+//     prefetchAppointments: jest.fn(() => {
+//       console.log('hitting the mock')
+//       return {
+//         type: '',
+//         payload: '',
+//       }
+//     }),
+//   }
+// })
+
 context('AppointmentsScreen', () => {
   let component: RenderAPI
   let testInstance: any
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, serviceErrors: mockAppointmentServiceErrors = {}, appointmentsAuthorized = true) => {
+  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState,
+                                  serviceErrors: mockAppointmentServiceErrors = {}, appointmentsAuthorized = true) => {
     const appointments: AppointmentsState = {
       ...initialAppointmentsState,
       ...serviceErrors,
@@ -113,7 +140,17 @@ context('AppointmentsScreen', () => {
   describe('when pastVaServiceError exist for past appointments', () => {
     describe('while on past appointments tab', () => {
       it('should display an alertbox specifying some appointments are not available', async () => {
-        initializeTestInstance(undefined, { pastVaServiceError: true })
+        await waitFor(() => {
+          when(api.get as jest.Mock)
+            .calledWith(`/v0/appointments`, expect.anything())
+            .mockResolvedValue({
+              data: [], meta: {
+                errors: [{source: AppointmentsErrorServiceTypesConstants.VA}]
+              }
+            })
+          initializeTestInstance(undefined, {pastVaServiceError: true})
+        })
+
         await waitFor(() => {
           const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
           pastButton.props.onPress()
@@ -164,9 +201,12 @@ context('AppointmentsScreen', () => {
         }
 
         await waitFor(() => {
+          when(api.get as jest.Mock)
+            .calledWith(`/v0/appointments`, expect.anything())
+            .mockRejectedValue({ networkError: true } as api.APIError)
           initializeTestInstance(errorState)
-          expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
         })
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
       })
 
       it('should not render error component when the stores screenID does not match the components screenID', async () => {
@@ -196,10 +236,14 @@ context('AppointmentsScreen', () => {
         }
 
         await waitFor(() => {
+          when(api.get as jest.Mock)
+            .calledWith(`/v0/appointments`, expect.anything())
+            .mockRejectedValue({ networkError: true } as api.APIError)
           initializeTestInstance(errorState)
-          expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-          expect(testInstance.findByProps({ phone: '877-327-0022' })).toBeTruthy()
         })
+
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+        expect(testInstance.findByProps({ phone: '877-327-0022' })).toBeTruthy()
       })
 
       it('should not render error component when the stores screenID does not match the components screenID', async () => {

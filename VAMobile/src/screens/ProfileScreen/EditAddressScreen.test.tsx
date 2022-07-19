@@ -701,12 +701,9 @@ context('EditAddressScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
 
-      expect(textViews[242].props.children).toEqual('Street address is required')
-      expect(textViews[257].props.children).toEqual('Please select a valid option')
-      expect(textViews[269].props.children).toEqual('Please select a valid option')
-      expect(textViews[274].props.children).toEqual('Postal code is required')
+      expect(findByTypeWithText(testInstance, TextView, "Street address is required")).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, "Postal code is required")).toBeTruthy()
     })
   })
 

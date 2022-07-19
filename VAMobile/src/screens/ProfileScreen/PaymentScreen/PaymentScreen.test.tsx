@@ -166,8 +166,9 @@ context('PaymentScreen', () => {
 
   describe('when user clicks on a payment button', () => {
     it('should navigate to Payment Missing Screen', async () => {
-      const links = testInstance.findAllByProps({ accessibilityRole: 'button' })
-      links[12].props.onPress()
+      const link = testInstance.findByProps({ accessibilityLabel: 'Post-9/11 GI Bill $1,172.60' })
+      console.log(link)
+      link.props.onPress()
       await waitFor(() => {
         expect(navigatePaymentDetailsSpy).toHaveBeenCalled()
       })

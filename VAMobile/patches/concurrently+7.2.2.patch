@@ -1,0 +1,21 @@
+diff --git a/node_modules/concurrently/package.json b/node_modules/concurrently/package.json
+index 0a909b9..0019db7 100644
+--- a/node_modules/concurrently/package.json
++++ b/node_modules/concurrently/package.json
+@@ -12,10 +12,12 @@
+     "node": "^12.20.0 || ^14.13.0 || >=16.0.0"
+   },
+   "exports": {
+-    "import": "./index.mjs",
+-    "require": "./index.js",
+-    "default": "./index.js",
+-    "types": "./dist/src/index.d.ts"
++    "./package.json": "./package.json",
++    ".": {
++      "import": "./index.mjs",
++      "require": "./index.js",
++      "default": "./index.js"
++    }
+   },
+   "scripts": {
+     "build": "tsc --build",

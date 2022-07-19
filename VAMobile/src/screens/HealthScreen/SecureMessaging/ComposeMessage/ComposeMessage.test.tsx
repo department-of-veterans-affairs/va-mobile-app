@@ -13,6 +13,7 @@ import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessag
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { when } from 'jest-when'
+import * as api from 'store/api'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -131,6 +132,11 @@ context('ComposeMessage', () => {
         ...InitialState,
         secureMessaging: {
           ...InitialState.secureMessaging,
+          signature: {
+            signatureName: 'signatureName',
+            includeSignature: false,
+            signatureTitle: 'Title'
+          },
           sendMessageFailed: sendMessageFailed,
           recipients: noRecipientsReturned
             ? []
@@ -212,6 +218,10 @@ context('ComposeMessage', () => {
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
+      when(api.get as jest.Mock)
+          .calledWith('/v0/messaging/health/recipients')
+          .mockRejectedValue({ networkError: true } as api.APIError)
+
       await waitFor(() => {
         initializeTestInstance(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
         expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
@@ -260,13 +270,14 @@ context('ComposeMessage', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       await waitFor(() => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
-
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[29].props.children).toEqual('Subject Line')
-        expect(textViews[30].props.children).toEqual(' ')
-        expect(textViews[31].props.children).toEqual('(Required)')
       })
+
+      const textViews = testInstance.findAllByType(TextView)
+
+      expect(textViews[13].props.children).toEqual('Subject Line')
+      expect(textViews[15].props.children).toEqual('(Required)')
     })
+
   })
 
   describe('when pressing the back button', () => {
@@ -360,7 +371,6 @@ context('ComposeMessage', () => {
         testInstance.findByProps({ label: 'Send' }).props.onPress()
       })
 
-      let textViews = testInstance.findAllByType(TextView)
       expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
@@ -373,9 +383,9 @@ context('ComposeMessage', () => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
 
-      textViews = testInstance.findAllByType(TextView)
-      expect(textViews[14].props.children).toEqual('')
-      expect(textViews[31].props.children).toEqual('Attachments')
+      expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeFalsy()
     })
   })
 

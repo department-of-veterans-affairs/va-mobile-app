@@ -1,9 +1,9 @@
 import 'react-native'
 import React from 'react'
-import { TextInput } from 'react-native'
+import {Pressable, TextInput} from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, waitFor, render, RenderAPI } from 'testUtils'
+import {context, mockNavProps, waitFor, render, RenderAPI, findByOnPressFunction, findByTypeWithText} from 'testUtils'
 import EditDirectDepositScreen from './EditDirectDepositScreen'
 import { AlertBox, VASelector, ErrorComponent, LoadingComponent, VAModalPicker, VATextInput, TextView } from 'components'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
@@ -156,15 +156,18 @@ context('EditDirectDepositScreen', () => {
         accountNumberTextInput.props.onChangeText('')
         accountTypeRNPickerSelect.props.onSelectionChange('')
         confirmCheckBox.props.onSelectionChange(false)
-
-        navHeaderSpy.save.props.onSave()
-
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(testInstance.findAllByType(TextView)[7].props.children).toEqual("Enter the bank's 9-digit routing number.")
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Enter your account number.')
-        expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Select the type that best describes the account.')
-        expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Confirm this information is correct.')
       })
+
+      await waitFor(() => {
+        navHeaderSpy.save.props.onSave()
+      })
+
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(findByTypeWithText(testInstance, TextView, "Enter the bank's 9-digit routing number.")).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, "Enter your account number.")).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, "Select the type that best describes the account.")).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, "Confirm this information is correct.")).toBeTruthy()
+
     })
   })
 

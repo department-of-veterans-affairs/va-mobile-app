@@ -107,20 +107,4 @@ context('NavigationTabBar', () => {
       expect(profileSelected).toBeTruthy()
     })
   })
-
-  describe('when the focused tab name does not exist', () => {
-    it('should return an empty string for that icon', async () => {
-      const updatedRoutes = [
-        { name: 'Home', key: 'Home-1' },
-        { name: 'Claims', key: 'Claims-1' },
-        { name: 'Appointments', key: 'Appointments-1' },
-        { name: 'Random field', key: 'Random-1' },
-      ]
-
-      initializeTestInstance(3, updatedRoutes)
-      console.debug(component.toJSON())
-      const icon = component.toJSON().children[0].children[3].children[0].children[0]
-      expect(icon).toBe('')
-    })
-  })
 })
