@@ -289,10 +289,22 @@ commands:
       - retrieve_persisted_env:
           envVar: "SLACK_THREAD_TS"
           path: "threadTs"
+
+  queue_job:
+    parameters:
+      regex:
+        type: string
+    steps:
+      - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
+      - run:
+          working_directory: ~/project/VAMobile
+          command: python queue-builds.py
 jobs:
   test:
     executor: default
     steps:
+      - queue_job:
+          regex: "^test"
       - checkout
       - install_deps
       - lint

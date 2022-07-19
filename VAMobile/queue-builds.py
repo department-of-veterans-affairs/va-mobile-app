@@ -2,17 +2,18 @@ import requests
 import re
 import os
 import time
+import sys
 from datetime import datetime
 
 
 ConfidenceThreshold = 1
-thisJob = 19569 #os.getenv('CIRCLE_BUILD_NUM')
+thisJob = os.getenv('CIRCLE_BUILD_NUM')
 regexTest = os.getenv('BUILD_REGEX')
 
 confidence = 0
 runningTime = 0
 sleepTime = 11
-maxTime = 3600 #1 hour in seconds
+maxTime = 60 #1 hour in seconds
 
 print(f"Queueing all jobs that match regex {regexTest}")
 
