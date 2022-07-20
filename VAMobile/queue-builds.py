@@ -54,8 +54,8 @@ while True:
 #   check to see if oldest job is our job
   print(oldestJob)
   print(oldestJob == thisJob)
-  print(type(thisJob)
-  print(type(oldestJob)
+  print(type(thisJob))
+  print(type(oldestJob))
 
   if oldestJob == thisJob:
 #   if the oldest job is out job, gauge our confidence level.regexTest
