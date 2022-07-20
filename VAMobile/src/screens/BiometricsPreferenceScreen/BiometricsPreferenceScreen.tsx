@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -9,13 +9,13 @@ import { getSupportedBiometricA11yLabel, getSupportedBiometricText, getSupported
 import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 
 const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.SETTINGS)
 
   const { supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)

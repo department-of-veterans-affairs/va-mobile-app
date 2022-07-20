@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -7,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { ViewStyle } from 'react-native'
 import { updateSecureMessagingTab } from 'store/slices'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 
 export type NoFolderMessagesProps = {
@@ -17,7 +16,7 @@ export type NoFolderMessagesProps = {
 const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {

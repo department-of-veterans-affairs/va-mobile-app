@@ -6,14 +6,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VAButton } from './index'
 import { logout } from 'store/slices/authSlice'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert } from 'utils/hooks'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
 
 /**Common component for the sign out button */
 const SignoutButton: FC = ({}) => {
   const { t } = useTranslation(NAMESPACE.SETTINGS)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const signOutAlert = useDestructiveAlert()
   const _logout = () => {
     dispatch(logout())

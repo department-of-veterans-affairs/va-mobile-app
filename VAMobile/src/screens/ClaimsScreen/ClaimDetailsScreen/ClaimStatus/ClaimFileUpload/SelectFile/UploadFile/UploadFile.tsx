@@ -1,5 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
@@ -15,7 +15,7 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 
 type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
@@ -26,7 +26,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
