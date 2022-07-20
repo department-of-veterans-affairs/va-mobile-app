@@ -70,6 +70,12 @@ while True:
 #   check running time to see if max allowed exceeded
   if runningTime >= maxTime:
     print("Exceeded maximum wait time, canceling build")
+    rs = requests.post(
+      'https://slack.com/api/chat.postMessage',
+      headers={"Authorization": f"Bearer {os.getenv('SLACK_API_TOKEN')}", "Content-Type":"application/json"},
+      json={"channel":"va-mobile-app-automation-test-channel","text": f"A CircleCi build job exceeded queue time. Please see {os.getenv('CIRCLE_BUILD_URL')}"}
+    )
+    print(re.json())
     cancelResp = requests.post(
       f"https://circleci.com/api/v1.1/project/github/department-of-veterans-affairs/va-mobile-app/{str(thisJob)}/cancel",
       headers={'circle-token':os.getenv('CIRCLECI_TOKEN')}
@@ -77,12 +83,6 @@ while True:
 #     sleep to make sure api cancels job before exiting
     time.sleep(10)
     # send slack message about queue error
-    rs = requests.post(
-      'https://slack.com/api/chat.postMessage',
-      headers={"Authorization": f"Bearer {os.getenv('SLACK_API_TOKEN')}", "Content-Type":"application/json"},
-      json={"channel":"va-mobile-app-automation-test-channel","text": f"A CircleCi build job exceeded queue time. Please see {os.getenv('CIRCLE_BUILD_URL')}"}
-    )
-    print(re.json())
     sys.exit("canceled build")
 
 #   still have time left to wait. sleep the loop and update wait time
