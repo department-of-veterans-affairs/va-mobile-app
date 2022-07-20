@@ -10,6 +10,9 @@ ConfidenceThreshold = 1
 thisJob = os.getenv('CIRCLE_BUILD_NUM')
 regexTest = os.getenv('BUILD_REGEX')
 
+print(thisJob)
+print(regexTest)
+
 confidence = 0
 runningTime = 0
 sleepTime = 11
