@@ -286,6 +286,23 @@ context('ReplyMessage', () => {
     })
   })
 
+  describe('when first message and last message is clicked', () => {
+    it('should expand first accordion and close last accordion', async () => {
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[4].props.onPress()
+      })
+      await waitFor(() => {
+      testInstance.findAllByType(Pressable)[6].props.onPress()
+      })
+
+      expect(testInstance.findAllByType(TextView)[18].props.children).toBe('message 1 body text')
+      // Used to display last message's contents, but now there is no textview after the date
+      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 3')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('Invalid DateTime')
+      expect(testInstance.findAllByType(TextView).length).toBe(23)
+    })
+  })
+
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance({}, [], true)
