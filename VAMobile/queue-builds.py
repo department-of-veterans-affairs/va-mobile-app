@@ -10,8 +10,8 @@ ConfidenceThreshold = 1
 thisJob = int(os.getenv('CIRCLE_BUILD_NUM'))
 regexTest = os.getenv('BUILD_REGEX')
 
-print(thisJob)
-print(regexTest)
+print(f"CIRCLE_BUILD_NUM: {thisJob}")
+print(f"BUILD_REGEX: {regexTest}")
 
 confidence = 0
 runningTime = 0
@@ -27,16 +27,16 @@ while True:
     params={'limit': 30, 'shallow': True, 'filter': 'running'},
     headers={'circle-token': os.getenv('CIRCLECI_TOKEN')}
   )
-
 #   print(response)
+
   # get array of running jobs
   jobs = response.json()
-  print(len(jobs))
+  print(f"there are currently {len(jobs)} running")
 
 #   keep only the jobs that match {regexTest}
   print(f"Filtering jobs to match {regexTest}")
   result = list(filter(lambda it: re.search(regexTest, it['workflows']['job_name']) != None, jobs))
-  print(len(result))
+  print(f"there are currently {len(result)} jobs that match regex {regexTest}")
 
   print("fetching all start times for jobs")
   for r in result:
@@ -52,11 +52,6 @@ while True:
 # fins the oldest running job
   oldestJob = result[0]['build_num']
 #   check to see if oldest job is our job
-  print(oldestJob)
-  print(oldestJob == thisJob)
-  print(type(thisJob))
-  print(type(oldestJob))
-
   if oldestJob == thisJob:
 #   if the oldest job is out job, gauge our confidence level.regexTest
 #   Since the API can sometimes not have all running jobs, we make sure we reach a certain threshold before we let our build go

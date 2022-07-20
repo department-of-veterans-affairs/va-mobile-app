@@ -309,7 +309,7 @@ commands:
           command: python3 queue-builds.py
 jobs:
   test:
-    executor: ios
+    executor: android
     steps:
       - checkout
       - queue_job:
