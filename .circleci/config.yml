@@ -310,9 +310,9 @@ jobs:
   test:
     executor: ios
     steps:
+      - checkout
       - queue_job:
           regex: "^test"
-      - checkout
       - install_deps
       - lint
       - jest
