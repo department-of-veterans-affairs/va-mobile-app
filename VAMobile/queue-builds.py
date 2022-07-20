@@ -16,7 +16,7 @@ print(f"BUILD_REGEX: {regexTest}")
 confidence = 0
 runningTime = 0
 sleepTime = 11
-maxTime = 60 #1 hour in seconds
+maxTime = 10 # 3600 #1 hour in seconds
 
 print(f"Queueing all jobs that match regex {regexTest}")
 
@@ -71,12 +71,17 @@ while True:
   if runningTime >= maxTime:
     print("Exceeded maximum wait time, canceling build")
     cancelResp = requests.post(
-      f"https://circleci.com/api/v1.1/project/github/department-of-veterans-affairs/va-mobile-app/${thisJob}/cancel",
+      f"https://circleci.com/api/v1.1/project/github/department-of-veterans-affairs/va-mobile-app/{str(thisJob)}/cancel",
       headers={'circle-token':os.getenv('CIRCLECI_TOKEN')}
     )
 #     sleep to make sure api cancels job before exiting
     time.sleep(10)
-#     todo: we should add something for slack here
+    # send slack message about queue error
+    rs = requests.post(
+      'https://slack.com/api/chat.postMessage',
+      headers={"Authorization": f"Bearer {os.getenv('SLACK_API_TOKEN')}", "Content-Type":"application/json"},
+      json={"channel":"va-mobile-app-automation-test-channel","text": f"A CircleCi build job exceeded queue time. Please see {os.getenv('CIRCLE_BUILD_URL')}"}
+    )
     sys.exit("canceled build")
 
 #   still have time left to wait. sleep the loop and update wait time
