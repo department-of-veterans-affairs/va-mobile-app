@@ -319,6 +319,8 @@ commands:
       - run:
           working_directory: ~/project/VAMobile
           command: python3 queue-builds.py
+      - notify_queueing_error:
+          when: on_fail
   queue_ios_jobs:
     parameters:
       regex:
