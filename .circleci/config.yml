@@ -303,6 +303,7 @@ commands:
         type: string
     steps:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
+      - run: sudo apt-get update
       - run: sudo apt-get install python3-pip
       - run: python3 -m pip install requests
       - run:
