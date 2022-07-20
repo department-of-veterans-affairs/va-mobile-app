@@ -303,7 +303,7 @@ commands:
         type: string
     steps:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
-      - run: python3 -m pip3 install requests
+      - run: python3 -m pip install requests
       - run:
           working_directory: ~/project/VAMobile
           command: python3 queue-builds.py
