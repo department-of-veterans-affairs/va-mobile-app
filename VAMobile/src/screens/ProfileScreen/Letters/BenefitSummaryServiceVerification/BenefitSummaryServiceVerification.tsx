@@ -31,7 +31,7 @@ import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'ut
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
-const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
+const { LINK_URL_ASK_VA_GOV } = getEnv()
 
 type BenefitSummaryServiceVerificationProps = Record<string, unknown>
 
@@ -248,7 +248,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           <ClickForActionLink
             displayedText={t('letters.benefitService.sendMessage')}
             linkType={LinkTypeOptionsConstants.url}
-            numberOrUrlLink={LINK_URL_IRIS_CUSTOMER_HELP}
+            numberOrUrlLink={LINK_URL_ASK_VA_GOV}
             linkUrlIconType={LinkUrlIconType.Arrow}
             {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
           />

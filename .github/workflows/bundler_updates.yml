@@ -3,12 +3,16 @@ name: "Update Bundler"
 on:
   schedule:
     - cron: "0 7 * * 3"
+  workflow_dispatch:
+
 jobs:
   update_bundler:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout repo'
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_ACTIONS_PAT }}
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
@@ -32,7 +36,7 @@ jobs:
             git config --global user.email 'va-mobileapp@adhocteam.us'
             git add -A
             git commit -m "Automated bundler and fastlane updates"
-            git push -u origin develop
+            git push -u origin HEAD
           else
             echo 'There are no changes to the lock files or plugins'
           fi
