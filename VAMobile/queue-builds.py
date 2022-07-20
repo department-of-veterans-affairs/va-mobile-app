@@ -35,7 +35,7 @@ while True:
 
 #   keep only the jobs that match {regexTest}
   print(f"Filtering jobs to match {regexTest}")
-  result = list(filter(lambda it: re.search("test", it['workflows']['job_name']) != None, jobs))
+  result = list(filter(lambda it: re.search(regexTest, it['workflows']['job_name']) != None, jobs))
   print(len(result))
 
   print("fetching all start times for jobs")
