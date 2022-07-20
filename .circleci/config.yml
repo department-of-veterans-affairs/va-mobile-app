@@ -324,7 +324,7 @@ jobs:
     executor: ios
     steps:
       - checkout
-      - queue_ios_job:
+      - queue_ios_jobs:
           regex: "^test"
       - install_deps
       - lint
