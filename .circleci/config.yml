@@ -297,7 +297,7 @@ commands:
           envVar: "SLACK_THREAD_TS"
           path: "threadTs"
 
-  queue_job:
+  queue_android_jobs:
     parameters:
       regex:
         type: string
@@ -309,12 +309,22 @@ commands:
       - run:
           working_directory: ~/project/VAMobile
           command: python3 queue-builds.py
+  queue_ios_jobs:
+    parameters:
+      regex:
+        type: string
+    steps:
+      - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
+      - run: python3 -m pip install requests
+      - run:
+          working_directory: ~/project/VAMobile
+          command: python3 queue-builds.py
 jobs:
   test:
     executor: ios
     steps:
       - checkout
-      - queue_job:
+      - queue_ios_job:
           regex: "^test"
       - install_deps
       - lint
