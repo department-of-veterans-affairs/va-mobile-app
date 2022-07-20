@@ -260,7 +260,9 @@ context('ComposeMessage', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       await waitFor(() => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
-        expect(testInstance.findByType(TextView).props.children).toEqual('Subject Line (Required)')
+
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[25].props.children).toEqual(['Subject Line',' ','(Required)'])
       })
     })
   })
@@ -367,8 +369,7 @@ context('ComposeMessage', () => {
       await waitFor(() => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
-      expect(testInstance.findByType(TextView).props.children).toEqual('')
-      expect(testInstance.findByType(TextView).props.children).toEqual('Attachments')
+      expect(findByTypeWithText(testInstance, TextView, 'Attachments')).toBeTruthy()
     })
   })
 

@@ -270,32 +270,19 @@ context('ReplyMessage', () => {
 
   it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
     await waitFor(() => {
-      expect(findByTypeWithText(testInstance, TextView, 'mock sender 1')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Invalid DateTime')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'mock sender 2')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'mock sender 3')).toBeTruthy()
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews[16].props.children).toEqual('mock sender 1')
+      expect(textViews[17].props.children).toEqual('Invalid DateTime')
+      expect(textViews[18].props.children).toEqual('mock sender 2')
+      expect(textViews[19].props.children).toEqual('Invalid DateTime')
+      expect(textViews[20].props.children).toEqual('mock sender 3')
+      expect(textViews[21].props.children).toEqual('Invalid DateTime')
     })
   })
 
   it("should render last accordion's body text since it should be expanded", async () => {
     await waitFor(() => {
-      expect(testInstance.findByType(TextView).props.children).toEqual('Last accordion collapsible should be open, so the body text of this message should display')
-    })
-  })
-
-  describe('when first message and last message is clicked', () => {
-    it('should expand first accordion and close last accordion', async () => {
-      await waitFor(() => {
-        act(() => {
-          testInstance.findAllByType(Pressable)[5].props.onPress()
-          testInstance.findAllByType(Pressable)[7].props.onPress()
-        })
-        expect(testInstance.findByType(TextView).props.children).toEqual('message 1 body text')
-        // Used to display last message's contents, but now there is no textview after the date
-        expect(testInstance.findByType(TextView).props.children).toEqual('mock sender 3')
-        expect(testInstance.findByType(TextView).props.children).toEqual('Invalid DateTime')
-        // expect(testInstance.findByType(TextView).props.children).toEqual(25)
-      })
+      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
     })
   })
 
