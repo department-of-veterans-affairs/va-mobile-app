@@ -75,7 +75,7 @@ while True:
       headers={"Authorization": f"Bearer {os.getenv('SLACK_API_TOKEN')}", "Content-Type":"application/json"},
       json={"channel":"va-mobile-app-automation-test-channel","text": f"A CircleCi build job exceeded queue time. Please see {os.getenv('CIRCLE_BUILD_URL')}"}
     )
-    print(re.json())
+    print(rs.json())
     cancelResp = requests.post(
       f"https://circleci.com/api/v1.1/project/github/department-of-veterans-affairs/va-mobile-app/{str(thisJob)}/cancel",
       headers={'circle-token':os.getenv('CIRCLECI_TOKEN')}
