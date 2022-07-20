@@ -45,10 +45,10 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   }, [dispatch, appointmentID, pendingAppointment])
 
   useEffect(() => {
-    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
+    if (appointment && pendingAppointment && !appointmentMessagesById[appointmentID]) {
       dispatch(getAppointmentMessages(appointmentID))
     }
-  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
+  }, [dispatch, appointment, appointmentID, appointmentMessagesById, pendingAppointment])
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled

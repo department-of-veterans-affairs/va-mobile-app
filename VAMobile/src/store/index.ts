@@ -54,6 +54,7 @@ export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
 
 // creates the types thunk action creator
-export type AppThunk<ReturnType = Promise<void>> = ThunkAction<ReturnType, RootState, unknown, AnyAction>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AppThunk<ReturnType = Promise<void>> = ThunkAction<ReturnType, RootState, any, AnyAction>
 
 export default store
