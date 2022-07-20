@@ -402,7 +402,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
-  - react-native-webview (11.17.1):
+  - react-native-webview (11.22.7):
     - React-Core
   - React-perflogger (0.69.1)
   - React-RCTActionSheet (0.69.1):
@@ -511,8 +511,8 @@ PODS:
   - RNScreens (3.15.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (12.1.1):
-    - React
+  - RNSVG (12.4.0):
+    - React-Core
   - SDWebImage/Core (5.13.0)
   - SDWebImageWebPCoder (0.9.0):
     - libwebp (~> 1.0)
@@ -808,7 +808,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 5fe0a96bef4935bbdfb02f59b910bf40d5526109
   react-native-notifications: 805108822ceff3440644d5701944f0cda35f5b4b
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
-  react-native-webview: 162b6453d074e0b1c7025242bb7a939b6f72b9e7
+  react-native-webview: 227ba9205abb8579116b69ea5774d9744267c65a
   React-perflogger: c9161ff0f1c769993cd11d2751e4331ff4ceb7cd
   React-RCTActionSheet: 2d885b0bea76a5254ef852939273edd8de116180
   React-RCTAnimation: 353fa4fc3c19060068832dd32e555182ec07be45
@@ -836,13 +836,13 @@ SPEC CHECKSUMS:
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
   RNLocalize: f567ea0e35116a641cdffe6683b0d212d568f32a
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
-  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  RNSVG: 3dd44d99d1c18e1342aee4bfa53ab3f6a8c4865f
   SDWebImage: 0327043dbb9533e75f2eff8445b3df0f2ceca6ac
   SDWebImageWebPCoder: 3dc350894112feab5375cfba9ce0986544a66a69
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 7ab6e3ee4ce47d7b789d1cb520163833e515f452
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: c853452a8b787a5ce55e05af4e886b7b092eb508
+PODFILE CHECKSUM: 4982b95ee9a16804b66e78493a56ad95e3878ced
 
 COCOAPODS: 1.11.3

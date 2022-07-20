@@ -5902,8 +5902,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 46EB2E00000000 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 1BEE828C124E6416179B904A9F66D794;
-			remoteInfo = React;
+			remoteGlobalIDString = 7ACAA9BE580DD31A5CB9D97C45D9492D;
+			remoteInfo = "React-Core";
 		};
 		46EB2E00026670 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27549,8 +27549,8 @@
 		};
 		46EB2E00026660 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = React;
-			target = 1BEE828C124E6416179B904A9F66D794 /* React */;
+			name = "React-Core";
+			target = 7ACAA9BE580DD31A5CB9D97C45D9492D /* React-Core */;
 			targetProxy = 46EB2E00026650 /* PBXContainerItemProxy */;
 		};
 		46EB2E00026680 /* PBXTargetDependency */ = {
