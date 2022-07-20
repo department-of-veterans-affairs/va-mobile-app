@@ -305,7 +305,7 @@ commands:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
       - run:
           working_directory: ~/project/VAMobile
-          command: python queue-builds.py
+          command: python3 queue-builds.py
 jobs:
   test:
     executor: ios
