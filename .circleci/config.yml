@@ -247,13 +247,16 @@ commands:
         type: string
       message:
         type: string
+      thread:
+        type: string
+        default: ''
     steps:
       - run:
           name: "Post message to slack"
           command: |
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
               -H 'Content-type: application/json' \
-              --data '{"channel":"'<<parameters.channelId>>'","text":"<<parameters.message>>"}' \
+              --data '{"channel":"'<<parameters.channelId>>'","text":"<<parameters.message>>", "thread_ts": "'<<parameters.thread>>'"}' \
               https://slack.com/api/chat.postMessage|
               jq -r '.ts')
             echo "export SLACK_THREAD_TS=${ts}" >> $BASH_ENV
@@ -296,7 +299,14 @@ commands:
       - retrieve_persisted_env:
           envVar: "SLACK_THREAD_TS"
           path: "threadTs"
-
+  notify_queueing_error:
+    steps:
+      - get_slack_thread
+      - get_slack_channel_id:
+          channelName: "va-mobile-app-automation-test-channel"
+      - send_slack_message:
+          message: "Queueing failed for ${CIRCLE_JOB}. Please check here for more details: ${CIRCLE_BUILD_URL}"
+          channelId: ${SLACK_CHANNEL_ID}
   queue_android_jobs:
     parameters:
       regex:
@@ -319,6 +329,8 @@ commands:
       - run:
           working_directory: ~/project/VAMobile
           command: python3 queue-builds.py
+      - notify_queueing_error:
+          when: on_fail
 jobs:
   test:
     executor: android
