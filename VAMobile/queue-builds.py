@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 ConfidenceThreshold = 1
-thisJob = os.getenv('CIRCLE_BUILD_NUM')
+thisJob = int(os.getenv('CIRCLE_BUILD_NUM'))
 regexTest = os.getenv('BUILD_REGEX')
 
 print(thisJob)
