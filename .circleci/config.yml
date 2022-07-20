@@ -305,7 +305,7 @@ commands:
       - get_slack_channel_id:
           channelName: "va-mobile-app-automation-test-channel"
       - send_slack_message:
-          message: "Queueing failed for ${CIRCLE_JOB}. Please check here for more details: ${CIRCLE_BUILD_URL}"
+          message: "Queueing failed for ${CIRCLE_JOB}. Please check here for more details: ${CIRCLE_BUILD_URL} "
           channelId: ${SLACK_CHANNEL_ID}
   queue_android_jobs:
     parameters:
