@@ -52,6 +52,8 @@ while True:
 # fins the oldest running job
   oldestJob = result[0]['build_num']
 #   check to see if oldest job is our job
+  print(oldestJob)
+  print(oldestJob == thisJob)
   if oldestJob == thisJob:
 #   if the oldest job is out job, gauge our confidence level.regexTest
 #   Since the API can sometimes not have all running jobs, we make sure we reach a certain threshold before we let our build go
