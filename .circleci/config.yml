@@ -311,7 +311,7 @@ commands:
           command: python3 queue-builds.py
 jobs:
   test:
-    executor: android
+    executor: ios
     steps:
       - checkout
       - queue_job:
