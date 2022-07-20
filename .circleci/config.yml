@@ -303,7 +303,7 @@ commands:
         type: string
     steps:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
-      - run: apt install python3-pip
+      - run: sudo apt install python3-pip
       - run: python3 -m pip install requests
       - run:
           working_directory: ~/project/VAMobile
