@@ -335,8 +335,6 @@ jobs:
     executor: android
     steps:
       - checkout
-      - queue_android_jobs:
-          regex: "^test"
       - install_deps
       - lint
       - jest
@@ -590,9 +588,3 @@ workflows:
               only: main
     jobs:
       - run_release_lanes
-  queue_workflow:
-    jobs:
-      - queue_work:
-          filters:
-            branches:
-              only: feature/queue-builds
