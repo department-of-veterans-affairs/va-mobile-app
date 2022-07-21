@@ -16,7 +16,7 @@ print(f"BUILD_REGEX: {regexTest}")
 confidence = 0
 runningTime = 0
 sleepTime = 11
-maxTime = 10 # 3600 #1 hour in seconds
+maxTime = 3600 #1 hour in seconds
 
 print(f"Queueing all jobs that match regex {regexTest}")
 
@@ -27,9 +27,9 @@ while True:
     params={'limit': 30, 'shallow': True, 'filter': 'running'},
     headers={'circle-token': os.getenv('CIRCLECI_TOKEN')}
   )
-#   print(response)
+  #print(response)
 
-  # get array of running jobs
+#   get array of running jobs
   jobs = response.json()
   print(f"there are currently {len(jobs)} running")
 
@@ -49,12 +49,12 @@ while True:
 #   sort all the running jobs by datetime
   result = list(sorted(result, key=lambda it: it['created_at']))
 
-# fins the oldest running job
+#   fins the oldest running job
   oldestJob = result[0]['build_num']
 #   check to see if oldest job is our job
   if oldestJob == thisJob:
-#   if the oldest job is out job, gauge our confidence level.regexTest
-#   Since the API can sometimes not have all running jobs, we make sure we reach a certain threshold before we let our build go
+#     if the oldest job is out job, gauge our confidence level.regexTest
+#     Since the API can sometimes not have all running jobs, we make sure we reach a certain threshold before we let our build go
     if confidence < ConfidenceThreshold:
       confidence += 1
       print("No previous workflows, but below confidence threshold.")
@@ -63,7 +63,7 @@ while True:
       print("Job at front of the queue, releasing container to continue")
       break
   else:
-    # not at the front of the line. reset confidence and pause before rerunning
+#     not at the front of the line. reset confidence and pause before rerunning
     confidence = 0
     print(f"This build ({thisJob}) is queued, waiting for {oldestJob} fo finish")
     print(f"totalCurrent wait time is {runningTime} seconds" )
@@ -86,7 +86,7 @@ while True:
     )
 #     sleep to make sure api cancels job before exiting
     time.sleep(10)
-    # send slack message about queue error
+#     send slack message about queue error
     sys.exit("canceled build")
 
 #   still have time left to wait. sleep the loop and update wait time
