@@ -73,7 +73,11 @@ while True:
     rs = requests.post(
       'https://slack.com/api/chat.postMessage',
       headers={"Authorization": f"Bearer {os.getenv('SLACK_API_TOKEN')}", "Content-Type":"application/json"},
-      json={"channel":"va-mobile-app-automation-test-channel","text": f"A CircleCi build job exceeded queue time. Please see {os.getenv('CIRCLE_BUILD_URL')}"}
+      json={"channel":"va-mobile-app-automation-test-channel",
+        "text": f"A CircleCi build job exceeded queue time. Please see {os.getenv('CIRCLE_BUILD_URL')}",
+        "as_user": False,
+        "icon_emoji": ":sad-robot:"
+      }
     )
     print(rs.json())
     cancelResp = requests.post(
