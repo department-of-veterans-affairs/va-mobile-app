@@ -74,7 +74,7 @@ while True:
       'https://slack.com/api/chat.postMessage',
       headers={"Authorization": f"Bearer {os.getenv('SLACK_API_TOKEN')}", "Content-Type":"application/json"},
       json={"channel":"va-mobile-app-automation-test-channel",
-        "text": f"A CircleCi build job exceeded queue time. <Please see CircleCI to see what is blocking the queue|{os.getenv('CIRCLE_BUILD_URL')}>",
+        "text": f"A CircleCi build job exceeded queue time. <{os.getenv('CIRCLE_BUILD_URL')}|Please see CircleCI to see what is blocking the queue>",
         "icon_emoji": ":sad_robot:",
         "username": "Build Queue Robot"
       }
