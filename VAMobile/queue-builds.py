@@ -75,7 +75,7 @@ while True:
       headers={"Authorization": f"Bearer {os.getenv('SLACK_API_TOKEN')}", "Content-Type":"application/json"},
       json={"channel":"va-mobile-app-automation-test-channel",
         "text": f"A CircleCi build job exceeded queue time. Please see {os.getenv('CIRCLE_BUILD_URL')}",
-        "icon_emoji": ":sad-robot:"
+        "icon_emoji": ":sad_robot:"
       }
     )
     print(rs.json())
