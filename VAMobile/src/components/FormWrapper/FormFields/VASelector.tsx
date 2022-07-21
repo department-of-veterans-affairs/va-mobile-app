@@ -121,7 +121,7 @@ const VASelector: FC<VASelectorProps> = ({
   return (
     <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={a11yState} accessibilityRole={a11yRole} accessibilityLabel={labelToUse} {...hintProp}>
       <Box>
-        {!!error && <Box {...errorBoxProps}>{renderInputError(theme, error)}</Box>}
+        {!!error && <Box {...errorBoxProps}>{renderInputError(error)}</Box>}
         <Box flexDirection="row">
           <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
           <Box {...selectorBoxProps}>
