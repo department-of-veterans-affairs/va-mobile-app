@@ -328,7 +328,7 @@ commands:
           command: python3 queue-builds.py
 jobs:
   test:
-    executor: android
+    executor: default
     steps:
       - checkout
       - install_deps
