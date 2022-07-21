@@ -39,11 +39,9 @@ commands:
             sudo gem install bundler
   install_python:
     steps:
-      - run: sudo apt update
-      - run: sudo apt install python3
-      - run: python -m ensurepip --upgrade
-      - run: python -m pip install requests
-
+      - run: sudo apt-get update
+      - run: sudo apt-get install python3-pip
+      - run: python3 -m pip install requests
   bundle_app:
     description: "Bundles the app for the OS specified"
     parameters:
@@ -314,9 +312,7 @@ commands:
         type: string
     steps:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
-      - run: sudo apt-get update
-      - run: sudo apt-get install python3-pip
-      - run: python3 -m pip install requests
+      - install_python
       - run:
           working_directory: ~/project/VAMobile
           command: python3 queue-builds.py
@@ -469,11 +465,6 @@ jobs:
           os: "ios"
       - ios_fastlane:
           lane: "rc"
-  queue_work:
-    executor: default
-    steps:
-      - install_python
-      - run: echo "${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
 workflows:
   pr:
     jobs:
