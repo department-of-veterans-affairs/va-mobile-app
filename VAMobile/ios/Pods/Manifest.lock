@@ -396,9 +396,9 @@ PODS:
     - React-Core
   - react-native-document-picker (8.1.1):
     - React-Core
-  - react-native-image-picker (4.7.1):
+  - react-native-image-picker (4.8.4):
     - React-Core
-  - react-native-notifications (4.1.3):
+  - react-native-notifications (4.3.1):
     - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
@@ -506,7 +506,7 @@ PODS:
     - React-Core
   - RNKeychain (8.0.0):
     - React-Core
-  - RNLocalize (2.1.7):
+  - RNLocalize (2.2.2):
     - React-Core
   - RNScreens (3.15.0):
     - React-Core
@@ -805,8 +805,8 @@ SPEC CHECKSUMS:
   React-logger: ca970551cb7eea2fd814d0d5f6fc1a471eb53b76
   react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
   react-native-document-picker: f68191637788994baed5f57d12994aa32cf8bf88
-  react-native-image-picker: 5fe0a96bef4935bbdfb02f59b910bf40d5526109
-  react-native-notifications: 805108822ceff3440644d5701944f0cda35f5b4b
+  react-native-image-picker: cffb727cf2f59bd5c0408e30b3dbe0b935f88835
+  react-native-notifications: 33ec77006f7987bb22de8f1665889abc633b9196
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-webview: 227ba9205abb8579116b69ea5774d9744267c65a
   React-perflogger: c9161ff0f1c769993cd11d2751e4331ff4ceb7cd
@@ -834,7 +834,7 @@ SPEC CHECKSUMS:
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
-  RNLocalize: f567ea0e35116a641cdffe6683b0d212d568f32a
+  RNLocalize: 95a43f85e41a966be7bc9cff2437128911c52da0
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   RNSVG: 3dd44d99d1c18e1342aee4bfa53ab3f6a8c4865f
   SDWebImage: 0327043dbb9533e75f2eff8445b3df0f2ceca6ac
