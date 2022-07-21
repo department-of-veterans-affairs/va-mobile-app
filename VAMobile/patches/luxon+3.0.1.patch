@@ -1,0 +1,14 @@
+diff --git a/node_modules/luxon/package.json b/node_modules/luxon/package.json
+index 2e9bd6e..4c378d0 100644
+--- a/node_modules/luxon/package.json
++++ b/node_modules/luxon/package.json
+@@ -12,7 +12,8 @@
+     ".": {
+       "import": "./src/luxon.js",
+       "require": "./build/node/luxon.js"
+-    }
++    },
++    "./package.json": "./package.json"
+   },
+   "scripts": {
+     "build": "babel-node tasks/buildAll.js",
