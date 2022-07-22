@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, findByTypeWithText, findByTypeWithSubstring, mockNavProps, render, RenderAPI } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { UserDataProfile } from 'store/api/types'
 import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
@@ -17,7 +17,7 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
 import { SnackbarMessages } from 'components/SnackBar'
 
-const snackbarMessages : SnackbarMessages = {
+const snackbarMessages: SnackbarMessages = {
   successMsg: 'Mailing address saved',
   errorMsg: 'Mailing address could not be saved',
 }
@@ -702,8 +702,8 @@ context('EditAddressScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
 
-      expect(findByTypeWithText(testInstance, TextView, "Street address is required")).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, "Postal code is required")).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
     })
   })
 
@@ -718,7 +718,6 @@ context('EditAddressScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
       expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
