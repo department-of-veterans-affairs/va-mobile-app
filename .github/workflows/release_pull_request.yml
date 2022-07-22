@@ -1,0 +1,70 @@
+name: "Merge Release to Main and Create PR to Develop"
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        type: string
+        required: true
+    secrets:
+      GH_ACTIONS_PAT:
+        description: 'PAT token from composite parent workflow'
+        required: true
+    outputs:
+      devPrUrl:
+        value: ${{jobs.create_prs.outputs.devPrUrl}}
+      releaseHash:
+        value: ${{jobs.create_prs.outputs.releaseHash}}
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version Number (eg. v1.1.0)'
+        required: true
+        type: string
+
+jobs:
+  create_prs:
+    runs-on: ubuntu-latest
+    outputs:
+      devPrUrl: ${{steps.urls.outputs.dev}}
+      releaseHash: ${{steps.urls.outputs.release}}
+    steps:
+      - name: 'Checkout repo'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_ACTIONS_PAT }}
+      - name: 'Set up GH CLI secret'
+        run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
+      - name: 'Log into GH CLI'
+        run: gh auth login --with-token < token.txt
+      - name: 'Create PR to merge changes back to develop'
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git checkout release/${{inputs.version}}
+          git checkout -b dev-to-release
+          git push -u origin dev-to-release
+          echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
+      - name: 'Merge changes to main and tag for release build'
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git checkout main
+          git checkout release/${{inputs.version}}
+          git checkout -b merge-to-main
+          git merge -s ours main -m "merge main changes"
+          git checkout main
+          git merge merge-to-main --squash
+          git commit  -m ${{inputs.version}}
+          git push
+          git tag -a ${{inputs.version}} -m ${{inputs.version}}
+          git push origin ${{inputs.version}}
+          echo "RELEASE_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - name: 'Set Outputs'
+        id: urls
+        run: |
+          echo "::set-output name=dev::${{env.DEV_PR}}"
+          echo "::set-output name=release::${{env.RELEASE_HASH}}"
+

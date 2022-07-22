@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import _ from 'underscore'
@@ -14,9 +15,10 @@ import {
 } from 'store/api/types'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PersonalInformationState } from 'store/slices'
+import { RootState } from 'store'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
@@ -300,9 +302,9 @@ type AppealCurrentStatusProps = {
 
 const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const launchExternalLink = useExternalLink()
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const marginTop = theme.dimensions.condensedMarginBetween
   const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, profile?.fullName || '', t, docketName || 'UNDF DOCKET')
@@ -349,7 +351,6 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             text: details[4],
             linkToRedirect: LINK_URL_DECISION_REVIEWS,
             variant: 'MobileBodyLink',
-            color: 'link',
           },
         ]
         return (
@@ -373,9 +374,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             </TextView>
             <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
               <TextView variant="MobileBody">{details[1]}</TextView>
-              <TextView variant="MobileBodyLink" color="link">
-                {details[2]}
-              </TextView>
+              <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
             </TextView>
           </Box>
@@ -388,11 +387,9 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             </TextView>
             <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
               <TextView variant="MobileBody">{details[1]}</TextView>
-              <TextView variant="MobileBodyLink" color="link">
-                {details[2]}
-              </TextView>
+              <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
-              <TextView variant="MobileBodyLink" color="link" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
+              <TextView variant="MobileBodyLink" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
                 {details[4]}
               </TextView>
               <TextView variant="MobileBody">.</TextView>

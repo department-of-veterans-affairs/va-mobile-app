@@ -1,29 +1,32 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, AppState, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
-import { StackNavigationOptions } from '@react-navigation/stack'
-import { TFunction } from 'i18next'
-import { useTranslation as realUseTranslation } from 'react-i18next'
+import { StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
+import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useTranslation } from 'react-i18next'
 import React from 'react'
 
-import { AccessibilityState, ErrorsState, PatientState, SecureMessagingState, StoreState } from 'store'
+import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
+import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
+import { AppDispatch, RootState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
+import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
+import { capitalizeFirstLetter, stringToTitleCase } from './formattingUtils'
 import { getHeaderStyles } from 'styles/common'
-import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
-import { updateAccessibilityFocus } from 'store/actions'
 import HeaderTitle from 'components/HeaderTitle'
 
 /**
@@ -32,14 +35,12 @@ import HeaderTitle from 'components/HeaderTitle'
  * @returns boolean to show the error
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
-  const { errorsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
-    return state.errors
-  })
+  const { errorsByScreenID } = useSelector<RootState, ErrorsState>((state) => state.errors)
   return useDowntime(DowntimeScreenIDToFeature[currentScreenID]) || !!errorsByScreenID[currentScreenID]
 }
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
-  const { downtimeWindowsByFeature } = useSelector<StoreState, ErrorsState>((state) => state.errors)
+  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const mw = downtimeWindowsByFeature[feature]
   if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
     return true
@@ -54,7 +55,7 @@ export const useDowntime = (feature: DowntimeFeatureType): boolean => {
  * @returns a function to calculate 'value' based on fontScale
  */
 export const useFontScale = (): ((val: number) => number) => {
-  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
 
   return (value: number): number => {
     const pixelRatio = PixelRatio.getFontScale()
@@ -69,15 +70,6 @@ export const useFontScale = (): ((val: number) => number) => {
  */
 export const useTheme = (): VATheme => {
   return useContext<VATheme>(ThemeContext)
-}
-
-/** Provides a helper function to get typed checked namespace for VA
- * @param ns - the namespace
- * @returns the translation function
- */
-export const useTranslation = (ns?: i18n_NS): TFunction => {
-  const { t } = realUseTranslation(ns)
-  return t
 }
 
 /**
@@ -154,7 +146,7 @@ type RouteNavParams<T extends ParamListBase> = {
 export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref: MutableRefObject<any> = useRef<T>(null)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const screanReaderEnabled = useIsScreanReaderEnabled()
 
   const setFocus = useCallback(() => {
@@ -223,7 +215,7 @@ export function useIsScreanReaderEnabled(): boolean {
  * @returns an alert showing user they are leaving the app
  */
 export function useExternalLink(): (url: string) => void {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (url: string) => {
     if (url.startsWith(WebProtocolTypesConstants.http)) {
@@ -246,7 +238,7 @@ export function useExternalLink(): (url: string) => void {
  * @returns boolean showing if the user has cerner facilities
  */
 export const useHasCernerFacilities = (): boolean => {
-  const { cernerFacilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  const { cernerFacilities } = useSelector<RootState, PatientState>((state) => state.patient)
   return cernerFacilities.length > 0
 }
 
@@ -263,7 +255,7 @@ export type UseDestructiveAlertProps = {
   /** message of alert */
   message?: string // message for the alert
   /** ios destructive index */
-  destructiveButtonIndex: number
+  destructiveButtonIndex?: number
   /** ios cancel index */
   cancelButtonIndex: number
   /** options to show in alert */
@@ -285,7 +277,7 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
       ActionSheetIOS.showActionSheetWithOptions(
         {
           ...remainingProps,
-          options: buttons.map((button) => button.text),
+          options: buttons.map((button) => stringToTitleCase(button.text)),
         },
         (buttonIndex) => {
           const onPress = buttons[buttonIndex]?.onPress
@@ -317,8 +309,8 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
           if (scrollPoint) {
             messageRef.current.measureLayout(
               scrollPoint,
-              (_, y, __, height) => {
-                currentObject.scrollTo({ y: y * height, animated: false })
+              (_, y) => {
+                currentObject.scrollTo({ y: y, animated: true })
               },
               () => {
                 currentObject.scrollTo({ y: 0 })
@@ -330,7 +322,7 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
       if (shouldFocus) {
         setFocus()
       }
-    }, 200)
+    }, 400)
     return () => clearTimeout(timeOut)
   }, [messageRef, setFocus, shouldFocus])
 
@@ -343,10 +335,10 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
  * @returns message state and the setMessage function
  */
 export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const { signature, loadingSignature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { signature, loadingSignature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const [message, setMessage] = useState('')
   useEffect(() => {
-    if (signature && signature.includeSignature) {
+    if (PREPOPULATE_SIGNATURE && signature && signature.includeSignature) {
       setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
     }
   }, [loadingSignature, signature])
@@ -360,7 +352,7 @@ export function useMessageWithSignature(): [string, React.Dispatch<React.SetStat
  * @returns boolean if the message is valid
  */
 export function useValidateMessageWithSignature(): (message: string) => boolean {
-  const { signature } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { signature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   return (message: string): boolean => {
     let isMessageBlank = !!message
@@ -388,7 +380,7 @@ export function useAttachments(): [
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
   const destructiveAlert = useDestructiveAlert()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
     setAttachmentsList([...attachmentsList, attachmentFileToAdd])
@@ -400,7 +392,7 @@ export function useAttachments(): [
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
     destructiveAlert({
-      title: t('secureMessaging.attachments.removeAttachmentAreYouSure'),
+      title: t('health:secureMessaging.attachments.removeAttachmentAreYouSure'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
@@ -418,4 +410,97 @@ export function useAttachments(): [
   }
 
   return [attachmentsList, addAttachment, removeAttachment]
+}
+
+export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
+
+/**
+ * Returns a wrapper to showActionSheetWithOptions that converts iOS options to title case
+ */
+export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
+  const { showActionSheetWithOptions } = useActionSheet()
+
+  return (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => {
+    // Use title case for iOS, sentence case for Android
+    const casedOptionText = options.options.map((optionText) => {
+      if (isIOS()) {
+        return stringToTitleCase(optionText)
+      } else {
+        return capitalizeFirstLetter(optionText)
+      }
+    })
+
+    const casedOptions = {
+      ...options,
+      options: casedOptionText,
+    }
+
+    showActionSheetWithOptions(casedOptions, callback)
+  }
+}
+
+// function that returns if the device is on portrait mode or not
+export function useOrientation(): boolean {
+  const getOrientation = () => {
+    const dim = Dimensions.get('screen')
+    return dim.height >= dim.width
+  }
+
+  const [isPortrait, setIsPortrait] = useState<boolean>(getOrientation())
+
+  useEffect(() => {
+    const sub = Dimensions.addEventListener('change', () => {
+      setIsPortrait(getOrientation())
+    })
+
+    return () => {
+      sub.remove()
+    }
+  }, [])
+
+  return isPortrait
+}
+
+/**
+ * Hook to catch IOS swipes and Android lower nav back events
+ *
+ * @param navigation - navigation object passed to a screen
+ * @param callback - function to execute when 'beforeRemove' is called
+ */
+export function useBeforeNavBackListener(
+  navigation: StackNavigationProp<ParamListBase, keyof ParamListBase>,
+  callback: (
+    e: EventArg<'beforeRemove', true, { action: Readonly<{ type: string; payload?: object | undefined; source?: string | undefined; target?: string | undefined }> }>,
+  ) => void,
+): void {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      callback(e)
+    })
+
+    return unsubscribe
+  })
+}
+
+/**
+ * Hook that is called when app moves from the background to the foreground
+ *
+ * @param callback - function to execute when app is back in the foreground
+ */
+export function useOnResumeForeground(callback: () => void): void {
+  const appState = useRef(AppState.currentState)
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        // App has come back to the foreground!
+        callback()
+      }
+
+      appState.current = nextAppState
+    })
+
+    return () => {
+      subscription.remove()
+    }
+  }, [callback])
 }

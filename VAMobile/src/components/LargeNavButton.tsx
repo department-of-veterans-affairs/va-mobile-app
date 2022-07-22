@@ -128,9 +128,11 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             </TextView>
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
-          <TextView color={textColor}>{subText}</TextView>
+          <TextView variant={'MobileBody'} color={textColor}>
+            {subText}
+          </TextView>
         </Box>
-        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
+        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>
     </Box>
   )

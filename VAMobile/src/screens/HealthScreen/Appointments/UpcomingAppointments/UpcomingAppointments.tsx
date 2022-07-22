@@ -1,29 +1,31 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 import _ from 'underscore'
 
-import { AppointmentsDateRange, getAppointmentsInDateRange } from 'store/actions'
-import { AppointmentsState, StoreState } from 'store/reducers'
+import { AppointmentsDateRange, AppointmentsState, getAppointmentsInDateRange } from 'store/slices'
+import { AppointmentsGroupedByYear, ScreenIDTypesConstants } from 'store/api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types'
+import { RootState } from 'store'
 import { TimeFrameTypeConstants } from 'constants/appointments'
+import { deepCopyObject } from 'utils/common'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tc = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useDispatch()
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
-  const currentPageUpcomingAppointmentsByYear = currentPageAppointmentsByYear.upcoming
+  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()

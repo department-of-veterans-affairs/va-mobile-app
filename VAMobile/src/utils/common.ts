@@ -1,19 +1,20 @@
-import { Action } from 'redux'
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
 import { Dimensions, TextInput } from 'react-native'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { RefObject } from 'react'
 import { contains, isEmpty, map } from 'underscore'
 
+import { AppDispatch } from 'store'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { ErrorObject } from 'store/api'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { PhoneData } from 'store/api/types/PhoneData'
-import { StoreState, updatBottomOffset } from 'store'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
-import { ThunkDispatch } from 'redux-thunk'
 import { formatPhoneNumber } from './formattingUtils'
+import { updatBottomOffset } from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
 
 /**
@@ -45,6 +46,29 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
   })
 
   return generateTestID(listOfTextID.join(' '), '')
+}
+
+/**
+ * Generate a testID string for the array of text lines passed into TextLineWithIcon for list item - includes accessibility labels for icons
+ */
+export const generateTestIDForInlineTextIconList = (listOfText: Array<InlineTextWithIconsProps>, t: TFunction): string => {
+  const listOfTextID: Array<string> = []
+
+  listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'UnreadIcon') {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
+      listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
+    }
+    listOfTextID.push(listOfTextItem.leftTextProps.text)
+
+    if (listOfTextItem.rightTextProps?.text) {
+      listOfTextID.push(listOfTextItem.rightTextProps.text)
+    }
+  })
+
+  return listOfTextID.join(' ')
 }
 
 /**
@@ -141,19 +165,52 @@ export const sanitizeString = (val: string): string => {
  * Example: '(12 MB)'
  *
  * @param bytes - given number to convert mb, kb, or bytes representation
+ * @param t - translation function
+ * @param includeParens - whether to display parenthesis around the size. Defaults to true
  */
-export const bytesToFinalSizeDisplay = (bytes: number, t: TFunction): string => {
+export const bytesToFinalSizeDisplay = (bytes: number, t: TFunction, includeParens = true): string => {
+  let fileSize = ''
+
   if (bytes < 10) {
     // Less than 0.01 KB, display with Bytes size unit
-    return `(${bytes} ${t('common:Bytes')})`
+    fileSize = `${bytes} ${t('common:Bytes')}`
   } else if (bytes < 10000) {
     // Less than 0.01 MB, display with KB size unit
     const kb = bytesToKilobytes(bytes)
-    return `(${kb} ${t('common:KB')})`
+    fileSize = `${kb} ${t('common:KB')}`
   } else {
     const mb = bytesToMegabytes(bytes)
-    return `(${mb} ${t('common:MB')})`
+    fileSize = `${mb} ${t('common:MB')}`
   }
+
+  return includeParens ? `(${fileSize})` : fileSize
+}
+
+/**
+ * Converts the given bytes to a size display string that includes the size unit and parentheses. Rounded to two decimals
+ * Example: '(12 MB)'
+ * Strings returned use the accessibility labels for screenreaders
+ *
+ * @param bytes - given number to convert mb, kb, or bytes representation
+ * @param t - translation function
+ * @param includeParens - whether to display parenthesis around the size. Defaults to true
+ */
+export const bytesToFinalSizeDisplayA11y = (bytes: number, t: TFunction, includeParens = true): string => {
+  let fileSize = ''
+
+  if (bytes < 10) {
+    // Less than 0.01 KB, display with Bytes size unit
+    fileSize = `${bytes} ${t('common:Bytes')}`
+  } else if (bytes < 10000) {
+    // Less than 0.01 MB, display with KB size unit
+    const kb = bytesToKilobytes(bytes)
+    fileSize = `${kb} ${t('common:KB.a11y')}`
+  } else {
+    const mb = bytesToMegabytes(bytes)
+    fileSize = `${mb} ${t('common:MB.a11y')}`
+  }
+
+  return includeParens ? `(${fileSize})` : fileSize
 }
 
 /**
@@ -227,36 +284,38 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
  *
  * @param error - error object coming from exception in catch
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isErrorObject = (error: any): error is ErrorObject => {
   return ['json', 'stack', 'networkError'].some((item) => item in error)
+}
+
+export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
+  if (item) {
+    return JSON.parse(JSON.stringify(item))
+  }
+
+  return item as T
 }
 
 /**
  * Function to show snackbar
  * @param message - snackbar message
  * @param dispatch - dispatch function to change the bottom offset
- * @param confirmAction - action to perform on undo
+ * @param actionPressed - action to perform on undo
  * @param isUndo - if user pressed undo it will not show undo again
  * @param isError - if it is an error will show the error icon
- * @param withNav - offset snackbar to be over the bottom nav
+ * @param withNavBar - offset snackbar to be over the bottom nav
  * @returns snackbar
  */
-export function showSnackBar(
-  message: string,
-  dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
-  confirmAction?: () => void,
-  isUndo?: boolean,
-  isError?: boolean,
-  withNavBar = false,
-): void {
+export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
+  snackBar.hideAll()
   dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
   snackBar.show(message, {
     type: 'custom_snackbar',
     data: {
-      onConfirmAction: () => {
-        if (confirmAction) {
-          confirmAction()
+      onActionPressed: () => {
+        if (actionPressed) {
+          actionPressed()
         }
       },
       isUndo,
@@ -273,4 +332,29 @@ export function showSnackBar(
 
 export const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
   return map(itemTexts, 'text').join(' ')
+}
+
+/**
+ * Provides a name and size as strings for either an image picker or document picker file
+ * @param attachment - response from the image or document picker
+ * @param t - translation function
+ * @param fileSizeParens - whether to include parenthesis around the file size
+ */
+export const getFileDisplay = (attachment: ImagePickerResponse | DocumentPickerResponse, t: TFunction, fileSizeParens: boolean): { fileName: string; fileSize: string } => {
+  let fileName: string | undefined
+  let fileSize: number | undefined
+
+  if ('assets' in attachment) {
+    const { fileName: name, fileSize: size } = attachment.assets ? attachment.assets[0] : ({} as Asset)
+    fileName = name || ''
+    fileSize = size || 0
+  } else if ('size' in attachment) {
+    const { name, size } = attachment
+    fileName = name || ''
+    fileSize = size || 0
+  }
+
+  const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, t, fileSizeParens) : ''
+
+  return { fileName: fileName || '', fileSize: formattedFileSize }
 }

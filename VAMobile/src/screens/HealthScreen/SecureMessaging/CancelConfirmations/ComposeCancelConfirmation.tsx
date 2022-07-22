@@ -1,9 +1,13 @@
+import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
-import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
-import { useDestructiveAlert, useRouteNavigation, useTranslation } from 'utils/hooks'
-import { useDispatch } from 'react-redux'
+import { SnackbarMessages } from 'components/SnackBar'
+import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import { useDestructiveAlert, useRouteNavigation } from 'utils/hooks'
+import { useState } from 'react'
 
 type ComposeCancelConfirmationProps = {
   /** Contents of the message */
@@ -17,75 +21,77 @@ type ComposeCancelConfirmationProps = {
   /** id of draft message */
   draftMessageID?: number
 }
-export function useComposeCancelConfirmation(): (props: ComposeCancelConfirmationProps) => void {
-  const t = useTranslation(NAMESPACE.HEALTH)
+
+export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void] {
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveAlert()
   const goToDrafts = useGoToDrafts()
+  const [isDiscarded, setIsDiscarded] = useState(false)
 
-  return (props: ComposeCancelConfirmationProps) => {
-    const { replyToID, messageData, draftMessageID, isFormValid, origin } = props
-    const isReply = origin === FormHeaderTypeConstants.reply
-    const isEditDraft = origin === FormHeaderTypeConstants.draft
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('secureMessaging.draft.saved'),
+    errorMsg: t('secureMessaging.draft.saved.error'),
+  }
 
-    const resetAlerts = () => {
-      dispatch(resetSendMessageFailed())
-      dispatch(resetSaveDraftComplete())
-      dispatch(resetSaveDraftFailed())
-      dispatch(resetHasLoadedRecipients())
-    }
+  return [
+    isDiscarded,
+    (props: ComposeCancelConfirmationProps) => {
+      const { replyToID, messageData, draftMessageID, isFormValid, origin } = props
+      const isReply = origin === FormHeaderTypeConstants.reply
+      const isEditDraft = origin === FormHeaderTypeConstants.draft
 
-    const onSaveDraft = (): void => {
-      if (!isFormValid) {
-        navigateTo('ComposeMessage', { saveDraftConfirmFailed: true })()
-      } else {
-        dispatch(saveDraft(messageData, draftMessageID, !!replyToID, replyToID, true))
-        dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
-        resetAlerts()
+      const resetAlerts = () => {
+        dispatch(resetSendMessageFailed())
+        dispatch(resetSaveDraftComplete())
+        dispatch(resetSaveDraftFailed())
+        dispatch(resetHasLoadedRecipients())
+      }
 
-        // If we've been to the drafts folder before, we can go directly there.  Otherwise, we want to pop back to the SecureMessaging
-        // screen first, then add the Drafts folder to the stack
-        if (isEditDraft) {
-          goToDrafts(true)
+      const onSaveDraft = (): void => {
+        if (!isFormValid) {
+          navigateTo('ComposeMessage', { saveDraftConfirmFailed: true })()
         } else {
-          navigateTo('SecureMessaging')()
-          goToDrafts(true)
+          dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
+          dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
         }
       }
-    }
 
-    const onDiscard = (): void => {
-      resetAlerts()
-      if (isReply && replyToID) {
-        navigateTo('ViewMessageScreen', { messageID: replyToID })()
-      } else if (isEditDraft) {
-        goToDrafts(false)
-      } else {
-        navigateTo('SecureMessaging')()
+      const onDiscard = (): void => {
+        setIsDiscarded(true)
+        resetAlerts()
+        if (isReply && replyToID) {
+          navigateTo('ViewMessageScreen', { messageID: replyToID })()
+        } else if (isEditDraft) {
+          goToDrafts(false)
+        } else {
+          navigateTo('SecureMessaging')()
+        }
       }
-    }
 
-    confirmationAlert({
-      title: t('secureMessaging.composeMessage.cancel.saveDraftQuestion'),
-      message: t('secureMessaging.composeMessage.cancel.saveDraftDescription'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('common:cancel'),
-        },
-        {
-          text: t('secureMessaging.composeMessage.cancel.discard'),
-          onPress: onDiscard,
-        },
-        {
-          text: t('secureMessaging.composeMessage.cancel.saveDraft'),
-          onPress: onSaveDraft,
-        },
-      ],
-    })
-  }
+      confirmationAlert({
+        title: t('secureMessaging.composeMessage.cancel.saveDraftQuestion'),
+        message: t('secureMessaging.composeMessage.cancel.saveDraftDescription'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: tc('cancel'),
+          },
+          {
+            text: t('secureMessaging.composeMessage.cancel.discard'),
+            onPress: onDiscard,
+          },
+          {
+            text: t('secureMessaging.composeMessage.cancel.saveDraft'),
+            onPress: onSaveDraft,
+          },
+        ],
+      })
+    },
+  ]
 }
 
 export function useGoToDrafts(): (draftSaved: boolean) => void {

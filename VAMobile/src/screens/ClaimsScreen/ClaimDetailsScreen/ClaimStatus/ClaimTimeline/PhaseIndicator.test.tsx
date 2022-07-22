@@ -1,25 +1,23 @@
 import React from 'react'
 
-import { context, renderWithProviders } from "testUtils";
-import PhaseIndicator from "./PhaseIndicator";
-import { act, ReactTestInstance } from "react-test-renderer";
-import { Box, TextView, VAIcon } from "components";
+import { context, render, RenderAPI } from 'testUtils'
+import PhaseIndicator from './PhaseIndicator'
+import { ReactTestInstance } from 'react-test-renderer'
+import { Box, TextView, VAIcon } from 'components'
 
 context('PhaseIndicator', () => {
-
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTextInstance = (phase:number, current: number) => {
-    act(() => {
-      component = renderWithProviders(<PhaseIndicator phase={phase} current={current} />)
-    })
-    testInstance = component.root
+  const initializeTextInstance = (phase: number, current: number) => {
+    component = render(<PhaseIndicator phase={phase} current={current} />)
+
+    testInstance = component.container
   }
 
   // make sure the component works
   it('initializes correctly', async () => {
-    await initializeTextInstance(1,1)
+    await initializeTextInstance(1, 1)
     expect(component).toBeTruthy()
   })
 
@@ -42,11 +40,11 @@ context('PhaseIndicator', () => {
     beforeEach(() => {
       initializeTextInstance(1, 1)
     })
-    it('should render a white number on a blue background', async () => {
+    it('should render a #f1f1f1 number on a blue background', async () => {
       const text = testInstance.findAllByType(TextView)[0]
       expect(text).toBeTruthy()
       expect(text.props.children).toEqual(1)
-      expect(text.props.color).toEqual('claimPhase')
+      expect(text.props.variant).toEqual('ClaimPhase') // variant has a default color of f1f1f1
       expect(testInstance.findAllByType(Box)[0].props.backgroundColor).toEqual('currentPhase')
     })
   })
@@ -60,9 +58,8 @@ context('PhaseIndicator', () => {
       const text = testInstance.findAllByType(TextView)[0]
       expect(text).toBeTruthy()
       expect(text.props.children).toEqual(2)
-      expect(text.props.color).toEqual('claimPhase')
+      expect(text.props.variant).toEqual('ClaimPhase') // variant has a default color of f1f1f1
       expect(testInstance.findAllByType(Box)[0].props.backgroundColor).toEqual('upcomingPhase')
     })
   })
-
 })

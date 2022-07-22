@@ -4,13 +4,13 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockStore, renderWithProviders, findByTestID } from 'testUtils'
+import { context, render, findByTestID, RenderAPI } from 'testUtils'
 import AddressValidation from './AddressValidation'
-import { initialPersonalInformationState, InitialState } from 'store/reducers'
 import { AddressData, AddressValidationScenarioTypes, AddressValidationScenarioTypesConstants } from 'store/api/types'
-import { AccordionCollapsible, TextView, VASelector } from 'components'
-import { updateAddress } from 'store'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
+import { CollapsibleAlert, TextView } from 'components'
+import { updateAddress, initialPersonalInformationState, InitialState } from 'store/slices'
+import { Pressable } from 'react-native'
+import { SnackbarMessages } from 'components/SnackBar'
 
 const mockAddress: AddressData = {
   addressLine1: '2248 San Miguel Ave.',
@@ -21,6 +21,11 @@ const mockAddress: AddressData = {
   countryCodeIso3: 'USA',
   stateCode: 'CA',
   zipCode: '95403',
+}
+
+const snackbarMessages : SnackbarMessages = {
+  successMsg: 'address saved',
+  errorMsg: 'address could not be saved',
 }
 
 const mockedNavigate = jest.fn()
@@ -39,8 +44,8 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
-jest.mock('../../store/actions', () => {
-  let actual = jest.requireActual('../../store/actions')
+jest.mock('../../store/slices', () => {
+  let actual = jest.requireActual('../../store/slices')
   return {
     ...actual,
     updateAddress: jest.fn(() => {
@@ -53,25 +58,23 @@ jest.mock('../../store/actions', () => {
 })
 
 context('AddressValidation', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
+
   let testInstance: ReactTestInstance
 
   const prepInstanceWithStore = (addressValidationScenario: AddressValidationScenarioTypes = AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE) => {
-    store = mockStore({
-      ...InitialState,
-      personalInformation: {
-        ...initialPersonalInformationState,
-        addressValidationScenario,
-        addressData: mockAddress,
+    component = render(<AddressValidation addressEntered={mockAddress} addressId={12345} snackbarMessages={snackbarMessages} />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: {
+          ...initialPersonalInformationState,
+          addressValidationScenario,
+          addressData: mockAddress,
+        },
       },
     })
 
-    act(() => {
-      component = renderWithProviders(<AddressValidation addressEntered={mockAddress} addressId={12345} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -87,7 +90,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.BAD_UNIT_NUMBER_OVERRIDE)
 
       act(() => {
-        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
+        testInstance.findByType(CollapsibleAlert).findByType(Pressable).props.onPress()
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -107,7 +110,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE)
 
       act(() => {
-        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
+        testInstance.findByType(CollapsibleAlert).findByType(Pressable).props.onPress()
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -127,7 +130,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
 
       act(() => {
-        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
+        testInstance.findByType(CollapsibleAlert).findByType(Pressable).props.onPress()
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -147,7 +150,7 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE)
 
       act(() => {
-        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
+        testInstance.findByType(CollapsibleAlert).findByType(Pressable).props.onPress()
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -167,12 +170,10 @@ context('AddressValidation', () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
 
       act(() => {
-        testInstance.findByType(AccordionCollapsible).findByType(Pressable).props.onPress()
+        testInstance.findByType(CollapsibleAlert).findByType(Pressable).props.onPress()
       })
 
-      testInstance.findAllByType(VASelector)[0].findByType(TouchableWithoutFeedback).props.onPress()
-
-      const useThisAddressButton = findByTestID(testInstance, 'Use This Address')
+      const useThisAddressButton = findByTestID(testInstance, 'Use this address')
       expect(useThisAddressButton).toBeTruthy()
 
       useThisAddressButton.props.onPress()

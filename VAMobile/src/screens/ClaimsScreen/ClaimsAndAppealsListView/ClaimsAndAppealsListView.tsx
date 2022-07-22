@@ -1,14 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getClaimsAndAppeals } from 'store/actions'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 export const ClaimTypeConstants: {
@@ -26,12 +27,12 @@ type ClaimsAndAppealsListProps = {
 }
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
-  const tc = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const claimsAndAppeals = claimsAndAppealsByClaimType[claimType]
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
@@ -43,7 +44,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
     switch (type) {
       case ClaimOrAppealConstants.claim:
-        return t('claims.claimFor', { displayTitle: displayTitle.toLowerCase(), date: formattedUpdatedAtDate })
+        return t('claims.claimFor', { displayTitle: displayTitle?.toLowerCase(), date: formattedUpdatedAtDate })
       case ClaimOrAppealConstants.appeal:
         return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
     }
@@ -63,7 +64,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       ]
 
       const position = (currentPage - 1) * perPage + index + 1
-      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+      const a11yValue = tc('listPosition', { position, total: totalEntries })
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
       listItems.push({
         textLines,

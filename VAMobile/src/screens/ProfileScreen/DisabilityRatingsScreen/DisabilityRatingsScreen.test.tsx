@@ -3,8 +3,8 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
-import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
 import { LoadingComponent, TextView, ErrorComponent } from 'components'
 import ProfileBanner from '../ProfileBanner'
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
@@ -14,9 +14,9 @@ import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
 let mockNavigationSpy = jest.fn()
 
-jest.mock('../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../utils/hooks')
-  let theme = jest.requireActual('../../../styles/themes/standardTheme').default
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
@@ -30,8 +30,7 @@ jest.mock('../../../utils/hooks', () => {
 })
 
 context('DisabilityRatingsScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
@@ -58,24 +57,22 @@ context('DisabilityRatingsScreen', () => {
   }
 
   const initializeTestInstance = (ratingInfo = ratingDataMock, loading = false, errorState: ErrorsState = initialErrorsState) => {
-    store = mockStore({
-      auth: { ...initialAuthState },
-      disabilityRating: {
-        ratingData: ratingInfo,
-        loading,
-        needsDataLoad: false,
-        preloadComplete: true,
-      },
-      errors: errorState,
-    })
-
     props = mockNavProps()
 
-    act(() => {
-      component = renderWithProviders(<DisabilityRatingsScreen {...props} />, store)
+    component = render(<DisabilityRatingsScreen {...props} />, {
+      preloadedState: {
+        auth: { ...initialAuthState },
+        disabilityRating: {
+          ratingData: ratingInfo,
+          loading,
+          needsDataLoad: false,
+          preloadComplete: true,
+        },
+        errors: errorState,
+      },
     })
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {

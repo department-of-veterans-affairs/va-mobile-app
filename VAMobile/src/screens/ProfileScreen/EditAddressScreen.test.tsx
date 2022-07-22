@@ -5,17 +5,22 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTestID, findByTypeWithSubstring, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, findByTypeWithSubstring, mockNavProps, render, RenderAPI } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
-import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton, BackButton } from 'components'
+import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
-import { validateAddress, deleteAddress, finishValidateAddress } from 'store/actions'
+import { validateAddress, ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
+import { SnackbarMessages } from 'components/SnackBar'
+
+const snackbarMessages : SnackbarMessages = {
+  successMsg: 'Mailing address saved',
+  errorMsg: 'Mailing address could not be saved',
+}
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -25,8 +30,8 @@ jest.mock('@react-navigation/stack', () => {
   }
 })
 
-jest.mock('../../store/actions', () => {
-  let actual = jest.requireActual('../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     validateAddress: jest.fn(() => {
@@ -77,8 +82,7 @@ jest.mock('@react-navigation/native', () => {
 })
 
 context('EditAddressScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
   let profileInfo: UserDataProfile
@@ -113,26 +117,24 @@ context('EditAddressScreen', () => {
       },
     )
 
-    store = mockStore({
-      ...InitialState,
-      personalInformation: {
-        profile,
-        loading: false,
-        addressSaved,
-        showValidation,
-        needsDataLoad: false,
-        emailSaved: false,
-        preloadComplete: false,
-        phoneNumberSaved: false,
+    component = render(<EditAddressScreen {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: {
+          profile,
+          loading: false,
+          addressSaved,
+          showValidation,
+          needsDataLoad: false,
+          emailSaved: false,
+          preloadComplete: false,
+          phoneNumberSaved: false,
+        },
+        errors: errorsState,
       },
-      errors: errorsState,
     })
 
-    act(() => {
-      component = renderWithProviders(<EditAddressScreen {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -144,7 +146,6 @@ context('EditAddressScreen', () => {
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',
-      gender: 'M',
       addresses: '',
       residentialAddress: {
         id: 0,
@@ -198,14 +199,6 @@ context('EditAddressScreen', () => {
         phoneType: 'HOME',
       },
       formattedWorkPhone: '(858)-690-1287',
-      faxNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901286',
-        phoneType: 'HOME',
-      },
-      formattedFaxPhone: '(858)-690-1286',
       signinService: 'IDME',
     }
 
@@ -693,7 +686,7 @@ context('EditAddressScreen', () => {
       expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'State is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Zip code is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
     })
   })
 
@@ -706,14 +699,13 @@ context('EditAddressScreen', () => {
       act(() => {
         navHeaderSpy.save.props.onSave()
       })
-
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
 
-      expect(textViews[242].props.children).toEqual('Street address is required')
-      expect(textViews[257].props.children).toEqual('Please select a valid option')
-      expect(textViews[269].props.children).toEqual('Please select a valid option')
-      expect(textViews[274].props.children).toEqual('Zip code is required')
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(textViews[238].props.children).toEqual('Street address is required')
+      expect(textViews[251].props.children).toEqual('Please select a valid option')
+      expect(textViews[261].props.children).toEqual('Please select a valid option')
+      expect(textViews[264].props.children).toEqual('Postal code is required')
     })
   })
 
@@ -728,7 +720,6 @@ context('EditAddressScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
       expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
@@ -739,7 +730,7 @@ context('EditAddressScreen', () => {
     it('should display the remove button', () => {
       initializeTestInstance(profileInfo, false, true)
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Home Address')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home address')
     })
   })
 
@@ -782,6 +773,7 @@ context('EditAddressScreen', () => {
             zipCode: '',
             province: 'Ontario',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
@@ -826,6 +818,7 @@ context('EditAddressScreen', () => {
             zipCode: '94920',
             internationalPostalCode: '',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })
@@ -869,6 +862,7 @@ context('EditAddressScreen', () => {
             stateCode: 'AP',
             zipCode: '96278',
           },
+          snackbarMessages,
           ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         )
       })

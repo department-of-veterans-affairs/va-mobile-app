@@ -1,7 +1,10 @@
 import { isEqual, map } from 'underscore'
-import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
+import React, { ReactElement, useEffect } from 'react'
 
 import { Box, SelectorType, TextView, VASelector } from '../../index'
+import { NAMESPACE } from 'constants/namespaces'
+import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
@@ -32,32 +35,46 @@ export type RadioGroupProps<T> = {
 /**A common component to display radio button selectors for a list of selectable items*/
 const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const hasSingleOption = options.length === 1
+
+  useEffect(() => {
+    // Auto select the first option if there is only one option
+    if (hasSingleOption && !value) {
+      onChange(options[0].value)
+    }
+  }, [hasSingleOption, value, options, onChange])
+
+  const getOption = (option: radioOption<T>): ReactElement => {
+    const { labelKey, labelArgs } = option
+
+    // Render option as simple text
+    if (hasSingleOption) {
+      return <TextView variant="VASelector">{getTranslation(labelKey, t, labelArgs)}</TextView>
+    }
+
+    const selected = isEqual(option.value, value)
+    const onVASelectorChange = (_selected: boolean): void => {
+      onChange(option.value)
+    }
+
+    return <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} labelKey={labelKey} labelArgs={labelArgs} disabled={disabled} />
+  }
 
   const getRadios = (): ReactElement => {
     const radios = map(options, (option, index) => {
-      const selected = isEqual(option.value, value)
-      const onVASelectorChange = (_selected: boolean): void => {
-        onChange(option.value)
-      }
-      const { labelKey, labelArgs, headerText } = option
+      const { headerText } = option
       return (
         <Box key={index}>
           {headerText && (
             <Box>
-              <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {headerText}
               </TextView>
             </Box>
           )}
           <Box mb={theme.dimensions.standardMarginBetween} key={index} mt={headerText ? theme.dimensions.contentMarginTop : 0}>
-            <VASelector
-              selectorType={SelectorType.Radio}
-              selected={selected}
-              onSelectionChange={onVASelectorChange}
-              labelKey={labelKey}
-              labelArgs={labelArgs}
-              disabled={disabled}
-            />
+            {getOption(option)}
           </Box>
         </Box>
       )

@@ -1,8 +1,9 @@
-import { AccessibilityProps, ActivityIndicator, Pressable, PressableProps } from 'react-native'
+import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
+import LoadingComponent from './LoadingComponent'
 import React, { FC } from 'react'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -46,13 +47,13 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, onPress,
   return (
     <Pressable {...a11yProps} {...pressableProps}>
       <Box flexDirection={'row'} mr={theme.dimensions.gutter}>
-        <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
+        <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
           <VAIcon name="PaperClip" width={16} height={16} fill={'link'} />
         </Box>
-        <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} color={'link'} accessible={true}>
+        <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} accessible={true}>
           {text}
         </TextView>
-        {load && <ActivityIndicator accessible={true} size="small" color={theme.colors.icon.spinner} />}
+        {load && <LoadingComponent justTheSpinnerIcon={true} spinnerHeight={24} spinnerWidth={24} />}
       </Box>
     </Pressable>
   )

@@ -1,12 +1,12 @@
-import React, { FC, ReactElement } from 'react'
-
 import { DateTime } from 'luxon'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactElement } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_COMPENSATION_CLAIM_EXAM } = getEnv()
@@ -18,7 +18,7 @@ type EstimatedDecisionDateProps = {
 
 const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, showCovidMessage }): ReactElement => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const launchExternalLink = useExternalLink()
 
   const onAlertLinkPress = async (): Promise<void> => {
@@ -27,8 +27,8 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
 
   if (showCovidMessage) {
     return (
-      <TextArea>
-        <AlertBox border="warning" background="cardBackground" text={t('claimDetails.covidMessage')}>
+      <Box mx={theme.dimensions.gutter}>
+        <AlertBox border="warning" text={t('claimDetails.covidMessage')}>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onAlertLinkPress}
@@ -39,7 +39,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
             />
           </Box>
         </AlertBox>
-      </TextArea>
+      </Box>
     )
   }
 

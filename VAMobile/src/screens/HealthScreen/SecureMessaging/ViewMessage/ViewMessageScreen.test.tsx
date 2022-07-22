@@ -4,38 +4,34 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
+import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
 import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
 import Mock = jest.Mock
-import { InteractionManager, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 import { StackNavigationOptions } from '@react-navigation/stack'
+import { when } from 'jest-when'
+import { DateTime, DiffOptions, Duration, DurationUnits } from 'luxon'
+import { LocaleOptions } from 'luxon/src/datetime'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('/utils/hooks', () => {
-  let original = jest.requireActual('/utils/hooks')
-  let theme = jest.requireActual('/styles/themes/standardTheme').default
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
-
-const runAfterTransition = (testToRun: () => void) => {
-  InteractionManager.runAfterInteractions(() => {
-    testToRun()
-  })
-  jest.runAllTimers()
-}
 
 jest.mock('@react-navigation/native', () => {
   let actual = jest.requireActual('@react-navigation/native')
@@ -52,9 +48,9 @@ jest.mock('@react-navigation/native', () => {
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
 
 // Create a date that's always more than 45 days from now
-const d = new Date()
-const fortySixDaysAgo = d.setDate(d.getDate() - 46)
-const fortySixDaysAgoISO = new Date(fortySixDaysAgo).toISOString()
+const nowInMill = 1643402338567
+const mockDateISO = DateTime.fromMillis(nowInMill).toISO()
+const fortySixDaysAgoISO = DateTime.fromMillis(nowInMill).minus({ days: 45}).toISO()
 
 // Contains message attributes mapped to their ids
 const mockMessagesById: SecureMessagingMessageMap = {
@@ -90,7 +86,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     subject: '',
     body: 'Last accordion collapsible should be open, so the body text of this message should display',
     attachment: false,
-    sentDate: new Date().toISOString(), // current date
+    sentDate: mockDateISO,
     senderId: 2,
     senderName: 'mock sender 3',
     recipientId: 3,
@@ -113,12 +109,12 @@ const mockMessagesById: SecureMessagingMessageMap = {
 }
 
 context('ViewMessageScreen', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
   let navHeaderSpy: any
+  let navigateToSpy: jest.Mock
   onPressSpy = jest.fn(() => {})
 
   const initializeTestInstance = (
@@ -147,25 +143,46 @@ context('ViewMessageScreen', () => {
       { params: { messageID: messageID } },
     )
 
+    const fromISOSpy = jest.spyOn(DateTime, 'fromISO')
+    when(fromISOSpy).calledWith(mockDateISO).mockReturnValue({
+      diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
+        return {
+          days: -14
+        } as Duration
+      },
+      toFormat: (fmt: string, opts?: LocaleOptions) => {
+        return ''
+      },
+    } as DateTime ).calledWith(fortySixDaysAgoISO).mockReturnValue({
+      diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
+        return {
+          days: -46
+        } as Duration
+      },
+      toFormat: (fmt: string, opts?: LocaleOptions) => {
+        return ''
+      },
+    } as DateTime )
+
+    navigateToSpy = jest.fn()
+    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} }).mockReturnValue(navigateToSpy)
     onPressSpy = jest.fn(() => {})
 
-    store = mockStore({
-      auth: { ...initialAuthState },
-      secureMessaging: {
-        ...initialSecureMessagingState,
-        loading: loading,
-        messagesById: mockMessagesById,
-        threads: threadList,
-        messageIDsOfError: messageIDsOfError,
+    component = render(<ViewMessageScreen {...props} />, {
+      preloadedState: {
+        auth: { ...initialAuthState },
+        secureMessaging: {
+          ...initialSecureMessagingState,
+          loading: loading,
+          messagesById: mockMessagesById,
+          threads: threadList,
+          messageIDsOfError: messageIDsOfError,
+        },
+        errors: initialErrorsState,
       },
-      errors: initialErrorsState,
     })
 
-    act(() => {
-      component = renderWithProviders(<ViewMessageScreen {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -173,42 +190,44 @@ context('ViewMessageScreen', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
   })
 
   it('renders only messages in the same thread as the message associated with messageID', async () => {
-    runAfterTransition(() => {
+    await waitFor(() => {
       expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
     })
   })
 
   it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
-    runAfterTransition(() => {
+    await waitFor(() => {
       expect(testInstance.findAllByType(TextView)[1].props.children).toBe('mock sender 1')
       // Have to use Invalid DateTime values otherwise will fail git tests if in different time zone
       expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Invalid DateTime')
       expect(testInstance.findAllByType(TextView)[3].props.children).toBe('mock sender 2')
       expect(testInstance.findAllByType(TextView)[4].props.children).toBe('Invalid DateTime')
       expect(testInstance.findAllByType(TextView)[5].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateTimeYear(new Date().toISOString()))
+      expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateTimeYear(mockDateISO))
     })
   })
 
   it("should render last accordion's body text since it should be expanded", async () => {
-    runAfterTransition(() => {
+    await waitFor(() => {
       expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
     })
   })
 
   describe('when first message and last message is clicked', () => {
     it('should expand first accordion and close last accordion', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
         testInstance.findAllByType(Pressable)[2].props.onPress()
         expect(testInstance.findAllByType(TextView)[3].props.children).toBe('message 1 body text')
         // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
         expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
-        expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateTimeYear(new Date().toISOString()))
+        expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateTimeYear(mockDateISO))
         // Reply footer displays properly if latest message in thread is not over 45 days old
         expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Reply')
       })
@@ -218,7 +237,8 @@ context('ViewMessageScreen', () => {
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance({}, [], true)
-      runAfterTransition(() => {
+
+      await waitFor(() => {
         expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
       })
     })
@@ -228,7 +248,8 @@ context('ViewMessageScreen', () => {
     describe('when an individual message returns an error and that message is clicked', () => {
       it('should show AlertBox with "Message could not be found" title', async () => {
         initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1])
-        runAfterTransition(() => {
+
+        await waitFor(() => {
           testInstance.findAllByType(Pressable)[0].props.onPress()
           expect(testInstance.findByType(IndividualMessageErrorComponent)).toBeTruthy()
           expect(testInstance.findByProps({ title: 'Message could not be found' })).toBeTruthy()
@@ -238,7 +259,8 @@ context('ViewMessageScreen', () => {
     describe('when multiple messages are expanded and fail to load', () => {
       it('should show multiple error components', async () => {
         initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1, 3])
-        runAfterTransition(() => {
+
+        await waitFor(() => {
           testInstance.findAllByType(Pressable)[0].props.onPress()
           testInstance.findAllByType(Pressable)[2].props.onPress()
           expect(testInstance.findAllByType(IndividualMessageErrorComponent)).toBeTruthy()
@@ -255,16 +277,16 @@ context('ViewMessageScreen', () => {
     })
 
     it('should show AlertBox with Compose button', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
-        expect(testInstance.findByProps({ label: 'Compose a New Message' })).toBeTruthy()
+        expect(testInstance.findByProps({ label: 'Compose a new message' })).toBeTruthy()
       })
     })
 
     it('should use route navigation when Compose button is clicked', async () => {
-      runAfterTransition(() => {
-        testInstance.findByProps({ label: 'Compose a New Message' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findByProps({ label: 'Compose a new message' }).props.onPress()
+        expect(navigateToSpy).toHaveBeenCalled()
       })
     })
   })

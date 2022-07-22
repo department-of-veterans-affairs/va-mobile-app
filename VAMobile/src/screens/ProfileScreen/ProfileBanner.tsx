@@ -1,13 +1,15 @@
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
-import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
@@ -15,11 +17,11 @@ import { useTheme, useTranslation } from 'utils/hooks'
 export type ProfileBannerProps = Record<string, unknown>
 
 const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const { mostRecentBranch } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
 
   const theme = useTheme()
 
@@ -61,7 +63,7 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
             {getBranchSeal()}
           </Box>
         )}
-        <Box ml={theme.dimensions.textXPadding} flex={1}>
+        <Box ml={20} flex={1}>
           <TextView
             textTransform="capitalize"
             mb={theme.dimensions.textIconMargin}

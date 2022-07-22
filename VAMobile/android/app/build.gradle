@@ -1,8 +1,8 @@
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 import com.android.build.OutputFile
 
@@ -118,7 +118,7 @@ def jscFlavor = 'org.webkit:android-jsc-intl:+'
 /**
  * Whether to enable the Hermes VM.
  *
- * This should be set on project.ext.react and mirrored here.  If it is not set
+ * This should be set on project.ext.react and that value will be read here. If it is not set
  * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
  * and the benefits of using Hermes will therefore be sharply reduced.
  */
@@ -167,6 +167,11 @@ android {
             keyPassword System.getenv("ANDROID_KS_KEY_PW")
         }
     }
+    packagingOptions {
+        jniLibs {
+            pickFirsts += ['**/armeabi-v7a/libc++_shared.so', '**/x86/libc++_shared.so', '**/x86_64/libc++_shared.so', '**/arm64-v8a/libc++_shared.so', '**/libjsc.so']
+        }
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -175,6 +180,10 @@ android {
                     abiFilters nativeArchitectures.split(',')
                 }
             }
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher",
+                    appIconRound:"ic_launcher_round"
+            ]
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -184,6 +193,37 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
             signingConfig signingConfigs.release
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher",
+                    appIconRound:"ic_launcher_round"
+            ]
+        }
+        rc {
+            signingConfig signingConfigs.debug
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher_rc",
+                    appIconRound:"ic_launcher_rc_round"
+            ]
+            matchingFallbacks = ['release', 'debug']
+            versionNameSuffix = ".RC"
+        }
+        qaFirebase {
+            signingConfig signingConfigs.debug
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher_qa",
+                    appIconRound:"ic_launcher_qa_round"
+            ]
+            matchingFallbacks = ['release', 'debug']
+            versionNameSuffix = ".QA"
+        }
+        qaStore{
+            signingConfig signingConfigs.release
+            manifestPlaceholders = [
+                    appIcon:"ic_launcher_qa",
+                    appIconRound:"ic_launcher_qa_round"
+            ]
+            matchingFallbacks = ['release', 'debug']
+            versionNameSuffix = ".QA"
         }
     }
 
@@ -203,13 +243,6 @@ android {
         }
     }
 
-      packagingOptions {
-       pickFirst '**/armeabi-v7a/libc++_shared.so'
-       pickFirst '**/x86/libc++_shared.so'
-       pickFirst '**/x86_64/libc++_shared.so'
-       pickFirst '**/arm64-v8a/libc++_shared.so'
-       pickFirst '**/libjsc.so'
-    }
 }
 
 dependencies {
@@ -228,7 +261,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     // kotlin
-    implementation "androidx.core:core-ktx:1.6.0"
+    implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$KOTLIN_VERSION"
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
@@ -254,11 +287,13 @@ dependencies {
     implementation 'com.google.android.play:core:1.10.0'
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
+    implementation 'androidx.appcompat:appcompat:1.4.2'
     androidTestImplementation('com.wix:detox:+')
     androidTestImplementation('com.google.firebase:firebase-iid'){
         exclude group: 'com.google.firebase:firebase-iid'
     }
 
+    implementation project(':lottie-react-native')
 }
 
 // Run this once to be able to run the application with BUCK

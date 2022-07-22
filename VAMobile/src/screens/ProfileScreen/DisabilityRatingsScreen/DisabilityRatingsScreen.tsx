@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import {
@@ -20,24 +20,27 @@ import {
   TextViewProps,
   VAScrollView,
 } from 'components'
-import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
+import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import ProfileBanner from '../ProfileBanner'
 import getEnv from 'utils/env'
 
 const DisabilityRatingsScreen: FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation([NAMESPACE.CLAIMS, NAMESPACE.COMMON])
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
-  const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
@@ -150,12 +153,12 @@ const DisabilityRatingsScreen: FC = () => {
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claims:claimDetails.callVA.a11yLabel')}>
-            {t('claims:claimDetails.callVA')}
+          <TextView variant="MobileBody" selectable={false} accessibilityLabel={tc('claims:claimDetails.callVA.a11yLabel')}>
+            {tc('claims:claimDetails.callVA')}
           </TextView>
         </Box>
 
-        <ClickToCallPhoneNumber phone={t('common:8008271000.displayText')} />
+        <ClickToCallPhoneNumber phone={tc('common:8008271000.displayText')} />
       </TextArea>
     )
   }
@@ -168,7 +171,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <React.Fragment>
         <ProfileBanner showRating={false} />
-        <LoadingComponent />
+        <LoadingComponent text={t('disabilityRating.loading')} />
       </React.Fragment>
     )
   }
@@ -199,7 +202,7 @@ const DisabilityRatingsScreen: FC = () => {
       <ProfileBanner showRating={false} />
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
-        <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} />
+        <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
       </Box>
       <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
       <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>

@@ -1,17 +1,17 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, renderWithProviders } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render, waitFor, RenderAPI } from 'testUtils'
 
 import AppealTimeline from './AppealTimeline'
 
 context('AppealTimeline', () => {
-  let component: any
+  let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  beforeEach(async () => {
     props = mockNavProps({
       events: [
         {
@@ -26,14 +26,12 @@ context('AppealTimeline', () => {
           data: '',
           type: 'claim_decision',
         },
-      ]
+      ],
     })
 
-    act(() => {
-      component = renderWithProviders(<AppealTimeline {...props} />)
-    })
+    component = render(<AppealTimeline {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('should initialize', async () => {

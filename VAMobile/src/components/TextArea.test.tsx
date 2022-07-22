@@ -3,23 +3,20 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
-import {TouchableWithoutFeedback} from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 import Mock = jest.Mock
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
 import TextArea from './TextArea'
 
 context('TextArea', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
-
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
-    act(() => {
-      component = renderWithProviders(<TextArea onPress={onPressSpy}/>)
-    })
-    testInstance = component.root
+    component = render(<TextArea onPress={onPressSpy} />)
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -32,20 +29,18 @@ context('TextArea', () => {
     })
 
     it('should call onPress on press', async () => {
-      testInstance.findByType(TextArea).props.onPress()
-      expect(onPressSpy).toBeCalled()
+      await waitFor(() => {
+        testInstance.findByType(TextArea).props.onPress()
+        expect(onPressSpy).toBeCalled()
+      })
     })
   })
 
   describe('when onPress does not exist', () => {
     it('should not render a TouchableWithoutFeedback', async () => {
-      act(() => {
-        component = renderWithProviders(<TextArea/>)
-      })
-      testInstance = component.root
-
+      component = render(<TextArea />)
+      testInstance = component.container
       expect(testInstance.findAllByType(TouchableWithoutFeedback).length).toEqual(0)
     })
   })
-
 })

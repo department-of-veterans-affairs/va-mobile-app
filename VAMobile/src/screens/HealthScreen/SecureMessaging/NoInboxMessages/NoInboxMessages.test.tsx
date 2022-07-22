@@ -4,23 +4,18 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders} from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import NoInboxMessages from './NoInboxMessages'
 import { TextView } from 'components'
 
 context('NoInboxMessages', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = () => {
-    act(() => {
-      component = renderWithProviders(
-        <NoInboxMessages />, store
-      )
-    })
+    component = render(<NoInboxMessages />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -33,7 +28,9 @@ context('NoInboxMessages', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe('You don\'t have any messages in your Inbox')
-    expect(texts[1].props.children).toBe('Compose a message to ask non-urgent (non-emergency) health related questions, send updates, manage appointments, and request referrals and medication refills from your VA health care team.')
+    expect(texts[0].props.children).toBe("You don't have any messages in your Inbox")
+    expect(texts[1].props.children).toBe(
+      'Compose a message to ask non-urgent (non-emergency) health related questions, send updates, manage appointments, and request referrals and medication refills from your VA health care team.',
+    )
   })
 })

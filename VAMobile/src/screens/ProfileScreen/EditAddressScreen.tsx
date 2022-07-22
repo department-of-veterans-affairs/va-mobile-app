@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
@@ -23,17 +23,19 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
+import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PersonalInformationState, deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/slices'
 import { RootNavStackParamList } from 'App'
+import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
-import { deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/actions'
 import { profileAddressOptions } from './AddressSummary'
-import { stringToTitleCase } from '../../utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
 import HeaderTitle from 'components/HeaderTitle'
 
@@ -80,10 +82,11 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressSaved, loading, showValidation } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { profile, addressSaved, savingAddress, showValidation } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const destructiveAlert = useDestructiveAlert()
 
@@ -93,6 +96,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const addressLine3Ref = useRef<TextInput>(null)
   const zipCodeRef = useRef<TextInput>(null)
   const cityRef = useRef<TextInput>(null)
+
+  const snackbarMessages: SnackbarMessages = GenerateAddressMessages(t, addressType)
+
+  const removalSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.residentialAddress.removed'),
+    errorMsg: t('personalInformation.residentialAddress.removed.error'),
+  }
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = profile?.[addressType]?.[itemToGet]
@@ -122,7 +132,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
           text: t('editAddress.validation.cancelConfirm.confirm'),
@@ -174,7 +184,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
 
     setDeleting(true)
-    dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    dispatch(deleteAddress(currentAddressData, removalSnackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   const getAddressValues = (): AddressData => {
@@ -214,7 +224,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const onSave = (): void => {
-    dispatch(validateAddress(getAddressValues(), ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    dispatch(validateAddress(getAddressValues(), snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -248,7 +258,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
   }
 
-  if (loading || addressSaved) {
+  if (savingAddress || addressSaved) {
     const loadingText = deleting ? t('personalInformation.delete.address') : t('personalInformation.savingAddress')
 
     return <LoadingComponent text={loadingText} />
@@ -258,6 +268,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     const addressValidationProps = {
       addressEntered: getAddressValues(),
       addressId: profile?.[addressType]?.id || 0,
+      snackbarMessages: snackbarMessages,
     }
     return <AddressValidation {...addressValidationProps} />
   }
@@ -478,10 +489,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
-          text: t('common:remove'),
+          text: tc('remove'),
           onPress: onDelete,
         },
       ],
@@ -495,15 +506,15 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: stringToTitleCase(lowerCaseTitle) })}
-              buttonType={ButtonTypesConstants.buttonImportant}
+              label={t('personalInformation.removeData', { pageName: lowerCaseTitle })}
+              buttonType={ButtonTypesConstants.buttonDestructive}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
             />
           </Box>
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+            <AlertBox title={t('editAddress.alertError')} border="error" />
           </Box>
         )}
         <FormWrapper

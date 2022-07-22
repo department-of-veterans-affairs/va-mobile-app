@@ -1,19 +1,20 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockNavProps, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import SelectFile from './SelectFile'
-import {VAButton} from 'components'
-import {launchImageLibrary} from 'react-native-image-picker'
+import { VAButton } from 'components'
 
 let mockShowActionSheetWithOptions = jest.fn()
 jest.mock('@expo/react-native-action-sheet', () => {
   let original = jest.requireActual('@expo/react-native-action-sheet')
   return {
     ...original,
-    useActionSheet: () => { return { showActionSheetWithOptions: mockShowActionSheetWithOptions }}
+    useActionSheet: () => {
+      return { showActionSheetWithOptions: mockShowActionSheetWithOptions }
+    },
   }
 })
 
@@ -21,13 +22,12 @@ jest.mock('react-native-image-picker', () => {
   let original = jest.requireActual('react-native-image-picker')
   return {
     ...original,
-    launchImageLibrary: jest.fn()
+    launchImageLibrary: jest.fn(),
   }
 })
 
-
 context('SelectFile', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
 
@@ -36,17 +36,15 @@ context('SelectFile', () => {
     date: '2020-07-16',
     status: 'NEEDED',
     uploaded: false,
-    uploadsAllowed: true
+    uploadsAllowed: true,
   }
 
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
+    props = mockNavProps(undefined, {addListener: jest.fn(), setOptions: jest.fn() }, { params: { request } })
 
-    act(() => {
-      component = renderWithProviders(<SelectFile {...props}/>)
-    })
+    component = render(<SelectFile {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -63,11 +61,8 @@ context('SelectFile', () => {
 
       expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
 
-      const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0];
-      expect(actionSheetConfig.options).toEqual([
-        'File folder',
-        'Cancel',
-      ]);
+      const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0]
+      expect(actionSheetConfig.options).toEqual(['File Folder', 'Cancel'])
     })
   })
 })

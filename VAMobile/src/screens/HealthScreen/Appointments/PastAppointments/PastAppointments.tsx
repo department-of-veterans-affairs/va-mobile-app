@@ -1,31 +1,33 @@
 import { DateTime } from 'luxon'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useState } from 'react'
-
 import _ from 'underscore'
 
-import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
-import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLineWithIconProps, VAModalPicker } from 'components'
+import { AppointmentsList } from 'store/api/types'
+import { AppointmentsState, CurrentPageAppointmentsByYear, getAppointmentsInDateRange } from 'store/slices'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { getAppointmentLocation, getAppointmentTypeIcon, getGroupedAppointments, getYearsToSortedMonths } from 'utils/appointments'
-import { getAppointmentsInDateRange } from 'store/actions'
-import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { deepCopyObject } from 'utils/common'
+import { getFormattedDate } from 'utils/formattingUtils'
+import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToSortedMonths, isAPendingAppointment } from 'utils/appointments'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = Record<string, unknown>
 
 const PastAppointments: FC<PastAppointmentsProps> = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tc = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const newCurrentPageAppointmentsByYear = deepCopyObject<CurrentPageAppointmentsByYear>(currentPageAppointmentsByYear)
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -117,7 +119,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const pickerOptions = getPickerOptions()
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
   const { timeFrame } = datePickerOption
-  const currentPagePastAppointmentsByYear = currentPageAppointmentsByYear[timeFrame]
+  const currentPagePastAppointmentsByYear = newCurrentPageAppointmentsByYear[timeFrame]
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
   const { currentPage, perPage, totalEntries } = paginationByTimeFrame[timeFrame]
@@ -128,33 +130,17 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment, index) => {
-      const {
-        attributes: { appointmentType, startDateUtc, timeZone, phoneOnly, location, status, isCovidVaccine },
-      } = appointment
-
-      const textLines: Array<TextLineWithIconProps> = []
-
-      if (status === AppointmentStatusConstants.CANCELLED) {
-        textLines.push({ text: t('appointments.canceled'), isTextTag: true })
-      }
-
-      textLines.push(
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-        {
-          text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly, isCovidVaccine) }),
-          iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
-        },
-      )
+      const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
+      const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
 
       const position = (currentPage - 1) * perPage + index + 1
-      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+      const a11yValue = tc('listPosition', { position, total: totalEntries })
 
       listItems.push({
         textLines,
         a11yValue,
         onPress: () => onPastAppointmentPress(appointment.id),
-        a11yHintText: t('appointments.viewDetails'),
+        a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
         testId: getTestIDFromTextLines(textLines),
       })
     })

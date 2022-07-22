@@ -4,9 +4,10 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import { FooterButton } from 'components'
 import ReplyMessageFooter from './ReplyMessageFooter'
+import { waitFor } from '@testing-library/react-native'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -18,21 +19,22 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
 context('ReplyMessageFooter', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
+  let navigateToSpy: jest.Mock
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<ReplyMessageFooter messageID={1} />)
-    })
+    navigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(navigateToSpy)
+    component = render(<ReplyMessageFooter messageID={1} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -42,7 +44,8 @@ context('ReplyMessageFooter', () => {
   describe('on click of the footer button', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findByType(FooterButton).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ReplyMessage', {'attachmentFileToAdd': {}, 'attachmentFileToRemove': {}, 'messageID': 1})
+      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 })

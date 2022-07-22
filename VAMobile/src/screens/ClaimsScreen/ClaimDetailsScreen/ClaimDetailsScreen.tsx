@@ -1,19 +1,21 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView, VAScrollView } from 'components'
+import { BackButton, Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -23,25 +25,49 @@ export const getClaimType = (claim: ClaimData | undefined, translation: TFunctio
 
 type ClaimDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'ClaimDetailsScreen'>
 
-const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
-  const dispatch = useDispatch()
+const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) => {
+  const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
   const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
-  const { claimID, claimType } = route.params
-  const { claim, loadingClaim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claimID, claimType, focusOnSnackbar } = route.params
+  const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
+
+  useBeforeNavBackListener(navigation, () => {
+    // if claim is still loading cancel it
+    if (loadingClaim) {
+      cancelLoadingDetailScreen?.abort()
+    }
+  })
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props): ReactNode => (
+        <BackButton
+          onPress={() => {
+            navigation.goBack()
+          }}
+          focusOnButton={focusOnSnackbar ? false : true}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.back}
+          showCarat={true}
+        />
+      ),
+    })
+  })
 
   useEffect(() => {
     dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
-    InteractionManager.runAfterInteractions(() => {
+    const interaction = InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
+    return () => interaction.cancel()
   }, [dispatch, claimID])
 
   if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
@@ -58,7 +84,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   return (
     <VAScrollView {...testIdProps('Your-claim: Claim-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
+        <Box mx={theme.dimensions.gutter}>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
           </TextView>
@@ -72,7 +98,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
               accessibilityHints={a11yHints}
             />
           </Box>
-        </TextArea>
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
           {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}

@@ -1,10 +1,11 @@
-import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import React, { FC, useEffect, useState } from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
-import { buildNumber, versionName } from 'utils/deviceData'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { getBuildNumber, getVersionName } from 'utils/deviceData'
+import { useTheme } from 'utils/hooks'
 
 export type AppVersionAndBuildProps = {
   /** color of the text */
@@ -16,9 +17,22 @@ export type AppVersionAndBuildProps = {
 /**
  * Common component to display the apps version and build number
  */
-const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'primary', textWeight = 'MobileBody' }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'bodyText', textWeight = 'MobileBody' }) => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const [versionName, setVersionName] = useState<string>()
+  const [buildNumber, setBuildNumber] = useState<number>()
+
+  useEffect(() => {
+    async function getVersionAndBuild() {
+      const version = await getVersionName()
+      const build = await getBuildNumber()
+      setVersionName(version)
+      setBuildNumber(build)
+    }
+
+    getVersionAndBuild()
+  }, [])
 
   return (
     <Box mb={theme.dimensions.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>

@@ -3,6 +3,7 @@ import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/t
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
@@ -10,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VA_ICON_MAP } from './VAIcon'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import VAIcon from './VAIcon'
 
@@ -51,7 +52,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 /**Component for the bottom tab navigation*/
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
     const event = navigation.emit({
@@ -81,6 +82,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
         const iconProps = {
           id: `${routeName.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
           name: `${routeName}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
+          fill: `${focused ? 'active' : 'inactive'}`,
         }
         return <VAIcon {...iconProps} />
       default:
@@ -125,7 +127,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               {...testIdProps(translatedName)}
               {...props}
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
-              <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
+              <Box flex={1} display="flex" flexDirection="column" mt={7}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
                   {tabBarIcon(routeName, isFocused)}
                 </Box>

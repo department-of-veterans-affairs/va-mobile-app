@@ -2,62 +2,56 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import {context, mockStore, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, mockStore, render, RenderAPI } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import OnboardingCarousel from './OnboardingCarousel'
-import {InitialState} from 'store/reducers'
-import {EmailData, PhoneData} from 'store/api/types'
-import {completeFirstTimeLogin} from 'store/actions'
-import {Carousel} from 'components'
+import { EmailData, PhoneData } from 'store/api/types'
+import { completeFirstTimeLogin, InitialState } from 'store/slices'
+import { Carousel } from 'components'
 
-jest.mock('../../store/actions', () => {
-  let actual = jest.requireActual('../../store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     completeFirstTimeLogin: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
 context('OnboardingCarousel', () => {
-  let component: any
-  let store: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    store = mockStore({
-      ...InitialState,
-      personalInformation: {
-        ...InitialState.personalInformation,
-        profile: {
-          middleName: '',
-          lastName: '',
-          contactEmail: {} as EmailData,
-          signinEmail: '',
-          birthDate: '',
-          gender: '',
-          addresses: '',
-          homePhoneNumber: {} as PhoneData,
-          mobilePhoneNumber: {} as PhoneData,
-          workPhoneNumber: {} as PhoneData,
-          faxNumber: {} as PhoneData,
-          fullName: '',
-          firstName: 'Billy',
-          signinService: 'IDME',
-        }
-      }
+    component = render(<OnboardingCarousel />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: {
+          ...InitialState.personalInformation,
+          profile: {
+            middleName: '',
+            lastName: '',
+            contactEmail: {} as EmailData,
+            signinEmail: '',
+            birthDate: '',
+            addresses: '',
+            homePhoneNumber: {} as PhoneData,
+            mobilePhoneNumber: {} as PhoneData,
+            workPhoneNumber: {} as PhoneData,
+            fullName: '',
+            firstName: 'Billy',
+            signinService: 'IDME',
+          },
+        },
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<OnboardingCarousel />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

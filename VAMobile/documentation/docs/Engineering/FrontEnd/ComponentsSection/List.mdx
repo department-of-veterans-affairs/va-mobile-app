@@ -1,0 +1,14 @@
+import CodeBlock from '@theme/CodeBlock'
+import ListString from '!!raw-loader!@componentsDocs/List'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString =`import { List, ListItemObj } from 'components'
+    const listExample: Array<ListItemObj> = [
+        { content: <TextView>'My Title 1'</TextView>, a11yHintText: 'Hint 1', onPress: () => { console.log('button 1 pressed') } },
+        { content: <TextView>'My Title 2'</TextView>, a11yHintText: 'Hint 2', onPress: () => { console.log('button 2 pressed') } },
+    ]\n
+<List items={listExample} />`
+
+
+<ComponentTopInfo componentName="List" example={exampleString} codeString={ListString} />

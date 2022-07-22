@@ -4,26 +4,25 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import ContactVAScreen from './ContactVAScreen'
 import { CrisisLineCta, ClickToCallPhoneNumber, TextArea } from 'components'
 
 context('ContactVAScreen', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
     const props = mockNavProps(
-        {},
-        {
-          setOptions: () => {},
-        }
+      {},
+      {
+        setOptions: () => {},
+      },
     )
 
-    act(() => {
-      component = renderWithProviders(<ContactVAScreen {...props} />)
-    })
-    testInstance = component.root
+    component = render(<ContactVAScreen {...props} />)
+
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

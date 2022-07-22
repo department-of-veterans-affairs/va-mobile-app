@@ -1,10 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box } from 'components'
 import { ClaimAttributesData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useTranslation } from 'utils/hooks'
 import ClaimPhase from './ClaimPhase'
 import theme from 'styles/themes/standardTheme'
 
@@ -20,7 +20,7 @@ export type ClaimTimelineProps = {
 
 /** component that renders the complete timeline of a claim */
 const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline)
   const itemsNeededFromVet = needItemsFromVet(attributes)
@@ -31,7 +31,7 @@ const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
     <Box>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
-          <AlertBox border={'warning'} background={'noCardBackground'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
+          <AlertBox border={'warning'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
         </Box>
       )}
       <Box borderColor={'primary'} borderTopWidth={theme.dimensions.borderWidth} mt={mt} mb={theme.dimensions.condensedMarginBetween}>

@@ -2,21 +2,19 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import VABulletList from './VABulletList'
 
 context('VABulletList', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+    component = render(<VABulletList listOfText={['first line', 'second line']} />)
 
-    act(() => {
-      component = renderWithProviders(<VABulletList listOfText={['first line', 'second line']} />)
-    })
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

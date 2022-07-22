@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -5,7 +6,6 @@ import { NAMESPACE } from '../constants/namespaces'
 import { TouchableOpacity } from 'react-native'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
-import { useTranslation } from '../utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 
@@ -36,10 +36,6 @@ const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
   border-radius: 8px;
   padding-vertical: 7px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
-  shadow-opacity: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 0.4 : 0))};
-  shadow-radius: 1px;
-  shadow-offset: 0px 2px;
-  shadow-color: ${themeFn<ButtonContainerProps>((theme) => theme.colors.background.shadow)};
   elevation: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 4 : 0))};
   background-color: ${themeFn<ButtonContainerProps>((theme, props) =>
     props.isSelected ? theme.colors.segmentedControl.buttonActive : theme.colors.segmentedControl.buttonInactive,
@@ -47,7 +43,7 @@ const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
 `
 /**A common component for filtering UI views by segments or lanes. Used for things like toggling between Active/Completed claims and Future/Past Appointments */
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected, accessibilityHints }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   useEffect(() => {
     onChange(values[selected])
@@ -67,10 +63,12 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
   return (
     <Box {...boxProps}>
       {values.map((value, index) => {
+        const isSelected = selected === index
+
         return (
           <ButtonContainer
             onPress={(): void => onChange(values[index])}
-            isSelected={selected === index}
+            isSelected={isSelected}
             key={index}
             widthPct={`${100 / values.length}%`}
             {...testIdProps(value)}
@@ -78,7 +76,11 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
             {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: values.length }) })}
             accessibilityRole={'tab'}
             accessibilityState={{ selected: selected === index }}>
-            <TextView variant={selected === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary" allowFontScaling={false}>
+            <TextView
+              variant={selected === index ? 'MobileBodyBold' : 'MobileBody'}
+              textAlign="center"
+              color={isSelected ? 'segmentControllerActive' : 'segmentControllerInactive'}
+              allowFontScaling={false}>
               {titles[index]}
             </TextView>
           </ButtonContainer>

@@ -1,16 +1,18 @@
 import { TFunction } from 'i18next'
-import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
-import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
+import { Box, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { SecureMessagingFolderList } from 'store/api/types'
-import { SecureMessagingState, StoreState } from 'store/reducers'
+import { SecureMessagingState } from 'store/slices'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,
@@ -95,10 +97,10 @@ export const getUserFolders = (
 type FoldersProps = Record<string, unknown>
 
 const Folders: FC<FoldersProps> = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { folders, loadingFolders } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { folders, loadingFolders } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   const onFolderPress = (folderID: number, folderName: string): void => {
     navigateTo('FolderMessages', { folderID, folderName })()
@@ -109,10 +111,12 @@ const Folders: FC<FoldersProps> = () => {
   }
 
   return (
-    <Box {...testIdProps('', false, 'Folders-page')}>
-      {getSystemFolders(folders || [], theme, t, onFolderPress)}
-      {getUserFolders(folders || [], theme, t, onFolderPress)}
-    </Box>
+    <VAScrollView {...testIdProps('', false, 'Folders-page')}>
+      <Box>
+        {getSystemFolders(folders || [], theme, t, onFolderPress)}
+        {getUserFolders(folders || [], theme, t, onFolderPress)}
+      </Box>
+    </VAScrollView>
   )
 }
 

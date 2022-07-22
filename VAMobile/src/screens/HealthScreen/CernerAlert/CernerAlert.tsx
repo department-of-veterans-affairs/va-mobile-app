@@ -1,20 +1,22 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 
-import { AccordionCollapsible, Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
+import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
 import { Facility } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { PatientState, StoreState } from 'store/reducers'
+import { PatientState } from 'store/slices'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useHasCernerFacilities, useTheme, useTranslation } from 'utils/hooks'
+import { useHasCernerFacilities, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const CernerAlert: FC = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const { cernerFacilities, facilities } = useSelector<StoreState, PatientState>((state) => state.patient)
+  const { cernerFacilities, facilities } = useSelector<RootState, PatientState>((state) => state.patient)
   const hasCernerFacilities = useHasCernerFacilities()
 
   // if no cerner facilities then do not show the alert
@@ -25,14 +27,7 @@ const CernerAlert: FC = () => {
   // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
   const allCernerFacilities = facilities.length === cernerFacilities.length
   const headerText = allCernerFacilities ? t('cernerAlert.header.all') : t('cernerAlert.header.some')
-
-  const accordionHeader = (): ReactNode => {
-    return (
-      <Box>
-        <TextView variant="MobileBodyBold">{headerText}</TextView>
-      </Box>
-    )
-  }
+  const headerA11yLabel = allCernerFacilities ? t('cernerAlert.header.all.a11yLabel') : t('cernerAlert.header.some.a11yLabel')
 
   const accordionContent = (): ReactNode => {
     const body = cernerFacilities.map((facility: Facility) => {
@@ -41,6 +36,7 @@ const CernerAlert: FC = () => {
           variant="MobileBodyBold"
           key={facility.facilityId}
           mt={theme.dimensions.standardMarginBetween}
+          selectable={true}
           {...testIdProps(`${facility.facilityName} (${t('cernerAlert.nowUsing')})`)}>
           {facility.facilityName}
           <TextView variant="MobileBody">{` (${t('cernerAlert.nowUsing')})`}</TextView>
@@ -60,7 +56,7 @@ const CernerAlert: FC = () => {
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBody">{t('cernerAlert.ourRecordsShow')}</TextView>
         {body}
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
           {t('cernerAlert.footer')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />
@@ -68,9 +64,7 @@ const CernerAlert: FC = () => {
     )
   }
 
-  return (
-    <AccordionCollapsible header={accordionHeader()} expandedContent={accordionContent()} testID={headerText} alertBorder={'warning'} a11yHint={t('cernerAlert.header.a11yHint')} />
-  )
+  return <CollapsibleAlert border="warning" headerText={headerText} body={accordionContent()} a11yLabel={headerA11yLabel} />
 }
 
 export default CernerAlert

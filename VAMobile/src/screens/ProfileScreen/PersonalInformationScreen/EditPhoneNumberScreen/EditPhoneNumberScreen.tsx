@@ -1,5 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
@@ -18,15 +18,17 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
-import { PhoneTypeConstants } from 'store/api/types'
+import { PersonalInformationState, deleteUsersNumber, editUsersNumber, finishEditPhoneNumber } from 'store/slices/personalInformationSlice'
 import { RootNavStackParamList } from 'App'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { deleteUsersNumber, dispatchClearErrors, editUsersNumber, finishEditPhoneNumber } from 'store/actions'
-import { formatPhoneNumber, getNumbersFromString, stringToTitleCase } from 'utils/formattingUtils'
+import { SnackbarMessages } from 'components/SnackBar'
+import { dispatchClearErrors } from 'store/slices/errorSlice'
+import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import HeaderTitle from 'components/HeaderTitle'
 
 const MAX_DIGITS = 10
@@ -35,9 +37,10 @@ const MAX_DIGITS_AFTER_FORMAT = 14
 type IEditPhoneNumberScreen = StackScreenProps<RootNavStackParamList, 'EditPhoneNumber'>
 
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useDestructiveAlert()
 
@@ -47,7 +50,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [deleting, setDeleting] = useState(false)
 
-  const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { phoneNumberSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   useEffect(() => {
     if (phoneNumberSaved) {
@@ -57,16 +60,26 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     }
   }, [phoneNumberSaved, navigation, dispatch])
 
+  const saveSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.phoneNumber.saved', { type: displayTitle }),
+    errorMsg: t('personalInformation.phoneNumber.not.saved', { type: displayTitle }),
+  }
+
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const numberId = phoneData && phoneData.id ? phoneData.id : 0
 
-    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, saveSnackbarMessages, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+  }
+
+  const removeSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.phoneNumber.removed', { type: displayTitle }),
+    errorMsg: t('personalInformation.phoneNumber.not.removed', { type: displayTitle }),
   }
 
   const onDelete = (): void => {
     setDeleting(true)
-    dispatch(deleteUsersNumber(phoneType, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    dispatch(deleteUsersNumber(phoneType, removeSnackbarMessages, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
@@ -155,7 +168,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     },
   ]
 
-  const testIdPrefix = phoneType === PhoneTypeConstants.FAX ? 'fax-number: ' : `${phoneType.toLowerCase()}-phone: `
+  const testIdPrefix = `${phoneType.toLowerCase()}-phone: `
   const buttonTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
@@ -166,10 +179,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
-          text: t('common:remove'),
+          text: tc('remove'),
           onPress: onDelete,
         },
       ],
@@ -183,16 +196,16 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: stringToTitleCase(buttonTitle) })}
-              buttonType={ButtonTypesConstants.buttonImportant}
+              label={t('personalInformation.removeData', { pageName: buttonTitle })}
+              buttonType={ButtonTypesConstants.buttonDestructive}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: buttonTitle })}
             />
           </Box>
         )}
-        <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} background="noCardBackground" border="informational" />
+        <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
         {formContainsError && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editPhoneNumber.checkPhoneNumber')} border="error" background="noCardBackground" />
+            <AlertBox title={t('editPhoneNumber.checkPhoneNumber')} border="error" />
           </Box>
         )}
         <Box mt={theme.dimensions.formMarginBetween}>

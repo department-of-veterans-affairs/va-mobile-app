@@ -5,14 +5,15 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
 import ReplyMessage from './ReplyMessage'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
+import { initialAuthState, initialErrorsState, initialSecureMessagingState, saveDraft } from 'store/slices'
 import { AccordionCollapsible, AlertBox, FormWrapper, LoadingComponent, TextView } from 'components'
 import { InteractionManager, Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { isIOS } from '../../../../utils/platform'
-import { saveDraft } from 'store/actions'
+import { when } from 'jest-when'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -24,20 +25,13 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
-const runAfterTransition = (testToRun: () => void) => {
-  InteractionManager.runAfterInteractions(() => {
-    testToRun()
-  })
-  jest.runAllTimers()
-}
-
-jest.mock('store/actions', () => {
-  let actual = jest.requireActual('store/actions')
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
   return {
     ...actual,
     saveDraft: jest.fn(() => {
@@ -114,13 +108,15 @@ const mockMessagesById: SecureMessagingMessageMap = {
 }
 
 context('ReplyMessage', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
-  let store: any
   let goBack: jest.Mock
   let isIOSMock = isIOS as jest.Mock
   let navHeaderSpy: any
+  let navigateToVeteranCrisisLineSpy: jest.Mock
+  let navigateToAttachmentsSpy: jest.Mock
+  let navigateToAttachmentsFAQSpy: jest.Mock
 
   const initializeTestInstance = (
     mockMessagesById: SecureMessagingMessageMap,
@@ -129,13 +125,21 @@ context('ReplyMessage', () => {
     sendMessageFailed: boolean = false,
   ) => {
     goBack = jest.fn()
+    navigateToVeteranCrisisLineSpy = jest.fn()
+    navigateToAttachmentsSpy = jest.fn()
+    navigateToAttachmentsFAQSpy = jest.fn()
+
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteranCrisisLineSpy)
+        .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 }).mockReturnValue(navigateToAttachmentsSpy)
+        .calledWith('AttachmentsFAQ', { originHeader: 'Reply' } ).mockReturnValue(navigateToAttachmentsFAQSpy)
 
     isIOSMock.mockReturnValue(false)
 
     props = mockNavProps(
       undefined,
       {
-        navigate: mockNavigationSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -147,23 +151,21 @@ context('ReplyMessage', () => {
       { params: { messageID: 3, attachmentFileToAdd: {} } },
     )
 
-    store = mockStore({
-      auth: { ...initialAuthState },
-      secureMessaging: {
-        ...initialSecureMessagingState,
-        loading: loading,
-        messagesById: mockMessagesById,
-        threads: threadList,
-        sendMessageFailed: sendMessageFailed,
+    component = render(<ReplyMessage {...props} />, {
+      preloadedState: {
+        auth: { ...initialAuthState },
+        secureMessaging: {
+          ...initialSecureMessagingState,
+          loading: loading,
+          messagesById: mockMessagesById,
+          threads: threadList,
+          sendMessageFailed: sendMessageFailed,
+        },
+        errors: initialErrorsState,
       },
-      errors: initialErrorsState,
     })
 
-    act(() => {
-      component = renderWithProviders(<ReplyMessage {...props} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -171,26 +173,25 @@ context('ReplyMessage', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-        })
-        expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        expect(navigateToVeteranCrisisLineSpy).toHaveBeenCalled()
       })
     })
   })
 
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findAllByType(Pressable)[0].props.onPress()
-        })
+      waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+
         expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
           'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
         )
@@ -199,30 +200,27 @@ context('ReplyMessage', () => {
   })
 
   it('should add the text (*Required) for the message body text field', async () => {
-    runAfterTransition(() => {
+    await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[12].props.children).toEqual('Message')
-      expect(textViews[14].props.children).toEqual('(*Required)')
+      expect(textViews[12].props.children).toEqual(['Message', ' ','(Required)'])
     })
   })
 
   describe('on click of save (draft)', () => {
-    beforeEach(() => {
-      runAfterTransition(() => {
-        act(() => {
-          navHeaderSpy.save.props.onSave()
-        })
+    beforeEach(async () => {
+      await waitFor(() => {
+        navHeaderSpy.save.props.onSave()
       })
     })
     describe('when a required field is not filled', () => {
       it('should display a field error for that field', async () => {
-        runAfterTransition(() => {
+        await waitFor(() => {
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
         })
       })
 
       it('should display an AlertBox', async () => {
-        runAfterTransition(() => {
+        await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
           expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
@@ -232,7 +230,7 @@ context('ReplyMessage', () => {
 
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
-        runAfterTransition(() => {
+        await waitFor(() => {
           testInstance.findByType(FormWrapper).props.onSave(true)
           expect(saveDraft).toHaveBeenCalled()
         })
@@ -242,8 +240,8 @@ context('ReplyMessage', () => {
 
   describe('on click of send', () => {
     describe('when a required field is not filled', () => {
-      beforeEach(() => {
-        runAfterTransition(() => {
+      beforeEach(async () => {
+        await waitFor(() => {
           act(() => {
             testInstance.findByProps({ label: 'Send' }).props.onPress()
           })
@@ -251,12 +249,12 @@ context('ReplyMessage', () => {
       })
 
       it('should display a field error for that field', async () => {
-        runAfterTransition(() => {
+        await waitFor(() => {
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
         })
       })
       it('should display an AlertBox', async () => {
-        runAfterTransition(() => {
+        await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
           expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
         })
@@ -265,48 +263,50 @@ context('ReplyMessage', () => {
   })
 
   it('renders only messages in the same thread as the message associated with messageID', async () => {
-    runAfterTransition(() => {
+    await waitFor(() => {
       expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
     })
   })
 
   it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
-    runAfterTransition(() => {
-      expect(testInstance.findAllByType(TextView)[18].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[19].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[20].props.children).toBe('mock sender 2')
-      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[23].props.children).toBe('Invalid DateTime')
+    await waitFor(() => {
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews[16].props.children).toEqual('mock sender 1')
+      expect(textViews[17].props.children).toEqual('Invalid DateTime')
+      expect(textViews[18].props.children).toEqual('mock sender 2')
+      expect(textViews[19].props.children).toEqual('Invalid DateTime')
+      expect(textViews[20].props.children).toEqual('mock sender 3')
+      expect(textViews[21].props.children).toEqual('Invalid DateTime')
     })
   })
 
   it("should render last accordion's body text since it should be expanded", async () => {
-    runAfterTransition(() => {
-      expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
+    await waitFor(() => {
+      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
     })
   })
 
   describe('when first message and last message is clicked', () => {
     it('should expand first accordion and close last accordion', async () => {
-      runAfterTransition(() => {
-        act(() => {
-          testInstance.findAllByType(Pressable)[5].props.onPress()
-          testInstance.findAllByType(Pressable)[7].props.onPress()
-        })
-        expect(testInstance.findAllByType(TextView)[20].props.children).toBe('message 1 body text')
-        // Used to display last message's contents, but now there is no textview after the date
-        expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 3')
-        expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
-        expect(testInstance.findAllByType(TextView).length).toBe(25)
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[4].props.onPress()
       })
+      await waitFor(() => {
+      testInstance.findAllByType(Pressable)[6].props.onPress()
+      })
+
+      expect(testInstance.findAllByType(TextView)[18].props.children).toBe('message 1 body text')
+      // Used to display last message's contents, but now there is no textview after the date
+      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 3')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('Invalid DateTime')
+      expect(testInstance.findAllByType(TextView).length).toBe(23)
     })
   })
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance({}, [], true)
-      runAfterTransition(() => {
+      await waitFor(() => {
         expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
       })
     })
@@ -314,48 +314,9 @@ context('ReplyMessage', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
+      await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('on click of the "How to attach a file" link', () => {
-    it('should call useRouteNavigation', async () => {
-      runAfterTransition(() => {
-        testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('when message send fails', () => {
-    beforeEach(() => {
-      initializeTestInstance({}, [], false, true)
-    })
-
-    it('should display error alert', async () => {
-      runAfterTransition(() => {
-        expect(testInstance.findByType(AlertBox)).toBeTruthy()
-      })
-    })
-
-    describe('when the My HealtheVet phone number link is clicked', () => {
-      it('should call Linking open url with the parameter tel:8773270022', async () => {
-        runAfterTransition(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-        })
-      })
-    })
-
-    describe('when the call TTY phone link is clicked', () => {
-      it('should call Linking open url with the parameter tel:711', async () => {
-        runAfterTransition(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:711')
-        })
+        expect(navigateToAttachmentsSpy).toHaveBeenCalled()
       })
     })
   })

@@ -1,3 +1,5 @@
+import { includes } from 'underscore'
+
 export const DEFAULT_PAGE_SIZE = 10
 
 export const EnvironmentTypesConstants: {
@@ -41,3 +43,38 @@ export const SnackBarConstants: {
   animationDuration: 100,
   duration: 900000,
 }
+
+const screensToCloseSnackbarOnNavigation = [
+  'AppealDetailsScreen',
+  'AskForClaimDecision',
+  'ClaimDetails',
+  'ClaimDetailsScreen',
+  'ComposeMessage',
+  'DirectDeposit',
+  'EditDirectDeposit',
+  'EditDraft',
+  'EditPhoneNumber',
+  'FileRequest',
+  'FolderMessages',
+  'PersonalInformation',
+  'ReplyMessage',
+  'SecureMessaging',
+  'SecureMessaging',
+  'SelectFile',
+  'TakePhotos',
+  'UpcomingAppointmentDetails',
+  'UploadFile',
+  'UploadOrAddPhotos',
+  'ViewMessage',
+]
+
+export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
+  if (screenName) {
+    const screen = screenName.split('-')[0]
+    if (includes(screensToCloseSnackbarOnNavigation, screen)) {
+      snackBar.hideAll()
+    }
+  }
+}
+
+export const DIRECT_DEPOSIT = 'Direct Deposit'

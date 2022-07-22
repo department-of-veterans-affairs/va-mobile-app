@@ -3,8 +3,8 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, renderWithProviders } from 'testUtils'
 
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import FormAttachments from './FormAttachments'
 import TextView from '../../TextView'
 import { Pressable } from 'react-native'
@@ -19,16 +19,17 @@ jest.mock('utils/hooks', () => {
       return { ...theme }
     }),
     useRouteNavigation: () => {
-      return () => mockNavigationSpy
+      return mockNavigationSpy
     },
   }
 })
 
 context('FormAttachments', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let removeOnPressSpy: jest.Mock
   let largeButtonSpy: jest.Mock
+  let mockNavigateToSpy: jest.Mock
 
   const attachmentsList = [
     {
@@ -51,19 +52,19 @@ context('FormAttachments', () => {
   const initializeTestInstance = (attachments = attachmentsList) => {
     removeOnPressSpy = jest.fn()
     largeButtonSpy = jest.fn()
+    mockNavigateToSpy = jest.fn()
+    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
-    act(() => {
-      component = renderWithProviders(
-        <FormAttachments
-          originHeader="test header"
-          removeOnPress={removeOnPressSpy}
-          largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }}
-          attachmentsList={attachments}
-        />,
-      )
-    })
+    component = render(
+      <FormAttachments
+        originHeader="test header"
+        removeOnPress={removeOnPressSpy}
+        largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }}
+        attachmentsList={attachments}
+      />,
+    )
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -81,8 +82,10 @@ context('FormAttachments', () => {
 
     describe('when the remove link is clicked for an attachment', () => {
       it('should call the removeOnPress', async () => {
-        testInstance.findAllByType(TextView)[3].props.onPress()
-        expect(removeOnPressSpy).toHaveBeenCalled()
+        await waitFor(() => {
+          testInstance.findAllByProps({ accessibilityLabel: 'Remove'})[0].props.onPress()
+          expect(removeOnPressSpy).toHaveBeenCalled()
+        })
       })
     })
   })
@@ -98,16 +101,21 @@ context('FormAttachments', () => {
 
   describe('when the large button is clicked', () => {
     it('should call the largeButtonOnClick', async () => {
-      const pressables = testInstance.findAllByType(Pressable)
-      pressables[pressables.length - 1].props.onPress()
-      expect(largeButtonSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        const pressables = testInstance.findAllByType(Pressable)
+        pressables[pressables.length - 1].props.onPress()
+        expect(largeButtonSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('on click of the "How to attach a file" link', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('AttachmentsFAQ', { 'originHeader': 'test header' })
+        expect(mockNavigateToSpy).toHaveBeenCalled()
+      })
     })
   })
 })

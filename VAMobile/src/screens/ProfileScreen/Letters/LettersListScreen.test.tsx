@@ -3,32 +3,45 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {
-  ErrorsState,
-  initialAuthorizedServicesState,
-  initialErrorsState, initializeErrorsByScreenID,
-  initialLettersState,
-  InitialState
-} from 'store/reducers'
-import {LettersList} from "store/api/types"
-import {LettersListScreen} from "./index"
-import {ErrorComponent, LoadingComponent, TextView} from 'components';
+import { context, mockNavProps, waitFor, render, RenderAPI } from 'testUtils'
+import { ErrorsState, initialAuthorizedServicesState, initialErrorsState, initializeErrorsByScreenID, initialLettersState, InitialState } from 'store/slices'
+import { LettersList } from 'store/api/types'
+import { LettersListScreen } from './index'
+import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import NoLettersScreen from './NoLettersScreen'
 import { Pressable } from 'react-native'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
-  jest.mock('../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../utils/hooks")
-  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+
+jest.mock('store/slices/', () => {
+  let actual = jest.requireActual('store/slices')
+  let letters = jest.requireActual('store/slices').initialLettersState
+  return {
+    ...actual,
+    getLetters: jest.fn(() => {
+      return {
+        type: '',
+        payload: {
+          ...letters,
+        },
+      }
+    }),
+  }
+})
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(()=> {
-      return {...theme}
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
-    useRouteNavigation: () => { return () => mockNavigationSpy },
+    useRouteNavigation: () => {
+      return mockNavigationSpy
+    },
   }
 })
 
@@ -68,133 +81,191 @@ const lettersData: LettersList = [
 ]
 
 context('LettersListScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
+  let mockNavigateToBenefitSummarySpy: jest.Mock
+  let mockNavigateToServiceVerificationLetterSpy: jest.Mock
+  let mockNavigateToCommissaryLetterSpy: jest.Mock
+  let mockNavigateToCivilServiceLetterSpy: jest.Mock
+  let mockNavigateToBenefitVerificationSpy: jest.Mock
+  let mockNavigateToProofOfServiceLetterSpy: jest.Mock
+  let mockNavigateToProofOfPrescriptionLetterSpy: jest.Mock
+  let mockNavigateToProofOfMinimumEssentialLetterSpy: jest.Mock
 
   const initializeTestInstance = (lettersList: LettersList | null, loading = false, errorsState: ErrorsState = initialErrorsState, lettersAndDocuments: boolean = true) => {
+    mockNavigateToBenefitSummarySpy = jest.fn()
+    mockNavigateToServiceVerificationLetterSpy = jest.fn()
+    mockNavigateToCommissaryLetterSpy = jest.fn()
+    mockNavigateToCivilServiceLetterSpy = jest.fn()
+    mockNavigateToBenefitVerificationSpy = jest.fn()
+    mockNavigateToProofOfServiceLetterSpy = jest.fn()
+    mockNavigateToProofOfPrescriptionLetterSpy = jest.fn()
+    mockNavigateToProofOfMinimumEssentialLetterSpy = jest.fn()
+    when(mockNavigationSpy)
+        .mockReturnValue(() => {})
+        .calledWith('BenefitSummaryServiceVerificationLetter').mockReturnValue(mockNavigateToBenefitSummarySpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'service_verification' })).mockReturnValue(mockNavigateToServiceVerificationLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'commissary' })).mockReturnValue(mockNavigateToCommissaryLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'civil_service' })).mockReturnValue(mockNavigateToCivilServiceLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'benefit_verification' })).mockReturnValue(mockNavigateToBenefitVerificationSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'proof_of_service' })).mockReturnValue(mockNavigateToProofOfServiceLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'medicare_partd' })).mockReturnValue(mockNavigateToProofOfPrescriptionLetterSpy)
+        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'minimum_essential_coverage' })).mockReturnValue(mockNavigateToProofOfMinimumEssentialLetterSpy)
+
     const storeVals = {
       ...InitialState,
       authorizedServices: {
         ...initialAuthorizedServicesState,
         lettersAndDocuments: lettersAndDocuments,
       },
-      letters: {...initialLettersState, loading},
-      errors: errorsState
+      letters: { ...initialLettersState, loading },
+      errors: errorsState,
     }
 
     if (lettersList) {
       storeVals.letters.letters = lettersList
     }
 
-    store = mockStore(storeVals)
-
     props = mockNavProps()
 
-    act(() => {
-      component = renderWithProviders(<LettersListScreen {...props} />, store)
+    component = render(<LettersListScreen {...props} />, {
+      preloadedState: {
+        ...storeVals,
+      },
     })
 
-    testInstance = component.root
+    testInstance = component.container
   }
 
-  beforeEach(() => {
-    initializeTestInstance(lettersData)
-  })
-
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      initializeTestInstance(lettersData)
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(lettersData,true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      await waitFor(() => {
+        initializeTestInstance(lettersData, true)
+        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      })
     })
   })
 
   it('should display the correct list of letters', async () => {
-    const texts = testInstance.findAllByType(TextView)
-    expect(texts.length).toBe(8)
+    await waitFor(() => {
+      initializeTestInstance(lettersData)
+      const texts = testInstance.findAllByType(TextView)
+      expect(texts.length).toBe(8)
 
-    expect(texts[0].props.children).toBe('Commissary letter')
-    expect(texts[1].props.children).toBe('Proof of service card')
-    expect(texts[2].props.children).toBe('Proof of creditable prescription drug coverage letter')
-    expect(texts[3].props.children).toBe('Proof of minimum essential coverage letter')
-    expect(texts[4].props.children).toBe('Service verification letter')
-    expect(texts[5].props.children).toBe('Civil service preference letter')
-    expect(texts[6].props.children).toBe('Benefit summary letter')
-    expect(texts[7].props.children).toBe('Benefit verification letter')
+      expect(texts[0].props.children).toBe('Commissary letter')
+      expect(texts[1].props.children).toBe('Proof of service card')
+      expect(texts[2].props.children).toBe('Proof of creditable prescription drug coverage letter')
+      expect(texts[3].props.children).toBe('Proof of minimum essential coverage letter')
+      expect(texts[4].props.children).toBe('Service verification letter')
+      expect(texts[5].props.children).toBe('Civil service preference letter')
+      expect(texts[6].props.children).toBe('Benefit summary letter')
+      expect(texts[7].props.children).toBe('Benefit verification letter')
+    })
   })
 
   describe('when a link is clicked', () => {
     it('should call navigations navigate for Benefit Summary Service Verification Letter', async () => {
-      testInstance.findAllByType(Pressable)[6].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+        testInstance.findAllByType(Pressable)[6].props.onPress()
+        expect(mockNavigateToBenefitSummarySpy).toHaveBeenCalled()
+      })
     })
 
     it('should call navigations navigate for Service Verification Letter', async () => {
-      testInstance.findAllByType(Pressable)[4].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+        testInstance.findAllByType(Pressable)[4].props.onPress()
+        expect(mockNavigateToServiceVerificationLetterSpy).toHaveBeenCalled()
+      })
     })
 
     it('should call navigations navigate for Commissary Letter', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(mockNavigateToCommissaryLetterSpy).toHaveBeenCalled()
+      })
     })
 
     it('should call navigations navigate for Civil Service Letter', async () => {
-      testInstance.findAllByType(Pressable)[5].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+        testInstance.findAllByType(Pressable)[5].props.onPress()
+        expect(mockNavigateToCivilServiceLetterSpy).toHaveBeenCalled()
+      })
     })
 
     it('should call navigations navigate for Benefit Verification Letter', async () => {
-      testInstance.findAllByType(Pressable)[7].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+        testInstance.findAllByType(Pressable)[7].props.onPress()
+        expect(mockNavigateToBenefitVerificationSpy).toHaveBeenCalled()
+      })
     })
 
     it('should call navigations navigate for Proof of Service Letter', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+        testInstance.findAllByType(Pressable)[1].props.onPress()
+        expect(mockNavigateToProofOfServiceLetterSpy).toHaveBeenCalled()
+      })
     })
 
     it('should call navigations navigate for Proof of Creditable Prescription Drug Coverage Letter', async () => {
-      testInstance.findAllByType(Pressable)[2].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+        testInstance.findAllByType(Pressable)[2].props.onPress()
+        expect(mockNavigateToProofOfPrescriptionLetterSpy).toHaveBeenCalled()
+      })
     })
 
     it('should call navigations navigate for Proof of Minimum Essential Coverage Letter', async () => {
-      testInstance.findAllByType(Pressable)[3].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+        testInstance.findAllByType(Pressable)[3].props.onPress()
+        expect(mockNavigateToProofOfMinimumEssentialLetterSpy).toHaveBeenCalled()
+      })
     })
   })
 
   describe('when lettersAndDocuments is set to false', () => {
     it('should show noLettersScreen', async () => {
-      initializeTestInstance(lettersData,false, initialErrorsState, false)
-      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      await waitFor(() => {
+        initializeTestInstance(lettersData, false, initialErrorsState, false)
+        expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      })
     })
   })
 
   describe('when letters is falsy', () => {
     it('should show No Letters Screen', async () => {
-      initializeTestInstance(null)
-
-      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      await waitFor(() => {
+        initializeTestInstance(null)
+        expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      })
     })
   })
 
   describe('when there is no letters', () => {
     it('should show No Letters Screen', async () => {
-      initializeTestInstance([])
-
-      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      await waitFor(() => {
+        initializeTestInstance([])
+        expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      })
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -202,12 +273,13 @@ context('LettersListScreen', () => {
         ...initialErrorsState,
         errorsByScreenID,
       }
-
-      initializeTestInstance([], undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+      await waitFor(() => {
+        initializeTestInstance([], undefined, errorState)
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+      })
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -216,8 +288,10 @@ context('LettersListScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance([], undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      await waitFor(() => {
+        initializeTestInstance([], undefined, errorState)
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      })
     })
   })
 })

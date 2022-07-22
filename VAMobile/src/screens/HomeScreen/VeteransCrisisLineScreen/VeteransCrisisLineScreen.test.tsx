@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, findByTestID, renderWithProviders } from 'testUtils'
+import { context, findByTestID, render, RenderAPI } from 'testUtils'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen'
 
 const mockExternalLinkSpy = jest.fn()
@@ -23,15 +23,13 @@ jest.mock('utils/hooks', () => {
 })
 
 context('VeteransCrisisLineScreen', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    act(() => {
-      component = renderWithProviders(<VeteransCrisisLineScreen />)
-    })
+    component = render(<VeteransCrisisLineScreen />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

@@ -1,11 +1,18 @@
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { themeFn } from 'utils/theme'
+import { useTheme } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
+import styled from 'styled-components'
+
+const StyledSafeAreaView = styled(SafeAreaView)`
+  background-color: ${themeFn((theme) => theme.colors.background.webviewControls)};
+`
 
 /**
  *  Signifies the props that need to be passed in to {@link WebviewControls}
@@ -27,7 +34,7 @@ export type WebviewControlsProps = {
  * Controls for back, forward, and open in browser used in the Webview screen
  */
 const WebviewControls: FC<WebviewControlsProps> = (props) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const controlsViewProps: BoxProps = {
@@ -40,7 +47,7 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
   }
 
   return (
-    <SafeAreaView edges={['bottom']}>
+    <StyledSafeAreaView edges={['bottom']}>
       <Box {...controlsViewProps}>
         <WebviewControlButton icon={'WebviewBack'} onPress={props.onBackPressed} disabled={!props.canGoBack} a11yHint={t('back.a11yHint')} {...testIdProps(t('back'))} />
         <WebviewControlButton
@@ -52,7 +59,7 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
         />
         <WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} a11yHint={t('openInBrowser.a11yHint')} {...testIdProps(t('openInBrowser'))} />
       </Box>
-    </SafeAreaView>
+    </StyledSafeAreaView>
   )
 }
 

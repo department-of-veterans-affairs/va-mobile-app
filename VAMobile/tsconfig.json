@@ -3,7 +3,9 @@
 		"target": "esnext",
 		"module": "commonjs",
 		"lib": [
-			"es6"
+			"es6",
+			"ES2019",
+			"ESNext"
 		],
 		"allowJs": true,
 		"jsx": "react-native",
@@ -30,6 +32,7 @@
 	],
 	"include": [
 		"global.d.ts",
+		"react-i18next.d.ts",
 		"src",
 		"__tests__"
 	]

@@ -1,32 +1,34 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Carousel } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
 import { capitalizeWord } from 'utils/formattingUtils'
-import { completeFirstTimeLogin } from 'store/actions'
-import { useTranslation } from 'utils/hooks'
+
+import { PersonalInformationState, completeFirstTimeLogin } from 'store/slices'
+import { RootState } from 'store'
+import { useAppDispatch } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
 const OnboardingProfile: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} testID="Onboarding-profile-page" />
 }
 
 const OnboardingClaimsAndAppeals: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} testID="Onboarding-claims-and-Appeals-page" />
 }
 
-const OnboardingAppointments: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
+const OnboardingHealth: FC = () => {
+  const { t } = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.appointments.header')} text={t('onboarding.appointments.details')} testID="Onboarding-appointments-page" />
 }
 
 const OnboardingAppOverview: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const firstName = profile?.firstName ? `${capitalizeWord(profile?.firstName)}` : ''
 
   return (
@@ -43,8 +45,8 @@ const OnboardingAppOverview: FC = () => {
 }
 
 const OnboardingCarousel: FC = () => {
-  const dispatch = useDispatch()
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const dispatch = useAppDispatch()
+  const { t } = useTranslation(NAMESPACE.LOGIN)
 
   const onCarouselEnd = (): void => {
     dispatch(completeFirstTimeLogin())
@@ -57,12 +59,12 @@ const OnboardingCarousel: FC = () => {
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 1 }),
-        continueHint: t('onboarding.continueA11yHint.appointmentsOnboarding'),
+        continueHint: t('onboarding.continueA11yHint.healthOnboarding'),
       },
     },
     {
       name: 'OnboardingAppointments',
-      component: OnboardingAppointments,
+      component: OnboardingHealth,
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
@@ -77,7 +79,7 @@ const OnboardingCarousel: FC = () => {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 3 }),
         continueHint: t('onboarding.continueA11yHint.profileOnboarding'),
-        backHint: t('onboarding.backA11yHint.appointmentsOnboarding'),
+        backHint: t('onboarding.backA11yHint.healthOnboarding'),
       },
     },
     {

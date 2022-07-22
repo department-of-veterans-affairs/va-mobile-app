@@ -1,30 +1,32 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, LettersState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
+import { LettersState, getLetters } from 'store/slices/lettersSlice'
 import { NAMESPACE } from 'constants/namespaces'
-import { OnPressHandler, useDowntime, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { OnPressHandler, useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { ProfileStackParamList } from '../ProfileStackScreens'
-import { getLetters } from 'store/actions/letters'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
+import { useSelector } from 'react-redux'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<ProfileStackParamList, 'LettersList'>
 
 const LettersListScreen: FC<LettersListScreenProps> = () => {
-  const dispatch = useDispatch()
-  const { lettersAndDocuments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const { letters, loading } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const dispatch = useAppDispatch()
+  const { lettersAndDocuments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const t = useTranslation(NAMESPACE.PROFILE)
-  const tCommon = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tCommon } = useTranslation(NAMESPACE.COMMON)
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
 
   const letterPressFn = (letterType: LetterTypes, letterName: string): OnPressHandler | undefined => {

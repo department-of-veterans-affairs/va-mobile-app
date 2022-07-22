@@ -1,19 +1,22 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
+import { AuthState, loginStart } from 'store/slices/authSlice'
+import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
-  const t = useTranslation(NAMESPACE.LOGIN)
-  const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { t } = useTranslation([NAMESPACE.LOGIN, NAMESPACE.COMMON, NAMESPACE.HOME])
+  const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
@@ -27,11 +30,12 @@ const LoginScreen: FC = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   const onFacilityLocator = navigateTo('Webview', {
     url: WEBVIEW_URL_FACILITY_LOCATOR,
     displayTitle: t('common:webview.vagov'),
+    loadingMessage: t('home:webview.valocation.loading'),
   })
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
@@ -45,12 +49,13 @@ const LoginScreen: FC = () => {
     py: theme.dimensions.buttonPadding,
   }
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const handleUpdateDemoMode = () => {
     dispatch(updateDemoMode(true))
   }
   const tapForDemo = () => {
     demoTaps++
+    console.log(`demotaps: ${demoTaps}`)
     if (demoTaps > TAPS_FOR_DEMO) {
       demoTaps = 0
       setDemoPromptVisible(true)
@@ -71,14 +76,14 @@ const LoginScreen: FC = () => {
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && (
         <Box mx={theme.dimensions.gutter}>
-          <AlertBox border={'informational'} background={'cardBackground'} title={'DEMO MODE'} />
+          <AlertBox border={'informational'} title={'DEMO MODE'} />
         </Box>
       )}
       <Box flex={1}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.loginContentMarginBottom}>
+        <Box mx={theme.dimensions.gutter} mb={80}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}

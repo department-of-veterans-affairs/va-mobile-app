@@ -3,8 +3,8 @@ import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
-import { VAIconColors } from 'styles/theme'
-import { useFontScale, useTheme } from 'utils/hooks'
+import { VAIconColors, VATextColors } from 'styles/theme'
+import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
 // New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
@@ -56,19 +56,26 @@ import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 
 // Misc
-import { AccessibilityState, StoreState } from 'store/reducers'
+
+import { AccessibilityState } from 'store/slices'
+import { RootState } from 'store'
 import { updateFontScale } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import Add from './svgs/add.svg'
+import BuildingSolid from './svgs/buildingSolid.svg'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
 import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
+import Delete from './svgs/delete.svg'
+import EllipsisSolid from './svgs/ellipsisSolid.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import FolderSolid from './svgs/folder-solid.svg'
 import InboxSolid from './svgs/inbox-solid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
+import Minus from './svgs/minus.svg'
 import PaperClip from './svgs/paperClip.svg'
 import PhoneSolid from './svgs/phoneSolid.svg'
 import QuestionMark from './svgs/questionMark.svg'
@@ -87,6 +94,7 @@ export const VA_ICON_MAP = {
   ClaimsUnselected,
   ProfileSelected,
   ProfileUnselected,
+  Add,
   ArrowDown,
   ArrowUp,
   ArrowLeft,
@@ -98,14 +106,17 @@ export const VA_ICON_MAP = {
   Compose,
   CircleCheckMark,
   CoastGuard,
+  Delete,
   Directions,
   EmptyCheckBox,
   FilledCheckBox,
   FolderSolid,
   EmptyRadio,
+  EllipsisSolid,
   FilledRadio,
   DisabledRadio,
   Marines,
+  Minus,
   Navy,
   PaperClip,
   Phone,
@@ -131,6 +142,7 @@ export const VA_ICON_MAP = {
   ExclamationTriangleSolid,
   TrashSolid,
   InboxSolid,
+  BuildingSolid,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
@@ -140,7 +152,7 @@ export type VAIconProps = BoxProps & {
   name: keyof typeof VA_ICON_MAP
 
   /** Fill color for the icon */
-  fill?: keyof VAIconColors | string
+  fill?: keyof VAIconColors | keyof VATextColors | string
 
   /** Stroke color of the icon */
   stroke?: keyof VAIconColors | string
@@ -160,13 +172,12 @@ export type VAIconProps = BoxProps & {
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
+const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, ...boxProps }) => {
   const theme = useTheme()
-  let domProps = Object.create(props)
   const fs: (val: number) => number = useFontScale()
-  const dispatch = useDispatch()
-  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
-  const { name, width, height, fill, stroke, preventScaling } = props
+  const dispatch = useAppDispatch()
+  const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
+  let iconProps = Object.create({ name, width, height, stroke, preventScaling, fill })
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
@@ -175,30 +186,29 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   }, [dispatch, fontScale])
 
   if (fill) {
-    domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })
+    iconProps = Object.assign({}, iconProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || theme.colors.text[fill as keyof VATextColors] || fill })
   }
 
   if (stroke) {
-    domProps = Object.assign({}, domProps, { stroke: theme.colors.icon[stroke as keyof VAIconColors] || stroke })
+    iconProps = Object.assign({}, iconProps, { stroke: theme.colors.icon[stroke as keyof VAIconColors] || stroke })
   }
 
   const Icon: FC<SvgProps> | undefined = VA_ICON_MAP[name]
   if (!Icon) {
     return <></>
   }
-  delete domProps.name
 
   if (width && isFinite(width)) {
-    domProps = Object.assign({}, domProps, { width: preventScaling ? width : fs(width) })
+    iconProps = Object.assign({}, iconProps, { width: preventScaling ? width : fs(width) })
   }
 
   if (height && isFinite(height)) {
-    domProps = Object.assign({}, domProps, { height: preventScaling ? height : fs(height) })
+    iconProps = Object.assign({}, iconProps, { height: preventScaling ? height : fs(height) })
   }
 
   return (
-    <Box {...domProps}>
-      <Icon {...domProps} />
+    <Box {...boxProps}>
+      <Icon {...iconProps} />
     </Box>
   )
 }

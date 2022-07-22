@@ -1,23 +1,28 @@
 import { pick } from 'underscore'
-import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, NotificationsState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
-import { DEVICE_ENDPOINT_SID, debugResetFirstTimeLogin } from 'store/actions'
+
+import { AnalyticsState } from 'store/slices'
+import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
+import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
+import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
+import { RootState } from 'store'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
+import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
-  const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
+  const authorizedServices = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
@@ -26,7 +31,8 @@ const DebugScreen: FC = ({}) => {
   }
 
   // push data
-  const { deviceToken } = useSelector<StoreState, NotificationsState>((state) => state.notifications)
+  const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
+  const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
@@ -56,17 +62,30 @@ const DebugScreen: FC = ({}) => {
     resetReviewActionCount()
   }
 
+  const onClickFirebaseDebugMode = (): void => {
+    dispatch(toggleFirebaseDebugMode())
+  }
+
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={onResetFirstTimeLogin} label={'Reset First Time Login'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={resetInAppReview} label={'Reset In-App Review Actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={resetInAppReview} label={'Reset in-app review actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
+        <Box mt={theme.dimensions.contentMarginTop}>
+          <TextArea>
+            <VAButton
+              onPress={onClickFirebaseDebugMode}
+              label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+            />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

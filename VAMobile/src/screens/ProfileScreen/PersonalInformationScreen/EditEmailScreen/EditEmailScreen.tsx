@@ -1,6 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
@@ -20,13 +19,14 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices'
 import { RootNavStackParamList } from 'App'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { deleteEmail, finishEditEmail, updateEmail } from 'store/actions'
-import { stringToTitleCase } from 'utils/formattingUtils'
+import { SnackbarMessages } from 'components/SnackBar'
 import { testIdProps } from 'utils/accessibility'
-import { useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 
@@ -34,10 +34,11 @@ type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
  * Screen for editing a users email in the personal info section
  */
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
-  const { profile, emailSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
   const deleteEmailAlert = useDestructiveAlert()
 
@@ -67,8 +68,18 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     setSaveDisabled(formContainsError)
   }, [formContainsError])
 
+  const saveSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.emailAddress.saved'),
+    errorMsg: t('personalInformation.emailAddress.not.saved'),
+  }
+
   const saveEmail = (): void => {
-    dispatch(updateEmail(email, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
+    dispatch(updateEmail(saveSnackbarMessages, email, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
+  }
+
+  const removeSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.emailAddress.removed'),
+    errorMsg: t('personalInformation.emailAddress.not.removed'),
   }
 
   const onDelete = (): void => {
@@ -80,7 +91,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     }
 
     setDeleting(true)
-    dispatch(deleteEmail(originalEmail, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
+    dispatch(deleteEmail(removeSnackbarMessages, originalEmail, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
   }
 
   if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
@@ -129,10 +140,10 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
-          text: t('common:remove'),
+          text: tc('remove'),
           onPress: onDelete,
         },
       ],
@@ -146,15 +157,15 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: stringToTitleCase(emailTitle) })}
-              buttonType={ButtonTypesConstants.buttonImportant}
+              label={t('personalInformation.removeData', { pageName: emailTitle })}
+              buttonType={ButtonTypesConstants.buttonDestructive}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: emailTitle })}
             />
           </Box>
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editEmail.alertError')} background="noCardBackground" border="error" />
+            <AlertBox title={t('editEmail.alertError')} border="error" />
           </Box>
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />

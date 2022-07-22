@@ -1,24 +1,21 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import {context, mockNavProps, renderWithProviders} from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 
 import HowWillYouScreen from './HowWillYouScreen'
 
 context('HowWillYouScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
 
-    act(() => {
-      component = renderWithProviders(<HowWillYouScreen {...props} />)
-    })
+    component = render(<HowWillYouScreen {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

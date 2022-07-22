@@ -32,16 +32,16 @@ platform :ios do
   desc "Push a new internal QA build to TestFlight"
   lane :qa do |options|
     puts('Begin QA lane' )
+    notes = options[:notes]
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
     sign
     build
-    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y")
+    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
     upload_tf(notes, "Development Team")
-    upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New QA build successfully uploaded to TestFlight Group - Development Team"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Push new demo version to TestFlight"
@@ -56,33 +56,62 @@ platform :ios do
     sign
     build
     upload_app_store
-    upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New Production build successfully uploaded to App Store for review"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Production", message, "iOS")
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Production", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Promote the release Awaiting Developer Release to App Store"
   lane :release do
-    app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
-    version = app.get_pending_release_app_store_version
-    unless version.nil?
-      Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
-      slack_release_success(version.version_string, "iOS")
+    begin
+      app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
+      version = app.get_pending_release_app_store_version
+      unless version.nil?
+        Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
+        upload_deobfuscation_file(version.version_string)
+        slack_release_success(version.version_string, "iOS")
+      end
+    rescue => e
+      slack_release_error(version, e)
     end
   end
 
   desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
   lane :on_demand do |options|
     puts "on demand run"
+    notes = options[:notes]
+    datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
     update_version(options[:version])
     sign
     build
-    notes = "New On Demand QA version for " + Time.new.strftime("%m.%d.%Y")
-    upload_tf(notes, options[:tfGroup])
-    upload_deobfuscation_file
-    message = "New On Demand build successfully uploaded to TestFlight Group " + options[:tfGroup]
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS")
+
+    tf_group = options[:tfGroup].empty? ? "Development Team" : options[:tfGroup]
+
+    if notes.to_s.empty?
+      notes = "New On Demand QA version for " + datetime
+    elsif notes.start_with?("feature-build-")
+      notes = "Feature Build: #{notes.gsub('feature-build-','').gsub('-',' ')} - " + datetime
+    end
+
+    puts notes
+    upload_tf(notes, tf_group)
+    message = "New On Demand build successfully uploaded to TestFlight Group " + tf_group
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS", ENV['SLACK_THREAD_TS'])
+  end
+
+  desc "Deploy a RC new version to TestFlight"
+  lane :rc do |options|
+    puts('Begin RC lane' )
+    update_version(options[:version])
+    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-RC")
+    sign
+    build("RC")
+    rcVersion = "#{Gem::Version.new(lane_context[SharedValues::VERSION_NUMBER]).bump}.0"
+    notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
+    upload_tf(notes, "Development Team")
+    tag_build(lane_context[SharedValues::BUILD_NUMBER])
+    message = "New RC for #{rcVersion} successfully uploaded to TestFlight Group - Development Team"
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Release Candidate", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   after_all do |lane, options|
@@ -91,7 +120,7 @@ platform :ios do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
+    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS", ENV['SLACK_THREAD_TS'])
   end
 
 
@@ -135,7 +164,7 @@ platform :ios do
       push_git_tags
     rescue => e
         puts e.to_s
-      slack_github_error(e, "Error tagging iOS build", "iOS")
+      slack_github_error(e, "Error tagging iOS build", "iOS", ENV['SLACK_THREAD_TS'])
     end
   end
 
@@ -145,10 +174,11 @@ platform :ios do
   end
 
   desc "Build the app for upload"
-  def build
+  def build(config = "Release")
     gym(
       workspace: "VAMobile.xcworkspace",
       scheme: ENV['IOS_SCHEME'],
+      configuration: config,
       silent: true,
       export_method: "app-store",
     )
@@ -180,7 +210,9 @@ platform :ios do
       )
   end
 
-  def upload_deobfuscation_file
+  def upload_deobfuscation_file(version)
+    download_dsyms(version: version)
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip", app_id: ENV['FIREBASE_IOS_APP_ID'])
+    clean_build_artifacts
   end
 end

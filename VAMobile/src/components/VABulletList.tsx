@@ -2,9 +2,9 @@ import React, { FC } from 'react'
 
 import _ from 'underscore'
 
-import { VAIconColors, VATextColors } from 'styles/theme'
+import { VATextColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useExternalLink } from 'utils/hooks'
 import Box from './Box'
 import TextView, { FontVariant, TextViewProps } from './TextView'
 import VAIcon from './VAIcon'
@@ -38,16 +38,12 @@ export type VABulletListText = {
 export type VABulletListProps = {
   /** list of text to display in a bulleted list*/
   listOfText: Array<string | VABulletListText>
-
-  /** optional bullet color */
-  bulletColor?: keyof VAIconColors
 }
 
 /**
  * Displays the list of text as a bulleted list
  */
-const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' }) => {
-  const theme = useTheme()
+const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
   const launchExternalLink = useExternalLink()
 
   const getUpdatedListOfText = (): Array<VABulletListText> => {
@@ -73,16 +69,16 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' 
 
         const textViewProps: TextViewProps = {
           variant: variant || 'MobileBody',
-          color: color || 'primary',
+          color: color || 'bodyText',
           onPress: linkToRedirect ? async (): Promise<void> => onPress(linkToRedirect) : undefined,
           flexWrap: 'wrap',
           flex: 1,
         }
 
         return (
-          <Box display="flex" flexDirection="row" alignItems="flex-start" key={index}>
-            <Box mr={theme.dimensions.textXPadding} mt={theme.dimensions.bulletMargin}>
-              <VAIcon name="Bullet" fill={bulletColor} />
+          <Box display="flex" flexDirection="row" alignItems="flex-start" key={index} accessible={true}>
+            <Box mr={20} mt={12}>
+              <VAIcon name="Bullet" fill={color || 'bodyText'} />
             </Box>
             <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
               {text.trim()}

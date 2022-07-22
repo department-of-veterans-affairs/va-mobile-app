@@ -1,22 +1,20 @@
-import 'react-native'
 import React from 'react'
 
-import renderer, { act } from 'react-test-renderer'
-
-import { TestProviders, context, mockStore } from 'testUtils'
+import { context, render, act, RenderAPI, waitFor } from 'testUtils'
 
 import { Linking } from 'react-native'
-import { handleTokenCallbackUrl } from 'store/actions/auth'
 import App, { AuthGuard, AuthedApp } from './App'
 import LoginScreen from 'screens/auth/LoginScreen'
-import { initialAuthState } from './store/reducers'
-import { AuthParamsLoadingStateTypeConstants } from 'store'
-import snackBar, { initialSnackBarState } from 'store/reducers/snackBar'
+import { handleTokenCallbackUrl, initialAuthState, initialSnackBarState } from 'store/slices'
 
-jest.mock('./store/actions/auth', () => ({
-  handleTokenCallbackUrl: jest.fn(() => ({ type: 'FOO' })),
-  initializeAuth: jest.fn(() => ({ type: 'FOO' })),
-}))
+jest.mock('./store/slices', () => {
+  let original = jest.requireActual('./store/slices')
+  return {
+    ...original,
+    handleTokenCallbackUrl: jest.fn(() => ({ type: 'FOO' })),
+    initializeAuth: jest.fn(() => ({ type: 'FOO' })),
+  }
+})
 
 jest.mock('react-native-keyboard-manager', () => ({
   setEnable: jest.fn(() => {}),
@@ -26,6 +24,7 @@ jest.mock('react-native-keyboard-manager', () => ({
 
 context('App', () => {
   it('initializes correctly', async () => {
+    let component: any
     jest.mock('./store', () => ({
       ...(jest.requireActual('./store') as any),
       configureStore: () => ({
@@ -35,42 +34,36 @@ context('App', () => {
       }),
     }))
 
-    let component: any
-    act(() => {
-      component = renderer.create(<App />)
-    })
+    component = render(<App />, { preloadedState: { auth: initialAuthState }, navigationProvided: true })
+
     expect(component).toBeTruthy()
   })
 
   describe('AuthGuard', () => {
     it('should render loading spinner while initializing', async () => {
-      const store = mockStore({
-        auth: { ...initialAuthState },
-      })
       let component: any
-      act(() => {
-        component = renderer.create(
-          <TestProviders store={store}>
-            <AuthGuard />
-          </TestProviders>,
-        )
+      await waitFor(async () => {
+        component = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState, initializing: true },
+          },
+        })
       })
+
       expect(component).toBeTruthy()
-      expect(() => component.root.findByType(LoginScreen)).toThrow()
-      expect(() => component.root.findByType(AuthedApp)).toThrow()
+      expect(() => component.container.findByType(LoginScreen)).toThrow()
+      expect(() => component.container.findByType(AuthedApp)).toThrow()
     })
 
     it('should initilize by registering for linking', async () => {
-      const store = mockStore({
-        auth: { ...initialAuthState },
-      })
       let component: any
-      act(() => {
-        component = renderer.create(
-          <TestProviders store={store}>
-            <AuthGuard />
-          </TestProviders>,
-        )
+
+      await waitFor(() => {
+        component = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState },
+          },
+        })
       })
       expect(component).toBeTruthy()
       expect(Linking.addEventListener).toHaveBeenCalled()
@@ -79,56 +72,43 @@ context('App', () => {
     it('should dispatch handleTokenCallbackUrl when auth token result comes back', async () => {
       let component: any
 
-      const store = mockStore({
-        auth: {
-          ...initialAuthState,
-          initializing: false,
-        },
+      await waitFor(() => {
+        component = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState, initializing: false },
+          },
+        })
       })
-      act(() => {
-        component = renderer.create(
-          <TestProviders store={store}>
-            <AuthGuard />
-          </TestProviders>,
-        )
-        expect(component).toBeTruthy()
-      })
-      expect(Linking.addEventListener).toHaveBeenCalled()
+
       const spy = Linking.addEventListener as jest.Mock
       const listeners = spy.mock.calls
 
-      act(() => {
+      await waitFor(() => {
         listeners.forEach((k) => {
           const listener = k[1]
           listener({ url: 'vamobile://login-success?code=123&state=5434' })
         })
       })
-
+      expect(Linking.addEventListener).toHaveBeenCalled()
       expect(handleTokenCallbackUrl).toHaveBeenCalled()
     })
 
     it('should not dispatch handleTokenCallbackUrl when not an auth result url', async () => {
       let component: any
 
-      const store = mockStore({
-        auth: {
-          ...initialAuthState,
-          initializing: false,
-        },
+      await waitFor(() => {
+        component = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState, initializing: false },
+          },
+        })
       })
-      act(() => {
-        component = renderer.create(
-          <TestProviders store={store}>
-            <AuthGuard />
-          </TestProviders>,
-        )
-        expect(component).toBeTruthy()
-      })
+
       expect(Linking.addEventListener).toHaveBeenCalled()
       const spy = Linking.addEventListener as jest.Mock
       const listeners = spy.mock.calls
 
-      act(() => {
+      await waitFor(() => {
         listeners.forEach((k) => {
           const listener = k[1]
           listener({ url: 'vamobile://foo?code=123&state=5434' })
@@ -139,45 +119,34 @@ context('App', () => {
     })
 
     it('should render Login when not authorized', async () => {
-      const store = mockStore({
-        auth: {
-          ...initialAuthState,
-          initializing: false,
-        },
+      await waitFor(() => {
+        let { container } = render(<AuthGuard />, {
+          preloadedState: {
+            auth: { ...initialAuthState, initializing: false },
+          },
+        })
+        expect(container).toBeTruthy()
+        expect(container.findByType(LoginScreen)).toBeTruthy()
       })
-      let component: any
-      act(() => {
-        component = renderer.create(
-          <TestProviders store={store}>
-            <AuthGuard />
-          </TestProviders>,
-        )
-      })
-      expect(component).toBeTruthy()
-      expect(component.root.findByType(LoginScreen)).toBeTruthy()
     })
 
     it('should render AuthedApp when authorized', async () => {
-      const store = mockStore({
-        auth: {
-          ...initialAuthState,
-          initializing: false,
-          loggedIn: true,
-        },
-        snackBar: {
-          ...initialSnackBarState,
-        },
-      })
+      await waitFor(() => {
+        let { container } = render(<AuthGuard />, {
+          preloadedState: {
+            auth: {
+              ...initialAuthState,
+              initializing: false,
+              loggedIn: true,
+            },
+            snackBar: {
+              ...initialSnackBarState,
+            },
+          },
+        })
 
-      let component: any
-      act(() => {
-        component = renderer.create(
-          <TestProviders store={store}>
-            <AuthGuard />
-          </TestProviders>,
-        )
+        expect(container.findByType(AuthedApp)).toBeTruthy()
       })
-      expect(component.root.findByType(AuthedApp)).toBeTruthy()
     })
   })
 })

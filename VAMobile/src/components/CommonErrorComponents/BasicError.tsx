@@ -1,10 +1,11 @@
 import { ViewStyle } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type BasicErrorProps = {
   /** function called when the Try again button is pressed */
@@ -23,14 +24,13 @@ export type BasicErrorProps = {
 
 /**A common component to show an error*/
 const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, label }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const buttonText: string = label || t('tryAgain')
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.main,
   }
 
   const containerStyles = {

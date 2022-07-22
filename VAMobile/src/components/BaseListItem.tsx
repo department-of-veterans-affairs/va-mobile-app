@@ -4,6 +4,7 @@ import React, { FC, ReactElement, useState } from 'react'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
+import FileRequestNumberIndicator from 'screens/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import SwitchComponent, { SwitchProps } from './Switch'
 import VAIcon, { VAIconProps } from './VAIcon'
 
@@ -17,6 +18,8 @@ export enum ButtonDecoratorType {
   None = 'None',
   /** Picker selected item decorator **/
   SelectedItem = 'SelectedItem',
+  /** Trash can decorator */
+  Delete = 'Delete',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -57,6 +60,12 @@ export type BaseListItemProps = {
 
   /** Optional active background color for an individual item */
   activeBackgroundColor?: BackgroundVariant
+
+  /** Optional file request number for the number indicator */
+  claimsRequestNumber?: number
+
+  /** Optional file request if file was loaded to show check mark */
+  fileUploaded?: boolean
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
@@ -66,17 +75,19 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
     case ButtonDecoratorType.Switch:
       return <SwitchComponent onPress={onPress} {...decoratorProps} />
     case ButtonDecoratorType.SelectedItem:
+      return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
+    case ButtonDecoratorType.Delete:
+      return <VAIcon name={'TrashSolid'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
+    default:
       return (
         <VAIcon
-          name={'CheckMark'}
-          height={theme.dimensions.pickerModalSelectedIconHeight}
-          width={theme.dimensions.pickerModalSelectedIconWidth}
-          fill={theme.colors.icon.grayDark}
+          name={'ArrowRight'}
+          fill={theme.colors.icon.chevronListItem}
+          width={theme.dimensions.chevronListItemWidth}
+          height={theme.dimensions.chevronListItemHeight}
           {...decoratorProps}
         />
       )
-    default:
-      return <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={10} height={15} {...decoratorProps} />
   }
 }
 
@@ -85,7 +96,21 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  * @returns BaseListItem component
  */
 const BaseListItem: FC<BaseListItemProps> = (props) => {
-  const { onPress, a11yHint, a11yRole, a11yState, decorator, decoratorProps, testId, a11yValue, children, backgroundColor, activeBackgroundColor } = props
+  const {
+    onPress,
+    a11yHint,
+    a11yRole,
+    a11yState,
+    decorator,
+    decoratorProps,
+    testId,
+    a11yValue,
+    children,
+    backgroundColor,
+    activeBackgroundColor,
+    claimsRequestNumber,
+    fileUploaded,
+  } = props
   const theme = useTheme()
 
   const [isPressed, setIsPressed] = useState(false)
@@ -161,6 +186,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
       <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
+        {claimsRequestNumber !== undefined ? <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} /> : <></>}
         {children}
         {showDecorator && (
           <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>

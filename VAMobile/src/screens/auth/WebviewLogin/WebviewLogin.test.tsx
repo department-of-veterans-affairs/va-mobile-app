@@ -1,20 +1,15 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { TestProviders, context, mockStore, mockNavProps } from 'testUtils'
-import renderer, { act } from 'react-test-renderer'
+import { render, context, mockNavProps, waitFor } from 'testUtils'
 
-import { initialAuthState } from '../../../store/reducers'
-import WebviewLogin from "./WebviewLogin";
+import WebviewLogin from './WebviewLogin'
+import { initialAuthState } from 'store/slices'
 
 context('WebviewLogin', () => {
-  let store: any
   let component: any
 
-  beforeEach(() => {
-    store = mockStore({
-      auth: {...initialAuthState},
-    })
+  beforeEach(async () => {
     const mockProps = mockNavProps(
       {},
       {
@@ -22,12 +17,10 @@ context('WebviewLogin', () => {
       },
     )
 
-    act(() => {
-      component = renderer.create(
-        <TestProviders store={store}>
-          <WebviewLogin {...mockProps}/>
-        </TestProviders>,
-      )
+    component = render(<WebviewLogin {...mockProps} />, {
+      preloadedState: {
+        auth: { ...initialAuthState },
+      },
     })
   })
 

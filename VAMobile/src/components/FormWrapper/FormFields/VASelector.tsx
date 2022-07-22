@@ -1,10 +1,14 @@
 import { TouchableWithoutFeedback } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, TextView, VAIcon, VAIconProps } from '../../index'
+import { Box, BoxProps, TextView, VAIcon, VAIconProps } from '../../index'
+import { NAMESPACE } from 'constants/namespaces'
+import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { getTranslation } from 'utils/formattingUtils'
 import { renderInputError } from './formFieldUtils'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export enum SelectorType {
   Checkbox = 'Checkbox',
@@ -54,10 +58,9 @@ const VASelector: FC<VASelectorProps> = ({
   isRequiredField,
 }) => {
   const theme = useTheme()
-  const t = useTranslation()
-  const {
-    dimensions: { selectorWidth, selectorHeight, checkboxLabelMargin },
-  } = theme
+  const { t } = useTranslation()
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const iconWidth = 22
 
   const selectorOnPress = (): void => {
     if (!disabled) {
@@ -72,13 +75,32 @@ const VASelector: FC<VASelectorProps> = ({
     }
   }
 
+  const getIconsProps = (name: string, stroke?: keyof VAIconColors | string, fill?: keyof VAIconColors | keyof VATextColors | string): VAIconProps => {
+    return {
+      name,
+      stroke,
+      width: iconWidth,
+      height: 22,
+      fill,
+    } as VAIconProps
+  }
+
+  const errorBoxProps: BoxProps = {
+    ml: 10 + iconWidth,
+  }
+
+  const selectorBoxProps: BoxProps = {
+    ml: 10,
+    flex: 1,
+  }
+
   const getCheckBoxIcon = (): React.ReactNode => {
     if (disabled && selectorType === SelectorType.Radio) {
-      return <VAIcon name="DisabledRadio" width={selectorWidth} height={selectorHeight} {...testIdProps('DisabledRadio')} />
+      return <VAIcon {...getIconsProps('DisabledRadio')} {...testIdProps('DisabledRadio')} />
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
-      return <VAIcon name="ErrorCheckBox" width={selectorWidth} height={selectorHeight} {...testIdProps('ErrorCheckBox')} />
+      return <VAIcon {...getIconsProps('ErrorCheckBox', theme.colors.icon.error)} {...testIdProps('ErrorCheckBox')} />
     }
 
     const filledName = selectorType === SelectorType.Checkbox ? 'FilledCheckBox' : 'FilledRadio'
@@ -88,35 +110,23 @@ const VASelector: FC<VASelectorProps> = ({
     const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
     const stroke = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabled'
 
-    const selectorIconProps: VAIconProps = {
-      name,
-      width: selectorWidth,
-      height: selectorHeight,
-      fill,
-      stroke,
-    }
-
-    return <VAIcon {...selectorIconProps} {...testIdProps(name)} />
+    return <VAIcon {...getIconsProps(name, stroke, fill)} {...testIdProps(name)} />
   }
 
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
   const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'radio'
   const a11yState = selectorType === SelectorType.Checkbox ? { checked: selected } : { selected }
+  const labelToUse = `${a11yLabel || getTranslation(labelKey, t, labelArgs)} ${error ? tc('error', { error }) : ''}`
 
   return (
-    <TouchableWithoutFeedback
-      onPress={selectorOnPress}
-      accessibilityState={a11yState}
-      accessibilityRole={a11yRole}
-      {...hintProp}
-      {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
+    <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={a11yState} accessibilityRole={a11yRole} accessibilityLabel={labelToUse} {...hintProp}>
       <Box>
-        {!!error && <Box ml={checkboxLabelMargin + selectorWidth}>{renderInputError(theme, error)}</Box>}
+        {!!error && <Box {...errorBoxProps}>{renderInputError(error)}</Box>}
         <Box flexDirection="row">
           <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
-          <Box flex={1} ml={checkboxLabelMargin}>
-            <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'primary'}>
-              {t(labelKey, labelArgs)}
+          <Box {...selectorBoxProps}>
+            <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'bodyText'}>
+              {getTranslation(labelKey, t, labelArgs)}
             </TextView>
           </Box>
         </Box>

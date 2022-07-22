@@ -1,11 +1,12 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useAccessibilityFocus, useTheme, useTranslation } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -32,7 +33,7 @@ export type BackButtonProps = {
  * Button used by the stack navigation to go back to the previous screen
  */
 export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint, focusOnButton = true }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -43,15 +44,15 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
     return null
   }
 
-  const chevron = showCarat ? <VAIcon mt={1} name={'ArrowLeft'} fill="contrast" /> : <></>
+  const chevron = showCarat ? <VAIcon mt={1} name={'ArrowLeft'} fill="backButton" /> : <></>
 
   const a11yHintPropParam = a11yHint ? a11yHint : t(`${label}.a11yHint`)
 
   return (
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} alignItems={'center'}>
+      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} alignItems={'center'}>
         {chevron}
-        <TextView variant="ActionBar" color="primaryContrast" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
+        <TextView variant="ActionBar" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {t(label)}
         </TextView>
       </Box>

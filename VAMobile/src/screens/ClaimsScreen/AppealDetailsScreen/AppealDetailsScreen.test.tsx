@@ -1,132 +1,227 @@
 import 'react-native'
 import React from 'react'
+import * as api from 'store/api'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render, waitForElementToBeRemoved, when } from 'testUtils'
 
 import AppealDetailsScreen from './AppealDetailsScreen'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
-import { appeal } from '../appealData'
-import { ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
+import { appeal as appealData } from '../appealData'
+import {ErrorComponent, LoadingComponent, SegmentedControl, TextView} from 'components'
 import AppealStatus from './AppealStatus/AppealStatus'
 import AppealIssues from './AppealIssues/AppealIssues'
 import { AppealEventData, AppealTypes } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { RenderAPI, waitFor } from '@testing-library/react-native'
+import { StackNavigationOptions } from '@react-navigation/stack'
 
 context('AppealDetailsScreen', () => {
-  let component: any
+  let component: RenderAPI
   let props: any
-  let store: any
+  let navHeaderSpy: any
   let testInstance: ReactTestInstance
+  let goBack: jest.Mock
+  let abortLoadSpy: jest.Mock
+  let store: any
 
-  const initializeTestInstance = (type?: AppealTypes, events?: Array<AppealEventData>, loadingAppeal: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
-    props = mockNavProps(undefined, undefined, { params: {appealID: '0'} })
+  const mockApiCall = (type?: AppealTypes, events?: Array<AppealEventData>) => {
+    when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({ data: {
+            ...appealData,
+            type: type ? type : 'appeal',
+            attributes: {
+              ...appealData.attributes,
+              events: events || appealData.attributes.events,
+            },
+          }
+        })
 
-    if (type) {
-      appeal.type = type
-    }
-
-    if (events) {
-      appeal.attributes.events = events
-    }
-
-    store = mockStore({
-      ...InitialState,
-      claimsAndAppeals: {
-        ...InitialState.claimsAndAppeals,
-        appeal,
-        loadingAppeal
-      },
-      errors: errorsState
-    })
-
-    act(() => {
-      component = renderWithProviders(<AppealDetailsScreen {...props} />, store)
-    })
-
-    testInstance = component.root
+    initializeTestInstance()
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
+  const initializeTestInstance = (loadingAppeal: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
+    goBack = jest.fn()
+    abortLoadSpy = jest.fn()
+    props = mockNavProps(undefined, {
+      navigate: jest.fn(),
+      addListener: jest.fn(),
+      setOptions: (options: Partial<StackNavigationOptions>) => {
+        navHeaderSpy = {
+          back: options.headerLeft ? options.headerLeft({}) : undefined,
+        }
+      },
+      goBack,
+    }, { params: { appealID: '0' } })
+
+    component = render(<AppealDetailsScreen {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        claimsAndAppeals: {
+          ...InitialState.claimsAndAppeals,
+          loadingAppeal,
+          cancelLoadingDetailScreen: {
+            abort: abortLoadSpy
+          },
+        },
+        errors: errorsState,
+      },
+    })
+
+    testInstance = component.container
+  }
 
   it('should initialize', async () => {
-    expect(component).toBeTruthy()
+    await waitFor(() => {
+      initializeTestInstance()
+      expect(component).toBeTruthy()
+    })
   })
 
   describe('when loadingClaim is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(undefined, undefined, true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      await waitFor(() => {
+        initializeTestInstance( true)
+        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      })
     })
   })
 
   describe('when the selected tab is status', () => {
     it('should display the AppealStatus component', async () => {
-      testInstance.findByType(SegmentedControl).props.onChange('Status')
-      expect(testInstance.findAllByType(AppealStatus).length).toEqual(1)
+      await waitFor(async () => {
+        mockApiCall()
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        testInstance.findByType(SegmentedControl).props.onChange('Status')
+        expect(component.container.findAllByType(AppealStatus).length).toEqual(1)
+      })
     })
   })
 
   describe('when the selected tab is issues', () => {
-    it('should display the AppealIssues component', async () => {
-      testInstance.findByType(SegmentedControl).props.onChange('Issues')
-      expect(testInstance.findAllByType(AppealIssues).length).toEqual(1)
+    it('should display the AppealStatus component', async () => {
+      await waitFor(async () => {
+        mockApiCall()
+        initializeTestInstance()
+      })
+
+      await waitFor(async () => {
+        component.container.findByType(SegmentedControl).props.onChange('Issues')
+      })
+      expect(component.container.findAllByType(AppealIssues).length).toEqual(1)
     })
   })
 
   describe('when the type is higherLevelReview', () => {
     it('should display "Higher level review appeal for {{ programArea }}" as the title', async () => {
-      initializeTestInstance('higherLevelReview')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Higher level review appeal for compensation')
+      mockApiCall('higherLevelReview')
+      await waitFor(() => {
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Higher level review appeal for compensation')
+      })
     })
 
     it('should display the submitted date as the event date where the type is "hlr_request"', async () => {
-      initializeTestInstance('higherLevelReview', [{ date: '2020-01-20', type: 'hlr_request' }, { date: '2020-01-20', type: 'claim_decision' }])
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+      await waitFor(async () => {
+        mockApiCall('higherLevelReview', [
+          { date: '2020-01-20', type: 'hlr_request' },
+          { date: '2020-01-20', type: 'claim_decision' },
+        ])
+        initializeTestInstance()
+      })
+      await waitFor(() => {
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+      })
     })
   })
 
   describe('when the type is legacyAppeal', () => {
     it('should display "Appeal for {{ programArea }}" as the title', async () => {
-      initializeTestInstance('legacyAppeal')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Appeal for compensation')
+      await waitFor(async () => {
+        mockApiCall('legacyAppeal')
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Appeal for compensation')
+      })
     })
 
     it('should display the submitted date as the event date where the type is "nod"', async () => {
-      initializeTestInstance('legacyAppeal', [{ date: '2020-01-20', type: 'nod' }, { date: '2020-10-31', type: 'claim_decision' }])
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+      await waitFor(async () => {
+        mockApiCall('legacyAppeal', [
+          { date: '2020-01-20', type: 'nod' },
+          { date: '2020-10-31', type: 'claim_decision' },
+        ])
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+      })
     })
   })
 
   describe('when the type is appeal', () => {
     it('should display "Appeal for {{ programArea }}" as the title', async () => {
-      initializeTestInstance('appeal')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Appeal for compensation')
+      await waitFor(async () => {
+        mockApiCall('appeal', )
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Appeal for compensation')
+      })
     })
 
     it('should display the submitted date as the event date where the type is "nod"', async () => {
-      initializeTestInstance('appeal', [{ date: '2020-01-20', type: 'nod' }, { date: '2020-10-31', type: 'claim_decision' }])
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+      await waitFor(async () => {
+        mockApiCall('appeal', [
+          { date: '2020-01-20', type: 'nod' },
+          { date: '2020-10-31', type: 'claim_decision' },
+        ])
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+      })
     })
   })
 
   describe('when the type is supplementalClaim', () => {
     it('should display "Supplemental claim appeal for {{ programArea }}" as the title', async () => {
-      initializeTestInstance('supplementalClaim')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Supplemental claim appeal for compensation')
+      await waitFor(async () => {
+        mockApiCall('supplementalClaim')
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Supplemental claim appeal for compensation')
+      })
     })
 
     it('should display the submitted date as the event date where the type is "sc_request"', async () => {
-      initializeTestInstance('supplementalClaim', [{ date: '2020-01-20', type: 'sc_request' }, { date: '2020-10-31', type: 'claim_decision' }])
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+      await waitFor(async () => {
+        mockApiCall('supplementalClaim', [
+          { date: '2020-01-20', type: 'sc_request' },
+          { date: '2020-10-31', type: 'claim_decision' },
+        ])
+        initializeTestInstance()
+      })
+
+      await waitFor(() => {
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+      })
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -135,11 +230,13 @@ context('AppealDetailsScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance('appeal', undefined, false, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+      await waitFor(() => {
+        initializeTestInstance(false, errorState)
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+      })
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -148,8 +245,10 @@ context('AppealDetailsScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance('appeal', undefined, false, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      await waitFor(() => {
+        initializeTestInstance(false, errorState)
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      })
     })
   })
 })

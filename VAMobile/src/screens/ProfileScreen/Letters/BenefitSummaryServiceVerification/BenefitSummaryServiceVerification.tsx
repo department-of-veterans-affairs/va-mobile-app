@@ -1,7 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { map } from 'underscore'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Alert } from 'react-native'
 import {
   BasicError,
   Box,
@@ -21,25 +22,25 @@ import {
   VAScrollView,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
-import { DemoState, LettersState, StoreState } from 'store/reducers'
+import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
-import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
-import { map } from 'underscore'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
-const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
+const { LINK_URL_ASK_VA_GOV } = getEnv()
 
 type BenefitSummaryServiceVerificationProps = Record<string, unknown>
 
 const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = () => {
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useDispatch()
-  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const dispatch = useAppDispatch()
+  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
@@ -58,39 +59,39 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           textLines: [
             { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
+              text: tc('text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
             },
           ],
-          a11yValue: t('common:listPosition', { position: 1, total: 4 }),
+          a11yValue: tc('listPosition', { position: 1, total: 4 }),
         },
         {
           textLines: [
             { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
+              text: tc('text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
             },
           ],
-          a11yValue: t('common:listPosition', { position: 2, total: 4 }),
+          a11yValue: tc('listPosition', { position: 2, total: 4 }),
         },
         {
           textLines: [
             { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
+              text: tc('text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
             },
           ],
           testId: `${t('letters.benefitService.activeDutyStart')} ${formatDateMMMMDDYYYY(periodOfService.enteredDate || '')}`,
-          a11yValue: t('common:listPosition', { position: 3, total: 4 }),
+          a11yValue: tc('listPosition', { position: 3, total: 4 }),
         },
         {
           textLines: [
             { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
+              text: tc('text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
             },
           ],
           testId: `${t('letters.benefitService.separationDate')} ${formatDateMMMMDDYYYY(periodOfService.releasedDate || '')}`,
-          a11yValue: t('common:listPosition', { position: 4, total: 4 }),
+          a11yValue: tc('listPosition', { position: 4, total: 4 }),
         },
       ]
       return (
@@ -192,25 +193,20 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     return [...toggleListItems, ...nonDataDrivenData]
   }
 
-  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
-    if (demoMode) {
-      Alert.alert('Demo Mode', 'Letters are not available to download for demo user')
-    } else {
-      const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
-        militaryService: includeMilitaryServiceInfoToggle,
-        monthlyAward: monthlyAwardToggle,
-        serviceConnectedEvaluation: combinedServiceRatingToggle,
-        chapter35Eligibility: disabledDueToServiceToggle,
-        serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
-      }
-
-      dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+    const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
+      militaryService: includeMilitaryServiceInfoToggle,
+      monthlyAward: monthlyAwardToggle,
+      serviceConnectedEvaluation: combinedServiceRatingToggle,
+      chapter35Eligibility: disabledDueToServiceToggle,
+      serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
     }
+
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
   }
 
   if (letterDownloadError) {
-    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('Try again to download your letter')} />
+    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
   }
 
   if (downloading || !letterBeneficiaryData) {
@@ -252,7 +248,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           <ClickForActionLink
             displayedText={t('letters.benefitService.sendMessage')}
             linkType={LinkTypeOptionsConstants.url}
-            numberOrUrlLink={LINK_URL_IRIS_CUSTOMER_HELP}
+            numberOrUrlLink={LINK_URL_ASK_VA_GOV}
             linkUrlIconType={LinkUrlIconType.Arrow}
             {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
           />

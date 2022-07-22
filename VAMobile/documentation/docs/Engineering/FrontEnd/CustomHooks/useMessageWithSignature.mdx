@@ -1,0 +1,26 @@
+import HooksInfo from '../../../../src/components/HooksInfo'
+
+export const exampleString = `const [messageReply, setMessageReply] = useMessageWithSignature()\n
+const goToCancel = () => {
+    replyCancelConfirmation({
+      origin: FormHeaderTypeConstants.reply,
+      replyToID: messageID,
+      messageData: { body: messageReply },
+      isFormValid: true,
+    })
+}\n
+{
+    fieldType: FieldType.TextInput,
+    fieldProps: {
+    inputType: 'none',
+    value: messageReply,
+    onChange: setMessageReply,
+    labelKey: 'health:secureMessaging.formMessage.message',
+    isRequiredField: true,
+    isTextArea: true,
+    setInputCursorToBeginning: true,
+    },
+    fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
+},`
+
+<HooksInfo componentName="useMessageWithSignature" example={exampleString}/>

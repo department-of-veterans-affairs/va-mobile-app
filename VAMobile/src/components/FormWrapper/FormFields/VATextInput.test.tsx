@@ -1,50 +1,56 @@
 import 'react-native'
 import React from 'react'
-import {Pressable, TextInput} from 'react-native'
+import { Pressable, TextInput } from 'react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import {context, mockStore, renderWithProviders} from 'testUtils'
-import VATextInput, {VATextInputTypes} from './VATextInput'
-import {Box, TextView} from '../../index'
-import {isIOS} from 'utils/platform'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
+import VATextInput, { VATextInputTypes } from './VATextInput'
+import { Box, TextView } from '../../index'
+import { isIOS } from 'utils/platform'
 
 let mockIsIOS = jest.fn()
 jest.mock('utils/platform', () => ({
   isIOS: jest.fn(() => mockIsIOS),
 }))
 
-
 context('VATextInput', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onChangeSpy: Mock
-  let store: any
   let isIOSMock = isIOS as jest.Mock
 
-  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isTextArea = false) => {
+  const initializeTestInstance = (
+    inputType = 'email' as VATextInputTypes,
+    value = '',
+    helperTextKey = '',
+    error = '',
+    isRequiredField = false,
+    testID = '',
+    labelKey = 'profile:personalInformation.emailAddress',
+    isTextArea = false,
+  ) => {
     onChangeSpy = jest.fn(() => {})
 
     isIOSMock.mockReturnValue(false)
 
-    store = mockStore()
+    component = render(
+      <VATextInput
+        inputType={inputType}
+        onChange={onChangeSpy}
+        labelKey={labelKey}
+        value={value}
+        helperTextKey={helperTextKey}
+        isRequiredField={isRequiredField}
+        testID={testID}
+        isTextArea={isTextArea}
+        error={error}
+      />,
+    )
 
-    act(() => {
-      component = renderWithProviders(<VATextInput
-                                        inputType={inputType}
-                                        onChange={onChangeSpy}
-                                        labelKey={labelKey}
-                                        value={value}
-                                        helperTextKey={helperTextKey}
-                                        isRequiredField={isRequiredField}
-                                        testID={testID}
-                                        isTextArea={isTextArea}
-                                        error={error} />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   }
 
   beforeEach(() => {
@@ -56,8 +62,10 @@ context('VATextInput', () => {
   })
 
   it('should call onChange', async () => {
-    testInstance.findByType(VATextInput).props.onChange()
-    expect(onChangeSpy).toBeCalled()
+    await waitFor(() => {
+      testInstance.findByType(VATextInput).props.onChange()
+      expect(onChangeSpy).toBeCalled()
+    })
   })
 
   describe('when isTextArea is true', () => {
@@ -97,93 +105,8 @@ context('VATextInput', () => {
 
     it('should set the border color to error and make the border thicker', async () => {
       initializeTestInstance('email', '', '', 'ERROR')
-      expect(testInstance.findAllByType(Box)[3].props.borderColor).toEqual('error')
-      expect(testInstance.findAllByType(Box)[3].props.borderWidth).toEqual(2)
-    })
-  })
-
-  describe('when isRequiredField is true', () => {
-    it('should display (*Required)', async () => {
-      initializeTestInstance('email', '', '', '', true)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('(*Required)')
-    })
-  })
-
-  describe('when the platform is ios', () => {
-    it('should render a Pressable', async () => {
-      isIOSMock.mockReturnValueOnce(true)
-      initializeTestInstance('email', '', '', '', true, '', '')
-      expect(testInstance.findAllByType(Pressable).length).toEqual(1)
-    })
-  })
-
-  describe('accessibilityValue', () => {
-    describe('when the text input is focused', () => {
-      describe('when there is a value', () => {
-        it('should set the a11yValue to Editing: {{ text }}', async () => {
-          initializeTestInstance('email', 'MY VALUE')
-          testInstance.findByType(TextInput).props.onFocus()
-          expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing: MY VALUE' })
-        })
-      })
-
-      describe('when there is no value', () => {
-        it('should set the a11yValue to Editing value', async () => {
-          initializeTestInstance('email', '')
-          testInstance.findByType(TextInput).props.onFocus()
-          expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing value' })
-        })
-      })
-    })
-
-    describe('when there is a value', () => {
-      it('should set the a11yValue to "Filled - value"', async () => {
-        initializeTestInstance('email', 'the text value')
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Filled - the text value' })
-      })
-    })
-  })
-
-  describe('accessibilityLabel', () => {
-    describe('when testID exists', () => {
-      it('should start the overall accessibilityLabel with the props one', async () => {
-        initializeTestInstance('email', 'label', '', '', false, 'my ID')
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('my ID text input')
-      })
-    })
-
-    describe('when testID does not exist but label key does', () => {
-      it('should start the overall accessibilityLabel with the labelKey translated', async () => {
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Email address text input')
-      })
-    })
-
-    describe('when testID and label key do not exist', () => {
-      it('should start the overall accessibilityLabel with the word text input', async () => {
-        initializeTestInstance('email', '', '', '', false, '', '')
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('text input')
-      })
-    })
-
-    describe('when isRequiredField is true', () => {
-      it('should have the word required in the accessibilityLabel', async () => {
-        initializeTestInstance('email', '', '', '', true, '', 'common:field')
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field text input required')
-      })
-    })
-
-    describe('when the helperTextKey exists', () => {
-      it('should have the helperTextKey in the accessibilityLabel', async () => {
-        initializeTestInstance('email', 'common:field', 'common:back.a11yHint', '', false, '', 'common:field')
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field text input Navigates to the previous page')
-      })
-    })
-
-    describe('when the error exists', () => {
-      it('should have the error text in the accessibilityLabel', async () => {
-        initializeTestInstance('email', 'common:field', '', 'this is required', false, '', 'common:field')
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field text input Error - this is required')
-      })
+      expect(testInstance.findAllByType(Box)[4].props.borderColor).toEqual('error')
+      expect(testInstance.findAllByType(Box)[4].props.borderWidth).toEqual(2)
     })
   })
 })

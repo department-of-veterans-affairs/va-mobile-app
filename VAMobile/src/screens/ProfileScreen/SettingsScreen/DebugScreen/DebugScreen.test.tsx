@@ -3,16 +3,16 @@ import Clipboard from '@react-native-community/clipboard'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockStore, render, RenderAPI, findByOnPressFunction } from 'testUtils'
 
 import { TextView, TextArea } from 'components'
 import DebugScreen from './index'
-import {initialAuthState} from "../../../../store/reducers";
+import { initialAuthState, initialAnalyticsState } from 'store/slices'
+import { Pressable } from 'react-native'
 
-const authTokensIdxStart = 2
+const authTokensIdxStart = 3
 context('DebugScreen', () => {
-  let store: any
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   const authCredentials = {
     access_token: 'PacsDkFjpqYylPHGTvDy',
@@ -21,15 +21,16 @@ context('DebugScreen', () => {
   }
 
   beforeEach(() => {
-    store = mockStore({
-      auth: { ...initialAuthState, authCredentials },
+    component = render(<DebugScreen />, {
+      preloadedState: {
+        auth: { ...initialAuthState, authCredentials },
+        analytics: {
+          ...initialAnalyticsState,
+        }
+      },
     })
 
-    act(() => {
-      component = renderWithProviders(<DebugScreen />, store)
-    })
-
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {
@@ -38,7 +39,7 @@ context('DebugScreen', () => {
     const textViews = testInstance.findAllByType(TextView)
     expect(textViews.length).toBeGreaterThan(6)
     expect(textViews[authTokensIdxStart].props.children).toBe('Auth Tokens')
-    expect(textViews[authTokensIdxStart +1].props.children).toBe('access_token')
+    expect(textViews[authTokensIdxStart + 1].props.children).toBe('access_token')
     expect(textViews[authTokensIdxStart + 2].props.children).toBe(authCredentials.access_token)
     expect(textViews[authTokensIdxStart + 3].props.children).toBe('refresh_token')
     expect(textViews[authTokensIdxStart + 4].props.children).toBe(authCredentials.refresh_token)
@@ -46,7 +47,7 @@ context('DebugScreen', () => {
     expect(textViews[authTokensIdxStart + 6].props.children).toBe(authCredentials.id_token)
   })
 
-  it('should copy text to clipboard', async() => {
+  it('should copy text to clipboard', async () => {
     const textAreas = testInstance.findAllByType(TextArea)
     expect(textAreas.length).toBeGreaterThan(3)
 
@@ -58,5 +59,16 @@ context('DebugScreen', () => {
 
     textAreas[authTokensIdxStart + 3].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.id_token)
+  })
+
+  describe('toggle firebase debug mode', () => {
+    it('should say enable if not yet enabled', async () => {
+      expect(findByTypeWithText(testInstance, TextView, 'Enable Firebase debug mode')).toBeTruthy()
+    })
+
+    it('pressing the button should toggle the debug mode', async () => {
+      findByOnPressFunction(testInstance, Pressable, 'onClickFirebaseDebugMode')?.props.onPress()
+      expect(findByTypeWithText(testInstance, TextView, 'Disable Firebase debug mode')).toBeTruthy()
+    })
   })
 })

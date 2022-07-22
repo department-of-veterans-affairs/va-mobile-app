@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
@@ -6,7 +7,7 @@ import { CrisisLineCta } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import HeaderTitle from 'components/HeaderTitle'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
@@ -18,7 +19,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  */
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
 
   useEffect(() => {
@@ -37,10 +38,10 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
-          <TextView color="primary" variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+          <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
             {t('contactVA.va411.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />

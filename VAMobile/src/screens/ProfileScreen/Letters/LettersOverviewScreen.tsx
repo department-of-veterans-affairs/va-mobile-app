@@ -1,11 +1,13 @@
-import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PersonalInformationState } from 'store/slices'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from '../AddressSummary'
 
 type LettersOverviewProps = Record<string, unknown>
@@ -14,10 +16,10 @@ type LettersOverviewProps = Record<string, unknown>
  * Landing page for the letters flow. Shows the current address and the button to go to the letters list
  */
 const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const onViewPressed = navigateTo('LettersList')
 

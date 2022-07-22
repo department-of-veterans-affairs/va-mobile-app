@@ -1,29 +1,32 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { ViewStyle } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
-import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { getProfileInfo, prefetchClaimsAndAppeals } from 'store/actions'
+import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useDowntime, useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHeaderStyles, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 
 const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const dispatch = useDispatch()
-  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const dispatch = useAppDispatch()
+  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
-  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>(
+    (state) => state.personalInformation,
+  )
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
@@ -97,7 +100,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
 
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" background="noCardBackground" />
+          <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" />
         </Box>
       )
     }
@@ -138,7 +141,7 @@ const ClaimsScreenStack = createStackNavigator()
  * Stack screen for the claims tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const ClaimsStackScreen: FC<ClaimsStackScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
   const headerStyles = useHeaderStyles()
 
   return (

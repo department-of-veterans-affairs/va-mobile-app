@@ -157,6 +157,28 @@ export const Events = {
       },
     }
   },
+  // Issue#2273 Track appointment pagination discrepancies
+  vama_appts_page_warning: (): Event => {
+    return {
+      name: 'vama_appts_page_warning',
+    }
+  },
+  vama_appt_view_details: (isPendingAppointment: boolean): Event => {
+    return {
+      name: 'vama_appt_view_details',
+      params: {
+        isPending: isPendingAppointment,
+      },
+    }
+  },
+  vama_appt_cancel: (isPendingAppointment: boolean): Event => {
+    return {
+      name: 'vama_appt_cancel',
+      params: {
+        isPending: isPendingAppointment,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {

@@ -50,14 +50,29 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
 }
 
 /**
- *Returns the date formatted in the format DAY OF WEEK, MONTH DAY, YEAR
+ *Returns the date formatted in the format MONTH DAY, YEAR, TIME MERIDIEM TIMEZONE
  *
  * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
  *
  * @returns the date string based on format specified below
  */
 export const getFormattedDateTimeYear = (dateTime: string): string => {
-  return DateTime.fromISO(dateTime).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
+  return DateTime.fromISO(dateTime).toFormat('FF')
+}
+
+/**
+ *Returns the date formatted in the format TIME if today and DATE if earlier
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns the date string based on format specified below
+ */
+export const getFormattedMessageTime = (dateTime: string): string => {
+  const date = DateTime.fromISO(dateTime)
+  if (DateTime.now().minus({ hours: 24 }) < date) {
+    return date.toFormat('t')
+  } else {
+    return date.toFormat('D')
+  }
 }
 
 /**
@@ -120,6 +135,29 @@ export const formatDateMMMMDDYYYY = (date: string): string => {
 }
 
 /**
+ * Returns the date formatted in the format MM/DD/YYYY
+ *
+ * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns date string formatted as MM/DD/YYYY
+ */
+export const formatDateMMDDYYYY = (date: string): string => {
+  return getFormattedDate(date, 'MM/dd/yyyy')
+}
+
+/**
+ * Method that will format date for all time zones. Prevents the date being the day before on some time zones.
+ *
+ * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param formatString - string signifying how the date should be formatted, i.e. MMMM dd, yyyy
+ *
+ * @returns  date string formatted based on formatString
+ */
+export const formatDateUtc = (date: string, formatString: string): string => {
+  return DateTime.fromISO(date).toUTC().toFormat(formatString)
+}
+
+/**
  * Returns the substring of all entries before the provided character
  *
  * @param originalStr - string to be formatted
@@ -139,7 +177,7 @@ export const getSubstringBeforeChar = (originalStr: string, stopChar: string): s
  * @returns word with capitalized first letter and rest of the word lowercased
  */
 export const capitalizeWord = (word: string): string => {
-  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  return word ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : ''
 }
 
 /**
@@ -150,17 +188,25 @@ export const capitalizeWord = (word: string): string => {
  * @returns string with capitalized first letter and rest of the string unchanged
  */
 export const capitalizeFirstLetter = (originalStr: string): string => {
+  if (!originalStr) {
+    return ''
+  }
+
   return originalStr.charAt(0).toUpperCase() + originalStr.slice(1)
 }
 
 /**
  * Returns the string formatted in title case
  *
- * @param originalStr - string to format
+ * @param str - string to format
  *
  * @returns string with the first letter after any spaces capitalized
  */
 export const stringToTitleCase = (str: string): string => {
+  if (!str) {
+    return ''
+  }
+
   return str
     .toLowerCase()
     .split(' ')
@@ -272,4 +318,14 @@ export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TF
     default:
       return ''
   }
+}
+
+/**
+ * Get a translation without using a type safe key, used when building keys programmatically.
+ * @param key - translation key to translate
+ * @param t - translation function
+ * @param options - optional param for variables in interpolated translations
+ */
+export const getTranslation = (key: string, t: TFunction, options?: object): string => {
+  return options ? t(key, options) : t(key)
 }

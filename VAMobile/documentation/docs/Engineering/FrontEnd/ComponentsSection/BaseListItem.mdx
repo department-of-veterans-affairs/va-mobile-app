@@ -1,0 +1,16 @@
+import CodeBlock from '@theme/CodeBlock'
+import BaseListItemString from '!!raw-loader!@componentsDocs/BaseListItem'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `import { BaseListItem, BaseListItemProps } from 'components'\n
+const listItemProps: BaseListItemProps = {
+    a11yHint: 'My Hint'
+    onPress: () => { console.log('item pressed') }
+  }\n
+<BaseListItem {...listItemProps}>
+    <TextLines listOfText={[{ text: 'my text', isBold: true}]} />
+</BaseListItem>`
+
+
+<ComponentTopInfo componentName="BaseListItem" example={exampleString} codeString={BaseListItemString} />

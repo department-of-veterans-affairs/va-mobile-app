@@ -1,14 +1,14 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, findByTestID, renderWithProviders } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, findByTestID, render, RenderAPI } from 'testUtils'
 
 import WebviewControls from './WebviewControls'
 import Mock = jest.Mock
 
 context('WebviewControls', () => {
-  let component: any
+  let component: RenderAPI
   let testInstance: ReactTestInstance
   let onBackSpy: Mock
   let onForwardSpy: Mock
@@ -27,11 +27,9 @@ context('WebviewControls', () => {
       canGoForward: true,
     }
 
-    act(() => {
-      component = renderWithProviders(<WebviewControls {...props} />)
-    })
+    component = render(<WebviewControls {...props} />)
 
-    testInstance = component.root
+    testInstance = component.container
   })
 
   it('initializes correctly', async () => {

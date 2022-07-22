@@ -33,7 +33,7 @@ const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children }) => {
       }
 
   const boxProps: BoxProps = {
-    backgroundColor: 'textBox',
+    backgroundColor: 'contentBox',
     p: theme.dimensions.cardPadding,
   }
 
