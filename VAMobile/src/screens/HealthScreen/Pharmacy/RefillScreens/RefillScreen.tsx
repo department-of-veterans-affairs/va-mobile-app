@@ -25,7 +25,7 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
-  const [selecteTab, setSelectedTab] = useState(0)
+  const [selecteTab, setSelectedTab] = useState<string>(t('prescriptions.refill.refillableTabValue'))
   const [showAlert, setAlert] = useState(false)
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
   const [selectedPrescriptionsCount, setSelectedPrescriptionsCount] = useState(0)
