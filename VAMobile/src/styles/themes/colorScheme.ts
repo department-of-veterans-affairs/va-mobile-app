@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from 'react'
 export function useColorScheme(delay = 250): NonNullable<ColorSchemeName> {
   const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme())
 
-  let timeout = useRef<NodeJS.Timeout | null>(null).current
+  let timeout: ReturnType<typeof setTimeout> | null = useRef(null).current
 
   useEffect(() => {
     const appearanceEvent = Appearance.addChangeListener(onColorSchemeChange)
