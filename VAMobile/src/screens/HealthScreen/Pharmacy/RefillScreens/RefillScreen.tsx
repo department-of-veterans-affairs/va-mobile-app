@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect, useState } from 'react'
 
-import { AlertBox, Box, FooterButton, LoadingComponent, TabBar, TabsValuesType, TextView, VAScrollView } from 'components'
+import { AlertBox, Box, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, getRefillablePrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
@@ -25,34 +25,16 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
-  const [selectedTab, setSelectedTab] = useState<string>(t('prescriptions.refill.refillableTabValue'))
   const [showAlert, setAlert] = useState(false)
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
   const [selectedPrescriptionsCount, setSelectedPrescriptionsCount] = useState(0)
 
-  const {
-    loadingRefillable,
-    submittingRequestRefills,
-    refillableCount,
-    nonRefillableCount,
-    refillablePrescriptions,
-    needsRefillableLoaded,
-    showLoadingScreenRequestRefills,
-    submittedRequestRefillCount,
-  } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { loadingRefillable, submittingRequestRefills, refillablePrescriptions, needsRefillableLoaded, showLoadingScreenRequestRefills, submittedRequestRefillCount } = useSelector<
+    RootState,
+    PrescriptionState
+  >((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []
   const prevLoadingRequestRefills = usePrevious<boolean>(submittingRequestRefills)
-
-  const tabs: TabsValuesType = [
-    {
-      title: t('prescriptions.refill.refillableTabText', { count: refillableCount }),
-      value: t('prescriptions.refill.refillableTabValue'),
-    },
-    {
-      title: t('prescriptions.refill.noRrefillableTabText', { count: nonRefillableCount }),
-      value: t('prescriptions.refill.noRrefillableTabValue'),
-    },
-  ]
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -119,7 +101,6 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   return (
     <>
       <VAScrollView>
-        <TabBar onChange={setSelectedTab} tabs={tabs} selected={selectedTab} />
         {showAlert && (
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
             <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
