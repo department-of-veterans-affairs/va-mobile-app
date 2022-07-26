@@ -36,8 +36,6 @@ export const lightTheme = {
     warningTag: colors.gold,
     inactiveTag: colors.grayMedium,
     activeTag: colors.greenDarker,
-    tabSelectorInactive: colors.grayLightest,
-    tabSelectorActive: colors.primaryAltLightest,
     modalHeader: colors.white,
     modalButton: colors.primaryAltLightest,
   },
@@ -60,8 +58,6 @@ export const lightTheme = {
     trackingCard: colors.grayDark,
     trackingCardActive: colors.grayLight,
     prescriptionDivider: colors.grayLighter,
-    tabSelectorInactive: colors.grayLight,
-    tabSelectorActive: colors.primary,
     modalButton: colors.primary,
   },
   icon: {
@@ -125,8 +121,6 @@ export const lightTheme = {
     defaultMenuItem: primaryTextColor,
     bodyText: primaryTextColor,
     warningTag: colors.darkmodeGrayWarmDark,
-    tabSelectorInactive: colors.grayDark,
-    tabSelectorActive: colors.primary,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -216,8 +210,6 @@ export const darkTheme = {
     warningTag: colors.gold,
     inactiveTag: colors.grayMedium,
     activeTag: colors.greenDarker,
-    tabSelectorInactive: colors.darkmodeGrayDark,
-    tabSelectorActive: colors.base,
     modalHeader: colors.darkmodeGrayDark,
     modalButton: colors.darkmodeBorder,
   },
@@ -240,8 +232,6 @@ export const darkTheme = {
     trackingCard: colors.darkmodeBorder,
     trackingCardActive: colors.grayLight,
     prescriptionDivider: colors.darkmodeBorder,
-    tabSelectorInactive: colors.grayMedium,
-    tabSelectorActive: colors.darkmodeLightBlue,
     modalButton: colors.darkmodeBorder,
   },
   icon: {
@@ -303,8 +293,6 @@ export const darkTheme = {
     bodyText: colors.grayLighter,
     showAll: colors.darkmodeLightBlue,
     warningTag: colors.darkmodeGrayWarmDark,
-    tabSelectorInactive: colors.grayLighter,
-    tabSelectorActive: colors.darkmodeLightBlue,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
