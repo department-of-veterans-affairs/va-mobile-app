@@ -53,6 +53,8 @@ export const lightTheme = {
     confirmation: colors.goldLight,
     footerButton: colors.grayLight,
     menuDivider: colors.grayLight,
+    tabSelectorInactive: colors.grayLight,
+    tabSelectorActive: colors.primary,
   },
   icon: {
     footerButton: colors.primary,
@@ -112,6 +114,8 @@ export const lightTheme = {
     defaultMenuItem: primaryTextColor,
     bodyText: primaryTextColor,
     warningTag: colors.darkmodeGrayWarmDark,
+    tabSelectorInactive: colors.grayDark,
+    tabSelectorActive: colors.primary,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -210,6 +214,8 @@ export const darkTheme = {
     confirmation: colors.gold,
     footerButton: colors.darkmodeBorder,
     menuDivider: colors.darkmodeBorder,
+    tabSelectorInactive: colors.grayMedium,
+    tabSelectorActive: colors.darkmodeLightBlue,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
@@ -269,6 +275,8 @@ export const darkTheme = {
     defaultMenuItem: colors.grayLighter,
     bodyText: colors.grayLighter,
     warningTag: colors.darkmodeGrayWarmDark,
+    tabSelectorInactive: colors.grayLighter,
+    tabSelectorActive: colors.darkmodeLightBlue,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
