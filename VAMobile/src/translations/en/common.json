@@ -105,5 +105,12 @@
   "weekdays.wed": "WED",
   "weekdays.thu": "THU",
   "weekdays.fri": "FRI",
-  "weekdays.sat": "SAT"
+  "weekdays.sat": "SAT",
+  "weekdays.short.sun": "S",
+  "weekdays.short.mon": "M",
+  "weekdays.short.tue": "T",
+  "weekdays.short.wed": "W",
+  "weekdays.short.thu": "T",
+  "weekdays.short.fri": "F",
+  "weekdays.short.sat": "S"
 }

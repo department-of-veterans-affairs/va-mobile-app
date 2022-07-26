@@ -51,6 +51,9 @@ export type TextViewProps = AccessibilityProps &
 
     /** sets line height of the text */
     lineHeight?: number
+
+    /** Set max size for text when font scale increases */
+    maxFontSizeMultiplier?: number
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {

@@ -1,10 +1,12 @@
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps, useWindowDimensions } from 'react-native'
+import { isIOS } from 'utils/platform'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from 'utils/hooks'
 
 // TODO make more flexible
@@ -35,6 +37,13 @@ export type CustomCalendarProps = {
   // TODO add support to disable specific dates
 }
 
+// Values determine via checking max settings for a11y larger font for IOS and Android
+const IOS_MAX_FONT_SCALE = 3.571
+const ANDROID_MAX_FONT_SCALE = 1.299
+// https://experienceleague.adobe.com/docs/target/using/experiences/vec/mobile-viewports.html
+// broke around 428
+const HEADER_MIN_WIDTH = 480
+
 /**
  *
  * Returns Custom Calendar component
@@ -46,30 +55,35 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
   const [selectedDate, setSelectedDate] = useState<DateTime | null>(null)
   const now = DateTime.now()
 
-  const preventScaling = true
-
   const WEEKDAYS = [t('weekdays.sun'), t('weekdays.mon'), t('weekdays.tue'), t('weekdays.wed'), t('weekdays.thu'), t('weekdays.fri'), t('weekdays.sat')]
+  const WEEKDAYS_SHORT = [
+    t('weekdays.short.sun'),
+    t('weekdays.short.mon'),
+    t('weekdays.short.tue'),
+    t('weekdays.short.wed'),
+    t('weekdays.short.thu'),
+    t('weekdays.short.fri'),
+    t('weekdays.short.sat'),
+  ]
+  const { fontScale, width } = useWindowDimensions()
+  const insets = useSafeAreaInsets()
 
-  const { fontScale } = useWindowDimensions()
-  const scaleFontSize = (size: number) => {
-    let newSize = size
-
-    // if (fontScale > 1.0 && fontScale <= 2.5) {
-    //   newSize = size + size / 4
-    // } else if (fontScale > 2.5) {
-    //   newSize = size + size / 3
-    // }
-
-    // +2 + 4
-    if (fontScale > 1.0 && fontScale <= 2.5) {
-      newSize = size + 2
-    } else if (fontScale > 2.5) {
-      newSize = size + 4
+  const calendarWidth = width - insets.right - insets.left - theme.dimensions.gutter * 2
+  const columnWidth = calendarWidth / 7
+  const maxFontScale = isIOS() ? IOS_MAX_FONT_SCALE : ANDROID_MAX_FONT_SCALE
+  const smallScreen = width <= HEADER_MIN_WIDTH
+  const isSmallScreenWithBigFont = fontScale > maxFontScale / 2 && smallScreen
+  // https://stackoverflow.com/questions/929103/convert-a-number-range-to-another-range-maintaining-ratio
+  const normalizeSize = (size: number) => {
+    if (fontScale <= 1) {
+      return size
     }
 
-    // if (fontScale > 1) {
-    //   newSize = newSize * 2
-    // }
+    const fontScaleRanges = { min: 1, max: maxFontScale }
+    const fontSizeRanges = { min: size, max: size * 2 }
+    const oldRange = fontScaleRanges.max - fontScaleRanges.min
+    const newRange = fontSizeRanges.max - fontSizeRanges.min
+    const newSize = ((fontScale - fontScaleRanges.min) * newRange) / oldRange + fontSizeRanges.min
 
     return newSize
   }
@@ -127,7 +141,7 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
     const maxDays = activeDate.daysInMonth
 
     // create weekday header
-    matrix[0] = WEEKDAYS
+    matrix[0] = isSmallScreenWithBigFont ? WEEKDAYS_SHORT : WEEKDAYS
 
     // Adds in the days
     let counter = 1
@@ -169,14 +183,13 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
             textAlign: 'center',
             variant: 'HelperText',
             color: 'calendarDay',
-            fontSize: scaleFontSize(theme.fontSizes.HelperText.fontSize),
-            lineHeight: scaleFontSize(theme.fontSizes.HelperText.lineHeight),
+            maxFontSizeMultiplier: 2,
           }
 
           // Explict so we know its a string
           const weekday = item as string
           return (
-            <TextView allowFontScaling={!preventScaling} key={`${rowIndex}_${colIndex}`} {...headerTextProps}>
+            <TextView maxFontSizeMultiplier={2} key={`${rowIndex}_${colIndex}`} {...headerTextProps}>
               {weekday}
             </TextView>
           )
@@ -206,8 +219,10 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
           },
           style: {
             flex: 1,
-            justifyContent: 'center',
-            minHeight: theme.dimensions.touchableMinHeight,
+            // justifyContent: 'center',
+            // backgroundColor: 'red',
+            // margin: 1,
+            marginBottom: smallScreen ? 15 : 0,
           },
           accessible,
           importantForAccessibility: day === -1 ? 'no' : 'yes', // Android a11y - so it does not read empty days
@@ -218,17 +233,15 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
           variant: disabled ? 'HelperText' : 'HelperTextBold', // current day
           color: disabled ? 'calendarDayDisabled' : isSelected ? 'calendarDaySelected' : 'calendarDay',
           accessible,
-          fontSize: scaleFontSize(disabled ? theme.fontSizes.HelperText.fontSize : theme.fontSizes.HelperTextBold.fontSize),
-          lineHeight: scaleFontSize(disabled ? theme.fontSizes.HelperText.lineHeight : theme.fontSizes.HelperTextBold.lineHeight),
-          allowFontScaling: !preventScaling,
+          maxFontSizeMultiplier: 2,
         }
 
         // Need to handle larger scale
         const commonCircleProps: BoxProps = {
           borderWidth: 1,
-          borderRadius: 50,
-          width: scaleFontSize(22),
-          height: scaleFontSize(22),
+          borderRadius: 100,
+          width: columnWidth,
+          height: columnWidth,
           position: 'absolute',
         }
 
@@ -245,9 +258,9 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
 
         return (
           <Pressable key={`${rowIndex}_${colIndex}`} {...pressableProps}>
-            <Box position="relative" alignItems={'center'}>
-              {isCurrentDay && <Box {...currenDayCircleProps} />}
-              {isSelected && <Box {...selectedDayCircleProps} />}
+            <Box position="relative" alignItems={'center'} justifyContent={'center'} height={columnWidth} overflow={'visible'}>
+              {isCurrentDay && <Box {...currenDayCircleProps} overflow={'visible'} />}
+              {isSelected && <Box {...selectedDayCircleProps} overflow={'visible'} />}
               <TextView {...dayTextViewProps}>{day !== -1 ? day : ''}</TextView>
             </Box>
           </Pressable>
@@ -307,18 +320,16 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
 
     const monthTextProps: TextViewProps = {
       textAlign: 'center',
-      allowFontScaling: !preventScaling,
+      maxFontSizeMultiplier: 2,
       variant: 'MobileBody',
       color: 'calendarDay',
-      fontSize: scaleFontSize(theme.fontSizes.MobileBody.fontSize),
-      lineHeight: scaleFontSize(theme.fontSizes.MobileBody.lineHeight),
     }
 
     const commonIconProps: Partial<VAIconProps> = {
-      width: scaleFontSize(14),
-      height: scaleFontSize(16),
+      width: normalizeSize(14),
+      height: normalizeSize(16),
       fill: 'calendarArrow',
-      preventScaling: preventScaling,
+      preventScaling: true,
     }
 
     return (
@@ -339,6 +350,15 @@ const CustomCalendar: FC<CustomCalendarProps> = ({ initialDate, earliestDay, lat
 
   return (
     <Box mx={theme.dimensions.gutter}>
+      {/*<View>*/}
+      {/*  <TextView>{`width: ${width}`}</TextView>*/}
+      {/*</View>*/}
+      {/*<View>*/}
+      {/*  <TextView>{`ratio: ${width / height}`}</TextView>*/}
+      {/*</View>*/}
+      {/*<View>*/}
+      {/*  <TextView>{`nomralize : ${normalizeSize(14)}`}</TextView>*/}
+      {/*</View>*/}
       {renderHeader()}
       {renderMonth()}
     </Box>
