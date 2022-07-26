@@ -57,6 +57,8 @@ export type VATextColors = {
   bodyText: string
   defaultMenuItem: string
   warningTag: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
 }
 
 export type VAIconColors = {
@@ -162,6 +164,8 @@ export type VABorderColors = {
   confirmation: string
   footerButton: string
   menuDivider: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
 }
 
 export type VAFontSizes = {
