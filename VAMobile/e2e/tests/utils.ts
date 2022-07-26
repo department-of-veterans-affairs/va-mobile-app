@@ -5,9 +5,10 @@ export const CommonE2eIdConstants = {
   VA_LOGO_ICON_ID: 'va-icon',
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
   DEMO_BTN_ID: 'demo-btn',
-  SIGN_IN_BTN_ID: 'Sign In',
+  SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
+  PROFILE_TAB_BUTTON_ID: 'Profile'
 }
 
 /** Log the automation into demo mode
@@ -28,6 +29,20 @@ export async function loginToDemoMode() {
     await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
   }
 }
+
+/** Opens the Crisis Line, if the banner exists on the screen
+ * TKD note - could potentially expand this to a opens & looks for to simplify those RC cases.... idk.....
+ * */
+ export async function openVeteransCrisisLine() {
+  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
+}
+
+/** Open the profile from the home screen 
+ * */
+export async function openProfile() {
+  await element(by.id(CommonE2eIdConstants.PROFILE_TAB_BUTTON_ID)).tap()
+}
+
 
 /** this function is to see if a element is present that could sometime not be like the carousel for example
  * which will perform a check without actually performing a test and return true or false

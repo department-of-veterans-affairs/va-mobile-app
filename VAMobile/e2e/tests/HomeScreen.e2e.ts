@@ -21,7 +21,7 @@ describe('Home Screen', () => {
       .withTimeout(2000)
 
     await expect(element(by.id(HomeE2eIdConstants.HOME_HEADER_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.GREETING_ID))).toBeVisible()
+    // await expect(element(by.id(HomeE2eIdConstants.GREETING_ID))).toBeVisible()
     await expect(element(by.id(HomeE2eIdConstants.CLAIMS_APPEAL_BTN_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.HEALTH_CARE_BTN_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.LETTERS_BTN_ID))).toExist()
