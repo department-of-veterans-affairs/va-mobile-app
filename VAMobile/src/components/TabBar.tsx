@@ -16,7 +16,7 @@ export type TabsValuesType = Array<{
   a11yHint?: string
 }>
 
-type TabsControlProps = {
+type TabBarProps = {
   /** method to trigger on tab change */
   onChange: (value: string) => void
   /** tab information */
@@ -25,7 +25,7 @@ type TabsControlProps = {
   selected: string
 }
 
-const TabsControl: FC<TabsControlProps> = ({ onChange, tabs, selected }) => {
+const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
   const theme = useTheme()
 
   const mainContainerStyle: ViewStyle = {
@@ -76,4 +76,4 @@ const TabsControl: FC<TabsControlProps> = ({ onChange, tabs, selected }) => {
   )
 }
 
-export default TabsControl
+export default TabBar
