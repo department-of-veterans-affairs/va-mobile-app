@@ -91,7 +91,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
           border="informational"
           headerText={t('fileUpload.accessibilityAlert.title')}
           body={collapsibleContent()}
-          testID={t('fileUpload.accessibilityAlert.title')}
+          a11yLabel={t('fileUpload.accessibilityAlert.title')}
         />
       </Box>
       <TextArea>
