@@ -55,6 +55,8 @@ export type VATextColors = {
   actionBar: string
   actionBarDisabled: string
   bodyText: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
   showAll: string
   defaultMenuItem: string
   warningTag: string
@@ -166,6 +168,8 @@ export type VABorderColors = {
   confirmation: string
   footerButton: string
   menuDivider: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
   trackingCard: string
   trackingCardActive: string
   prescriptionDivider: string

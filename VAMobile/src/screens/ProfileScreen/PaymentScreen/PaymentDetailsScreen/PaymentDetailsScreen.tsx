@@ -11,7 +11,7 @@ import { PaymentsAttributeData } from 'store/api'
 import { Pressable } from 'react-native'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { RootState } from 'store'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateUtc } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -62,7 +62,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
-            {getFormattedDate(date, 'MMMM d, yyyy')}
+            {formatDateUtc(date, 'MMMM d, yyyy')}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
             <TextView variant="BitterBoldHeading">{paymentType}</TextView>
