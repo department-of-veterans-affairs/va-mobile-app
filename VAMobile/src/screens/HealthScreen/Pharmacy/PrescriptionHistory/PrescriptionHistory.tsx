@@ -5,7 +5,21 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, BoxProps, ErrorComponent, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
+import {
+  Box,
+  BoxProps,
+  ErrorComponent,
+  List,
+  ListItemObj,
+  LoadingComponent,
+  Pagination,
+  PaginationProps,
+  TabBar,
+  TabBarProps,
+  TabsValuesType,
+  TextView,
+  VAScrollView,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
@@ -97,6 +111,8 @@ const PrescriptionHistory: FC = ({}) => {
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState('')
 
+  const [currentTab, setCurrentTab] = useState('0')
+
   const requestPage = useCallback(
     (requestedPage: number) => {
       const filter = getFilterArgsForFilter(filterToUse)
@@ -117,6 +133,27 @@ const PrescriptionHistory: FC = ({}) => {
 
   if (loadingHisory) {
     return <LoadingComponent text={t('prescriptions.loading')} />
+  }
+
+  const tabs: TabsValuesType = [
+    {
+      value: '0',
+      title: t('prescriptions.tabs.all', { count: 0 }),
+    },
+    {
+      value: '1',
+      title: t('prescriptions.tabs.processing', { count: 0 }),
+    },
+    {
+      value: '2',
+      title: t('prescriptions.tabs.shipped', { count: 0 }),
+    },
+  ]
+
+  const tabProps: TabBarProps = {
+    tabs,
+    onChange: setCurrentTab,
+    selected: currentTab,
   }
 
   const getListItemsForPrescriptions = () => {
@@ -253,6 +290,7 @@ const PrescriptionHistory: FC = ({}) => {
   }
 
   const filterScrollWrapperProps: BoxProps = {
+    pt: theme.dimensions.contentMarginTop,
     pb: 15,
     borderBottomWidth: 1,
     borderColor: 'primary',
@@ -306,7 +344,8 @@ const PrescriptionHistory: FC = ({}) => {
   }
 
   return (
-    <Box pt={theme.dimensions.contentMarginTop} display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
+    <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
+      <TabBar {...tabProps} />
       <Box {...filterScrollWrapperProps}>
         <ScrollView horizontal={true}>
           <Box {...filterContainerProps}>
