@@ -32,13 +32,11 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: '100%',
-    justifyContent: 'space-between',
-    flexGrow: 1,
   }
 
   const tabButtonStyle: ViewStyle = {
-    minHeight: 54,
-    alignItems: 'center',
+    paddingHorizontal: 10,
+    height: 54,
     justifyContent: 'center',
   }
 
@@ -55,7 +53,8 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
         return (
           <Box
             key={index}
-            width={`${100 / tabs.length}%`}
+            flexGrow={1}
+            flexShrink={0}
             borderBottomColor={getBorderColor(isSelected)}
             borderBottomWidth={2.5}
             accessibilityLabel={a11yLabel}
@@ -65,7 +64,11 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
             accessibilityState={{ selected: isSelected }}
             accessibilityValue={{ text: `tab position ${index + 1} of ${tabs.length}` }}>
             <TouchableWithoutFeedback onPress={() => onChange(value)} style={tabButtonStyle}>
-              <TextView variant={isSelected ? 'MobileBodyBold' : 'MobileBody'} color={isSelected ? 'tabSelectorActive' : 'tabSelectorInactive'} textAlign="center">
+              <TextView
+                maxFontSizeMultiplier={1.5}
+                variant={isSelected ? 'MobileBodyBold' : 'MobileBody'}
+                color={isSelected ? 'tabSelectorActive' : 'tabSelectorInactive'}
+                textAlign="center">
                 {title}
               </TextView>
             </TouchableWithoutFeedback>

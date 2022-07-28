@@ -94,6 +94,7 @@ export const lightTheme = {
     snackBarIcon: colors.grayLighter,
     buttonWithIcon: colors.black,
     infoIcon: colors.grayMedium,
+    infoIconContrast: colors.grayLightest,
   },
   text: {
     footerButton: colors.primary,
@@ -272,6 +273,7 @@ export const darkTheme = {
     snackBarIcon: colors.grayDark,
     buttonWithIcon: colors.grayLightest,
     infoIcon: colors.grayLight,
+    infoIconContrast: colors.grayLight,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,

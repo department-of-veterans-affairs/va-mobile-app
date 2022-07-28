@@ -151,10 +151,10 @@ export const VA_ICON_MAP = {
   ExclamationTriangleSolid,
   TrashSolid,
   InboxSolid,
+  BuildingSolid,
+  InfoIcon,
   CommentSolid,
   ListSolid,
-  InfoIcon,
-  BuildingSolid,
   WhiteCheckCircle,
   WhiteCloseCircle,
 }
