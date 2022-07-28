@@ -10,6 +10,7 @@ import {
   PrescriptionsPaginationData,
   RefillRequestSummaryItems,
   ScreenIDTypes,
+  TabCounts,
   get,
   put,
 } from '../api'
@@ -43,6 +44,7 @@ export type PrescriptionState = {
   showLoadingScreenRequestRefillsRetry: boolean
   submittedRequestRefillCount: number
   refillRequestSummaryItems: RefillRequestSummaryItems
+  tabCounts: TabCounts
 }
 
 export const initialPrescriptionState: PrescriptionState = {
@@ -60,53 +62,75 @@ export const initialPrescriptionState: PrescriptionState = {
   showLoadingScreenRequestRefillsRetry: false,
   submittedRequestRefillCount: 0,
   refillRequestSummaryItems: [],
+  tabCounts: {},
 }
 
+// export const getTabCounts = (): AppThunk => async (dispatch) => {
+//   let filterParams = {}
+//   if (filter) {
+//     filterParams = {
+//       'filter[refill_status][eq]': filter,
+//     }
+//   }
+//
+//   if (trackableOnly) {
+//     filterParams = { ...filterParams, 'filter[is_trackable][eq]': true }
+//   }
+//
+//   const params = {
+//     ...filterParams,
+//   }
+//
+//   try {
+//     const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
+//
+//     dispatch(dispatchFinishGetPrescriptions({ prescriptionData }))
+//   } catch (error) {
+//     if (isErrorObject(error)) {
+//       logNonFatalErrorToFirebase(error, `getPrescriptions: ${prescriptionNonFatalErrorString}`)
+//       dispatch(dispatchFinishGetPrescriptions({ prescriptionData: undefined, error }))
+//       dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
+//     }
+//   }
+// }
+
 export const getPrescriptions =
-  (screenID?: ScreenIDTypes, page = 1, filter?: string, sort?: string): AppThunk =>
+  (screenID?: ScreenIDTypes, page = 1, filter?: string, sort?: string, trackableOnly?: boolean): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchStartGetPrescriptions())
 
-    /**
-     * Bypassing the standard parameter because of an encoding issue for the filter params. When encoded, the service
-     * throws a 400, so we are adding them as raw strings to the url because they are all known values coming from
-     * the app
-     *
-     * TODO: replace with the params arg if issue is fixed on the back end
-     **/
-    let uri = `/v0/health/rx/prescriptions?page[number]=${page.toString()}&page[size]=${DEFAULT_PAGE_SIZE.toString()}`
+    const pageParams = {
+      'page[number]': page.toString(),
+      'page[size]': DEFAULT_PAGE_SIZE.toString(),
+    }
 
-    // const pageParams = {
-    //   'page[number]': page.toString(),
-    //   'page[size]': DEFAULT_PAGE_SIZE.toString(),
-    // }
-
-    // let filterParams = {}
+    let filterParams = {}
     if (filter) {
-      // filterParams = {
-      //   'filter[refill_status][eq]': filter,
-      // }
-      uri += `&filter[[refill_status][eq]]=${filter}`
+      filterParams = {
+        'filter[refill_status][eq]': filter,
+      }
     }
 
-    // let sortParams = {}
+    if (trackableOnly) {
+      filterParams = { ...filterParams, 'filter[is_trackable][eq]': true }
+    }
+
+    let sortParams = {}
     if (sort) {
-      uri += `&sort=${sort}`
-      // sortParams = {
-      //   'sort': sort,
-      // }
+      sortParams = {
+        sort: sort,
+      }
     }
 
-    // const params = {
-    //   ...pageParams,
-    //   ...filterParams,
-    //   ...sortParams,
-    // }
+    const params = {
+      ...pageParams,
+      ...filterParams,
+      ...sortParams,
+    }
 
     try {
-      // const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
-      const prescriptionData = await get<PrescriptionsGetData>(uri)
+      const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
 
       dispatch(dispatchFinishGetPrescriptions({ prescriptionData }))
     } catch (error) {

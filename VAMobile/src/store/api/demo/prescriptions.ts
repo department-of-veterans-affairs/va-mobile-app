@@ -20,9 +20,7 @@ export type PrescriptionsDemoReturnTypes = undefined | PrescriptionsGetData
 
 export const getPrescriptions = (store: DemoStore, params: Params, endpoint: string): PrescriptionsGetData => {
   const page = params['page[number]']
-  // TODO: Fix this workaround
-  // const prescriptionsStore = store[endpoint as keyof PrescriptionsDemoStore]
-  const prescriptionsStore = store['/v0/health/rx/prescriptions']
+  const prescriptionsStore = store[endpoint as keyof PrescriptionsDemoStore]
 
   if (!page) {
     const combinedData = prescriptionsStore['1'].data.concat(prescriptionsStore['2'].data)

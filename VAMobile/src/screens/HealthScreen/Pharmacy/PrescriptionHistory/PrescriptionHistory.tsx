@@ -21,12 +21,12 @@ import {
   VAScrollView,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { PrescriptionState, getPrescriptions } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getFilterArgsForFilter } from 'utils/prescriptions'
+import { getFilterArgsForFilterAndTab } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -43,56 +43,72 @@ const sortOrderOptions = [
   { display: 'prescriptions.sort.ztoa', value: '-' },
 ]
 
-const filterOptions = [
-  {
-    display: 'prescription.filter.all',
-    value: '',
-  },
-  {
-    display: 'prescription.history.tag.active',
-    value: RefillStatusConstants.ACTIVE,
-  },
-  {
-    display: 'prescription.history.tag.active.hold',
-    value: RefillStatusConstants.HOLD,
-  },
-  {
-    display: 'prescription.history.tag.active.parked',
-    value: RefillStatusConstants.ACTIVE_PARKED,
-  },
-  {
-    display: 'prescription.history.tag.active.inProgress',
-    value: RefillStatusConstants.REFILL_IN_PROCESS,
-  },
-  {
-    display: 'prescription.history.tag.active.submitted',
-    value: RefillStatusConstants.SUBMITTED,
-  },
-  {
-    display: 'prescription.history.tag.active.suspended',
-    value: RefillStatusConstants.SUSPENDED,
-  },
-  {
-    display: 'prescription.history.tag.discontinued',
-    value: RefillStatusConstants.DISCONTINUED,
-  },
-  {
-    display: 'prescription.history.tag.expired',
-    value: RefillStatusConstants.EXPIRED,
-  },
-  {
-    display: 'prescription.history.tag.nonVerified',
-    value: RefillStatusConstants.NON_VERIFIED,
-  },
-  {
-    display: 'prescription.history.tag.transferred',
-    value: RefillStatusConstants.TRANSFERRED,
-  },
-  {
-    display: 'prescription.history.tag.unknown',
-    value: RefillStatusConstants.UNKNOWN,
-  },
-]
+const filterOptions = {
+  all: [
+    {
+      display: 'prescription.filter.all',
+      value: '',
+    },
+    {
+      display: 'prescription.history.tag.active',
+      value: RefillStatusConstants.ACTIVE,
+    },
+    {
+      display: 'prescription.history.tag.active.hold',
+      value: RefillStatusConstants.HOLD,
+    },
+    {
+      display: 'prescription.history.tag.active.parked',
+      value: RefillStatusConstants.ACTIVE_PARKED,
+    },
+    {
+      display: 'prescription.history.tag.active.inProgress',
+      value: RefillStatusConstants.REFILL_IN_PROCESS,
+    },
+    {
+      display: 'prescription.history.tag.active.submitted',
+      value: RefillStatusConstants.SUBMITTED,
+    },
+    {
+      display: 'prescription.history.tag.active.suspended',
+      value: RefillStatusConstants.SUSPENDED,
+    },
+    {
+      display: 'prescription.history.tag.discontinued',
+      value: RefillStatusConstants.DISCONTINUED,
+    },
+    {
+      display: 'prescription.history.tag.expired',
+      value: RefillStatusConstants.EXPIRED,
+    },
+    {
+      display: 'prescription.history.tag.nonVerified',
+      value: RefillStatusConstants.NON_VERIFIED,
+    },
+    {
+      display: 'prescription.history.tag.transferred',
+      value: RefillStatusConstants.TRANSFERRED,
+    },
+    {
+      display: 'prescription.history.tag.unknown',
+      value: RefillStatusConstants.UNKNOWN,
+    },
+  ],
+  processing: [
+    {
+      display: 'prescription.filter.all',
+      value: '',
+    },
+    {
+      display: 'prescription.history.tag.active.inProgress',
+      value: RefillStatusConstants.REFILL_IN_PROCESS,
+    },
+    {
+      display: 'prescription.history.tag.active.submitted',
+      value: RefillStatusConstants.SUBMITTED,
+    },
+  ],
+}
 
 const PrescriptionHistory: FC = ({}) => {
   const dispatch = useAppDispatch()
@@ -111,16 +127,17 @@ const PrescriptionHistory: FC = ({}) => {
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState('')
 
-  const [currentTab, setCurrentTab] = useState('0')
+  const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
 
   const requestPage = useCallback(
     (requestedPage: number) => {
-      const filter = getFilterArgsForFilter(filterToUse)
+      const filter = getFilterArgsForFilterAndTab(filterToUse, currentTab)
       const sort = sortByToUse ? `${sortOnToUse}${sortByToUse}` : ''
+      const trackableOnly = currentTab === PrescriptionHistoryTabConstants.SHIPPED
 
-      dispatch(getPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID, requestedPage, filter, sort))
+      dispatch(getPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID, requestedPage, filter, sort, trackableOnly))
     },
-    [dispatch, filterToUse, sortOnToUse, sortByToUse],
+    [dispatch, filterToUse, sortOnToUse, sortByToUse, currentTab],
   )
 
   useEffect(() => {
@@ -137,22 +154,27 @@ const PrescriptionHistory: FC = ({}) => {
 
   const tabs: TabsValuesType = [
     {
-      value: '0',
+      value: PrescriptionHistoryTabConstants.ALL,
       title: t('prescriptions.tabs.all', { count: 0 }),
     },
     {
-      value: '1',
+      value: PrescriptionHistoryTabConstants.PROCESSING,
       title: t('prescriptions.tabs.processing', { count: 0 }),
     },
     {
-      value: '2',
+      value: PrescriptionHistoryTabConstants.SHIPPED,
       title: t('prescriptions.tabs.shipped', { count: 0 }),
     },
   ]
 
+  const onTabChange = (newTab: string) => {
+    setFilterToUse('')
+    setCurrentTab(newTab)
+  }
+
   const tabProps: TabBarProps = {
     tabs,
-    onChange: setCurrentTab,
+    onChange: onTabChange,
     selected: currentTab,
   }
 
@@ -248,14 +270,16 @@ const PrescriptionHistory: FC = ({}) => {
     },
   }
 
-  const filterRadioOptions = filterOptions.map((option) => {
+  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PROCESSING ? filterOptions.processing : filterOptions.all
+
+  const filterRadioOptions = filterOptionsForTab.map((option) => {
     return {
       value: option.value,
       labelKey: getTranslation(option.display, t),
     }
   })
 
-  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptions, filterToUse)}`
+  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptionsForTab, filterToUse)}`
 
   const filterProps: RadioGroupModalProps = {
     groups: [

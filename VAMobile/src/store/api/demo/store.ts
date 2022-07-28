@@ -114,15 +114,6 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     return undefined
   }
 
-  /**
-   * currently the filter for prescriptions is being done all on the query string, so this workaround is for demo mode
-   * until the api supports the usual way of passing in query parameters
-   */
-
-  if (endpoint.startsWith('/v0/health/rx/prescriptions')) {
-    return getPrescriptions(store, params, endpoint)
-  }
-
   switch (endpoint) {
     /**
      * APPOINTMENTS
