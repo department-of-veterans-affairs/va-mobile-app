@@ -93,6 +93,7 @@ export type VAIconColors = {
   veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
+  infoIconContrast: string
 }
 
 export type VATypographyThemeVariants = {
