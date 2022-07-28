@@ -149,7 +149,7 @@ const PrescriptionHistory: FC = ({}) => {
   }
 
   if (loadingHisory) {
-    return <LoadingComponent text={t('prescriptions.loading')} />
+    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
   }
 
   const tabs: TabsValuesType = [

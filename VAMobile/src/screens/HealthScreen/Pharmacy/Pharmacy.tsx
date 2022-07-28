@@ -25,7 +25,7 @@ const Pharmacy: FC = ({}) => {
   }, [dispatch, needsRefillableLoaded])
 
   if (loadingRefillable) {
-    return <LoadingComponent text={t('prescriptions.loading')} />
+    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
   }
 
   const condensedMarginBetween = theme.dimensions.condensedMarginBetween
