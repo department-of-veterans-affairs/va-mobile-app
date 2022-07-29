@@ -11,7 +11,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
-import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, getMaxWidthAndHeightOfImage } from 'utils/common'
+import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
@@ -118,9 +118,11 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const renderFileDisplay = (fileName: string, fileSize: number): ReactNode => {
     const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
+    const formattedFileSizeA11y = fileSize ? bytesToFinalSizeDisplayA11y(fileSize, tFunction) : ''
     const text = [fileName, formattedFileSize].join(' ').trim()
+    const textA11y = [fileName, formattedFileSizeA11y].join(' ').trim()
     return (
-      <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween} accessibilityLabel={textA11y}>
         {text}
       </TextView>
     )
@@ -144,7 +146,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.attachments.youMayAttach')} {t('secureMessaging.attachments.acceptedFileTypes')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
           {t('secureMessaging.attachments.sizeRequirements')}
         </TextView>
         <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
