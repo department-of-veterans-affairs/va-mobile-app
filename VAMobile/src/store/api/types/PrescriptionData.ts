@@ -12,6 +12,18 @@ export const PrescriptionSortOptionConstants: {
   REFILL_REMAINING: 'refill_remaining',
 }
 
+export type PrescriptionHistoryTabs = '0' | '1' | '2'
+
+export const PrescriptionHistoryTabConstants: {
+  ALL: PrescriptionHistoryTabs
+  PROCESSING: PrescriptionHistoryTabs
+  SHIPPED: PrescriptionHistoryTabs
+} = {
+  ALL: '0',
+  PROCESSING: '1',
+  SHIPPED: '2',
+}
+
 export const RefillStatusConstants: {
   ACTIVE: RefillStatus
   DELETED: RefillStatus
@@ -117,6 +129,10 @@ export type PrescriptionsPaginationLinks = {
 
 export type PrescriptionsMap = {
   [key: string]: PrescriptionData
+}
+
+export type TabCounts = {
+  [key: string]: number | undefined
 }
 
 export type RefillRequestSummaryItems = Array<{ submitted: boolean; data: PrescriptionData }>

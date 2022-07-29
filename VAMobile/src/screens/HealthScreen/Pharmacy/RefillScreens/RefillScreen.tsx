@@ -55,7 +55,7 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
 
   if (loadingRefillable) {
-    return <LoadingComponent text={t('prescriptions.loading')} />
+    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
   }
 
   const onSubmitPressed = () => {

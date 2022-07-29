@@ -1,18 +1,32 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { ScrollView, StyleProp, ViewStyle } from 'react-native'
+import { StyleProp, ViewStyle } from 'react-native'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, BoxProps, ErrorComponent, List, ListItemObj, LoadingComponent, Pagination, PaginationProps, TextView, VAScrollView } from 'components'
+import {
+  Box,
+  BoxProps,
+  ErrorComponent,
+  List,
+  ListItemObj,
+  LoadingComponent,
+  Pagination,
+  PaginationProps,
+  TabBar,
+  TabBarProps,
+  TabsValuesType,
+  TextView,
+  VAScrollView,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
-import { PrescriptionState, getPrescriptions } from 'store/slices/prescriptionSlice'
+import { PrescriptionState, getPrescriptions, getTabCounts } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getFilterArgsForFilter } from 'utils/prescriptions'
+import { getFilterArgsForFilterAndTab } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -29,60 +43,76 @@ const sortOrderOptions = [
   { display: 'prescriptions.sort.ztoa', value: '-' },
 ]
 
-const filterOptions = [
-  {
-    display: 'prescription.filter.all',
-    value: '',
-  },
-  {
-    display: 'prescription.history.tag.active',
-    value: RefillStatusConstants.ACTIVE,
-  },
-  {
-    display: 'prescription.history.tag.active.hold',
-    value: RefillStatusConstants.HOLD,
-  },
-  {
-    display: 'prescription.history.tag.active.parked',
-    value: RefillStatusConstants.ACTIVE_PARKED,
-  },
-  {
-    display: 'prescription.history.tag.active.inProgress',
-    value: RefillStatusConstants.REFILL_IN_PROCESS,
-  },
-  {
-    display: 'prescription.history.tag.active.submitted',
-    value: RefillStatusConstants.SUBMITTED,
-  },
-  {
-    display: 'prescription.history.tag.active.suspended',
-    value: RefillStatusConstants.SUSPENDED,
-  },
-  {
-    display: 'prescription.history.tag.discontinued',
-    value: RefillStatusConstants.DISCONTINUED,
-  },
-  {
-    display: 'prescription.history.tag.expired',
-    value: RefillStatusConstants.EXPIRED,
-  },
-  {
-    display: 'prescription.history.tag.nonVerified',
-    value: RefillStatusConstants.NON_VERIFIED,
-  },
-  {
-    display: 'prescription.history.tag.transferred',
-    value: RefillStatusConstants.TRANSFERRED,
-  },
-  {
-    display: 'prescription.history.tag.unknown',
-    value: RefillStatusConstants.UNKNOWN,
-  },
-]
+const filterOptions = {
+  all: [
+    {
+      display: 'prescription.filter.all',
+      value: '',
+    },
+    {
+      display: 'prescription.history.tag.active',
+      value: RefillStatusConstants.ACTIVE,
+    },
+    {
+      display: 'prescription.history.tag.active.hold',
+      value: RefillStatusConstants.HOLD,
+    },
+    {
+      display: 'prescription.history.tag.active.parked',
+      value: RefillStatusConstants.ACTIVE_PARKED,
+    },
+    {
+      display: 'prescription.history.tag.active.inProgress',
+      value: RefillStatusConstants.REFILL_IN_PROCESS,
+    },
+    {
+      display: 'prescription.history.tag.active.submitted',
+      value: RefillStatusConstants.SUBMITTED,
+    },
+    {
+      display: 'prescription.history.tag.active.suspended',
+      value: RefillStatusConstants.SUSPENDED,
+    },
+    {
+      display: 'prescription.history.tag.discontinued',
+      value: RefillStatusConstants.DISCONTINUED,
+    },
+    {
+      display: 'prescription.history.tag.expired',
+      value: RefillStatusConstants.EXPIRED,
+    },
+    {
+      display: 'prescription.history.tag.nonVerified',
+      value: RefillStatusConstants.NON_VERIFIED,
+    },
+    {
+      display: 'prescription.history.tag.transferred',
+      value: RefillStatusConstants.TRANSFERRED,
+    },
+    {
+      display: 'prescription.history.tag.unknown',
+      value: RefillStatusConstants.UNKNOWN,
+    },
+  ],
+  processing: [
+    {
+      display: 'prescription.filter.all',
+      value: '',
+    },
+    {
+      display: 'prescription.history.tag.active.inProgress',
+      value: RefillStatusConstants.REFILL_IN_PROCESS,
+    },
+    {
+      display: 'prescription.history.tag.active.submitted',
+      value: RefillStatusConstants.SUBMITTED,
+    },
+  ],
+}
 
 const PrescriptionHistory: FC = ({}) => {
   const dispatch = useAppDispatch()
-  const { prescriptions, loadingHisory, prescriptionPagination } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { prescriptions, loadingHistory, prescriptionPagination, tabCounts } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -97,15 +127,22 @@ const PrescriptionHistory: FC = ({}) => {
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState('')
 
+  const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
+
   const requestPage = useCallback(
     (requestedPage: number) => {
-      const filter = getFilterArgsForFilter(filterToUse)
+      const filter = getFilterArgsForFilterAndTab(filterToUse, currentTab)
       const sort = sortByToUse ? `${sortOnToUse}${sortByToUse}` : ''
+      const trackableOnly = currentTab === PrescriptionHistoryTabConstants.SHIPPED
 
-      dispatch(getPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID, requestedPage, filter, sort))
+      dispatch(getPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID, requestedPage, filter, sort, trackableOnly))
     },
-    [dispatch, filterToUse, sortOnToUse, sortByToUse],
+    [dispatch, filterToUse, sortOnToUse, sortByToUse, currentTab],
   )
+
+  useEffect(() => {
+    dispatch(getTabCounts())
+  }, [dispatch])
 
   useEffect(() => {
     requestPage(1)
@@ -115,8 +152,34 @@ const PrescriptionHistory: FC = ({}) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
   }
 
-  if (loadingHisory) {
-    return <LoadingComponent text={t('prescriptions.loading')} />
+  if (loadingHistory) {
+    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+  }
+
+  const tabs: TabsValuesType = [
+    {
+      value: PrescriptionHistoryTabConstants.ALL,
+      title: t('prescriptions.tabs.all', { count: tabCounts[PrescriptionHistoryTabConstants.ALL] }),
+    },
+    {
+      value: PrescriptionHistoryTabConstants.PROCESSING,
+      title: t('prescriptions.tabs.processing', { count: tabCounts[PrescriptionHistoryTabConstants.PROCESSING] }),
+    },
+    {
+      value: PrescriptionHistoryTabConstants.SHIPPED,
+      title: t('prescriptions.tabs.shipped', { count: tabCounts[PrescriptionHistoryTabConstants.SHIPPED] }),
+    },
+  ]
+
+  const onTabChange = (newTab: string) => {
+    setFilterToUse('')
+    setCurrentTab(newTab)
+  }
+
+  const tabProps: TabBarProps = {
+    tabs,
+    onChange: onTabChange,
+    selected: currentTab,
   }
 
   const getListItemsForPrescriptions = () => {
@@ -211,14 +274,16 @@ const PrescriptionHistory: FC = ({}) => {
     },
   }
 
-  const filterRadioOptions = filterOptions.map((option) => {
+  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PROCESSING ? filterOptions.processing : filterOptions.all
+
+  const filterRadioOptions = filterOptionsForTab.map((option) => {
     return {
       value: option.value,
       labelKey: getTranslation(option.display, t),
     }
   })
 
-  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptions, filterToUse)}`
+  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptionsForTab, filterToUse)}`
 
   const filterProps: RadioGroupModalProps = {
     groups: [
@@ -249,11 +314,14 @@ const PrescriptionHistory: FC = ({}) => {
   const filterContainerProps: BoxProps = {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '100%',
+    pt: 16,
+    pb: 6,
     px: 20,
   }
 
-  const filterScrollWrapperProps: BoxProps = {
-    pb: 15,
+  const filterWrapperProps: BoxProps = {
     borderBottomWidth: 1,
     borderColor: 'primary',
   }
@@ -286,40 +354,39 @@ const PrescriptionHistory: FC = ({}) => {
     } else {
       return (
         <>
-          <VAScrollView contentContainerStyle={mainViewStyle}>
-            <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-              <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
-              <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-                {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
-              </TextView>
+          <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+            <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
+            <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+              {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
+            </TextView>
+          </Box>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <List items={getListItemsForPrescriptions()} />
+            <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+              {renderPagination()}
             </Box>
-            <Box mb={theme.dimensions.contentMarginBottom}>
-              <List items={getListItemsForPrescriptions()} />
-              <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-                {renderPagination()}
-              </Box>
-            </Box>
-          </VAScrollView>
+          </Box>
         </>
       )
     }
   }
 
   return (
-    <Box pt={theme.dimensions.contentMarginTop} display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
-      <Box {...filterScrollWrapperProps}>
-        <ScrollView horizontal={true}>
+    <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
+      <VAScrollView contentContainerStyle={mainViewStyle}>
+        <TabBar {...tabProps} />
+        <Box {...filterWrapperProps}>
           <Box {...filterContainerProps}>
-            <Box mr={8}>
+            <Box mr={8} mb={10}>
               <RadioGroupModal {...filterProps} />
             </Box>
-            <Box>
+            <Box mb={10}>
               <RadioGroupModal {...sortProps} />
             </Box>
           </Box>
-        </ScrollView>
-      </Box>
-      {getContent()}
+        </Box>
+        {getContent()}
+      </VAScrollView>
     </Box>
   )
 }
