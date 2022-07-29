@@ -164,7 +164,9 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
       </Modal>
       <Pressable {...pressableProps}>
         <Box {...buttonDisplayProps}>
-          <TextView variant={'HelperText'}>{buttonText}</TextView>
+          <TextView maxFontSizeMultiplier={1.5} variant={'HelperText'}>
+            {buttonText}
+          </TextView>
         </Box>
       </Pressable>
     </View>
