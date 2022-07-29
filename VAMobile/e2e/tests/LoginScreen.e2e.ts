@@ -19,10 +19,4 @@ describe('Login Screen', () => {
     await expect(element(by.id(LoginE2eIdConstants.LOGIN_FIND_VA_BUTTON_ID))).toExist() 
     
   })
-
-  it('VCL button should work', async () => {
-    await openVeteransCrisisLine()
-    await expect(element(by.id(VCLE2eIdConstants.VETERANS_CRISIS_LINE_PAGE_ID))).toExist()
-  }
-  )
 })

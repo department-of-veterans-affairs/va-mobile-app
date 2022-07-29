@@ -8,7 +8,7 @@ export const CommonE2eIdConstants = {
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
-  PROFILE_TAB_BUTTON_ID: 'Profile'
+  PROFILE_TAB_BUTTON_TEXT: 'Profile'
 }
 
 /** Log the automation into demo mode
@@ -31,7 +31,7 @@ export async function loginToDemoMode() {
 }
 
 /** Opens the Crisis Line, if the banner exists on the screen
- * TKD note - could potentially expand this to a opens & looks for to simplify those RC cases.... idk.....
+ * TKD note - future idea to expand this to a opens & looks for to simplify those RC cases
  * */
  export async function openVeteransCrisisLine() {
   await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
@@ -40,7 +40,7 @@ export async function loginToDemoMode() {
 /** Open the profile from the home screen 
  * */
 export async function openProfile() {
-  await element(by.id(CommonE2eIdConstants.PROFILE_TAB_BUTTON_ID)).tap()
+  await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
 }
 
 
