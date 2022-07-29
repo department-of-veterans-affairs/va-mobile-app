@@ -25,7 +25,8 @@ import { logNonFatalErrorToFirebase } from 'utils/analytics'
 const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
 export type PrescriptionState = {
-  loadingHisory: boolean
+  loadingHistory: boolean
+  loadingCount: boolean
   prescriptions?: PrescriptionsList
   prescriptionPagination: PrescriptionsPaginationData
   error?: api.APIError
@@ -48,7 +49,8 @@ export type PrescriptionState = {
 }
 
 export const initialPrescriptionState: PrescriptionState = {
-  loadingHisory: false,
+  loadingHistory: false,
+  loadingCount: false,
   prescriptionsById: {} as PrescriptionsMap,
   prescriptionPagination: {} as PrescriptionsPaginationData,
   refillableCount: 0,
@@ -65,34 +67,34 @@ export const initialPrescriptionState: PrescriptionState = {
   tabCounts: {},
 }
 
-// export const getTabCounts = (): AppThunk => async (dispatch) => {
-//   let filterParams = {}
-//   if (filter) {
-//     filterParams = {
-//       'filter[refill_status][eq]': filter,
-//     }
-//   }
-//
-//   if (trackableOnly) {
-//     filterParams = { ...filterParams, 'filter[is_trackable][eq]': true }
-//   }
-//
-//   const params = {
-//     ...filterParams,
-//   }
-//
-//   try {
-//     const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
-//
-//     dispatch(dispatchFinishGetPrescriptions({ prescriptionData }))
-//   } catch (error) {
-//     if (isErrorObject(error)) {
-//       logNonFatalErrorToFirebase(error, `getPrescriptions: ${prescriptionNonFatalErrorString}`)
-//       dispatch(dispatchFinishGetPrescriptions({ prescriptionData: undefined, error }))
-//       dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
-//     }
-//   }
-// }
+export const getTabCounts = (): AppThunk => async (dispatch) => {
+  dispatch(dispatchStartGetTabCounts())
+
+  const processingFilterParams = {
+    'filter[refill_status][eq]': 'refillinprocess,submitted',
+  }
+
+  const trackableFilterParams = { 'filter[is_trackable][eq]': true }
+
+  try {
+    const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', {})
+    const processingData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', processingFilterParams)
+    const shippedData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', trackableFilterParams)
+
+    const counts: TabCounts = {
+      '0': allData?.meta.pagination.totalEntries,
+      '1': processingData?.meta.pagination.totalEntries,
+      '2': shippedData?.meta.pagination.totalEntries,
+    }
+
+    dispatch(dispatchFinishGetTabCounts({ tabCounts: counts }))
+  } catch (error) {
+    if (isErrorObject(error)) {
+      logNonFatalErrorToFirebase(error, `getTabCounts: ${prescriptionNonFatalErrorString}`)
+      dispatch(dispatchFinishGetTabCounts({ tabCounts: {} }))
+    }
+  }
+}
 
 export const getPrescriptions =
   (screenID?: ScreenIDTypes, page = 1, filter?: string, sort?: string, trackableOnly?: boolean): AppThunk =>
@@ -219,7 +221,7 @@ const prescriptionSlice = createSlice({
   initialState: initialPrescriptionState,
   reducers: {
     dispatchStartGetPrescriptions: (state) => {
-      state.loadingHisory = true
+      state.loadingHistory = true
     },
     dispatchFinishGetPrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>) => {
       const { prescriptionData } = action.payload
@@ -227,7 +229,7 @@ const prescriptionSlice = createSlice({
       const prescriptionsById = indexBy(prescriptions || [], 'id')
 
       state.prescriptions = prescriptions
-      state.loadingHisory = false
+      state.loadingHistory = false
       state.prescriptionPagination = { ...meta?.pagination }
       state.prescriptionsById = prescriptionsById
     },
@@ -297,6 +299,14 @@ const prescriptionSlice = createSlice({
       state.error = error
       state.loadingTrackingInfo = false
     },
+    dispatchStartGetTabCounts: (state) => {
+      state.loadingCount = true
+    },
+    dispatchFinishGetTabCounts: (state, action: PayloadAction<{ tabCounts: TabCounts }>) => {
+      const { tabCounts } = action.payload
+      state.loadingCount = false
+      state.tabCounts = tabCounts
+    },
   },
 })
 
@@ -312,5 +322,7 @@ export const {
   dispatchClearPrescriptionLogout,
   dispatchStartGetTrackingInfo,
   dispatchFinishGetTrackingInfo,
+  dispatchStartGetTabCounts,
+  dispatchFinishGetTabCounts,
 } = prescriptionSlice.actions
 export default prescriptionSlice.reducer

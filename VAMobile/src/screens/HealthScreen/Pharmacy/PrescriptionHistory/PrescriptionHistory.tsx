@@ -23,7 +23,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionState, getPrescriptions } from 'store/slices/prescriptionSlice'
+import { PrescriptionState, getPrescriptions, getTabCounts } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getFilterArgsForFilterAndTab } from 'utils/prescriptions'
@@ -112,7 +112,7 @@ const filterOptions = {
 
 const PrescriptionHistory: FC = ({}) => {
   const dispatch = useAppDispatch()
-  const { prescriptions, loadingHisory, prescriptionPagination } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { prescriptions, loadingHistory, prescriptionPagination, tabCounts } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -141,6 +141,10 @@ const PrescriptionHistory: FC = ({}) => {
   )
 
   useEffect(() => {
+    dispatch(getTabCounts())
+  }, [dispatch])
+
+  useEffect(() => {
     requestPage(1)
   }, [requestPage])
 
@@ -148,22 +152,22 @@ const PrescriptionHistory: FC = ({}) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
   }
 
-  if (loadingHisory) {
+  if (loadingHistory) {
     return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
   }
 
   const tabs: TabsValuesType = [
     {
       value: PrescriptionHistoryTabConstants.ALL,
-      title: t('prescriptions.tabs.all', { count: 0 }),
+      title: t('prescriptions.tabs.all', { count: tabCounts[PrescriptionHistoryTabConstants.ALL] }),
     },
     {
       value: PrescriptionHistoryTabConstants.PROCESSING,
-      title: t('prescriptions.tabs.processing', { count: 0 }),
+      title: t('prescriptions.tabs.processing', { count: tabCounts[PrescriptionHistoryTabConstants.PROCESSING] }),
     },
     {
       value: PrescriptionHistoryTabConstants.SHIPPED,
-      title: t('prescriptions.tabs.shipped', { count: 0 }),
+      title: t('prescriptions.tabs.shipped', { count: tabCounts[PrescriptionHistoryTabConstants.SHIPPED] }),
     },
   ]
 

@@ -132,7 +132,7 @@ export type PrescriptionsMap = {
 }
 
 export type TabCounts = {
-  [key: string]: string
+  [key: string]: number | undefined
 }
 
 export type RefillRequestSummaryItems = Array<{ submitted: boolean; data: PrescriptionData }>
