@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { ScrollView, StyleProp, ViewStyle } from 'react-native'
+import { StyleProp, ViewStyle } from 'react-native'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -310,12 +310,14 @@ const PrescriptionHistory: FC = ({}) => {
   const filterContainerProps: BoxProps = {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '100%',
+    pt: 16,
+    pb: 6,
     px: 20,
   }
 
-  const filterScrollWrapperProps: BoxProps = {
-    pt: theme.dimensions.contentMarginTop,
-    pb: 15,
+  const filterWrapperProps: BoxProps = {
     borderBottomWidth: 1,
     borderColor: 'primary',
   }
@@ -348,20 +350,18 @@ const PrescriptionHistory: FC = ({}) => {
     } else {
       return (
         <>
-          <VAScrollView contentContainerStyle={mainViewStyle}>
-            <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-              <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
-              <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-                {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
-              </TextView>
+          <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+            <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
+            <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+              {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
+            </TextView>
+          </Box>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <List items={getListItemsForPrescriptions()} />
+            <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+              {renderPagination()}
             </Box>
-            <Box mb={theme.dimensions.contentMarginBottom}>
-              <List items={getListItemsForPrescriptions()} />
-              <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-                {renderPagination()}
-              </Box>
-            </Box>
-          </VAScrollView>
+          </Box>
         </>
       )
     }
@@ -369,20 +369,20 @@ const PrescriptionHistory: FC = ({}) => {
 
   return (
     <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
-      <TabBar {...tabProps} />
-      <Box {...filterScrollWrapperProps}>
-        <ScrollView horizontal={true}>
+      <VAScrollView contentContainerStyle={mainViewStyle}>
+        <TabBar {...tabProps} />
+        <Box {...filterWrapperProps}>
           <Box {...filterContainerProps}>
-            <Box mr={8}>
+            <Box mr={8} mb={10}>
               <RadioGroupModal {...filterProps} />
             </Box>
-            <Box>
+            <Box mb={10}>
               <RadioGroupModal {...sortProps} />
             </Box>
           </Box>
-        </ScrollView>
-      </Box>
-      {getContent()}
+        </Box>
+        {getContent()}
+      </VAScrollView>
     </Box>
   )
 }
