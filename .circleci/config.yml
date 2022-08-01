@@ -372,6 +372,7 @@ jobs:
       - decode_android_keys
       - bundle_app:
           os: "android"
+      - queue_android_jobs
       - android_fastlane
   build_ios_feature:
     executor: ios
@@ -396,6 +397,7 @@ jobs:
       - decode_android_keys
       - bundle_app:
           os: android
+      - queue_android_jobs
       - android_fastlane:
           lane: on_demand
           notes: ${CIRCLE_TAG}
@@ -432,6 +434,7 @@ jobs:
       - decode_android_keys
       - bundle_app:
           os: "android"
+      - queue_android_jobs
       - android_fastlane:
           version: ${CIRCLE_TAG}
           lane: "review"
@@ -457,6 +460,7 @@ jobs:
       - decode_android_keys
       - bundle_app:
           os: "android"
+      - queue_android_jobs
       - android_fastlane:
           lane: "rc"
   build_ios_release_candidate:
