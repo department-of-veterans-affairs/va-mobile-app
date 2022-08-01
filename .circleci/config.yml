@@ -310,6 +310,7 @@ commands:
     parameters:
       regex:
         type: string
+        default: "^build_android_"
     steps:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
       - install_python
@@ -320,6 +321,7 @@ commands:
     parameters:
       regex:
         type: string
+        default: "^build_ios_"
     steps:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
       - run: python3 -m pip install requests
@@ -359,6 +361,7 @@ jobs:
       - install_pods
       - bundle_app:
           os: "ios"
+      - queue_ios_jobs
       - ios_fastlane
   build_android_qa:
     executor: android
@@ -379,6 +382,7 @@ jobs:
       - install_pods
       - bundle_app:
           os: ios
+      - queue_ios_jobs
       - ios_fastlane:
           lane: on_demand
           notes: ${CIRCLE_TAG}
@@ -414,6 +418,7 @@ jobs:
       - install_pods
       - bundle_app:
           os: "ios"
+      - queue_ios_jobs
       - ios_fastlane:
           version: ${CIRCLE_TAG}
           lane: "review"
@@ -463,6 +468,7 @@ jobs:
       - install_pods
       - bundle_app:
           os: "ios"
+      - queue_ios_jobs
       - ios_fastlane:
           lane: "rc"
 workflows:
