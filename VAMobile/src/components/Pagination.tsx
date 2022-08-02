@@ -1,9 +1,10 @@
 import { Pressable, PressableProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -49,7 +50,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
   const boxProps: BoxProps = {
     backgroundColor: disabled ? 'buttonSecondaryDisabled' : 'buttonPrimary',
     minHeight: theme.dimensions.touchableMinHeight,
-    p: theme.dimensions.paginationButtonPadding,
+    p: 15,
     borderRadius: 5,
   }
   return (
@@ -63,7 +64,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
 /**A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item. */
 const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev, onNext }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const boxProps: BoxProps = {
     flexDirection: 'row',

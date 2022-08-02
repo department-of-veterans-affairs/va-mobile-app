@@ -202,8 +202,7 @@ context('ReplyMessage', () => {
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[12].props.children).toEqual('Message')
-      expect(textViews[14].props.children).toEqual('(Required)')
+      expect(textViews[12].props.children).toEqual(['Message', ' ','(Required)'])
     })
   })
 
@@ -271,34 +270,36 @@ context('ReplyMessage', () => {
 
   it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
     await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[18].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[19].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[20].props.children).toBe('mock sender 2')
-      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[23].props.children).toBe('Invalid DateTime')
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews[16].props.children).toEqual('mock sender 1')
+      expect(textViews[17].props.children).toEqual('Invalid DateTime')
+      expect(textViews[18].props.children).toEqual('mock sender 2')
+      expect(textViews[19].props.children).toEqual('Invalid DateTime')
+      expect(textViews[20].props.children).toEqual('mock sender 3')
+      expect(textViews[21].props.children).toEqual('Invalid DateTime')
     })
   })
 
   it("should render last accordion's body text since it should be expanded", async () => {
     await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
     })
   })
 
   describe('when first message and last message is clicked', () => {
     it('should expand first accordion and close last accordion', async () => {
       await waitFor(() => {
-        act(() => {
-          testInstance.findAllByType(Pressable)[5].props.onPress()
-          testInstance.findAllByType(Pressable)[7].props.onPress()
-        })
-        expect(testInstance.findAllByType(TextView)[20].props.children).toBe('message 1 body text')
-        // Used to display last message's contents, but now there is no textview after the date
-        expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 3')
-        expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
-        expect(testInstance.findAllByType(TextView).length).toBe(25)
+        testInstance.findAllByType(Pressable)[4].props.onPress()
       })
+      await waitFor(() => {
+      testInstance.findAllByType(Pressable)[6].props.onPress()
+      })
+
+      expect(testInstance.findAllByType(TextView)[18].props.children).toBe('message 1 body text')
+      // Used to display last message's contents, but now there is no textview after the date
+      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 3')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('Invalid DateTime')
+      expect(testInstance.findAllByType(TextView).length).toBe(23)
     })
   })
 
@@ -316,45 +317,6 @@ context('ReplyMessage', () => {
       await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
         expect(navigateToAttachmentsSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('on click of the "How to attach a file" link', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(navigateToAttachmentsFAQSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('when message send fails', () => {
-    beforeEach(() => {
-      initializeTestInstance({}, [], false, true)
-    })
-
-    it('should display error alert', async () => {
-      await waitFor(() => {
-        expect(testInstance.findByType(AlertBox)).toBeTruthy()
-      })
-    })
-
-    describe('when the My HealtheVet phone number link is clicked', () => {
-      it('should call Linking open url with the parameter tel:8773270022', async () => {
-        await waitFor(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-        })
-      })
-    })
-
-    describe('when the call TTY phone link is clicked', () => {
-      it('should call Linking open url with the parameter tel:711', async () => {
-        await waitFor(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:711')
-        })
       })
     })
   })

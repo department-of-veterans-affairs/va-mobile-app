@@ -1,19 +1,32 @@
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
-import { bytesToMegabytes } from './common'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import React, { ReactElement } from 'react'
 
-import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
+import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
+import { MAX_NUM_PHOTOS } from 'constants/claims'
 
 /** function that returns the tracked items that need uploads from a claimant or have had uploads from a claimant */
 export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[] => {
-  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && event.uploadsAllowed)
+  const notUploadedRequests = events.filter(
+    (event: ClaimEventData) => event.status === FILE_REQUEST_STATUS.NEEDED && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU && event.uploadsAllowed,
+  )
+  const uploadedRequests = events.filter(
+    (event: ClaimEventData) =>
+      (event.status === FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU) ||
+      event.type === FILE_REQUEST_TYPE.RECEIVED_FROM_YOU,
+  )
+
+  return [...notUploadedRequests, ...uploadedRequests]
 }
 
 /** function that returns the tracked items that need uploads from a claimant */
 export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEventData[] => {
-  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && !event.uploaded && event.uploadsAllowed)
+  return events.filter(
+    (event: ClaimEventData) => event.status === FILE_REQUEST_STATUS.NEEDED && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU && !event.uploaded && event.uploadsAllowed,
+  )
 }
 
 /** function that returns the number of tracked items that need uploads from a claimant */
@@ -129,26 +142,35 @@ export const postCameraLaunchCallback = (
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
   t: TFunction,
-  displayBytesUsed: boolean,
 ): void => {
   const { assets, errorMessage, didCancel } = response
-  const { fileSize, type, uri } = assets ? assets[0] : ({} as Asset)
-
   if (didCancel) {
     return
-  }
-
-  if (!!fileSize && fileSize + totalBytesUsed > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
-    const fileSizeError = displayBytesUsed ? t('fileUpload.fileSizeErrorWithMBUsed', { mbUsed: bytesToMegabytes(totalBytesUsed) }) : t('fileUpload.fileSizeError')
-    setError(fileSizeError)
-  } else if (!!type && !isValidFileType(type)) {
-    setError(t('fileUpload.fileTypeError'))
   } else if (errorMessage) {
     setError(errorMessage)
   } else {
-    setError('')
-
-    if (uri) {
+    let fileSizeAdded = 0
+    let badFileType = false
+    let badUri = false
+    assets?.forEach((asset) => {
+      if (asset.fileSize) {
+        fileSizeAdded = fileSizeAdded + asset.fileSize
+      }
+      if (asset.type === undefined || (!!asset.type && !isValidFileType(asset.type))) {
+        badFileType = true
+        setError(t('fileUpload.fileTypeError'))
+      } else if (!asset.uri) {
+        badUri = true
+      }
+    })
+    if (assets?.length === 0) {
+      badFileType = true
+      setError(t('fileUpload.fileTypeError'))
+    }
+    if (fileSizeAdded + totalBytesUsed > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
+      setError(t('fileUpload.fileSizeError'))
+    } else if (badFileType === false && badUri === false) {
+      setError('')
       callbackIfUri(response)
     }
   }
@@ -183,15 +205,65 @@ export const onAddPhotos = (
       switch (buttonIndex) {
         case 0:
           launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
+            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
+          launchImageLibrary({ selectionLimit: MAX_NUM_PHOTOS, mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
       }
     },
   )
+}
+
+/**
+ * Delete a photo from the photo array
+ *
+ * @param image - ImagePickerResponse image selection for deletion
+ */
+export const deletePhoto = (deleteCallbackIfUri: (response: Asset[]) => void, deleteIndex: number, images: Asset[]): void => {
+  images.splice(deleteIndex, 1)
+  deleteCallbackIfUri(images)
+}
+
+/**
+ * Return the indicators common props
+ *
+ * @param fs - fontscale function
+ */
+export const getIndicatorCommonProps = (fs: (val: number) => number) => {
+  const indicatorDiameter = 30
+  return {
+    height: fs(indicatorDiameter),
+    width: fs(indicatorDiameter),
+    borderRadius: fs(indicatorDiameter),
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center',
+    mr: 10,
+  } as BoxProps
+}
+
+/**
+ * Return the indicators number or checkmark icon
+ *
+ * @param number - number to show in the indicator
+ * @param useCheckMark - boolen to show check mark instead of number
+ */
+export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactElement => {
+  if (useCheckMark) {
+    return (
+      <Box justifyContent={'center'} alignItems={'center'}>
+        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" />
+      </Box>
+    )
+  } else {
+    return (
+      <TextView variant="ClaimPhase" textAlign={'center'}>
+        {number}
+      </TextView>
+    )
+  }
 }

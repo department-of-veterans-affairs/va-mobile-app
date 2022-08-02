@@ -3,13 +3,14 @@ import Clipboard from '@react-native-community/clipboard'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, mockStore, render, RenderAPI } from 'testUtils'
+import { context, findByTypeWithText, mockStore, render, RenderAPI, findByOnPressFunction } from 'testUtils'
 
 import { TextView, TextArea } from 'components'
 import DebugScreen from './index'
-import { initialAuthState } from 'store/slices'
+import { initialAuthState, initialAnalyticsState } from 'store/slices'
+import { Pressable } from 'react-native'
 
-const authTokensIdxStart = 2
+const authTokensIdxStart = 3
 context('DebugScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
@@ -23,6 +24,9 @@ context('DebugScreen', () => {
     component = render(<DebugScreen />, {
       preloadedState: {
         auth: { ...initialAuthState, authCredentials },
+        analytics: {
+          ...initialAnalyticsState,
+        }
       },
     })
 
@@ -55,5 +59,16 @@ context('DebugScreen', () => {
 
     textAreas[authTokensIdxStart + 3].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.id_token)
+  })
+
+  describe('toggle firebase debug mode', () => {
+    it('should say enable if not yet enabled', async () => {
+      expect(findByTypeWithText(testInstance, TextView, 'Enable Firebase debug mode')).toBeTruthy()
+    })
+
+    it('pressing the button should toggle the debug mode', async () => {
+      findByOnPressFunction(testInstance, Pressable, 'onClickFirebaseDebugMode')?.props.onPress()
+      expect(findByTypeWithText(testInstance, TextView, 'Disable Firebase debug mode')).toBeTruthy()
+    })
   })
 })

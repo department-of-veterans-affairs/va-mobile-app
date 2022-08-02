@@ -126,7 +126,7 @@ context('EditEmailScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Enter your email address again using this format: X@X.com')
+      expect(findByTypeWithText(testInstance, TextView, 'Enter your email address again using this format: X@X.com')).toBeTruthy()
     })
   })
 
@@ -138,7 +138,7 @@ context('EditEmailScreen', () => {
         navHeaderSpy.save.props.onSave()
       })
 
-      expect(updateEmail).toHaveBeenCalledWith('my@email.com', '0', 'EDIT_EMAIL_SCREEN')
+      expect(updateEmail).toHaveBeenCalledWith({"errorMsg": "Email address could not be saved", "successMsg": "Email address saved"}, 'my@email.com', '0', 'EDIT_EMAIL_SCREEN')
     })
   })
 
@@ -146,7 +146,7 @@ context('EditEmailScreen', () => {
     it('should display the remove button', () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' } } })
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Email Address')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove email address')
     })
   })
 

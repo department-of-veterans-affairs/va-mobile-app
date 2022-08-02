@@ -1,25 +1,43 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AppointmentPractitioner, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
+import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAllFieldsThatExist } from 'utils/common'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { isAPendingAppointment } from 'utils/appointments'
+import { useTheme } from 'utils/hooks'
 
 type ProviderNameProps = {
-  /* The type of appointment */
-  appointmentType: AppointmentType
-  /* The practitioner name object*/
-  practitioner: AppointmentPractitioner | undefined
-  /* The provider name string  */
-  healthcareProvider: string | null
+  attributes: AppointmentAttributes
 }
 
-const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, healthcareProvider }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  let practitionerName = ''
+  const isAppointmentPending = isAPendingAppointment(attributes)
 
+  const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location } = attributes || ({} as AppointmentAttributes)
+
+  // pending appointments
+  if (isAppointmentPending) {
+    let header = friendlyLocationName
+    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE) {
+      header = healthcareProvider || location.name || t('appointments.noProviderSelected')
+    }
+
+    // default to VA appointments
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {header}
+        </TextView>
+      </Box>
+    )
+  }
+
+  // Canceled and Booked appointments
+  let practitionerName = ''
   if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE && practitioner) {
     practitionerName = getAllFieldsThatExist([practitioner.firstName || '', practitioner.middleName || '', practitioner.lastName || ''])
       .join(' ')
@@ -32,7 +50,7 @@ const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, he
     <>
       {!!practitionerName && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.provider')}
           </TextView>
           <TextView variant="MobileBody">{practitionerName}</TextView>

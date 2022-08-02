@@ -1,7 +1,7 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { useTranslation } from 'utils/hooks'
 import BasicError from './BasicError'
 
 export type NetworkConnectionErrorProps = {
@@ -11,7 +11,7 @@ export type NetworkConnectionErrorProps = {
 
 /**A common component to show an alert for when it is a network error*/
 const NetworkConnectionError: FC<NetworkConnectionErrorProps> = ({ onTryAgain }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
     <BasicError

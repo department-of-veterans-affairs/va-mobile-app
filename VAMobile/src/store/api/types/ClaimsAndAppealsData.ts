@@ -520,6 +520,10 @@ export type ClaimsAndAppealsList = Array<ClaimAndAppealData>
 
 // TODO: need to get data shape for this.
 export type ClaimEventDocumentData = {
+  trackedItemId?: number
+  fileType?: string
+  documentType?: string
+  filename?: string
   uploadDate: string
 }
 
@@ -533,4 +537,41 @@ export type ClaimDocUploadData = {
 
 export type ClaimDecisionResponseData = {
   data: { jobId: string }
+}
+
+export type FileRequestTypes =
+  | 'still_need_from_you_list'
+  | 'received_from_you_list'
+  | 'still_need_from_others_list'
+  | 'received_from_others_list'
+  | 'never_received_from_you_list'
+  | 'never_received_from_others_list'
+  | 'other_documents_list'
+
+export const FILE_REQUEST_TYPE: {
+  STILL_NEED_FROM_YOU: FileRequestTypes
+  RECEIVED_FROM_YOU: FileRequestTypes
+  NEVER_RECEIVED_FROM_YOU: FileRequestTypes
+  STILL_NEED_FROM_OTHERS: FileRequestTypes
+  RECEIVED_FROM_OTHERS: FileRequestTypes
+  NEVER_RECEIVED_FROM_OTHERS: FileRequestTypes
+  OTHER_DOCUMENTS_LISTS: FileRequestTypes
+} = {
+  STILL_NEED_FROM_YOU: 'still_need_from_you_list',
+  RECEIVED_FROM_YOU: 'received_from_you_list',
+  NEVER_RECEIVED_FROM_YOU: 'never_received_from_you_list',
+  STILL_NEED_FROM_OTHERS: 'still_need_from_others_list',
+  RECEIVED_FROM_OTHERS: 'received_from_others_list',
+  NEVER_RECEIVED_FROM_OTHERS: 'never_received_from_others_list',
+  OTHER_DOCUMENTS_LISTS: 'other_documents_list',
+}
+
+export type FileRequestsStatuses = 'NEEDED' | 'SUBMITTED_AWAITING_REVIEW'
+
+export const FILE_REQUEST_STATUS: {
+  NEEDED: FileRequestsStatuses
+  SUBMITTED_AWAITING_REVIEW: FileRequestsStatuses
+} = {
+  NEEDED: 'NEEDED',
+  SUBMITTED_AWAITING_REVIEW: 'SUBMITTED_AWAITING_REVIEW',
 }

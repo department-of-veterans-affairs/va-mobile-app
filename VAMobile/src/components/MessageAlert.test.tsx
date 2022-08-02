@@ -14,36 +14,22 @@ context('MessageAlert', () => {
   const initializeTestInstance = ({
     hasValidationError,
     saveDraftAttempted,
-    saveDraftComplete,
-    saveDraftFailed,
     savingDraft,
-    sendMessageFailed,
   }: {
     hasValidationError?: boolean
     saveDraftAttempted?: boolean
-    saveDraftComplete?: boolean
-    saveDraftFailed?: boolean
     savingDraft?: boolean
-    sendMessageFailed?: boolean
   }): void => {
     component = render(
       <MessageAlert
         hasValidationError={hasValidationError}
         saveDraftAttempted={saveDraftAttempted}
-        saveDraftComplete={saveDraftComplete}
-        saveDraftFailed={saveDraftFailed}
         savingDraft={savingDraft}
-        sendMessageFailed={sendMessageFailed}
       />,
     )
 
     testInstance = component.container
   }
-
-  it('displays save draft success', async () => {
-    initializeTestInstance({ hasValidationError: false, saveDraftAttempted: true, saveDraftComplete: true })
-    expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-  })
 
   it('displays save draft validation', async () => {
     initializeTestInstance({ hasValidationError: true, saveDraftAttempted: true })
@@ -61,11 +47,5 @@ context('MessageAlert', () => {
   it('should show loading screen when saving draft', async () => {
     initializeTestInstance({ saveDraftAttempted: true, savingDraft: true })
     expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-  })
-
-  it('should handle draft saving error', async () => {
-    initializeTestInstance({ saveDraftAttempted: true, saveDraftFailed: true })
-    expect(findByTypeWithText(testInstance, TextView, "We couldn't save your draft")).toBeTruthy()
-    expect(findByTypeWithText(testInstance, TextView, 'Please try again later')).toBeTruthy()
   })
 })

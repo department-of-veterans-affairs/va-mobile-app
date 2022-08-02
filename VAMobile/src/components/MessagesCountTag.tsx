@@ -14,14 +14,14 @@ const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
   const theme = useTheme()
   return (
     <Box
-      minWidth={theme.dimensions.tagCountMinWidth}
+      minWidth={theme.dimensions.tagMinWidth}
       justifyContent={'center'}
       alignSelf={'center'}
       backgroundColor="unreadMessagesTag"
-      borderRadius={theme.dimensions.tagCountCurvedBorder}
+      borderRadius={2}
       {...testIdProps(unread.toString())}
       accessible={true}>
-      <TextView flexWrap={'wrap'} color="primaryContrast" variant="UnreadMessagesTag" px={theme.dimensions.condensedMarginBetween} pt={theme.dimensions.tagCountTopPadding}>
+      <TextView flexWrap={'wrap'} variant="UnreadMessagesTag" px={10} pt={3}>
         {unread}
       </TextView>
     </Box>

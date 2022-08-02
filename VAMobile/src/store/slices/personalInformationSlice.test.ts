@@ -15,6 +15,7 @@ import {
   updateEmail,
   validateAddress,
 } from './personalInformationSlice'
+import { SnackbarMessages } from 'components/SnackBar'
 
 export const ActionTypes: {
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: string
@@ -46,6 +47,11 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: 'personalInformation/dispatchFinishEditAddress',
 }
 
+const snackbarMessages: SnackbarMessages = {
+  successMsg: 'success',
+  errorMsg: 'failure',
+}
+
 context('personalInformation', () => {
   const mockStorePersonalInformation: Partial<RootState> = {
     personalInformation: {
@@ -59,7 +65,6 @@ context('personalInformation', () => {
         contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
         signinEmail: 'ben@gmail.com',
         birthDate: '1990-05-08',
-        gender: 'M',
         addresses: '',
         residentialAddress: {
           id: 1,
@@ -113,14 +118,6 @@ context('personalInformation', () => {
           phoneType: 'HOME',
         },
         formattedWorkPhone: '(858)-690-1287',
-        faxNumber: {
-          id: 1,
-          areaCode: '858',
-          countryCode: '1',
-          phoneNumber: '6901286',
-          phoneType: 'HOME',
-        },
-        formattedFaxPhone: '(858)-690-1286',
         signinService: 'IDME',
       },
       needsDataLoad: false,
@@ -147,7 +144,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(deleteUsersNumber('HOME'))
+      await store.dispatch(deleteUsersNumber('HOME', snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER })
@@ -180,7 +177,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
+      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER })
@@ -210,7 +207,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore()
-      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
+      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER })
@@ -244,7 +241,7 @@ context('personalInformation', () => {
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
+      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER })
@@ -268,14 +265,6 @@ context('personalInformation', () => {
         data: {
           attributes: {
             profile: {
-              fax_phone: {
-                id: 1,
-                areaCode: '555',
-                countryCode: '1',
-                phoneNumber: '1234567',
-                phoneType: 'FAX',
-              },
-              formattedFaxPhone: '(555)-123-4567',
               formattedHomePhone: '(555)-123-4568',
               formattedMobilePhone: '(555)-123-4569',
               formattedWorkPhone: '(555)-123-4560',
@@ -308,7 +297,6 @@ context('personalInformation', () => {
               contactEmail: { emailAddress: 'user123@id.me', id: '0' },
               signinEmail: 'user123@id.me',
               birthDate: '04/01/1970',
-              gender: 'M',
               addresses: '1234 Test Ln',
             },
           },
@@ -316,7 +304,7 @@ context('personalInformation', () => {
       }
 
       when(api.get as jest.Mock)
-        .calledWith('/v0/user')
+        .calledWith('/v1/user')
         .mockResolvedValue(mockProfilePayload)
 
       const store = realStore()
@@ -353,7 +341,7 @@ context('personalInformation', () => {
       }
 
       when(api.get as jest.Mock)
-        .calledWith('/v0/user')
+        .calledWith('/v1/user')
         .mockResolvedValue(mockAuthorizedServicesPayload)
 
       const store = realStore()
@@ -395,7 +383,7 @@ context('personalInformation', () => {
       }
 
       when(api.get as jest.Mock)
-        .calledWith('/v0/user')
+        .calledWith('/v1/user')
         .mockResolvedValue(mockHealthPayload)
 
       const store = realStore()
@@ -416,7 +404,7 @@ context('personalInformation', () => {
       const error = new Error('error from backend')
 
       when(api.get as jest.Mock)
-        .calledWith('/v0/user')
+        .calledWith('/v1/user')
         .mockRejectedValue(error)
 
       const store = realStore()
@@ -449,7 +437,7 @@ context('personalInformation', () => {
         .calledWith('/v0/user/emails')
         .mockResolvedValue({})
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateEmail('newEmail@email.com', '111'))
+      await store.dispatch(updateEmail(snackbarMessages,'newEmail@email.com', '111'))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_EMAIL })
@@ -471,7 +459,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore()
-      await store.dispatch(updateEmail('newEmail@email.com', ''))
+      await store.dispatch(updateEmail(snackbarMessages, 'newEmail@email.com', ''))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_EMAIL })
@@ -495,7 +483,7 @@ context('personalInformation', () => {
         .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateEmail('test@email.com', '1'))
+      await store.dispatch(updateEmail(snackbarMessages, 'test@email.com', '1'))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_EMAIL })
@@ -518,7 +506,7 @@ context('personalInformation', () => {
         .calledWith('/v0/user/emails')
         .mockResolvedValue({})
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(deleteEmail('newEmail@email.com', '111'))
+      await store.dispatch(deleteEmail(snackbarMessages, 'newEmail@email.com', '111'))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_EMAIL })
@@ -554,7 +542,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -589,7 +577,7 @@ context('personalInformation', () => {
         .mockResolvedValue(mockStorePersonalInformation)
 
       const store = realStore()
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -627,7 +615,7 @@ context('personalInformation', () => {
         .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+      await store.dispatch(updateAddress(addressPayload as AddressData, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -665,7 +653,7 @@ context('personalInformation', () => {
         .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(deleteAddress(addressPayload as AddressData))
+      await store.dispatch(deleteAddress(addressPayload as AddressData, snackbarMessages))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_SAVE_ADDRESS })
@@ -741,7 +729,7 @@ context('personalInformation', () => {
 
       const store = realStore()
 
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, snackbarMessages))
       expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()
@@ -810,7 +798,7 @@ context('personalInformation', () => {
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, snackbarMessages))
       const actions = store.getActions()
 
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS })
@@ -871,7 +859,7 @@ context('personalInformation', () => {
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, snackbarMessages))
       const actions = store.getActions()
 
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS })
@@ -930,7 +918,7 @@ context('personalInformation', () => {
 
       const store = realStore()
 
-      await store.dispatch(validateAddress(addressPayload as AddressData))
+      await store.dispatch(validateAddress(addressPayload as AddressData, snackbarMessages))
       expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
 
       const actions = store.getActions()

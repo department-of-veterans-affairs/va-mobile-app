@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
@@ -18,15 +19,15 @@ import {
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, deleteUsersNumber, editUsersNumber, finishEditPhoneNumber } from 'store/slices/personalInformationSlice'
-import { PhoneTypeConstants } from 'store/api/types'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors } from 'store/slices/errorSlice'
-import { formatPhoneNumber, getNumbersFromString, stringToTitleCase } from 'utils/formattingUtils'
+import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import HeaderTitle from 'components/HeaderTitle'
 
@@ -38,7 +39,8 @@ type IEditPhoneNumberScreen = StackScreenProps<RootNavStackParamList, 'EditPhone
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useDestructiveAlert()
 
@@ -58,16 +60,26 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     }
   }, [phoneNumberSaved, navigation, dispatch])
 
+  const saveSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.phoneNumber.saved', { type: displayTitle }),
+    errorMsg: t('personalInformation.phoneNumber.not.saved', { type: displayTitle }),
+  }
+
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const numberId = phoneData && phoneData.id ? phoneData.id : 0
 
-    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, saveSnackbarMessages, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+  }
+
+  const removeSnackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.phoneNumber.removed', { type: displayTitle }),
+    errorMsg: t('personalInformation.phoneNumber.not.removed', { type: displayTitle }),
   }
 
   const onDelete = (): void => {
     setDeleting(true)
-    dispatch(deleteUsersNumber(phoneType, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    dispatch(deleteUsersNumber(phoneType, removeSnackbarMessages, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
@@ -156,7 +168,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     },
   ]
 
-  const testIdPrefix = phoneType === PhoneTypeConstants.FAX ? 'fax-number: ' : `${phoneType.toLowerCase()}-phone: `
+  const testIdPrefix = `${phoneType.toLowerCase()}-phone: `
   const buttonTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
@@ -167,10 +179,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: tc('cancel'),
         },
         {
-          text: t('common:remove'),
+          text: tc('remove'),
           onPress: onDelete,
         },
       ],
@@ -184,8 +196,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: stringToTitleCase(buttonTitle) })}
-              buttonType={ButtonTypesConstants.buttonImportant}
+              label={t('personalInformation.removeData', { pageName: buttonTitle })}
+              buttonType={ButtonTypesConstants.buttonDestructive}
               a11yHint={t('personalInformation.removeData.a11yHint', { pageName: buttonTitle })}
             />
           </Box>

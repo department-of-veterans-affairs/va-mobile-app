@@ -60,6 +60,7 @@ context('HomeScreen', () => {
         const expectNavArgs = {
           url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
           displayTitle: 'va.gov',
+          loadingMessage: 'Loading VA COVID-19 updates...',
         }
         expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
       })
@@ -110,6 +111,12 @@ context('HomeScreen', () => {
     it('should render the letters button', async () => {
       await waitFor(() => {
         expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Letters')
+      })
+    })
+
+    it('should render the payments button', async () => {
+      await waitFor(() => {
+        expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Payments')
       })
     })
   })

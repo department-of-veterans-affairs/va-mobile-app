@@ -382,19 +382,19 @@ const styles = StyleSheet.create({
   shadowMenuContainer: {
     position: 'absolute',
     backgroundColor: theme.colors.background.menu,
-    borderRadius: theme.dimensions.menuBorderRadius,
-    opacity: theme.dimensions.menuOpacity,
+    borderRadius: 4,
+    opacity: 0,
 
     /* Shadow */
     ...Platform.select({
       ios: {
         shadowColor: colors.black,
-        shadowOffset: { width: theme.dimensions.menuShadowX, height: theme.dimensions.menuShadowY },
-        shadowOpacity: theme.dimensions.menuShadowOpacity,
-        shadowRadius: theme.dimensions.menuShadowRadius,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.6,
+        shadowRadius: 4,
       },
       android: {
-        elevation: theme.dimensions.menuElevation,
+        elevation: 20,
         shadowColor: colors.black,
       },
     }),

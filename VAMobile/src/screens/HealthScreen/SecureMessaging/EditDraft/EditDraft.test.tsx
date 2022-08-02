@@ -73,7 +73,7 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useComposeCancelConfirmation: () => mockUseComposeCancelConfirmationSpy,
+    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
     useGoToDrafts: () => mockUseGoToDraftSpy,
   }
 })
@@ -261,7 +261,7 @@ context('EditDraft', () => {
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
         await waitFor(() => {
-          testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+          testInstance.findByProps({ label: 'Go to inbox' }).props.onPress()
           expect(navigateSpy).toHaveBeenCalled()
           expect(updateSecureMessagingTab).toHaveBeenCalled()
         })
@@ -328,44 +328,6 @@ context('EditDraft', () => {
       await waitFor(() => {
         testInstance.findByProps({ label: 'Add Files' }).props.onPress()
         expect(navigateToAddToFilesSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('on click of the "How to attach a file" link', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ variant: 'HelperText', color: 'link' }).props.onPress()
-        expect(navigateToAttachAFileSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('when message send fails', () => {
-    beforeEach(() => {
-      // Give a different screenID so it won't display the error screen instead
-      initializeTestInstance({ sendMessageFailed: true })
-    })
-
-    it('should display error alert', async () => {
-      await waitFor(() => {
-        expect(testInstance.findByType(AlertBox)).toBeTruthy()
-      })
-    })
-    describe('when the My HealtheVet phone number link is clicked', () => {
-      it('should call Linking open url with the parameter tel:8773270022', async () => {
-        await waitFor(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-        })
-      })
-    })
-    describe('when the call TTY phone link is clicked', () => {
-      it('should call Linking open url with the parameter tel:711', async () => {
-        await waitFor(() => {
-          testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-          expect(Linking.openURL).toBeCalledWith('tel:711')
-        })
       })
     })
   })

@@ -166,16 +166,6 @@ context('FolderMessages', () => {
     })
   })
 
-  describe('when a draft is saved and redirected here', () => {
-    it('should show a success message', async () => {
-      await waitFor(() => {
-        initializeTestInstance(undefined, undefined, undefined, true)
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Draft successfully saved')).toBeTruthy()
-      })
-    })
-  })
-
   describe('pagination', () => {
     it('should call listFolderMessages for previous arrow', async () => {
       await waitFor(() => {
@@ -193,11 +183,11 @@ context('FolderMessages', () => {
       expect(listFolderMessages).toHaveBeenCalledWith(-1, 3, expect.anything())
     })
 
-    it('should hide pagination if it is not a system folder', async () => {
+    it('should show pagination if it is not a system folder', async () => {
       await waitFor(() => {
         initializeTestInstance(false, false, 1)
       })
-      expect(testInstance.findAllByType(Pagination).length).toEqual(0)
+      expect(testInstance.findAllByType(Pagination).length).toEqual(1)
     })
   })
 

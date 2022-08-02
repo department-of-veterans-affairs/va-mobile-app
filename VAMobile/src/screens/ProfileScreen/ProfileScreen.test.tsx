@@ -45,6 +45,7 @@ context('ProfileScreen', () => {
 
   const initializeTestInstance = (
     directDepositBenefits: boolean = false,
+    directDepositBenefitsUpdate: boolean = false,
     userProfileUpdate: boolean = false,
     militaryInformationLoading = false,
     errorState: ErrorsState = initialErrorsState,
@@ -54,17 +55,20 @@ context('ProfileScreen', () => {
     navigateToHowToUpdateDirectDepositSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('DirectDeposit').mockReturnValue(navigateToDirectDepositSpy)
-        .calledWith('HowToUpdateDirectDeposit').mockReturnValue(navigateToHowToUpdateDirectDepositSpy)
+      .mockReturnValue(() => {})
+      .calledWith('DirectDeposit')
+      .mockReturnValue(navigateToDirectDepositSpy)
+      .calledWith('HowToUpdateDirectDeposit')
+      .mockReturnValue(navigateToHowToUpdateDirectDepositSpy)
 
     component = render(<ProfileScreen />, {
       preloadedState: {
         auth: { ...initialAuthState },
         authorizedServices: {
           ...initialAuthorizedServicesState,
-          directDepositBenefits: directDepositBenefits,
-          userProfileUpdate: userProfileUpdate,
+          directDepositBenefits,
+          directDepositBenefitsUpdate,
+          userProfileUpdate,
         },
         militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
         disabilityRating: {
@@ -92,16 +96,14 @@ context('ProfileScreen', () => {
   }
 
   it('initializes correctly', async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-      expect(component).toBeTruthy()
-    })
+    initializeTestInstance()
+    expect(component).toBeTruthy()
   })
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       await waitFor(() => {
-        initializeTestInstance(false, false, true)
+        initializeTestInstance(false, false, false, true)
         expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
       })
     })
@@ -117,20 +119,30 @@ context('ProfileScreen', () => {
       })
     })
 
-    describe('when user signs in through IDME', () => {
+    describe('when user signs in through IDME ', () => {
       it('should navigate to DirectDeposit', async () => {
         await waitFor(() => {
-          initializeTestInstance(true)
+          initializeTestInstance(true, true)
         })
         findByTestID(testInstance, 'direct-deposit-information').props.onPress()
         expect(navigateToDirectDepositSpy).toHaveBeenCalled()
       })
     })
 
-    describe('when user did not signs in through IDME and does not have direcDepositBenefits', () => {
+    describe('when user signs in through Login.gov ', () => {
+      it('should navigate to DirectDeposit', async () => {
+        await waitFor(() => {
+          initializeTestInstance(true, true, undefined, undefined, undefined, SigninServiceTypesConstants.LOGINGOV)
+        })
+        findByTestID(testInstance, 'direct-deposit-information').props.onPress()
+        expect(navigateToDirectDepositSpy).toHaveBeenCalled()
+      })
+    })
+
+    describe('when user did not signs in through IDME and does not have directDepositBenefits', () => {
       it('should navigate to HowToUpdateDirectDeposit', async () => {
         await waitFor(() => {
-          initializeTestInstance(false, false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
+          initializeTestInstance(false, false, false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
         })
         findByTestID(testInstance, 'direct-deposit-information').props.onPress()
         expect(navigateToHowToUpdateDirectDepositSpy).toHaveBeenCalled()
@@ -142,11 +154,8 @@ context('ProfileScreen', () => {
     describe('when userProfileUpdate is true', () => {
       it('should be shown', async () => {
         await waitFor(() => {
-          initializeTestInstance(false, true)
-          component.debug('Rafael')
+          initializeTestInstance(false, false, true)
         })
-
-        component.debug('Rafael2')
 
         expect(findByTestID(testInstance, 'personal-and-contact-information')).toBeTruthy()
       })
@@ -173,7 +182,7 @@ context('ProfileScreen', () => {
         ...initialErrorsState,
         errorsByScreenID,
       }
-      initializeTestInstance(true, undefined, undefined, errorState)
+      initializeTestInstance(true, undefined, undefined, undefined, errorState)
 
       await waitFor(() => {
         expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
@@ -190,7 +199,7 @@ context('ProfileScreen', () => {
       }
 
       await waitFor(() => {
-        initializeTestInstance(true, undefined, undefined, errorState)
+        initializeTestInstance(true, undefined, undefined, undefined, errorState)
       })
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })

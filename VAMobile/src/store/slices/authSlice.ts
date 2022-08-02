@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
+import performance from '@react-native-firebase/perf'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
@@ -26,6 +27,7 @@ import { dispatchClearCerner } from './patientSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
+import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
 import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchProfileLogout } from './personalInformationSlice'
@@ -33,7 +35,7 @@ import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchVaccineLogout } from './vaccineSlice'
 import { isAndroid } from 'utils/platform'
 import { isErrorObject } from 'utils/common'
-import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { updateDemoMode } from './demoSlice'
 import getEnv from 'utils/env'
@@ -46,6 +48,7 @@ export const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
+const authNonFatalErrorString = 'Auth Service Error'
 
 export type AuthState = {
   loading: boolean
@@ -136,7 +139,6 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
   if (isFirstLogin) {
     await clearStoredAuthCreds()
   }
-  console.debug('Rafael')
   dispatch(dispatchSetFirstLogin(isFirstLogin))
 }
 
@@ -164,6 +166,7 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
       console.debug('shouldStoreWithBiometrics: BIOMETRICS_STORE_PREF_KEY: no stored preference for auth found')
     }
   } catch (e) {
+    logNonFatalErrorToFirebase(e, `isBiometricsPreferred: ${authNonFatalErrorString}`)
     // if we get an exception here assume there is no preference
     // and go with the default case, log the error and continue
     console.error(e)
@@ -206,7 +209,9 @@ const finishInitialize = async (dispatch: AppDispatch, loginPromptType: LOGIN_PR
   if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
     await crashlytics().setCrashlyticsCollectionEnabled(false)
     await analytics().setAnalyticsCollectionEnabled(false)
+    await performance().setPerformanceCollectionEnabled(false)
   }
+
   dispatch(dispatchInitializeAction(payload))
 }
 
@@ -241,6 +246,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       await Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options)
       await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.BIOMETRIC)
     } catch (err) {
+      logNonFatalErrorToFirebase(err, `saveRefreshTokenWithBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
     }
   } else if (getEnv().AUTH_ALLOW_NON_BIOMETRIC_SAVE === 'true') {
@@ -256,6 +262,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       await Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options)
       await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
     } catch (err) {
+      logNonFatalErrorToFirebase(err, `saveRefreshTokenWithoutBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
     }
   } else {
@@ -311,6 +318,7 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     throw new Error('No Refresh or Access Token')
   } catch (e) {
     console.error(e)
+    logNonFatalErrorToFirebase(e, `processAuthResponse: ${authNonFatalErrorString}`)
     console.debug('processAuthResponse: clearing keychain')
     await clearStoredAuthCreds()
     throw e
@@ -339,6 +347,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
     await processAuthResponse(response)
     return true
   } catch (err) {
+    logNonFatalErrorToFirebase(err, `refreshAccessToken: ${authNonFatalErrorString}`)
     console.error(err)
     return false
   }
@@ -360,6 +369,7 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
     }
     return LOGIN_PROMPT_TYPE.LOGIN
   } catch (err) {
+    logNonFatalErrorToFirebase(err, `getAuthLoginPromptType: ${authNonFatalErrorString}`)
     console.debug('getAuthLoginPromptType: Failed to retrieve type from keychain')
     console.error(err)
     return undefined
@@ -387,6 +397,7 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: AppDispatch,
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
   } catch (err) {
     console.error(err)
+    logNonFatalErrorToFirebase(err, `attempIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
     // if some error occurs, we need to force them to re-login
     // even if they had a refreshToken saved, since these tokens are one time use
     // if we fail, we just need to get a new one (re-login) and start over
@@ -436,6 +447,8 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     })
     console.debug('logout:', response.status)
     console.debug('logout:', await response.text())
+  } catch (err) {
+    logNonFatalErrorToFirebase(err, `logout: ${authNonFatalErrorString}`)
   } finally {
     await clearStoredAuthCreds()
     api.setAccessToken(undefined)
@@ -451,6 +464,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchProfileLogout())
     dispatch(dispatchMilitaryHistoryLogout())
     dispatch(dispatchDisabilityRatingLogout())
+    dispatch(dispatchClearPaymentsOnLogout())
     dispatch(dispatchFinishLogout())
     dispatch(dispatchVaccineLogout())
   }
@@ -478,6 +492,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
         return
       }
     }
+    logNonFatalErrorToFirebase(err, `startBiometricsLogin: ${authNonFatalErrorString}`)
     console.debug('startBiometricsLogin: Failed to get generic password from keychain')
     console.error(err)
   }
@@ -514,6 +529,7 @@ export const initializeAuth = (): AppThunk => async (dispatch) => {
       const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
       refreshToken = result ? result.password : undefined
     } catch (err) {
+      logNonFatalErrorToFirebase(err, `initializeAuth: ${authNonFatalErrorString}`)
       console.debug('initializeAuth: Failed to get generic password from keychain')
       console.error(err)
       await clearStoredAuthCreds()
@@ -559,6 +575,7 @@ export const handleTokenCallbackUrl =
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_exchange_failed())
         dispatch(dispatchFinishAuthLogin({ error }))
       }

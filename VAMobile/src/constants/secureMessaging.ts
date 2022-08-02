@@ -12,6 +12,8 @@ export const UNREAD = 'UNREAD'
 
 export const TRASH_FOLDER_NAME = 'Trash'
 
+export const PREPOPULATE_SIGNATURE = true
+
 export type FolderNameType = 'Drafts' | 'Deleted' | 'Sent' | 'Inbox'
 
 export const FolderNameTypeConstants: {

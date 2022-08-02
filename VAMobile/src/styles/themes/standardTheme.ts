@@ -1,4 +1,4 @@
-import { Appearance, Platform } from 'react-native'
+import { Appearance } from 'react-native'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
@@ -27,14 +27,13 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
   theme = {
     ...theme,
     colors: { ...colorScheme },
+    typography: buildTypography(colorScheme),
   }
 }
 
 export const getTheme = (): VATheme => {
   return theme
 }
-
-const claimPhaseLineHeight = Platform.OS === 'ios' ? 25 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
@@ -52,10 +51,6 @@ const fontSizes = {
   UnreadMessagesTag: {
     fontSize: 20,
     lineHeight: 20,
-  },
-  SentMessagesReadTag: {
-    fontSize: 16,
-    lineHeight: 16,
   },
   TableHeaderBold: {
     fontSize: 20,
@@ -75,7 +70,7 @@ const fontSizes = {
   },
   ClaimPhase: {
     fontSize: 20,
-    lineHeight: claimPhaseLineHeight,
+    lineHeight: 25,
   },
   ActionBar: {
     fontSize: 20,
@@ -86,6 +81,18 @@ const fontSizes = {
     lineHeight: 24,
   },
   HelperText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  LabelTag: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  LabelTagBold: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  HelperTextBold: {
     fontSize: 16,
     lineHeight: 22,
   },
@@ -108,104 +115,60 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
   return styles.join(';\n')
 }
 
+const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
+  return {
+    BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
+    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
+    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
+    LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
+    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold, scheme.text.primaryContrast),
+    TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
+    TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
+    TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
+    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, scheme.text.link, true),
+    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
+    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
+    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
+    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
+    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
+  }
+}
+
 let theme: VATheme = {
   colors: {
     ...colorScheme,
   },
   dimensions: {
-    keyboardManagerDistanceFromTextField: 45,
+    attachmentIconTopMargin: 8,
     borderWidth: 1,
     focusedInputBorderWidth: 2,
     buttonBorderWidth: 2,
     gutter: 20,
     textIconMargin: 5,
-    textXPadding: 20,
     contentMarginTop: 20,
     contentMarginBottom: 40,
     standardMarginBetween: 20,
     condensedMarginBetween: 10,
     cardPadding: 20,
-    cardMargin: 20,
     buttonPadding: 10,
     alertBorderWidth: 8,
-    alertPaddingY: 20,
-    alertPaddingX: 10,
     listItemDecoratorMarginLeft: 20,
-    messagesDecoratorMarginLeft: 16,
-    noLettersPaddingY: 6,
-    datePickerArrowsPaddingRight: 15,
-    pickerLabelMargin: 9,
-    checkboxLabelMargin: 10,
-    navigationBarIconMarginTop: 7,
     navBarHeight: 56,
     touchableMinHeight: 44,
-    textAreaHeight: 201,
-    headerButtonMargin: 10,
-    headerButtonPadding: 14,
-    textInputLabelMarginBottom: 5,
-    phaseIndicatorRightMargin: 10,
-    phaseIndicatorDiameter: 30,
-    phaseIndicatorBorderWidth: 2,
-    phaseIndicatorIconWidth: 15,
-    phaseIndicatorIconHeight: 15,
-    bulletMargin: 12,
     textAndButtonLargeMargin: 40,
-    fileUploadMargin: 40,
-    biometricsPreferenceMarginTop: 60,
-    carouselProgressDotsMargin: 6,
     headerHeight: 64,
-    textInputMargin: 40,
     formMarginBetween: 30,
-    tagCountMinWidth: 29,
-    tagCountCurvedBorder: 2,
-    tagCountTopPadding: 3,
-    messagePhotoAttachmentMaxHeight: 300,
-    messageIconLeftMargin: 16,
-    messageIconWidth: 16,
-    messageIconHeight: 16,
+    tagMinWidth: 29,
     maxNumMessageAttachments: 4,
-    paginationButtonPadding: 15,
-    pickerModalTopPadding: 60,
-    pickerModalSelectedIconWidth: 16,
-    pickerModalSelectedIconHeight: 13,
-    messageSentReadLeftMargin: 23,
-    syncLogoSpacing: 50,
     paginationTopPadding: 40,
-    collapsibleIconMargin: 7,
-    loginContentMarginBottom: 80,
-    webviewReloadButtonHeight: isIOS() ? 64 : 45,
-    webviewReloadButtonSize: 17,
-    webviewButtonSize: 16,
-    webviewButtona11ySize: 44,
-    errorLabelBottomMargin: 3,
-    selectorWidth: 22,
-    selectorHeight: 22,
-    snackBarPadding: 15,
-    snackBarMarginBottom: 0,
-    snackBarMarginLeft: 10,
-    snackBarMarginRight: 10,
-    snackBarButtonTopMargin: 5,
-    snackBarConfirmBtnMarginRight: 15,
-    snackBarVerticalMargin: 10,
-    snackBarBorderRadius: 4,
-    snackBarBetweenSpace: 8,
-    snackBarShadowX: 0,
-    snackBarShadowY: 4,
-    snackBarShadowOpacity: 0.6,
-    snackBarIconTopMargin: 2,
-    snackBarIconSize: 18,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
-    menuShadowX: 0,
-    menuShadowY: 4,
-    menuShadowOpacity: 0.6,
-    menuShadowRadius: 4,
-    menuOpacity: 0,
-    menuBorderRadius: 4,
-    menuItemMinWidth: 191,
-    menuElevation: 20,
     chevronListItemWidth: 10,
     chevronListItemHeight: 15,
+    headerButtonSpacing: 10,
+    headerLeftButtonFromTextPadding: 14,
   },
 
   fontFace: {
@@ -224,26 +187,13 @@ let theme: VATheme = {
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
-    SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
+    HelperText: fontSizes.HelperText,
+    HelperTextBold: fontSizes.HelperTextBold,
+    LabelTag: fontSizes.LabelTag,
+    LabelTagBold: fontSizes.LabelTagBold,
   },
-
-  typography: {
-    BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
-    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
-    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
-    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
-    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag),
-    TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
-    TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
-    TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
-    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
-    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
-    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
-    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
-    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
-    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText),
-  },
+  typography: buildTypography(colorScheme),
 }
 
 export default theme

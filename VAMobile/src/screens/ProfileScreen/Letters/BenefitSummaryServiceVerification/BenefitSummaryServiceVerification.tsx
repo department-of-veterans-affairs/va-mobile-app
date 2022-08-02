@@ -1,3 +1,6 @@
+import { map } from 'underscore'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import {
@@ -25,17 +28,16 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
-import { map } from 'underscore'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
-const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
+const { LINK_URL_ASK_VA_GOV } = getEnv()
 
 type BenefitSummaryServiceVerificationProps = Record<string, unknown>
 
 const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = () => {
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
@@ -55,41 +57,41 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       const militaryServiceInfoList: Array<DefaultListItemObj> = [
         {
           textLines: [
-            { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold', color: 'primaryTitle' },
+            { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
+              text: tc('text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
             },
           ],
-          a11yValue: t('common:listPosition', { position: 1, total: 4 }),
+          a11yValue: tc('listPosition', { position: 1, total: 4 }),
         },
         {
           textLines: [
-            { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold', color: 'primaryTitle' },
+            { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
+              text: tc('text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
             },
           ],
-          a11yValue: t('common:listPosition', { position: 2, total: 4 }),
+          a11yValue: tc('listPosition', { position: 2, total: 4 }),
         },
         {
           textLines: [
-            { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold', color: 'primaryTitle' },
+            { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
+              text: tc('text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
             },
           ],
           testId: `${t('letters.benefitService.activeDutyStart')} ${formatDateMMMMDDYYYY(periodOfService.enteredDate || '')}`,
-          a11yValue: t('common:listPosition', { position: 3, total: 4 }),
+          a11yValue: tc('listPosition', { position: 3, total: 4 }),
         },
         {
           textLines: [
-            { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold', color: 'primaryTitle' },
+            { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
+              text: tc('text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
             },
           ],
           testId: `${t('letters.benefitService.separationDate')} ${formatDateMMMMDDYYYY(periodOfService.releasedDate || '')}`,
-          a11yValue: t('common:listPosition', { position: 4, total: 4 }),
+          a11yValue: tc('listPosition', { position: 4, total: 4 }),
         },
       ]
       return (
@@ -204,7 +206,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   }
 
   if (letterDownloadError) {
-    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('Try again to download your letter')} />
+    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
   }
 
   if (downloading || !letterBeneficiaryData) {
@@ -215,7 +217,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     <VAScrollView {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
@@ -223,7 +225,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           </TextView>
         </TextArea>
 
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header">
           {t('letters.benefitService.chooseIncludedInformation')}
         </TextView>
         {getListOfMilitaryService()}
@@ -246,7 +248,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           <ClickForActionLink
             displayedText={t('letters.benefitService.sendMessage')}
             linkType={LinkTypeOptionsConstants.url}
-            numberOrUrlLink={LINK_URL_IRIS_CUSTOMER_HELP}
+            numberOrUrlLink={LINK_URL_ASK_VA_GOV}
             linkUrlIconType={LinkUrlIconType.Arrow}
             {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
           />

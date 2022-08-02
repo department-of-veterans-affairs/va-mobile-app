@@ -15,7 +15,7 @@ Help() {
   echo
   echo "This script does the following:"
   echo "1. Checks the date to see if it occurs at a 2 week interval from August 4, 2021. (If this is true, then we should cut a release branch from develop"
-  echo "2. Checks out the master branch, then pulls the latest tag."
+  echo "2. Checks out the main branch, then pulls the latest tag."
   echo "3. Increments the latest tag by the minor version to get the next release version number"
   echo "4. Checks out and pulls latest develop branch"
   echo "5. Creates a new release branch with the correct name and pushes it up to the origin"
@@ -51,12 +51,12 @@ done
 if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
 then
 
-  echo "Checking out and pulling latest from master branch"
-  git checkout master &&
-  git pull origin master &&
+  echo "Checking out and pulling latest from main branch"
+  git checkout main &&
+  git pull origin main &&
 
   echo "Fetching latest tag"
-  # checks for latest tag on master that matches vX.Y.Z
+  # checks for latest tag on main that matches vX.Y.Z
   latest=$(git describe --match "v[0-9]*.[0-9]*.[0-9]*" --abbrev=0) &&
 
   echo "Incrementing latest tag $latest by minor version"
@@ -73,6 +73,14 @@ then
   git push -u origin release/"$next"
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
+
+  echo "Tag branch for Release Candidate build"
+  TAG="RC-$next-$(date +%m%d%y-%H%M)"
+  git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
+  git push origin "$TAG"
+
+  echo "Successfully tagged for Release Candidate builds"
+  echo "Exit"
 else
   echo "Not scheduled for new release branch this week. Exiting."
   exit 0

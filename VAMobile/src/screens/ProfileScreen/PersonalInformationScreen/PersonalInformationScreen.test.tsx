@@ -6,16 +6,17 @@ import { Pressable } from 'react-native'
 
 import PersonalInformationScreen from './index'
 import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
-import {context, mockNavProps, render, RenderAPI, waitFor} from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
 import {
   ErrorsState,
   initialAuthorizedServicesState,
   initialAuthState,
-  initialErrorsState, initializeErrorsByScreenID,
+  initialErrorsState,
+  initializeErrorsByScreenID,
   initialMilitaryServiceState,
-  initialPersonalInformationState
+  initialPersonalInformationState,
 } from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -23,12 +24,12 @@ import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../utils/hooks")
-  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  let original = jest.requireActual('../../../utils/hooks')
+  let theme = jest.requireActual('../../../styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(()=> {
-      return {...theme}
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
     useRouteNavigation: () => mockNavigationSpy,
   }
@@ -42,13 +43,13 @@ const authorizedMilitaryState = {
   militaryService: {
     ...initialMilitaryServiceState,
     mostRecentBranch: BranchesOfServiceConstants.AirForce,
-    serviceHistory: [{} as ServiceData]
-  }
+    serviceHistory: [{} as ServiceData],
+  },
 }
 
 const personalInformationState = {
   ...initialPersonalInformationState,
-  needsDataLoad: false
+  needsDataLoad: false,
 }
 
 context('PersonalInformationScreen', () => {
@@ -65,9 +66,11 @@ context('PersonalInformationScreen', () => {
     navigateToResidentialAddressSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: 'mailingAddress' }).mockReturnValue(navigateToMailingAddressSpy)
-        .calledWith('EditAddress', { displayTitle: 'Home address', addressType: 'residentialAddress' }).mockReturnValue(navigateToResidentialAddressSpy)
+      .mockReturnValue(() => {})
+      .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: 'mailingAddress' })
+      .mockReturnValue(navigateToMailingAddressSpy)
+      .calledWith('EditAddress', { displayTitle: 'Home address', addressType: 'residentialAddress' })
+      .mockReturnValue(navigateToResidentialAddressSpy)
     profile = {
       firstName: 'Ben',
       middleName: 'J',
@@ -76,7 +79,6 @@ context('PersonalInformationScreen', () => {
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',
-      gender: 'M',
       addresses: '',
       residentialAddress: {
         id: 1,
@@ -130,20 +132,11 @@ context('PersonalInformationScreen', () => {
         phoneType: 'HOME',
       },
       formattedWorkPhone: '(858)-690-1287',
-      faxNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901286',
-        phoneType: 'HOME',
-        extension: '11111'
-      },
-      formattedFaxPhone: '(858)-690-1286',
       signinService: 'IDME',
     }
 
     store = {
-      auth: {...initialAuthState},
+      auth: { ...initialAuthState },
       personalInformation: {
         ...personalInformationState,
         profile,
@@ -156,11 +149,11 @@ context('PersonalInformationScreen', () => {
       },
       militaryService: {
         ...initialMilitaryServiceState,
-        serviceHistory: [{} as ServiceData]
-      }
+        serviceHistory: [{} as ServiceData],
+      },
     }
 
-    component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+    component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
 
     testInstance = component.container
   }
@@ -183,12 +176,12 @@ context('PersonalInformationScreen', () => {
   describe('when profile does not exist', () => {
     it('should display empty string in the profile banner for the name', async () => {
       store = {
-        auth: {...initialAuthState},
-        personalInformation: { ...personalInformationState }
+        auth: { ...initialAuthState },
+        personalInformation: { ...personalInformationState },
       }
 
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
 
       testInstance = component.container
@@ -198,12 +191,12 @@ context('PersonalInformationScreen', () => {
 
     it('should not display string for most recent military branch in the profile banner', async () => {
       store = {
-        auth: {...initialAuthState},
-        personalInformation: { ...personalInformationState }
+        auth: { ...initialAuthState },
+        personalInformation: { ...personalInformationState },
       }
 
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
 
       testInstance = component.container
@@ -223,16 +216,16 @@ context('PersonalInformationScreen', () => {
       profile.birthDate = ''
 
       store = {
-        auth: {...initialAuthState},
+        auth: { ...initialAuthState },
         personalInformation: {
           ...personalInformationState,
-          profile
+          profile,
         },
-        ...authorizedMilitaryState
+        ...authorizedMilitaryState,
       }
 
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
 
       testInstance = component.container
@@ -241,64 +234,10 @@ context('PersonalInformationScreen', () => {
     })
   })
 
-  describe('when there is a gender', () => {
-    describe('when the gender is set to M', () => {
-      it('should display the text to Male', async () => {
-        expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Male')
-      })
-    })
-
-    describe('when the gender is set to F', () => {
-      it('should display the text to Female', async () => {
-        profile.gender = 'F'
-
-        store ={
-          auth: {...initialAuthState},
-          personalInformation: {
-            ...personalInformationState,
-            profile
-          },
-          ...authorizedMilitaryState
-        }
-
-        await waitFor(() => {
-          component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
-        })
-
-        testInstance = component.container
-
-        expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Female')
-      })
-    })
-  })
-
-  describe('when there is no gender', () => {
-    it('should display the message This information is not available right now', async () => {
-      profile.gender = ''
-
-      store = {
-        auth: {...initialAuthState},
-        personalInformation: {
-          ...personalInformationState,
-          profile
-        },
-        ...authorizedMilitaryState
-      }
-
-      await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
-      })
-
-      testInstance = component.container
-
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('This information is not available right now')
-    })
-  })
-
   describe('when there is a mailing address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Tiburon, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
+      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Tiburon, CA, 94920')
     })
   })
 
@@ -306,40 +245,40 @@ context('PersonalInformationScreen', () => {
     it('should display Add your mailing address', async () => {
       profile.mailingAddress = {} as AddressData
       store = {
-        auth: {...initialAuthState},
+        auth: { ...initialAuthState },
         personalInformation: {
           ...personalInformationState,
-          profile
+          profile,
         },
-        ...authorizedMilitaryState
+        ...authorizedMilitaryState,
       }
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
       testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Add your mailing address')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Add your mailing address')
 
       profile = {} as UserDataProfile
       store = {
-        auth: {...initialAuthState},
+        auth: { ...initialAuthState },
         personalInformation: {
           ...personalInformationState,
-          profile
+          profile,
         },
-        ...authorizedMilitaryState
+        ...authorizedMilitaryState,
       }
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
       testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Add your mailing address')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Add your mailing address')
     })
   })
 
   describe('when there is a residential address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('10 Laurel Way')
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Novato, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('10 Laurel Way')
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Novato, CA, 94920')
     })
   })
 
@@ -347,24 +286,24 @@ context('PersonalInformationScreen', () => {
     it('should display Add your home address', async () => {
       profile.residentialAddress = {} as AddressData
       store = {
-        auth: {...initialAuthState},
+        auth: { ...initialAuthState },
         personalInformation: {
           ...personalInformationState,
-          profile
+          profile,
         },
-        ...authorizedMilitaryState
+        ...authorizedMilitaryState,
       }
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
       testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Add your home address')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Add your home address')
     })
   })
 
   describe('where is a home number', () => {
     it('should display the formatted home phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('(858)-690-1289')
+      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('(858)-690-1289')
     })
   })
 
@@ -373,27 +312,27 @@ context('PersonalInformationScreen', () => {
       profile.formattedHomePhone = ''
 
       store = {
-        auth: {...initialAuthState},
+        auth: { ...initialAuthState },
         personalInformation: {
           ...personalInformationState,
-          profile
+          profile,
         },
-        ...authorizedMilitaryState
+        ...authorizedMilitaryState,
       }
 
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Add your home phone number')
+      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('Add your home phone number')
     })
   })
 
   describe('where is a work number', () => {
     it('should display the formatted work phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('(858)-690-1287')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('(858)-690-1287')
     })
   })
 
@@ -401,28 +340,28 @@ context('PersonalInformationScreen', () => {
     it('should display the message Add your work phone number', async () => {
       profile.formattedWorkPhone = ''
 
-      store ={
-        auth: {...initialAuthState},
+      store = {
+        auth: { ...initialAuthState },
         personalInformation: {
           ...personalInformationState,
-          profile
+          profile,
         },
-        ...authorizedMilitaryState
+        ...authorizedMilitaryState,
       }
 
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Add your work phone number')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Add your work phone number')
     })
   })
 
   describe('where is a cell number', () => {
     it('should display the formatted cell phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('(858)-690-1288')
+      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('(858)-690-1288')
     })
   })
 
@@ -430,57 +369,28 @@ context('PersonalInformationScreen', () => {
     it('should display the message Add your cell phone number', async () => {
       profile.formattedMobilePhone = ''
 
-      store ={
-        auth: {...initialAuthState},
+      store = {
+        auth: { ...initialAuthState },
         personalInformation: {
           ...personalInformationState,
-          profile
+          profile,
         },
-        ...authorizedMilitaryState
+        ...authorizedMilitaryState,
       }
 
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Add your cell phone number')
-    })
-  })
-
-  describe('where is a fax number', () => {
-    it('should display the formatted fax number', async () => {
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('(858)-690-1286, ext. 11111')
-    })
-  })
-
-  describe('where is no fax number', () => {
-    it('should display the message Add your fax number', async () => {
-      profile.formattedFaxPhone = ''
-
-      store ={
-        auth: {...initialAuthState},
-        personalInformation: {
-          ...personalInformationState,
-          profile
-        },
-        ...authorizedMilitaryState
-      }
-
-      await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
-      })
-
-      testInstance = component.container
-
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Add your fax number')
+      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Add your cell phone number')
     })
   })
 
   describe('when there is an email address', () => {
     it('should display the email address', async () => {
-      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('ben@gmail.com')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('ben@gmail.com')
     })
   })
 
@@ -489,21 +399,21 @@ context('PersonalInformationScreen', () => {
       profile.contactEmail = { emailAddress: '', id: '0' }
 
       store = {
-        auth: {...initialAuthState},
+        auth: { ...initialAuthState },
         personalInformation: {
           ...personalInformationState,
           profile,
         },
-        ...authorizedMilitaryState
+        ...authorizedMilitaryState,
       }
 
       await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store})
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('Add your email address')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Add your email address')
     })
   })
 
@@ -522,7 +432,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -535,7 +445,7 @@ context('PersonalInformationScreen', () => {
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 

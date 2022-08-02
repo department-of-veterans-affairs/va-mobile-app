@@ -40,11 +40,11 @@ context('PhaseIndicator', () => {
     beforeEach(() => {
       initializeTextInstance(1, 1)
     })
-    it('should render a white number on a blue background', async () => {
+    it('should render a #f1f1f1 number on a blue background', async () => {
       const text = testInstance.findAllByType(TextView)[0]
       expect(text).toBeTruthy()
       expect(text.props.children).toEqual(1)
-      expect(text.props.color).toEqual('claimPhase')
+      expect(text.props.variant).toEqual('ClaimPhase') // variant has a default color of f1f1f1
       expect(testInstance.findAllByType(Box)[0].props.backgroundColor).toEqual('currentPhase')
     })
   })
@@ -58,7 +58,7 @@ context('PhaseIndicator', () => {
       const text = testInstance.findAllByType(TextView)[0]
       expect(text).toBeTruthy()
       expect(text.props.children).toEqual(2)
-      expect(text.props.color).toEqual('claimPhase')
+      expect(text.props.variant).toEqual('ClaimPhase') // variant has a default color of f1f1f1
       expect(testInstance.findAllByType(Box)[0].props.backgroundColor).toEqual('upcomingPhase')
     })
   })

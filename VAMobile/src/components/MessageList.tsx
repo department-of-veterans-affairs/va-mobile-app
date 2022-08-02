@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { ButtonDecoratorType } from 'components'
@@ -6,9 +7,8 @@ import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { READ } from '../constants/secureMessaging'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
-import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
-import MessagesSentReadTag from './MessagesSentReadTag'
+import LabelTag from './LabelTag'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}
@@ -35,8 +35,7 @@ export type MessageListProps = {
  * Display a list of buttons with text and optional actions
  */
 const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const themes = useTheme()
+  const { t } = useTranslation(NAMESPACE.HEALTH)
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { inlineTextWithIcons, testId, ...listItemObj } = item
@@ -49,13 +48,13 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
     const content = (
       // Package individual textLineWithIcon components together into one message
       <Box flex={1}>
-        <Box flexDirection="column" mb={themes.dimensions.navigationBarIconMarginTop}>
+        <Box flexDirection="column" mb={7}>
           {inlineTextWithIcons?.map((textObj: InlineTextWithIconsProps, index: number) => {
             return <InlineTextWithIcons key={index} {...textObj} />
           })}
           {isSentReadTag && (
-            <Box ml={themes.dimensions.messageSentReadLeftMargin} mt={themes.dimensions.navigationBarIconMarginTop}>
-              <MessagesSentReadTag text={t('secureMessaging.folders.read.tag')} />
+            <Box ml={23} mt={7}>
+              <LabelTag text={t('secureMessaging.folders.read.tag')} />
             </Box>
           )}
         </Box>

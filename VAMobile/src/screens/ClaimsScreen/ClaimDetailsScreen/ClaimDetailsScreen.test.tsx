@@ -13,22 +13,44 @@ import ClaimDetails from './ClaimDetails/ClaimDetails'
 import { claim } from '../claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { InteractionManager } from 'react-native'
+import { StackNavigationOptions } from '@react-navigation/stack'
+
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
+  return {
+    ...actual,
+    useNavigation: () => ({
+      setOptions: jest.fn(),
+      goBack: jest.fn(),
+    }),
+  }
+})
 
 context('ClaimDetailsScreen', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
-
-  const runAfterTransition = (testToRun: () => void) => {
-    InteractionManager.runAfterInteractions(() => {
-      testToRun()
-    })
-    jest.runAllTimers()
-  }
+  let navHeaderSpy: any
+  let goBack: jest.Mock
+  let abortLoadSpy: jest.Mock
 
   const initializeTestInstance = (loadingClaim = false, errorsState: ErrorsState = initialErrorsState) => {
-    props = mockNavProps(undefined, undefined, { params: { claimID: '0', claimType: 'ACTIVE' } })
+    goBack = jest.fn()
+    abortLoadSpy = jest.fn()
+    props = mockNavProps(
+      undefined,
+      {
+        navigate: jest.fn(),
+        addListener: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+          }
+        },
+        goBack,
+      },
+      { params: { claimID: '0', claimType: 'ACTIVE' } },
+    )
 
     component = render(<ClaimDetailsScreen {...props} />, {
       preloadedState: {
@@ -37,6 +59,9 @@ context('ClaimDetailsScreen', () => {
           ...initialClaimsAndAppealsState,
           loadingClaim,
           claim: claim,
+          cancelLoadingDetailScreen: {
+            abort: abortLoadSpy
+          }
         },
         errors: errorsState,
       },
@@ -67,7 +92,7 @@ context('ClaimDetailsScreen', () => {
     it('should display the ClaimStatus component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/0`)
+          .calledWith(`/v0/claim/0`, {}, expect.anything())
           .mockResolvedValue({ data: claim })
         initializeTestInstance()
       })
@@ -83,7 +108,7 @@ context('ClaimDetailsScreen', () => {
     it('should display the ClaimDetails component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/0`)
+          .calledWith(`/v0/claim/0`, {}, expect.anything())
           .mockResolvedValue({ data: claim })
         initializeTestInstance()
       })

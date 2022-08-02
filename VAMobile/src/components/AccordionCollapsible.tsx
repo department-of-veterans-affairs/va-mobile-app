@@ -1,11 +1,11 @@
 import { Pressable, PressableProps, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VABorderColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */
@@ -26,8 +26,6 @@ export type AccordionCollapsibleProps = {
   expandedInitialValue?: boolean
   /** gets rid of border of TextArea so the top and bottom borders don't double up in message threads when accordion is opened */
   noBorder?: boolean
-  /** applies a border to create the alert effect on the view */
-  alertBorder?: keyof VABorderColors
   /** Ref for the header section */
   headerRef?: Ref<View>
 }
@@ -45,11 +43,10 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   expandedInitialValue,
   noBorder,
   children,
-  alertBorder,
   a11yHint,
   headerRef,
 }) => {
-  const t = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
@@ -82,26 +79,28 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
       </Box>
     )
 
+    const labelProps = testID
+      ? {
+          accessibilityLabel: testID,
+        }
+      : {}
+
     if (hideArrow) {
-      return <Box {...testIdProps(testID || '')}>{data}</Box>
+      return (
+        <Box {...labelProps} accessible={true}>
+          {data}
+        </Box>
+      )
     }
 
     return (
-      <Pressable {...pressableProps} {...testIdProps(testID || '')} ref={headerRef}>
+      <Pressable {...pressableProps} {...labelProps} ref={headerRef}>
         {data}
       </Pressable>
     )
   }
 
-  const leftBorderProps = alertBorder
-    ? {
-        borderLeftWidth: theme.dimensions.alertBorderWidth,
-        borderLeftColor: alertBorder,
-      }
-    : {}
-
   const boxProps: BoxProps = {
-    ...leftBorderProps,
     borderBottomColor: 'primary',
     borderBottomWidth: theme.dimensions.borderWidth,
   }

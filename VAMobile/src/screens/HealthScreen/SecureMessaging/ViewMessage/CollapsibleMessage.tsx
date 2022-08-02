@@ -1,7 +1,8 @@
-import { ActivityIndicator, View } from 'react-native'
+import { View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref } from 'react'
 
-import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView, VAIcon } from 'components'
+import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -9,7 +10,7 @@ import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'sto
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay } from 'utils/common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
@@ -24,9 +25,9 @@ export type ThreadMessageProps = {
 
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
-  const tCom = useTranslation(NAMESPACE.COMMON)
-  const tFunction = useTranslation()
+  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tCom } = useTranslation(NAMESPACE.COMMON)
+  const { t: tFunction } = useTranslation()
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
@@ -56,7 +57,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           </TextView>
           {loadingAttachments && !attachments?.length && attachment && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-              <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
+              <LoadingComponent justTheSpinnerIcon={true} />
             </Box>
           )}
         </Box>
@@ -64,9 +65,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           {attachments?.length && (
             <Box mt={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
               <Box accessible={true} accessibilityRole="header">
-                <TextView variant={'MobileBodyBold'} color={'primaryTitle'}>
-                  {t('secureMessaging.viewMessage.attachments')}
-                </TextView>
+                <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
               </Box>
               {attachments?.map((a, index) => (
                 <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
@@ -90,12 +89,12 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const getHeader = (): ReactNode => {
     return (
       <Box flexDirection={'column'}>
-        <TextView variant="MobileBodyBold" color={'primaryTitle'} accessible={false}>
+        <TextView variant="MobileBodyBold" accessible={false}>
           {senderName}
         </TextView>
         <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>
           {attachment && (
-            <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
+            <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
             </Box>
           )}

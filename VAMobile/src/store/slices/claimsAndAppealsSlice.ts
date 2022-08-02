@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import _ from 'underscore'
+import { find, map, sortBy } from 'underscore'
 
 import * as api from '../api'
 import { AppThunk } from 'store'
@@ -10,24 +10,29 @@ import {
   ClaimDecisionResponseData,
   ClaimDocUploadData,
   ClaimEventData,
+  ClaimEventDocumentData,
   ClaimsAndAppealsErrorServiceTypesConstants,
   ClaimsAndAppealsGetData,
   ClaimsAndAppealsGetDataMetaPagination,
   ClaimsAndAppealsList,
+  FILE_REQUEST_STATUS,
   ScreenIDTypes,
 } from 'store/api/types'
+import { Asset } from 'react-native-image-picker'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentTypes526 } from 'constants/documentTypes'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { ImagePickerResponse } from 'react-native-image-picker'
+
+import { SnackbarMessages } from 'components/SnackBar'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { getItemsInRange, isErrorObject } from 'utils/common'
+import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 
@@ -56,7 +61,11 @@ export type ClaimsAndAppealsState = {
   claimsAndAppealsByClaimType: ClaimsAndAppealsListType
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
+  cancelLoadingDetailScreen?: AbortController // abortController to canceling loading of claim(getClaim) and appeal(getAppeal) detail screens
 }
+
+const claimsAndAppealsNonFatalErrorString = 'Claims And Appeals Service Error'
+
 const initialPaginationState = {
   currentPage: 1,
   totalEntries: 0,
@@ -88,6 +97,7 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
     ACTIVE: initialPaginationState,
     CLOSED: initialPaginationState,
   },
+  cancelLoadingDetailScreen: undefined,
 }
 
 const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
@@ -104,7 +114,7 @@ const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
 }
 
 export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): ClaimsAndAppealsList => {
-  return _.sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
+  return sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
     return new Date(claimAndAppeal.attributes.updatedAt)
   }).reverse()
 }
@@ -302,6 +312,7 @@ export const prefetchClaimsAndAppeals =
       dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `prefetchClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: undefined, closed: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -336,6 +347,7 @@ export const getClaimsAndAppeals =
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -350,7 +362,12 @@ export const getClaim =
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
-    dispatch(dispatchStartGetClaim())
+
+    // // create a new signal for this api call so it can be aborted if a user leaves(goes back) to the previous screen
+    const newAbortController = new AbortController()
+    const signal = newAbortController.signal
+
+    dispatch(dispatchStartGetClaim({ abortController: newAbortController }))
 
     try {
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
@@ -362,7 +379,7 @@ export const getClaim =
           data: Claim,
         }
       } else {
-        singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
+        singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`, {}, signal)
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
@@ -374,6 +391,7 @@ export const getClaim =
       dispatch(dispatchFinishGetClaim({ claim: singleClaim?.data }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getClaim: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishGetClaim({ claim: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -388,7 +406,12 @@ export const getAppeal =
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
-    dispatch(dispatchStartGetAppeal())
+
+    // create a new signal for this api call so it can be aborted if a user leaves(goes back) to the previous screen
+    const newAbortController = new AbortController()
+    const signal = newAbortController.signal
+
+    dispatch(dispatchStartGetAppeal({ abortController: newAbortController }))
     try {
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       let appeal
@@ -397,7 +420,7 @@ export const getAppeal =
           data: Appeal,
         }
       } else {
-        appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+        appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`, {}, signal)
       }
 
       const [totalTime] = getAnalyticsTimers(getState())
@@ -409,6 +432,7 @@ export const getAppeal =
       dispatch(dispatchFinishGetAppeal({ appeal: appeal?.data }))
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getAppeal: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishGetAppeal({ appeal: undefined, error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
@@ -422,17 +446,20 @@ export const submitClaimDecision =
   (claimID: string, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(submitClaimDecision(claimID, screenID))))
+    const retryFunction = () => dispatch(submitClaimDecision(claimID, screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartSubmitClaimDecision())
 
     try {
       await api.post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 
       dispatch(dispatchFinishSubmitClaimDecision())
+      showSnackBar('Request sent', dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `submitClaimDecision: ${claimsAndAppealsNonFatalErrorString}`)
         dispatch(dispatchFinishSubmitClaimDecision(error))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        showSnackBar('Request could not be sent', dispatch, retryFunction, false, true)
       }
     }
   }
@@ -441,18 +468,16 @@ export const submitClaimDecision =
  * Redux action to upload a file to a claim
  */
 export const uploadFileToClaim =
-  (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AppThunk =>
+  (claimID: string, messages: SnackbarMessages, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
   async (dispatch) => {
+    const retryFunction = () => dispatch(uploadFileToClaim(claimID, messages, request, files))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartFileUpload())
     await logAnalyticsEvent(Events.vama_claim_upload_start())
     try {
       if (files.length > 1) {
-        const fileStrings = files.map((file: DocumentPickerResponse | ImagePickerResponse) => {
-          if ('assets' in file) {
-            return file.assets ? file.assets[0].base64 : undefined
-          } else if ('size' in file) {
-            return file.base64
-          }
+        const fileStrings = files.map((file: DocumentPickerResponse | Asset) => {
+          return file.base64
         })
 
         const payload = JSON.parse(
@@ -471,13 +496,11 @@ export const uploadFileToClaim =
         let typeOfFile: string | undefined
         let uriOfFile: string | undefined
 
-        if ('assets' in fileToUpload) {
-          if (fileToUpload.assets && fileToUpload.assets.length > 0) {
-            const { fileName, type, uri } = fileToUpload.assets[0]
-            nameOfFile = fileName
-            typeOfFile = type
-            uriOfFile = uri
-          }
+        if ('fileSize' in fileToUpload) {
+          const { fileName, type, uri } = fileToUpload
+          nameOfFile = fileName
+          typeOfFile = type
+          uriOfFile = uri
         } else if ('size' in fileToUpload) {
           const { name, uri, type } = fileToUpload
           nameOfFile = name
@@ -502,11 +525,15 @@ export const uploadFileToClaim =
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
       }
       await logAnalyticsEvent(Events.vama_claim_upload_compl())
-      dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description }))
+
+      dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description, files, request }))
+      showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `uploadFileToClaim: ${claimsAndAppealsNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_claim_upload_fail())
         dispatch(dispatchFinishFileUpload({ error }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
@@ -530,6 +557,36 @@ export const sendClaimStep3Analytics = (): AppThunk => async () => {
  */
 export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {
   await logAnalyticsEvent(Events.vama_claim_file_request())
+}
+
+// creates the documents array after submitting a file request
+const createFileRequestDocumentsArray = (
+  files: Array<Asset> | Array<DocumentPickerResponse>,
+  trackedItemId: number | undefined,
+  documentType: string,
+  uploadDate: string,
+): Array<ClaimEventDocumentData> => {
+  return map(files, (item) => {
+    let name: string | undefined
+
+    if ('fileSize' in item) {
+      name = item.fileName
+    } else if ('size' in item) {
+      name = item.name
+    }
+
+    const fileType = find(DocumentTypes526, (type) => {
+      return type.value === documentType
+    })
+
+    return {
+      trackedItemId,
+      fileType: fileType ? fileType.label : '',
+      filename: name,
+      documentType,
+      uploadDate,
+    } as ClaimEventDocumentData
+  })
 }
 
 /**
@@ -591,8 +648,9 @@ const claimsAndAppealsSlice = createSlice({
       state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
     },
 
-    dispatchStartGetClaim: (state) => {
+    dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
       state.loadingClaim = true
+      state.cancelLoadingDetailScreen = action.payload.abortController
     },
 
     dispatchFinishGetClaim: (state, action: PayloadAction<{ claim?: ClaimData; error?: Error }>) => {
@@ -601,10 +659,12 @@ const claimsAndAppealsSlice = createSlice({
       state.claim = claim
       state.error = error
       state.loadingClaim = false
+      state.cancelLoadingDetailScreen = undefined
     },
 
-    dispatchStartGetAppeal: (state) => {
+    dispatchStartGetAppeal: (state, action: PayloadAction<{ abortController: AbortController }>) => {
       state.loadingAppeal = true
+      state.cancelLoadingDetailScreen = action.payload.abortController
     },
 
     dispatchFinishGetAppeal: (state, action: PayloadAction<{ appeal?: AppealData; error?: Error }>) => {
@@ -613,6 +673,7 @@ const claimsAndAppealsSlice = createSlice({
       state.appeal = appeal
       state.error = error
       state.loadingAppeal = false
+      state.cancelLoadingDetailScreen = undefined
     },
 
     dispatchStartSubmitClaimDecision: (state) => {
@@ -636,13 +697,25 @@ const claimsAndAppealsSlice = createSlice({
       state.loadingFileUpload = true
     },
 
-    dispatchFinishFileUpload: (state, action: PayloadAction<{ error?: Error; eventDescription?: string }>) => {
-      const { error, eventDescription } = action.payload
+    dispatchFinishFileUpload: (
+      state,
+      action: PayloadAction<{ error?: Error; eventDescription?: string; files?: Array<Asset> | Array<DocumentPickerResponse>; request?: ClaimEventData }>,
+    ) => {
+      const { error, eventDescription, files, request } = action.payload
 
       if (state.claim && !error) {
+        const dateUploadedString = DateTime.local().toISO()
         const indexOfRequest = state.claim.attributes.eventsTimeline.findIndex((el) => el.description === eventDescription)
         state.claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
-        state.claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
+        state.claim.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
+
+        state.claim.attributes.eventsTimeline[indexOfRequest].documents = createFileRequestDocumentsArray(
+          files || [],
+          request?.trackedItemId || undefined,
+          request?.documentType || '',
+          dateUploadedString,
+        )
+        state.claim.attributes.eventsTimeline[indexOfRequest].uploadDate = dateUploadedString
       }
 
       state.loadingFileUpload = false

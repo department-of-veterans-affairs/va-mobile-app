@@ -1,16 +1,17 @@
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, TextView, TextViewProps, VABulletList, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type LoaGateProps = Record<string, unknown>
 
 const LoaGate: FC<LoaGateProps> = ({}) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.LOGIN)
   const navigateTo = useRouteNavigation()
 
   const onConfirm = navigateTo('WebviewLogin')
@@ -19,6 +20,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   const bulletOne = {
     text: t('loaGate.readMore.bulletOne'),
     boldedText: ' ' + t('loaGate.readMore.or'),
+    a11yLabel: t('loaGate.readMore.bulletOne.a11y'),
   }
 
   const bodyTextProps: TextViewProps = {

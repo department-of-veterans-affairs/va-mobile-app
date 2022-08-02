@@ -1,20 +1,22 @@
+import { StyleProp, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, sendLoginStartAnalytics, setPKCEParams } from 'store/slices/authSlice'
 import { Box, LoadingComponent } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
-import { useSelector } from 'react-redux'
-import crashlytics from '@react-native-firebase/crashlytics'
 import getEnv from 'utils/env'
 import qs from 'querystringify'
 
@@ -23,6 +25,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { AUTH_CLIENT_ID, AUTH_REDIRECT_URL, AUTH_SCOPES, AUTH_ENDPOINT } = getEnv()
   const { codeChallenge, authorizeStateParam, authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const params = qs.stringify({
     client_id: AUTH_CLIENT_ID,
@@ -62,7 +65,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
             dispatch(cancelWebLogin())
             navigation.goBack()
           } else {
-            crashlytics().recordError(e, 'iOS Login Error')
+            logNonFatalErrorToFirebase(e, 'iOS Login Error')
             dispatch(sendLoginFailedAnalytics(e))
           }
         }
@@ -75,8 +78,8 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   }, [authParamsLoadingState, codeChallenge, authorizeStateParam, dispatch, navigation])
 
   const loadingSpinner: ReactElement = (
-    <Box display="flex" height="100%" width="100%" justifyContent="center" alignItems="center">
-      <ActivityIndicator size="large" />
+    <Box display="flex" height="100%" width="100%">
+      <LoadingComponent text={t('webview.preLogin.message')} />
     </Box>
   )
 
@@ -84,7 +87,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   if (isIOS()) {
     return <></>
   } else if (authParamsLoadingState !== AuthParamsLoadingStateTypeConstants.READY) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('webview.preLogin.message')} />
   } else {
     return (
       <Box style={webviewStyle}>
@@ -96,7 +99,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
             const err = new Error(e.nativeEvent.description)
             err.stack = JSON.stringify(e.nativeEvent)
             err.name = e.nativeEvent.title
-            crashlytics().recordError(err, 'Android Login Webview Error')
+            logNonFatalErrorToFirebase(err, 'Android Login Webview Error')
             dispatch(sendLoginFailedAnalytics(err))
           }}
           renderLoading={(): ReactElement => loadingSpinner}

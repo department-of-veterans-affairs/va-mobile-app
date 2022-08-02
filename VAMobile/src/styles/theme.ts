@@ -5,8 +5,8 @@ export type VAButtonBackgroundColors = {
   buttonSecondaryActive: string
   buttonDisabled: string
   buttonSecondaryDisabled: string
-  buttonImportant: string
-  buttonImportantActive: string
+  buttonDestructive: string
+  buttonDestructiveActive: string
   buttonWhite: string
   buttonWhiteActive: string
   brandedPrimary: string
@@ -17,8 +17,8 @@ export type VAButtonBackgroundColors = {
 export type VAButtonBorderColors = {
   buttonSecondary: string
   buttonSecondaryActive: string
-  buttonImportant: string
-  buttonImportantActive: string
+  buttonDestructive: string
+  buttonDestructiveActive: string
   brandedPrimary: string
   brandedPrimaryActive: string
 }
@@ -27,7 +27,7 @@ export type VAButtonTextColors = {
   buttonPrimary: string
   buttonSecondary: string
   buttonDisabled: string
-  buttonImportant: string
+  buttonDestructive: string
   buttonWhite: string
   brandedPrimary: string
 }
@@ -37,9 +37,7 @@ export type VATextColors = {
   footerButtonActive: string
   navBar: string
   primary: string
-  primaryTitle: string
   primaryContrast: string
-  primaryContrastDisabled: string
   secondary: string
   link: string
   error: string
@@ -49,13 +47,18 @@ export type VATextColors = {
   claimPhase: string
   input: string
   inputFocused: string
-  inputRequired: string
   brandedPrimaryText: string
   segmentControllerActive: string
   segmentControllerInactive: string
   snackBarBtn: string
-  backButton: string
-  snackBarText: string
+  snackBarTxt: string
+  actionBar: string
+  actionBarDisabled: string
+  bodyText: string
+  defaultMenuItem: string
+  warningTag: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
 }
 
 export type VAIconColors = {
@@ -64,6 +67,7 @@ export type VAIconColors = {
   link: string
   nav: string
   largeNav: string
+  deleteFill: string
   disclosure: string
   success: string
   error: string
@@ -75,8 +79,8 @@ export type VAIconColors = {
   checkboxDisabled: string
   checkboxDisabledContrast: string
   spinner: string
-  dark: string
   covid19Vaccinations: string
+  photoAdd: string
   pickerIcon: string
   pagination: string
   chevronCollapsible: string
@@ -84,6 +88,11 @@ export type VAIconColors = {
   webviewReload: string
   backButton: string
   unreadMessage: string
+  veteransCrisisLineArrow: string
+  snackBarIcon: string
+  defaultMenuItem: string
+  infoIcon: string
+  infoIconContrast: string
 }
 
 export type VATypographyThemeVariants = {
@@ -91,7 +100,6 @@ export type VATypographyThemeVariants = {
   MobileBody: string
   MobileBodyBold: string
   UnreadMessagesTag: string
-  SentMessagesReadTag: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -100,7 +108,10 @@ export type VATypographyThemeVariants = {
   ActionBar: string
   VASelector: string
   HelperText: string
+  HelperTextBold: string
   SnackBarBtnText: string
+  LabelTag: string
+  LabelTagBold: string
 }
 
 export type VABackgroundColors = {
@@ -134,6 +145,9 @@ export type VABackgroundColors = {
   pickerControls: string
   menu: string
   alertBox: string
+  warningTag: string
+  inactiveTag: string
+  activeTag: string
 }
 
 export type VABorderColors = {
@@ -146,11 +160,14 @@ export type VABorderColors = {
   phaseIndicatorUpcoming: string
   success: string
   primaryDarkest: string
+  photoAdd: string // todo rename photoAdd border color to be more abstract (talk to design)
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string
   footerButton: string
   menuDivider: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
 }
 
 export type VAFontSizes = {
@@ -184,99 +201,34 @@ export type VAColorScheme = {
 export type VATheme = {
   colors: VAColorScheme
   dimensions: {
-    keyboardManagerDistanceFromTextField: number
+    attachmentIconTopMargin: number
     borderWidth: number
     focusedInputBorderWidth: number
     buttonBorderWidth: number
     gutter: number
     textIconMargin: number
-    textXPadding: number
     contentMarginTop: number
     contentMarginBottom: number
     standardMarginBetween: number
     condensedMarginBetween: number
     cardPadding: number
-    cardMargin: number
     buttonPadding: number
     alertBorderWidth: number
-    alertPaddingY: number
-    alertPaddingX: number
     listItemDecoratorMarginLeft: number
-    messagesDecoratorMarginLeft: number
-    noLettersPaddingY: number
-    datePickerArrowsPaddingRight: number
-    pickerLabelMargin: number
-    checkboxLabelMargin: number
-    navigationBarIconMarginTop: number
     touchableMinHeight: number
-    textAreaHeight: number
-    headerButtonMargin: number
-    headerButtonPadding: number
-    textInputLabelMarginBottom: number
-    phaseIndicatorRightMargin: number
-    phaseIndicatorDiameter: number
-    phaseIndicatorBorderWidth: number
-    phaseIndicatorIconWidth: number
-    phaseIndicatorIconHeight: number
-    bulletMargin: number
     textAndButtonLargeMargin: number
-    fileUploadMargin: number
-    biometricsPreferenceMarginTop: number
-    carouselProgressDotsMargin: number
     headerHeight: number
-    textInputMargin: number
     formMarginBetween: number
-    tagCountMinWidth: number
-    tagCountCurvedBorder: number
-    tagCountTopPadding: number
-    messagePhotoAttachmentMaxHeight: number
-    messageIconLeftMargin: number
-    messageIconWidth: number
-    messageIconHeight: number
+    tagMinWidth: number
     maxNumMessageAttachments: number
-    paginationButtonPadding: number
-    pickerModalTopPadding: number
-    pickerModalSelectedIconWidth: number
-    pickerModalSelectedIconHeight: number
-    messageSentReadLeftMargin: number
-    syncLogoSpacing: number
     navBarHeight: number
     paginationTopPadding: number
-    collapsibleIconMargin: number
-    loginContentMarginBottom: number
-    webviewReloadButtonHeight: number
-    webviewReloadButtonSize: number
-    webviewButtonSize: number
-    webviewButtona11ySize: number
-    errorLabelBottomMargin: number
-    selectorWidth: number
-    selectorHeight: number
-    snackBarPadding: number
-    snackBarMarginBottom: number
-    snackBarMarginRight: number
-    snackBarMarginLeft: number
-    snackBarVerticalMargin: number
-    snackBarBorderRadius: number
-    snackBarBetweenSpace: number
-    snackBarShadowX: number
-    snackBarShadowY: number
-    snackBarShadowOpacity: number
-    snackBarIconSize: number
     snackBarBottomOffset: number
     snackBarBottomOffsetWithNav: number
-    snackBarButtonTopMargin: number
-    snackBarConfirmBtnMarginRight: number
-    snackBarIconTopMargin: number
-    menuShadowX: number
-    menuShadowY: number
-    menuShadowOpacity: number
-    menuShadowRadius: number
-    menuOpacity: number
-    menuBorderRadius: number
-    menuItemMinWidth: number
-    menuElevation: number
     chevronListItemWidth: number
     chevronListItemHeight: number
+    headerButtonSpacing: number
+    headerLeftButtonFromTextPadding: number
   }
   fontFace: {
     regular: string
@@ -288,13 +240,16 @@ export type VATheme = {
     MobileBody: VAFontSizes
     MobileBodyBold: VAFontSizes
     UnreadMessagesTag: VAFontSizes
-    SentMessagesReadTag: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
     MobileBodyLink: VAFontSizes
     ClaimPhase: VAFontSizes
     VASelector: VAFontSizes
+    LabelTag: VAFontSizes
+    LabelTagBold: VAFontSizes
+    HelperText: VAFontSizes
+    HelperTextBold: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }

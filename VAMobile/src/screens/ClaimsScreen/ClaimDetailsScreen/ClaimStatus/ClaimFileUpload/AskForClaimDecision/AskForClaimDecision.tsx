@@ -1,79 +1,62 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC, useEffect, useState } from 'react'
 
 import {
-  AlertBox,
-  BackButton,
   Box,
   ButtonTypesConstants,
   ErrorComponent,
   FieldType,
   FormFieldType,
   FormWrapper,
+  LoadingComponent,
   TextArea,
   TextView,
   VABulletList,
   VAButton,
   VAScrollView,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimTypeConstants } from '../../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
-import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<ClaimsStackParamList, 'AskForClaimDecision'>
 
 const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { submittedDecision, error, claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
+  const requestEvalAlert = useDestructiveAlert()
 
-  const displaySubmittedDecisionScreen = submittedDecision && !error
+  const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
 
   useEffect(() => {
-    const title = displaySubmittedDecisionScreen ? t('askForClaimDecision.submittedClaim.pageTitle') : t('askForClaimDecision.pageTitle')
-    const backA11yHint = displaySubmittedDecisionScreen ? t('askForClaimDecision.backA11yHint') : t('common:back.a11yHint')
-
-    const onBack = (): void => {
-      displaySubmittedDecisionScreen ? navigation.navigate('ClaimDetailsScreen', { claimID, claimType }) : navigation.goBack()
+    if (navigateToClaimsDetailsPage) {
+      navigation.navigate('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
     }
-
-    navigation.setOptions({
-      headerTitle: () => (
-        <HiddenTitle accessibilityLabel={title} accessibilityRole="header">
-          {title}
-        </HiddenTitle>
-      ),
-      headerLeft: (props): ReactNode => <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={backA11yHint} />,
-    })
-  }, [displaySubmittedDecisionScreen, navigation, claimID, claimType, t])
+  }, [navigateToClaimsDetailsPage, navigation, claimID, claimType])
 
   if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
   }
 
-  if (displaySubmittedDecisionScreen) {
-    return (
-      <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.submittedClaim.pageTitle'), ''))}>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <AlertBox title={t('askForClaimDecision.requestReceived')} text={t('askForClaimDecision.willMakeADecision')} border="success" />
-        </Box>
-      </VAScrollView>
-    )
+  if (loadingSubmitClaimDecision) {
+    return <LoadingComponent text={t('askForClaimDecision.loading')} />
   }
 
   const bulletedListOfText = [
@@ -85,6 +68,22 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   const onSubmit = (): void => {
     dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
+  }
+
+  const onRequestEvaluation = (): void => {
+    requestEvalAlert({
+      title: t('askForClaimDecision.alertTitle'),
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: tc('cancel'),
+        },
+        {
+          text: t('askForClaimDecision.alertBtnTitle'),
+          onPress: onSubmit,
+        },
+      ],
+    })
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -104,18 +103,20 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   return (
     <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" color={'primaryTitle'} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
             {t('askForClaimDecision.title')}
           </TextView>
           <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" my={standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
           <VABulletList listOfText={bulletedListOfText} />
-          <Box my={theme.dimensions.standardMarginBetween}>
-            <FormWrapper fieldsList={formFieldsList} onSave={onSubmit} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
+        </TextArea>
+        <Box mx={gutter}>
+          <Box my={standardMarginBetween}>
+            <FormWrapper fieldsList={formFieldsList} onSave={onRequestEvaluation} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
           </Box>
           <VAButton
             onPress={(): void => setOnSaveClicked(true)}
@@ -124,7 +125,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             a11yHint={t('askForClaimDecision.submitA11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
           />
-        </TextArea>
+        </Box>
       </Box>
     </VAScrollView>
   )

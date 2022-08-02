@@ -1,4 +1,5 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
@@ -11,7 +12,7 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { ProfileStackParamList } from './ProfileStackScreens'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ProfileBanner from './ProfileBanner'
 
@@ -20,6 +21,7 @@ type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const {
     directDepositBenefits,
+    directDepositBenefitsUpdate,
     userProfileUpdate,
     militaryServiceHistory: militaryInfoAuthorization,
   } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -43,7 +45,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
 
   /**
@@ -82,39 +85,41 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, disabilityRatingNeedsUpdate, drNotInDowntime])
 
-  const isIDMESignin = profile?.signinService === SigninServiceTypesConstants.IDME
+  const isIDMEOrLoginGovSignin = profile?.signinService === SigninServiceTypesConstants.IDME || profile?.signinService === SigninServiceTypesConstants.LOGINGOV
 
-  const onPersonalAndContactInformation = navigateTo('PersonalInformation')
+  const getTopSection = (): Array<SimpleListItemObj> => {
+    const buttonDataList: Array<SimpleListItemObj> = []
 
-  const onMilitaryInformation = navigateTo('MilitaryInformation')
+    buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: navigateTo('DisabilityRatings') })
 
-  const onDirectDeposit = isIDMESignin ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+    if (userProfileUpdate) {
+      buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: navigateTo('PersonalInformation') })
+    }
 
-  const onLettersAndDocs = navigateTo('LettersOverview')
+    buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: navigateTo('MilitaryInformation') })
 
-  const onSettings = navigateTo('Settings')
+    // Show if user has permission or if user did not signed in through IDME
+    if (directDepositBenefits || !isIDMEOrLoginGovSignin) {
+      buttonDataList.push({
+        text: t('directDeposit.information'),
+        a11yHintText: t('directDeposit.a11yHint'),
+        onPress: directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit'),
+      })
+    }
 
-  const onDisabilityRatings = navigateTo('DisabilityRatings')
-
-  const buttonDataList: Array<SimpleListItemObj> = []
-
-  buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: onDisabilityRatings })
-
-  if (userProfileUpdate) {
-    buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
+    return buttonDataList
   }
 
-  buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
-
-  // Show if user has permission or if user did not signed in through IDME
-  if (directDepositBenefits || !isIDMESignin) {
-    buttonDataList.push({ text: t('directDeposit.information'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
+  const getMiddleSection = (): Array<SimpleListItemObj> => {
+    return [
+      { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: navigateTo('LettersOverview') },
+      { text: th('payments.title'), a11yHintText: t('payments.a11yHint'), onPress: navigateTo('Payments') },
+    ]
   }
 
-  buttonDataList.push(
-    { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
-    { text: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
-  )
+  const getLastSection = (): Array<SimpleListItemObj> => {
+    return [{ text: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: navigateTo('Settings') }]
+  }
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
   if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID)) {
@@ -132,7 +137,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     return (
       <React.Fragment>
         <ProfileBanner />
-        <LoadingComponent />
+        <LoadingComponent text={t('profile.loading')} />
       </React.Fragment>
     )
   }
@@ -141,7 +146,13 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps('Profile-page')}>
       <ProfileBanner />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
-        <SimpleList items={buttonDataList} />
+        <SimpleList items={getTopSection()} />
+      </Box>
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <SimpleList items={getMiddleSection()} />
+      </Box>
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <SimpleList items={getLastSection()} />
       </Box>
       <Box px={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <SignoutButton />
@@ -158,7 +169,7 @@ const ProfileScreenStack = createStackNavigator()
  * Stack screen for the Profile tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PROFILE)
   const headerStyles = useHeaderStyles()
 
   return (

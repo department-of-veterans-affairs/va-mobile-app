@@ -35,6 +35,8 @@
   "healthCare.title": "Health care",
   "letters.title": "Letters",
   "letters.subText": "Download common VA letters and documents",
+  "payments.title": "Payments",
+  "payments.subText": "Review payments made to you by the V\ufeffA",
   "secureMessaging.title": "Messages",
   "title": "Home",
   "veteransCrisisLine.callA11yHint": "Dials this number via your device’s call function",
@@ -54,5 +56,7 @@
   "veteransCrisisLine.urlA11yLabel": "Veterans Crisis Line .net",
   "veteransCrisisLine.urlDisplayed": "VeteransCrisisLine.net",
   "veteransCrisisLine.weAreHereForYou": "We’re here anytime, day or night – 24/7",
-  "veteransCrisisLine.weAreHereForYou.a11yLabel": "We’re here anytime, day or night – 24 7"
+  "veteransCrisisLine.weAreHereForYou.a11yLabel": "We’re here anytime, day or night – 24 7",
+  "webview.valocation.loading": "Loading VA location finder...",
+  "webview.covidUpdates.loading": "Loading VA COVID-19 updates..."
 }
