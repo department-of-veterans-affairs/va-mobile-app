@@ -404,7 +404,6 @@ const PrescriptionHistory: FC = ({}) => {
             </TextView>
           </Box>
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-            {/*<List items={getListItemsForPrescriptions()} />*/}
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
