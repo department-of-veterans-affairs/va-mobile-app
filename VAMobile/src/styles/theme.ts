@@ -55,12 +55,12 @@ export type VATextColors = {
   actionBar: string
   actionBarDisabled: string
   bodyText: string
-  tabSelectorInactive: string
-  tabSelectorActive: string
   showAll: string
   defaultMenuItem: string
   warningTag: string
   statusDescription: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
 }
 
 export type VAIconColors = {
@@ -90,11 +90,12 @@ export type VAIconColors = {
   webviewReload: string
   backButton: string
   unreadMessage: string
-  infoIcon: string
   veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
   statusInfoIcon: string
+  infoIcon: string
+  infoIconContrast: string
 }
 
 export type VATypographyThemeVariants = {
