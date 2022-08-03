@@ -7,8 +7,10 @@ import { useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
 
 export type LoadingComponentProps = {
-  /**Text to be shown under the spinner */
+  /** Text to be shown under the spinner */
   text?: string
+  /** AccessibilityLabel for the text */
+  a11yLabel?: string
   /** Param to show the spinner icon only and not the full page with text */
   justTheSpinnerIcon?: boolean
   /** spinner height*/
@@ -20,7 +22,7 @@ export type LoadingComponentProps = {
 }
 
 /**A common component to show a loading spinner */
-const LoadingComponent: FC<LoadingComponentProps> = ({ text, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor }) => {
+const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor }) => {
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
@@ -67,7 +69,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text, justTheSpinnerIcon,
           <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
             {getSpinner()}
             <Box mt={theme.dimensions.condensedMarginBetween}>
-              <TextView textAlign={'center'} variant="MobileBody">
+              <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>
                 {text}
               </TextView>
             </Box>
