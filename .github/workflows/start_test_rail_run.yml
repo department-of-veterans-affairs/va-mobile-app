@@ -18,7 +18,7 @@ on:
       milestoneId:
         description: "Milestone id for the run to be associated with"
         type: string
-        required: false
+        required: true
     secrets:
       TEST_RAIL_USER:
         description: "Testrail robot userid"
@@ -46,7 +46,7 @@ on:
       milestoneId:
         description: "Milestone id for the run to be associated with"
         type: string
-        required: false
+        required: true
 jobs:
   start_run:
     outputs:
