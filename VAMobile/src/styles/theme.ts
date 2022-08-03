@@ -95,7 +95,6 @@ export type VAIconColors = {
   defaultMenuItem: string
   statusInfoIcon: string
   infoIcon: string
-  infoIconContrast: string
 }
 
 export type VATypographyThemeVariants = {
