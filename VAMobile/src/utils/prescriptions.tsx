@@ -58,3 +58,27 @@ export const getFilterArgsForFilterAndTab = (filter: string, tab: string) => {
 
   return filterResult
 }
+
+export const getTagColorForStatus = (status: string) => {
+  switch (status) {
+    case RefillStatusConstants.ACTIVE:
+      return 'tagActive'
+    case RefillStatusConstants.DELETED:
+    case RefillStatusConstants.DISCONTINUED:
+    case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+    case RefillStatusConstants.DISCONTINUED_EDIT:
+    case RefillStatusConstants.EXPIRED:
+    case RefillStatusConstants.UNKNOWN:
+    case RefillStatusConstants.TRANSFERRED:
+      return 'tagExpired'
+    case RefillStatusConstants.HOLD:
+    case RefillStatusConstants.PROVIDER_HOLD:
+    case RefillStatusConstants.SUSPENDED:
+    case RefillStatusConstants.ACTIVE_PARKED:
+    case RefillStatusConstants.NON_VERIFIED:
+    case RefillStatusConstants.SUBMITTED:
+      return 'tagSuspended'
+    case RefillStatusConstants.REFILL_IN_PROCESS:
+      return 'tagInProgress'
+  }
+}

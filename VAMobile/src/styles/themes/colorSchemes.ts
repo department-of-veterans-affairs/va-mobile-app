@@ -94,7 +94,7 @@ export const lightTheme = {
     snackBarIcon: colors.grayLighter,
     buttonWithIcon: colors.black,
     infoIcon: colors.grayMedium,
-    infoIconContrast: colors.grayLightest,
+    statusInfoIcon: colors.base,
   },
   text: {
     footerButton: colors.primary,
@@ -126,6 +126,7 @@ export const lightTheme = {
     backButton: colors.white,
     snackBarText: colors.white,
     showAll: colors.primary,
+    statusDescription: colors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -173,10 +174,10 @@ export const lightTheme = {
   },
   selectCopyText: colors.primaryAltLight,
   listTag: {
-    tagActive: colors.primary,
-    tagExpired: colors.grayMedium,
+    tagActive: colors.primaryAltDark,
+    tagExpired: colors.grayLight,
     tagSuspended: colors.gold,
-    tagInProgress: colors.greenDarker,
+    tagInProgress: colors.greenLight,
   },
 }
 
@@ -273,7 +274,7 @@ export const darkTheme = {
     snackBarIcon: colors.grayDark,
     buttonWithIcon: colors.grayLightest,
     infoIcon: colors.grayLight,
-    infoIconContrast: colors.grayLight,
+    statusInfoIcon: colors.base,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,
@@ -303,6 +304,7 @@ export const darkTheme = {
     tabSelectorInactive: colors.grayLighter,
     tabSelectorActive: colors.darkmodeLightBlue,
     showAll: colors.darkmodeLightBlue,
+    statusDescription: colors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
@@ -348,9 +350,9 @@ export const darkTheme = {
   },
   selectCopyText: colors.primaryAltLight,
   listTag: {
-    tagActive: colors.primaryDarker2,
-    tagExpired: colors.darkmodeBorder,
+    tagActive: colors.primaryAltDark,
+    tagExpired: colors.grayLight,
     tagSuspended: colors.gold,
-    tagInProgress: colors.greenDarker,
+    tagInProgress: colors.greenLight,
   },
 }

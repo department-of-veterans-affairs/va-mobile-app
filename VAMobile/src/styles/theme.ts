@@ -58,6 +58,7 @@ export type VATextColors = {
   showAll: string
   defaultMenuItem: string
   warningTag: string
+  statusDescription: string
   tabSelectorInactive: string
   tabSelectorActive: string
 }
@@ -92,8 +93,8 @@ export type VAIconColors = {
   veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
+  statusInfoIcon: string
   infoIcon: string
-  infoIconContrast: string
 }
 
 export type VATypographyThemeVariants = {
