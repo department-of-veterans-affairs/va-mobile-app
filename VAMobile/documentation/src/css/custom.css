@@ -122,3 +122,7 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
 .footer--dark {
   --ifm-footer-background-color: var(--navyBlue) !important;
 }
+
+.navbar__search {
+  margin-left: 10px !important;
+}

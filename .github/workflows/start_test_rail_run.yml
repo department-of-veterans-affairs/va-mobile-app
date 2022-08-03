@@ -18,7 +18,7 @@ on:
       milestoneId:
         description: "Milestone id for the run to be associated with"
         type: string
-        required: false
+        required: true
     secrets:
       TEST_RAIL_USER:
         description: "Testrail robot userid"
@@ -46,7 +46,7 @@ on:
       milestoneId:
         description: "Milestone id for the run to be associated with"
         type: string
-        required: false
+        required: true
 jobs:
   start_run:
     outputs:
@@ -56,6 +56,8 @@ jobs:
       - name: 'Add RC run in testrail'
         id: add_run
         run: |
+          echo "TICKET_NUMBER: ${{inputs.ticketNumber}}"
+          echo "MILESTONE_ID: ${{inputs.milestoneId}}"
           echo "" >> input.json
           for ((i=0; ; i+=250)); do
             echo "i = $i"
@@ -70,11 +72,13 @@ jobs:
           done
           jq --compact-output -s 'add' input.json
           name='Regression pass for ${{github.event.inputs.version}} ${{github.event.inputs.releaseDate}} release'
-          desc='QA Regression pass for ${{github.event.inputs.version}} ${{github.event.inputs.releaseDate}} release'
+          desc='QA Regression pass for ${{inputs.version}} ${{inputs.releaseDate}} release'
+          data='{"suite_id": 92,"include_all": false,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'", "milestone_id": '${{inputs.milestoneId}}' , "case_ids": '$(jq --compact-output -s 'add' input.json)'}'
+          echo ${data}
           response=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                	-d '{"suite_id": 92,"include_all": false,"name": "'"${name}"'","refs": "'"${{github.event.inputs.ticketNumber}}"'","description": "'"${desc}"'", "milestone_id": '${{github.event.inputs.milestoneId}}' , "case_ids": '$(jq --compact-output -s 'add' input.json)'}' \
-                	"https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
+                  -d ${data} \
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
           echo ${response}
           echo "::set-output name=url::$(echo ${response} |  jq '.url')"
 
