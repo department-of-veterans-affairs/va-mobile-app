@@ -9,15 +9,16 @@ import {
   Box,
   BoxProps,
   ErrorComponent,
-  List,
-  ListItemObj,
   LoadingComponent,
+  MultiTouchCard,
+  MultiTouchCardProps,
   Pagination,
   PaginationProps,
   TabBar,
   TabBarProps,
   TabsValuesType,
   TextView,
+  VAIcon,
   VAScrollView,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -26,7 +27,7 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, getPrescriptions, getTabCounts } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getFilterArgsForFilterAndTab } from 'utils/prescriptions'
+import { getFilterArgsForFilterAndTab, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -182,12 +183,54 @@ const PrescriptionHistory: FC = ({}) => {
     selected: currentTab,
   }
 
-  const getListItemsForPrescriptions = () => {
-    const listItems: Array<ListItemObj> = (prescriptions || []).map((prescription) => {
-      return {
-        onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
-        content: <PrescriptionListItem prescription={prescription.attributes} />,
+  const prescriptionItems = () => {
+    const total = prescriptions?.length
+
+    const listItems: Array<ReactNode> = (prescriptions || []).map((prescription, idx) => {
+      const refillStatus = prescription.attributes.refillStatus
+
+      let cardProps: MultiTouchCardProps = {
+        topOnPress: () => {},
+        topText: getTextForRefillStatus(refillStatus, t),
+        topBackgroundColor: getTagColorForStatus(refillStatus),
+        topTextColor: 'statusDescription',
+        topIconColor: 'statusInfoIcon',
+        a11yValue: t('prescription.history.a11yValue', { idx: idx + 1, total: total }),
+        topA11yHint: t('prescription.history.a11yHint.top'),
+        middleOnPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
+        middleA11yHint: t('prescription.history.a11yHint.middle'),
+        middleContent: <PrescriptionListItem prescription={prescription.attributes} />,
+        bottomOnPress: () => {},
       }
+
+      if (prescription.attributes.isRefillable) {
+        const bottomContentProps: BoxProps = {
+          py: 5,
+          flexDirection: 'row',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+        }
+
+        const bottomContent = (
+          <Box {...bottomContentProps}>
+            <Box mr={8}>
+              <VAIcon name={'Truck'} fill={'link'} />
+            </Box>
+            <TextView variant={'HelperTextBold'} color={'link'}>
+              {t('prescription.history.tracking')}
+            </TextView>
+          </Box>
+        )
+
+        cardProps = { ...cardProps, bottomContent }
+      }
+
+      return (
+        <Box mt={theme.dimensions.standardMarginBetween} key={idx}>
+          <MultiTouchCard {...cardProps} />
+        </Box>
+      )
     })
 
     return listItems
@@ -360,11 +403,10 @@ const PrescriptionHistory: FC = ({}) => {
               {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
             </TextView>
           </Box>
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <List items={getListItemsForPrescriptions()} />
-            <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-              {renderPagination()}
-            </Box>
+          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+            {/*<List items={getListItemsForPrescriptions()} />*/}
+            {prescriptionItems()}
+            <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
         </>
       )

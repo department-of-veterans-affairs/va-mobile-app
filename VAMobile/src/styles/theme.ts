@@ -60,6 +60,7 @@ export type VATextColors = {
   showAll: string
   defaultMenuItem: string
   warningTag: string
+  statusDescription: string
 }
 
 export type VAIconColors = {
@@ -93,7 +94,7 @@ export type VAIconColors = {
   veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
-  infoIconContrast: string
+  statusInfoIcon: string
 }
 
 export type VATypographyThemeVariants = {

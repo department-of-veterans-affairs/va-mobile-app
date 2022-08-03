@@ -33,7 +33,7 @@ context('MultiTouchCard', () => {
       topTextColor: 'primaryContrast',
       a11yValue: 'Prescription 1 of 1',
       topA11yHint: 'Review status definition',
-      topIconColor: 'infoIconContrast',
+      topIconColor: 'infoIcon',
       middleContent: <TextLines listOfText={middleTextLines} />,
       middleA11yHint: 'Review prescription details',
       topBackgroundColor: 'completedPhase',
