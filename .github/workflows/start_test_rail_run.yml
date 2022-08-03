@@ -69,10 +69,12 @@ jobs:
             fi
           done
           jq --compact-output -s 'add' input.json
-          name='Regression pass for ${{inputs.version}} ${{inputs.releaseDate}} release'
-          desc='QA Regression pass for ${{inputs.version}} ${{inputs.releaseDate}} release'
-          echo "::set-output name=url::$(curl -X POST -H 'Content-Type: application/json' \
+          name='Regression pass for ${{github.event.inputs.version}} ${{github.event.inputs.releaseDate}} release'
+          desc='QA Regression pass for ${{github.event.inputs.version}} ${{github.event.inputs.releaseDate}} release'
+          response=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                	-d '{"suite_id": 92,"include_all": false,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'", "milestone_id": '${{inputs.milestoneId}}' , "case_ids": '$(jq --compact-output -s 'add' input.json)'}'\
-                	"https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29"|
-                    jq '.url')"
+                	-d '{"suite_id": 92,"include_all": false,"name": "'"${name}"'","refs": "'"${{github.event.inputs.ticketNumber}}"'","description": "'"${desc}"'", "milestone_id": '${{github.event.inputs.milestoneId}}' , "case_ids": '$(jq --compact-output -s 'add' input.json)'}' \
+                	"https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
+          echo ${response}
+          echo "::set-output name=url::$(echo ${response} |  jq '.url')"
+
