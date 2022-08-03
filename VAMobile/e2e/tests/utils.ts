@@ -8,7 +8,13 @@ export const CommonE2eIdConstants = {
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
-  PROFILE_TAB_BUTTON_TEXT: 'Profile'
+  PROFILE_TAB_BUTTON_TEXT: 'Profile',
+  SETTINGS_ROW_TEXT: 'Settings',
+  SIGN_OUT_BTN_ID: 'Sign out',
+  SIGN_OUT_CONFIRM_TEXT: 'Are you sure you want to sign out?',
+  BACK_BTN_LABEL: 'Back',
+  LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
+  CANCEL_UNIVERSAL_TEXT: 'Cancel'
 }
 
 /** Log the automation into demo mode
@@ -29,20 +35,6 @@ export async function loginToDemoMode() {
     await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
   }
 }
-
-/** Opens the Crisis Line, if the banner exists on the screen
- * TKD note - future idea to expand this to a opens & looks for to simplify those RC cases
- * */
- export async function openVeteransCrisisLine() {
-  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
-}
-
-/** Open the profile from the home screen 
- * */
-export async function openProfile() {
-  await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
-}
-
 
 /** this function is to see if a element is present that could sometime not be like the carousel for example
  * which will perform a check without actually performing a test and return true or false
@@ -77,3 +69,18 @@ const checkIfElementIsPresent = async (matchString: string, findbyText = false, 
     return false
   }
 }
+
+
+// Single-source collection for 'open this screen' functions, so if the matcher changes there's a single place to update
+ export async function openVeteransCrisisLine() { 
+  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
+}
+
+export async function openProfile() {
+  await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap() 
+}
+
+export async function openSettings() {
+  await element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)).tap() 
+}
+
