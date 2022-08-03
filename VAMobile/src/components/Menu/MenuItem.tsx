@@ -17,6 +17,8 @@ interface MenuItemViewProps {
   viewStyle?: ViewProps['style']
   /** sets the method to execute on press */
   onPress: TouchableHighlightProps['onPress']
+  /** accessibility label for the menu item */
+  accessibilityLabel?: string
 }
 
 /** This is the menu item common component. This component will be the actions shown inside the menu.
@@ -29,6 +31,7 @@ export const MenuItem = ({
   disabledStyle,
   children,
   onPress,
+  accessibilityLabel,
 }: PropsWithChildren<MenuItemViewProps>): JSX.Element => {
   const touchableInitialStyle: StyleProp<ViewStyle> = {
     justifyContent: 'center',
@@ -37,7 +40,13 @@ export const MenuItem = ({
   }
 
   return (
-    <TouchableHighlight disabled={disabled} onPress={onPress} style={[touchableInitialStyle, touchableStyle]} underlayColor={underlayColor} importantForAccessibility={'no'}>
+    <TouchableHighlight
+      disabled={disabled}
+      onPress={onPress}
+      style={[touchableInitialStyle, touchableStyle]}
+      underlayColor={underlayColor}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}>
       <View style={[viewStyle, disabled && disabledStyle]}>{children}</View>
     </TouchableHighlight>
   )
