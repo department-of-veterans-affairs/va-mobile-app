@@ -57,7 +57,7 @@ jobs:
         id: add_run
         run: |
           echo "TICKET_NUMBER: ${{github.event.inputs.ticketNumber}}"
-          echo "MILESTONE_ID: ${{github.event.inputs.milestoneId}}
+          echo "MILESTONE_ID: ${{github.event.inputs.milestoneId}}"
           echo "" >> input.json
           for ((i=0; ; i+=250)); do
             echo "i = $i"
