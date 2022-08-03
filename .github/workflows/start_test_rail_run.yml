@@ -77,7 +77,7 @@ jobs:
           echo ${data}
           response=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  -d $data \
+                  -d ${data} \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
           echo ${response}
           echo "::set-output name=url::$(echo ${response} |  jq '.url')"
