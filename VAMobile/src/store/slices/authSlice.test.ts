@@ -41,7 +41,7 @@ jest.mock('../../utils/platform', () => ({
 
 jest.mock('../../utils/env', () =>
   jest.fn(() => ({
-    AUTH_ALLOW_NON_BIOMETRIC_SAVE: 'false',
+    __DEV__: false,
     AUTH_CLIENT_SECRET: 'TEST_SECRET',
     AUTH_CLIENT_ID: 'VAMobile',
     AUTH_REDIRECT_URL: 'vamobile://login-success',
@@ -53,7 +53,7 @@ jest.mock('../../utils/env', () =>
 )
 
 const defaultEnvParams = {
-  AUTH_ALLOW_NON_BIOMETRIC_SAVE: 'false',
+  __DEV__: false,
   AUTH_CLIENT_SECRET: 'TEST_SECRET',
   AUTH_CLIENT_ID: 'VAMobile',
   AUTH_REDIRECT_URL: 'vamobile://login-success',
@@ -252,38 +252,6 @@ context('authAction', () => {
         // we shouldn't be logged in until the user decides how to store refreshToken
         expect(authState.loggedIn).toBeTruthy()
         expect(Keychain.setInternetCredentials).not.toHaveBeenCalled()
-      })
-
-      describe('AUTH_ALLOW_NON_BIOMETRIC_SAVE=true', () => {
-        beforeEach(() => {
-          const envMock = getEnv as jest.Mock
-          envMock.mockReturnValue({
-            ...defaultEnvParams,
-            AUTH_ALLOW_NON_BIOMETRIC_SAVE: 'true',
-          })
-        })
-
-        it('should save the refresh token even if biometrics not available', async () => {
-          const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
-          kcMockSupported.mockResolvedValue(null)
-
-          const prefMock = AsyncStorage.getItem as jest.Mock
-          prefMock.mockResolvedValue(null)
-
-          const tokenResponse = () => {
-            return Promise.resolve({
-              access_token: testAccessToken,
-              refresh_token: testRefreshToken,
-            })
-          }
-          fetch.mockResolvedValue({ status: 200, json: tokenResponse })
-          await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
-          const authState = store.getState().auth
-
-          // we shouldn't be logged in until the user decides how to store refreshToken
-          expect(authState.loggedIn).toBeTruthy()
-          expect(Keychain.setInternetCredentials).toHaveBeenCalled()
-        })
       })
     })
   })

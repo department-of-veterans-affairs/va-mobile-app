@@ -249,7 +249,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       logNonFatalErrorToFirebase(err, `saveRefreshTokenWithBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
     }
-    // Skip actually performing biometric unlock in the development environment
+    // In development environment, allow saving refresh token/unlock without biometrics
   } else if (__DEV__) {
     console.debug('saveRefreshToken: saving non biometric protected')
     const options: Keychain.Options = {
