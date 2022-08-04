@@ -10,6 +10,7 @@ import {
   ScreenIDTypes,
   TypeOfAudiologyCareObjectType,
   TypeOfCareIdV2Types,
+  TypeOfCareNameTypes,
   TypeOfCareObjectType,
   TypeOfCareWithSubCareIdType,
   TypeOfEyeCareObjectType,
@@ -87,8 +88,8 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { ccEligibilityChecked, ccEligible } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const isVaEligible = useRef(true)
-  const selectedName = useRef<string>('')
-  const selectedIdV2 = useRef<string>('')
+  const selectedName = useRef<TypeOfCareNameTypes>()
+  const selectedIdV2 = useRef<TypeOfCareIdV2Types>()
 
   const manageEligibilityRoute = useCallback(
     (isCommunity: boolean | undefined, isVA: boolean, goToSubType = false) => {
@@ -96,7 +97,7 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
       const navigateToCCReason = navigateTo('CCReasonForAppointmentScreen')
       const navigateToFacilityType = navigateTo('FacilityTypeSelectionScreen')
       const navigateToSchedulingHelp = navigateTo('GeneralHelpScreen', {
-        title: t('requestAppointments.scheduleHelpHeaderTitle', { careType: selectedName.current.toLocaleLowerCase() }),
+        title: t('requestAppointments.scheduleHelpHeaderTitle', { careType: selectedName.current?.toLocaleLowerCase() }),
         description: t('requestAppointments.scheduleHelpDescription'),
       })
       const navigateToSubType = navigateTo('SubTypeOfCareSelectionScreen')
@@ -142,7 +143,7 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
       selectedIdV2.current = selectedCare.idV2
 
       //checks if the selected care could be available in community care if yes than check for the community care eligibility
-      if (AVAILABLE_FOR_CC.includes(selectedIdV2.current as TypeOfCareIdV2Types)) {
+      if (AVAILABLE_FOR_CC.includes(selectedIdV2.current)) {
         // doing this due to backend not using idv2 value for nutrition
         const typeName = selectedIdV2.current === 'foodAndNutrition' ? 'nutrition' : selectedIdV2.current
         dispatch(getUserCommunityCareEligibility(typeName, screenID))
