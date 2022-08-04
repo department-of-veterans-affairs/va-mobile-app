@@ -360,7 +360,7 @@ export type UserVAEligibilityAttributes = {
   services: Array<UserVAEligibilityService>
 }
 export type UserVAEligibilityService = {
-  name: string
+  name: TypeOfCareIdV2Types
   requestEligibleFacilities: Array<string>
   directEligibleFacilities: Array<string>
 }
