@@ -33,13 +33,13 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription }) =
         </TextView>
       </Box>
       <TextView variant={'HelperText'} mt={condensedMarginBetween}>
-        {t('prescription.history.refill')} {refillRemaining}
+        {t('prescription.refillsLeft')} {refillRemaining}
       </TextView>
       <TextView variant={'HelperText'} mt={condensedMarginBetween}>
         {`${t('prescriptions.sort.fillDate')}: ${formatDateUtc(refillDate || '', 'MM/dd/yyyy')}`}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween}>
-        {t('prescription.history.facility')} {facilityName}
+      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={t('prescription.vaFacility.a11yLabel')}>
+        {t('prescription.vaFacility')} {facilityName}
       </TextView>
     </Box>
   )

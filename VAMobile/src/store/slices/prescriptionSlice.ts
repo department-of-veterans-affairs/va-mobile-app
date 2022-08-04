@@ -4,6 +4,7 @@ import * as api from '../api'
 import {
   APIError,
   PrescriptionTrackingInfo,
+  PrescriptionTrackingInfoGetData,
   PrescriptionsGetData,
   PrescriptionsList,
   PrescriptionsMap,
@@ -205,8 +206,8 @@ export const getTrackingInfo =
     dispatch(dispatchStartGetTrackingInfo())
 
     try {
-      const trackingInfo = await api.get<PrescriptionTrackingInfo>(`/v0/health/rx/prescriptions/${id}/tracking`)
-      dispatch(dispatchFinishGetTrackingInfo({ trackingInfo }))
+      const trackingInfo = await api.get<PrescriptionTrackingInfoGetData>(`/v0/health/rx/prescriptions/${id}/tracking`)
+      dispatch(dispatchFinishGetTrackingInfo({ trackingInfo: trackingInfo?.data }))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `getTrackingInfo : ${prescriptionNonFatalErrorString}`)

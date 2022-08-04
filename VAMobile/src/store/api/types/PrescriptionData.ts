@@ -142,14 +142,20 @@ export type PrescriptionTrackingInfoOtherItem = {
   prescriptionNumber: string
 }
 
+export type PrescriptionTrackingInfoAttributeData = {
+  prescriptionName: string
+  trackingNumber: string
+  shippedDate: string
+  deliveryService: string
+  otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
+}
+
 export type PrescriptionTrackingInfo = {
   type: string
   id: string
-  attributes: {
-    prescriptionName: string
-    trackingNumber: string
-    shippedDate: string
-    deliveryService: string
-    otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
-  }
+  attributes: PrescriptionTrackingInfoAttributeData
+}
+
+export type PrescriptionTrackingInfoGetData = {
+  data: PrescriptionTrackingInfo
 }
