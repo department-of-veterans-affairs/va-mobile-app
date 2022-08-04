@@ -41,7 +41,6 @@ jest.mock('../../utils/platform', () => ({
 
 jest.mock('../../utils/env', () =>
   jest.fn(() => ({
-    __DEV__: false,
     AUTH_CLIENT_SECRET: 'TEST_SECRET',
     AUTH_CLIENT_ID: 'VAMobile',
     AUTH_REDIRECT_URL: 'vamobile://login-success',
@@ -53,7 +52,6 @@ jest.mock('../../utils/env', () =>
 )
 
 const defaultEnvParams = {
-  __DEV__: false,
   AUTH_CLIENT_SECRET: 'TEST_SECRET',
   AUTH_CLIENT_ID: 'VAMobile',
   AUTH_REDIRECT_URL: 'vamobile://login-success',
@@ -162,6 +160,9 @@ context('authAction', () => {
     })
 
     it('should parse code and state correctly and login', async () => {
+      // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
+      global.__DEV__ = false
+
       const tokenResponse = () => {
         return Promise.resolve({
           access_token: testAccessToken,
@@ -200,6 +201,9 @@ context('authAction', () => {
         body: 'grant_type=authorization_code&client_id=VAMobile&client_secret=TEST_SECRET&code_verifier=mylongcodeverifier&code=FOO34asfa&redirect_uri=vamobile%3A%2F%2Flogin-success',
       })
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
+      
+      // Revert __DEV__ variable
+      global.__DEV__ = true
     })
 
     describe('when biometrics is available and biometrics is preferred', () => {
@@ -233,6 +237,9 @@ context('authAction', () => {
 
     describe('when biometrics is not available', () => {
       it('should not save the refresh token', async () => {
+        // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
+        global.__DEV__ = false
+
         const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
         kcMockSupported.mockResolvedValue(null)
 
@@ -252,6 +259,33 @@ context('authAction', () => {
         // we shouldn't be logged in until the user decides how to store refreshToken
         expect(authState.loggedIn).toBeTruthy()
         expect(Keychain.setInternetCredentials).not.toHaveBeenCalled()
+        
+        // Revert __DEV__ variable
+        global.__DEV__ = true
+      })
+    })
+
+    describe('when in the development environment (__DEV__=true)', () => {
+      it('should save the refresh token even if biometrics not available', async () => {
+        const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
+        kcMockSupported.mockResolvedValue(null)
+  
+        const prefMock = AsyncStorage.getItem as jest.Mock
+        prefMock.mockResolvedValue(null)
+  
+        const tokenResponse = () => {
+          return Promise.resolve({
+            access_token: testAccessToken,
+            refresh_token: testRefreshToken,
+          })
+        }
+        fetch.mockResolvedValue({ status: 200, json: tokenResponse })
+        await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
+        const authState = store.getState().auth
+  
+        // we shouldn't be logged in until the user decides how to store refreshToken
+        expect(authState.loggedIn).toBeTruthy()
+        expect(Keychain.setInternetCredentials).toHaveBeenCalled()
       })
     })
   })
