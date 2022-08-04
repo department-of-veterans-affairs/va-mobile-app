@@ -9,6 +9,7 @@ import {
   AppointmentFlowFormDataType,
   ScreenIDTypes,
   TypeOfAudiologyCareObjectType,
+  TypeOfCareIdV2Types,
   TypeOfCareObjectType,
   TypeOfCareWithSubCareIdType,
   TypeOfEyeCareObjectType,
@@ -59,8 +60,19 @@ export function useSetIsVAEligible<T extends SetIsVAEligibleType>() {
   const { vaEligibleTypeOfCares } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   return (data: Array<T>) => {
     return data.map((care) => {
-      const careItem = vaEligibleTypeOfCares.find((item) => item.name === care.idV2)
-      const isEligible = careItem && (careItem.requestEligibleFacilities.length > 0 || careItem.directEligibleFacilities.length > 0)
+      let isEligible: boolean | undefined
+
+      if (care.idV2 === 'sleepParentCare') {
+        const cpapCare = vaEligibleTypeOfCares.find((item) => item.name === 'cpap')
+        const homeSleepCare = vaEligibleTypeOfCares.find((item) => item.name === 'homeSleepTesting')
+        const cpapEligible = cpapCare && (cpapCare.requestEligibleFacilities.length > 0 || cpapCare.directEligibleFacilities.length > 0)
+        const homeSleepCareEligible = homeSleepCare && (homeSleepCare.requestEligibleFacilities.length > 0 || homeSleepCare.directEligibleFacilities.length > 0)
+        isEligible = cpapEligible || homeSleepCareEligible
+      } else {
+        const careItem = vaEligibleTypeOfCares.find((item) => item.name === care.idV2)
+        isEligible = careItem && (careItem.requestEligibleFacilities.length > 0 || careItem.directEligibleFacilities.length > 0)
+      }
+
       return { ...care, isVaEligible: isEligible }
     })
   }
@@ -76,9 +88,10 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
   const { ccEligibilityChecked, ccEligible } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const isVaEligible = useRef(true)
   const selectedName = useRef<string>('')
+  const selectedIdV2 = useRef<string>('')
 
   const manageEligibilityRoute = useCallback(
-    (isCommunity: boolean | undefined, isVA: boolean) => {
+    (isCommunity: boolean | undefined, isVA: boolean, goToSubType = false) => {
       const navigateToVAReason = navigateTo('VAReasonForAppointmentScreen')
       const navigateToCCReason = navigateTo('CCReasonForAppointmentScreen')
       const navigateToFacilityType = navigateTo('FacilityTypeSelectionScreen')
@@ -86,15 +99,24 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
         title: t('requestAppointments.scheduleHelpHeaderTitle', { careType: selectedName.current.toLocaleLowerCase() }),
         description: t('requestAppointments.scheduleHelpDescription'),
       })
+      const navigateToSubType = navigateTo('SubTypeOfCareSelectionScreen')
 
-      if (isCommunity && isVA) {
+      if (goToSubType) {
+        navigateToSubType()
+      } else if (isCommunity && isVA) {
         navigateToFacilityType()
       } else if (!isCommunity && isVA) {
         navigateToVAReason()
       } else if (isCommunity && !isVA) {
         // if it routes straight to CC than appointment kind is CC
         dispatch(updateFormData({ kind: 'cc' }))
-        navigateToCCReason()
+
+        // If the care selected was audiology route to subtype when is cc only
+        if (selectedIdV2.current === 'audiology') {
+          navigateToSubType()
+        } else {
+          navigateToCCReason()
+        }
       } else {
         navigateToSchedulingHelp()
       }
@@ -117,14 +139,19 @@ export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>()
     if (selectedCare) {
       isVaEligible.current = selectedCare.isVaEligible === undefined ? false : selectedCare.isVaEligible
       selectedName.current = selectedCare.name
+      selectedIdV2.current = selectedCare.idV2
 
       //checks if the selected care could be available in community care if yes than check for the community care eligibility
-      if (AVAILABLE_FOR_CC.includes(selectedCare.idV2)) {
+      if (AVAILABLE_FOR_CC.includes(selectedIdV2.current as TypeOfCareIdV2Types)) {
         // doing this due to backend not using idv2 value for nutrition
-        const typeName = selectedCare.idV2 === 'foodAndNutrition' ? 'nutrition' : selectedCare.idV2
+        const typeName = selectedIdV2.current === 'foodAndNutrition' ? 'nutrition' : selectedIdV2.current
         dispatch(getUserCommunityCareEligibility(typeName, screenID))
       } else {
-        manageEligibilityRoute(false, isVaEligible.current)
+        if (selectedIdV2.current === 'eyeParentCare' || (selectedIdV2.current === 'sleepParentCare' && isVaEligible.current)) {
+          manageEligibilityRoute(false, isVaEligible.current, true)
+        } else {
+          manageEligibilityRoute(false, isVaEligible.current)
+        }
       }
     }
   }
