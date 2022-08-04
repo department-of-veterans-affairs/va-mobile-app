@@ -201,7 +201,7 @@ context('authAction', () => {
         body: 'grant_type=authorization_code&client_id=VAMobile&client_secret=TEST_SECRET&code_verifier=mylongcodeverifier&code=FOO34asfa&redirect_uri=vamobile%3A%2F%2Flogin-success',
       })
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
-      
+
       // Revert __DEV__ variable
       global.__DEV__ = true
     })
@@ -259,33 +259,33 @@ context('authAction', () => {
         // we shouldn't be logged in until the user decides how to store refreshToken
         expect(authState.loggedIn).toBeTruthy()
         expect(Keychain.setInternetCredentials).not.toHaveBeenCalled()
-        
+
         // Revert __DEV__ variable
         global.__DEV__ = true
       })
-    })
 
-    describe('when in the development environment (__DEV__=true)', () => {
-      it('should save the refresh token even if biometrics not available', async () => {
-        const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
-        kcMockSupported.mockResolvedValue(null)
-  
-        const prefMock = AsyncStorage.getItem as jest.Mock
-        prefMock.mockResolvedValue(null)
-  
-        const tokenResponse = () => {
-          return Promise.resolve({
-            access_token: testAccessToken,
-            refresh_token: testRefreshToken,
-          })
-        }
-        fetch.mockResolvedValue({ status: 200, json: tokenResponse })
-        await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
-        const authState = store.getState().auth
-  
-        // we shouldn't be logged in until the user decides how to store refreshToken
-        expect(authState.loggedIn).toBeTruthy()
-        expect(Keychain.setInternetCredentials).toHaveBeenCalled()
+      describe('when in the development environment (__DEV__=true)', () => {
+        it('should save the refresh token even if biometrics not available', async () => {
+          const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
+          kcMockSupported.mockResolvedValue(null)
+
+          const prefMock = AsyncStorage.getItem as jest.Mock
+          prefMock.mockResolvedValue(null)
+
+          const tokenResponse = () => {
+            return Promise.resolve({
+              access_token: testAccessToken,
+              refresh_token: testRefreshToken,
+            })
+          }
+          fetch.mockResolvedValue({ status: 200, json: tokenResponse })
+          await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
+          const authState = store.getState().auth
+
+          // we shouldn't be logged in until the user decides how to store refreshToken
+          expect(authState.loggedIn).toBeTruthy()
+          expect(Keychain.setInternetCredentials).toHaveBeenCalled()
+        })
       })
     })
   })
