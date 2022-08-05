@@ -207,7 +207,7 @@ context('Prescription', () => {
     }
 
     it('should get tracking info', async () => {
-      when(api.get as jest.Mock).calledWith(`/v0/health/rx/prescriptions/${mockData.id}/tracking`).mockResolvedValue(mockData)
+      when(api.get as jest.Mock).calledWith(`/v0/health/rx/prescriptions/${mockData.id}/tracking`).mockResolvedValue({ data: mockData })
 
       const store = realStore()
       await store.dispatch(getTrackingInfo(mockData.id))

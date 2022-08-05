@@ -203,7 +203,7 @@ const PrescriptionHistory: FC = ({}) => {
         bottomOnPress: () => {},
       }
 
-      if (prescription.attributes.isRefillable) {
+      if (prescription.attributes.isTrackable) {
         const bottomContentProps: BoxProps = {
           py: 5,
           flexDirection: 'row',
@@ -223,7 +223,9 @@ const PrescriptionHistory: FC = ({}) => {
           </Box>
         )
 
-        cardProps = { ...cardProps, bottomContent }
+        const bottomOnPress = navigateTo('RefillTrackingModal', { prescription: prescription })
+
+        cardProps = { ...cardProps, bottomContent, bottomOnPress }
       }
 
       return (
