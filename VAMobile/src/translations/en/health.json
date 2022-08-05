@@ -232,7 +232,7 @@
   "prescriptions.tabs.processing": "Processing ({{count}})",
   "prescriptions.tabs.shipped": "Shipped ({{count}})",
   "prescription.vaFacility": "VA facility:",
-  "prescription.vaFacility.a11yLabel": "VA facility:",
+  "prescription.vaFacility.a11yLabel": "V-A facility:",
   "secureMessaging.a11yHint": "go to Secure Messaging tool",
   "secureMessaging.attachments": "Attachments",
   "secureMessaging.attachments.acceptedFileTypes": "doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.",
