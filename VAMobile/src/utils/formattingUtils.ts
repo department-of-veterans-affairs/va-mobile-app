@@ -88,6 +88,28 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
 }
 
 /**
+ * Returns the date formatted in the format HH:MM aa TIMEZONE
+ *
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param timeZone - string signifying the current timeZone i.e. America/Los_Angeles
+ *
+ * @returns  the date formatted in the format HH:MM aa TIMEZONE
+ */
+export const getFormattedDateAndTimeZone = (dateTime: string, timeZone?: string): string => {
+  let monthFormat: DateTimeFormatOptions['month']
+  const dateTimeObj = DateTime.fromISO(dateTime)
+  const shortMonths = [3, 4, 5, 6, 7]
+
+  if (shortMonths.includes(dateTimeObj.month)) {
+    monthFormat = 'long'
+  } else {
+    monthFormat = 'short'
+  }
+
+  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATETIME_MED, timeZone, { month: monthFormat, timeZoneName: 'short' })
+}
+
+/**
  * Returns the number of seconds UTC from 1970
  *
  * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
