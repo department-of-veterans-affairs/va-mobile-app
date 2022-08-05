@@ -131,9 +131,18 @@ context('authAction', () => {
 
   describe('handleTokenCallbackUrl', () => {
     let store: TrackedStore
+    const DEV: boolean = global.__DEV__
     beforeEach(() => {
       store = realStore()
       store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.LOGIN }))
+      
+      // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
+      global.__DEV__ = false
+    })
+
+    afterEach(() => {
+      // Restore __DEV__ variable
+      global.__DEV__ = DEV
     })
 
     it('should handle malformed urls', async () => {
@@ -160,9 +169,6 @@ context('authAction', () => {
     })
 
     it('should parse code and state correctly and login', async () => {
-      // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
-      global.__DEV__ = false
-
       const tokenResponse = () => {
         return Promise.resolve({
           access_token: testAccessToken,
@@ -201,9 +207,6 @@ context('authAction', () => {
         body: 'grant_type=authorization_code&client_id=VAMobile&client_secret=TEST_SECRET&code_verifier=mylongcodeverifier&code=FOO34asfa&redirect_uri=vamobile%3A%2F%2Flogin-success',
       })
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
-
-      // Revert __DEV__ variable
-      global.__DEV__ = true
     })
 
     describe('when biometrics is available and biometrics is preferred', () => {
@@ -237,9 +240,6 @@ context('authAction', () => {
 
     describe('when biometrics is not available', () => {
       it('should not save the refresh token', async () => {
-        // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
-        global.__DEV__ = false
-
         const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
         kcMockSupported.mockResolvedValue(null)
 
@@ -259,12 +259,10 @@ context('authAction', () => {
         // we shouldn't be logged in until the user decides how to store refreshToken
         expect(authState.loggedIn).toBeTruthy()
         expect(Keychain.setInternetCredentials).not.toHaveBeenCalled()
-
-        // Revert __DEV__ variable
-        global.__DEV__ = true
       })
 
       describe('when in the development environment (__DEV__=true)', () => {
+        beforeEach(() => {global.__DEV__ = true})
         it('should save the refresh token even if biometrics not available', async () => {
           const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
           kcMockSupported.mockResolvedValue(null)
