@@ -73,11 +73,9 @@ jobs:
           jq --compact-output -s 'add' input.json
           name='Regression pass for ${{github.event.inputs.version}} ${{github.event.inputs.releaseDate}} release'
           desc='QA Regression pass for ${{inputs.version}} ${{inputs.releaseDate}} release'
-          data='{"suite_id": 92,"include_all": false,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'", "milestone_id": '${{inputs.milestoneId}}' , "case_ids": '$(jq --compact-output -s 'add' input.json)'}'
-          echo ${data}
           response=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  -d ${data} \
+                  -d '{"suite_id": 92,"include_all": false,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'", "milestone_id": '${{inputs.milestoneId}}' , "case_ids": '$(jq --compact-output -s 'add' input.json)'}' \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
           echo ${response}
           echo "::set-output name=url::$(echo ${response} |  jq '.url')"
