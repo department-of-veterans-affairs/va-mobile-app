@@ -9,6 +9,7 @@ import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { RootState } from 'store'
+import { featureEnabled } from 'utils/remoteConfig'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
@@ -65,6 +66,8 @@ const DebugScreen: FC = ({}) => {
   const onClickFirebaseDebugMode = (): void => {
     dispatch(toggleFirebaseDebugMode())
   }
+
+  const testFeature = featureEnabled('testFeature')
 
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
@@ -176,6 +179,17 @@ const DebugScreen: FC = ({}) => {
               }}>
               <TextView variant="MobileBodyBold">Endpoint SID</TextView>
               <TextView>{deviceAppSid}</TextView>
+            </TextArea>
+          </Box>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <TextArea
+              onPress={(): void => {
+                onCopy(deviceToken || '')
+              }}>
+              <TextView variant="MobileBodyBold">testFeature</TextView>
+              <TextView selectable>{testFeature.toString()}</TextView>
             </TextArea>
           </Box>
         </Box>
