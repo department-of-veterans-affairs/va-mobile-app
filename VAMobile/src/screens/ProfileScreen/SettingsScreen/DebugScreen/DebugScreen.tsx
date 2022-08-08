@@ -112,6 +112,22 @@ const DebugScreen: FC = ({}) => {
         })}
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
+            <TextView variant="BitterBoldHeading">Remote Config</TextView>
+          </TextArea>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <TextArea
+              onPress={(): void => {
+                onCopy(deviceToken || '')
+              }}>
+              <TextView variant="MobileBodyBold">testFeature</TextView>
+              <TextView selectable>{testFeature.toString()}</TextView>
+            </TextArea>
+          </Box>
+        </Box>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <TextArea>
             <TextView variant="BitterBoldHeading">Authorized Services</TextView>
           </TextArea>
         </Box>
@@ -179,17 +195,6 @@ const DebugScreen: FC = ({}) => {
               }}>
               <TextView variant="MobileBodyBold">Endpoint SID</TextView>
               <TextView>{deviceAppSid}</TextView>
-            </TextArea>
-          </Box>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextArea
-              onPress={(): void => {
-                onCopy(deviceToken || '')
-              }}>
-              <TextView variant="MobileBodyBold">testFeature</TextView>
-              <TextView selectable>{testFeature.toString()}</TextView>
             </TextArea>
           </Box>
         </Box>
