@@ -142,6 +142,18 @@ export type PrescriptionTrackingInfoOtherItem = {
   prescriptionNumber: string
 }
 
+export const DELIVERY_SERVICE_TYPES: {
+  USPS: string
+  UPS: string
+  FEDEX: string
+  DHL: string
+} = {
+  USPS: 'USPS',
+  UPS: 'UPS',
+  FEDEX: 'FEDEX',
+  DHL: 'DHL',
+}
+
 export type PrescriptionTrackingInfoAttributeData = {
   prescriptionName: string
   trackingNumber: string
