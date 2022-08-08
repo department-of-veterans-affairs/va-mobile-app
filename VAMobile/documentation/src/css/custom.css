@@ -14,9 +14,12 @@
   --vads-u-font-family--serif: 'Bitter';
 
   --vads-u-primary-darkest: #112e51;
-  --vads-u-background-color--primary: #0071bb;
+  --vads-u-color-primary: #0071bb;
+  --vads-u-color-link-default: #004795;
+  --vads-u-background-color--primary: var(--vads-u-color-primary);
 
   --ifm-color-primary: #25c2a0;
+  --ifm-color-primary: var(--vads-u-color-primary);
   --ifm-color-primary-dark: rgb(33, 175, 144);
   --ifm-color-primary-darker: rgb(31, 165, 136);
   --ifm-color-primary-darkest: rgb(26, 136, 112);
@@ -24,6 +27,9 @@
   --ifm-color-primary-lighter: rgb(102, 212, 189);
   --ifm-color-primary-lightest: rgb(146, 224, 208);
 
+  --ifm-link-color: var(--vads-u-color-link-default);
+  --ifm-navbar-link-color): var(--vads-u-color-link-default);
+  --ifm-button-border-color: var(--ifm-button-color);
   --ifm-font-family-base: var(--vads-u-font-family--sans);
 
   --ifm-code-font-size: 95%;
@@ -31,6 +37,8 @@
   --navyBlue : #112e51;
   --ifm-table-head-background: var(--pre-background);
   --icon-colors : rgb(0, 113, 188);
+
+  --ifm-link-decoration: underline;
 }
 
 .footer {
