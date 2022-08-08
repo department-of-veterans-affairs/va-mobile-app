@@ -27939,6 +27939,32 @@
 			};
 			name = RC;
 		};
+		08117236209CE9F6D0402B54B64EAB46 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8A5D7AA9E41B7912EBC4740246D0B0C /* react-native-notifications.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-notifications/react-native-notifications-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = RNNotifications;
+				PRODUCT_NAME = "react-native-notifications";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		085C1AD93AA1F73C8CF8D23DDF93053D /* QA */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A091C52EA2EC099DA0DB157647C13695 /* Pods-VAMobile-VAMobileTests.qa.xcconfig */;
@@ -28805,31 +28831,6 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
-		};
-		22956CB4C73BF362548A73399812E18A /* RC */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E8A5D7AA9E41B7912EBC4740246D0B0C /* react-native-notifications.release.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-notifications/react-native-notifications-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = RNNotifications;
-				PRODUCT_NAME = "react-native-notifications";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = RC;
 		};
 		22A8BEFC0128FF65B08FD5D339428039 /* RC */ = {
 			isa = XCBuildConfiguration;
@@ -30561,31 +30562,6 @@
 			};
 			name = Debug;
 		};
-		5535D3C721A50D4A3FB7AD80853A7B8A /* QA */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E8A5D7AA9E41B7912EBC4740246D0B0C /* react-native-notifications.release.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-notifications/react-native-notifications-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = RNNotifications;
-				PRODUCT_NAME = "react-native-notifications";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = QA;
-		};
 		569A99B009681A41B2FA5BD6FB8C327D /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D34475031DBEE95AC2E3026848AC2311 /* React-callinvoker.release.xcconfig */;
@@ -31551,30 +31527,6 @@
 			};
 			name = RC;
 		};
-		76E4A46D479826E8A713A1D1843A686D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0550EFB385A4EC94B77A7AC9C81693DE /* react-native-notifications.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-notifications/react-native-notifications-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = RNNotifications;
-				PRODUCT_NAME = "react-native-notifications";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		77515BB6A149B066C09D5D3713C20F6F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1710DC2FED2C92DA336F545247799FE4 /* react-native-image-picker.debug.xcconfig */;
@@ -31715,31 +31667,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
-		};
-		7C27810A0D25003C971A7010B2E55E13 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E8A5D7AA9E41B7912EBC4740246D0B0C /* react-native-notifications.release.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-notifications/react-native-notifications-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = RNNotifications;
-				PRODUCT_NAME = "react-native-notifications";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
 		};
 		7E440DA83A3B16149EF3C814921CA7A2 /* QA */ = {
 			isa = XCBuildConfiguration;
@@ -32579,6 +32506,57 @@
 			};
 			name = Release;
 		};
+		9522B00472ED8597422BE6FA53645BFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0550EFB385A4EC94B77A7AC9C81693DE /* react-native-notifications.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-notifications/react-native-notifications-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = RNNotifications;
+				PRODUCT_NAME = "react-native-notifications";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9601815C82AD4234A54C42561C9CF390 /* RC */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8A5D7AA9E41B7912EBC4740246D0B0C /* react-native-notifications.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-notifications/react-native-notifications-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = RNNotifications;
+				PRODUCT_NAME = "react-native-notifications";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = RC;
+		};
 		96CBA13EE790B69A39CB8A90D113E44E /* QA */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -32831,6 +32809,32 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = RC;
+		};
+		99E6D9966ABE7E6CAAC1D074564E215D /* QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8A5D7AA9E41B7912EBC4740246D0B0C /* react-native-notifications.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-notifications/react-native-notifications-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = RNNotifications;
+				PRODUCT_NAME = "react-native-notifications";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = QA;
 		};
 		9AA6323CC6A27A3B259A90CA51249683 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -37287,10 +37291,10 @@
 		CE7FF0AC2D36960964E5208223B937EE /* Build configuration list for PBXNativeTarget "react-native-notifications" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				76E4A46D479826E8A713A1D1843A686D /* Debug */,
-				5535D3C721A50D4A3FB7AD80853A7B8A /* QA */,
-				22956CB4C73BF362548A73399812E18A /* RC */,
-				7C27810A0D25003C971A7010B2E55E13 /* Release */,
+				9522B00472ED8597422BE6FA53645BFF /* Debug */,
+				99E6D9966ABE7E6CAAC1D074564E215D /* QA */,
+				9601815C82AD4234A54C42561C9CF390 /* RC */,
+				08117236209CE9F6D0402B54B64EAB46 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
