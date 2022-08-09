@@ -46,7 +46,7 @@ platform :android do
     upload("Pre-Prod Stash")
     tag_build
     message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android", ENV['SLACK_THREAD_TS'])
+    slack_sent_for_review(ENV['BUILD_NUM'], ENV['VERSION_NAME'], message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Promote the release in Pre-Prod stash to Production"

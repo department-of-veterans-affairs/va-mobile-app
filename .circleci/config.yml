@@ -37,6 +37,11 @@ commands:
           command: |
             echo INSTALLING BUNDLER
             sudo gem install bundler
+  install_python:
+    steps:
+      - run: sudo apt-get update
+      - run: sudo apt-get install python3-pip
+      - run: python3 -m pip install requests
   bundle_app:
     description: "Bundles the app for the OS specified"
     parameters:
@@ -301,6 +306,26 @@ commands:
       - retrieve_persisted_env:
           envVar: "SLACK_THREAD_TS"
           path: "threadTs"
+  queue_android_jobs:
+    parameters:
+      regex:
+        type: string
+    steps:
+      - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
+      - install_python
+      - run:
+          working_directory: ~/project/VAMobile
+          command: python3 queue-builds.py
+  queue_ios_jobs:
+    parameters:
+      regex:
+        type: string
+    steps:
+      - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
+      - run: python3 -m pip install requests
+      - run:
+          working_directory: ~/project/VAMobile
+          command: python3 queue-builds.py
 jobs:
   test:
     executor: default
@@ -345,7 +370,7 @@ jobs:
       - bundle_app:
           os: "android"
       - android_fastlane
-  feature_build_ios:
+  build_ios_feature:
     executor: ios
     steps:
       - checkout
@@ -358,7 +383,7 @@ jobs:
           lane: on_demand
           notes: ${CIRCLE_TAG}
           tf_group: Development Team
-  feature_build_android:
+  build_android_feature:
     executor: android
     steps:
       - checkout
@@ -495,7 +520,7 @@ workflows:
               only: /^feature-build-.+/
             branches:
               ignore: /.*/
-      - feature_build_android:
+      - build_android_feature:
           requires:
             - start_slack_thread
           filters:
@@ -503,7 +528,7 @@ workflows:
               only: /^feature-build-.+/
             branches:
               ignore: /.*/
-      - feature_build_ios:
+      - build_ios_feature:
           requires:
             - start_slack_thread
           filters:
