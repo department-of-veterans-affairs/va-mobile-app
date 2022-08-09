@@ -100,14 +100,14 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
         <TextView {...commonBoxHeaderProps}>{t('prescriptions.refillTracking.trackingInformation')}</TextView>
         <TextArea>
           <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
-          <TextView {...trackingNumberProps}>{trackingNumber}</TextView>
+          <TextView {...trackingNumberProps}>{trackingNumber || tc('noneNoted')}</TextView>
           <Box mt={condensedMarginBetween}>
             <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.deliveryService')}</TextView>
-            <TextView variant="MobileBody">{deliveryService}</TextView>
+            <TextView variant="MobileBody">{deliveryService || tc('noneNoted')}</TextView>
           </Box>
           <Box {...dividerProps} />
           <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.dateShipped')}</TextView>
-          <TextView variant="MobileBody">{`${formatDateUtc(shippedDate || '', 'MM/dd/yyyy')}`}</TextView>
+          <TextView variant="MobileBody">{shippedDate ? `${formatDateUtc(shippedDate, 'MM/dd/yyyy')}` : tc('noneNoted')}</TextView>
         </TextArea>
       </>
     )
@@ -124,15 +124,17 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
         <TextView {...commonBoxHeaderProps}>{t('prescriptions.refillTracking.prescriptionInformation')}</TextView>
         <TextArea>
           <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
-          <TextView {...commonTextProps} mt={0}>
-            {`${t('prescription.prescriptionNumber')} ${prescriptionNumber}`}
+          <TextView {...commonTextProps} color={'placeholder'} mt={0}>
+            {`${t('prescription.prescriptionNumber')} ${prescriptionNumber || tc('noneNoted')}`}
           </TextView>
           <TextView {...commonTextProps} mt={0} my={standardMarginBetween}>
-            {instructions}
+            {instructions || t('prescription.refillTracking.instructions.noneNoted')}
           </TextView>
-          <TextView {...commonTextProps}>{`${t('prescription.refillsLeft')} ${refillRemaining}`}</TextView>
-          <TextView {...commonTextProps}>{`${t('prescriptions.sort.fillDate')}: ${formatDateUtc(refillDate || '', 'MM/dd/yyyy')}`}</TextView>
-          <TextView {...commonTextProps} accessibilityLabel={t('prescription.vaFacility.a11yLabel')}>{`${t('prescription.vaFacility')} ${facilityName}`}</TextView>
+          <TextView {...commonTextProps} mt={0}>{`${t('prescription.refillsLeft')} ${refillRemaining || tc('noneNoted')}`}</TextView>
+          <TextView {...commonTextProps}>{`${t('prescriptions.sort.fillDate')}: ${refillDate ? formatDateUtc(refillDate, 'MM/dd/yyyy') : tc('noneNoted')}`}</TextView>
+          <TextView {...commonTextProps} accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || tc('noneNoted')}`}>{`${t('prescription.vaFacility')} ${
+            facilityName || tc('noneNoted')
+          }`}</TextView>
         </TextArea>
       </>
     )
@@ -152,7 +154,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
     const otherPrescriptionItems: Array<DefaultListItemObj> = otherPrescriptions.map((item: PrescriptionTrackingInfoOtherItem) => {
       const { prescriptionName, prescriptionNumber } = item
-      const rxNumber = `${t('prescription.prescriptionNumber')} ${prescriptionNumber}`
+      const rxNumber = `${t('prescription.prescriptionNumber')} ${prescriptionNumber || tc('noneNoted')}`
       return {
         textLines: [
           {
@@ -161,6 +163,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
           },
           {
             text: rxNumber,
+            color: 'placeholder',
             variant: 'HelperText',
           },
         ],
