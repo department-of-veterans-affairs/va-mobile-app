@@ -67,8 +67,6 @@ const DebugScreen: FC = ({}) => {
     dispatch(toggleFirebaseDebugMode())
   }
 
-  const testFeature = featureEnabled('testFeature')
-
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
@@ -117,12 +115,9 @@ const DebugScreen: FC = ({}) => {
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextArea
-              onPress={(): void => {
-                onCopy(deviceToken || '')
-              }}>
+            <TextArea>
               <TextView variant="MobileBodyBold">testFeature</TextView>
-              <TextView selectable>{testFeature.toString()}</TextView>
+              <TextView selectable>{featureEnabled('testFeature')?.toString()}</TextView>
             </TextArea>
           </Box>
         </Box>
