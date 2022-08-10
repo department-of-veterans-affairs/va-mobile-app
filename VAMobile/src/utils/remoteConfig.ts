@@ -6,6 +6,7 @@ import remoteConfig from '@react-native-firebase/remote-config'
 const { ENVIRONMENT } = getEnv()
 
 const isProduction = ENVIRONMENT === EnvironmentTypesConstants.Production
+const RC_CACHE_TIME = 43200000 // 12 hours
 
 type FeatureToggleType = 'testFeature'
 
@@ -21,6 +22,11 @@ const productionDefaults: RemoteConfigValues = {
   testFeature: false,
 }
 
+/**
+ * Sets up Remote Config, setting defaults, activating them, and fetching the config for next app launch
+ * following Strategy 3 https://firebase.google.com/docs/remote-config/loading#strategy_3_load_new_values_for_next_startup
+ * @returns Promise<void>
+ */
 export const activateRemoteConfig = async (): Promise<void> => {
   try {
     console.debug('Remote Config: Setting defaults')
@@ -34,8 +40,10 @@ export const activateRemoteConfig = async (): Promise<void> => {
     if (isProduction) {
       console.debug('Remote Config: Fetching and activating')
       // Fetch config and activate. Default cache is 12 hours.
-      await remoteConfig().fetchAndActivate()
-      console.debug('Remote Config: Fetched and activated')
+      await remoteConfig().activate()
+      console.debug('Remote Config: Activated last fetched config')
+      await remoteConfig().fetch(RC_CACHE_TIME)
+      console.debug('Remote Config: Fetched latest remote config')
     }
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
