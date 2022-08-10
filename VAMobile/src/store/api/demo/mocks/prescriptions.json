@@ -217,8 +217,8 @@
         "pagination": {
           "currentPage": 1,
           "perPage": 10,
-          "totalPages": 2,
-          "totalEntries": 20
+          "totalPages": 3,
+          "totalEntries": 22
         }
       },
       "links": {
@@ -446,8 +446,8 @@
         "pagination": {
           "currentPage": 2,
           "perPage": 10,
-          "totalPages": 2,
-          "totalEntries": 20
+          "totalPages": 3,
+          "totalEntries": 22
         }
       },
       "links": {
@@ -457,6 +457,100 @@
         "next": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=3",
         "last": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7"
       }
+    },
+    "3": {
+      "data": [
+        {
+          "attributes":
+          {
+            "dispensedDate": "2022-08-02T04:00:00.000Z",
+            "expirationDate": "2023-05-15T04:00:00.000Z",
+            "facilityName": "SLC10 TEST LAB",
+            "instructions": "TAKE ONE TABLET TWO (2) TIMES A DAY FOR 30 DAYS",
+            "isRefillable": true,
+            "isTrackable": true,
+            "orderedDate": "2022-05-14T04:00:00.000Z",
+            "prescriptionName": "CAPECITABINE 500MG TAB",
+            "prescriptionNumber": "3636856",
+            "quantity": 60,
+            "refillDate": "2022-07-05T04:00:00.000Z",
+            "refillRemaining": 1,
+            "refillStatus": "active",
+            "refillSubmitDate": "2022-08-04T13:59:40.000Z",
+            "stationNumber": "979"
+          },
+          "id": "21142592",
+          "type": "Prescription"
+        },
+        {
+          "attributes":
+          {
+            "dispensedDate": "2022-08-02T04:00:00.000Z",
+            "expirationDate": "2023-04-27T04:00:00.000Z",
+            "facilityName": "",
+            "instructions": "",
+            "isRefillable": false,
+            "isTrackable": true,
+            "orderedDate": "2022-04-26T04:00:00.000Z",
+            "prescriptionName": "LAMIVUDINE 100MG TAB",
+            "prescriptionNumber": "",
+            "quantity": 30,
+            "refillDate": null,
+            "refillRemaining": null,
+            "refillStatus": "active",
+            "refillSubmitDate": "2022-08-04T13:59:40.000Z",
+            "stationNumber": "989"
+          },
+          "id": "21142623",
+          "type": "Prescription"
+        }
+      ],
+      "meta": {
+        "pagination": {
+          "currentPage": 3,
+          "perPage": 10,
+          "totalPages": 3,
+          "totalEntries": 22
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=3",
+        "first": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
+        "prev": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
+        "next": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=4",
+        "last": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7"
+      }
+    }
+  },
+  "/v0/health/rx/prescriptions/21142592/tracking": {
+    "data": {
+      "attributes": {
+        "deliveryService": "DHL",
+        "otherPrescriptions": [
+          {
+            "prescriptionName": "LAMIVUDINE 10MG TAB",
+            "prescriptionNumber": "2336800"
+          }
+        ],
+        "prescriptionName": "CAPECITABINE 500MG TAB",
+        "shippedDate": "2022-06-14T00:00:00.000Z",
+        "trackingNumber": "7534533636856"
+      },
+      "id": "21142592",
+      "type": "PrescriptionTracking"
+    }
+  },
+  "/v0/health/rx/prescriptions/21142623/tracking": {
+    "data": {
+      "attributes":  {
+        "deliveryService": "",
+        "otherPrescriptions": [],
+        "prescriptionName": "LAMIVUDINE 100MG TAB",
+        "shippedDate": "",
+        "trackingNumber": ""
+      },
+      "id": "21142623",
+      "type": "PrescriptionTracking"
     }
   }
 }
