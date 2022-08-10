@@ -1,4 +1,4 @@
-import { PrescriptionHistoryTabConstants, RefillStatus, RefillStatusConstants } from 'store/api/types'
+import { RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { TFunction } from 'i18next'
 
 export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
@@ -36,27 +36,17 @@ export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
  * Some filter values from the front end map to multiple values on the back end. This util provides the translation
  * from value selected on the front end to the param sent to the API
  * @param filter - value selected by the user
- * @param tab - current tab the user is on
  */
-export const getFilterArgsForFilterAndTab = (filter: string, tab: string) => {
-  let filterResult = filter
-
+export const getFilterArgsForFilter = (filter: string) => {
   switch (filter) {
     case RefillStatusConstants.DISCONTINUED:
-      filterResult = 'discontinued,discontinuedByProvider,discontinuedEdit'
-      break
+      return ['discontinued', 'discontinuedByProvider', 'discontinuedEdit']
     case RefillStatusConstants.HOLD:
     case RefillStatusConstants.PROVIDER_HOLD:
-      filterResult = 'hold,providerHold'
-      break
+      return ['hold', 'providerHold']
   }
 
-  // The processing tab shows only in process and submitted unless filtered further
-  if (tab === PrescriptionHistoryTabConstants.PROCESSING && filter === '') {
-    filterResult = 'refillinprocess,submitted'
-  }
-
-  return filterResult
+  return [filter]
 }
 
 export const getTagColorForStatus = (status: string) => {

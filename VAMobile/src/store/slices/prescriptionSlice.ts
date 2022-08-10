@@ -3,6 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import * as api from '../api'
 import {
   APIError,
+  PrescriptionData,
   PrescriptionTrackingInfo,
   PrescriptionTrackingInfoGetData,
   PrescriptionsGetData,
@@ -16,19 +17,25 @@ import {
   put,
 } from '../api'
 import { AppThunk } from 'store'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
+import { contains, filter, indexBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { indexBy } from 'underscore'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
 const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
+// Page size used to pull all prescriptions for a user
+const ALL_RX_PAGE_SIZE = 5000
+
 export type PrescriptionState = {
   loadingHistory: boolean
   loadingCount: boolean
   prescriptions?: PrescriptionsList
+  processingPrescriptions?: PrescriptionsList
+  shippedPrescriptions?: PrescriptionsList
+  filteredPrescriptions?: PrescriptionsList
   prescriptionPagination: PrescriptionsPaginationData
   error?: api.APIError
   prescriptionsById: PrescriptionsMap
@@ -47,6 +54,7 @@ export type PrescriptionState = {
   submittedRequestRefillCount: number
   refillRequestSummaryItems: RefillRequestSummaryItems
   tabCounts: TabCounts
+  prescriptionsNeedLoad: boolean
 }
 
 export const initialPrescriptionState: PrescriptionState = {
@@ -66,84 +74,60 @@ export const initialPrescriptionState: PrescriptionState = {
   submittedRequestRefillCount: 0,
   refillRequestSummaryItems: [],
   tabCounts: {},
+  prescriptionsNeedLoad: true,
 }
 
-export const getTabCounts = (): AppThunk => async (dispatch) => {
-  dispatch(dispatchStartGetTabCounts())
+export const loadAllPrescriptions = (): AppThunk => async (dispatch) => {
+  dispatch(dispatchStartLoadAllPrescriptions())
 
-  const processingFilterParams = {
-    'filter[refill_status][eq]': 'refillinprocess,submitted',
+  const params = {
+    'page[number]': '1',
+    'page[size]': ALL_RX_PAGE_SIZE.toString(),
+    sort: PrescriptionSortOptionConstants.PRESCRIPTION_NAME,
   }
-
-  const trackableFilterParams = { 'filter[is_trackable][eq]': true }
 
   try {
-    const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', {})
-    const processingData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', processingFilterParams)
-    const shippedData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', trackableFilterParams)
+    const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
 
-    const counts: TabCounts = {
-      '0': allData?.meta.pagination.totalEntries,
-      '1': processingData?.meta.pagination.totalEntries,
-      '2': shippedData?.meta.pagination.totalEntries,
-    }
-
-    dispatch(dispatchFinishGetTabCounts({ tabCounts: counts }))
+    dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: allData }))
   } catch (error) {
     if (isErrorObject(error)) {
-      logNonFatalErrorToFirebase(error, `getTabCounts: ${prescriptionNonFatalErrorString}`)
-      dispatch(dispatchFinishGetTabCounts({ tabCounts: {} }))
+      logNonFatalErrorToFirebase(error, `loadAllPrescriptions: ${prescriptionNonFatalErrorString}`)
+      dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: undefined, error }))
     }
   }
 }
 
-export const getPrescriptions =
-  (screenID?: ScreenIDTypes, page = 1, filter?: string, sort?: string, trackableOnly?: boolean): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchStartGetPrescriptions())
+export const filterAndSortPrescriptions =
+  (filters: string[], tab: string, _sort: string): AppThunk =>
+  async (dispatch, getState) => {
+    dispatch(dispatchStartFilterAndSortPrescriptions())
 
-    const pageParams = {
-      'page[number]': page.toString(),
-      'page[size]': DEFAULT_PAGE_SIZE.toString(),
+    const state = getState()
+    let prescriptionsToSort: PrescriptionsList = []
+
+    switch (tab) {
+      case PrescriptionHistoryTabConstants.ALL:
+        prescriptionsToSort = state.prescriptions.prescriptions || []
+        break
+      case PrescriptionHistoryTabConstants.PROCESSING:
+        prescriptionsToSort = state.prescriptions.processingPrescriptions || []
+        break
+      case PrescriptionHistoryTabConstants.SHIPPED:
+        prescriptionsToSort = state.prescriptions.shippedPrescriptions || []
+        break
     }
 
-    let filterParams = {}
-    if (filter) {
-      filterParams = {
-        'filter[refill_status][eq]': filter,
-      }
-    }
-
-    if (trackableOnly) {
-      filterParams = { ...filterParams, 'filter[is_trackable][eq]': true }
-    }
-
-    let sortParams = {}
-    if (sort) {
-      sortParams = {
-        sort: sort,
-      }
-    }
-
-    const params = {
-      ...pageParams,
-      ...filterParams,
-      ...sortParams,
-    }
-
-    try {
-      const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
-
-      dispatch(dispatchFinishGetPrescriptions({ prescriptionData }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getPrescriptions: ${prescriptionNonFatalErrorString}`)
-        dispatch(dispatchFinishGetPrescriptions({ prescriptionData: undefined, error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
-      }
+    if (filters && filters[0] === '') {
+      dispatch(dispatchFinishFilterAndSortPrescriptions({ prescriptions: prescriptionsToSort }))
+    } else {
+      const filteredList = filter(prescriptionsToSort, (prescription) => {
+        return contains(filters, prescription.attributes.refillStatus)
+      })
+      dispatch(dispatchFinishFilterAndSortPrescriptions({ prescriptions: filteredList }))
     }
   }
+
 export const getRefillablePrescriptions =
   (screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
@@ -300,13 +284,54 @@ const prescriptionSlice = createSlice({
       state.error = error
       state.loadingTrackingInfo = false
     },
-    dispatchStartGetTabCounts: (state) => {
-      state.loadingCount = true
+    dispatchStartLoadAllPrescriptions: (state) => {
+      state.loadingHistory = true
     },
-    dispatchFinishGetTabCounts: (state, action: PayloadAction<{ tabCounts: TabCounts }>) => {
-      const { tabCounts } = action.payload
-      state.loadingCount = false
-      state.tabCounts = tabCounts
+    dispatchFinishLoadAllPrescriptions: (state, action: PayloadAction<{ allPrescriptions?: PrescriptionsGetData; error?: APIError }>) => {
+      const { allPrescriptions } = action.payload
+
+      const { data: prescriptions, meta } = allPrescriptions || ({} as PrescriptionsGetData)
+
+      const prescriptionsById: PrescriptionsMap = {}
+      const processingPrescriptions: PrescriptionData[] = []
+      const shippedPrescriptions: PrescriptionData[] = []
+
+      prescriptions.forEach((prescription) => {
+        prescriptionsById[prescription.id] = prescription
+
+        if (prescription.attributes.isTrackable) {
+          shippedPrescriptions.push(prescription)
+        }
+
+        if (prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS || prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED) {
+          processingPrescriptions.push(prescription)
+        }
+      })
+
+      state.prescriptions = prescriptions
+      state.filteredPrescriptions = prescriptions
+      state.processingPrescriptions = processingPrescriptions
+      state.shippedPrescriptions = shippedPrescriptions
+
+      state.loadingHistory = false
+      state.prescriptionPagination = { ...meta?.pagination }
+      state.prescriptionsById = prescriptionsById
+      state.prescriptionsNeedLoad = false
+
+      state.tabCounts = {
+        '0': prescriptions.length,
+        '1': processingPrescriptions.length,
+        '2': shippedPrescriptions.length,
+      }
+    },
+    dispatchStartFilterAndSortPrescriptions: (state) => {
+      state.loadingHistory = true
+    },
+    dispatchFinishFilterAndSortPrescriptions: (state, action: PayloadAction<{ prescriptions?: PrescriptionsList }>) => {
+      const { prescriptions } = action.payload
+
+      state.filteredPrescriptions = prescriptions
+      state.loadingHistory = false
     },
   },
 })
@@ -323,7 +348,9 @@ export const {
   dispatchClearPrescriptionLogout,
   dispatchStartGetTrackingInfo,
   dispatchFinishGetTrackingInfo,
-  dispatchStartGetTabCounts,
-  dispatchFinishGetTabCounts,
+  dispatchStartLoadAllPrescriptions,
+  dispatchFinishLoadAllPrescriptions,
+  dispatchStartFilterAndSortPrescriptions,
+  dispatchFinishFilterAndSortPrescriptions,
 } = prescriptionSlice.actions
 export default prescriptionSlice.reducer
