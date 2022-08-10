@@ -88,12 +88,13 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
 }
 
 /**
- * Returns the date formatted in the format HH:MM aa TIMEZONE
+ * Returns the datetime formatted in the format: MMM DD, YYYY at HH:MM PM TIMEZONE
  *
- * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
- * @param timeZone - string signifying the current timeZone i.e. America/Los_Angeles
+ * @param dateTime - Full ISO 8601 datetime, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param timeZone - Optional override string for the current timeZone i.e. America/Los_Angeles
  *
- * @returns  the date formatted in the format HH:MM aa TIMEZONE
+ * @returns Returns datetime as: MMM DD, YYYY at HH:MM PM TIMEZONE
+ *   Where MMM is abbreviated for long month names and not for March, April, May, June, July
  */
 export const getFormattedDateAndTimeZone = (dateTime: string, timeZone?: string): string => {
   let monthFormat: DateTimeFormatOptions['month']
