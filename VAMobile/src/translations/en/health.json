@@ -214,6 +214,7 @@
   "prescriptions.refillTracking.dateShipped": "Date shipped",
   "prescriptions.refillTracking.deliveryService": "Delivery service",
   "prescriptions.refillTracking.loading": "Loading your prescription tracking details...",
+  "prescription.refillTracking.instructions.noneNoted": "Instructions not noted",
   "prescriptions.refillTracking.otherPrescription": "Other prescriptions in this package",
   "prescriptions.refillTracking.otherPrescription.none": "There are no other prescriptions in this package.",
   "prescriptions.refillTracking.pageHeaderTitle": "Prescription Tracking",

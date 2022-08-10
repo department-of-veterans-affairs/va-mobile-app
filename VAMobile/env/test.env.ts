@@ -27,3 +27,7 @@ export const LINK_URL_GO_TO_PATIENT_PORTAL="https://patientportal.myhealth.va.go
 export const LINK_URL_ASK_VA_GOV="https://ask.va.gov/"
 export const LINK_URL_GO_TO_VA_GOV="https://va.gov"
 export const ENVIRONMENT="test"
+export const CARRIER_TRACKING_URL_USPS="https://tools.usps.com/go/TrackConfirmAction_input?strOrigTrackNum="
+export const CARRIER_TRACKING_URL_UPS="https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums="
+export const CARRIER_TRACKING_URL_FEDEX="https://www.fedex.com/apps/fedextrack/?tracknumbers="
+export const CARRIER_TRACKING_URL_DHL="https://www.dhl.com/en/express/tracking.html?AWB="
