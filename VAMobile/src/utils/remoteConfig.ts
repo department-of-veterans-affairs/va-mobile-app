@@ -22,20 +22,20 @@ const productionDefaults: RemoteConfigValues = {
 }
 
 export const activateRemoteConfig = async (): Promise<void> => {
-  /**
-   * If in production, fetch and activate remote settings.  Otherwise,
-   * we'll use the devDefaults for dev and staging defined above.
-   */
   try {
-    if (isProduction) {
-      console.debug('Remote Config: Setting defaults')
-      // Sets defaults for remote config for use prior to fetching and activating
-      await remoteConfig().setDefaults(productionDefaults)
+    console.debug('Remote Config: Setting defaults')
+    // Sets defaults for remote config for use prior to fetching and activating
+    await remoteConfig().setDefaults(isProduction ? productionDefaults : devDefaults)
 
+    /**
+     * If in production, fetch and activate remote settings.  Otherwise,
+     * we'll use the devDefaults for dev and staging defined above.
+     */
+    if (isProduction) {
       console.debug('Remote Config: Fetching and activating')
       // Fetch config and activate. Default cache is 12 hours.
       await remoteConfig().fetchAndActivate()
-      console.debug('Remote Config: Activated')
+      console.debug('Remote Config: Fetched and activated')
     }
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
@@ -46,5 +46,5 @@ export const activateRemoteConfig = async (): Promise<void> => {
 }
 
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
-  return isProduction ? remoteConfig().getValue(feature)?.asBoolean() : devDefaults[feature]
+  return remoteConfig().getValue(feature)?.asBoolean()
 }
