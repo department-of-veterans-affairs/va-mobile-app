@@ -39,7 +39,7 @@ export const activateRemoteConfig = async (): Promise<void> => {
      */
     if (isProduction) {
       console.debug('Remote Config: Fetching and activating')
-      // Fetch config and activate. Default cache is 12 hours.
+      // Activate last fetched config then fetch latest config for use on next app launch
       await remoteConfig().activate()
       console.debug('Remote Config: Activated last fetched config')
       await remoteConfig().fetch(RC_CACHE_TIME)
