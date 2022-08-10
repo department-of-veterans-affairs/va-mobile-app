@@ -3,18 +3,37 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect } from 'react'
 
 import { Box, BoxProps, CloseModalButton, DefaultList, DefaultListItemObj, LoadingComponent, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
+import { DELIVERY_SERVICE_TYPES, PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
-import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useModalHeaderStyles, useTheme } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useModalHeaderStyles, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import getEnv from 'utils/env'
+
+const { CARRIER_TRACKING_URL_USPS, CARRIER_TRACKING_URL_UPS, CARRIER_TRACKING_URL_FEDEX, CARRIER_TRACKING_URL_DHL } = getEnv()
 
 type RefillTrackingDetailsProps = StackScreenProps<HealthStackParamList, 'RefillTrackingModal'>
+
+const getTrackingLink = (deliveryService: string): string => {
+  const upperCaseCarrier = deliveryService?.toUpperCase() || ''
+  switch (upperCaseCarrier) {
+    case DELIVERY_SERVICE_TYPES.USPS:
+      return CARRIER_TRACKING_URL_USPS
+    case DELIVERY_SERVICE_TYPES.UPS:
+      return CARRIER_TRACKING_URL_UPS
+    case DELIVERY_SERVICE_TYPES.FEDEX:
+      return CARRIER_TRACKING_URL_FEDEX
+    case DELIVERY_SERVICE_TYPES.DHL:
+      return CARRIER_TRACKING_URL_DHL
+    default:
+      return ''
+  }
+}
 
 const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigation }) => {
   const { prescription } = route.params
@@ -25,6 +44,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
+  const launchExternalLink = useExternalLink()
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -65,12 +85,22 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
       borderBottomColor: 'primary',
     }
 
+    const trackingLink = getTrackingLink(deliveryService)
+    const trackingNumberProps: TextViewProps = {
+      variant: trackingLink ? 'MobileBodyLink' : 'MobileBody',
+      onPress: trackingLink
+        ? () => {
+            launchExternalLink(trackingLink + trackingNumber)
+          }
+        : undefined,
+    }
+
     return (
       <>
         <TextView {...commonBoxHeaderProps}>{t('prescriptions.refillTracking.trackingInformation')}</TextView>
         <TextArea>
           <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
-          <TextView variant="MobileBodyLink">{trackingNumber}</TextView>
+          <TextView {...trackingNumberProps}>{trackingNumber}</TextView>
           <Box mt={condensedMarginBetween}>
             <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.deliveryService')}</TextView>
             <TextView variant="MobileBody">{deliveryService}</TextView>
