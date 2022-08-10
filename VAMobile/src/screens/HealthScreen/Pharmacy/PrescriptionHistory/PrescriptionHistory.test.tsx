@@ -244,11 +244,11 @@ context('PrescriptionHistory', () => {
     initializeTestInstance()
   })
 
-  // it('initializes correctly', async () => {
-  //   await waitFor(() => {
-  //     expect(component).toBeTruthy()
-  //   })
-  // })
+  it('initializes correctly', async () => {
+    await waitFor(() => {
+      expect(component).toBeTruthy()
+    })
+  })
 
   describe('when showing the list', () => {
     it('should show the names and instructions of prescriptions', async () => {
