@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
+import { AuthorizedServicesState } from '../../../../store/slices'
 import {
   Box,
   BoxProps,
@@ -31,6 +32,8 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getFilterArgsForFilter, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
+import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 
 const pageSize = DEFAULT_PAGE_SIZE
@@ -117,6 +120,7 @@ const filterOptions = {
 const PrescriptionHistory: FC = ({}) => {
   const dispatch = useAppDispatch()
   const { filteredPrescriptions: prescriptions, loadingHistory, tabCounts, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -149,13 +153,21 @@ const PrescriptionHistory: FC = ({}) => {
   }, [page, prescriptions])
 
   useEffect(() => {
-    if (prescriptionsNeedLoad) {
+    if (prescriptionsNeedLoad && prescriptionsAuthorized) {
       dispatch(loadAllPrescriptions())
     }
-  }, [dispatch, prescriptionsNeedLoad])
+  }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized])
 
   if (useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+  }
+
+  if (!prescriptionsAuthorized) {
+    return <PrescriptionHistoryNotAuthorized />
+  }
+
+  if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
+    return <PrescriptionHistoryNoPrescriptions />
   }
 
   if (loadingHistory) {

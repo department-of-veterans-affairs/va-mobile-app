@@ -7,7 +7,7 @@ import PrescriptionHistory from './PrescriptionHistory'
 import { ReactTestInstance } from 'react-test-renderer'
 
 import {PrescriptionsGetData} from 'store/api'
-import {initialAuthState, initialPrescriptionState} from "../../../../store/slices";
+import {initialAuthState, initialPrescriptionState, InitialState} from "../../../../store/slices";
 import {TextView} from "../../../../components";
 
 const prescriptionData: PrescriptionsGetData = {
@@ -235,7 +235,16 @@ context('PrescriptionHistory', () => {
           prescriptionPagination: prescriptionData.meta.pagination,
           prescriptionsNeedLoad: false,
           loadingHistory: false,
-        }
+          tabCounts: {
+            '0': 8,
+            '1': 4,
+            '2': 3,
+          }
+        },
+        authorizedServices: {
+          ...InitialState.authorizedServices,
+          prescriptions: true,
+        },
       }})
     testInstance = component.container
   }
