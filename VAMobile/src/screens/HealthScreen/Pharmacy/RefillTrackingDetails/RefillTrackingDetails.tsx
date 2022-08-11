@@ -68,6 +68,10 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     }
   }, [dispatch, prescription, prescriptionInDowntime])
 
+  // ErrorComponent normally handles both downtime and error but can only for 1 screenID.
+  // In this case, we need to support two different screenIDs:
+  // 1. Generic 'rx_refill' downtime message that can be seen in multiple Pharmacy screens
+  // 2. Error message specific to this page
   if (prescriptionInDowntime) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
   }
