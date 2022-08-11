@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AuthorizedServicesState } from '../../../../store/slices'
+import { AuthorizedServicesState } from 'store/slices'
 import {
   Box,
   BoxProps,
