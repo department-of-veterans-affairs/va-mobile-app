@@ -57,6 +57,8 @@ export type VATextColors = {
   bodyText: string
   defaultMenuItem: string
   warningTag: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
 }
 
 export type VAIconColors = {
@@ -89,6 +91,8 @@ export type VAIconColors = {
   veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
+  infoIcon: string
+  infoIconContrast: string
 }
 
 export type VATypographyThemeVariants = {
@@ -162,6 +166,8 @@ export type VABorderColors = {
   confirmation: string
   footerButton: string
   menuDivider: string
+  tabSelectorInactive: string
+  tabSelectorActive: string
 }
 
 export type VAFontSizes = {
