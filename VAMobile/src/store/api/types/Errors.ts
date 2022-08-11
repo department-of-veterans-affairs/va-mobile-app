@@ -43,6 +43,7 @@ export type DowntimeFeatureType =
   | 'appointments'
   | 'user_profile_update'
   | 'payment_history'
+  | 'rx_refill'
 
 export const DowntimeFeatureTypeConstants: {
   facilityLocator: DowntimeFeatureType
@@ -59,6 +60,7 @@ export const DowntimeFeatureTypeConstants: {
   appointments: DowntimeFeatureType
   userProfileUpdate: DowntimeFeatureType
   payments: DowntimeFeatureType
+  rx: DowntimeFeatureType
 } = {
   facilityLocator: 'facility_locator',
   authDSLogon: 'auth_dslogon',
@@ -74,6 +76,7 @@ export const DowntimeFeatureTypeConstants: {
   appointments: 'appointments',
   userProfileUpdate: 'user_profile_update',
   payments: 'payment_history',
+  rx: 'rx_refill',
 }
 
 // Friendly names shown in downtime messages
@@ -89,6 +92,7 @@ export const DowntimeFeatureNameConstants = {
   [DowntimeFeatureTypeConstants.appeals]: 'Appeals',
   [DowntimeFeatureTypeConstants.userProfileUpdate]: 'Personal Information',
   [DowntimeFeatureTypeConstants.payments]: 'Payments',
+  [DowntimeFeatureTypeConstants.rx]: 'VA Prescriptions',
 }
 
 // which screen to show which downtime message on
@@ -105,6 +109,7 @@ export const DowntimeFeatureToScreenID = {
   [DowntimeFeatureTypeConstants.appeals]: ScreenIDTypesConstants.CLAIMS_SCREEN_ID,
   [DowntimeFeatureTypeConstants.userProfileUpdate]: ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID,
   [DowntimeFeatureTypeConstants.payments]: ScreenIDTypesConstants.PAYMENTS_SCREEN_ID,
+  [DowntimeFeatureTypeConstants.rx]: ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID,
 }
 
 export const DowntimeScreenIDToFeature: DowntimeScreenIDToFeatureType = invert(DowntimeFeatureToScreenID)

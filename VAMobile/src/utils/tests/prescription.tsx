@@ -44,3 +44,41 @@ export const defaultPrescriptionsList: PrescriptionsList = [
     type: 'Prescription',
   },
 ]
+
+export const emptyStatePrescriptionList = [
+  {
+    attributes: {
+      dispensedDate: '2022-08-02T04:00:00.000Z',
+      expirationDate: '2023-04-27T04:00:00.000Z',
+      facilityName: '',
+      instructions: '',
+      isRefillable: false,
+      isTrackable: true,
+      orderedDate: '2022-04-26T04:00:00.000Z',
+      prescriptionName: 'ALLOPURINOL 100MG TAB',
+      prescriptionNumber: '',
+      quantity: 30,
+      refillDate: null,
+      refillRemaining: -1,
+      refillStatus: 'active',
+      refillSubmitDate: '2022-08-04T13:59:40.000Z',
+      stationNumber: '989',
+    },
+    id: '20004342',
+    type: 'Prescription',
+  },
+]
+
+export const emptyStateTrackingInfoList = [
+  {
+    attributes: {
+      deliveryService: '',
+      otherPrescriptions: [],
+      prescriptionName: 'ALLOPURINOL 100MG TAB',
+      shippedDate: '',
+      trackingNumber: '',
+    },
+    id: '20004342',
+    type: 'PrescriptionTracking',
+  },
+]
