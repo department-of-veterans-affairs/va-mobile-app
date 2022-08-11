@@ -109,7 +109,8 @@ const call = async function <T>(
       throw { networkError: true }
     }
 
-    if (response.status === 401) {
+    // TODO: check for only 401 or 403 depending on SIS feature flag
+    if (response.status === 401 || response.status === 403) {
       console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
       // If the access token is expired, attempt to refresh it and redo the request
       if (!refreshPromise) {
