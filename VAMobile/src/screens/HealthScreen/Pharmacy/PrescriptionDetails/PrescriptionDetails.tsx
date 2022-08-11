@@ -30,7 +30,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
     prescriptionsById[prescriptionId]?.attributes
 
   const getDate = (date?: string | null) => {
-    return date ? DateTime.fromISO(date).toUTC().toFormat('MM/dd/yyyy') : tc('noneNoted')
+    return date ? DateTime.fromISO(date).toUTC().toFormat('MM/dd/yyyy') : noneNoted
   }
 
   const clickToCallProps: LinkButtonProps = {
@@ -61,11 +61,11 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
           <DetailsTextSections leftSectionTitle={t('prescription.details.instructionsHeader')} leftSectionValue={instructions || noneNoted} />
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.refillLeftHeader')}
-            leftSectionValue={refillRemaining !== null && refillRemaining > -1 ? refillRemaining : noneNoted}
+            leftSectionValue={refillRemaining ?? noneNoted}
             rightSectionTitle={t('prescription.details.lastFillDateHeader')}
             rightSectionValue={lastRefilledDateFormatted}
           />
-          <DetailsTextSections leftSectionTitle={t('prescription.details.quantityHeader')} leftSectionValue={quantity !== null && quantity > -1 ? quantity : noneNoted} />
+          <DetailsTextSections leftSectionTitle={t('prescription.details.quantityHeader')} leftSectionValue={quantity ?? noneNoted} />
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.expiresOnHeader')}
             leftSectionValue={expireDateFormatted}

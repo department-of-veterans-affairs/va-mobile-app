@@ -147,7 +147,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
           <TextView {...commonTextProps} mt={0} my={standardMarginBetween}>
             {instructions || t('prescription.refillTracking.instructions.noneNoted')}
           </TextView>
-          <TextView {...commonTextProps} mt={0}>{`${t('prescription.refillsLeft')} ${refillRemaining !== null && refillRemaining > -1 ? refillRemaining : noneNoted}`}</TextView>
+          <TextView {...commonTextProps} mt={0}>{`${t('prescription.refillsLeft')} ${refillRemaining ?? noneNoted}`}</TextView>
           <TextView {...commonTextProps}>{`${t('prescriptions.sort.fillDate')}: ${refillDate ? formatDateUtc(refillDate, 'MM/dd/yyyy') : noneNoted}`}</TextView>
           <TextView {...commonTextProps} accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || noneNoted}`}>{`${t('prescription.vaFacility')} ${
             facilityName || noneNoted

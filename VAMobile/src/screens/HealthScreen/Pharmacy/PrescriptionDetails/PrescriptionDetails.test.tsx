@@ -79,8 +79,8 @@ context('PrescriptionDetails', () => {
     it('should show None Noted for applicable properties', async () => {
       initializeTestInstance({
         instructions: '',
-        refillRemaining: -1,
-        quantity: -1,
+        refillRemaining: undefined,
+        quantity: undefined,
         refillDate: null,
         expirationDate: null,
         orderedDate: null,

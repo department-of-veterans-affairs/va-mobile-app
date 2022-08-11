@@ -539,9 +539,9 @@
           "orderedDate": null,
           "prescriptionName": "LAMIVUDINE 100MG TAB",
           "prescriptionNumber": "",
-          "quantity": -1,
+          "quantity": null,
           "refillDate": null,
-          "refillRemaining": -1,
+          "refillRemaining": null,
           "refillStatus": "active",
           "refillSubmitDate": "2022-08-04T13:59:40.000Z",
           "stationNumber": "989"

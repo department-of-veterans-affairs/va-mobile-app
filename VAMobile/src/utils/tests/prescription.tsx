@@ -59,7 +59,6 @@ export const emptyStatePrescriptionList = [
       prescriptionNumber: '',
       quantity: 30,
       refillDate: null,
-      refillRemaining: -1,
       refillStatus: 'active',
       refillSubmitDate: '2022-08-04T13:59:40.000Z',
       stationNumber: '989',
