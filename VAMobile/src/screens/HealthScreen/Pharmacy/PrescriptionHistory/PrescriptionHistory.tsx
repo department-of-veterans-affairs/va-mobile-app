@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { StyleProp, ViewStyle } from 'react-native'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -21,16 +21,19 @@ import {
   VAIcon,
   VAScrollView,
 } from 'components'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
+import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, PrescriptionSortOptions, PrescriptionsList, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionState, getPrescriptions, getTabCounts } from 'store/slices/prescriptionSlice'
+import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getFilterArgsForFilterAndTab, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
+import { getFilterArgsForFilter, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
+
+const pageSize = DEFAULT_PAGE_SIZE
 
 const sortByOptions = [
   { display: 'prescriptions.sort.facility', value: PrescriptionSortOptionConstants.FACILITY_NAME },
@@ -113,12 +116,15 @@ const filterOptions = {
 
 const PrescriptionHistory: FC = ({}) => {
   const dispatch = useAppDispatch()
-  const { prescriptions, loadingHistory, prescriptionPagination, tabCounts } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { filteredPrescriptions: prescriptions, loadingHistory, tabCounts, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+
+  const [page, setPage] = useState(1)
+  const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
 
   const [selectedFilter, setSelectedFilter] = useState<RefillStatus | ''>('')
   const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
@@ -130,24 +136,23 @@ const PrescriptionHistory: FC = ({}) => {
 
   const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
 
-  const requestPage = useCallback(
-    (requestedPage: number) => {
-      const filter = getFilterArgsForFilterAndTab(filterToUse, currentTab)
-      const sort = sortByToUse ? `${sortOnToUse}${sortByToUse}` : ''
-      const trackableOnly = currentTab === PrescriptionHistoryTabConstants.SHIPPED
-
-      dispatch(getPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID, requestedPage, filter, sort, trackableOnly))
-    },
-    [dispatch, filterToUse, sortOnToUse, sortByToUse, currentTab],
-  )
+  useEffect(() => {
+    const filters = getFilterArgsForFilter(filterToUse)
+    // TODO: implement sort
+    // const sort = sortByToUse ? `${sortOnToUse}${sortByToUse}` : ''
+    dispatch(filterAndSortPrescriptions(filters, currentTab, ''))
+  }, [dispatch, filterToUse, currentTab])
 
   useEffect(() => {
-    dispatch(getTabCounts())
-  }, [dispatch])
+    const newPrescriptions = prescriptions?.slice((page - 1) * pageSize, page * pageSize)
+    setCurrentPrescriptions(newPrescriptions || [])
+  }, [page, prescriptions])
 
   useEffect(() => {
-    requestPage(1)
-  }, [requestPage])
+    if (prescriptionsNeedLoad) {
+      dispatch(loadAllPrescriptions())
+    }
+  }, [dispatch, prescriptionsNeedLoad])
 
   if (useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
@@ -184,9 +189,9 @@ const PrescriptionHistory: FC = ({}) => {
   }
 
   const prescriptionItems = () => {
-    const total = prescriptions?.length
+    const total = currentPrescriptions?.length
 
-    const listItems: Array<ReactNode> = (prescriptions || []).map((prescription, idx) => {
+    const listItems: Array<ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
       const refillStatus = prescription.attributes.refillStatus
 
       let cardProps: MultiTouchCardProps = {
@@ -243,16 +248,15 @@ const PrescriptionHistory: FC = ({}) => {
   }
 
   const renderPagination = (): ReactNode => {
-    const page = prescriptionPagination?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {
-        requestPage(page + 1)
+        setPage(page + 1)
       },
       onPrev: () => {
-        requestPage(page - 1)
+        setPage(page - 1)
       },
-      totalEntries: prescriptionPagination?.totalEntries || 0,
-      pageSize: prescriptionPagination?.perPage || 0,
+      totalEntries: prescriptions?.length || 0,
+      pageSize: pageSize,
       page,
     }
 
@@ -402,7 +406,7 @@ const PrescriptionHistory: FC = ({}) => {
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
             <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
             <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-              {t('prescription.history.list.title', { count: prescriptionPagination.totalEntries })}
+              {t('prescription.history.list.title', { count: prescriptions?.length })}
             </TextView>
           </Box>
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>

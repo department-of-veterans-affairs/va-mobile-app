@@ -229,7 +229,12 @@ context('PrescriptionHistory', () => {
         prescriptions: {
           ...initialPrescriptionState,
           prescriptions: prescriptionData.data,
-          prescriptionPagination: prescriptionData.meta.pagination
+          filteredPrescriptions: prescriptionData.data,
+          processingPrescriptions: prescriptionData.data,
+          shippedPrescriptions: prescriptionData.data,
+          prescriptionPagination: prescriptionData.meta.pagination,
+          prescriptionsNeedLoad: false,
+          loadingHistory: false,
         }
       }})
     testInstance = component.container
@@ -249,12 +254,14 @@ context('PrescriptionHistory', () => {
     it('should show the names and instructions of prescriptions', async () => {
       await waitFor(() => {
         initializeTestInstance()
-        expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY')).toBeTruthy()
-
-        expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 325MG TAB')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
       })
+
+      expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY')).toBeTruthy()
+
+      expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 325MG TAB')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
+
     })
   })
 })
