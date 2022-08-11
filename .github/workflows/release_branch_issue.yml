@@ -54,7 +54,7 @@ jobs:
       version: ${{ needs.release_ticket.outputs.versionNumber }}
       releaseDate: ${{ needs.release_ticket.outputs.releaseDate }}
       ticketNumber: ${{ needs.release_ticket.outputs.ticketNumber }}
-      milestoneID: ${{ needs.create_testrail_milestone.outputs.milestoneId }}
+      milestoneId: ${{ needs.create_testrail_milestone.outputs.milestoneId }}
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}

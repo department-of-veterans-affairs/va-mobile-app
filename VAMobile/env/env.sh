@@ -18,14 +18,12 @@ then
   AUTH_PREFIX="sqa."
   AUTH_SIS_PREFIX="staging."
   API_PREFIX="staging-api."
-  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=true" >> .env
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET
   echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
 else
   echo "Setting up Production environment"
   AUTH_PREFIX=""
   API_PREFIX="api."
-  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=false" >> .env
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET_PROD
   echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET_PROD}" >> .env
 fi

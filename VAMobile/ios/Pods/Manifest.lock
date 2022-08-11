@@ -21,6 +21,9 @@ PODS:
   - Firebase/Performance (8.12.1):
     - Firebase/CoreOnly
     - FirebasePerformance (~> 8.12.0)
+  - Firebase/RemoteConfig (8.12.1):
+    - Firebase/CoreOnly
+    - FirebaseRemoteConfig (~> 8.12.0)
   - FirebaseABTesting (8.12.0):
     - FirebaseCore (~> 8.0)
   - FirebaseAnalytics/WithoutAdIdSupport (8.12.0):
@@ -386,7 +389,7 @@ PODS:
     - React-Core
   - react-native-image-picker (4.7.1):
     - React-Core
-  - react-native-notifications (4.1.3):
+  - react-native-notifications (4.3.1):
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
@@ -489,6 +492,10 @@ PODS:
     - Firebase/Performance (= 8.12.1)
     - React-Core
     - RNFBApp
+  - RNFBRemoteConfig (15.2.0):
+    - Firebase/RemoteConfig (= 8.12.1)
+    - React-Core
+    - RNFBApp
   - RNFileViewer (2.1.5):
     - React-Core
   - RNGestureHandler (2.2.0):
@@ -582,6 +589,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBPerf (from `../node_modules/@react-native-firebase/perf`)"
+  - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
   - RNFileViewer (from `../node_modules/react-native-file-viewer`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
@@ -721,6 +729,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/crashlytics"
   RNFBPerf:
     :path: "../node_modules/@react-native-firebase/perf"
+  RNFBRemoteConfig:
+    :path: "../node_modules/@react-native-firebase/remote-config"
   RNFileViewer:
     :path: "../node_modules/react-native-file-viewer"
   RNGestureHandler:
@@ -788,7 +798,7 @@ SPEC CHECKSUMS:
   react-native-cookies: cd92f3824ed1e32a20802e8185101e14bb5b76da
   react-native-document-picker: 429972f7ece4463aa5bcdd789622b3a674a3c5d1
   react-native-image-picker: 5fe0a96bef4935bbdfb02f59b910bf40d5526109
-  react-native-notifications: 805108822ceff3440644d5701944f0cda35f5b4b
+  react-native-notifications: 33ec77006f7987bb22de8f1665889abc633b9196
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-webview: 162b6453d074e0b1c7025242bb7a939b6f72b9e7
   React-perflogger: 9a6172711d9c4c8c7ac0a426717317c3c6ecf85c
@@ -814,6 +824,7 @@ SPEC CHECKSUMS:
   RNFBApp: 06c8447270d295edc431bccd55970d8711a07a42
   RNFBCrashlytics: 0cfb53fcd558969ee498eb7030ee7065c7dacf8d
   RNFBPerf: 15708e8e7b9c64add98e0244baa8f055fe6422a6
+  RNFBRemoteConfig: 3040825f5f44297ecc565d5f28d53eccc62ac411
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94

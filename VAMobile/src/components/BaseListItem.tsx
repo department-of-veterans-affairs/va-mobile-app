@@ -68,12 +68,14 @@ export type BaseListItemProps = {
   fileUploaded?: boolean
 }
 
-const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
+export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress?: () => void }> = ({ decorator, decoratorProps, onPress }) => {
   const theme = useTheme()
+
+  const switchOnPress = onPress ? onPress : () => {}
 
   switch (decorator) {
     case ButtonDecoratorType.Switch:
-      return <SwitchComponent onPress={onPress} {...decoratorProps} />
+      return <SwitchComponent onPress={switchOnPress} {...decoratorProps} />
     case ButtonDecoratorType.SelectedItem:
       return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
     case ButtonDecoratorType.Delete:
