@@ -21,6 +21,9 @@ PODS:
   - Firebase/Performance (8.12.1):
     - Firebase/CoreOnly
     - FirebasePerformance (~> 8.12.0)
+  - Firebase/RemoteConfig (8.12.1):
+    - Firebase/CoreOnly
+    - FirebaseRemoteConfig (~> 8.12.0)
   - FirebaseABTesting (8.12.0):
     - FirebaseCore (~> 8.0)
   - FirebaseAnalytics/WithoutAdIdSupport (8.12.0):
@@ -489,6 +492,10 @@ PODS:
     - Firebase/Performance (= 8.12.1)
     - React-Core
     - RNFBApp
+  - RNFBRemoteConfig (15.2.0):
+    - Firebase/RemoteConfig (= 8.12.1)
+    - React-Core
+    - RNFBApp
   - RNFileViewer (2.1.5):
     - React-Core
   - RNGestureHandler (2.2.0):
@@ -582,6 +589,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBPerf (from `../node_modules/@react-native-firebase/perf`)"
+  - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
   - RNFileViewer (from `../node_modules/react-native-file-viewer`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
@@ -721,6 +729,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/crashlytics"
   RNFBPerf:
     :path: "../node_modules/@react-native-firebase/perf"
+  RNFBRemoteConfig:
+    :path: "../node_modules/@react-native-firebase/remote-config"
   RNFileViewer:
     :path: "../node_modules/react-native-file-viewer"
   RNGestureHandler:
@@ -814,6 +824,7 @@ SPEC CHECKSUMS:
   RNFBApp: 06c8447270d295edc431bccd55970d8711a07a42
   RNFBCrashlytics: 0cfb53fcd558969ee498eb7030ee7065c7dacf8d
   RNFBPerf: 15708e8e7b9c64add98e0244baa8f055fe6422a6
+  RNFBRemoteConfig: 3040825f5f44297ecc565d5f28d53eccc62ac411
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
