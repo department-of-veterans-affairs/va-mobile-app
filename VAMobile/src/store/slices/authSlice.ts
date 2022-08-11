@@ -295,7 +295,7 @@ const storeSplitRefreshToken = async (refreshToken: string, options: Keychain.Op
   const splitToken = refreshToken.split('.')
   console.debug(splitToken)
   await Promise.all([
-    Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1], options),
+    Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
     AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
     AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
   ])
