@@ -12,7 +12,7 @@ import { ErrorComponent, TextView } from 'components'
 import {
   defaultPrescriptionsList as mockData,
   emptyStatePrescriptionList as emptyMockData,
-  emptyStateTrackingInfoList as emptyTrackingMockDat,
+  emptyStateTrackingInfoList as emptyTrackingMockData,
 } from 'utils/tests/prescription'
 import { DateTime } from 'luxon'
 import { ScreenIDTypesConstants } from 'store/api/types'
@@ -50,13 +50,13 @@ context('RefillTrackingDetails', () => {
     it('should show None Noted for applicable properties', async () => {
       when(api.get as jest.Mock)
       .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
-      .mockResolvedValue({ data: emptyTrackingMockDat[0] })
+      .mockResolvedValue({ data: emptyTrackingMockData[0] })
 
       await waitFor(() => {
         initializeTestInstance(undefined, emptyMockData[0] as PrescriptionData)
       })
 
-      let texts = testInstance.findAllByType(TextView)
+      const texts = testInstance.findAllByType(TextView)
       // Tracking information
       expect(texts[1].props.children).toEqual('Tracking number')
       expect(texts[2].props.children).toEqual('None noted')

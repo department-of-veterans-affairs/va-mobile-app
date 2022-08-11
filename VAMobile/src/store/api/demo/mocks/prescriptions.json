@@ -531,17 +531,17 @@
         "attributes":
         {
           "dispensedDate": "2022-08-02T04:00:00.000Z",
-          "expirationDate": "2023-04-27T04:00:00.000Z",
+          "expirationDate": null,
           "facilityName": "",
           "instructions": "",
           "isRefillable": false,
           "isTrackable": true,
-          "orderedDate": "2022-04-26T04:00:00.000Z",
+          "orderedDate": null,
           "prescriptionName": "LAMIVUDINE 100MG TAB",
           "prescriptionNumber": "",
-          "quantity": 30,
+          "quantity": null,
           "refillDate": null,
-          "refillRemaining": -1,
+          "refillRemaining": null,
           "refillStatus": "active",
           "refillSubmitDate": "2022-08-04T13:59:40.000Z",
           "stationNumber": "989"
