@@ -22,6 +22,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { t: th } = useTranslation(NAMESPACE.HOME)
+  const noneNoted = tc('noneNoted')
 
   const { contentMarginTop, standardMarginBetween, contentMarginBottom } = theme.dimensions
 
@@ -29,7 +30,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
     prescriptionsById[prescriptionId]?.attributes
 
   const getDate = (date?: string | null) => {
-    return date ? DateTime.fromISO(date).toUTC().toFormat('MM/dd/yyyy') : ''
+    return date ? DateTime.fromISO(date).toUTC().toFormat('MM/dd/yyyy') : tc('noneNoted')
   }
 
   const clickToCallProps: LinkButtonProps = {
@@ -57,14 +58,14 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
           <TextView variant="BitterBoldHeading" mt={standardMarginBetween}>
             {prescriptionName}
           </TextView>
-          <DetailsTextSections leftSectionTitle={t('prescription.details.instructionsHeader')} leftSectionValue={instructions || ''} />
+          <DetailsTextSections leftSectionTitle={t('prescription.details.instructionsHeader')} leftSectionValue={instructions || noneNoted} />
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.refillLeftHeader')}
-            leftSectionValue={refillRemaining}
+            leftSectionValue={refillRemaining !== null && refillRemaining > -1 ? refillRemaining : noneNoted}
             rightSectionTitle={t('prescription.details.lastFillDateHeader')}
             rightSectionValue={lastRefilledDateFormatted}
           />
-          <DetailsTextSections leftSectionTitle={t('prescription.details.quantityHeader')} leftSectionValue={quantity} />
+          <DetailsTextSections leftSectionTitle={t('prescription.details.quantityHeader')} leftSectionValue={quantity !== null && quantity > -1 ? quantity : noneNoted} />
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.expiresOnHeader')}
             leftSectionValue={expireDateFormatted}
@@ -73,15 +74,15 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
           />
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.vaFacilityHeader')}
-            leftSectionValue={facilityName}
+            leftSectionValue={facilityName || noneNoted}
             leftSectionTitleLabel={t('prescription.details.vaFacilityHeaderLabel')}>
             <ClickForActionLink {...clickToCallProps} />
             <ClickForActionLink {...ttyProps} />
           </DetailsTextSections>
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.rxNumberHeader')}
-            leftSectionValue={prescriptionNumber}
-            leftSectionValueLabel={prescriptionNumber.split('').join(' ')}
+            leftSectionValue={prescriptionNumber || noneNoted}
+            leftSectionValueLabel={prescriptionNumber ? prescriptionNumber.split('').join(' ') : noneNoted}
           />
         </TextArea>
       </Box>

@@ -56,7 +56,7 @@ context('RefillTrackingDetails', () => {
         initializeTestInstance(undefined, emptyMockData[0] as PrescriptionData)
       })
 
-      let texts = testInstance.findAllByType(TextView)
+      const texts = testInstance.findAllByType(TextView)
       // Tracking information
       expect(texts[1].props.children).toEqual('Tracking number')
       expect(texts[2].props.children).toEqual('None noted')
