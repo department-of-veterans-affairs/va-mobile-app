@@ -492,7 +492,7 @@ PODS:
     - Firebase/Performance (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNFBRemoteConfig (15.2.0):
+  - RNFBRemoteConfig (14.5.0):
     - Firebase/RemoteConfig (= 8.12.1)
     - React-Core
     - RNFBApp
@@ -824,7 +824,7 @@ SPEC CHECKSUMS:
   RNFBApp: 06c8447270d295edc431bccd55970d8711a07a42
   RNFBCrashlytics: 0cfb53fcd558969ee498eb7030ee7065c7dacf8d
   RNFBPerf: 15708e8e7b9c64add98e0244baa8f055fe6422a6
-  RNFBRemoteConfig: 3040825f5f44297ecc565d5f28d53eccc62ac411
+  RNFBRemoteConfig: 440bb1657e45674f7ca6561581bedb6fb80ebfed
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
