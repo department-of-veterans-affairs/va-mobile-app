@@ -163,12 +163,12 @@ const PrescriptionHistory: FC = ({}) => {
   }, [page, prescriptions])
 
   useEffect(() => {
-    if (prescriptionsNeedLoad && prescriptionsAuthorized) {
+    if (prescriptionsNeedLoad && prescriptionsAuthorized && !prescriptionInDowntime) {
       dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
     }
   }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized])
 
-  // ErrorComponent normally handles both downtime and error but can only for 1 screenID.
+  // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support multiple screen IDs
   if (prescriptionInDowntime) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
