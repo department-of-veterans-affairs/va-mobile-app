@@ -11,12 +11,13 @@ import { PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { useAppDispatch, useDestructiveAlert, useModalHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
+import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
 
 type RefillScreenProps = StackScreenProps<RefillStackParamList, 'RefillScreen'>
 
-const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
+export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const submitRefillAlert = useDestructiveAlert()
@@ -54,10 +55,6 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
 
-  if (loadingRefillable) {
-    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
-  }
-
   const onSubmitPressed = () => {
     submitRefillAlert({
       title: t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
@@ -87,11 +84,19 @@ const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const getListItems = () => {
     const listItems: Array<SelectionListItemObj> = refillable.map((prescription) => {
       return {
-        content: <PrescriptionListItem prescription={prescription.attributes} />,
+        content: <PrescriptionListItem prescription={prescription.attributes} hideEmptyInstructions={true} />,
       }
     })
 
     return listItems
+  }
+
+  if (refillable.length === 0) {
+    return <NoRefills />
+  }
+
+  if (loadingRefillable) {
+    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
   }
 
   if (showLoadingScreenRequestRefills) {
