@@ -364,19 +364,19 @@
         "attributes": {
           "refillStatus": "active",
           "refillSubmitDate": null,
-          "refillDate": "2022-06-07T04:00:00.000Z",
-          "refillRemaining": 2,
-          "facilityName": "SLC10 TEST LAB",
+          "refillDate": null,
+          "refillRemaining": null,
+          "facilityName": "",
           "orderedDate": "2022-05-08T04:00:00.000Z",
           "quantity": 30,
           "expirationDate": "2023-05-09T04:00:00.000Z",
-          "prescriptionNumber": "3636847",
+          "prescriptionNumber": "",
           "prescriptionName": "OLANZAPINE 10MG RAPID DISINTEGRATING TAB",
           "dispensedDate": null,
           "stationNumber": "979",
           "isRefillable": true,
           "isTrackable": false,
-          "instructions": "ONE TABLET AT BEDTIME FOR 30 DAYS"
+          "instructions": ""
         }
       },
       {
