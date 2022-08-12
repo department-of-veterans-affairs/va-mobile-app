@@ -166,7 +166,7 @@ const PrescriptionHistory: FC = ({}) => {
     if (prescriptionsNeedLoad && prescriptionsAuthorized && !prescriptionInDowntime) {
       dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
     }
-  }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized])
+  }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized, prescriptionInDowntime])
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support multiple screen IDs
