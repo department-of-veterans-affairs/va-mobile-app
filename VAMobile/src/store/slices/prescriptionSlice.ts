@@ -93,7 +93,6 @@ export const loadAllPrescriptions =
       dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: allData }))
     } catch (error) {
       if (isErrorObject(error)) {
-        console.log('in error block')
         logNonFatalErrorToFirebase(error, `loadAllPrescriptions: ${prescriptionNonFatalErrorString}`)
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
         dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: undefined, error }))
