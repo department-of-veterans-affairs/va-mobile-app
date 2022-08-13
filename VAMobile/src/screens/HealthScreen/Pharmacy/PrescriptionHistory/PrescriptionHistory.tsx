@@ -23,15 +23,23 @@ import {
   VAScrollView,
 } from 'components'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import {
+  DowntimeFeatureTypeConstants,
+  PrescriptionHistoryTabConstants,
+  PrescriptionSortOptionConstants,
+  PrescriptionSortOptions,
+  PrescriptionsList,
+  RefillStatus,
+  RefillStatusConstants,
+} from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, PrescriptionSortOptions, PrescriptionsList, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getFilterArgsForFilter, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -126,6 +134,8 @@ const PrescriptionHistory: FC = ({}) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -153,12 +163,18 @@ const PrescriptionHistory: FC = ({}) => {
   }, [page, prescriptions])
 
   useEffect(() => {
-    if (prescriptionsNeedLoad && prescriptionsAuthorized) {
-      dispatch(loadAllPrescriptions())
+    if (prescriptionsNeedLoad && prescriptionsAuthorized && !prescriptionInDowntime) {
+      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
     }
-  }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized])
+  }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized, prescriptionInDowntime])
 
-  if (useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)) {
+  // ErrorComponent normally handles both downtime and error but only for 1 screenID.
+  // In this case, we need to support multiple screen IDs
+  if (prescriptionInDowntime) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+  }
+
+  if (hasError) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
   }
 
@@ -166,12 +182,12 @@ const PrescriptionHistory: FC = ({}) => {
     return <PrescriptionHistoryNotAuthorized />
   }
 
-  if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
-    return <PrescriptionHistoryNoPrescriptions />
-  }
-
   if (loadingHistory) {
     return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+  }
+
+  if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
+    return <PrescriptionHistoryNoPrescriptions />
   }
 
   const tabs: TabsValuesType = [

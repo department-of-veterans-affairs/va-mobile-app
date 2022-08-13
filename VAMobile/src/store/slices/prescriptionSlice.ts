@@ -77,26 +77,28 @@ export const initialPrescriptionState: PrescriptionState = {
   prescriptionsNeedLoad: true,
 }
 
-export const loadAllPrescriptions = (): AppThunk => async (dispatch) => {
-  dispatch(dispatchStartLoadAllPrescriptions())
+export const loadAllPrescriptions =
+  (screenID?: ScreenIDTypes): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchStartLoadAllPrescriptions())
 
-  const params = {
-    'page[number]': '1',
-    'page[size]': ALL_RX_PAGE_SIZE.toString(),
-    sort: PrescriptionSortOptionConstants.PRESCRIPTION_NAME,
-  }
+    const params = {
+      'page[number]': '1',
+      'page[size]': ALL_RX_PAGE_SIZE.toString(),
+      sort: PrescriptionSortOptionConstants.PRESCRIPTION_NAME,
+    }
 
-  try {
-    const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
-
-    dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: allData }))
-  } catch (error) {
-    if (isErrorObject(error)) {
-      logNonFatalErrorToFirebase(error, `loadAllPrescriptions: ${prescriptionNonFatalErrorString}`)
-      dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: undefined, error }))
+    try {
+      const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
+      dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: allData }))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `loadAllPrescriptions: ${prescriptionNonFatalErrorString}`)
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
+        dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: undefined, error }))
+      }
     }
   }
-}
 
 export const filterAndSortPrescriptions =
   (filters: string[], tab: string, _sort: string): AppThunk =>
