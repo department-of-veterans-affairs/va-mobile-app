@@ -211,7 +211,7 @@
   "prescriptions.refill.refillableTabValue": "Refillable",
   "prescriptions.refill.noRrefillableTabText": "Non-Refillable {{ count }}",
   "prescriptions.refill.noRrefillableTabValue": "Non-Refillable",
-  "prescriptions.refill.pleaseSelect": "Please select a prescription to request a refill",
+  "prescriptions.refill.pleaseSelect": "Please select a prescription",
   "prescriptions.refill.weWillMailText": "We'll mail your refills to the address on file at your local VA Pharmacy.",
   "prescriptions.refill.pageHeaderTitle": "Refill",
   "prescriptions.refill.submit_one": "Submitting {{ count }} out of {{total}} refill request...",
