@@ -7,13 +7,17 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { RefillScreen } from './RefillScreen'
 import NoRefills from './NoRefills'
 import { RootState } from 'store'
-import { initialPrescriptionState, PrescriptionState } from 'store/slices'
+import { ErrorsState, initialErrorsState, initialPrescriptionState, PrescriptionState } from 'store/slices'
+import { DateTime } from 'luxon'
+import { AlertBox, ErrorComponent, FooterButton } from 'components'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
 context('RefillScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>) => {
+  const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>, errorState?: Partial<ErrorsState>) => {
     const props = mockNavProps({}, {
       setOptions: jest.fn(),
       navigate: jest.fn()
@@ -22,6 +26,10 @@ context('RefillScreen', () => {
       prescriptions: {
         ...initialPrescriptionState,
         ...prescriptionState,
+      },
+      errors: {
+        ...initialErrorsState,
+        ...errorState,
       }
     }
 
@@ -44,6 +52,48 @@ context('RefillScreen', () => {
         })
       })
       expect(testInstance.findByType(NoRefills)).toBeTruthy()
+    })
+  })
+
+  describe('if no prescription is selected', () => {
+    it('should show alert for no prescription selected', async () => {
+      await waitFor(() => {
+        initializeTestInstance(
+          {
+            needsRefillableLoaded: false,
+            refillablePrescriptions: mockData
+          }
+        )
+      })
+
+      await waitFor(() => {
+        const button = testInstance.findByType(FooterButton)
+        button.props.onPress()
+      })
+
+      const alert = testInstance.findByType(AlertBox)
+      expect(alert).toBeTruthy()
+      expect(alert.props.title).toEqual('Please select a prescription')
+    })
+  })
+
+  describe('when there is a downtime message for rx refill', () => {
+    it('should show PRESCRIPTION_SCREEN downtime message', async () => {
+      await waitFor(() => {
+        initializeTestInstance( {}, {
+          downtimeWindowsByFeature: {
+            rx_refill: {
+              featureName: 'VA Prescriptions',
+              startTime: DateTime.now().plus({ days: -1 }),
+              endTime: DateTime.now().plus({ days: 1 }),
+            }
+          }
+        })
+      })
+
+      const error = testInstance.findByType(ErrorComponent)
+      expect(error).toBeTruthy()
+      expect(error.props.screenID).toEqual(ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID)
     })
   })
 })

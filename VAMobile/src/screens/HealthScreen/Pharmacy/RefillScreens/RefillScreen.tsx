@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect, useState } from 'react'
 
-import { AlertBox, Box, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, getRefillablePrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
-import { PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
-import { useAppDispatch, useDestructiveAlert, useModalHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useDowntime, useModalHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
@@ -30,6 +30,8 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
   const [selectedPrescriptionsCount, setSelectedPrescriptionsCount] = useState(0)
 
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+
   const { loadingRefillable, submittingRequestRefills, refillablePrescriptions, needsRefillableLoaded, showLoadingScreenRequestRefills, submittedRequestRefillCount } = useSelector<
     RootState,
     PrescriptionState
@@ -44,10 +46,10 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }, [navigation, headerStyle])
 
   useEffect(() => {
-    if (needsRefillableLoaded) {
+    if (needsRefillableLoaded && !prescriptionInDowntime) {
       dispatch(getRefillablePrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
     }
-  }, [dispatch, needsRefillableLoaded])
+  }, [dispatch, needsRefillableLoaded, prescriptionInDowntime])
 
   useEffect(() => {
     if (prevLoadingRequestRefills && prevLoadingRequestRefills !== submittingRequestRefills) {
@@ -89,6 +91,10 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     })
 
     return listItems
+  }
+
+  if (prescriptionInDowntime) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
   }
 
   if (refillable.length === 0) {
