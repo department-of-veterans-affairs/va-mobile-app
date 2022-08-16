@@ -70,8 +70,28 @@ const checkIfElementIsPresent = async (matchString: string, findbyText = false, 
   }
 }
 
+/** This function will open, check for, and dismiss the leaving app popup from a specified launching point
+ * 
+ * @param matchString - string of the text or id to match
+ * @param findbyText - boolean to search by testID or Text
+ */
+export async function openDismissLeavingAppPopup(matchString: string, findbyText = false) {
+  if (findbyText) {
+    await element(by.text(matchString)).tap()
+  } else {
+    await element(by.id(matchString)).tap()
+  }
 
-// Single-source collection for 'open this screen' functions, so if the matcher changes there's a single place to update
+  await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
+  await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+}
+
+/**
+ * Single-source collection for 'open this screen' functions
+ * Having multiple functions repeats the line of code, but
+ * Have a single file to update if the matchers change (here, vs scattered throughout tests files)
+ * And can have a more specific & readable name for each function
+*/
  export async function openVeteransCrisisLine() { 
   await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
 }

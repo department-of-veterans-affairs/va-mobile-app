@@ -13,7 +13,7 @@ beforeAll(async () => {
 })
 
 describe('Veterans Crisis Line', () => {
-  it('should show VCL content', async () => {
+  it('should show some VCL content', async () => {
     await waitFor(element(by.id(VCLE2eIdConstants.VETERANS_CRISIS_LINE_PAGE_ID)))
       .toExist()
       .withTimeout(2000)

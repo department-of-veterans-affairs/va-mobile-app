@@ -1,6 +1,6 @@
 import { expect, device, by, element, waitFor } from 'detox'
 import { isTypedArray } from 'util/types'
-import { loginToDemoMode, openProfile, openSettings, CommonE2eIdConstants } from './utils'
+import { loginToDemoMode, openProfile, openSettings, openDismissLeavingAppPopup, CommonE2eIdConstants } from './utils'
 
 export const SettingsE2eIdConstants = {
   SETTINGS_PAGE_ID: 'Settings-page',
@@ -38,9 +38,7 @@ describe('Settings Screen', () => {
   })
 
   it('should show and dismiss leaving app popup for privacy', async () => {
-    await element(by.text(SettingsE2eIdConstants.PRIVACY_ROW_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
-    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+    await openDismissLeavingAppPopup(SettingsE2eIdConstants.PRIVACY_ROW_TEXT, true)
   })
 
   it('should show and dismiss signout popup', async () => {
@@ -50,7 +48,7 @@ describe('Settings Screen', () => {
   })
 
   /** Sidelined while we have back buttons that have no unique identifiers, no ancestors, no descendants
-   * Could have individual tests that end on each page that could open, but that's quickly expensive
+   * 
    * 
   it('should open, show, and close manage accounts page', async () => {
     await element(by.text(SettingsE2eIdConstants.MANAGE_ACCT_ROW_TEXT)).tap()
