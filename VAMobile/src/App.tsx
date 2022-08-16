@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar, useColorScheme } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useSelector } from 'react-redux'
@@ -32,6 +32,7 @@ import { SnackBarConstants } from 'constants/common'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import { activateRemoteConfig } from 'utils/remoteConfig'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
@@ -40,6 +41,7 @@ import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks'
+import { useColorScheme } from 'styles/themes/colorScheme'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -193,6 +195,7 @@ export const AuthGuard: FC = () => {
     // only run on app load
     dispatch(sendUsesLargeTextAnalytics())
     dispatch(sendUsesScreenReaderAnalytics())
+    activateRemoteConfig()
   }, [dispatch])
 
   useEffect(() => {
