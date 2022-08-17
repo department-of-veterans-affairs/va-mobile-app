@@ -415,7 +415,7 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
   }
 }
 
-export const attempIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
+export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
   try {
     await CookieManager.clearAll()
     const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
@@ -436,7 +436,7 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: AppDispatch,
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
   } catch (err) {
     console.error(err)
-    logNonFatalErrorToFirebase(err, `attempIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+    logNonFatalErrorToFirebase(err, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
     // if some error occurs, we need to force them to re-login
     // even if they had a refreshToken saved, since these tokens are one time use
     // if we fail, we just need to get a new one (re-login) and start over
@@ -554,7 +554,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
     return
   }
   dispatch(dispatchStartAuthLogin(true))
-  await attempIntializeAuthWithRefreshToken(dispatch, refreshToken)
+  await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
 }
 
 export const initializeAuth = (): AppThunk => async (dispatch) => {
@@ -586,7 +586,7 @@ export const initializeAuth = (): AppThunk => async (dispatch) => {
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     return
   }
-  await attempIntializeAuthWithRefreshToken(dispatch, refreshToken)
+  await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
 }
 
 export const handleTokenCallbackUrl =
