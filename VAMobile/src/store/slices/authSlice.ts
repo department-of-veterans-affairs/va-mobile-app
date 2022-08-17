@@ -316,9 +316,7 @@ const retrieveRefreshToken = async (): Promise<string | undefined> => {
   console.debug('retrieveRefreshToken')
   if (SIS_ENABLED) {
     const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
-    console.debug('Retrieved token components:', result)
     const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
-    console.debug('Reconstructed token: ', reconstructedToken)
     return reconstructedToken
   } else {
     const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
@@ -600,7 +598,6 @@ export const initializeAuth = (): AppThunk => async (dispatch) => {
     // and we will clear it and show login again
     try {
       refreshToken = await retrieveRefreshToken()
-      console.debug('reconstructed refresh token:', refreshToken)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `initializeAuth: ${authNonFatalErrorString}`)
       console.debug('initializeAuth: Failed to get generic password from keychain')
