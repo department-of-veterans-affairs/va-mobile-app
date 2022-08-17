@@ -17,7 +17,7 @@ export type RemoteConfigValues = {
 
 const devDefaults: RemoteConfigValues = {
   testFeature: true,
-  SIS: false,
+  SIS: true,
 }
 
 const productionDefaults: RemoteConfigValues = {

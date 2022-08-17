@@ -66,12 +66,12 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   ///   - scope: space separated string of open ID scopes for IAM
   ///   - codeChallenge: PKCE code challenge string
   ///   - state: state string for OAuth flow with IAM
-  ///   - IAM: boolean of whether we are using IAM or not
+  ///   - SISEnabled: boolean of whether we are using SIS or not
   ///   - resolve: React Native Promise resolver.
   ///   - reject: React Native Promise rejecter.
   /// - Returns: resolves with the callback url or rejects with an error.
   @objc(beginAuthSession:clientId:redirectUri:scope:codeChallenge:state:SISEnabled:resolver:rejecter:)
-  func beginAuthSession(_ authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, IAM: Bool, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+  func beginAuthSession(_ authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, SISEnabled: Bool, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
     let authUrl: URL? = generateUrl(authUrl: authUrl, clientId: clientId, redirectUri: redirectUri, scope: scope, codeChallenge: codeChallenge, state: state, SISEnabled: SISEnabled)
     guard let url = authUrl else {
       reject("002", "RNAuthSession Error", RNAuthSessionError.authUrlError)
