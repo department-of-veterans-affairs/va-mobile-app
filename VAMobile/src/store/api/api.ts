@@ -1,9 +1,12 @@
+import { featureEnabled } from 'utils/remoteConfig'
 import { refreshAccessToken } from 'store/slices'
 import { transform } from './demo/store'
 import _ from 'underscore'
 import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
+
+const IAM = featureEnabled('IAM')
 
 let _token: string | undefined
 let _refresh_token: string | undefined
@@ -57,11 +60,13 @@ const doRequest = async function (
     credentials: 'include',
     headers: {
       authorization: `Bearer ${_token}`,
-      'Authentication-Method': 'SIS',
       'X-Key-Inflection': 'camel',
+      ...(!IAM ? { 'Authentication-Method': 'SIS' } : {}),
     },
     ...({ signal: abortSignal } || {}),
   }
+
+  console.debug(fetchObj.headers)
 
   if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
     fetchObj.headers = {
@@ -97,6 +102,7 @@ const call = async function <T>(
 ): Promise<T | undefined> {
   if (!_demoMode) {
     let response
+    let responseBody
 
     try {
       response = await doRequest(method, endpoint, params, contentType, abortSignal)
@@ -109,37 +115,36 @@ const call = async function <T>(
       throw { networkError: true }
     }
 
-    // TODO: check for only 401 or 403 depending on SIS feature flag
-    if (response.status === 401 || response.status === 403) {
-      let responseBody
-      if (response.status === 403) {
-        responseBody = await response.json()
-      }
+    if (!IAM && response.status === 403) {
+      responseBody = await response.json()
+    }
+
+    const tokenExpired = IAM ? response.status === 401 : response.status === 403 && responseBody?.errors === 'Access token has expired'
+
+    if (tokenExpired) {
       // TODO: if IAM, we don't care about the response body
-      if (response.status === 401 || (response.status === 403 && responseBody?.errors === 'Access token has expired')) {
-        console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
-        // If the access token is expired, attempt to refresh it and redo the request
-        if (!refreshPromise) {
-          // If there is not already a refresh request in flight, create one
-          refreshPromise = refreshAccessToken(_refresh_token || '')
-        }
+      console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
+      // If the access token is expired, attempt to refresh it and redo the request
+      if (!refreshPromise) {
+        // If there is not already a refresh request in flight, create one
+        refreshPromise = refreshAccessToken(_refresh_token || '')
+      }
 
-        // Wait for the token refresh to complete and try the call again
-        const didRefresh = await refreshPromise
-        refreshPromise = undefined
+      // Wait for the token refresh to complete and try the call again
+      const didRefresh = await refreshPromise
+      refreshPromise = undefined
 
-        if (didRefresh) {
-          console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
-          try {
-            response = await doRequest(method, endpoint, params, contentType, abortSignal)
-          } catch (networkError) {
-            // networkError coming back as `AbortError` means abortController.abort() was called
-            // @ts-ignore
-            if (networkError?.name === 'AbortError') {
-              return
-            }
-            throw { networkError: true }
+      if (didRefresh) {
+        console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
+        try {
+          response = await doRequest(method, endpoint, params, contentType, abortSignal)
+        } catch (networkError) {
+          // networkError coming back as `AbortError` means abortController.abort() was called
+          // @ts-ignore
+          if (networkError?.name === 'AbortError') {
+            return
           }
+          throw { networkError: true }
         }
       }
     }

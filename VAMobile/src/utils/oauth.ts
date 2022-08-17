@@ -35,5 +35,5 @@ export const pkceAuthorizeParams = async (): Promise<PKCEParameters> => {
  * characters and removing padding.
  */
 function urlEncode(input: string): string {
-  return input.replace(/\+/g, '-').replace(/\//g, '_').replace(/[=]/g, '').replace(/\n|\r/g, '')
+  return input.replace(/\+/g, '-').replace(/\//g, '_').replace(/[=]/g, '') //.replace(/\n|\r/g, '')
 }

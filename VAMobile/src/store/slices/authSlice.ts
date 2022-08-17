@@ -33,6 +33,7 @@ import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchProfileLogout } from './personalInformationSlice'
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchVaccineLogout } from './vaccineSlice'
+import { featureEnabled } from 'utils/remoteConfig'
 import { isAndroid } from 'utils/platform'
 import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
@@ -41,20 +42,22 @@ import { updateDemoMode } from './demoSlice'
 import getEnv from 'utils/env'
 
 const {
-  AUTH_CLIENT_ID,
-  AUTH_CLIENT_SECRET,
-  // AUTH_ENDPOINT,
+  AUTH_IAM_CLIENT_ID,
+  AUTH_IAM_CLIENT_SECRET,
+  AUTH_IAM_ENDPOINT,
+  AUTH_IAM_REDIRECT_URL,
+  AUTH_IAM_REVOKE_URL,
+  AUTH_IAM_SCOPES,
+  AUTH_IAM_TOKEN_EXCHANGE_URL,
   AUTH_SIS_ENDPOINT,
-  AUTH_REDIRECT_URL,
-  // AUTH_REVOKE_URL,
   AUTH_SIS_REVOKE_URL,
-  // AUTH_SCOPES,
-  // AUTH_TOKEN_EXCHANGE_URL,
   AUTH_SIS_TOKEN_EXCHANGE_URL,
   AUTH_SIS_TOKEN_REFRESH_URL,
   ENVIRONMENT,
   IS_TEST,
 } = getEnv()
+
+const IAM = featureEnabled('IAM')
 
 let inMemoryRefreshToken: string | undefined
 
@@ -258,7 +261,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
     try {
-      await storeSplitRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.BIOMETRIC)
+      await storeRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.BIOMETRIC)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `saveRefreshTokenWithBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
@@ -274,7 +277,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
     try {
-      await storeSplitRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.NONE)
+      await storeRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.NONE)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `saveRefreshTokenWithoutBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
@@ -291,25 +294,36 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  * Biometric storage has a max storage size of 384 bytes.  Because our tokens are so long, we will split the token into 3 pieces,
  * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
  */
-const storeSplitRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
-  console.debug('storeSplitRefreshToken')
-  const splitToken = refreshToken.split('.')
-  console.debug(splitToken)
-  await Promise.all([
-    Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
-    AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
-    AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
-  ])
+const storeRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
+  console.debug('storeRefreshToken')
+  if (IAM) {
+    await Promise.all([Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options), AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType)])
+  } else {
+    const splitToken = refreshToken.split('.')
+    console.debug(splitToken)
+    await Promise.all([
+      Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
+      AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
+      AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
+    ])
+  }
 }
 
 /**
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
-const getSplitRefreshToken = async (): Promise<string | undefined> => {
-  console.debug('getSplitRefreshToken')
-  const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
-  console.debug('Retrieved token components:', result)
-  return result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+const retrieveRefreshToken = async (): Promise<string | undefined> => {
+  console.debug('retrieveRefreshToken')
+  if (IAM) {
+    const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
+    return result ? result.password : undefined
+  } else {
+    const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
+    console.debug('Retrieved token components:', result)
+    const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+    console.debug('Reconstructed token: ', reconstructedToken)
+    return reconstructedToken
+  }
 }
 
 type StringMap = { [key: string]: string | undefined }
@@ -340,11 +354,12 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
 const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
   try {
     if (response.status < 200 || response.status > 399) {
+      debugger
       console.debug('processAuthResponse: non-200 response', response.status)
-      console.debug('processAuthResponse:', await response.text())
+      console.debug('processAuthResponse:', await response.json())
       throw Error(`${response.status}`)
     }
-    const authResponse = (await response.json())?.data as AuthCredentialData
+    const authResponse = IAM ? ((await response.json()) as AuthCredentialData) : ((await response.json())?.data as AuthCredentialData)
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
     // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
     // state is not uniformly supported on the token exchange request so may not be necessary
@@ -368,17 +383,21 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
   console.debug('refreshAccessToken: Refreshing access token')
   try {
     await CookieManager.clearAll()
-    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
+    const response = await fetch(IAM ? AUTH_IAM_TOKEN_EXCHANGE_URL : AUTH_SIS_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: qs.stringify({
-        grant_type: 'refresh_token',
-        client_id: AUTH_CLIENT_ID,
-        client_secret: AUTH_CLIENT_SECRET,
-        redirect_uri: AUTH_REDIRECT_URL,
         refresh_token: refreshToken,
+        ...(IAM
+          ? {
+              grant_type: 'refresh_token',
+              client_id: AUTH_IAM_CLIENT_ID,
+              client_secret: AUTH_IAM_CLIENT_SECRET,
+              redirect_uri: AUTH_IAM_REDIRECT_URL,
+            }
+          : {}),
       }),
     })
 
@@ -418,17 +437,21 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
 export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
   try {
     await CookieManager.clearAll()
-    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
+    const response = await fetch(IAM ? AUTH_IAM_TOKEN_EXCHANGE_URL : AUTH_SIS_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: qs.stringify({
-        grant_type: 'refresh_token',
-        client_id: AUTH_CLIENT_ID,
-        client_secret: AUTH_CLIENT_SECRET,
-        redirect_uri: AUTH_REDIRECT_URL,
         refresh_token: refreshToken,
+        ...(IAM
+          ? {
+              grant_type: 'refresh_token',
+              client_id: AUTH_IAM_CLIENT_ID,
+              client_secret: AUTH_IAM_CLIENT_SECRET,
+              redirect_uri: AUTH_IAM_REDIRECT_URL,
+            }
+          : {}),
       }),
     })
     const authCredentials = await processAuthResponse(response)
@@ -473,23 +496,27 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
   let refreshToken = inMemoryRefreshToken
 
   if (!refreshToken) {
-    refreshToken = await getSplitRefreshToken()
+    refreshToken = await retrieveRefreshToken()
   }
 
   try {
     await CookieManager.clearAll()
-    const response = await fetch(AUTH_SIS_REVOKE_URL, {
+    const response = await fetch(IAM ? AUTH_IAM_REVOKE_URL : AUTH_SIS_REVOKE_URL, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: qs.stringify({
-        token,
-        client_id: AUTH_CLIENT_ID,
-        client_secret: AUTH_CLIENT_SECRET,
-        redirect_uri: AUTH_REDIRECT_URL,
         refresh_token: refreshToken,
+        ...(IAM
+          ? {
+              token,
+              client_id: AUTH_IAM_CLIENT_ID,
+              client_secret: AUTH_IAM_CLIENT_SECRET,
+              redirect_uri: AUTH_IAM_REDIRECT_URL,
+            }
+          : {}),
       }),
     })
     console.debug('logout:', response.status)
@@ -500,7 +527,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     await clearStoredAuthCreds()
     api.setAccessToken(undefined)
     api.setRefreshToken(undefined)
-    // we're truly loging out here, so in order to log back in
+    // we're truly logging out here, so in order to log back in
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     dispatch(dispatchClearLoadedAppointments())
@@ -528,8 +555,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   console.debug('startBiometricsLogin: starting')
   let refreshToken: string | undefined
   try {
-    refreshToken = await getSplitRefreshToken()
-    console.log('reconstructed refresh token:', refreshToken)
+    refreshToken = await retrieveRefreshToken()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     if (isAndroid()) {
@@ -573,8 +599,8 @@ export const initializeAuth = (): AppThunk => async (dispatch) => {
     // if it fails, just means there was nothing there or it was corrupted
     // and we will clear it and show login again
     try {
-      refreshToken = await getSplitRefreshToken()
-      console.log('reconstructed refresh token:', refreshToken)
+      refreshToken = await retrieveRefreshToken()
+      console.debug('reconstructed refresh token:', refreshToken)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `initializeAuth: ${authNonFatalErrorString}`)
       console.debug('initializeAuth: Failed to get generic password from keychain')
@@ -599,9 +625,9 @@ export const handleTokenCallbackUrl =
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
-      console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
+      console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL, AUTH_IAM_CLIENT_ID, AUTH_IAM_CLIENT_SECRET)
       await CookieManager.clearAll()
-      const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
+      const response = await fetch(IAM ? AUTH_IAM_TOKEN_EXCHANGE_URL : AUTH_SIS_TOKEN_EXCHANGE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -645,21 +671,24 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.
-  const params = qs.stringify({
-    // TODO: Re-add these params if we're using IAM
-    // client_id: AUTH_CLIENT_ID,
-    // redirect_uri: AUTH_REDIRECT_URL,
-    // scope: AUTH_SCOPES,
-    // response_type: 'code',
-    // response_mode: 'query',
-    // state: '12345',
+  const params = {
     code_challenge_method: 'S256',
     code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
     application: 'vamobile',
     oauth: 'true',
-  })
-  const url = `${AUTH_SIS_ENDPOINT}?${params}`
-  console.log(`authSlice.ts startWebLogin URL: ${url}`)
+    ...(IAM
+      ? {
+          client_id: AUTH_IAM_CLIENT_ID,
+          redirect_uri: AUTH_IAM_REDIRECT_URL,
+          scope: AUTH_IAM_SCOPES,
+          response_type: 'code',
+          response_mode: 'query',
+          state: '12345',
+        }
+      : {}),
+  }
+
+  const url = `${IAM ? AUTH_IAM_ENDPOINT : AUTH_SIS_ENDPOINT}?${qs.stringify(params)}`
   dispatch(dispatchShowWebLogin(url))
 }
 

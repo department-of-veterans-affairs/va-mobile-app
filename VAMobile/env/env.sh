@@ -33,10 +33,10 @@ echo "ENVIRONMENT=$environment" >> .env
 echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
 # set IAM vars
-AUTH_ROOT="https://${AUTH_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
-echo "AUTH_ENDPOINT=${AUTH_ROOT}/authorize" >> .env
-echo "AUTH_TOKEN_EXCHANGE_URL=${AUTH_ROOT}/token" >> .env
-echo "AUTH_REVOKE_URL=${AUTH_ROOT}/revoke" >> .env
+AUTH_IAM_ROOT="https://${AUTH_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
+echo "AUTH_IAM_ENDPOINT=${AUTH_IAM_ROOT}/authorize" >> .env
+echo "AUTH_IAM_TOKEN_EXCHANGE_URL=${AUTH_IAM_ROOT}/token" >> .env
+echo "AUTH_IAM_REVOKE_URL=${AUTH_IAM_ROOT}/revoke" >> .env
 
 # set SIS vars
 AUTH_SIS_ROOT="https://${AUTH_SIS_PREFIX}va.gov"

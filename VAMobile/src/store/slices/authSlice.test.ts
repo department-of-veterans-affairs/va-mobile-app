@@ -135,7 +135,7 @@ context('authAction', () => {
     beforeEach(() => {
       store = realStore()
       store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.LOGIN }))
-      
+
       // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
       global.__DEV__ = false
     })
@@ -262,7 +262,9 @@ context('authAction', () => {
       })
 
       describe('when in the development environment (__DEV__=true)', () => {
-        beforeEach(() => {global.__DEV__ = true})
+        beforeEach(() => {
+          global.__DEV__ = true
+        })
         it('should save the refresh token even if biometrics not available', async () => {
           const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
           kcMockSupported.mockResolvedValue(null)
@@ -422,8 +424,6 @@ context('authAction', () => {
       await store.dispatch(initializeAuth())
 
       const actions = store.getActions()
-      console.log('Hello')
-      console.log(testRefreshToken)
 
       // this is one of the differences between init and bio init
       // we should transition to a loading spinner here with AUTH_START_LOGIN
