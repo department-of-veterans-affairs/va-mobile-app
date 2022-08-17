@@ -8,21 +8,21 @@ const { ENVIRONMENT } = getEnv()
 const isProduction = ENVIRONMENT === EnvironmentTypesConstants.Production
 const RC_CACHE_TIME = 43200000 // 12 hours
 
-type FeatureToggleType = 'testFeature' | 'IAM'
+type FeatureToggleType = 'testFeature' | 'SIS'
 
 export type RemoteConfigValues = {
   testFeature: boolean
-  IAM: boolean
+  SIS: boolean
 }
 
 const devDefaults: RemoteConfigValues = {
   testFeature: true,
-  IAM: true,
+  SIS: false,
 }
 
 const productionDefaults: RemoteConfigValues = {
   testFeature: false,
-  IAM: true,
+  SIS: false,
 }
 
 /**

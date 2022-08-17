@@ -29,13 +29,18 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
       static let authScheme = "vamobile"
   }
   
-  func generateUrl(authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, IAM: Bool)-> URL? {
+  func generateUrl(authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, SISEnabled: Bool)-> URL? {
     var items = [
       URLQueryItem(name: "code_challenge_method", value: "S256"),
       URLQueryItem(name: "code_challenge", value: codeChallenge),
     ]
 
-    if (IAM) {
+    if (SISEnabled) {
+      items.append(contentsOf: [
+        URLQueryItem(name: "application", value: "vamobile"),
+        URLQueryItem(name: "oauth", value: "true")
+      ])
+    } else {
       items.append(contentsOf: [
         URLQueryItem(name: "client_id", value: clientId),
         URLQueryItem(name: "redirect_uri", value: redirectUri),
@@ -43,11 +48,6 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
         URLQueryItem(name: "response_type", value: "code"),
         URLQueryItem(name: "response_mode", value: "query"),
         URLQueryItem(name: "state", value: state)
-      ])
-    } else {
-      items.append(contentsOf: [
-        URLQueryItem(name: "application", value: "vamobile"),
-        URLQueryItem(name: "oauth", value: "true")
       ])
     }
 
@@ -70,10 +70,9 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   ///   - resolve: React Native Promise resolver.
   ///   - reject: React Native Promise rejecter.
   /// - Returns: resolves with the callback url or rejects with an error.
-  @objc(beginAuthSession:clientId:redirectUri:scope:codeChallenge:state:IAM:resolver:rejecter:)
+  @objc(beginAuthSession:clientId:redirectUri:scope:codeChallenge:state:SISEnabled:resolver:rejecter:)
   func beginAuthSession(_ authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, IAM: Bool, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
-    let authUrl: URL? = generateUrl(authUrl: authUrl, clientId: clientId, redirectUri: redirectUri, scope: scope, codeChallenge: codeChallenge, state: state, IAM: IAM)
-   print(authUrl!.absoluteString)
+    let authUrl: URL? = generateUrl(authUrl: authUrl, clientId: clientId, redirectUri: redirectUri, scope: scope, codeChallenge: codeChallenge, state: state, SISEnabled: SISEnabled)
     guard let url = authUrl else {
       reject("002", "RNAuthSession Error", RNAuthSessionError.authUrlError)
       return

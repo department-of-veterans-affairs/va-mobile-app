@@ -10,5 +10,5 @@
 
 
 @interface RCT_EXTERN_MODULE(RNAuthSession, NSObject)
-RCT_EXTERN_METHOD(beginAuthSession: (NSString *)authUrl clientId:(NSString *)clientId redirectUri:(NSString *)redirectUri scope:(NSString *)scope codeChallenge:(NSString *)codeChallenge state:(NSString *)state IAM:(BOOL *)IAM resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(beginAuthSession: (NSString *)authUrl clientId:(NSString *)clientId redirectUri:(NSString *)redirectUri scope:(NSString *)scope codeChallenge:(NSString *)codeChallenge state:(NSString *)state SISEnabled:(BOOL *)IAM resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 @end

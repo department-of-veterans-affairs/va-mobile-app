@@ -19,13 +19,13 @@ then
   AUTH_SIS_PREFIX="staging."
   API_PREFIX="staging-api."
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET
-  echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
+  echo "AUTH_IAM_CLIENT_SECRET=${APP_IAM_CLIENT_SECRET}" >> .env
 else
   echo "Setting up Production environment"
   AUTH_PREFIX=""
   API_PREFIX="api."
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET_PROD
-  echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET_PROD}" >> .env
+  echo "AUTH_IAM_CLIENT_SECRET=${APP_IAM_CLIENT_SECRET_PROD}" >> .env
 fi
 # set environment
 echo "ENVIRONMENT=$environment" >> .env

@@ -6,7 +6,7 @@ import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
 
-const IAM = featureEnabled('IAM')
+const SIS_ENABLED = featureEnabled('SIS')
 
 let _token: string | undefined
 let _refresh_token: string | undefined
@@ -61,12 +61,10 @@ const doRequest = async function (
     headers: {
       authorization: `Bearer ${_token}`,
       'X-Key-Inflection': 'camel',
-      ...(!IAM ? { 'Authentication-Method': 'SIS' } : {}),
+      ...(SIS_ENABLED ? { 'Authentication-Method': 'SIS' } : {}),
     },
     ...({ signal: abortSignal } || {}),
   }
-
-  console.debug(fetchObj.headers)
 
   if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
     fetchObj.headers = {
@@ -115,14 +113,13 @@ const call = async function <T>(
       throw { networkError: true }
     }
 
-    if (!IAM && response.status === 403) {
+    if (SIS_ENABLED && response.status === 403) {
       responseBody = await response.json()
     }
 
-    const tokenExpired = IAM ? response.status === 401 : response.status === 403 && responseBody?.errors === 'Access token has expired'
+    const tokenExpired = SIS_ENABLED ? response.status === 403 && responseBody?.errors === 'Access token has expired' : response.status === 401
 
     if (tokenExpired) {
-      // TODO: if IAM, we don't care about the response body
       console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
       // If the access token is expired, attempt to refresh it and redo the request
       if (!refreshPromise) {

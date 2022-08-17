@@ -28,28 +28,26 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const { codeChallenge, authorizeStateParam, authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const IAM = featureEnabled('IAM')
+  const SIS_ENABLED = featureEnabled('SIS')
 
-  const params = {
+  const params = qs.stringify({
     code_challenge: codeChallenge,
     code_challenge_method: 'S256',
-    ...(IAM
+    ...(SIS_ENABLED
       ? {
+          application: 'vamobile',
+          oauth: 'true',
+        }
+      : {
           client_id: AUTH_IAM_CLIENT_ID,
           redirect_uri: AUTH_IAM_REDIRECT_URL,
           scope: AUTH_IAM_SCOPES,
           response_type: 'code',
           response_mode: 'query',
           state: authorizeStateParam,
-        }
-      : {
-          application: 'vamobile',
-          oauth: 'true',
         }),
-  }
-  console.debug(params)
-  const webLoginUrl = `${IAM ? AUTH_IAM_ENDPOINT : AUTH_SIS_ENDPOINT}?${qs.stringify(params)}`
-  console.debug(`webLoginUrl: ${webLoginUrl}`)
+  })
+  const webLoginUrl = `${SIS_ENABLED ? AUTH_SIS_ENDPOINT : AUTH_IAM_ENDPOINT}?${params}`
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
     position: 'absolute',
@@ -69,7 +67,6 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     const iosAuth = async () => {
       try {
         const callbackUrl = await startIosAuthSession(codeChallenge || '', authorizeStateParam || '')
-        console.debug('callbackUrl: ', callbackUrl)
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
