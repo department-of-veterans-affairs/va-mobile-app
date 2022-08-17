@@ -352,7 +352,6 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
 const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
   try {
     if (response.status < 200 || response.status > 399) {
-      debugger
       console.debug('processAuthResponse: non-200 response', response.status)
       console.debug('processAuthResponse:', await response.json())
       throw Error(`${response.status}`)
