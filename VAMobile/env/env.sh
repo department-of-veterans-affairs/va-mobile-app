@@ -14,7 +14,7 @@ echo "" > .env
 # Get the environment related variables
 if [[ $environment == 'staging' ]]
 then
-  echo "Setting up Staging environment"  
+  echo "Setting up Staging environment"
   AUTH_PREFIX="sqa."
   AUTH_SIS_PREFIX="staging."
   API_PREFIX="staging-api."
