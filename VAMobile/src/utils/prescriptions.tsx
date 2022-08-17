@@ -1,4 +1,5 @@
-import { RefillStatus, RefillStatusConstants } from 'store/api/types'
+import { ASCENDING } from '../constants/common'
+import { PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { TFunction } from 'i18next'
 
 export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
@@ -30,6 +31,47 @@ export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
     case RefillStatusConstants.UNKNOWN:
       return t('prescription.history.tag.unknown')
   }
+}
+
+export const getSortOrderOptionsForSortBy = (sortBy: PrescriptionSortOptions | '', t: TFunction) => {
+  switch (sortBy) {
+    case PrescriptionSortOptionConstants.FACILITY_NAME:
+    case PrescriptionSortOptionConstants.PRESCRIPTION_NAME:
+      return [
+        {
+          value: ASCENDING,
+          labelKey: t('prescriptions.sort.atoz'),
+        },
+        {
+          value: '',
+          labelKey: t('prescriptions.sort.ztoa'),
+        },
+      ]
+    case PrescriptionSortOptionConstants.REFILL_DATE:
+      return [
+        {
+          value: ASCENDING,
+          labelKey: t('prescriptions.sort.old.oldToNew'),
+        },
+        {
+          value: '',
+          labelKey: t('prescriptions.sort.old.newToOld'),
+        },
+      ]
+    case PrescriptionSortOptionConstants.REFILL_REMAINING:
+      return [
+        {
+          value: '',
+          labelKey: t('prescriptions.sort.low.highToLow'),
+        },
+        {
+          value: ASCENDING,
+          labelKey: t('prescriptions.sort.low.lowToHigh'),
+        },
+      ]
+  }
+
+  return []
 }
 
 /**
