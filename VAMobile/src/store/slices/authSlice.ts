@@ -469,19 +469,27 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(updateDemoMode(false, true))
   }
 
+  const token = api.getAccessToken()
+  let refreshToken = inMemoryRefreshToken
+
+  if (!refreshToken) {
+    refreshToken = await getSplitRefreshToken()
+  }
+
   try {
     await CookieManager.clearAll()
     const response = await fetch(AUTH_SIS_REVOKE_URL, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${api.getAccessToken()}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: qs.stringify({
-        token: api.getAccessToken(),
+        token,
         client_id: AUTH_CLIENT_ID,
         client_secret: AUTH_CLIENT_SECRET,
         redirect_uri: AUTH_REDIRECT_URL,
+        refresh_token: refreshToken,
       }),
     })
     console.debug('logout:', response.status)

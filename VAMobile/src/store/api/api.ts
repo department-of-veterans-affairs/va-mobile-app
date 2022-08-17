@@ -111,28 +111,35 @@ const call = async function <T>(
 
     // TODO: check for only 401 or 403 depending on SIS feature flag
     if (response.status === 401 || response.status === 403) {
-      console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
-      // If the access token is expired, attempt to refresh it and redo the request
-      if (!refreshPromise) {
-        // If there is not already a refresh request in flight, create one
-        refreshPromise = refreshAccessToken(_refresh_token || '')
+      let responseBody
+      if (response.status === 403) {
+        responseBody = await response.json()
       }
+      // TODO: if IAM, we don't care about the response body
+      if (response.status === 401 || (response.status === 403 && responseBody?.errors === 'Access token has expired')) {
+        console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
+        // If the access token is expired, attempt to refresh it and redo the request
+        if (!refreshPromise) {
+          // If there is not already a refresh request in flight, create one
+          refreshPromise = refreshAccessToken(_refresh_token || '')
+        }
 
-      // Wait for the token refresh to complete and try the call again
-      const didRefresh = await refreshPromise
-      refreshPromise = undefined
+        // Wait for the token refresh to complete and try the call again
+        const didRefresh = await refreshPromise
+        refreshPromise = undefined
 
-      if (didRefresh) {
-        console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
-        try {
-          response = await doRequest(method, endpoint, params, contentType, abortSignal)
-        } catch (networkError) {
-          // networkError coming back as `AbortError` means abortController.abort() was called
-          // @ts-ignore
-          if (networkError?.name === 'AbortError') {
-            return
+        if (didRefresh) {
+          console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
+          try {
+            response = await doRequest(method, endpoint, params, contentType, abortSignal)
+          } catch (networkError) {
+            // networkError coming back as `AbortError` means abortController.abort() was called
+            // @ts-ignore
+            if (networkError?.name === 'AbortError') {
+              return
+            }
+            throw { networkError: true }
           }
-          throw { networkError: true }
         }
       }
     }
