@@ -46,7 +46,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     // state: authorizeStateParam,
   })
   const webLoginUrl = `${AUTH_SIS_ENDPOINT}?${params}`
-  console.log(`WebviewLogin.tsx webLoginUrl: ${webLoginUrl}`)
+  console.debug(`webLoginUrl: ${webLoginUrl}`)
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
     position: 'absolute',
@@ -66,7 +66,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     const iosAuth = async () => {
       try {
         const callbackUrl = await startIosAuthSession(codeChallenge || '', authorizeStateParam || '')
-        console.log(callbackUrl)
+        console.debug('callbackUrl: ', callbackUrl)
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
