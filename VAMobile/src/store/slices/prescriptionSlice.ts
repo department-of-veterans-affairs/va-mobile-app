@@ -18,7 +18,7 @@ import {
 } from '../api'
 import { AppThunk } from 'store'
 import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
-import { contains, filter, indexBy } from 'underscore'
+import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
@@ -101,13 +101,14 @@ export const loadAllPrescriptions =
   }
 
 export const filterAndSortPrescriptions =
-  (filters: string[], tab: string, _sort: string): AppThunk =>
+  (filters: string[], tab: string, sort: string, ascending: boolean): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartFilterAndSortPrescriptions())
 
     const state = getState()
     let prescriptionsToSort: PrescriptionsList = []
 
+    // Start with the prefiltered lists based on the current tab
     switch (tab) {
       case PrescriptionHistoryTabConstants.ALL:
         prescriptionsToSort = state.prescriptions.prescriptions || []
@@ -120,14 +121,42 @@ export const filterAndSortPrescriptions =
         break
     }
 
+    let filteredList: PrescriptionsList = []
+
+    // If there are no filters, don't filter the list
     if (filters && filters[0] === '') {
-      dispatch(dispatchFinishFilterAndSortPrescriptions({ prescriptions: prescriptionsToSort }))
+      filteredList = [...prescriptionsToSort]
     } else {
-      const filteredList = filter(prescriptionsToSort, (prescription) => {
+      // Apply the custom filter by
+      filteredList = filter(prescriptionsToSort, (prescription) => {
         return contains(filters, prescription.attributes.refillStatus)
       })
-      dispatch(dispatchFinishFilterAndSortPrescriptions({ prescriptions: filteredList }))
     }
+
+    let sortedList: PrescriptionsList = []
+
+    // Sort the list
+    switch (sort) {
+      case PrescriptionSortOptionConstants.FACILITY_NAME:
+      case PrescriptionSortOptionConstants.PRESCRIPTION_NAME:
+      case PrescriptionSortOptionConstants.REFILL_REMAINING:
+        sortedList = sortBy(filteredList, (a) => {
+          return a.attributes[sort]
+        })
+        break
+      case PrescriptionSortOptionConstants.REFILL_DATE:
+        sortedList = sortBy(filteredList, (a) => {
+          return new Date(a.attributes.refillDate || '')
+        })
+        break
+    }
+
+    // For descending order, reverse the list
+    if (!ascending) {
+      sortedList.reverse()
+    }
+
+    dispatch(dispatchFinishFilterAndSortPrescriptions({ prescriptions: sortedList }))
   }
 
 export const getRefillablePrescriptions =

@@ -78,3 +78,5 @@ export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
 }
 
 export const DIRECT_DEPOSIT = 'Direct Deposit'
+
+export const ASCENDING = 'ascending'

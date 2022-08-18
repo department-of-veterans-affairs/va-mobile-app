@@ -1,4 +1,4 @@
-export type PrescriptionSortOptions = 'facility_name' | 'refill_date' | 'prescription_name' | 'refill_remaining'
+export type PrescriptionSortOptions = 'facilityName' | 'refillDate' | 'prescriptionName' | 'refillRemaining'
 
 export const PrescriptionSortOptionConstants: {
   FACILITY_NAME: PrescriptionSortOptions
@@ -6,10 +6,10 @@ export const PrescriptionSortOptionConstants: {
   PRESCRIPTION_NAME: PrescriptionSortOptions
   REFILL_REMAINING: PrescriptionSortOptions
 } = {
-  FACILITY_NAME: 'facility_name',
-  REFILL_DATE: 'refill_date',
-  PRESCRIPTION_NAME: 'prescription_name',
-  REFILL_REMAINING: 'refill_remaining',
+  FACILITY_NAME: 'facilityName',
+  REFILL_DATE: 'refillDate',
+  PRESCRIPTION_NAME: 'prescriptionName',
+  REFILL_REMAINING: 'refillRemaining',
 }
 
 export type PrescriptionHistoryTabs = '0' | '1' | '2'

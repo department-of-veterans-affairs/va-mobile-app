@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
+import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
 import { AuthorizedServicesState } from 'store/slices'
 import {
   Box,
@@ -22,7 +23,6 @@ import {
   VAIcon,
   VAScrollView,
 } from 'components'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import {
   DowntimeFeatureTypeConstants,
   PrescriptionHistoryTabConstants,
@@ -37,7 +37,7 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getFilterArgsForFilter, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
+import { getFilterArgsForFilter, getSortOrderOptionsForSortBy, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
@@ -51,11 +51,6 @@ const sortByOptions = [
   { display: 'prescriptions.sort.fillDate', value: PrescriptionSortOptionConstants.REFILL_DATE },
   { display: 'prescriptions.sort.medication', value: PrescriptionSortOptionConstants.PRESCRIPTION_NAME },
   { display: 'prescriptions.sort.refills', value: PrescriptionSortOptionConstants.REFILL_REMAINING },
-]
-
-const sortOrderOptions = [
-  { display: 'prescriptions.sort.atoz', value: '' },
-  { display: 'prescriptions.sort.ztoa', value: '-' },
 ]
 
 const filterOptions = {
@@ -142,20 +137,18 @@ const PrescriptionHistory: FC = ({}) => {
 
   const [selectedFilter, setSelectedFilter] = useState<RefillStatus | ''>('')
   const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
-  const [selectedSortOn, setSelectedSortOn] = useState('')
+  const [selectedSortOn, setSelectedSortOn] = useState(ASCENDING)
 
   const [filterToUse, setFilterToUse] = useState<RefillStatus | ''>('')
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
-  const [sortOnToUse, setSortOnToUse] = useState('')
+  const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
   const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
-    // TODO: implement sort
-    // const sort = sortByToUse ? `${sortOnToUse}${sortByToUse}` : ''
-    dispatch(filterAndSortPrescriptions(filters, currentTab, ''))
-  }, [dispatch, filterToUse, currentTab])
+    dispatch(filterAndSortPrescriptions(filters, currentTab, sortByToUse, sortOnToUse === ASCENDING))
+  }, [dispatch, filterToUse, currentTab, sortByToUse, sortOnToUse])
 
   useEffect(() => {
     const newPrescriptions = prescriptions?.slice((page - 1) * pageSize, page * pageSize)
@@ -306,12 +299,7 @@ const PrescriptionHistory: FC = ({}) => {
     }
   })
 
-  const sortOrderRadioOptions = sortOrderOptions.map((option) => {
-    return {
-      value: option.value,
-      labelKey: getTranslation(option.display, t),
-    }
-  })
+  const sortOrderRadioOptions = getSortOrderOptionsForSortBy(selectedSortBy, t)
 
   const sortProps: RadioGroupModalProps = {
     groups: [
