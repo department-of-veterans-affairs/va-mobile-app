@@ -50,16 +50,16 @@ context('RefillRequestSummary', () => {
 
       const textView = testInstance.findAllByType(TextView)
       // Alert
-      expect(textView[0].props.children).toEqual('Your refill requests have been submitted')
+      expect(textView[0].props.children).toEqual('We got your refill requests')
 
       // Summary
-      expect(textView[1].props.children).toEqual('Request summary')
+      expect(textView[1].props.children).toEqual('Refill Request Summary')
       expect(textView[2].props.children).toEqual('ALLOPURINOL 100MG TAB')
       expect(textView[3].props.children).toEqual('Rx #: 3636691')
 
       // Whats next
       expect(textView[4].props.children).toEqual('What’s next')
-      expect(textView[5].props.children).toEqual('Your refills have been sent for approval. Once they have been approved, they will be sent to the pharmacy for processing.')
+      expect(textView[5].props.children).toEqual('We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill. If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
 
       // Buttons
       const vaButtons = testInstance.findAllByType(VAButton)
@@ -83,8 +83,8 @@ context('RefillRequestSummary', () => {
 
       const textView = testInstance.findAllByType(TextView)
       // Alert
-      expect(textView[0].props.children).toEqual( 'Your refill requests failed')
-      expect(textView[1].props.children).toEqual( 'Try again or contact you local VA pharmacy.')
+      expect(textView[0].props.children).toEqual( 'We didn\'t get 1 refill requests')
+      expect(textView[1].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact you local VA pharmacy.')
 
       // Buttons
       const vaButtons = testInstance.findAllByType(VAButton)
@@ -92,12 +92,12 @@ context('RefillRequestSummary', () => {
       expect(vaButtons[0].props.label).toEqual('Try again')
 
       // Summary
-      expect(textView[3].props.children).toEqual( 'Request summary')
+      expect(textView[3].props.children).toEqual( 'Refill Request Summary')
       expect(textView[4].props.children).toEqual( 'ALLOPURINOL 100MG TAB')
       expect(textView[5].props.children).toEqual( 'Rx #: 3636691')
 
-      // Whats next should not show
-      expect(findByTypeWithText(testInstance, TextView, 'What’s next')).toBeFalsy()
+      // Whats next should show
+      expect(findByTypeWithText(testInstance, TextView, 'What’s next')).toBeTruthy()
     })
   })
 
@@ -126,11 +126,11 @@ context('RefillRequestSummary', () => {
 
       const textView = testInstance.findAllByType(TextView)
       // Alert
-      expect(textView[0].props.children).toEqual( '1 out of 2 refill requests failed')
-      expect(textView[1].props.children).toEqual( 'Try again or contact you local VA pharmacy.')
+      expect(textView[0].props.children).toEqual( 'We didn\'t get 1 refill requests')
+      expect(textView[1].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact you local VA pharmacy.')
 
       // Summary
-      expect(textView[3].props.children).toEqual( 'Request summary')
+      expect(textView[3].props.children).toEqual( 'Refill Request Summary')
       expect(textView[4].props.children).toEqual( 'ALLOPURINOL 100MG TAB')
       expect(textView[5].props.children).toEqual( 'Rx #: 3636691')
       expect(textView[6].props.children).toEqual( 'AMLODIPINE BESYLATE 10MG TAB')
@@ -138,7 +138,7 @@ context('RefillRequestSummary', () => {
 
       // Whats next
       expect(textView[8].props.children).toEqual( 'What’s next')
-      expect(textView[9].props.children).toEqual( 'Successfully submitted refills have been sent for approval. Once they have been approved, they will be sent to the pharmacy for processing.')
+      expect(textView[9].props.children).toEqual( 'We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill. If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
     })
   })
 })
