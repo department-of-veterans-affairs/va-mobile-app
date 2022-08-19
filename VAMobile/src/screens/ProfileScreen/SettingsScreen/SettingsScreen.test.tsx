@@ -34,6 +34,8 @@ jest.mock('../../../utils/hooks', () => {
   }
 })
 
+const envMock = getEnv as jest.Mock
+
 const defaultEnvVars = {
   SHOW_DEBUG_MENU: true,
   APPLE_STORE_LINK: 'https://apps.apple.com/us/app/va-health-and-benefits/id1559609596',
@@ -140,21 +142,18 @@ context('SettingsScreen', () => {
 
     describe('developer screen / debug menu', () => {
       it('should display the Developer Screen button if SHOW_DEBUG_MENU is true', async () => {
-        const envMock = getEnv as jest.Mock
         envMock.mockReturnValue(defaultEnvVars)
         initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
         expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
       })
 
       it('should not display the Developer Screen button if SHOW_DEBUG_MENU is false and demo mode is false', async () => {
-        const envMock = getEnv as jest.Mock
         envMock.mockReturnValue({ ...defaultEnvVars, SHOW_DEBUG_MENU: false })
         initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID, false)
         expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
       })
 
       it('should display the Developer Screen button if SHOW_DEBUG_MENU is false and demo mode is true', async () => {
-        const envMock = getEnv as jest.Mock
         envMock.mockReturnValue({ ...defaultEnvVars, SHOW_DEBUG_MENU: false })
         initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID, true)
         expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
