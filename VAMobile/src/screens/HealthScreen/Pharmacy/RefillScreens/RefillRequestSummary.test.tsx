@@ -96,8 +96,8 @@ context('RefillRequestSummary', () => {
       expect(textView[4].props.children).toEqual( 'ALLOPURINOL 100MG TAB')
       expect(textView[5].props.children).toEqual( 'Rx #: 3636691')
 
-      // Whats next should show
-      expect(findByTypeWithText(testInstance, TextView, 'What’s next')).toBeTruthy()
+      // Whats next should not show
+      expect(findByTypeWithText(testInstance, TextView, 'What’s next')).toBeFalsy()
     })
   })
 
