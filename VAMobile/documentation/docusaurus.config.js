@@ -37,6 +37,7 @@ const config = {
         },
       },
     ],
+    'docusaurus-lunr-search'
   ],
 
   presets: [

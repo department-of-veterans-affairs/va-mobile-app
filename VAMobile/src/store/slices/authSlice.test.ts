@@ -41,7 +41,6 @@ jest.mock('../../utils/platform', () => ({
 
 jest.mock('../../utils/env', () =>
   jest.fn(() => ({
-    AUTH_ALLOW_NON_BIOMETRIC_SAVE: 'false',
     AUTH_CLIENT_SECRET: 'TEST_SECRET',
     AUTH_CLIENT_ID: 'VAMobile',
     AUTH_REDIRECT_URL: 'vamobile://login-success',
@@ -53,7 +52,6 @@ jest.mock('../../utils/env', () =>
 )
 
 const defaultEnvParams = {
-  AUTH_ALLOW_NON_BIOMETRIC_SAVE: 'false',
   AUTH_CLIENT_SECRET: 'TEST_SECRET',
   AUTH_CLIENT_ID: 'VAMobile',
   AUTH_REDIRECT_URL: 'vamobile://login-success',
@@ -133,9 +131,18 @@ context('authAction', () => {
 
   describe('handleTokenCallbackUrl', () => {
     let store: TrackedStore
+    const DEV: boolean = global.__DEV__
     beforeEach(() => {
       store = realStore()
       store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.LOGIN }))
+      
+      // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
+      global.__DEV__ = false
+    })
+
+    afterEach(() => {
+      // Restore __DEV__ variable
+      global.__DEV__ = DEV
     })
 
     it('should handle malformed urls', async () => {
@@ -254,15 +261,8 @@ context('authAction', () => {
         expect(Keychain.setInternetCredentials).not.toHaveBeenCalled()
       })
 
-      describe('AUTH_ALLOW_NON_BIOMETRIC_SAVE=true', () => {
-        beforeEach(() => {
-          const envMock = getEnv as jest.Mock
-          envMock.mockReturnValue({
-            ...defaultEnvParams,
-            AUTH_ALLOW_NON_BIOMETRIC_SAVE: 'true',
-          })
-        })
-
+      describe('when in the development environment (__DEV__=true)', () => {
+        beforeEach(() => {global.__DEV__ = true})
         it('should save the refresh token even if biometrics not available', async () => {
           const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
           kcMockSupported.mockResolvedValue(null)

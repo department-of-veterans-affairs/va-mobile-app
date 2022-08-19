@@ -57,11 +57,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
 
     // Render option as simple text
     if (hasSingleOption) {
-      return (
-        <TextView accessibilityLabel={a11yLabel || getTranslation(labelKey, t, labelArgs)} variant="VASelector">
-          {getTranslation(labelKey, t, labelArgs)}
-        </TextView>
-      )
+      return <TextView variant="VASelector">{getTranslation(labelKey, t, labelArgs)}</TextView>
     }
 
     const selected = isEqual(option.value, value)

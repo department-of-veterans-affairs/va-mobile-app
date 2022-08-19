@@ -118,6 +118,10 @@ export type BoxProps = ViewProps & {
   borderLeftColor?: BorderColorVariant
   /** sets the border's radius of this component*/
   borderRadius?: number | string
+  /** sets the border radius just for the top of the component */
+  borderRadiusTop?: number | string
+  /** sets the border radius just for the bottom of the component */
+  borderRadiusBottom?: number | string
 }
 
 const toDimen = (val?: string | number): string | undefined => {
@@ -249,6 +253,10 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     ...blStyles,
     ...brStyles,
     'border-radius': typeof props.borderRadius === 'number' ? `${props.borderRadius}px` : props.borderRadius,
+    'border-top-left-radius': typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
+    'border-top-right-radius': typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
+    'border-bottom-left-radius': typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
+    'border-bottom-right-radius': typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
   }
 
   return _.map(styles, (v, k) => {
