@@ -1,6 +1,5 @@
 import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import LoadingComponent from './LoadingComponent'
