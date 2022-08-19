@@ -2859,6 +2859,11 @@
   dependencies:
     "@expo/config-plugins" "^4.0.18"
 
+"@react-native-firebase/remote-config@14.5.0":
+  version "14.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-14.5.0.tgz#3f3307e379b4cb68c99de67e60b3f26a31041b68"
+  integrity sha512-1Jo/qQ7WFC9DZF4eKZ94+4xTZSTV10wri5VxCtpNGdrL86P+U0lRw1F73wTrftQlJq8pplDWXJYNkz1Xf9Ovrw==
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz#c6f9bf63d274bafc8e970628de24986b30a55c8e"
@@ -12625,10 +12630,10 @@ react-native-localize@^2.0.2:
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-2.1.7.tgz#f1dda0c6fd58ab06b5b119cb4a507ab8800b9823"
   integrity sha512-phimOUtDLiqY2ba7Rjk9KpuaVSo7iGMNnwr7rjBVqlhmtTF3ShQ1FPFPxOyUrzDU9jLtj1xMi7MXWYuiVg660Q==
 
-react-native-notifications@^4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-4.1.3.tgz#841e4a1542c45184a6725eaa46094acf5d1edc48"
-  integrity sha512-A4SmRyfh2OlkptlJQvcQKkfnBKO1toUShmFplTkLXPNCqfpm/i4Fz+Uv+LzHSvbsU5U7EYf3JX9sfuyR06ZGPg==
+react-native-notifications@^4.2.4:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-4.3.1.tgz#ad9a8e6881bc17cf03ef16d4dfdaee9ec8bb721d"
+  integrity sha512-A668d+Q0/VQRjmrh+LvDpc/REA8GXgwCijXDCIlDHGMK8enmrtdxY5OANQf1VM3hecf+fD0wYFw2uqL/ZR8jgg==
 
 react-native-responsive-screen@^1.4.2:
   version "1.4.2"
