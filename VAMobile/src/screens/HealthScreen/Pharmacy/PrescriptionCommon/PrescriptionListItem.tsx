@@ -11,19 +11,19 @@ export type PrescriptionListItemProps = {
   /** the prescription info to present */
   prescription: PrescriptionAttributeData
   /** boolean to determine to hide the instructions */
-  hideEmptyInstructions?: boolean
+  hideInstructions?: boolean
+  /** whether to hide the fill date */
+  hideFillDate?: boolean
 }
 
 /** common component to show the prescription info on a list  */
-const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideEmptyInstructions = false }) => {
+const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, hideFillDate }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
   const noneNoted = tc('noneNoted')
-
-  const hideInstructions = hideEmptyInstructions && !instructions
 
   const renderInstructions = () => {
     if (hideInstructions) {
@@ -51,9 +51,11 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
       <TextView variant={'HelperText'} mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
         {`${t('prescription.refillsLeft')} ${refillRemaining ?? noneNoted}`}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween}>
-        {`${t('prescriptions.sort.fillDate')}: ${refillDate ? formatDateUtc(refillDate, 'MM/dd/yyyy') : noneNoted}`}
-      </TextView>
+      {!hideFillDate && (
+        <TextView variant={'HelperText'} mt={condensedMarginBetween}>
+          {`${t('prescriptions.sort.fillDate')}: ${refillDate ? formatDateUtc(refillDate, 'MM/dd/yyyy') : noneNoted}`}
+        </TextView>
+      )}
       <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || noneNoted}`}>
         {`${t('prescription.vaFacility')} ${facilityName || noneNoted}`}
       </TextView>

@@ -16,13 +16,14 @@ context('PrescriptionListItem', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (prescription: Partial<PrescriptionAttributeData> = {}, hideEmptyInstructions: boolean = false) => {
+  const initializeTestInstance = (prescription: Partial<PrescriptionAttributeData> = {}, hideInstructions = false, hideFillDate = false) => {
     const props = {
       prescription: {
         ...mockData[0].attributes,
         ...prescription
       },
-      hideEmptyInstructions,
+      hideInstructions,
+      hideFillDate,
     } as PrescriptionListItemProps
 
     component = render(<PrescriptionListItem {...props} />)
@@ -37,7 +38,7 @@ context('PrescriptionListItem', () => {
   })
 
   describe('when there is no data provided', () => {
-    describe('and hideEmptyInstructions is set to true', () => {
+    describe('and hideInstructions is set to true', () => {
       it('should show None noted for everything besides instructions', async () => {
         await waitFor(() => {
           initializeTestInstance({
@@ -54,7 +55,7 @@ context('PrescriptionListItem', () => {
       })
     })
 
-    describe('and hideEmptyInstructions is set to false', () => {
+    describe('and hideInstructions is set to false', () => {
       it('should show None noted for everything including instructions', async () => {
         await waitFor(() => {
           initializeTestInstance({
@@ -69,6 +70,23 @@ context('PrescriptionListItem', () => {
         expect(texts[3].props.children).toEqual('Refills left: None noted')
         expect(texts[4].props.children).toEqual('Fill date: None noted')
         expect(texts[5].props.children).toEqual('VA facility: None noted')
+      })
+    })
+
+    describe('and hideFillDate is set to true', () => {
+      it('should not display the fill date', async () => {
+        await waitFor(() => {
+          initializeTestInstance({
+            ...emptyMockData[0].attributes,
+            refillRemaining: undefined
+          }, false, true)
+        })
+
+        const texts = testInstance.findAllByType(TextView)
+        expect(texts[1].props.children).toEqual('Rx #: None noted')
+        expect(texts[2].props.children).toEqual('Instructions not noted')
+        expect(texts[3].props.children).toEqual('Refills left: None noted')
+        expect(texts[4].props.children).toEqual('VA facility: None noted')
       })
     })
   })
