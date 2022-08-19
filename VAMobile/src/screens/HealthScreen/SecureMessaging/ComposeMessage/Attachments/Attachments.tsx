@@ -36,6 +36,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
   const [error, setError] = useState('')
+  const [errorA11y, setErrorA11y] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
   const { origin, attachmentsList, messageID } = route.params
@@ -102,7 +103,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       return callbackOnSuccessfulFileSelection({ assets }, true)
     }
 
-    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
+    onAddFileAttachments(t, showActionSheetWithOptions, setError, setErrorA11y, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
   }
 
   const onAttach = (): void => {
@@ -137,7 +138,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox text={error} border="error" />
+            <AlertBox text={error} textA11yLabel={errorA11y} border="error" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
