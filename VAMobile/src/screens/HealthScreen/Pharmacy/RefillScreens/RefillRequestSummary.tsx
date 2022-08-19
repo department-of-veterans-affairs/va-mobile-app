@@ -69,19 +69,12 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           title: t('prescriptions.refillRequestSummary.success'),
         }
         break
-      case REQUEST_STATUS.FAILED:
-        alertBoxProps = {
-          border: 'error',
-          title: t('prescriptions.refillRequestSummary.failed'),
-          text: t('prescriptions.refillRequestSummary.tryAgain'),
-          textA11yLabel: t('prescriptions.refillRequestSummary.tryAgain.a11yLabel'),
-        }
-        break
       case REQUEST_STATUS.MIX:
+      case REQUEST_STATUS.FAILED:
       default:
         alertBoxProps = {
           border: 'error',
-          title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length, total: refillRequestSummaryItems.length }),
+          title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
           text: t('prescriptions.refillRequestSummary.tryAgain'),
           textA11yLabel: t('prescriptions.refillRequestSummary.tryAgain.a11yLabel'),
         }
@@ -142,7 +135,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         <Box key={index} {...boxProps} {...a11yProps}>
           <Box flex={1}>
             <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
-            <TextView variant="HelperText">{`${t('prescription.prescriptionNumber')} ${prescriptionNumber}`}</TextView>
+            <TextView variant="HelperText" color="placeholder">{`${t('prescription.prescriptionNumber')} ${prescriptionNumber}`}</TextView>
           </Box>
           <VAIcon {...vaIconProps} />
         </Box>
@@ -163,23 +156,17 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
     )
   }
   const renderWhatsNext = (): ReactElement => {
-    let yourRefillText = ''
-    switch (status) {
-      case REQUEST_STATUS.FAILED:
-        return <></>
-      case REQUEST_STATUS.SUCCESS:
-        yourRefillText = t('prescriptions.refillRequestSummary.yourRefills.success')
-        break
-      case REQUEST_STATUS.MIX:
-      default:
-        yourRefillText = t('prescriptions.refillRequestSummary.yourRefills.mix')
+    if (status === REQUEST_STATUS.FAILED) {
+      return <></>
     }
 
     return (
       <Box {...borderProps}>
         <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBody">{yourRefillText}</TextView>
+          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.success.a11y')}>
+            {t('prescriptions.refillRequestSummary.yourRefills.success')}
+          </TextView>
         </Box>
         <VAButton onPress={() => {}} label={t('prescriptions.refillRequestSummary.reviewRefills')} buttonType="buttonSecondary" />
       </Box>
