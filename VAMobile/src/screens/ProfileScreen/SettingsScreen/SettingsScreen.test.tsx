@@ -1,14 +1,15 @@
 import 'react-native'
 import React from 'react'
-import { Linking, Pressable, Share } from 'react-native'
+import { Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, findByTestID, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
 
 import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
-import { BaseListItem, TextView } from 'components'
+import { TextView } from 'components'
+import getEnv from 'utils/env'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
@@ -33,12 +34,20 @@ jest.mock('../../../utils/hooks', () => {
   }
 })
 
+const defaultEnvVars = {
+  SHOW_DEBUG_MENU: true,
+  APPLE_STORE_LINK: 'https://apps.apple.com/us/app/va-health-and-benefits/id1559609596',
+  GOOGLE_PLAY_LINK: 'https://play.google.com/store/apps/details?id=gov.va.mobileapp',
+}
+
+jest.mock('utils/env', () => jest.fn(() => defaultEnvVars))
+
 context('SettingsScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let navigateSpy: jest.Mock
 
-  const initializeTestInstance = (canStoreWithBiometric = false, supportedBiometric?: BIOMETRY_TYPE) => {
+  const initializeTestInstance = (canStoreWithBiometric = false, supportedBiometric?: BIOMETRY_TYPE, demoMode = false) => {
     navigateSpy = jest.fn()
     const props = mockNavProps(undefined, {
       navigate: navigateSpy,
@@ -51,6 +60,9 @@ context('SettingsScreen', () => {
           ...InitialState.auth,
           canStoreWithBiometric,
           supportedBiometric,
+        },
+        demo: {
+          demoMode,
         },
       },
     })
@@ -123,6 +135,29 @@ context('SettingsScreen', () => {
       it('should display the text "Use Face ID"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
         expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Face ID')
+      })
+    })
+
+    describe('developer screen / debug menu', () => {
+      it('should display the Developer Screen button if SHOW_DEBUG_MENU is true', async () => {
+        const envMock = getEnv as jest.Mock
+        envMock.mockReturnValue(defaultEnvVars)
+        initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
+        expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
+      })
+
+      it('should not display the Developer Screen button if SHOW_DEBUG_MENU is false and demo mode is false', async () => {
+        const envMock = getEnv as jest.Mock
+        envMock.mockReturnValue({ ...defaultEnvVars, SHOW_DEBUG_MENU: false })
+        initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID, false)
+        expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
+      })
+
+      it('should display the Developer Screen button if SHOW_DEBUG_MENU is false and demo mode is true', async () => {
+        const envMock = getEnv as jest.Mock
+        envMock.mockReturnValue({ ...defaultEnvVars, SHOW_DEBUG_MENU: false })
+        initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID, true)
+        expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
       })
     })
   })
