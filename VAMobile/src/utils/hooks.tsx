@@ -1,9 +1,23 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, AppState, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import {
+  AccessibilityInfo,
+  ActionSheetIOS,
+  Alert,
+  AlertButton,
+  Animated,
+  AppState,
+  Dimensions,
+  Linking,
+  PixelRatio,
+  ScrollView,
+  UIManager,
+  View,
+  findNodeHandle,
+} from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
-import { StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
+import { StackCardInterpolatedStyle, StackCardInterpolationProps, StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -13,7 +27,7 @@ import React from 'react'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { AppDispatch, RootState } from 'store'
-import { BackButton } from 'components'
+import { BackButton, CloseModalButton, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
@@ -503,4 +517,58 @@ export function useOnResumeForeground(callback: () => void): void {
       subscription.remove()
     }
   }, [callback])
+}
+
+/** Header style for the modals*/
+export const useModalHeaderStyles = (): StackNavigationOptions => {
+  const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+
+  const headerStyles: StackNavigationOptions = {
+    headerStyle: {
+      height: 60,
+      shadowColor: 'transparent', // removes bottom border
+      backgroundColor: theme.colors.background.modalHeader,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.border.menuDivider,
+    },
+    headerTitleAlign: 'center',
+    headerLeft: (props) => (
+      <CloseModalButton
+        buttonText={t('cancel')}
+        onPress={props.onPress}
+        buttonTextColor={'closeModal'}
+        a11yHint={t('cancel.modalA11yHint')}
+        focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
+      />
+    ),
+    headerTitle: (header) => (
+      <TextView variant="MobileBodyBold" allowFontScaling={false}>
+        {header.children}
+      </TextView>
+    ),
+  }
+  return headerStyles
+}
+
+// function to animate the half panel aka modal
+export function forHalfPanel({ current, inverted, layouts: { screen } }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  const translateY = Animated.multiply(
+    current.progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [screen.height, screen.height / 2], // modify constant for size of panel
+      extrapolate: 'clamp',
+    }),
+    inverted,
+  )
+  const overlayOpacity = current.progress.interpolate({
+    inputRange: [0, 1, 1.0001, 2],
+    outputRange: [0, 0.3, 1, 1],
+  })
+  return {
+    cardStyle: {
+      transform: [{ translateY }],
+    },
+    overlayStyle: { opacity: overlayOpacity },
+  }
 }
