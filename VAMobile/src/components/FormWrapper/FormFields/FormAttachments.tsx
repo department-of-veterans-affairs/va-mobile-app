@@ -33,8 +33,9 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
 
   const renderFileNames = (): ReactNode => {
     return _.map(attachmentsList || [], (attachment, index) => {
-      const { fileName, fileSize: formattedFileSize } = getFileDisplay(attachment, tFunction, true)
+      const { fileName, fileSize: formattedFileSize, fileSizeA11y } = getFileDisplay(attachment, tFunction, true)
       const text = [fileName, formattedFileSize].join(' ').trim()
+      //const textA11y = fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim()
 
       return (
         <Box
@@ -47,7 +48,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
           key={index}>
           <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
             <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
-            <TextView variant="MobileBodyBold" ml={theme.dimensions.textIconMargin}>
+            <TextView variant="MobileBodyBold" ml={theme.dimensions.textIconMargin} accessibilityLabel={fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim() : undefined}>
               {text}
             </TextView>
           </Box>
