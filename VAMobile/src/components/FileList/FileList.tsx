@@ -23,7 +23,6 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
   const deleteFileAlert = useDestructiveAlert()
 
   const listObjs: Array<DefaultListItemObj> = files.map((file) => {
-    //const { fileName, fileSize: formattedFileSize } = getFileDisplay(file, t, false)
     const { fileName, fileSize: formattedFileSize, fileSizeA11y: fileSizeA11y } = getFileDisplay(file, t, false)
 
     const textLines: Array<TextLine> = [{ text: fileName, variant: 'MobileBodyBold' }, { text: formattedFileSize }]

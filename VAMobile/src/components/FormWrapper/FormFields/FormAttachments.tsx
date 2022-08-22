@@ -35,7 +35,6 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
     return _.map(attachmentsList || [], (attachment, index) => {
       const { fileName, fileSize: formattedFileSize, fileSizeA11y } = getFileDisplay(attachment, tFunction, true)
       const text = [fileName, formattedFileSize].join(' ').trim()
-      //const textA11y = fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim()
 
       return (
         <Box
