@@ -33,10 +33,14 @@ export const CloseModalButton: FC<CloseModalButton> = ({ onPress, a11yHint, focu
 
   useFocusEffect(focusOnButton ? setFocus : () => {})
 
-  const a11yHintPropParam = a11yHint ? a11yHint : ''
-
   return (
-    <TouchableWithoutFeedback ref={focusRef} onPress={onPress} accessibilityLabel={buttonText} accessibilityHint={a11yHintPropParam} accessibilityRole="button" accessible={true}>
+    <TouchableWithoutFeedback
+      ref={focusRef}
+      onPress={onPress}
+      accessibilityLabel={buttonText}
+      accessibilityHint={a11yHint ? a11yHint : undefined}
+      accessibilityRole="button"
+      accessible={true}>
       <Box display="flex" flexDirection="row" ml={16} height={theme.dimensions.headerHeight} width={80} alignItems={'center'}>
         <TextView variant="MobileBody" color={buttonTextColor} ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {buttonText}

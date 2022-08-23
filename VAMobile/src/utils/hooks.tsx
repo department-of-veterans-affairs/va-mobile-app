@@ -1,23 +1,9 @@
-import {
-  AccessibilityInfo,
-  ActionSheetIOS,
-  Alert,
-  AlertButton,
-  Animated,
-  AppState,
-  Dimensions,
-  Linking,
-  PixelRatio,
-  ScrollView,
-  UIManager,
-  View,
-  findNodeHandle,
-} from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, AppState, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
-import { StackCardInterpolatedStyle, StackCardInterpolationProps, StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
+import { StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -549,26 +535,4 @@ export const useModalHeaderStyles = (): StackNavigationOptions => {
     ),
   }
   return headerStyles
-}
-
-// function to animate the half panel aka modal
-export function forHalfPanel({ current, inverted, layouts: { screen } }: StackCardInterpolationProps): StackCardInterpolatedStyle {
-  const translateY = Animated.multiply(
-    current.progress.interpolate({
-      inputRange: [0, 1],
-      outputRange: [screen.height, screen.height / 2], // modify constant for size of panel
-      extrapolate: 'clamp',
-    }),
-    inverted,
-  )
-  const overlayOpacity = current.progress.interpolate({
-    inputRange: [0, 1, 1.0001, 2],
-    outputRange: [0, 0.3, 1, 1],
-  })
-  return {
-    cardStyle: {
-      transform: [{ translateY }],
-    },
-    overlayStyle: { opacity: overlayOpacity },
-  }
 }
