@@ -13,11 +13,9 @@ The API backing it will have a URL with '-api' appended to the first part of the
 `http://a8710e1eb08cd469aa43874b25f86278-api.review.vetsgov-internal/mobile`
 
 ## API Calls
-### API Tokens
-You can obtain a token from the [token generator app](https://va-mobile-cutter.herokuapp.com) on Heroku. User credentials are in 1Password. If you do not yet have access to the shared 1Password 'VA.gov' vault ask a teammate to fetch the credentials you need.
 
 ### Making Requests
-As with the URLs you've been accessing so far, all API requests must go through the SOCKS proxy. You can configure this in your API client (Postman, Insomnia, Paw, etc). The proxy URL is `socks5h://127.0.0.1:2001`. Requests, as in staging and production, require that you include an 'Authorization' header. An example request using the SOCKS proxy to the user endpoint would look like below.
+As with the URLs you've been accessing so far, all API requests must go through the SOCKS proxy. You can configure this in your API client (Postman, Insomnia, Paw, etc). The proxy URL is `socks5h://127.0.0.1:2001`. Requests, as in staging and production, require that you include an 'Authorization' header with a [bearer token](./ApiTokens.md#fetching-api-tokens). An example request using the SOCKS proxy to the user endpoint would look like below.
 
 ```
 curl --proxy socks5h://127.0.0.1:2001 --request GET \
@@ -49,7 +47,7 @@ irb(main):001:0>
 
 ## User sessions
 
-Once you've started a Rails console you'll need a user session to test most features. As with the API calls you'll need an API token. Given a token the IAM session manager will create a user for you.
+Once you've started a Rails console you'll need a user session to test most features. As with the API calls you'll need an [API token](./ApiTokens.md#fetching-api-tokens). Given a token the IAM session manager will create a user for you.
 
 ```
 irb(main):001:0> user = IAMSSOeOAuth::SessionManager.new('EESBp0xiLD6p1g86q4g1').find_or_create_user

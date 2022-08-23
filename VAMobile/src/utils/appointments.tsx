@@ -205,11 +205,11 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
 
   if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-    textLines.push({ text: t('appointments.canceled'), textTag: { backgroundColor: 'inactiveTag', variant: 'LabelTagBold' }, mb: 14 })
+    textLines.push({ text: t('appointments.canceled'), textTag: { backgroundColor: 'inactiveTag', variant: 'LabelTagBold' }, mb: condensedMarginBetween })
   } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-    textLines.push({ text: t('appointments.confirmed'), textTag: { backgroundColor: 'activeTag', variant: 'LabelTagBold' }, mb: 14 })
+    textLines.push({ text: t('appointments.confirmed'), textTag: { backgroundColor: 'activeTag', variant: 'LabelTagBold' }, mb: condensedMarginBetween })
   } else if (isPendingAppointment) {
-    textLines.push({ text: t('appointments.pending'), textTag: { backgroundColor: 'warningTag', color: 'warningTag', variant: 'LabelTagBold' }, mb: 14 })
+    textLines.push({ text: t('appointments.pending'), textTag: { backgroundColor: 'warningTag', color: 'warningTag', variant: 'LabelTagBold' }, mb: condensedMarginBetween })
   }
 
   // pending appointments
