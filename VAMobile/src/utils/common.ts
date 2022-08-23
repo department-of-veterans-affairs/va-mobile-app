@@ -366,7 +366,7 @@ export const getFileDisplay = (
   return { fileName: fileName || '', fileSize: formattedFileSize, fileSizeA11y: formattedFileSizeA11y }
 }
 
-// function to animate a full screen modal into half the size
+// function to animate a full screen panel into half the size
 export function halfPanelCardStyleInterpolator({ current, inverted, layouts: { screen } }: StackCardInterpolationProps): StackCardInterpolatedStyle {
   const translateY = Animated.multiply(
     current.progress.interpolate({

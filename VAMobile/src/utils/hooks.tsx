@@ -505,7 +505,7 @@ export function useOnResumeForeground(callback: () => void): void {
   }, [callback])
 }
 
-/** Header style for the modals*/
+/** Header style for the panels*/
 export const usePanelHeaderStyles = (): StackNavigationOptions => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -524,8 +524,8 @@ export const usePanelHeaderStyles = (): StackNavigationOptions => {
         buttonText={t('cancel')}
         onPress={props.onPress}
         buttonTextColor={'closePanel'}
-        a11yHint={t('cancel.modalA11yHint')}
-        focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
+        a11yHint={t('cancel.panelA11yHint')}
+        focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on the panel
       />
     ),
     headerTitle: (header) => (
