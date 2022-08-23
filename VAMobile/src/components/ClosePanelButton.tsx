@@ -8,9 +8,9 @@ import Box from './Box'
 import TextView from './TextView'
 
 /**
- *  Signifies the props that need to be passed in to {@link CloseModalButton}
+ *  Signifies the props that need to be passed in to {@link ClosePanelButton}
  */
-export type CloseModalButton = {
+export type ClosePanelButton = {
   /** the onPress function for the close button */
   onPress: (() => void) | undefined
   /** optional param to add accessibility hint to close button */
@@ -24,9 +24,9 @@ export type CloseModalButton = {
 }
 
 /**
- * Button used by the request appointment modal
+ * Button used by the panel
  */
-export const CloseModalButton: FC<CloseModalButton> = ({ onPress, a11yHint, focusOnButton, buttonText, buttonTextColor }) => {
+export const ClosePanelButton: FC<ClosePanelButton> = ({ onPress, a11yHint, focusOnButton, buttonText, buttonTextColor }) => {
   const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -50,4 +50,4 @@ export const CloseModalButton: FC<CloseModalButton> = ({ onPress, a11yHint, focu
   )
 }
 
-export default CloseModalButton
+export default ClosePanelButton
