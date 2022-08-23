@@ -366,12 +366,12 @@ export const getFileDisplay = (
   return { fileName: fileName || '', fileSize: formattedFileSize, fileSizeA11y: formattedFileSizeA11y }
 }
 
-// function to animate the half modal
-export function forHalfModal({ current, inverted, layouts: { screen } }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+// function to animate a full screen modal into half the size
+export function halfPanelCardStyleInterpolator({ current, inverted, layouts: { screen } }: StackCardInterpolationProps): StackCardInterpolatedStyle {
   const translateY = Animated.multiply(
     current.progress.interpolate({
       inputRange: [0, 1],
-      outputRange: [screen.height, screen.height / 2], // modify constant for size of modal
+      outputRange: [screen.height, screen.height / 2], // modify constant for size of panel
       extrapolate: 'clamp',
     }),
     inverted,
