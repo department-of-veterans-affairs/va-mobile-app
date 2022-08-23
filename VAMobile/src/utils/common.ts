@@ -341,7 +341,11 @@ export const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
  * @param t - translation function
  * @param fileSizeParens - whether to include parenthesis around the file size
  */
-export const getFileDisplay = (attachment: ImagePickerResponse | DocumentPickerResponse, t: TFunction, fileSizeParens: boolean): { fileName: string; fileSize: string } => {
+export const getFileDisplay = (
+  attachment: ImagePickerResponse | DocumentPickerResponse,
+  t: TFunction,
+  fileSizeParens: boolean,
+): { fileName: string; fileSize: string; fileSizeA11y: string } => {
   let fileName: string | undefined
   let fileSize: number | undefined
 
@@ -357,7 +361,9 @@ export const getFileDisplay = (attachment: ImagePickerResponse | DocumentPickerR
 
   const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, t, fileSizeParens) : ''
 
-  return { fileName: fileName || '', fileSize: formattedFileSize }
+  const formattedFileSizeA11y = fileSize ? bytesToFinalSizeDisplayA11y(fileSize, t, fileSizeParens) : ''
+
+  return { fileName: fileName || '', fileSize: formattedFileSize, fileSizeA11y: formattedFileSizeA11y }
 }
 
 // function to animate the half modal
