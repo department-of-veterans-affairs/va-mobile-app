@@ -548,6 +548,28 @@
         },
         "id": "21142623",
         "type": "Prescription"
+      },
+      {
+        "attributes":
+        {
+          "dispensedDate": "2022-08-02T04:00:00.000Z",
+          "expirationDate": null,
+          "facilityName": "",
+          "instructions": "",
+          "isRefillable": false,
+          "isTrackable": true,
+          "orderedDate": null,
+          "prescriptionName": "LAMIVUDINE 1MG TAB",
+          "prescriptionNumber": "",
+          "quantity": null,
+          "refillDate": null,
+          "refillRemaining": null,
+          "refillStatus": "suspended",
+          "refillSubmitDate": "2022-08-04T13:59:40.000Z",
+          "stationNumber": "999"
+        },
+        "id": "21142627",
+        "type": "Prescription"
       }
     ],
     "meta": {
@@ -555,7 +577,7 @@
         "currentPage": 1,
         "perPage": 10000,
         "totalPages": 1,
-        "totalEntries": 24
+        "totalEntries": 27
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=3",

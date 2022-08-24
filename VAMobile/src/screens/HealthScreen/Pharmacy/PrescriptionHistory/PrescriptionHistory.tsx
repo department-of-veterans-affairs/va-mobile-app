@@ -214,9 +214,10 @@ const PrescriptionHistory: FC = ({}) => {
 
     const listItems: Array<ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
       const refillStatus = prescription.attributes.refillStatus
+      const refillStatusText = getTextForRefillStatus(refillStatus, t)
 
       let cardProps: MultiTouchCardProps = {
-        topOnPress: () => {},
+        topOnPress: navigateTo('StatusGlossary', { display: refillStatusText, value: refillStatus }),
         topText: getTextForRefillStatus(refillStatus, t),
         topBackgroundColor: getTagColorForStatus(refillStatus),
         topTextColor: 'statusDescription',
