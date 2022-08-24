@@ -1,14 +1,14 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
-import { AlertBox, AlertBoxProps, Box, BoxProps, CloseModalButton, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps, VAScrollView } from 'components'
+import { AlertBox, AlertBoxProps, Box, BoxProps, ClosePanelButton, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, requestRefills } from 'store/slices'
 import { PrescriptionsList } from 'store/api'
 import { RefillStackParamList } from './RefillScreen'
 import { RootState } from 'store'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useModalHeaderStyles, useTheme } from 'utils/hooks'
+import { useAppDispatch, usePanelHeaderStyles, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 type RefillRequestSummaryProps = StackScreenProps<RefillStackParamList, 'RefillRequestSummary'>
@@ -20,7 +20,7 @@ const enum REQUEST_STATUS {
 }
 
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
-  const headerStyle = useModalHeaderStyles()
+  const headerStyle = usePanelHeaderStyles()
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -50,7 +50,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
     navigation.setOptions({
       ...headerStyle,
       headerLeft: () => (
-        <CloseModalButton
+        <ClosePanelButton
           buttonText={tc('close')}
           onPress={navigation.getParent()?.goBack}
           buttonTextColor={'showAll'}
