@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
-import { PrescriptionData, SecureMessagingFormData } from 'store/api/types'
+import { PrescriptionData, PrescriptionHistoryTabs, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -102,7 +102,9 @@ export type HealthStackParamList = WebviewStackParams & {
     vaccineId: string
   }
   Pharmacy: undefined
-  PrescriptionHistory: undefined
+  PrescriptionHistory: {
+    startingTab?: PrescriptionHistoryTabs | undefined
+  }
   PrescriptionDetails: {
     prescriptionId: string
   }
