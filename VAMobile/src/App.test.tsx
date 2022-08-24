@@ -7,6 +7,10 @@ import App, { AuthGuard, AuthedApp } from './App'
 import LoginScreen from 'screens/auth/LoginScreen'
 import { handleTokenCallbackUrl, initialAuthState, initialSnackBarState } from 'store/slices'
 
+jest.mock('./utils/remoteConfig', () => ({
+  activateRemoteConfig: jest.fn(() => Promise.resolve()),
+}))
+
 jest.mock('./store/slices', () => {
   let original = jest.requireActual('./store/slices')
   return {

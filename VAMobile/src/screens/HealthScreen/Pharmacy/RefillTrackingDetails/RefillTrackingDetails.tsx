@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect } from 'react'
 
-import { Box, BoxProps, CloseModalButton, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
+import { Box, BoxProps, ClosePanelButton, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
 import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,7 +11,7 @@ import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherIte
 import { RootState } from 'store'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDowntime, useError, useExternalLink, useModalHeaderStyles, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useExternalLink, usePanelHeaderStyles, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
@@ -39,7 +39,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const { prescription } = route.params
   const dispatch = useAppDispatch()
   const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
-  const headerStyle = useModalHeaderStyles()
+  const headerStyle = usePanelHeaderStyles()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
@@ -53,7 +53,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     navigation.setOptions({
       ...headerStyle,
       headerLeft: (props) => (
-        <CloseModalButton
+        <ClosePanelButton
           buttonText={tc('close')}
           onPress={props.onPress}
           buttonTextColor={'showAll'}

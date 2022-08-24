@@ -56,7 +56,7 @@ declare -a tf_opts=("Development Team" "Ad Hoc Production Testers" "IAM Group" "
 
 # Play Store track default and options
 PS_TRACK="Development Team"
-declare -a ps_opts=("Ad Hoc Production Testers" "Development Team" "UAT Group" "VA Production Testers" "VA Production Testers" "Temp - Push" "508 Office")
+declare -a ps_opts=("Development Team" "VA Production Testers")
 
 # Notes set to empty string
 NOTES=""

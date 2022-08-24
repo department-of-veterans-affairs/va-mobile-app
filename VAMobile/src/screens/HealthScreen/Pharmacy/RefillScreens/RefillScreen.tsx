@@ -10,7 +10,7 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, getRefillablePrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
-import { useAppDispatch, useDestructiveAlert, useDowntime, useModalHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
@@ -21,7 +21,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const submitRefillAlert = useDestructiveAlert()
-  const headerStyle = useModalHeaderStyles()
+  const headerStyle = usePanelHeaderStyles()
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
