@@ -20,7 +20,7 @@ export const FocusedNavHeaderText: FC<FocusedNavHeaderTextProps> = ({ headerTitl
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
   useFocusEffect(setFocus)
 
-  return <HeaderTitle headerTitle={headerTitle} focusRef={focusRef} />
+  return <HeaderTitle headerTitle={headerTitle} focusRef={focusRef} testID={`${headerTitle}-page-header`} />
 }
 
 export default FocusedNavHeaderText
