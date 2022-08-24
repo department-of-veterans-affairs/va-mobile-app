@@ -145,6 +145,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode readBuildCode()
         versionName readVersionName()
+        testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     splits {
         abi {
@@ -184,9 +186,11 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.release
+            
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
+            signingConfig signingConfigs.release
             manifestPlaceholders = [
                     appIcon:"ic_launcher",
                     appIconRound:"ic_launcher_round"
@@ -281,6 +285,12 @@ dependencies {
     // playstore core for in-app reviews
     implementation 'com.google.android.play:core:1.10.0'
     implementation 'com.google.android.play:core-ktx:1.8.1'
+
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    androidTestImplementation('com.wix:detox:+')
+    androidTestImplementation('com.google.firebase:firebase-iid'){
+        exclude group: 'com.google.firebase:firebase-iid'
+    }
 
     implementation project(':lottie-react-native')
 }

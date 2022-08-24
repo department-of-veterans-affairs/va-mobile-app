@@ -270,6 +270,9 @@ context('ComposeMessage', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       await waitFor(() => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
+
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[25].props.children).toEqual(['Subject Line', ' ', '(Required)'])
       })
 
       const textViews = testInstance.findAllByType(TextView)

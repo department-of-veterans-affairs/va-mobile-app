@@ -21,6 +21,9 @@ PODS:
   - Firebase/Performance (8.15.0):
     - Firebase/CoreOnly
     - FirebasePerformance (~> 8.15.0)
+  - Firebase/RemoteConfig (8.15.0):
+    - Firebase/CoreOnly
+    - FirebaseRemoteConfig (~> 8.15.0)
   - FirebaseABTesting (8.15.0):
     - FirebaseCore (~> 8.0)
   - FirebaseAnalytics/WithoutAdIdSupport (8.15.0):
@@ -137,7 +140,7 @@ PODS:
     - GoogleUtilities/Network (~> 7.7)
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
     - nanopb (~> 2.30908.0)
-  - GoogleDataTransport (9.1.4):
+  - GoogleDataTransport (9.2.0):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -500,6 +503,10 @@ PODS:
     - Firebase/Performance (= 8.15.0)
     - React-Core
     - RNFBApp
+  - RNFBRemoteConfig (14.5.0):
+    - Firebase/RemoteConfig (= 8.15.0)
+    - React-Core
+    - RNFBApp
   - RNFileViewer (2.1.5):
     - React-Core
   - RNGestureHandler (2.5.0):
@@ -595,6 +602,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBPerf (from `../node_modules/@react-native-firebase/perf`)"
+  - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
   - RNFileViewer (from `../node_modules/react-native-file-viewer`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
@@ -737,6 +745,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/crashlytics"
   RNFBPerf:
     :path: "../node_modules/@react-native-firebase/perf"
+  RNFBRemoteConfig:
+    :path: "../node_modules/@react-native-firebase/remote-config"
   RNFileViewer:
     :path: "../node_modules/react-native-file-viewer"
   RNGestureHandler:
@@ -779,7 +789,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   GoogleAppMeasurement: 4c19f031220c72464d460c9daa1fb5d1acce958e
-  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
+  GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
@@ -831,6 +841,7 @@ SPEC CHECKSUMS:
   RNFBApp: 9646e09d041ea159b84584865212e4cf33acd179
   RNFBCrashlytics: f2b5e456c4969bdec60482e83d973d873ff17f1d
   RNFBPerf: ae25247c5d197d2ed6f512cdef575314abbf4cf2
+  RNFBRemoteConfig: d8f8d69a86b3d4a7680aedba1e327578aceb15a1
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94

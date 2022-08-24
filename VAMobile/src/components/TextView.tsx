@@ -45,6 +45,9 @@ export type TextViewProps = AccessibilityProps &
 
     /** if set, sets the number of lines the text will render on. if the text exceeds the line amount, it will ellipsis */
     numberOfLines?: number
+
+    /** Max size for font when user adjusts their font scaling */
+    maxFontSizeMultiplier?: number
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {

@@ -3,7 +3,6 @@ import { AccessibilityValue, AppStateStatus, NativeModules, PixelRatio } from 'r
 import _ from 'underscore'
 
 import { TextLine } from 'components/types'
-import { isIOS } from './platform'
 
 import { AppDispatch } from 'store'
 import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/slices/accessibilitySlice'
@@ -26,11 +25,7 @@ export const testIdProps = (id: string, disableAccessible?: boolean, integration
   // setting both testID and  accessibilityLabel prevents elements from being found in the integration tests on iOS
   // testID is not used on android for the integration tests
   if (IS_TEST) {
-    if (isIOS()) {
-      return { ...disableAccessibility, testID: idToUse }
-    }
-
-    return { ...disableAccessibility, accessibilityLabel: idToUse }
+    return { ...disableAccessibility, testID: idToUse }
   }
 
   return { ...disableAccessibility, testID: idToUse, accessibilityLabel: idToUse }
