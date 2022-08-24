@@ -1,6 +1,5 @@
 import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import LoadingComponent from './LoadingComponent'
@@ -13,6 +12,8 @@ export type AttachmentLinkProps = {
   name: string
   /** Size of file attachment and size unit wrapped in parentheses */
   formattedSize?: string
+  /** Size of file attachment and size unit wrapped in parentheses with pronounciation */
+  formattedSizeA11y?: string
   /** onPress function */
   onPress?: () => void
   /** optional a11y Hint */
@@ -26,7 +27,7 @@ export type AttachmentLinkProps = {
 /**
  * A common component for an attachment link display. Can be used to show file attachments in a message thread.
  */
-const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, onPress, a11yHint, a11yValue, load }) => {
+const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, formattedSizeA11y, onPress, a11yHint, a11yValue, load }) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
@@ -36,10 +37,10 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, onPress,
   }
 
   const text = [name, formattedSize].join(' ').trim()
-  const testId = generateTestID(text, '')
+  const textA11y = [name, formattedSizeA11y].join(' ').trim()
 
   const a11yProps: AccessibilityProps = {
-    ...testIdProps(testId || ''),
+    accessibilityLabel: textA11y,
     ...a11yHintProp(a11yHint || ''),
     accessibilityValue: a11yValue ? { text: a11yValue } : {},
   }
