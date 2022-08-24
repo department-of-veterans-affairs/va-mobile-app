@@ -310,6 +310,7 @@ commands:
     parameters:
       regex:
         type: string
+        default: "^build_android_"
     steps:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
       - install_python
@@ -320,6 +321,7 @@ commands:
     parameters:
       regex:
         type: string
+        default: "^build_ios_"
     steps:
       - run: echo "export BUILD_REGEX=<<parameters.regex>>" >> $BASH_ENV
       - run: python3 -m pip install requests
@@ -359,6 +361,7 @@ jobs:
       - install_pods
       - bundle_app:
           os: "ios"
+      - queue_ios_jobs
       - ios_fastlane
   build_android_qa:
     executor: android
@@ -369,6 +372,7 @@ jobs:
       - decode_android_keys
       - bundle_app:
           os: "android"
+      - queue_android_jobs
       - android_fastlane
   build_ios_feature:
     executor: ios
@@ -379,6 +383,7 @@ jobs:
       - install_pods
       - bundle_app:
           os: ios
+      - queue_ios_jobs
       - ios_fastlane:
           lane: on_demand
           notes: ${CIRCLE_TAG}
@@ -392,6 +397,7 @@ jobs:
       - decode_android_keys
       - bundle_app:
           os: android
+      - queue_android_jobs
       - android_fastlane:
           lane: on_demand
           notes: ${CIRCLE_TAG}
@@ -414,6 +420,7 @@ jobs:
       - install_pods
       - bundle_app:
           os: "ios"
+      - queue_ios_jobs
       - ios_fastlane:
           version: ${CIRCLE_TAG}
           lane: "review"
@@ -427,6 +434,7 @@ jobs:
       - decode_android_keys
       - bundle_app:
           os: "android"
+      - queue_android_jobs
       - android_fastlane:
           version: ${CIRCLE_TAG}
           lane: "review"
@@ -452,6 +460,7 @@ jobs:
       - decode_android_keys
       - bundle_app:
           os: "android"
+      - queue_android_jobs
       - android_fastlane:
           lane: "rc"
   build_ios_release_candidate:
@@ -463,6 +472,7 @@ jobs:
       - install_pods
       - bundle_app:
           os: "ios"
+      - queue_ios_jobs
       - ios_fastlane:
           lane: "rc"
 workflows:
