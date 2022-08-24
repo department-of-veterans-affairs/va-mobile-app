@@ -413,6 +413,17 @@ const PrescriptionHistory: FC = ({}) => {
     </VAScrollView>
   )
 
+  const getInstructions = () => {
+    switch (currentTab) {
+      case PrescriptionHistoryTabConstants.ALL:
+        return t('prescriptions.header.helper.all')
+      case PrescriptionHistoryTabConstants.PROCESSING:
+        return t('prescriptions.header.helper.processing')
+      case PrescriptionHistoryTabConstants.SHIPPED:
+        return t('prescriptions.header.helper.shipped')
+    }
+  }
+
   const getContent = () => {
     if (hasNoItems) {
       return noMatchDisplayEl
@@ -420,7 +431,7 @@ const PrescriptionHistory: FC = ({}) => {
       return (
         <>
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView variant={'HelperText'}>{t('prescriptions.header.helper')}</TextView>
+            <TextView variant={'HelperText'}>{getInstructions()}</TextView>
             <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
               {t('prescription.history.list.title', { count: prescriptions?.length })}
             </TextView>
