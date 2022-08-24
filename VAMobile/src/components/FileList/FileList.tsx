@@ -23,14 +23,15 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
   const deleteFileAlert = useDestructiveAlert()
 
   const listObjs: Array<DefaultListItemObj> = files.map((file) => {
-    const { fileName, fileSize: formattedFileSize } = getFileDisplay(file, t, false)
+    const { fileName, fileSize: formattedFileSize, fileSizeA11y: fileSizeA11y } = getFileDisplay(file, t, false)
 
     const textLines: Array<TextLine> = [{ text: fileName, variant: 'MobileBodyBold' }, { text: formattedFileSize }]
+    const textLinesA11y: Array<TextLine> = [{ text: fileName, variant: 'MobileBodyBold' }, { text: fileSizeA11y }]
 
     const fileButton: DefaultListItemObj = {
       textLines,
       a11yHintText: t('fileUpload.delete.a11yHint'),
-      testId: getA11yLabelText(textLines),
+      testId: getA11yLabelText(textLinesA11y),
       decorator: ButtonDecoratorType.Delete,
       onPress: () => {
         deleteFileAlert({

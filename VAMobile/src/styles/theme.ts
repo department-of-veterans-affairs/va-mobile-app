@@ -60,6 +60,7 @@ export type VATextColors = {
   warningTag: string
   tabSelectorInactive: string
   tabSelectorActive: string
+  closePanel: string
 }
 
 export type VAIconColors = {
@@ -150,6 +151,7 @@ export type VABackgroundColors = {
   warningTag: string
   inactiveTag: string
   activeTag: string
+  panelHeader: string
 }
 
 export type VABorderColors = {
