@@ -424,6 +424,17 @@ const PrescriptionHistory: FC = ({}) => {
     }
   }
 
+  const getInstructionA11y = () => {
+    switch (currentTab) {
+      case PrescriptionHistoryTabConstants.ALL:
+        return t('prescriptions.header.helper.all.a11y')
+      case PrescriptionHistoryTabConstants.PROCESSING:
+        return t('prescriptions.header.helper.processing.a11y')
+      case PrescriptionHistoryTabConstants.SHIPPED:
+        return t('prescriptions.header.helper.shipped')
+    }
+  }
+
   const getContent = () => {
     if (hasNoItems) {
       return noMatchDisplayEl
@@ -431,7 +442,9 @@ const PrescriptionHistory: FC = ({}) => {
       return (
         <>
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView variant={'HelperText'}>{getInstructions()}</TextView>
+            <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+              {getInstructions()}
+            </TextView>
             <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
               {t('prescription.history.list.title', { count: prescriptions?.length })}
             </TextView>
