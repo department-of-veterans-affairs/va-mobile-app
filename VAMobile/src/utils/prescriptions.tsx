@@ -114,3 +114,49 @@ export const getTagColorForStatus = (status: string) => {
       return 'tagInProgress'
   }
 }
+
+/**
+ * Function to get the correct text and a11yLabel for a certain type of RefillStatus
+ * @param status - RefillStatus to key to pull in the correct text
+ * @param t - translation function
+ */
+export const getStatusGlossaryTextForRefillStatus = (status: RefillStatus, t: TFunction): { text: string; a11yLabel: string } => {
+  switch (status) {
+    case RefillStatusConstants.ACTIVE:
+      return {
+        text: t('statusGlossary.active'),
+        a11yLabel: t('statusGlossary.active.a11yLabel'),
+      }
+    case RefillStatusConstants.REFILL_IN_PROCESS:
+      return {
+        text: t('statusGlossary.active.inProgress'),
+        a11yLabel: t('statusGlossary.active.inProgress.a11yLabel'),
+      }
+    case RefillStatusConstants.HOLD:
+    case RefillStatusConstants.PROVIDER_HOLD:
+      return {
+        text: t('statusGlossary.active.hold'),
+        a11yLabel: t('statusGlossary.active.hold.a11yLabel'),
+      }
+    case RefillStatusConstants.ACTIVE_PARKED:
+      return {
+        text: t('statusGlossary.active.parked'),
+        a11yLabel: t('statusGlossary.active.parked.a11yLabel'),
+      }
+    case RefillStatusConstants.SUBMITTED:
+      return {
+        text: t('statusGlossary.active.submitted'),
+        a11yLabel: t('statusGlossary.active.submitted.a11yLabel'),
+      }
+    case RefillStatusConstants.SUSPENDED:
+      return {
+        text: t('statusGlossary.active.suspended'),
+        a11yLabel: t('statusGlossary.active.suspended.a11yLabel'),
+      }
+    default:
+      return {
+        text: '',
+        a11yLabel: '',
+      }
+  }
+}

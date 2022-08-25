@@ -5,8 +5,9 @@ import React, { ReactNode } from 'react'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
-import { PrescriptionData, PrescriptionHistoryTabs, SecureMessagingFormData } from 'store/api/types'
+import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
+import { halfPanelCardStyleInterpolator } from 'utils/common'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
@@ -23,6 +24,7 @@ import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTracking
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import SecureMessaging from './SecureMessaging'
+import StatusGlossary from './Pharmacy/StatusGlossary/StatusGlossary'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
@@ -112,6 +114,10 @@ export type HealthStackParamList = WebviewStackParams & {
   RefillTrackingModal: {
     prescription: PrescriptionData
   }
+  StatusGlossary: {
+    display: string
+    value: RefillStatus
+  }
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -159,6 +165,21 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       name="RefillTrackingModal"
       component={RefillTrackingModal}
       options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescriptions.refillTracking.pageHeaderTitle') }}
+    />,
+    <HealthStack.Screen
+      key={'StatusGlossary'}
+      name="StatusGlossary"
+      component={StatusGlossary}
+      options={{
+        title: t('statusGlossary.title'),
+        presentation: 'transparentModal',
+        cardStyleInterpolator: halfPanelCardStyleInterpolator,
+        cardOverlayEnabled: true,
+        headerStatusBarHeight: 0,
+        cardStyle: {
+          borderRadius: 6,
+        },
+      }}
     />,
   ]
 }
