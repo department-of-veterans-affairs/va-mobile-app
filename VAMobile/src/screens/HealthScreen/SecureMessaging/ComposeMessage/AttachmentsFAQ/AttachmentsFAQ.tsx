@@ -17,6 +17,11 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
   const { t: tc } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON])
   const { originHeader } = route.params
 
+  const bulletedListOfText = [
+    { text: t('secureMessaging.attachments.FAQ.note.bullet1') },
+    { text: t('secureMessaging.attachments.sizeRequirements'), a11yLabel: t('secureMessaging.attachments.sizeRequirements.A11yLabel') },
+  ]
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
@@ -46,7 +51,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
               <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
             </TextView>
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <VABulletList listOfText={[t('secureMessaging.attachments.FAQ.note.bullet1'), t('secureMessaging.attachments.sizeRequirements')]} />
+              <VABulletList listOfText={bulletedListOfText} />
             </Box>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
