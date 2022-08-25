@@ -11,9 +11,11 @@ export type CommonErrorTypes =
   | 'appLevelErrorDisabilityRating'
   | 'downtimeError'
   | 'appLevelErrorVaccine'
+  | 'sessionExpired'
 
 export const CommonErrorTypesConstants: {
   NETWORK_CONNECTION_ERROR: CommonErrorTypes
+  SESSION_EXPIRED_ERROR: CommonErrorTypes
   APP_LEVEL_ERROR: CommonErrorTypes
   APP_LEVEL_ERROR_WITH_REFRESH: CommonErrorTypes
   APP_LEVEL_ERROR_HEALTH_LOAD: CommonErrorTypes
@@ -22,6 +24,7 @@ export const CommonErrorTypesConstants: {
   APP_LEVEL_ERROR_VACCINE: CommonErrorTypes
 } = {
   NETWORK_CONNECTION_ERROR: 'networkConnectionError',
+  SESSION_EXPIRED_ERROR: 'sessionExpired',
   APP_LEVEL_ERROR: 'appLevelError',
   APP_LEVEL_ERROR_WITH_REFRESH: 'appLevelErrorWithRefresh',
   APP_LEVEL_ERROR_HEALTH_LOAD: 'appLevelErrorHealthLoad',
