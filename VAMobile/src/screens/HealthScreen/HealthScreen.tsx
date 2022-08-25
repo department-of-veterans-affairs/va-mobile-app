@@ -60,10 +60,10 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
-          title={t('pharmacy.title')}
-          subText={t('pharmacy.subText')}
-          subTextA11yLabel={t('pharmacy.subText.a11yLabel')}
-          a11yHint={t('pharmacy.a11yHint')}
+          title={t('prescription.title')}
+          subText={t('prescription.subText')}
+          subTextA11yLabel={t('prescription.subText.a11yLabel')}
+          a11yHint={t('prescription.A11yHint')}
           onPress={onPharmacy}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
