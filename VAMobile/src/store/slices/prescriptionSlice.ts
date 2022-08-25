@@ -85,7 +85,7 @@ export const loadAllPrescriptions =
     const params = {
       'page[number]': '1',
       'page[size]': ALL_RX_PAGE_SIZE.toString(),
-      sort: PrescriptionSortOptionConstants.PRESCRIPTION_NAME,
+      sort: 'prescription_name', // Parameters are snake case for the back end
     }
 
     try {
