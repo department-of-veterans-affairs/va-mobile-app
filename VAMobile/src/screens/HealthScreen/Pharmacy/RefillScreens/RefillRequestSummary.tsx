@@ -3,12 +3,12 @@ import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'r
 
 import { AlertBox, AlertBoxProps, Box, BoxProps, ClosePanelButton, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
-import { PrescriptionsList } from 'store/api'
 import { RefillStackParamList } from './RefillScreen'
 import { RootState } from 'store'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, usePanelHeaderStyles, useTheme } from 'utils/hooks'
+import { useAppDispatch, usePanelHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 type RefillRequestSummaryProps = StackScreenProps<RefillStackParamList, 'RefillRequestSummary'>
@@ -28,6 +28,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
   const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry, submittedRequestRefillCount } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     const requestSubmittedItems = []
@@ -168,7 +169,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
             {t('prescriptions.refillRequestSummary.yourRefills.success')}
           </TextView>
         </Box>
-        <VAButton onPress={() => {}} label={t('prescriptions.refillRequestSummary.reviewRefills')} buttonType="buttonSecondary" />
+        <VAButton
+          onPress={navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PROCESSING })}
+          label={t('prescriptions.refillRequestSummary.reviewRefills')}
+          buttonType="buttonSecondary"
+        />
       </Box>
     )
   }
