@@ -57,7 +57,7 @@ const VAFacilitiesScreen: FC<VAFacilitiesScreenProps> = ({ navigation }) => {
         additionalLabelText: [cityStateString, milesString],
         a11yLabel: `${facility.name}, ${facility.city} ${States.find((item) => item.value === facility.state)?.label}, ${milesString}`,
         // remove radio button if not eligible for online request
-        removeRadioButtonIcon: !care?.directEligibleFacilities.includes(facility.id) && !care?.requestEligibleFacilities.includes(facility.id),
+        notSelectableRadioBtn: !care?.directEligibleFacilities.includes(facility.id) && !care?.requestEligibleFacilities.includes(facility.id),
       })
     }
     return facilityOptions

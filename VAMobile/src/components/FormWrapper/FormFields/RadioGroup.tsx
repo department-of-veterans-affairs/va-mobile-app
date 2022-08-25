@@ -20,8 +20,8 @@ export type radioOption<T> = {
   a11yLabel?: string
   /** Additional text to present under label key */
   additionalLabelText?: Array<string>
-  /** Removes the radio btn icon from radio list*/
-  removeRadioButtonIcon?: boolean
+  /** Removes the radio btn icon from radio list and makes it not selectable*/
+  notSelectableRadioBtn?: boolean
 }
 
 /**
@@ -108,7 +108,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
     const listItems: Array<DefaultListItemObj> = options.map((option, index) => {
       const selected = isEqual(option.value, value)
       const onSelectorChange = (): void => {
-        if (!disabled && !option.removeRadioButtonIcon) {
+        if (!disabled && !option.notSelectableRadioBtn) {
           onChange(option.value)
         }
       }
@@ -123,7 +123,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
 
       const radioButton: DefaultListItemObj = {
         textLines,
-        decorator: option.removeRadioButtonIcon
+        decorator: option.notSelectableRadioBtn
           ? ButtonDecoratorType.None
           : disabled
           ? ButtonDecoratorType.DisabledRadio
