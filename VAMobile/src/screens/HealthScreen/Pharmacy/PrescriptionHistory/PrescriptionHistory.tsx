@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react'
+import { StackScreenProps } from '@react-navigation/stack'
 import { StyleProp, ViewStyle } from 'react-native'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -32,6 +33,7 @@ import {
   RefillStatus,
   RefillStatusConstants,
 } from 'store/api/types'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
@@ -120,7 +122,9 @@ const filterOptions = {
   ],
 }
 
-const PrescriptionHistory: FC = ({}) => {
+type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
+
+const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ route }) => {
   const dispatch = useAppDispatch()
   const { filteredPrescriptions: prescriptions, loadingHistory, tabCounts, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -131,6 +135,7 @@ const PrescriptionHistory: FC = ({}) => {
   const navigateTo = useRouteNavigation()
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const startingTab = route?.params?.startingTab
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -143,7 +148,7 @@ const PrescriptionHistory: FC = ({}) => {
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
-  const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
+  const [currentTab, setCurrentTab] = useState<string>(startingTab || PrescriptionHistoryTabConstants.ALL)
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)

@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {render, context, RenderAPI, waitFor, findByTypeWithText} from 'testUtils'
+import {render, context, RenderAPI, waitFor, findByTypeWithText, mockNavProps} from 'testUtils'
 
 import PrescriptionHistory from './PrescriptionHistory'
 import { ReactTestInstance } from 'react-test-renderer'
@@ -224,7 +224,10 @@ context('PrescriptionHistory', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = () => {
-    component = render(<PrescriptionHistory />, { preloadedState: {
+    const props = mockNavProps(undefined, undefined, { params: { } })
+
+
+    component = render(<PrescriptionHistory {...props} />, { preloadedState: {
       auth: { ...initialAuthState },
         prescriptions: {
           ...initialPrescriptionState,
