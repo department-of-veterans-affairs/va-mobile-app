@@ -16,3 +16,5 @@ export { default as CCPreferredLanguageScreen } from './CCPreferredLanguageScree
 export * from './CCPreferredLanguageScreen'
 export { default as ConfirmContactScreen } from './ConfirmContactScreen'
 export * from './ConfirmContactScreen'
+export { default as VAFacilitiesScreen } from './VAFacilitiesScreen'
+export * from './VAFacilitiesScreen'

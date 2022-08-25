@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { ALWAYS_SHOW_CARE_LIST, ScreenIDTypesConstants, TYPE_OF_CARE, TypeOfCareIdV2Types, TypeOfCareObjectType } from 'store/api/types'
+import { ALWAYS_SHOW_CARE_LIST, FACILITY_FILTER, ScreenIDTypesConstants, TYPE_OF_CARE, TypeOfCareIdV2Types, TypeOfCareObjectType } from 'store/api/types'
 import { AppointmentFlowLayout, AppointmentFlowTitleSection } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { ErrorComponent, LoadingComponent, RadioGroup, radioOption } from 'components'
@@ -33,7 +33,7 @@ const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigat
 
   useEffect(() => {
     dispatch(getUserVAEligibility(ScreenIDTypesConstants.APPOINTMENT_REQUEST_TYPE_OF_CARE_SCREEN_ID))
-    dispatch(getUserFacilities())
+    dispatch(getUserFacilities(FACILITY_FILTER.home))
   }, [dispatch])
 
   const onSetSelectedTypeOfCare = (care: TypeOfCareIdV2Types): void => {
