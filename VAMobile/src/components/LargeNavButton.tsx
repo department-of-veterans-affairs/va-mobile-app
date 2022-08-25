@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react'
 
 import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, VAIcon } from 'components'
 import { VAIconColors, VATextColors } from 'styles/theme'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import MessagesCountTag from './MessagesCountTag'
 
@@ -110,7 +110,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const testId = `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText}`.trim()
+  const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText}`.trim()
 
   return (
     <Box {...boxProps}>
@@ -121,8 +121,9 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         onPressOut={_onPressOut}
         accessible={true}
         accessibilityRole={'menuitem'}
-        {...a11yHintProp(a11yHint || '')}
-        {...testIdProps(testId)}>
+        testID={title}
+        accessibilityLabel={accessibilityLabel}
+        {...a11yHintProp(a11yHint || '')}>
         <Box flex={1}>
           <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>

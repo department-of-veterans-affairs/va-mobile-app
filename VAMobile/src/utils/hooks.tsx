@@ -13,7 +13,7 @@ import React from 'react'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { AppDispatch, RootState } from 'store'
-import { BackButton, CloseModalButton, TextView } from 'components'
+import { BackButton, ClosePanelButton, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
@@ -505,8 +505,8 @@ export function useOnResumeForeground(callback: () => void): void {
   }, [callback])
 }
 
-/** Header style for the modals*/
-export const useModalHeaderStyles = (): StackNavigationOptions => {
+/** Header style for the panels*/
+export const usePanelHeaderStyles = (): StackNavigationOptions => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -514,18 +514,18 @@ export const useModalHeaderStyles = (): StackNavigationOptions => {
     headerStyle: {
       height: 60,
       shadowColor: 'transparent', // removes bottom border
-      backgroundColor: theme.colors.background.modalHeader,
+      backgroundColor: theme.colors.background.panelHeader,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.border.menuDivider,
     },
     headerTitleAlign: 'center',
     headerLeft: (props) => (
-      <CloseModalButton
+      <ClosePanelButton
         buttonText={t('cancel')}
         onPress={props.onPress}
-        buttonTextColor={'showAll'}
-        a11yHint={t('cancel.modalA11yHint')}
-        focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
+        buttonTextColor={'closePanel'}
+        a11yHint={t('cancel.panelA11yHint')}
+        focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on the panel
       />
     ),
     headerTitle: (header) => (

@@ -36,8 +36,8 @@ export const lightTheme = {
     warningTag: colors.gold,
     inactiveTag: colors.grayMedium,
     activeTag: colors.greenDarker,
-    modalHeader: colors.white,
     modalButton: colors.primaryAltLightest,
+    panelHeader: colors.white,
   },
   border: {
     primary: colors.grayLight,
@@ -127,6 +127,7 @@ export const lightTheme = {
     snackBarText: colors.white,
     showAll: colors.primary,
     statusDescription: colors.base,
+    closePanel: colors.primary,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -216,8 +217,8 @@ export const darkTheme = {
     warningTag: colors.gold,
     inactiveTag: colors.grayMedium,
     activeTag: colors.greenDarker,
-    modalHeader: colors.darkmodeGrayDark,
     modalButton: colors.darkmodeBorder,
+    panelHeader: colors.darkmodeGrayDark,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -305,6 +306,7 @@ export const darkTheme = {
     tabSelectorActive: colors.darkmodeLightBlue,
     showAll: colors.darkmodeLightBlue,
     statusDescription: colors.base,
+    closePanel: colors.darkmodeLightBlue,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
