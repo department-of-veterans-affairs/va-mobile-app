@@ -570,6 +570,111 @@
         },
         "id": "21142627",
         "type": "Prescription"
+      },
+      {
+        "id": "41142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "transferred",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "ZIDOVUDINE 1MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 15 DAYS"
+        }
+      },
+      {
+        "id": "52142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "discontinued",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB 1",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "ZIDOVUDINE 10MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 2 DAYS"
+        }
+      },
+      {
+        "id": "71142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "expired",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 Prime",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "ZIDOVUDINE 11MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "94142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "unknown",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "LAMIVUDINE 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 3 DAYS"
+        }
+      },
+      {
+        "id": "40142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "nonVerified",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 Lab",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "LAMIVUDINE 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 15 DAYS"
+        }
       }
     ],
     "meta": {
@@ -577,7 +682,7 @@
         "currentPage": 1,
         "perPage": 10000,
         "totalPages": 1,
-        "totalEntries": 27
+        "totalEntries": 32
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=3",

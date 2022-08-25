@@ -153,6 +153,35 @@ export const getStatusGlossaryTextForRefillStatus = (status: RefillStatus, t: TF
         text: t('statusGlossary.active.suspended'),
         a11yLabel: t('statusGlossary.active.suspended.a11yLabel'),
       }
+    case RefillStatusConstants.TRANSFERRED:
+      return {
+        text: t('statusGlossary.transferred'),
+        a11yLabel: t('statusGlossary.transferred.a11yLabel'),
+      }
+    case RefillStatusConstants.DISCONTINUED:
+    case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+    case RefillStatusConstants.DISCONTINUED_EDIT:
+      return {
+        text: t('statusGlossary.discontinued'),
+        a11yLabel: t('statusGlossary.discontinued.a11yLabel'),
+      }
+    case RefillStatusConstants.EXPIRED:
+      return {
+        text: t('statusGlossary.expired'),
+        a11yLabel: t('statusGlossary.expired.a11yLabel'),
+      }
+    case RefillStatusConstants.DELETED:
+    case RefillStatusConstants.UNKNOWN:
+      return {
+        text: t('statusGlossary.unknown'),
+        a11yLabel: t('statusGlossary.unknown.a11yLabel'),
+      }
+    case RefillStatusConstants.NON_VERIFIED: {
+      return {
+        text: t('statusGlossary.nonVerified'),
+        a11yLabel: t('statusGlossary.nonVerified.a11yLabel'),
+      }
+    }
     default:
       return {
         text: '',
