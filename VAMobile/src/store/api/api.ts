@@ -6,8 +6,6 @@ import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
 
-const SIS_ENABLED = featureEnabled('SIS')
-
 let _token: string | undefined
 let _refresh_token: string | undefined
 let refreshPromise: Promise<boolean> | undefined
@@ -61,7 +59,7 @@ const doRequest = async function (
     headers: {
       authorization: `Bearer ${_token}`,
       'X-Key-Inflection': 'camel',
-      ...(SIS_ENABLED ? { 'Authentication-Method': 'SIS' } : {}),
+      ...(featureEnabled('SIS') ? { 'Authentication-Method': 'SIS' } : {}),
     },
     ...({ signal: abortSignal } || {}),
   }
@@ -102,6 +100,8 @@ const call = async function <T>(
     let response
     let responseBody
 
+    const SISEnabled = featureEnabled('SIS')
+
     try {
       response = await doRequest(method, endpoint, params, contentType, abortSignal)
     } catch (networkError) {
@@ -113,13 +113,13 @@ const call = async function <T>(
       throw { networkError: true }
     }
 
-    if (SIS_ENABLED && response.status === 403) {
+    if (SISEnabled && response.status === 403) {
       responseBody = await response.json()
     }
 
-    const tokenExpired = SIS_ENABLED ? response.status === 403 && responseBody?.errors === 'Access token has expired' : response.status === 401
+    const accessTokenExpired = SISEnabled ? response.status === 403 && responseBody?.errors === 'Access token has expired' : response.status === 401
 
-    if (tokenExpired) {
+    if (accessTokenExpired) {
       console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
       // If the access token is expired, attempt to refresh it and redo the request
       if (!refreshPromise) {
@@ -130,7 +130,6 @@ const call = async function <T>(
       // Wait for the token refresh to complete and try the call again
       const didRefresh = await refreshPromise
       refreshPromise = undefined
-
       if (didRefresh) {
         console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
         try {

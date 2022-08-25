@@ -57,8 +57,6 @@ const {
   IS_TEST,
 } = getEnv()
 
-const SIS_ENABLED = featureEnabled('SIS')
-
 let inMemoryRefreshToken: string | undefined
 
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
@@ -296,7 +294,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  */
 const storeRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
   console.debug('storeRefreshToken')
-  if (SIS_ENABLED) {
+  if (featureEnabled('SIS')) {
     const splitToken = refreshToken.split('.')
     console.debug(splitToken)
     await Promise.all([
@@ -314,7 +312,7 @@ const storeRefreshToken = async (refreshToken: string, options: Keychain.Options
  */
 const retrieveRefreshToken = async (): Promise<string | undefined> => {
   console.debug('retrieveRefreshToken')
-  if (SIS_ENABLED) {
+  if (featureEnabled('SIS')) {
     const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
     const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
     return reconstructedToken
@@ -353,10 +351,10 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
   try {
     if (response.status < 200 || response.status > 399) {
       console.debug('processAuthResponse: non-200 response', response.status)
-      console.debug('processAuthResponse:', await response.json())
+      console.debug('processAuthResponse:', await response.text())
       throw Error(`${response.status}`)
     }
-    const authResponse = SIS_ENABLED ? ((await response.json())?.data as AuthCredentialData) : ((await response.json()) as AuthCredentialData)
+    const authResponse = featureEnabled('SIS') ? ((await response.json())?.data as AuthCredentialData) : ((await response.json()) as AuthCredentialData)
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
     // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
     // state is not uniformly supported on the token exchange request so may not be necessary
@@ -378,16 +376,17 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
 
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
+  const SISEnabled = featureEnabled('SIS')
   try {
     await CookieManager.clearAll()
-    const response = await fetch(SIS_ENABLED ? AUTH_SIS_TOKEN_REFRESH_URL : AUTH_IAM_TOKEN_EXCHANGE_URL, {
+    const response = await fetch(SISEnabled ? AUTH_SIS_TOKEN_REFRESH_URL : AUTH_IAM_TOKEN_EXCHANGE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: qs.stringify({
         refresh_token: refreshToken,
-        ...(!SIS_ENABLED
+        ...(!SISEnabled
           ? {
               grant_type: 'refresh_token',
               client_id: AUTH_IAM_CLIENT_ID,
@@ -434,14 +433,15 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
 export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
   try {
     await CookieManager.clearAll()
-    const response = await fetch(SIS_ENABLED ? AUTH_SIS_TOKEN_REFRESH_URL : AUTH_IAM_TOKEN_EXCHANGE_URL, {
+    const SISEnabled = featureEnabled('SIS')
+    const response = await fetch(SISEnabled ? AUTH_SIS_TOKEN_REFRESH_URL : AUTH_IAM_TOKEN_EXCHANGE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: qs.stringify({
         refresh_token: refreshToken,
-        ...(!SIS_ENABLED
+        ...(!SISEnabled
           ? {
               grant_type: 'refresh_token',
               client_id: AUTH_IAM_CLIENT_ID,
@@ -480,6 +480,7 @@ export const setBiometricsPreference =
   }
 
 export const logout = (): AppThunk => async (dispatch, getState) => {
+  const SISEnabled = featureEnabled('SIS')
   console.debug('logout: logging out')
   dispatch(dispatchStartLogout())
 
@@ -498,7 +499,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
 
   try {
     await CookieManager.clearAll()
-    const response = await fetch(SIS_ENABLED ? AUTH_SIS_REVOKE_URL : AUTH_IAM_REVOKE_URL, {
+    const response = await fetch(SISEnabled ? AUTH_SIS_REVOKE_URL : AUTH_IAM_REVOKE_URL, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -506,7 +507,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
       },
       body: qs.stringify({
         refresh_token: refreshToken,
-        ...(!SIS_ENABLED
+        ...(!SISEnabled
           ? {
               token,
               client_id: AUTH_IAM_CLIENT_ID,
@@ -616,11 +617,11 @@ export const handleTokenCallbackUrl =
   async (dispatch, getState) => {
     try {
       await logAnalyticsEvent(Events.vama_auth_completed())
+      const SISEnabled = featureEnabled('SIS')
       dispatch(dispatchStartAuthLogin(true))
-
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
-      const exchangeUrl = SIS_ENABLED ? AUTH_SIS_TOKEN_EXCHANGE_URL : AUTH_IAM_TOKEN_EXCHANGE_URL
+      const exchangeUrl = SISEnabled ? AUTH_SIS_TOKEN_EXCHANGE_URL : AUTH_IAM_TOKEN_EXCHANGE_URL
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', exchangeUrl, AUTH_IAM_CLIENT_ID, AUTH_IAM_CLIENT_SECRET)
       await CookieManager.clearAll()
@@ -633,7 +634,7 @@ export const handleTokenCallbackUrl =
           grant_type: 'authorization_code',
           code_verifier: getState().auth.codeVerifier,
           code,
-          ...(!SIS_ENABLED
+          ...(!SISEnabled
             ? {
                 client_id: AUTH_IAM_CLIENT_ID,
                 client_secret: AUTH_IAM_CLIENT_SECRET,
@@ -672,6 +673,7 @@ export const sendLoginStartAnalytics = (): AppThunk => async () => {
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
   await CookieManager.clearAll()
+  const SISEnabled = featureEnabled('SIS')
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.
@@ -680,7 +682,7 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
     code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
     application: 'vamobile',
     oauth: 'true',
-    ...(!SIS_ENABLED
+    ...(!SISEnabled
       ? {
           client_id: AUTH_IAM_CLIENT_ID,
           redirect_uri: AUTH_IAM_REDIRECT_URL,
@@ -692,7 +694,7 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
       : {}),
   })
 
-  const url = `${SIS_ENABLED ? AUTH_SIS_ENDPOINT : AUTH_IAM_ENDPOINT}?${params}`
+  const url = `${SISEnabled ? AUTH_SIS_ENDPOINT : AUTH_IAM_ENDPOINT}?${params}`
   dispatch(dispatchShowWebLogin(url))
 }
 
