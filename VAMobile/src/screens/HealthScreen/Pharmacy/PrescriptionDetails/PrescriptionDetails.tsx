@@ -24,7 +24,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const noneNoted = tc('noneNoted')
 
-  const { contentMarginTop, standardMarginBetween, contentMarginBottom } = theme.dimensions
+  const { contentMarginTop, contentMarginBottom } = theme.dimensions
 
   const { refillStatus, prescriptionName, instructions, refillRemaining, refillDate, quantity, facilityName, prescriptionNumber, expirationDate, orderedDate } =
     prescriptionsById[prescriptionId]?.attributes
@@ -53,11 +53,12 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
   return (
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <TextArea>
-          <RefillTag status={refillStatus} />
-          <TextView variant="BitterBoldHeading" mt={standardMarginBetween}>
-            {prescriptionName}
-          </TextView>
+        <RefillTag status={refillStatus} />
+        <TextArea noBorder={true}>
+          <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
+          <TextView color={'placeholder'} accessibilityLabel={prescriptionNumber ? prescriptionNumber.split('').join(' ') : noneNoted}>{`${t('prescription.prescriptionNumber')} ${
+            prescriptionNumber || noneNoted
+          }`}</TextView>
           <DetailsTextSections leftSectionTitle={t('prescription.details.instructionsHeader')} leftSectionValue={instructions || noneNoted} />
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.refillLeftHeader')}
@@ -79,11 +80,6 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
             <ClickForActionLink {...clickToCallProps} />
             <ClickForActionLink {...ttyProps} />
           </DetailsTextSections>
-          <DetailsTextSections
-            leftSectionTitle={t('prescription.details.rxNumberHeader')}
-            leftSectionValue={prescriptionNumber || noneNoted}
-            leftSectionValueLabel={prescriptionNumber ? prescriptionNumber.split('').join(' ') : noneNoted}
-          />
         </TextArea>
       </Box>
     </VAScrollView>
