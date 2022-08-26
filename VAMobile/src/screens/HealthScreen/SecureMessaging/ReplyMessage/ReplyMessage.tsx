@@ -42,7 +42,16 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
+import {
+  useAppDispatch,
+  useAttachments,
+  useBeforeNavBackListener,
+  useMessageWithSignature,
+  useOnOSBackEvent,
+  useRouteNavigation,
+  useTheme,
+  useValidateMessageWithSignature,
+} from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 
@@ -107,16 +116,24 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     })
   }, [dispatch, signature])
 
+  // useBeforeNavBackListener(navigation, (e) => {
+  //   if (validateMessage(messageReply)) {
+  //     e.preventDefault()
+  //     goToCancel()
+  //   } else {
+  //     navigation.goBack
+  //   }
+  // })
+
+  useOnOSBackEvent(navigation, (e) => {
+    e.preventDefault()
+    goToCancel()
+    return false
+  })
+
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.cancel}
-          showCarat={false}
-        />
-      ),
+      headerLeft: (props): ReactNode => <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
       headerRight: () => (
         <SaveButton
           onSave={() => {
