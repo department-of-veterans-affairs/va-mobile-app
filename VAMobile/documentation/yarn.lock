@@ -1688,7 +1688,7 @@
     fs-extra "^10.0.0"
     tslib "^2.3.1"
 
-"@docusaurus/types@2.0.0-beta.14", "@docusaurus/types@^2.0.0-beta.5":
+"@docusaurus/types@2.0.0-beta.14":
   version "2.0.0-beta.14"
   resolved "https://registry.yarnpkg.com/@docusaurus/types/-/types-2.0.0-beta.14.tgz#d9e1bae14a16ad96c51caaea3c5049eedbaed869"
   integrity sha512-1mVrVI0crwZrnjJJeUJUfBrwKdPJVsvh3E0I4pRG9Bo9dfeT8j3bj/GgjaKX4VYRFkDfsVPEpMfrVWujiWr4qQ==
@@ -4670,18 +4670,6 @@ docusaurus-plugin-redoc@^0.5.0:
     "@docusaurus/utils" "^2.0.0-beta.9"
     joi "^17.4.2"
     yaml "^1.10.0"
-
-docusaurus-plugin-relative-paths@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/docusaurus-plugin-relative-paths/-/docusaurus-plugin-relative-paths-1.0.0.tgz#a7ba960dde08c9d879f9c2fb38238e0f679cf93d"
-  integrity sha512-39Hbh8kqEZmLPms/SiBQgYVeclGH+DLwz3CxQuUjk1bQ58rdBaD+arQ6GxYE7qwCHO03YJ0QBXCs7ZCnn+RQiQ==
-  dependencies:
-    "@docusaurus/types" "^2.0.0-beta.5"
-    "@types/fs-extra" "^9.0.12"
-    "@types/recursive-readdir" "^2.2.0"
-    chalk "^4.1.2"
-    fs-extra "^10.0.0"
-    recursive-readdir "^2.2.2"
 
 docusaurus-theme-redoc@^0.5.0:
   version "0.5.0"
@@ -9205,11 +9193,6 @@ source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.0, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
-
-source-map@~0.7.2:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
-  integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
 sourcemap-codec@^1.4.4:
   version "1.4.8"
