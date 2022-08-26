@@ -479,3 +479,17 @@ export type AppointmentFlowFormDataType = {
   subTypeSelected?: TypeOfCareIdV2Types
   facilitySelected?: facilityTypeValueTypes
 } & Partial<AppointmentFlowDirectDataType & AppointmentFlowRequestDataType>
+
+export type FacilitiesFilterType = 'current' | 'home' | 'alphabetical' | 'appointments'
+
+export const FACILITY_FILTER: {
+  current: FacilitiesFilterType
+  home: FacilitiesFilterType
+  alphabetical: FacilitiesFilterType
+  appointments: FacilitiesFilterType
+} = {
+  home: 'home',
+  current: 'current',
+  alphabetical: 'alphabetical',
+  appointments: 'appointments',
+}
