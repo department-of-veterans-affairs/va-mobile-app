@@ -8,8 +8,9 @@ import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
+import { FeatureToggleType, featureEnabled, getFeatureToggles, toggleFeature } from 'utils/remoteConfig'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
+import { logout } from 'store/slices'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
@@ -89,6 +90,7 @@ const DebugScreen: FC = ({}) => {
             />
           </TextArea>
         </Box>
+
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
@@ -114,12 +116,32 @@ const DebugScreen: FC = ({}) => {
           </TextArea>
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextArea>
-              <TextView variant="MobileBodyBold">testFeature</TextView>
-              <TextView selectable>{featureEnabled('testFeature')?.toString()}</TextView>
-            </TextArea>
-          </Box>
+          {getFeatureToggles().map((key: string) => {
+            if (key === 'error') {
+              return null
+            }
+            const val = featureEnabled(key as FeatureToggleType).toString()
+            return (
+              <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
+                <TextArea>
+                  <TextView variant="MobileBodyBold">{key}</TextView>
+                  <TextView>{val}</TextView>
+                  {key === 'SIS' && (
+                    <Box mt={theme.dimensions.contentMarginTop}>
+                      <VAButton
+                        onPress={() => {
+                          toggleFeature('SIS')
+                          dispatch(logout())
+                        }}
+                        label={`${featureEnabled('SIS') ? 'Disable' : 'Enable'} SIS`}
+                        buttonType={ButtonTypesConstants.buttonPrimary}
+                      />
+                    </Box>
+                  )}
+                </TextArea>
+              </Box>
+            )
+          })}
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
