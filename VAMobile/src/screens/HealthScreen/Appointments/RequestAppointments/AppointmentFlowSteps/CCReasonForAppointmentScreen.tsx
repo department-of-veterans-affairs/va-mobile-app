@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmenFlowTextInputWithAlert, AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
+import { AppointmentFlowLayout, AppointmentFlowTextInputWithAlert, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
@@ -21,7 +21,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   const { gutter } = theme.dimensions
   const dispatch = useAppDispatch()
 
-  const navigateToPreferredLanguage = navigateTo('CCPreferredLanguageScreen')
+  const navigateToClosestCity = navigateTo('CCClosestCityScreen')
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { comment } = appointmentFlowFormData
@@ -36,7 +36,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   }
 
   const onContinue = () => {
-    navigateToPreferredLanguage()
+    navigateToClosestCity()
   }
 
   return (
@@ -51,7 +51,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
         text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
       />
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} />
-      <AppointmenFlowTextInputWithAlert
+      <AppointmentFlowTextInputWithAlert
         mx={gutter}
         inputType={'none'}
         inputLabel={t('requestAppointment.additionaldetailsTitle')}

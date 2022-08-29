@@ -4,7 +4,7 @@ import { Box, BoxProps, TextView, VATextInput, VATextInputTypes } from 'componen
 import { useTheme } from 'utils/hooks'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
-type AppointmenFlowTextInputWithAlertProps = BoxProps & {
+type AppointmentFlowTextInputWithAlertProps = BoxProps & {
   /** Type of the input. Will determine the keyboard used */
   inputType: VATextInputTypes
   /** The error message */
@@ -23,8 +23,8 @@ type AppointmenFlowTextInputWithAlertProps = BoxProps & {
   validationFunc?: () => void
 }
 
-// Coomon component for text input with an error alert for appointment request flow
-const AppointmenFlowTextInputWithAlert: FC<AppointmenFlowTextInputWithAlertProps> = ({
+// Common component for text input with an error alert for appointment request flow
+const AppointmentFlowTextInputWithAlert: FC<AppointmentFlowTextInputWithAlertProps> = ({
   inputType,
   errorMessage,
   value,
@@ -55,4 +55,4 @@ const AppointmenFlowTextInputWithAlert: FC<AppointmenFlowTextInputWithAlertProps
   )
 }
 
-export default AppointmenFlowTextInputWithAlert
+export default AppointmentFlowTextInputWithAlert

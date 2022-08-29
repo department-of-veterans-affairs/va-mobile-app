@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { AppointmenFlowTextInputWithAlert, AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
+import { AppointmentFlowLayout, AppointmentFlowTextInputWithAlert, AppointmentFlowTitleSection, AppointmentFlowWhiteCtaButton } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { Box, RadioGroup, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -88,7 +88,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
       <Box mb={contentMarginBottom}>
         <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={text} isRadioList={true} />
       </Box>
-      <AppointmenFlowTextInputWithAlert
+      <AppointmentFlowTextInputWithAlert
         mx={gutter}
         inputType={'none'}
         inputLabel={t('requestAppointment.additionaldetailsTitle')}

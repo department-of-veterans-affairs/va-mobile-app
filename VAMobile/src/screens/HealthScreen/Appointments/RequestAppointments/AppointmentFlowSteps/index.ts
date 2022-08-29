@@ -4,6 +4,8 @@ export { default as VAReasonForAppointmentScreen } from './VAReasonForAppointmen
 export * from './VAReasonForAppointmentScreen'
 export { default as CCReasonForAppointmentScreen } from './CCReasonForAppointmentScreen'
 export * from './CCReasonForAppointmentScreen'
+export { default as CCClosestCityScreen } from './CCClosestCityScreen'
+export * from './CCClosestCityScreen'
 export { default as TypeOfCareSelectionScreen } from './TypeOfCareSelectionScreen'
 export * from './TypeOfCareSelectionScreen'
 export { default as SubTypeOfCareSelectionScreen } from './SubTypeOfCareSelectionScreen'

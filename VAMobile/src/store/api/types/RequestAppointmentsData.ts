@@ -358,6 +358,7 @@ export const AVAILABLE_FOR_CC: Array<TypeOfCareIdV2Types> = ['primaryCare', 'opt
 
 export type UserVAEligibilityAttributes = {
   services: Array<UserVAEligibilityService>
+  ccSupported: Array<string>
 }
 export type UserVAEligibilityService = {
   name: TypeOfCareIdV2Types
