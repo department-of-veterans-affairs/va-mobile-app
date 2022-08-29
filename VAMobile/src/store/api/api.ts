@@ -1,8 +1,9 @@
 import { featureEnabled } from 'utils/remoteConfig'
-import { refreshAccessToken } from 'store/slices'
+import { logout, refreshAccessToken } from 'store/slices'
 import { transform } from './demo/store'
 import _ from 'underscore'
 import getEnv from 'utils/env'
+import store from 'store'
 
 const { API_ROOT } = getEnv()
 
@@ -142,6 +143,8 @@ const call = async function <T>(
           }
           throw { networkError: true }
         }
+      } else {
+        store.dispatch(logout())
       }
     }
     if (response.status === 204) {
