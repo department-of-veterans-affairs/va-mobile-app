@@ -1,11 +1,12 @@
 import { Box, BoxProps, TextView, VAIcon, VAIconProps } from 'components'
+import { Pressable, PressableProps } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { RefillStatus, RefillStatusConstants } from 'store/api/types'
-import { getTextForRefillStatus } from 'utils/prescriptions'
-import { useTheme } from 'utils/hooks'
+import { RefillStatus } from 'store/api/types'
+import { getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type RefillTagProps = {
   status: RefillStatus
@@ -14,81 +15,46 @@ export type RefillTagProps = {
 const RefillTag: FC<RefillTagProps> = ({ status }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const navigateTo = useRouteNavigation()
+
+  const statusText = getTextForRefillStatus(status, t)
 
   const infoIconProps: VAIconProps = {
     name: 'InfoIcon',
-    fill: 'infoIcon',
+    fill: 'statusInfoIcon',
     height: 16,
     width: 16,
     ml: 10,
   }
 
-  const getTextColor = () => {
-    switch (status) {
-      case RefillStatusConstants.DELETED:
-      case RefillStatusConstants.DISCONTINUED:
-      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-      case RefillStatusConstants.DISCONTINUED_EDIT:
-      case RefillStatusConstants.EXPIRED:
-      case RefillStatusConstants.UNKNOWN:
-      case RefillStatusConstants.ACTIVE:
-      case RefillStatusConstants.REFILL_IN_PROCESS:
-      case RefillStatusConstants.TRANSFERRED:
-        return 'primaryContrast'
-      case RefillStatusConstants.HOLD:
-      case RefillStatusConstants.PROVIDER_HOLD:
-      case RefillStatusConstants.SUSPENDED:
-      case RefillStatusConstants.ACTIVE_PARKED:
-      case RefillStatusConstants.NON_VERIFIED:
-      case RefillStatusConstants.SUBMITTED:
-        return 'primary'
-      default:
-        return 'primary'
-    }
-  }
-
-  const getTagColor = () => {
-    switch (status) {
-      case RefillStatusConstants.ACTIVE:
-        return 'tagActive'
-      case RefillStatusConstants.DELETED:
-      case RefillStatusConstants.DISCONTINUED:
-      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-      case RefillStatusConstants.DISCONTINUED_EDIT:
-      case RefillStatusConstants.EXPIRED:
-      case RefillStatusConstants.UNKNOWN:
-      case RefillStatusConstants.TRANSFERRED:
-        return 'tagExpired'
-      case RefillStatusConstants.HOLD:
-      case RefillStatusConstants.PROVIDER_HOLD:
-      case RefillStatusConstants.SUSPENDED:
-      case RefillStatusConstants.ACTIVE_PARKED:
-      case RefillStatusConstants.NON_VERIFIED:
-      case RefillStatusConstants.SUBMITTED:
-        return 'tagSuspended'
-      case RefillStatusConstants.REFILL_IN_PROCESS:
-        return 'tagInProgress'
-    }
+  const pressableProps: PressableProps = {
+    onPress: navigateTo('StatusGlossary', { display: statusText, value: status }),
+    accessible: true,
+    accessibilityRole: 'button',
+    accessibilityHint: t('prescription.history.a11yHint.top'),
   }
 
   const tagBoxProps: BoxProps = {
-    minWidth: theme.dimensions.tagMinWidth,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignSelf: 'flex-start',
-    borderRadius: 4,
-    backgroundColor: getTagColor(),
+    backgroundColor: getTagColorForStatus(status),
     alignItems: 'center',
+    flexDirection: 'row',
+    flex: 1,
+    width: '100%',
+    height: 42,
+    px: theme.dimensions.gutter,
   }
 
   return (
-    <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+    <Pressable {...pressableProps}>
       <Box {...tagBoxProps}>
-        <TextView variant={'MobileBodyBold'} color={getTextColor()} flexWrap={'wrap'} px={10} pt={3}>
-          {getTextForRefillStatus(status, t)?.toUpperCase()}
+        <TextView variant={'HelperText'} flexWrap={'wrap'} pt={3}>
+          {statusText}
         </TextView>
+        <VAIcon {...infoIconProps} />
       </Box>
-      <VAIcon {...infoIconProps} />
-    </Box>
+    </Pressable>
   )
 }
 

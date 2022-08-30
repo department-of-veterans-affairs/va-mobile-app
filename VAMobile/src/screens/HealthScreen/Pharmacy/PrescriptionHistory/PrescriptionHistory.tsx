@@ -241,7 +241,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
       let cardProps: MultiTouchCardProps = {
         topOnPress: navigateTo('StatusGlossary', { display: refillStatusText, value: refillStatus }),
-        topText: getTextForRefillStatus(refillStatus, t),
+        topText: refillStatusText,
         topBackgroundColor: getTagColorForStatus(refillStatus),
         topTextColor: 'statusDescription',
         topIconColor: 'statusInfoIcon',
