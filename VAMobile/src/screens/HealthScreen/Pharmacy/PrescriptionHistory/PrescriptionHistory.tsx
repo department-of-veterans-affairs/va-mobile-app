@@ -1,6 +1,6 @@
+import { Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native'
 import { ReactNode, useEffect, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
-import { StyleProp, ViewStyle } from 'react-native'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -124,7 +124,7 @@ const filterOptions = {
 
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
-const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ route }) => {
+const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const { filteredPrescriptions: prescriptions, loadingHistory, tabCounts, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -149,6 +149,24 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ route }) => {
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
   const [currentTab, setCurrentTab] = useState<string>(startingTab || PrescriptionHistoryTabConstants.ALL)
+
+  const pressableProps: PressableProps = {
+    onPress: navigateTo('PrescriptionHelp'),
+    accessibilityRole: 'button',
+    accessibilityLabel: t('prescription.help.button.a11yLabel'),
+  }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: (): ReactNode => (
+        <Pressable {...pressableProps}>
+          <Box px={23} height={theme.dimensions.headerHeight} justifyContent={'center'}>
+            <VAIcon preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} />
+          </Box>
+        </Pressable>
+      ),
+    })
+  })
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)

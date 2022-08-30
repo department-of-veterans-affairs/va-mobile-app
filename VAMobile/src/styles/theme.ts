@@ -96,6 +96,7 @@ export type VAIconColors = {
   defaultMenuItem: string
   statusInfoIcon: string
   infoIcon: string
+  prescriptionHelper: string
 }
 
 export type VATypographyThemeVariants = {

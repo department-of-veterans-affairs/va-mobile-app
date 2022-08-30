@@ -7,8 +7,8 @@ import PrescriptionHistory from './PrescriptionHistory'
 import { ReactTestInstance } from 'react-test-renderer'
 
 import {PrescriptionsGetData} from 'store/api'
-import {initialAuthState, initialPrescriptionState, InitialState} from "../../../../store/slices";
-import {TextView} from "../../../../components";
+import { initialAuthState, initialPrescriptionState, InitialState} from 'store/slices'
+import { TextView } from 'components'
 
 const prescriptionData: PrescriptionsGetData = {
   data: [
@@ -224,7 +224,9 @@ context('PrescriptionHistory', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = () => {
-    const props = mockNavProps(undefined, undefined, { params: { } })
+  const props = mockNavProps(undefined, {
+      setOptions: jest.fn(),
+    }, { params: { } })
 
 
     component = render(<PrescriptionHistory {...props} />, { preloadedState: {

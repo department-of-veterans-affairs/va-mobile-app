@@ -95,6 +95,7 @@ export const lightTheme = {
     buttonWithIcon: colors.black,
     infoIcon: colors.grayMedium,
     statusInfoIcon: colors.base,
+    prescriptionHelper: colors.white,
   },
   text: {
     footerButton: colors.primary,
@@ -276,6 +277,7 @@ export const darkTheme = {
     buttonWithIcon: colors.grayLightest,
     infoIcon: colors.grayLight,
     statusInfoIcon: colors.base,
+    prescriptionHelper: colors.darkmodeLightBlue,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,

@@ -18,6 +18,7 @@ import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointm
 import PharmacyScreen from './Pharmacy'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
+import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
@@ -118,6 +119,7 @@ export type HealthStackParamList = WebviewStackParams & {
     display: string
     value: RefillStatus
   }
+  PrescriptionHelp: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -165,6 +167,12 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       name="RefillTrackingModal"
       component={RefillTrackingModal}
       options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescriptions.refillTracking.pageHeaderTitle') }}
+    />,
+    <HealthStack.Screen
+      key={'PrescriptionHelp'}
+      name="PrescriptionHelp"
+      component={PrescriptionHelp}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescription.help.title') }}
     />,
     <HealthStack.Screen
       key={'StatusGlossary'}
