@@ -7,14 +7,14 @@ import PrescriptionDetails from './PrescriptionDetails'
 import { ReactTestInstance } from 'react-test-renderer'
 import { initialAuthState } from 'store/slices'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
-import { ClickForActionLink, TextView } from 'components'
-import { PrescriptionAttributeData } from 'store/api'
+import { ClickForActionLink, FooterButton, TextView} from 'components'
+import { PrescriptionAttributeData, RefillStatus, RefillStatusConstants } from 'store/api/types'
 
 context('PrescriptionDetails', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {} ) => {
+  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}, refillStatus: RefillStatus = RefillStatusConstants.ACTIVE ) => {
     const props = mockNavProps(undefined, undefined, { params: { prescriptionId: '13650544' } })
 
     component = render(<PrescriptionDetails {...props} />, {
@@ -27,7 +27,7 @@ context('PrescriptionDetails', () => {
               type: 'Prescription',
               id: '13650544',
               attributes: {
-                refillStatus: 'active',
+                refillStatus: refillStatus,
                 refillSubmitDate: '2022-10-28T04:00:00.000Z',
                 refillDate: '2022-10-28T04:00:00.000Z',
                 refillRemaining: 5,
@@ -103,6 +103,26 @@ context('PrescriptionDetails', () => {
       expect(texts[14].props.children).toEqual('None noted')
       expect(texts[15].props.children).toEqual('VA facility')
       expect(texts[16].props.children).toEqual('None noted')
+    })
+  })
+
+  describe('Go to My VA Health button', () => {
+    describe('when status is RefillStatusConstants.TRANSFERRED', () => {
+      it('should display FooterButton', async () => {
+        initializeTestInstance({}, RefillStatusConstants.TRANSFERRED)
+
+        const collapsibleAlert = testInstance.findAllByType(FooterButton)
+        expect(collapsibleAlert.length).toBe(1)
+      })
+    })
+
+    describe('when status is RefillStatusConstants.TRANSFERRED', () => {
+      it('should not display FooterButton', async () => {
+        initializeTestInstance()
+
+        const collapsibleAlert = testInstance.findAllByType(FooterButton)
+        expect(collapsibleAlert.length).toBe(0)
+      })
     })
   })
 })
