@@ -113,6 +113,7 @@ const call = async function <T>(
       throw { networkError: true }
     }
 
+    // For SIS, a 403 alone doesn't indicate that the token has expired. We also need to check the response body for a specific message.
     if (SISEnabled && response.status === 403) {
       responseBody = await response.json()
     }
