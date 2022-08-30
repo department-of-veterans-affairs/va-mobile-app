@@ -506,7 +506,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: qs.stringify({
-        refresh_token: refreshToken,
         ...(!SISEnabled
           ? {
               token,
@@ -514,9 +513,12 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
               client_secret: AUTH_IAM_CLIENT_SECRET,
               redirect_uri: AUTH_IAM_REDIRECT_URL,
             }
-          : {}),
+          : {
+              refresh_token: refreshToken,
+            }),
       }),
     })
+    debugger
     console.debug('logout:', response.status)
     console.debug('logout:', await response.text())
   } catch (err) {
