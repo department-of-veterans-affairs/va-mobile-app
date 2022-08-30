@@ -518,7 +518,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
             }),
       }),
     })
-    debugger
     console.debug('logout:', response.status)
     console.debug('logout:', await response.text())
   } catch (err) {
