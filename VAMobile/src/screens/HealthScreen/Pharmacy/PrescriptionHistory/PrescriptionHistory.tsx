@@ -481,11 +481,11 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
 
     const linkProps: LinkButtonProps = {
-      displayedText: t('cernerAlert.goToMyVAHealth'),
+      displayedText: tc('goToMyVAHealth'),
       linkType: LinkTypeOptionsConstants.externalLink,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      accessibilityLabel: t('cernerAlert.goToMyVAHealth'),
+      accessibilityLabel: tc('goToMyVAHealth'),
     }
 
     const props: CollapsibleAlertProps = {
