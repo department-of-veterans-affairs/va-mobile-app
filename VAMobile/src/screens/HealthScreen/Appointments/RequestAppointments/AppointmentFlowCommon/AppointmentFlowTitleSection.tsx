@@ -7,6 +7,8 @@ import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 type AppointmentModalTitleSectionProps = {
   /** title text */
   title: string
+  /** Optional accessibility label for the title */
+  titleA11yLabel?: string
   /** Optional text that will appear under title*/
   extraInformationText?: string
   /** Optional text for the error alert */
@@ -18,7 +20,7 @@ type AppointmentModalTitleSectionProps = {
 /** Common component for the appointment request modal title section.
  * Will show title, optional extra information text, and an optional error alert.
  * */
-const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, errorMessage, titleMarginBottom }) => {
+const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, errorMessage, titleMarginBottom, titleA11yLabel }) => {
   const theme = useTheme()
   const { gutter, standardMarginBetween, condensedMarginBetween, contentMarginBottom } = theme.dimensions
   const error = !!errorMessage
@@ -28,6 +30,7 @@ const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ ti
       <TextView
         mx={gutter}
         variant={'BitterBoldHeading'}
+        accessibilityLabel={titleA11yLabel}
         accessibilityRole={'header'}
         mb={titleMarginBottom ? titleMarginBottom : !extraInformationText && !error ? contentMarginBottom : 0}>
         {title}

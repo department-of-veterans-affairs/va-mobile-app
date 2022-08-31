@@ -189,6 +189,7 @@ const isValidAttachmentsFileType = (fileType: string): boolean => {
  */
 export const onFileFolderSelect = async (
   setError: (error: string) => void,
+  setErrorA11y: (errorA11y: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
   fileUris: Array<string>,
@@ -213,8 +214,10 @@ export const onFileFolderSelect = async (
       setError(t('secureMessaging.attachments.fileTypeError'))
     } else if (size > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
       setError(t('secureMessaging.attachments.fileSizeError'))
+      setErrorA11y(t('secureMessaging.attachments.fileSizeError.A11yLabel'))
     } else if (size + totalBytesUsed > MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES) {
       setError(t('secureMessaging.attachments.fileSumSizeError'))
+      setErrorA11y(t('secureMessaging.attachments.fileSumSizeError.A11yLabel'))
     } else {
       setError('')
       callbackIfUri(document, false)
@@ -248,6 +251,7 @@ export const onFileFolderSelect = async (
 export const postCameraOrImageLaunchOnFileAttachments = (
   response: ImagePickerResponse,
   setError: (error: string) => void,
+  setErrorA11y: (errorA11y: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
   imageBase64s: Array<string>,
@@ -266,8 +270,10 @@ export const postCameraOrImageLaunchOnFileAttachments = (
     setError(t('secureMessaging.attachments.fileTypeError'))
   } else if (!!fileSize && fileSize > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
     setError(t('secureMessaging.attachments.fileSizeError'))
+    setErrorA11y(t('secureMessaging.attachments.fileSizeError.A11yLabel'))
   } else if (!!fileSize && fileSize + totalBytesUsed > MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES) {
     setError(t('secureMessaging.attachments.fileSumSizeError'))
+    setErrorA11y(t('secureMessaging.attachments.fileSumSizeError.A11yLabel'))
   } else if (errorMessage) {
     setError(errorMessage)
   } else {
@@ -297,6 +303,7 @@ export const onAddFileAttachments = (
   t: TFunction,
   showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
   setError: (error: string) => void,
+  setErrorA11y: (errorA11y: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
   fileUris: Array<string>,
@@ -315,7 +322,7 @@ export const onAddFileAttachments = (
           launchCamera(
             { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
             (response: ImagePickerResponse): void => {
-              postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
+              postCameraOrImageLaunchOnFileAttachments(response, setError, setErrorA11y, callbackIfUri, totalBytesUsed, imageBase64s, t)
             },
           )
           break
@@ -323,12 +330,12 @@ export const onAddFileAttachments = (
           launchImageLibrary(
             { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
             (response: ImagePickerResponse): void => {
-              postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
+              postCameraOrImageLaunchOnFileAttachments(response, setError, setErrorA11y, callbackIfUri, totalBytesUsed, imageBase64s, t)
             },
           )
           break
         case 2:
-          onFileFolderSelect(setError, callbackIfUri, totalBytesUsed, fileUris, t)
+          onFileFolderSelect(setError, setErrorA11y, callbackIfUri, totalBytesUsed, fileUris, t)
           break
       }
     },

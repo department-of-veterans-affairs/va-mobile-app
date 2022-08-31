@@ -34,6 +34,7 @@
 		"global.d.ts",
 		"react-i18next.d.ts",
 		"src",
-		"__tests__"
+		"__tests__",
+		"e2e"
 	]
 }

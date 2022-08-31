@@ -12,6 +12,7 @@ import {
   FacilityTypeSelectionScreen,
   SubTypeOfCareSelectionScreen,
   TypeOfCareSelectionScreen,
+  VAFacilitiesScreen,
   VAReasonForAppointmentScreen,
   VisitTypeSelectionScreen,
 } from './AppointmentFlowSteps'
@@ -34,6 +35,7 @@ export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   EmergencyAndCrisisScreen: undefined
   CCPreferredLanguageScreen: undefined
   ConfirmContactScreen: undefined
+  VAFacilitiesScreen: undefined
 }
 
 type RequestAppointmentScreenProps = StackScreenProps<HealthStackParamList, 'RequestAppointmentScreen'>
@@ -109,6 +111,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
       <Stack.Screen name="VisitTypeSelectionScreen" component={VisitTypeSelectionScreen} />
       <Stack.Screen name="CCPreferredLanguageScreen" component={CCPreferredLanguageScreen} />
       <Stack.Screen name="ConfirmContactScreen" component={ConfirmContactScreen} />
+      <Stack.Screen name="VAFacilitiesScreen" component={VAFacilitiesScreen} />
     </Stack.Navigator>
   )
 }

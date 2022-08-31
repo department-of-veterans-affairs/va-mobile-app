@@ -1,0 +1,52 @@
+import 'react-native'
+import React from 'react'
+// Note: test renderer must be required after react-native.
+import 'jest-styled-components'
+import { Pressable } from 'react-native'
+import { ReactTestInstance } from 'react-test-renderer'
+import Mock = jest.Mock
+
+import { context, render, RenderAPI, waitFor } from 'testUtils'
+import {TextLine} from "./types";
+import MultiTouchCard, {MultiTouchCardProps} from "./MultiTouchCard";
+import {TextLines} from "./TextLines";
+
+context('MultiTouchCard', () => {
+  let component: RenderAPI
+  let testInstance: ReactTestInstance
+  let onPressSpy: Mock
+
+  beforeEach(() => {
+    onPressSpy = jest.fn(() => {})
+
+    const middleTextLines: Array<TextLine> = [
+      { text: 'line 1', variant: 'MobileBodyBold' },
+      {
+        text: 'line 2',
+      },
+    ]
+
+    const bottomText: Array<TextLine> = [{ text: 'bottom line 1', variant: 'MobileBodyBold' }]
+
+    const props: MultiTouchCardProps = {
+      topText: 'top part',
+      topTextColor: 'primaryContrast',
+      a11yValue: 'Prescription 1 of 1',
+      topA11yHint: 'Review status definition',
+      topIconColor: 'infoIconContrast',
+      middleContent: <TextLines listOfText={middleTextLines} />,
+      middleA11yHint: 'Review prescription details',
+      topBackgroundColor: 'completedPhase',
+      bottomContent: <TextLines listOfText={bottomText} />,
+      bottomA11yHint: 'Review tracking details',
+    }
+
+    component = render(<MultiTouchCard {...props} />)
+
+    testInstance = component.container
+  })
+
+  it('initializes correctly', async () => {
+    expect(component).toBeTruthy()
+  })
+})

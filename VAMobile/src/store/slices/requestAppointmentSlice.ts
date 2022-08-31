@@ -1,6 +1,6 @@
 import * as api from 'store/api'
 import { AppThunk } from 'store'
-import { AppointmentFlowFormDataType, ScreenIDTypes, UserCCEligibilityAttributes, UserFacilityInfo, UserVAEligibilityService } from 'store/api'
+import { AppointmentFlowFormDataType, FacilitiesFilterType, ScreenIDTypes, UserCCEligibilityAttributes, UserFacilityInfo, UserVAEligibilityService } from 'store/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { filter } from 'underscore'
@@ -88,14 +88,14 @@ export const getUserCommunityCareEligibility =
 
 // Retreives facilities info for a given user. The sort values are "current" "home" "alphabetical" "appointments"
 export const getUserFacilities =
-  (screenID?: ScreenIDTypes): AppThunk =>
+  (sortBy: FacilitiesFilterType, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getUserFacilities(screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getUserFacilities(sortBy, screenID))))
 
     try {
       dispatch(dispatchStartGetUserFacilities())
-      const facilities = await api.get<api.UserFacilitiesData>('/v0/facilities-info/home')
+      const facilities = await api.get<api.UserFacilitiesData>(`/v0/facilities-info/${sortBy}`)
 
       dispatch(dispatchFinishGetUserFacilities({ facilities: facilities?.data.attributes.facilities }))
     } catch (error) {
