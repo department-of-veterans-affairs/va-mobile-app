@@ -36,6 +36,7 @@ export type PrescriptionState = {
   processingPrescriptions?: PrescriptionsList
   shippedPrescriptions?: PrescriptionsList
   filteredPrescriptions?: PrescriptionsList
+  transferredPrescriptions?: PrescriptionsList
   prescriptionPagination: PrescriptionsPaginationData
   error?: api.APIError
   prescriptionsById: PrescriptionsMap
@@ -326,6 +327,7 @@ const prescriptionSlice = createSlice({
       const prescriptionsById: PrescriptionsMap = {}
       const processingPrescriptions: PrescriptionData[] = []
       const shippedPrescriptions: PrescriptionData[] = []
+      const transferredPrescriptions: PrescriptionData[] = []
 
       prescriptions.forEach((prescription) => {
         prescriptionsById[prescription.id] = prescription
@@ -337,12 +339,17 @@ const prescriptionSlice = createSlice({
         if (prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS || prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED) {
           processingPrescriptions.push(prescription)
         }
+
+        if (prescription.attributes.refillStatus === RefillStatusConstants.TRANSFERRED) {
+          transferredPrescriptions.push(prescription)
+        }
       })
 
       state.prescriptions = prescriptions
       state.filteredPrescriptions = prescriptions
       state.processingPrescriptions = processingPrescriptions
       state.shippedPrescriptions = shippedPrescriptions
+      state.transferredPrescriptions = transferredPrescriptions
 
       state.loadingHistory = false
       state.prescriptionPagination = { ...meta?.pagination }
