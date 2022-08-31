@@ -27,7 +27,6 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
   const launchExternalLink = useExternalLink()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
   const noneNoted = tc('noneNoted')
 
   const { contentMarginTop, contentMarginBottom } = theme.dimensions
