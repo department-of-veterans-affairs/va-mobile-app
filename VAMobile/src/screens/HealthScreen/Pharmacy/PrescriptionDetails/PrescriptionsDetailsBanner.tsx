@@ -3,23 +3,13 @@ import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-type PrescriptionsDetailsBannerProps = {
-  /** status of prescription aka refillStatus */
-  status: RefillStatus
-}
-
-const PrescriptionsDetailsBanner: FC<PrescriptionsDetailsBannerProps> = ({ status }) => {
+const PrescriptionsDetailsBanner: FC = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-
-  if (status !== RefillStatusConstants.TRANSFERRED) {
-    return <></>
-  }
 
   const { contentMarginTop, standardMarginBetween } = theme.dimensions
 

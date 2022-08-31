@@ -9,6 +9,7 @@ import { initialAuthState } from 'store/slices'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
 import { ClickForActionLink, FooterButton, TextView} from 'components'
 import { PrescriptionAttributeData, RefillStatus, RefillStatusConstants } from 'store/api/types'
+import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 context('PrescriptionDetails', () => {
   let component: RenderAPI
@@ -111,18 +112,37 @@ context('PrescriptionDetails', () => {
       it('should display FooterButton', async () => {
         initializeTestInstance({}, RefillStatusConstants.TRANSFERRED)
 
-        const collapsibleAlert = testInstance.findAllByType(FooterButton)
-        expect(collapsibleAlert.length).toBe(1)
+        const footerButton = testInstance.findAllByType(FooterButton)
+        expect(footerButton.length).toBe(1)
       })
     })
 
-    describe('when status is RefillStatusConstants.TRANSFERRED', () => {
+    describe('when status is not RefillStatusConstants.TRANSFERRED', () => {
       it('should not display FooterButton', async () => {
         initializeTestInstance()
 
-        const collapsibleAlert = testInstance.findAllByType(FooterButton)
-        expect(collapsibleAlert.length).toBe(0)
+        const footerButton = testInstance.findAllByType(FooterButton)
+        expect(footerButton.length).toBe(0)
       })
     })
+  })
+
+  describe('PrescriptionDetailsBanner', () => {
+    describe('when status is RefillStatusConstants.TRANSFERRED', () => {
+      it('should display the PrescriptionsDetailsBanner', async () => {
+        initializeTestInstance({}, RefillStatusConstants.TRANSFERRED)
+
+        const prescriptionsDetailsBanner = testInstance.findAllByType(PrescriptionsDetailsBanner)
+        expect(prescriptionsDetailsBanner.length).toBe(1)
+      })
+    })
+
+    describe('when status is not RefillStatusConstants.TRANSFERRED', () => {})
+      it('should not display the PrescriptionsDetailsBanner', async () => {
+        initializeTestInstance()
+
+        const prescriptionsDetailsBanner = testInstance.findAllByType(PrescriptionsDetailsBanner)
+        expect(prescriptionsDetailsBanner.length).toBe(0)
+      })
   })
 })

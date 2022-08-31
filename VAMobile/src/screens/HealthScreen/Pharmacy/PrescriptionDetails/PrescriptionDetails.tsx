@@ -63,6 +63,14 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
     return <FooterButton {...footerButtonProps} />
   }
 
+  const getBanner = () => {
+    if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
+      return <></>
+    }
+
+    return <PrescriptionsDetailsBanner />
+  }
+
   const lastRefilledDateFormatted = getDate(refillDate)
   const expireDateFormatted = getDate(expirationDate)
   const dateOrderedFormatted = getDate(orderedDate)
@@ -70,7 +78,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
   return (
     <>
       <VAScrollView>
-        <PrescriptionsDetailsBanner status={refillStatus} />
+        {getBanner()}
         <Box mt={contentMarginTop} mb={contentMarginBottom}>
           <RefillTag status={refillStatus} />
           <TextArea noBorder={true}>
