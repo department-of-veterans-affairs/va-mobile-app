@@ -8,7 +8,6 @@ export type APIError = {
   status?: number
   text?: string
   networkError?: boolean
-  sessionExpired?: boolean
   json?: {
     errors: Array<{
       title: string
