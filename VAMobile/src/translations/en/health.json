@@ -212,6 +212,7 @@
   "requestAppointment.typeOfCareNotListedFindfVaLinkLabel": "Find a V-A location",
   "requestAppointment.typeOfCareNotSelectedError": "Please choose a type of care",
   "requestAppointment.visitTypeNotSelectedError": "Please choose a type of appointment",
+  "requestAppointment.whatIsClosestCity": "What is the closest city to you?",
   "requestAppointment.whatTypeOfCare": "What type of care do you need?",
   "requestAppointment.whatSubTypeOfCare": "Which type of {{ subTypeName }} do you need?",
   "requestAppointment.whatSubTypeOfCareNotSelectedError": "Please choose a type of {{ subTypeName }}",

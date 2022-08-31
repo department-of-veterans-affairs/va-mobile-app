@@ -15,7 +15,6 @@ type CCClosestCityScreen = StackScreenProps<AppointmentFlowModalStackParamList, 
 
 const CCClosestCityScreen: FC<CCClosestCityScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
   const { userFacilities, ccSupportedFacilities } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const navigateTo = useRouteNavigation()
   const [selectedCity, setSelectedCity] = useState<string>()
@@ -49,9 +48,8 @@ const CCClosestCityScreen: FC<CCClosestCityScreen> = ({ navigation }) => {
         navigation.goBack()
       }}
       secondActionButtonPress={onContinue}>
-      <AppointmentFlowTitleSection title={'Select City TEMP TEMP'} />
-      {/* t('requestAppointment.whatReasonForCare') */}
-      <RadioGroup options={getClosestCityOptions()} onChange={onCitySelectionChanged} value={selectedCity} />
+      <AppointmentFlowTitleSection title={t('requestAppointment.whatIsClosestCity')} />
+      <RadioGroup options={getClosestCityOptions()} onChange={onCitySelectionChanged} value={selectedCity} isRadioList={true} />
     </AppointmentFlowLayout>
   )
 }
