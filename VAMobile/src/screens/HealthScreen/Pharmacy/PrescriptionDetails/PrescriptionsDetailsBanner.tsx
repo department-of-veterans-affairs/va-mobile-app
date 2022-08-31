@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RefillStatus, RefillStatusConstants } from 'store/api/types'
-import { getNumberAccessibilityLabelFromString } from '../../../../utils/formattingUtils'
+import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type PrescriptionsDetailsBannerProps = {
