@@ -40,7 +40,6 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
     backgroundColor: getTagColorForStatus(status),
     alignItems: 'center',
     flexDirection: 'row',
-    flex: 1,
     width: '100%',
     height: 42,
     px: theme.dimensions.gutter,
