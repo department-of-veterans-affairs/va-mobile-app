@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, FooterButton, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, FooterButton, FooterButtonProps, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState } from 'store/slices/prescriptionSlice'
@@ -39,19 +39,6 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
     return date ? DateTime.fromISO(date).toUTC().toFormat('MM/dd/yyyy') : noneNoted
   }
 
-  const clickToCallProps: LinkButtonProps = {
-    displayedText: tc('8773270022.displayText'),
-    numberOrUrlLink: tc('8773270022'),
-    linkType: LinkTypeOptionsConstants.call,
-  }
-
-  const ttyProps: LinkButtonProps = {
-    displayedText: th('contactVA.tty.displayText'),
-    linkType: LinkTypeOptionsConstants.callTTY,
-    numberOrUrlLink: th('contactVA.tty.number'),
-    accessibilityLabel: th('contactVA.tty.number.a11yLabel'),
-  }
-
   const redirectLink = (): void => {
     launchExternalLink(LINK_URL_GO_TO_PATIENT_PORTAL)
   }
@@ -60,8 +47,21 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
       return <></>
     }
-
-    return <FooterButton text={tc('goToMyVAHealth')} testID={tc('goToMyVAHealth.a11yLabel')} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={redirectLink} />
+    const footerButtonProps: FooterButtonProps = {
+      text: tc('goToMyVAHealth'),
+      testID: tc('goToMyVAHealth.a11yLabel'),
+      backGroundColor: 'buttonPrimary',
+      textColor: 'navBar',
+      onPress: redirectLink,
+      iconProps: {
+        name: 'WebviewOpen',
+        height: 15,
+        width: 15,
+        fill: 'navBar',
+        preventScaling: true,
+      },
+    }
+    return <FooterButton {...footerButtonProps} />
   }
 
   const lastRefilledDateFormatted = getDate(refillDate)
@@ -97,8 +97,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
               leftSectionTitle={t('prescription.details.vaFacilityHeader')}
               leftSectionValue={facilityName || noneNoted}
               leftSectionTitleLabel={t('prescription.details.vaFacilityHeaderLabel')}>
-              <ClickForActionLink {...clickToCallProps} />
-              <ClickForActionLink {...ttyProps} />
+              <ClickToCallPhoneNumber phone={tc('8773270022')} displayedText={tc('8773270022.displayText')} />
             </DetailsTextSections>
           </TextArea>
         </Box>
