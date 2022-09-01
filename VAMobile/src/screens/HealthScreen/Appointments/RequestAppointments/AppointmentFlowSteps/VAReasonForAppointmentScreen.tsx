@@ -30,7 +30,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const [noReasonSelectedError, setNoReasonSelectedError] = useState('')
   const [noDetailsAddedError, setNoDetailsAddedError] = useState('')
 
-  const navigateToVisitType = navigateTo('VisitTypeSelectionScreen')
+  const navigateToFacilities = navigateTo('VAFacilitiesScreen')
 
   const onSetSelectedReason = (type: string): void => {
     if (type) {
@@ -68,7 +68,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
     }
 
     if (text && comment) {
-      navigateToVisitType()
+      navigateToFacilities()
     }
   }
 

@@ -36,6 +36,7 @@ export const lightTheme = {
     warningTag: colors.gold,
     inactiveTag: colors.grayMedium,
     activeTag: colors.greenDarker,
+    panelHeader: colors.white,
   },
   border: {
     primary: colors.grayLight,
@@ -53,6 +54,8 @@ export const lightTheme = {
     confirmation: colors.goldLight,
     footerButton: colors.grayLight,
     menuDivider: colors.grayLight,
+    tabSelectorInactive: colors.grayLight,
+    tabSelectorActive: colors.primary,
   },
   icon: {
     footerButton: colors.primary,
@@ -84,6 +87,8 @@ export const lightTheme = {
     unreadMessage: colors.primary,
     veteransCrisisLineArrow: colors.grayLightest,
     snackBarIcon: colors.grayLighter,
+    infoIcon: colors.grayMedium,
+    infoIconContrast: colors.grayLightest,
   },
   text: {
     footerButton: colors.primary,
@@ -111,6 +116,9 @@ export const lightTheme = {
     bodyText: primaryTextColor,
     AppointmentRequestCtaBtnText: primaryTextColor,
     warningTag: colors.darkmodeGrayWarmDark,
+    tabSelectorInactive: colors.grayDark,
+    tabSelectorActive: colors.primary,
+    closePanel: colors.primary,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -192,6 +200,7 @@ export const darkTheme = {
     warningTag: colors.gold,
     inactiveTag: colors.grayMedium,
     activeTag: colors.greenDarker,
+    panelHeader: colors.darkmodeGrayDark,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -209,6 +218,8 @@ export const darkTheme = {
     confirmation: colors.gold,
     footerButton: colors.darkmodeBorder,
     menuDivider: colors.darkmodeBorder,
+    tabSelectorInactive: colors.grayMedium,
+    tabSelectorActive: colors.darkmodeLightBlue,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
@@ -240,6 +251,8 @@ export const darkTheme = {
     unreadMessage: colors.darkmodeLightBlue,
     veteransCrisisLineArrow: colors.grayLightest,
     snackBarIcon: colors.grayDark,
+    infoIcon: colors.grayLight,
+    infoIconContrast: colors.grayLight,
   },
   text: {
     footerButton: colors.darkmodeLightBlue,
@@ -267,6 +280,9 @@ export const darkTheme = {
     bodyText: colors.grayLighter,
     AppointmentRequestCtaBtnText: colors.grayDark,
     warningTag: colors.darkmodeGrayWarmDark,
+    tabSelectorInactive: colors.grayLighter,
+    tabSelectorActive: colors.darkmodeLightBlue,
+    closePanel: colors.darkmodeLightBlue,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

@@ -69,18 +69,18 @@ context('FileList', () => {
   })
 
   it('should display a file', async () => {
-    expect(findByTestID(testInstance, 'File 1 0.1 KB')).toBeTruthy()
+    expect(findByTestID(testInstance, 'File 1 0.1 kilobytes')).toBeTruthy()
   })
 
   it('should display an image file', async () => {
     initializeTestInstance(true)
-    expect(findByTestID(testInstance, 'Image file 0.1 KB')).toBeTruthy()
+    expect(findByTestID(testInstance, 'Image file 0.1 kilobytes')).toBeTruthy()
   })
 
   it('should call the alert when the button is pressed', async () => {
     await waitFor(() => {
-      expect(findByTestID(testInstance, 'File 1 0.1 KB')).toBeTruthy()
-      findByTestID(testInstance, 'File 1 0.1 KB').props.onPress()
+      expect(findByTestID(testInstance, 'File 1 0.1 kilobytes')).toBeTruthy()
+      findByTestID(testInstance, 'File 1 0.1 kilobytes').props.onPress()
       expect(mockAlertSpy).toBeCalled()
     })
   })
