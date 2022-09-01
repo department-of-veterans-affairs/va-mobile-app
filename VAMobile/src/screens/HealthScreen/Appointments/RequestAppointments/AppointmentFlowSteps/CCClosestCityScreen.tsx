@@ -17,13 +17,7 @@ const CCClosestCityScreen: FC<CCClosestCityScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { userFacilities, ccSupportedFacilities } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const navigateTo = useRouteNavigation()
-  const [selectedCity, setSelectedCity] = useState<string>()
-
-  const navigateToPreferredLanguage = navigateTo('CCPreferredLanguageScreen')
-
-  const onCitySelectionChanged = (facility: string) => {
-    setSelectedCity(facility)
-  }
+  const [selectedCity, onChangeSelectedCity] = useState<string>()
 
   const getClosestCityOptions = () => {
     const facilityOptions: Array<radioOption<string>> = []
@@ -38,18 +32,14 @@ const CCClosestCityScreen: FC<CCClosestCityScreen> = ({ navigation }) => {
     return facilityOptions
   }
 
-  const onContinue = () => {
-    navigateToPreferredLanguage()
-  }
-
   return (
     <AppointmentFlowLayout
       firstActionButtonPress={() => {
         navigation.goBack()
       }}
-      secondActionButtonPress={onContinue}>
+      secondActionButtonPress={navigateTo('CCPreferredLanguageScreen')}>
       <AppointmentFlowTitleSection title={t('requestAppointment.whatIsClosestCity')} />
-      <RadioGroup options={getClosestCityOptions()} onChange={onCitySelectionChanged} value={selectedCity} isRadioList={true} />
+      <RadioGroup options={getClosestCityOptions()} onChange={onChangeSelectedCity} value={selectedCity} isRadioList={true} />
     </AppointmentFlowLayout>
   )
 }

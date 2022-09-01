@@ -21,8 +21,6 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   const { gutter } = theme.dimensions
   const dispatch = useAppDispatch()
 
-  const navigateToClosestCity = navigateTo('CCClosestCityScreen')
-
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { comment } = appointmentFlowFormData
 
@@ -35,16 +33,12 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
     dispatch(updateFormData({ comment: data }))
   }
 
-  const onContinue = () => {
-    navigateToClosestCity()
-  }
-
   return (
     <AppointmentFlowLayout
       firstActionButtonPress={() => {
         navigation.goBack()
       }}
-      secondActionButtonPress={onContinue}>
+      secondActionButtonPress={navigateTo('CCClosestCityScreen')}>
       <AppointmentFlowWhiteCtaButton
         mx={10}
         onPress={() => {}}
