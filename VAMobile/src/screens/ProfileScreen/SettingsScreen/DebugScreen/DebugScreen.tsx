@@ -9,6 +9,7 @@ import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { RootState } from 'store'
+import { featureEnabled } from 'utils/remoteConfig'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
@@ -107,6 +108,19 @@ const DebugScreen: FC = ({}) => {
             </Box>
           )
         })}
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <TextArea>
+            <TextView variant="BitterBoldHeading">Remote Config</TextView>
+          </TextArea>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <TextArea>
+              <TextView variant="MobileBodyBold">testFeature</TextView>
+              <TextView selectable>{featureEnabled('testFeature')?.toString()}</TextView>
+            </TextArea>
+          </Box>
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Authorized Services</TextView>

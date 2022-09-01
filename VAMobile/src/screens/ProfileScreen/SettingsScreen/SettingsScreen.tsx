@@ -14,6 +14,7 @@ import { setBiometricsPreference } from 'store/slices/authSlice'
 import { testIdProps } from 'utils/accessibility'
 
 import { AuthState } from 'store/slices'
+import { DemoState } from 'store/slices/demoSlice'
 import { RootState } from 'store'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -31,6 +32,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
@@ -111,7 +113,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} flex={1}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <SimpleList items={items} />
-          {SHOW_DEBUG_MENU && debugMenu()}
+          {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
         </Box>
         <Box px={theme.dimensions.gutter}>
           <SignoutButton />
