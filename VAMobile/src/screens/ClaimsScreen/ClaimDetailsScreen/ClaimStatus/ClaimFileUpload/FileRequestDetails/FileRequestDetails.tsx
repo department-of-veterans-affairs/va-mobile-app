@@ -8,6 +8,7 @@ import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VASc
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { hasUploadedOrReceived } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -15,11 +16,15 @@ type FileRequestDetailsProps = StackScreenProps<ClaimsStackParamList, 'FileReque
 
 const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const { displayName, description, uploaded, uploadDate, documents } = request
+  const { displayName, description, uploadDate, documents } = request
+
+  const hasUploaded = hasUploadedOrReceived(request)
+  const noneNoted = tc('noneNoted')
 
   const boxProps: BoxProps = {
     borderStyle: 'solid',
@@ -32,28 +37,31 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
     flexGrow: 1,
   }
 
-  const getUploadedFileNames = (): JSX.Element[] => {
-    return map(documents || [], (item, index) => {
+  const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
+    const uploadedFileNames = map(documents || [], (item, index) => {
       return (
         <TextView variant="MobileBody" key={index}>
           {item.filename}
         </TextView>
       )
     })
+
+    return uploadedFileNames.length > 0 ? uploadedFileNames : <TextView variant="MobileBody">{noneNoted}</TextView>
   }
 
+  // apparently we can use date here and not just uploadDate as well
   const getUploadedDate = (): string => {
-    return uploadDate ? formatDateMMMMDDYYYY(uploadDate) : ''
+    return uploadDate ? formatDateMMMMDDYYYY(uploadDate) : noneNoted
   }
 
   const getUploadedFileType = (): string | undefined => {
-    return documents && documents.length > 0 ? documents[0].fileType : ''
+    return documents && documents.length > 0 ? documents[0].fileType : noneNoted
   }
 
   return (
     <VAScrollView {...testIdProps('file-request-details-page')} contentContainerStyle={mainViewStyle}>
       <Box mt={contentMarginTop} mb={contentMarginBottom} flex={1}>
-        {uploaded && (
+        {hasUploaded && (
           <Box mb={standardMarginBetween}>
             <TextArea>
               <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -80,7 +88,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
           <TextView variant="MobileBody">{description}</TextView>
         </TextArea>
       </Box>
-      {!uploaded && (
+      {!hasUploaded && (
         <Box {...boxProps}>
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
             <VAButton
