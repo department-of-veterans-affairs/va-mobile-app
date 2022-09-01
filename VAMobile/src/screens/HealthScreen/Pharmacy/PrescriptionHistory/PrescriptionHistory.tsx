@@ -11,7 +11,13 @@ import { AuthorizedServicesState } from 'store/slices'
 import {
   Box,
   BoxProps,
+  ClickForActionLink,
+  CollapsibleAlert,
+  CollapsibleAlertProps,
   ErrorComponent,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
   LoadingComponent,
   MultiTouchCard,
   MultiTouchCardProps,
@@ -45,6 +51,9 @@ import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } f
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
+import getEnv from 'utils/env'
+
+const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
 
@@ -126,7 +135,13 @@ type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'Prescrip
 
 const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
-  const { filteredPrescriptions: prescriptions, loadingHistory, tabCounts, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const {
+    filteredPrescriptions: prescriptions,
+    loadingHistory,
+    tabCounts,
+    prescriptionsNeedLoad,
+    transferredPrescriptions,
+  } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   const theme = useTheme()
@@ -136,6 +151,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const startingTab = route?.params?.startingTab
+  const hasTransferred = !!transferredPrescriptions?.length
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -459,12 +475,58 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   }
 
+  const getTransferAlert = () => {
+    if (!hasTransferred) {
+      return <></>
+    }
+
+    const linkProps: LinkButtonProps = {
+      displayedText: tc('goToMyVAHealth'),
+      linkType: LinkTypeOptionsConstants.externalLink,
+      linkUrlIconType: LinkUrlIconType.Arrow,
+      numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
+      accessibilityLabel: tc('goToMyVAHealth'),
+    }
+
+    const props: CollapsibleAlertProps = {
+      border: 'warning',
+      headerText: t('prescription.history.transferred.title'),
+      body: (
+        <>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
+            {t('prescription.history.transferred.instructions')}
+          </TextView>
+          <TextView mt={theme.dimensions.standardMarginBetween}>{t('prescription.history.transferred.ourRecords')}</TextView>
+          {transferredPrescriptions.map((prescription, idx) => {
+            return (
+              <TextView mt={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'} key={idx}>
+                {prescription.attributes.facilityName}
+              </TextView>
+            )
+          })}
+          <TextView my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
+            {t('prescription.history.transferred.youCan')}
+          </TextView>
+          <ClickForActionLink {...linkProps} />
+        </>
+      ),
+      a11yLabel: t('prescription.history.transferred.title'),
+    }
+
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <CollapsibleAlert {...props} />
+      </Box>
+    )
+  }
+
   const getContent = () => {
     if (hasNoItems) {
       return noMatchDisplayEl
     } else {
       return (
         <>
+          {getTransferAlert()}
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
             <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
               {getInstructions()}

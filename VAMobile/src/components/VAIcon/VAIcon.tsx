@@ -36,6 +36,7 @@ import Navy from './svgs/dodBranch/navy.svg'
 import Calendar from './svgs/links/calendar.svg'
 import Chat from './svgs/links/chat.svg'
 import Directions from './svgs/links/directions.svg'
+import ExternalLink from './svgs/links/circle_external_link.svg'
 import Phone from './svgs/links/phone.svg'
 import PhoneTTY from './svgs/links/phone-tty.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
@@ -159,6 +160,7 @@ export const VA_ICON_MAP = {
   WhiteCheckCircle,
   WhiteCloseCircle,
   Truck,
+  ExternalLink,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

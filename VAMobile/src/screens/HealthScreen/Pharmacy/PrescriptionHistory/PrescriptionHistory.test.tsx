@@ -223,21 +223,46 @@ context('PrescriptionHistory', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (includeTransferred = false) => {
   const props = mockNavProps(undefined, {
       setOptions: jest.fn(),
     }, { params: { } })
+
+    const data = prescriptionData.data
 
 
     component = render(<PrescriptionHistory {...props} />, { preloadedState: {
       auth: { ...initialAuthState },
         prescriptions: {
           ...initialPrescriptionState,
-          prescriptions: prescriptionData.data,
-          filteredPrescriptions: prescriptionData.data,
-          processingPrescriptions: prescriptionData.data,
-          shippedPrescriptions: prescriptionData.data,
-          prescriptionPagination: prescriptionData.meta.pagination,
+          prescriptions: data,
+          filteredPrescriptions: data,
+          processingPrescriptions: data,
+          shippedPrescriptions: data,
+          transferredPrescriptions: includeTransferred ? [
+              {
+                id: '2000434908349',
+                type: 'Prescription',
+                attributes: {
+                  refillStatus: 'transferred',
+                  refillSubmitDate: '2021-07-15T18:50:27.000Z',
+                  refillDate: '2021-08-04T04:00:00.000Z',
+                  refillRemaining: 8,
+                  facilityName: 'SLC10 TEST LAB',
+                  orderedDate: '2021-05-09T04:00:00.000Z',
+                  quantity: 30,
+                  expirationDate: '2022-05-10T04:00:00.000Z',
+                  prescriptionNumber: '3636697',
+                  prescriptionName: 'ADEFOVIR DIPIVOXIL 10MG TAB',
+                  dispensedDate: null,
+                  stationNumber: '979',
+                  isRefillable: false,
+                  isTrackable: false,
+                  instructions: 'TAKE ONE TABLET EVERY DAY FOR 30 DAYS',
+                },
+              },
+            ] : [],
+            prescriptionPagination: prescriptionData.meta.pagination,
           prescriptionsNeedLoad: false,
           loadingHistory: false,
           tabCounts: {
@@ -275,6 +300,17 @@ context('PrescriptionHistory', () => {
 
       expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 325MG TAB')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
+
+    })
+  })
+
+  describe('when there is a transferred prescription', () => {
+    it('should show the alert for transferred prescriptions', async () => {
+      await waitFor(() => {
+        initializeTestInstance(true)
+      })
+
+      expect(findByTypeWithText(testInstance, TextView, 'We can\'t refill some of your prescriptions in the app')).toBeTruthy()
 
     })
   })
