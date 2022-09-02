@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { AppointmenFlowTextInputWithAlert, AppointmentFlowLayout, AppointmentFlowTitleSection, PreferredTimeComponent } from '../AppointmentFlowCommon'
+import { AppointmentFlowLayout, AppointmentFlowTextInputWithAlert, AppointmentFlowTitleSection, PreferredTimeComponent } from '../AppointmentFlowCommon'
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { EMAIL_REGEX_EXP, MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { MethodOfContactType, PhoneEmailType, TimesForPhoneCallType } from 'store/api/types'
@@ -120,7 +120,7 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
       secondActionButtonPress={onContinue}>
       <AppointmentFlowTitleSection title={t('requestAppointment.confirmContactTitle')} extraInformationText={t('requestAppointment.confirmContactAdditionalText')} />
 
-      <AppointmenFlowTextInputWithAlert
+      <AppointmentFlowTextInputWithAlert
         mx={gutter}
         inputType={'phone'}
         inputLabel={t('requestAppointment.confirmContactYourPhone')}
@@ -133,7 +133,7 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
         validationFunc={validatePhone}
         errorMessage={phoneError}
       />
-      <AppointmenFlowTextInputWithAlert
+      <AppointmentFlowTextInputWithAlert
         mx={gutter}
         inputType={'email'}
         mb={standardMarginBetween}

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import {
+  CCClosestCityScreen,
   CCPreferredLanguageScreen,
   CCReasonForAppointmentScreen,
   ConfirmContactScreen,
@@ -27,6 +28,7 @@ export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   TypeOfCareSelectionScreen: undefined
   VAReasonForAppointmentScreen: undefined
   CCReasonForAppointmentScreen: undefined
+  CCClosestCityScreen: undefined
   SubTypeOfCareSelectionScreen: undefined
   FacilityTypeSelectionScreen: undefined
   VisitTypeSelectionScreen: undefined
@@ -103,6 +105,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
       <Stack.Screen name="TypeOfCareSelectionScreen" component={TypeOfCareSelectionScreen} />
       <Stack.Screen name="VAReasonForAppointmentScreen" component={VAReasonForAppointmentScreen} />
       <Stack.Screen name="CCReasonForAppointmentScreen" component={CCReasonForAppointmentScreen} />
+      <Stack.Screen name="CCClosestCityScreen" component={CCClosestCityScreen} />
       <Stack.Screen name="SubTypeOfCareSelectionScreen" component={SubTypeOfCareSelectionScreen} />
       <Stack.Screen name="FacilityTypeSelectionScreen" component={FacilityTypeSelectionScreen} />
       <Stack.Screen name="VisitTypeSelectionScreen" component={VisitTypeSelectionScreen} />

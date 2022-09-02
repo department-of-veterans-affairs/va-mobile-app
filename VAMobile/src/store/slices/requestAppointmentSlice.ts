@@ -13,6 +13,7 @@ export type RequestAppointmentState = {
   loadingCCEligibility: boolean
   loadingUserFacilities: boolean
   userFacilities: Array<UserFacilityInfo>
+  ccSupportedFacilities: Array<string>
   vaEligibleTypeOfCares: Array<UserVAEligibilityService>
   error?: Error
   ccEligibilityChecked?: boolean
@@ -25,6 +26,7 @@ export const initialRequestAppointmentState: RequestAppointmentState = {
   loadingCCEligibility: false,
   loadingUserFacilities: false,
   userFacilities: [],
+  ccSupportedFacilities: [],
   vaEligibleTypeOfCares: [],
   ccEligibilityChecked: false,
   ccEligible: false,
@@ -51,7 +53,7 @@ export const getUserVAEligibility =
         'facilityIds[]': facilities,
       })
 
-      dispatch(dispatchFinishGetVAEligibility({ eligibilityData: eligibilityData?.data.attributes.services }))
+      dispatch(dispatchFinishGetVAEligibility({ eligibilityData: eligibilityData?.data.attributes.services, ccSupported: eligibilityData?.data.attributes.ccSupported }))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, 'getUserEligibility: Request Appointment Service Error')
@@ -132,11 +134,12 @@ const requestAppointmentSlice = createSlice({
     dispatchStartGetCommunityCareEligibility: (state) => {
       state.loadingCCEligibility = true
     },
-    dispatchFinishGetVAEligibility: (state, action: PayloadAction<{ eligibilityData?: Array<UserVAEligibilityService>; error?: Error }>) => {
-      const { eligibilityData, error } = action.payload
+    dispatchFinishGetVAEligibility: (state, action: PayloadAction<{ eligibilityData?: Array<UserVAEligibilityService>; ccSupported?: Array<string>; error?: Error }>) => {
+      const { eligibilityData, ccSupported, error } = action.payload
 
       state.loadingVAEligibility = false
       state.vaEligibleTypeOfCares = eligibilityData || []
+      state.ccSupportedFacilities = ccSupported || []
       state.error = error
     },
     dispatchFinishGetUserFacilities: (state, action: PayloadAction<{ facilities?: Array<UserFacilityInfo>; error?: Error }>) => {
