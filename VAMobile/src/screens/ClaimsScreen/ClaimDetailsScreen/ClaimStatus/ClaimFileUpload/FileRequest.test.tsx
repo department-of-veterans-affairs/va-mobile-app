@@ -10,6 +10,7 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { when } from 'jest-when'
+import FileRequestNumberIndicator from './FileRequestNumberIndicator'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../utils/hooks', () => {
@@ -158,7 +159,7 @@ context('FileRequest', () => {
     })
 
     describe('on click of a file request', () => {
-      it('should navigate to file request detals page', async () => {
+      it('should navigate to file request details page', async () => {
         findByTestID(testInstance, 'Request 1').props.onPress()
         expect(mockNavigateToFileRequestdetailsSpy).toHaveBeenCalled()
       })
@@ -173,6 +174,43 @@ context('FileRequest', () => {
           expect(findByTypeWithText(testInstance, TextView, 'Ask for your claim evaluation')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Please review the evaluation details if you are ready for us to begin evaluating your claim')).toBeTruthy()
         })
+      })
+    })
+  })
+
+  describe('request timeline', () => {
+    describe('when a request type is received_from_you_list', () => {
+      it('should set fileUploaded to true for FileRequestNumberIndicator', async () => {
+        let updatedRequests = [
+          {
+            type: 'still_need_from_you_list',
+            date: '2020-07-16',
+            status: 'NEEDED',
+            uploaded: false,
+            uploadsAllowed: true,
+            displayName: 'Request 1',
+          },
+          {
+            type: 'received_from_you_list',
+            date: '2020-07-16',
+            status: 'INITIAL_REVIEW_COMPLETE',
+            uploaded: false,
+            uploadsAllowed: true,
+            displayName: 'Request 2',
+          },
+        ]
+
+
+        await waitFor(() => {
+          initializeTestInstance(updatedRequests)
+        })
+
+        const fileRequestNumberIndicator = testInstance.findAllByType(FileRequestNumberIndicator)
+        // Request 2
+        // make sure we only have 1 file request since Request 1 is still needed
+        expect(findByTypeWithText(testInstance, TextView, 'You have 1 file request from V\ufeffA')).toBeTruthy()
+        expect(fileRequestNumberIndicator[1].props.fileUploaded).toBeTruthy()
+
       })
     })
   })
