@@ -1,18 +1,4 @@
-import {
-  AccessibilityInfo,
-  ActionSheetIOS,
-  Alert,
-  AlertButton,
-  AppState,
-  BackHandler,
-  Dimensions,
-  Linking,
-  PixelRatio,
-  ScrollView,
-  UIManager,
-  View,
-  findNodeHandle,
-} from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, AppState, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
@@ -493,36 +479,6 @@ export function useBeforeNavBackListener(
     })
 
     return unsubscribe
-  })
-}
-
-export function useOnOSBackEvent(
-  navigation: StackNavigationProp<ParamListBase, keyof ParamListBase>,
-  callback: (
-    e: EventArg<'beforeRemove', true, { action: Readonly<{ type: string; payload?: object | undefined; source?: string | undefined; target?: string | undefined }> }>,
-  ) => boolean,
-): void {
-  const onBack = () => {
-    const beforeBack = navigation.addListener('beforeRemove', (e) => {
-      e.preventDefault()
-      const overrideDefaultAction = callback(e)
-      if (overrideDefaultAction) {
-        return
-      } else {
-        navigation.dispatch(e.data.action)
-      }
-    })
-
-    return beforeBack
-  }
-  useEffect(() => {
-    // const androidBack = BackHandler.addEventListener('hardwareBackPress', onBack)
-    const iosBack = navigation.addListener('gestureEnd', onBack)
-
-    return () => {
-      // BackHandler.removeEventListener('hardwareBackPress', onBack)
-      navigation.removeListener('gestureEnd', onBack)
-    }
   })
 }
 

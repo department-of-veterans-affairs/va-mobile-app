@@ -128,9 +128,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     setOnSendClicked(true)
   }, [saveDraftConfirmFailed])
 
+  /**
+   * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
+   */
   useBeforeNavBackListener(navigation, (e) => {
     if (isDiscarded || saveDraftComplete || sendMessageComplete) {
-      navigation.goBack
+      return
     } else if (!noProviderError && !isFormBlank) {
       e.preventDefault()
       goToCancel()
