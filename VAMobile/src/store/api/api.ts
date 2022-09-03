@@ -1,9 +1,9 @@
+import { ReduxToolkitStore } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { logout, refreshAccessToken } from 'store/slices'
 import { transform } from './demo/store'
 import _ from 'underscore'
 import getEnv from 'utils/env'
-import store from 'store'
 
 const { API_ROOT } = getEnv()
 
@@ -11,6 +11,8 @@ let _token: string | undefined
 let _refresh_token: string | undefined
 let refreshPromise: Promise<boolean> | undefined
 let _demoMode = false
+let _store: ReduxToolkitStore | undefined
+
 const DEMO_MODE_DELAY = 300
 
 export const setAccessToken = (token?: string): void => {
@@ -31,6 +33,10 @@ export const getRefreshToken = (): string | undefined => {
 
 export const setDemoMode = (demoMode: boolean): void => {
   _demoMode = demoMode
+}
+
+export const injectStore = (store: ReduxToolkitStore): void => {
+  _store = store
 }
 
 export type Params = {
@@ -145,7 +151,7 @@ const call = async function <T>(
           throw { networkError: true }
         }
       } else {
-        store.dispatch(logout())
+        _store?.dispatch(logout())
       }
     }
     if (response.status === 204) {
