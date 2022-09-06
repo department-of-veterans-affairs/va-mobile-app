@@ -1,10 +1,10 @@
-import { map } from 'underscore'
+import { map, pick } from 'underscore'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
-import { AccordionCollapsible, Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
 import { AddressData, AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
+import { Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
 import { RootState } from 'store'
@@ -13,6 +13,7 @@ import { ViewStyle } from 'react-native'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import CollapsibleAlert from 'components/CollapsibleAlert'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
@@ -66,6 +67,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
 
   const onUseThisAddress = (): void => {
+    let revalidate = false
     if (!selectedSuggestedAddress) {
       return
     }
@@ -74,13 +76,20 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
     if ('attributes' in selectedSuggestedAddress) {
       address = getAddressDataFromSuggestedAddress(selectedSuggestedAddress, addressId)
+      revalidate = true
     } else {
       address = selectedSuggestedAddress
-      // overriding with an invalid address requires a validation key
-      address.validationKey = validationKey
     }
 
-    dispatch(updateAddress(address, snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    //removes null properties
+    address = pick(address, (value) => {
+      return !!value
+    }) as AddressData
+
+    // need to send validation key with all addresses
+    address.validationKey = validationKey
+
+    dispatch(updateAddress(address, snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID, revalidate))
   }
 
   const getSuggestedAddressLabelArgs = (address: SuggestedAddress | AddressData): { [key: string]: string } => {
@@ -134,10 +143,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       default:
         return getAlertBody()
     }
-  }
-
-  const accordionHeader = (): ReactNode => {
-    return <TextView variant="MobileBodyBold">{getAlertTitle()}</TextView>
   }
 
   const getAlert = (): ReactNode => {
@@ -210,7 +215,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1}>
         <Box mt={contentMarginTop}>
-          <AccordionCollapsible expandedContent={getAlert()} header={accordionHeader()} alertBorder={'warning'} testID={getAlertTitle()} />
+          <CollapsibleAlert border="warning" headerText={getAlertTitle()} body={getAlert()} a11yLabel={getAlertTitle()} />
         </Box>
         <Box mt={contentMarginTop}>{getSuggestedAddresses()}</Box>
       </Box>

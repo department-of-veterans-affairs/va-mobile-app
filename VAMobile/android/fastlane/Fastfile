@@ -46,7 +46,7 @@ platform :android do
     upload("Pre-Prod Stash")
     tag_build
     message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android", ENV['SLACK_THREAD_TS'])
+    slack_sent_for_review(ENV['BUILD_NUM'], ENV['VERSION_NAME'], message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Promote the release in Pre-Prod stash to Production"
@@ -119,7 +119,7 @@ platform :android do
   error do |lane, exception, options|
     puts("ERROR REPORT")
     puts exception
-#     slack_build_error(exception, options[:version], "Android Build Failed", "Android", ENV['SLACK_THREAD_TS'])
+    slack_build_error(exception, options[:version], "Android Build Failed", "Android", ENV['SLACK_THREAD_TS'])
   end
 
 # method to update the version and build in the repo
@@ -145,7 +145,7 @@ platform :android do
 
 # method to get the highest build number from all tracks in the Play Store
   def get_latest_build_num
-    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office", "Pre-Prod Stash"]
+    allLanes = ["production", "Development Team", "Pre-Prod Stash"]
     highest = 0
     allLanes.each do |track|
       builds = google_play_track_version_codes(track:track.to_s)
@@ -158,7 +158,7 @@ platform :android do
 
 # method to get the highest version number from all tracks in the Play Store
   def get_latest_version_name
-  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office", "Pre-Prod Stash"]
+  allLanes = ["production", "Development Team", "Pre-Prod Stash"]
       highest = "0.0.0"
       allLanes.each do |track|
         versions = google_play_track_release_names(track:track.to_s)

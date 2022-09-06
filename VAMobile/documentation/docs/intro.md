@@ -17,23 +17,22 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 
 ### Product and Program Management
 - Matt Hall - Product Leadership
+- Brenda Cudone - Product
 - Meko Hong - Product
-- Ayush Chakravarty - Product
 - Ashley Matthews - Product
 - Brenda Rocha - Product
-- Brenda Cudone - Product
 - Seth Eheart - Program
 
 
 ### UX
-- Jen Ecker - UX Design Leadership
-- Melissa Lefevre - UX Design
-- Esther Kitavi - UX Design
-- Lauren Russell - UX Design
-- Holly Collier - UX Design
+- Jen Ecker - UX Leadership
+- Melissa Lefevre - Design
+- Esther Kitavi - Design
+- Lauren Russell - Design
+- Holly Collier - Design
 - Brea Blackwelder - Accessibility Design
-- Misty Milliron-Grant - UX Writing
 - Liz Straghalis - Research
+- Misty Milliron-Grant - Writer
 - Alex Taylor - Principal UX Designer
 
 
@@ -49,6 +48,7 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 - Jon Bindbeutel - Engineer
 - Tim Roettger - Engineer
 - Jason Conigliari - Engineer
+- Kris Pethtel - Engineer
 - Ken Harrison - QA Support
 - Tom Gammons - Engineer, QA
 - Therese Dickson - Engineer, QA
@@ -63,3 +63,4 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 
 ## Release Cycle
 Because VSP's Collaboration Cycle is designed for web features, the VA Mobile App team is going to leverage parts of the process that make sense for mobile and create other quality control processes where it doesn't. For example, the VA Mobile App team is creating its own Accessibility review that is tailored to mobile devices. These deviations will be documented [here](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/product/mobile-collaboration%20cycle.md) 
+ 

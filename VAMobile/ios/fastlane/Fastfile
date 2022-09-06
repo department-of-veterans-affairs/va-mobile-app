@@ -39,7 +39,6 @@ platform :ios do
     build
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
     upload_tf(notes, "Development Team")
-    upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New QA build successfully uploaded to TestFlight Group - Development Team"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS", ENV['SLACK_THREAD_TS'])
@@ -57,10 +56,9 @@ platform :ios do
     sign
     build
     upload_app_store
-    upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New Production build successfully uploaded to App Store for review"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Production", message, "iOS", ENV['SLACK_THREAD_TS'])
+    slack_sent_for_review(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Promote the release Awaiting Developer Release to App Store"
@@ -70,6 +68,7 @@ platform :ios do
       version = app.get_pending_release_app_store_version
       unless version.nil?
         Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
+        upload_deobfuscation_file(version.version_string)
         slack_release_success(version.version_string, "iOS")
       end
     rescue => e
@@ -96,7 +95,6 @@ platform :ios do
 
     puts notes
     upload_tf(notes, tf_group)
-    upload_deobfuscation_file
     message = "New On Demand build successfully uploaded to TestFlight Group " + tf_group
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
@@ -111,7 +109,6 @@ platform :ios do
     rcVersion = "#{Gem::Version.new(lane_context[SharedValues::VERSION_NUMBER]).bump}.0"
     notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
     upload_tf(notes, "Development Team")
-    upload_deobfuscation_file
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New RC for #{rcVersion} successfully uploaded to TestFlight Group - Development Team"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Release Candidate", message, "iOS", ENV['SLACK_THREAD_TS'])
@@ -213,8 +210,8 @@ platform :ios do
       )
   end
 
-  def upload_deobfuscation_file
-    download_dsyms
+  def upload_deobfuscation_file(version)
+    download_dsyms(version: version)
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip", app_id: ENV['FIREBASE_IOS_APP_ID'])
     clean_build_artifacts
   end

@@ -151,15 +151,6 @@ context('PastAppointmentDetails', () => {
     })
   })
 
-  describe('when navigating to past appointment details page', () => {
-    it('should show loading component', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-        expect(testInstance.findByType(TextView).props.children).toEqual('Loading your appointment details...')
-      })
-    })
-  })
-
   describe('when the appointment type is covid vaccine', () => {
     beforeEach(async () => {
       await waitFor(() => {

@@ -73,6 +73,7 @@ import EllipsisSolid from './svgs/ellipsisSolid.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import FolderSolid from './svgs/folder-solid.svg'
 import InboxSolid from './svgs/inbox-solid.svg'
+import InfoIcon from './svgs/info-circle.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import Minus from './svgs/minus.svg'
@@ -143,6 +144,7 @@ export const VA_ICON_MAP = {
   TrashSolid,
   InboxSolid,
   BuildingSolid,
+  InfoIcon,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

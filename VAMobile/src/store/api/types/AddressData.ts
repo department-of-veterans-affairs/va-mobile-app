@@ -35,23 +35,25 @@ export type AddressValidationData = {
   data: Array<SuggestedAddress>
 }
 
+export type SuggestedAddressAttributeType = {
+  addressLine1: string
+  addressLine2?: string
+  addressLine3?: string
+  addressPou: addressPouTypes
+  addressType: addressTypes
+  city: string
+  countryCodeIso3: string
+  internationalPostalCode: string
+  province: string
+  stateCode: string
+  zipCode: string
+  zipCodeSuffix: string
+}
+
 export type SuggestedAddress = {
   id: string
   type: string
-  attributes: {
-    addressLine1: string
-    addressLine2?: string
-    addressLine3?: string
-    addressPou: addressPouTypes
-    addressType: addressTypes
-    city: string
-    countryCodeIso3: string
-    internationalPostalCode: string
-    province: string
-    stateCode: string
-    zipCode: string
-    zipCodeSuffix: string
-  }
+  attributes: SuggestedAddressAttributeType
   meta: addressValidationMetadata
 }
 

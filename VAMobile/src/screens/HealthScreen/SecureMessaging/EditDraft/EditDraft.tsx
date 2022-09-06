@@ -402,7 +402,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID))
+      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, replyToID))
