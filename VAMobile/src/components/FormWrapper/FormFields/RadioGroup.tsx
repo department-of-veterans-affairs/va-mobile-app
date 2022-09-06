@@ -2,13 +2,13 @@ import { isEqual, map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { ReactElement, useEffect } from 'react'
 
-import { Box, SelectorType, TextView, VASelector } from '../../index'
+import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SelectorType, TextLine, TextView, VASelector } from '../../index'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
-  /** translated labelKey displayed next to the checkbox/radio */
+  /** translated text displayed next to the checkbox/radio */
   labelKey: string
   /** optional arguments to pass in with the labelKey during translation */
   labelArgs?: { [key: string]: string }
@@ -16,6 +16,10 @@ export type radioOption<T> = {
   value: T
   /** string for the header if one needed */
   headerText?: string
+  /** optional accessibilityLabel */
+  a11yLabel?: string
+  /** Additional text to present under label key */
+  additionalLabelText?: Array<string>
 }
 
 /**
@@ -30,12 +34,17 @@ export type RadioGroupProps<T> = {
   onChange: (val: T) => void
   /** optional boolean that disables the radio group when set to true */
   disabled?: boolean
+  /** optional boolean to indicate to use the radio buttons in a list */
+  isRadioList?: boolean
+  /** optional text to show as the radio list title */
+  radioListTitle?: string
 }
 
 /**A common component to display radio button selectors for a list of selectable items*/
-const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGroupProps<T>): ReactElement => {
+const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const hasSingleOption = options.length === 1
 
   useEffect(() => {
@@ -46,7 +55,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
   }, [hasSingleOption, value, options, onChange])
 
   const getOption = (option: radioOption<T>): ReactElement => {
-    const { labelKey, labelArgs } = option
+    const { labelKey, labelArgs, a11yLabel } = option
 
     // Render option as simple text
     if (hasSingleOption) {
@@ -58,11 +67,22 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
       onChange(option.value)
     }
 
-    return <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} labelKey={labelKey} labelArgs={labelArgs} disabled={disabled} />
+    return (
+      <VASelector
+        selectorType={SelectorType.Radio}
+        selected={selected}
+        onSelectionChange={onVASelectorChange}
+        labelKey={labelKey}
+        labelArgs={labelArgs}
+        disabled={disabled}
+        a11yLabel={a11yLabel}
+      />
+    )
   }
 
-  const getRadios = (): ReactElement => {
-    const radios = map(options, (option, index) => {
+  /** creates the radio group with an optiona title and the radio button on the left side */
+  const getStandardRadioGroup = () => {
+    return map(options, (option, index) => {
       const { headerText } = option
       return (
         <Box key={index}>
@@ -79,8 +99,47 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
         </Box>
       )
     })
+  }
 
-    return <Box>{radios}</Box>
+  /** creates the radio group with a optional title and the radio buttons in a list with the radio button ot the far right */
+  const getRadioGroupList = () => {
+    const listItems: Array<DefaultListItemObj> = options.map((option, index) => {
+      const selected = isEqual(option.value, value)
+      const onSelectorChange = (): void => {
+        if (!disabled) {
+          onChange(option.value)
+        }
+      }
+      const textLines: Array<TextLine> = [{ text: option.labelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' }]
+
+      if (option.additionalLabelText && option.additionalLabelText.length > 0) {
+        textLines[0].variant = 'MobileBodyBold'
+        option.additionalLabelText.forEach((item) => {
+          textLines.push({ text: item, variant: 'MobileBody' })
+        })
+      }
+
+      const radioButton: DefaultListItemObj = {
+        textLines,
+        decorator: disabled ? ButtonDecoratorType.DisabledRadio : selected ? ButtonDecoratorType.FilledRadio : ButtonDecoratorType.EmptyRadio,
+        onPress: onSelectorChange,
+        minHeight: 64,
+        a11yValue: selected ? tc('selected') : undefined,
+        a11yRole: 'radio',
+        testId: `${option.a11yLabel || option.labelKey} ${tc('option', { count: index + 1, totalOptions: options.length })}`,
+      }
+
+      return radioButton
+    })
+    return (
+      <Box>
+        <DefaultList items={listItems} title={radioListTitle} />
+      </Box>
+    )
+  }
+
+  const getRadios = (): ReactElement => {
+    return <Box>{isRadioList ? getRadioGroupList() : getStandardRadioGroup()}</Box>
   }
 
   return getRadios()

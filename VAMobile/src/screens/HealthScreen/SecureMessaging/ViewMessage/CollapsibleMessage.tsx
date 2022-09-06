@@ -8,7 +8,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
-import { bytesToFinalSizeDisplay } from 'utils/common'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -72,6 +72,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
                   <AttachmentLink
                     name={a.filename}
                     formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
+                    formattedSizeA11y={bytesToFinalSizeDisplayA11y(a.size, tFunction)}
                     a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
                     a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
                     onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
