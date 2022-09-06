@@ -47,6 +47,8 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
 })
 
+export type ReduxToolkitStore = typeof store
+
 //creates the typed dispatch to work with the thunk actions
 export type AppDispatch = typeof store.dispatch
 
