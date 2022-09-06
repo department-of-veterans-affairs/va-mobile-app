@@ -1,6 +1,8 @@
 import { pick } from 'underscore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useState } from 'react'
+import remoteConfig from '@react-native-firebase/remote-config'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 
@@ -8,15 +10,14 @@ import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
-import { FeatureToggleType, featureEnabled, getFeatureToggles, toggleFeature } from 'utils/remoteConfig'
 import { RootState } from 'store'
+import { featureEnabled, getFeatureToggles, toggleFeature } from 'utils/remoteConfig'
 import { logout } from 'store/slices'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
@@ -116,16 +117,22 @@ const DebugScreen: FC = ({}) => {
           </TextArea>
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <TextArea>
+              <TextView variant="MobileBodyBold">Last Fetch Status</TextView>
+              <TextView>{remoteConfig().lastFetchStatus}</TextView>
+            </TextArea>
+          </Box>
           {getFeatureToggles().map((key: string) => {
             if (key === 'error') {
               return null
             }
-            const val = featureEnabled(key as FeatureToggleType).toString()
+            const val = remoteConfig().getValue(key)
             return (
               <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea>
                   <TextView variant="MobileBodyBold">{key}</TextView>
-                  <TextView>{val}</TextView>
+                  <TextView>{`${val.asBoolean().toString()} (${val.getSource()})`}</TextView>
                   {key === 'SIS' && (
                     <Box mt={theme.dimensions.contentMarginTop}>
                       <VAButton
