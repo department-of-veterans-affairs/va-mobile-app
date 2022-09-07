@@ -11,7 +11,7 @@ import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'comp
 import ViewMessageScreen from './ViewMessageScreen'
 import Mock = jest.Mock
 import { Pressable } from 'react-native'
-import { getFormattedDateTimeYear } from 'utils/formattingUtils'
+import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 import { StackNavigationOptions } from '@react-navigation/stack'
 import { when } from 'jest-when'
@@ -209,7 +209,7 @@ context('ViewMessageScreen', () => {
       expect(testInstance.findAllByType(TextView)[3].props.children).toBe('mock sender 2')
       expect(testInstance.findAllByType(TextView)[4].props.children).toBe('Invalid DateTime')
       expect(testInstance.findAllByType(TextView)[5].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateTimeYear(mockDateISO))
+      expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
     })
   })
 
@@ -227,7 +227,7 @@ context('ViewMessageScreen', () => {
         expect(testInstance.findAllByType(TextView)[3].props.children).toBe('message 1 body text')
         // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
         expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
-        expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateTimeYear(mockDateISO))
+        expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
         // Reply footer displays properly if latest message in thread is not over 45 days old
         expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Reply')
       })
