@@ -110,9 +110,7 @@ export const loadPushPreferences = (): AppThunk => async (dispatch) => {
   const systemNotificationsOn = await notificationsEnabled()
   try {
     const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
-    console.log(`/v0/push/prefs/${endpoint_sid}`)
     const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
-    console.log(JSON.stringify(response))
     dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences: response?.data.attributes.preferences }))
   } catch (e) {
     logNonFatalErrorToFirebase(e, `loadPushPreferences: ${notificationsNonFatalErrorString}`)
