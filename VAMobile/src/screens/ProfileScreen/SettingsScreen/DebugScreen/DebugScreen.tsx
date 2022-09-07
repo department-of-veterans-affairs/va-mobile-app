@@ -119,7 +119,7 @@ const DebugScreen: FC = ({}) => {
         <Box mb={theme.dimensions.contentMarginBottom}>
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <TextArea>
-              <TextView variant="MobileBodyBold">Last Fetch Status</TextView>
+              <TextView variant="MobileBodyBold">Last fetch status</TextView>
               <TextView>{remoteConfig().lastFetchStatus}</TextView>
             </TextArea>
           </Box>
