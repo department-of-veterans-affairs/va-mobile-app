@@ -15,14 +15,14 @@ echo "" > .env
 if [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
-  AUTH_PREFIX="sqa."
+  AUTH_IAM_PREFIX="sqa."
   AUTH_SIS_PREFIX="staging."
   API_PREFIX="staging-api."
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET
   echo "AUTH_IAM_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
 else
   echo "Setting up Production environment"
-  AUTH_PREFIX=""
+  AUTH_IAM_PREFIX=""
   API_PREFIX="api."
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET_PROD
   echo "AUTH_IAM_CLIENT_SECRET=${APP_CLIENT_SECRET_PROD}" >> .env
@@ -33,7 +33,7 @@ echo "ENVIRONMENT=$environment" >> .env
 echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
 # set IAM vars
-AUTH_IAM_ROOT="https://${AUTH_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
+AUTH_IAM_ROOT="https://${AUTH_IAM_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
 echo "AUTH_IAM_ENDPOINT=${AUTH_IAM_ROOT}/authorize" >> .env
 echo "AUTH_IAM_TOKEN_EXCHANGE_URL=${AUTH_IAM_ROOT}/token" >> .env
 echo "AUTH_IAM_REVOKE_URL=${AUTH_IAM_ROOT}/revoke" >> .env
