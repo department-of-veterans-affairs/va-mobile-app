@@ -8,6 +8,25 @@ import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 
+/** function that determines if a request file has been uploaded or received for a claim's event*/
+export const hasUploadedOrReceived = (event: ClaimEventData): boolean => {
+  const { uploaded, type } = event
+  // anything marked with uploaded true is assumed to have been uploaded
+  if (uploaded) {
+    return true
+  }
+
+  // Sometimes the uploaded set to true is not enough, so will need to check the types to determine if it was received as well
+  // The website checks the following types to determine if something have been uploaded/received
+  switch (type) {
+    case FILE_REQUEST_TYPE.RECEIVED_FROM_YOU:
+    case FILE_REQUEST_TYPE.RECEIVED_FROM_OTHERS:
+    case FILE_REQUEST_TYPE.OTHER_DOCUMENTS_LISTS:
+      return true
+    default:
+      return false
+  }
+}
 /** function that returns the tracked items that need uploads from a claimant or have had uploads from a claimant */
 export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[] => {
   const notUploadedRequests = events.filter(
