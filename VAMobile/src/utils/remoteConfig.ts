@@ -59,3 +59,20 @@ export const activateRemoteConfig = async (): Promise<void> => {
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
   return remoteConfig().getValue(feature)?.asBoolean()
 }
+
+export const toggleFeature = async (feature: FeatureToggleType): Promise<void> => {
+  if (!isProduction) {
+    try {
+      const newValue = !featureEnabled(feature)
+      console.debug(`Remote Config: Toggling ${feature}. New value: ${newValue}`)
+      await remoteConfig().setDefaults({ ...devDefaults, [feature]: !featureEnabled(feature) })
+    } catch (err) {
+      logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
+      console.debug('toggleFeature: Failed to set default')
+      console.error(err)
+      return undefined
+    }
+  }
+}
+
+export const getFeatureToggles = (): string[] => Object.keys(remoteConfig().getAll())

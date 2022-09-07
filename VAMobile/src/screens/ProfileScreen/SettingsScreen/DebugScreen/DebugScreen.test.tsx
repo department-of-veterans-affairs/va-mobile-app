@@ -10,8 +10,20 @@ import DebugScreen from './index'
 import { initialAuthState, initialAnalyticsState } from 'store/slices'
 import { Pressable } from 'react-native'
 
-jest.mock('./../../../../utils/remoteConfig', () => ({
+jest.mock('@react-native-firebase/remote-config', () => {
+  return function () {
+    return {
+      getValue: jest.fn(() => ({
+        asBoolean: jest.fn(() => false),
+      })),
+      lastFetchStatus: jest.fn(() => 'no_fetch_yet'),
+    }
+  }
+})
+
+jest.mock('utils/remoteConfig', () => ({
   featureEnabled: jest.fn(() => Promise.resolve(true)),
+  getFeatureToggles: jest.fn(() => []),
 }))
 
 const authTokensIdxStart = 3
