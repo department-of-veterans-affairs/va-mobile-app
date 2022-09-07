@@ -1,3 +1,4 @@
+import { featureEnabled } from 'utils/remoteConfig'
 import { refreshAccessToken } from 'store/slices'
 import { transform } from './demo/store'
 import _ from 'underscore'
@@ -58,6 +59,7 @@ const doRequest = async function (
     headers: {
       authorization: `Bearer ${_token}`,
       'X-Key-Inflection': 'camel',
+      ...(featureEnabled('SIS') ? { 'Authentication-Method': 'SIS' } : {}),
     },
     ...({ signal: abortSignal } || {}),
   }
@@ -96,6 +98,9 @@ const call = async function <T>(
 ): Promise<T | undefined> {
   if (!_demoMode) {
     let response
+    let responseBody
+
+    const SISEnabled = featureEnabled('SIS')
 
     try {
       response = await doRequest(method, endpoint, params, contentType, abortSignal)
@@ -108,7 +113,14 @@ const call = async function <T>(
       throw { networkError: true }
     }
 
-    if (response.status === 401) {
+    // For SIS, a 403 alone doesn't indicate that the token has expired. We also need to check the response body for a specific message.
+    if (SISEnabled && response.status === 403) {
+      responseBody = await response.json()
+    }
+
+    const accessTokenExpired = SISEnabled ? response.status === 403 && responseBody?.errors === 'Access token has expired' : response.status === 401
+
+    if (accessTokenExpired) {
       console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
       // If the access token is expired, attempt to refresh it and redo the request
       if (!refreshPromise) {
@@ -119,7 +131,6 @@ const call = async function <T>(
       // Wait for the token refresh to complete and try the call again
       const didRefresh = await refreshPromise
       refreshPromise = undefined
-
       if (didRefresh) {
         console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
         try {
