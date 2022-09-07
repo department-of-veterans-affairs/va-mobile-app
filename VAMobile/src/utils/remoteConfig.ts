@@ -8,7 +8,7 @@ const { ENVIRONMENT } = getEnv()
 const isProduction = ENVIRONMENT === EnvironmentTypesConstants.Production
 const RC_CACHE_TIME = 43200000 // 12 hours
 
-export type FeatureToggleType = 'testFeature' | 'SIS'
+type FeatureToggleType = 'testFeature' | 'SIS'
 
 export type RemoteConfigValues = {
   testFeature: boolean
