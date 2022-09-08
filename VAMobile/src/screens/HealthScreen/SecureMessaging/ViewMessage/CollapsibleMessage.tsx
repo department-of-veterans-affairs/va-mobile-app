@@ -9,7 +9,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import { getFormattedDateTimeYear } from 'utils/formattingUtils'
+import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
@@ -33,7 +33,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const { attachment, attachments, senderName, sentDate, body } = message
   const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
-  const dateTime = getFormattedDateTimeYear(sentDate)
+  const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
 
   const onPress = (expandedValue?: boolean): void => {
