@@ -39,6 +39,7 @@ import {
   RefillStatus,
   RefillStatusConstants,
 } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
@@ -47,6 +48,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
@@ -240,6 +242,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const onTabChange = (newTab: string) => {
     setFilterToUse('')
     setCurrentTab(newTab)
+
+    if (newTab === PrescriptionHistoryTabConstants.PROCESSING) {
+      logAnalyticsEvent(Events.vama_rx_processingtab())
+    } else if (newTab === PrescriptionHistoryTabConstants.SHIPPED) {
+      logAnalyticsEvent(Events.vama_rx_trackingtab())
+    }
   }
 
   const tabProps: TabBarProps = {
@@ -368,6 +376,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     onConfirm: () => {
       setSortOnToUse(selectedSortOn)
       setSortByToUse(selectedSortBy)
+      logAnalyticsEvent(Events.vama_rx_sort_sel(selectedSortBy))
     },
     onUpperRightAction: () => {
       setSelectedSortBy('')
@@ -376,6 +385,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
       setSelectedSortOn(sortOnToUse)
+    },
+    onShowAnalyticsFn: () => {
+      logAnalyticsEvent(Events.vama_rx_sort())
     },
   }
 
@@ -407,12 +419,16 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
     onConfirm: () => {
       setFilterToUse(selectedFilter)
+      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
     },
     onUpperRightAction: () => {
       setSelectedFilter('')
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
+    },
+    onShowAnalyticsFn: () => {
+      logAnalyticsEvent(Events.vama_rx_filter())
     },
   }
 

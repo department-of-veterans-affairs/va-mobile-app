@@ -2,12 +2,14 @@ import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
 import { AlertBox, AlertBoxProps, Box, BoxProps, ClosePanelButton, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
 import { RefillStackParamList } from './RefillScreen'
 import { RootState } from 'store'
 import { isIOS } from 'utils/platform'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, usePanelHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -89,6 +91,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
               <VAButton
                 onPress={() => {
                   dispatch(requestRefills(requestFailed))
+                  logAnalyticsEvent(Events.vama_rx_refill_retry())
                 }}
                 label={tc('tryAgain')}
                 buttonType="buttonPrimary"

@@ -17,12 +17,13 @@ import {
   put,
 } from '../api'
 import { AppThunk } from 'store'
+import { Events } from 'constants/analytics'
 import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 
 const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
@@ -188,12 +189,13 @@ export const requestRefills =
     const results: RefillRequestSummaryItems = []
     for (const p of prescriptions) {
       try {
-        // return 204 on success, we just care if it succeed as any failures will go to the catch
+        // return 204 on success, we just care if it succeeds as any failures will go to the catch
         await put(`/v0/health/rx/prescriptions/${p.id}/refill`)
         results.push({
           submitted: true,
           data: p,
         })
+        await logAnalyticsEvent(Events.vama_rx_refill_success())
       } catch (error) {
         if (isErrorObject(error)) {
           logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
@@ -202,6 +204,7 @@ export const requestRefills =
           submitted: false,
           data: p,
         })
+        await logAnalyticsEvent(Events.vama_rx_refill_fail())
       } finally {
         const { submittedRequestRefillCount } = getState().prescriptions
         if (submittedRequestRefillCount < prescriptions.length) {

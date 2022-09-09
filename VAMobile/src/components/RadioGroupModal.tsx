@@ -37,6 +37,8 @@ export type RadioGroupModalProps = {
   topRightButtonText: string
   /** Accessibility hint for the button in the upper right */
   topRightButtonA11yHint?: string
+  /** Function called when the modal is opened to support analytics */
+  onShowAnalyticsFn?: () => void
 }
 
 const RadioGroupModal: FC<RadioGroupModalProps> = ({
@@ -49,6 +51,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   buttonA11yHint,
   topRightButtonText,
   topRightButtonA11yHint,
+  onShowAnalyticsFn,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
@@ -57,6 +60,9 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
 
   const showModal = (): void => {
     setModalVisible(true)
+    if (onShowAnalyticsFn) {
+      onShowAnalyticsFn()
+    }
   }
 
   const onCancelPressed = (): void => {
