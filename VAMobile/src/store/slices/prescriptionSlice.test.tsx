@@ -44,20 +44,23 @@ context('Prescription', () => {
       const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_REQUEST_REFILLS })
       expect(startAction).toBeTruthy()
       expect(startAction?.state.prescriptions.submittedRequestRefillCount).toEqual(1)
+      expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
 
       // Submitting second request
       const continueAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_CONTINUE_REQUEST_REFILLS })
       expect(continueAction).toBeTruthy()
       expect(continueAction?.state.prescriptions.submittedRequestRefillCount).toEqual(2)
+      expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
 
       // finish should stay the same
       const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
       expect(finishAction).toBeTruthy()
       expect(finishAction?.state.prescriptions.submittedRequestRefillCount).toEqual(2)
+      expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
     })
 
     describe('if some successfully submit', () => {
-      it('should set showLoadingScreenRequestRefillsRetry to true', async () => {
+      it('should set needsRefillableLoaded and prescriptionsNeedLoad to true', async () => {
         when(api.put as jest.Mock)
             .calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/refill`)
             .mockResolvedValue({})
@@ -81,11 +84,12 @@ context('Prescription', () => {
           }
         ] as RefillRequestSummaryItems)
         expect(finishAction?.state.prescriptions.needsRefillableLoaded).toBeTruthy()
+        expect(finishAction?.state.prescriptions.prescriptionsNeedLoad).toBeTruthy()
       })
     })
 
     describe('if all failed to submit', () => {
-      it('should set showLoadingScreenRequestRefillsRetry to false', async () => {
+      it('should set needsRefillableLoaded and prescriptionsNeedLoad to false', async () => {
         when(api.put as jest.Mock)
             .calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/refill`)
             .mockRejectedValue({})
@@ -109,6 +113,7 @@ context('Prescription', () => {
           }
         ] as RefillRequestSummaryItems)
         expect(finishAction?.state.prescriptions.needsRefillableLoaded).toBeFalsy()
+        expect(finishAction?.state.prescriptions.prescriptionsNeedLoad).toBeFalsy()
       })
     })
 
@@ -168,6 +173,7 @@ context('Prescription', () => {
           ...initialPrescriptionState,
           // Properties for refill
           submittedRequestRefillCount: 1,
+          totalSubmittedRequestRefill: 1,
           showLoadingScreenRequestRefills: true,
           submittingRequestRefills: true,
           showLoadingScreenRequestRefillsRetry: true
@@ -181,6 +187,7 @@ context('Prescription', () => {
       expect(clearAction).toBeTruthy()
       expect(clearAction?.state.prescriptions).toEqual(expect.objectContaining({
         submittedRequestRefillCount: 0,
+        totalSubmittedRequestRefill: 0,
         showLoadingScreenRequestRefills: false,
         submittingRequestRefills: false,
         showLoadingScreenRequestRefillsRetry: false
