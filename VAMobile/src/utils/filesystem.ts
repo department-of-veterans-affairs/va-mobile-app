@@ -1,7 +1,7 @@
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
-import { featureEnabled } from './remoteConfig'
-import { logNonFatalErrorToFirebase } from './analytics'
+import { featureEnabled } from 'utils/remoteConfig'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { refreshAccessToken } from 'store/slices/authSlice'
 import RNFetchBlob, { FetchBlobResponse, RNFetchBlobConfig } from 'rn-fetch-blob'
 
