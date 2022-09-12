@@ -262,7 +262,7 @@
   "secureMessaging.viewMessage.draftPrefix": "DRAFT - ",
   "secureMessaging.viewMessage.errorTitle": "Message could not be found",
   "secureMessaging.viewMessage.loading": "Loading your message...",
-  "secureMessaging.viewMessage.loadingAttachment": "We are getting your attachment. This may take a few minutes.",
+  "secureMessaging.viewMessage.loadingAttachment": "Loading your attachment...",
   "secureMessaging.doNotUseSM": "Do not use Secure Messaging if you have a medical emergency or an urgent need. It may take a few days for you to get a reply.",
   "termsAndConditions.goTo": "Go to My HealtheVet",
   "termsAndConditions.goTo.a11yLabel": "Go to My Healthy Vet",
