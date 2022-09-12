@@ -42,10 +42,11 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     const body = JSON.stringify(params)
     const results: FetchBlobResponse = await RNFetchBlob.config(options).fetch(method, endpoint, headers, body)
     const statusCode = results.respInfo.status
+    const accessTokenExpired = (SISEnabled && statusCode === 403) || (!SISEnabled && statusCode === 401)
 
     // Unauthorized, access-token likely expired
     // TODO: add analytics here to capture failed attempts
-    if ((SISEnabled && statusCode === 403) || (!SISEnabled && statusCode === 401 && retries > 0)) {
+    if (accessTokenExpired && retries > 0) {
       // refresh auth token and re-download
       await refreshAccessToken(getRefreshToken() || '')
       return await downloadFile(method, endpoint, fileName, params, retries - 1)
