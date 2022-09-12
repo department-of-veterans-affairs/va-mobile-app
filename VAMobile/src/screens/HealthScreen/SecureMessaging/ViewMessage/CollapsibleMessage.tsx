@@ -31,7 +31,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
@@ -76,7 +76,6 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
                     a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
                     a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
                     onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
-                    load={`attachment-${a.id}` === loadingFileKey && loadingFile}
                   />
                 </Box>
               ))}
