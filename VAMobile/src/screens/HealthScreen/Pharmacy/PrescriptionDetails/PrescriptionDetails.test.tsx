@@ -15,7 +15,7 @@ context('PrescriptionDetails', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}, refillStatus: RefillStatus = RefillStatusConstants.ACTIVE ) => {
+  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {} ) => {
     const props = mockNavProps(undefined, undefined, { params: { prescriptionId: '13650544' } })
 
     component = render(<PrescriptionDetails {...props} />, {
@@ -28,7 +28,7 @@ context('PrescriptionDetails', () => {
               type: 'Prescription',
               id: '13650544',
               attributes: {
-                refillStatus: refillStatus,
+                refillStatus: RefillStatusConstants.ACTIVE ,
                 refillSubmitDate: '2022-10-28T04:00:00.000Z',
                 refillDate: '2022-10-28T04:00:00.000Z',
                 refillRemaining: 5,
@@ -110,10 +110,13 @@ context('PrescriptionDetails', () => {
   describe('Go to My VA Health button', () => {
     describe('when status is RefillStatusConstants.TRANSFERRED', () => {
       it('should display FooterButton', async () => {
-        initializeTestInstance({}, RefillStatusConstants.TRANSFERRED)
+        initializeTestInstance({
+          refillStatus: RefillStatusConstants.TRANSFERRED
+        })
 
         const footerButton = testInstance.findAllByType(FooterButton)
         expect(footerButton.length).toBe(1)
+        expect(footerButton[0].props.text).toEqual('Go to My VA Health')
       })
     })
 
@@ -127,10 +130,35 @@ context('PrescriptionDetails', () => {
     })
   })
 
+  describe('RequestRefillButton', () => {
+    describe('when isRefillable is true', () => {
+      it('should display FooterButton', async () => {
+        initializeTestInstance({
+          isRefillable: true
+        })
+
+        const footerButton = testInstance.findAllByType(FooterButton)
+        expect(footerButton.length).toBe(1)
+        expect(footerButton[0].props.text).toEqual('Request refill')
+      })
+    })
+
+    describe('when isRefillable is false', () => {
+      it('should not display FooterButton', async () => {
+        initializeTestInstance()
+
+        const footerButton = testInstance.findAllByType(FooterButton)
+        expect(footerButton.length).toBe(0)
+      })
+    })
+  })
+
   describe('PrescriptionDetailsBanner', () => {
     describe('when status is RefillStatusConstants.TRANSFERRED', () => {
       it('should display the PrescriptionsDetailsBanner', async () => {
-        initializeTestInstance({}, RefillStatusConstants.TRANSFERRED)
+        initializeTestInstance({
+          refillStatus: RefillStatusConstants.TRANSFERRED
+        })
 
         const prescriptionsDetailsBanner = testInstance.findAllByType(PrescriptionsDetailsBanner)
         expect(prescriptionsDetailsBanner.length).toBe(1)

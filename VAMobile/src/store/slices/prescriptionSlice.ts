@@ -53,6 +53,7 @@ export type PrescriptionState = {
   showLoadingScreenRequestRefills: boolean
   showLoadingScreenRequestRefillsRetry: boolean
   submittedRequestRefillCount: number
+  totalSubmittedRequestRefill: number
   refillRequestSummaryItems: RefillRequestSummaryItems
   tabCounts: TabCounts
   prescriptionsNeedLoad: boolean
@@ -73,6 +74,7 @@ export const initialPrescriptionState: PrescriptionState = {
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
   submittedRequestRefillCount: 0,
+  totalSubmittedRequestRefill: 0,
   refillRequestSummaryItems: [],
   tabCounts: {},
   prescriptionsNeedLoad: true,
@@ -184,7 +186,7 @@ export const getRefillablePrescriptions =
 export const requestRefills =
   (prescriptions: PrescriptionsList): AppThunk =>
   async (dispatch, getState) => {
-    dispatch(dispatchStartRequestRefills())
+    dispatch(dispatchStartRequestRefills({ totalSubmittedRequestRefill: prescriptions.length }))
     const results: RefillRequestSummaryItems = []
     for (const p of prescriptions) {
       try {
@@ -266,7 +268,8 @@ const prescriptionSlice = createSlice({
       state.nonRefillableCount = nonRefillable.length
       state.needsRefillableLoaded = !!error
     },
-    dispatchStartRequestRefills: (state) => {
+    dispatchStartRequestRefills: (state, action: PayloadAction<{ totalSubmittedRequestRefill: number }>) => {
+      const { totalSubmittedRequestRefill } = action.payload
       // RefillScreen
       state.submittingRequestRefills = true
       state.showLoadingScreenRequestRefills = true
@@ -276,6 +279,7 @@ const prescriptionSlice = createSlice({
 
       // Both
       state.submittedRequestRefillCount = 1
+      state.totalSubmittedRequestRefill = totalSubmittedRequestRefill
     },
     dispatchContinueRequestRefills: (state) => {
       state.submittedRequestRefillCount += 1
@@ -288,14 +292,20 @@ const prescriptionSlice = createSlice({
       // RefillRequestSummary
       state.showLoadingScreenRequestRefillsRetry = false
 
+      // do a reload on refill data if some successfully submitted
+      const shouldReload = refillRequestSummaryItems.some((item) => item.submitted)
+
       // Both
       state.refillRequestSummaryItems = refillRequestSummaryItems
-      // do a reload on refill data if some successfully submitted
-      state.needsRefillableLoaded = refillRequestSummaryItems.some((item) => item.submitted)
+      state.needsRefillableLoaded = shouldReload
+
+      // PrescriptionDetails
+      state.prescriptionsNeedLoad = shouldReload
     },
     dispatchClearLoadingRequestRefills: (state) => {
       // Both
       state.submittedRequestRefillCount = 0
+      state.totalSubmittedRequestRefill = 0
 
       // RefillScreen
       state.showLoadingScreenRequestRefills = false

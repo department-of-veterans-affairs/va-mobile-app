@@ -5,6 +5,7 @@ import React, { FC, useEffect, useLayoutEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, getRefillablePrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
@@ -32,10 +33,15 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
-  const { loadingRefillable, submittingRequestRefills, refillablePrescriptions, needsRefillableLoaded, showLoadingScreenRequestRefills, submittedRequestRefillCount } = useSelector<
-    RootState,
-    PrescriptionState
-  >((s) => s.prescriptions)
+  const {
+    loadingRefillable,
+    submittingRequestRefills,
+    refillablePrescriptions,
+    needsRefillableLoaded,
+    showLoadingScreenRequestRefills,
+    submittedRequestRefillCount,
+    totalSubmittedRequestRefill,
+  } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []
   const prevLoadingRequestRefills = usePrevious<boolean>(submittingRequestRefills)
 
@@ -106,7 +112,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (showLoadingScreenRequestRefills) {
-    return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: selectedPrescriptionsCount })} />
+    return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: totalSubmittedRequestRefill })} />
   }
 
   return (
@@ -163,7 +169,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   )
 }
 
-type RefillStackScreenProps = Record<string, unknown>
+type RefillStackScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
 export type RefillStackParamList = {
   RefillScreen: undefined

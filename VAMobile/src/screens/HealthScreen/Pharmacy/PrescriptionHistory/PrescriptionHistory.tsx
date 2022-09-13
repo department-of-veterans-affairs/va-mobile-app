@@ -48,6 +48,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useFocusEffect } from '@react-navigation/native'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -194,11 +195,14 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     setCurrentPrescriptions(newPrescriptions || [])
   }, [page, prescriptions])
 
-  useEffect(() => {
-    if (prescriptionsNeedLoad && prescriptionsAuthorized && !prescriptionInDowntime) {
-      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
-    }
-  }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized, prescriptionInDowntime])
+  // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
+  useFocusEffect(
+    React.useCallback(() => {
+      if (prescriptionsNeedLoad && prescriptionsAuthorized && !prescriptionInDowntime) {
+        dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
+      }
+    }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized, prescriptionInDowntime]),
+  )
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support multiple screen IDs
