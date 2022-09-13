@@ -587,7 +587,7 @@
           "prescriptionName": "ZIDOVUDINE 1MG CAP",
           "dispensedDate": null,
           "stationNumber": "979",
-          "isRefillable": true,
+          "isRefillable": false,
           "isTrackable": false,
           "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 15 DAYS"
         }
@@ -608,7 +608,7 @@
           "prescriptionName": "ZIDOVUDINE 10MG CAP",
           "dispensedDate": null,
           "stationNumber": "979",
-          "isRefillable": true,
+          "isRefillable": false,
           "isTrackable": false,
           "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 2 DAYS"
         }
@@ -629,7 +629,7 @@
           "prescriptionName": "ZIDOVUDINE 11MG CAP",
           "dispensedDate": null,
           "stationNumber": "979",
-          "isRefillable": true,
+          "isRefillable": false,
           "isTrackable": false,
           "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 30 DAYS"
         }
@@ -650,7 +650,7 @@
           "prescriptionName": "LAMIVUDINE 10MG TAB",
           "dispensedDate": null,
           "stationNumber": "979",
-          "isRefillable": true,
+          "isRefillable": false,
           "isTrackable": false,
           "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 3 DAYS"
         }
@@ -671,7 +671,7 @@
           "prescriptionName": "LAMIVUDINE 10MG TAB",
           "dispensedDate": null,
           "stationNumber": "979",
-          "isRefillable": true,
+          "isRefillable": false,
           "isTrackable": false,
           "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 15 DAYS"
         }

@@ -148,6 +148,7 @@
   "prescription.details.banner.bullet2.a11yLabel": "Contact your local V-A pharmacy,",
   "prescription.details.banner.bullet3": "Call our automated phone system,",
   "prescription.details.banner.bullet4": "Mail in the refill slip that was included with your previous refill",
+  "prescription.details.loading": "Loading your prescription details...",
   "prescription.details.title": "Prescription Details",
   "prescription.details.instructionsHeader": "Instructions",
   "prescription.details.refillLeftHeader": "Refills left",

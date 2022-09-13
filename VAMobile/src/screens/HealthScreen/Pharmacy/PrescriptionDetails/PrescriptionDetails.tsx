@@ -4,14 +4,15 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, FooterButton, FooterButtonProps, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, FooterButton, FooterButtonProps, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionState } from 'store/slices/prescriptionSlice'
-import { RefillStatusConstants } from 'store/api/types'
+import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
+import { RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { RefillTag } from '../PrescriptionCommon'
 import { RootState } from 'store'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useExternalLink, useTheme } from 'utils/hooks'
+import { useFocusEffect } from '@react-navigation/native'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 import getEnv from 'utils/env'
@@ -20,19 +21,31 @@ type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'Prescrip
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
-const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
+const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }) => {
   const { prescriptionId } = route.params
-  const { prescriptionsById } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { loadingHistory, prescriptionsById, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
+  const submitRefillAlert = useDestructiveAlert()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const noneNoted = tc('noneNoted')
 
   const { contentMarginTop, contentMarginBottom } = theme.dimensions
 
-  const { refillStatus, prescriptionName, instructions, refillRemaining, refillDate, quantity, facilityName, prescriptionNumber, expirationDate, orderedDate } =
-    prescriptionsById[prescriptionId]?.attributes
+  const prescription = prescriptionsById[prescriptionId]
+  const { refillStatus, prescriptionName, isRefillable, instructions, refillRemaining, refillDate, quantity, facilityName, prescriptionNumber, expirationDate, orderedDate } =
+    prescription?.attributes
+
+  // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
+  useFocusEffect(
+    React.useCallback(() => {
+      if (prescriptionsNeedLoad) {
+        dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID))
+      }
+    }, [dispatch, prescriptionsNeedLoad]),
+  )
 
   const getDate = (date?: string | null) => {
     return date ? DateTime.fromISO(date).toUTC().toFormat('MM/dd/yyyy') : noneNoted
@@ -42,10 +55,16 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
     launchExternalLink(LINK_URL_GO_TO_PATIENT_PORTAL)
   }
 
-  const getFooter = () => {
-    if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
-      return <></>
+  const getFooterButton = () => {
+    if (refillStatus === RefillStatusConstants.TRANSFERRED) {
+      return getGoToMyVAHealthButton()
+    } else if (isRefillable) {
+      return getRequestRefillButton()
     }
+
+    return <></>
+  }
+  const getGoToMyVAHealthButton = () => {
     const footerButtonProps: FooterButtonProps = {
       text: tc('goToMyVAHealth'),
       testID: tc('goToMyVAHealth.a11yLabel'),
@@ -63,6 +82,34 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
     return <FooterButton {...footerButtonProps} />
   }
 
+  const getRequestRefillButton = () => {
+    const requestRefillButtonProps: FooterButtonProps = {
+      text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }),
+      backGroundColor: 'buttonPrimary',
+      textColor: 'navBar',
+      onPress: () => {
+        submitRefillAlert({
+          title: t('prescriptions.refill.confirmationTitle', { count: 0 }),
+          cancelButtonIndex: 0,
+          buttons: [
+            {
+              text: tc('cancel'),
+            },
+            {
+              text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }),
+              onPress: () => {
+                // Call refill request so its starts the loading screen and then go to the modal
+                dispatch(requestRefills([prescription]))
+                navigation.navigate('RefillScreenModal')
+              },
+            },
+          ],
+        })
+      },
+    }
+    return <FooterButton {...requestRefillButtonProps} />
+  }
+
   const getBanner = () => {
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
       return <></>
@@ -74,6 +121,10 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
   const lastRefilledDateFormatted = getDate(refillDate)
   const expireDateFormatted = getDate(expirationDate)
   const dateOrderedFormatted = getDate(orderedDate)
+
+  if (loadingHistory) {
+    return <LoadingComponent text={t('prescription.details.loading')} />
+  }
 
   return (
     <>
@@ -109,7 +160,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route }) => {
           </TextArea>
         </Box>
       </VAScrollView>
-      {getFooter()}
+      {getFooterButton()}
     </>
   )
 }
