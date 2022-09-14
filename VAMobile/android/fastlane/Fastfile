@@ -188,15 +188,16 @@ platform :android do
   end
 
   def upload(track)
-    skip_extras = track == "Development Team"
+    skip_meta = track == "Development Team"
+    puts "Skip meta: " + skip_meta.to_s
 
     supply(
       track: track, 
       package_name: "gov.va.mobileapp",
-      skip_upload_metadata: skip_extras,
-      skip_upload_changelogs: skip_extras,
-      skip_upload_images: skip_extras,
-      skip_upload_screenshots: skip_extras
+      skip_upload_metadata: skip_meta,
+      skip_upload_changelogs: skip_meta,
+      skip_upload_images: skip_meta,
+      skip_upload_screenshots: skip_meta
     )
   end
 
