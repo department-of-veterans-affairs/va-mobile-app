@@ -187,8 +187,11 @@ platform :android do
     gradle(task: "bundle", build_type: type)
   end
 
-  def upload(track)
-    skip_meta = track == "Development Team"
+  def upload(track, skip_meta = true)
+    if ["Pre-Prod Stash", "production"].include? track
+      skip_meta = false 
+    end
+
     puts "Skip meta: " + skip_meta.to_s
 
     supply(
