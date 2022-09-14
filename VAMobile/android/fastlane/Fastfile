@@ -43,7 +43,7 @@ platform :android do
     puts 'Run the review lane'
     update_version_and_build(options[:version ])
     bundle("Release")
-    upload("Pre-Prod Stash")
+    upload("Pre-Prod Stash", false)
     tag_build
     message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
     slack_sent_for_review(ENV['BUILD_NUM'], ENV['VERSION_NAME'], message, "Android", ENV['SLACK_THREAD_TS'])
@@ -187,13 +187,7 @@ platform :android do
     gradle(task: "bundle", build_type: type)
   end
 
-  def upload(track, skip_meta = true)
-    if ["Pre-Prod Stash", "production"].include? track
-      skip_meta = false 
-    end
-
-    puts "Skip meta: " + skip_meta.to_s
-
+  def upload(track, skip_meta = true)puts "Skip meta: " + skip_meta.to_s
     supply(
       track: track, 
       package_name: "gov.va.mobileapp",
