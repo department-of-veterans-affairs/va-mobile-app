@@ -187,7 +187,8 @@ platform :android do
     gradle(task: "bundle", build_type: type)
   end
 
-  def upload(track, skip_meta = true)puts "Skip meta: " + skip_meta.to_s
+  def upload(track, skip_meta = true)
+    puts "Skip meta: " + skip_meta.to_s
     supply(
       track: track, 
       package_name: "gov.va.mobileapp",
