@@ -148,7 +148,7 @@ platform :android do
     allLanes = ["production", "Development Team", "Pre-Prod Stash"]
     highest = 0
     allLanes.each do |track|
-      builds = google_play_track_version_codes(track:track.to_s)
+      builds = google_play_track_version_codes(track:track.to_s, package_name:"gov.va.mobileapp")
       if builds.max > highest
         highest = builds.max
       end
@@ -161,7 +161,7 @@ platform :android do
   allLanes = ["production", "Development Team", "Pre-Prod Stash"]
       highest = "0.0.0"
       allLanes.each do |track|
-        versions = google_play_track_release_names(track:track.to_s)
+        versions = google_play_track_release_names(track:track.to_s, package_name:"gov.va.mobileapp")
         max = versions.max_by{ |s| Gem::Version.new(s) }
         if Gem::Version.new(max) > Gem::Version.new(highest)
           highest = max
@@ -188,7 +188,16 @@ platform :android do
   end
 
   def upload(track)
-    supply(track: track, package_name: "gov.va.mobileapp")
+    skip_extras = track == "Development Team"
+
+    supply(
+      track: track, 
+      package_name: "gov.va.mobileapp",
+      skip_upload_metadata: skip_extras,
+      skip_upload_changelogs: skip_extras,
+      skip_upload_images: skip_extras,
+      skip_upload_screenshots: skip_extras
+    )
   end
 
   def promote_pre_prod
