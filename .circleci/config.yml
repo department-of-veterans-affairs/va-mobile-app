@@ -5,7 +5,7 @@ executors:
       - image: cimg/ruby:3.0.2-node
   android:
     docker:
-      - image: cimg/android:2022.07.1-node
+      - image: cimg/android:2022.09.2-node
     resource_class: large
   ios:
     macos:
