@@ -57,7 +57,7 @@ context('HealthScreen', () => {
       .mockReturnValue(mockNavigateToSecureMessagingSpy)
       .calledWith('VaccineList')
       .mockReturnValue(mockNavigateToVAVaccinesSpy)
-        .calledWith('Pharmacy').mockReturnValue(mockNavigateToPharmacySpy)
+        .calledWith('PrescriptionHistory').mockReturnValue(mockNavigateToPharmacySpy)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
