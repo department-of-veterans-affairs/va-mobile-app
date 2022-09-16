@@ -10,10 +10,6 @@ import DebugScreen from './index'
 import { initialAuthState, initialAnalyticsState } from 'store/slices'
 import { Pressable } from 'react-native'
 
-jest.mock('./../../../../utils/remoteConfig', () => ({
-  featureEnabled: jest.fn(() => Promise.resolve(true)),
-}))
-
 const authTokensIdxStart = 3
 context('DebugScreen', () => {
   let component: RenderAPI
