@@ -35,7 +35,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
-  const onPharmacy = navigateTo('Pharmacy')
+  const onPharmacy = navigateTo('PrescriptionHistory')
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.covidUpdates.loading') })

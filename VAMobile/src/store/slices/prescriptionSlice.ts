@@ -163,27 +163,6 @@ export const filterAndSortPrescriptions =
     dispatch(dispatchFinishFilterAndSortPrescriptions({ prescriptions: sortedList }))
   }
 
-export const getRefillablePrescriptions =
-  (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchStartGetAllPrescriptions())
-
-    try {
-      const prescriptionData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', {
-        'page[size]': '100',
-      })
-
-      dispatch(dispatchFinishGetAllPrescriptions({ prescriptionData }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getRefillablePrescriptions: ${prescriptionNonFatalErrorString}`)
-        dispatch(dispatchFinishGetPrescriptions({ prescriptionData: undefined, error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
-      }
-    }
-  }
-
 export const requestRefills =
   (prescriptions: PrescriptionsList): AppThunk =>
   async (dispatch, getState) => {
@@ -254,22 +233,6 @@ const prescriptionSlice = createSlice({
       state.loadingHistory = false
       state.prescriptionPagination = { ...meta?.pagination }
       state.prescriptionsById = prescriptionsById
-    },
-    dispatchStartGetRefillablePrescriptions: (state) => {
-      state.loadingRefillable = true
-    },
-    dispatchFinishGetRefillablePrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>) => {
-      const { prescriptionData, error } = action.payload
-      const { data: prescriptions } = prescriptionData || ({} as PrescriptionsGetData)
-      const refillable = prescriptions.filter((item) => item.attributes.isRefillable === true)
-      const nonRefillable = prescriptions.filter((item) => item.attributes.isRefillable === false)
-
-      state.loadingRefillable = false
-      state.refillablePrescriptions = refillable
-      state.refillableCount = refillable.length
-      state.nonRefillablePrescriptions = nonRefillable
-      state.nonRefillableCount = nonRefillable.length
-      state.needsRefillableLoaded = !!error
     },
     dispatchStartRequestRefills: (state, action: PayloadAction<{ totalSubmittedRequestRefill: number }>) => {
       const { totalSubmittedRequestRefill } = action.payload
@@ -390,8 +353,6 @@ const prescriptionSlice = createSlice({
 export const {
   dispatchStartGetPrescriptions,
   dispatchFinishGetPrescriptions,
-  dispatchFinishGetRefillablePrescriptions: dispatchFinishGetAllPrescriptions,
-  dispatchStartGetRefillablePrescriptions: dispatchStartGetAllPrescriptions,
   dispatchStartRequestRefills,
   dispatchContinueRequestRefills,
   dispatchFinishRequestRefills,

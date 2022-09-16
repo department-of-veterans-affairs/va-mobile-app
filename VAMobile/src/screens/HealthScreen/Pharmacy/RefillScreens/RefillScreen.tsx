@@ -8,7 +8,7 @@ import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionState, dispatchClearLoadingRequestRefills, getRefillablePrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
+import { PrescriptionState, dispatchClearLoadingRequestRefills, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { useAppDispatch, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
@@ -53,7 +53,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (needsRefillableLoaded && !prescriptionInDowntime) {
-      dispatch(getRefillablePrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
+      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID))
     }
   }, [dispatch, needsRefillableLoaded, prescriptionInDowntime])
 
@@ -100,7 +100,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (prescriptionInDowntime) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
   }
 
   if (refillable.length === 0) {

@@ -15,7 +15,6 @@ import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
-import PharmacyScreen from './Pharmacy'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
@@ -104,7 +103,6 @@ export type HealthStackParamList = WebviewStackParams & {
   VaccineDetails: {
     vaccineId: string
   }
-  Pharmacy: undefined
   PrescriptionHistory: {
     startingTab?: PrescriptionHistoryTabs | undefined
   }
@@ -153,7 +151,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
     <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
-    <HealthStack.Screen key={'Pharmacy'} name="Pharmacy" component={PharmacyScreen} options={{ title: t('prescription.title') }} />,
     <HealthStack.Screen key={'PrescriptionHistory'} name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />,
     <HealthStack.Screen key={'PrescriptionDetails'} name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />,
     <HealthStack.Screen

@@ -78,7 +78,7 @@ context('RefillScreen', () => {
   })
 
   describe('when there is a downtime message for rx refill', () => {
-    it('should show PRESCRIPTION_SCREEN downtime message', async () => {
+    it('should show PRESCRIPTION_REFILL_SCREEN_ID downtime message', async () => {
       await waitFor(() => {
         initializeTestInstance( {}, {
           downtimeWindowsByFeature: {
@@ -93,7 +93,7 @@ context('RefillScreen', () => {
 
       const error = testInstance.findByType(ErrorComponent)
       expect(error).toBeTruthy()
-      expect(error.props.screenID).toEqual(ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID)
+      expect(error.props.screenID).toEqual(ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID)
     })
   })
 })
