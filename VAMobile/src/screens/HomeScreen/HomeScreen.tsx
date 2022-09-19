@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
+import { Box, FocusedNavHeaderText, MultiTouchCard, MultiTouchCardProps, SimpleList, SimpleListItemObj, TextLine, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
 import { DateTime } from 'luxon'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -10,6 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
+import { TextLines } from '../../components/TextLines'
 import { createStackNavigator } from '@react-navigation/stack'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
@@ -84,6 +85,30 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
+  const middleTextLines: Array<TextLine> = [
+    {
+      text: 'line 1',
+      variant: 'MobileBodyBold',
+    },
+    {
+      text: 'line 1',
+      variant: 'MobileBodyBold',
+    },
+    {
+      text: 'line 1',
+      variant: 'MobileBodyBold',
+    },
+  ]
+  const bottomText: Array<TextLine> = [
+    { text: 'bottom line 1', variant: 'MobileBodyBold' },
+    { text: 'bottom line 2', variant: 'MobileBodyBold' },
+  ]
+  const props: MultiTouchCardProps = {
+    a11yValue: 'Prescription 1 of 1',
+    mainContent: <TextLines listOfText={middleTextLines} />,
+    bottomContent: <TextLines listOfText={bottomText} />,
+  }
+
   return (
     <VAScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
       <Box flex={1} justifyContent="flex-start">
@@ -94,42 +119,43 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           </TextView>
         </Box>
         <Box mx={theme.dimensions.gutter}>
-          <LargeNavButton
-            title={t('claimsAndAppeals.title')}
-            subText={t('claimsAndAppeals.subText')}
-            onPress={onClaimsAndAppeals}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('healthCare.title')}
-            subText={t('healthCare.subText')}
-            onPress={onHealthCare}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('letters.title')}
-            subText={t('letters.subText')}
-            onPress={onLetters}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('payments.title')}
-            subText={t('payments.subText')}
-            onPress={onPayments}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
+          <MultiTouchCard {...props} />
+          {/*<LargeNavButton*/}
+          {/*  title={t('claimsAndAppeals.title')}*/}
+          {/*  subText={t('claimsAndAppeals.subText')}*/}
+          {/*  onPress={onClaimsAndAppeals}*/}
+          {/*  borderWidth={theme.dimensions.buttonBorderWidth}*/}
+          {/*  borderColor={'secondary'}*/}
+          {/*  borderColorActive={'primaryDarkest'}*/}
+          {/*  borderStyle={'solid'}*/}
+          {/*/>*/}
+          {/*<LargeNavButton*/}
+          {/*  title={t('healthCare.title')}*/}
+          {/*  subText={t('healthCare.subText')}*/}
+          {/*  onPress={onHealthCare}*/}
+          {/*  borderWidth={theme.dimensions.buttonBorderWidth}*/}
+          {/*  borderColor={'secondary'}*/}
+          {/*  borderColorActive={'primaryDarkest'}*/}
+          {/*  borderStyle={'solid'}*/}
+          {/*/>*/}
+          {/*<LargeNavButton*/}
+          {/*  title={t('letters.title')}*/}
+          {/*  subText={t('letters.subText')}*/}
+          {/*  onPress={onLetters}*/}
+          {/*  borderWidth={theme.dimensions.buttonBorderWidth}*/}
+          {/*  borderColor={'secondary'}*/}
+          {/*  borderColorActive={'primaryDarkest'}*/}
+          {/*  borderStyle={'solid'}*/}
+          {/*/>*/}
+          {/*<LargeNavButton*/}
+          {/*  title={t('payments.title')}*/}
+          {/*  subText={t('payments.subText')}*/}
+          {/*  onPress={onPayments}*/}
+          {/*  borderWidth={theme.dimensions.buttonBorderWidth}*/}
+          {/*  borderColor={'secondary'}*/}
+          {/*  borderColorActive={'primaryDarkest'}*/}
+          {/*  borderStyle={'solid'}*/}
+          {/*/>*/}
         </Box>
         <Box my={theme.dimensions.contentMarginBottom}>
           <SimpleList items={buttonDataList} />

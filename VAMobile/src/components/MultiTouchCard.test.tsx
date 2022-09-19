@@ -20,25 +20,27 @@ context('MultiTouchCard', () => {
     onPressSpy = jest.fn(() => {})
 
     const middleTextLines: Array<TextLine> = [
-      { text: 'line 1', variant: 'MobileBodyBold' },
       {
-        text: 'line 2',
+        text: 'line 1',
+        variant: 'MobileBodyBold',
+      },
+      {
+        text: 'line 1',
+        variant: 'MobileBodyBold',
+      },
+      {
+        text: 'line 1',
+        variant: 'MobileBodyBold',
       },
     ]
-
-    const bottomText: Array<TextLine> = [{ text: 'bottom line 1', variant: 'MobileBodyBold' }]
-
+    const bottomText: Array<TextLine> = [
+      { text: 'bottom line 1', variant: 'MobileBodyBold' },
+      { text: 'bottom line 2', variant: 'MobileBodyBold' },
+    ]
     const props: MultiTouchCardProps = {
-      topText: 'top part',
-      topTextColor: 'primaryContrast',
       a11yValue: 'Prescription 1 of 1',
-      topA11yHint: 'Review status definition',
-      topIconColor: 'infoIconContrast',
-      middleContent: <TextLines listOfText={middleTextLines} />,
-      middleA11yHint: 'Review prescription details',
-      topBackgroundColor: 'completedPhase',
+      mainContent: <TextLines listOfText={middleTextLines} />,
       bottomContent: <TextLines listOfText={bottomText} />,
-      bottomA11yHint: 'Review tracking details',
     }
 
     component = render(<MultiTouchCard {...props} />)
