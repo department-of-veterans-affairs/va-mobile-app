@@ -20,5 +20,5 @@ Our expectations are that representatives will pay attention at the meeting (inh
 > “I had a lot of questions about how they’re going to implement the calendar feature for appointments, seems like there’s a lot of accessibility things to figure out there still.”
 - Things the whole team needs to know to do our jobs
 > - “We're pausing all work on this feature. Hold off on writing test plans for the areas we assigned out last week, until further notice." 
-When you’re sensing a problem, or if there’s something to keep an eye out for
+- When you’re sensing a problem, or if there’s something to keep an eye out for
 > “My first round of testing for the migration turned up way more issues than we expected. I confirmed changes with the testing plan with Eng and Product at the feature check-in, and the rest of the team can expect a meeting invitation to get up to speed (so you can also start testing) sometime this week."
