@@ -435,6 +435,7 @@
   "secureMessaging.viewMessage.draftPrefix": "DRAFT - ",
   "secureMessaging.viewMessage.errorTitle": "Message could not be found",
   "secureMessaging.viewMessage.loading": "Loading your message...",
+  "secureMessaging.viewMessage.loadingAttachment": "Loading your attachment...",
   "secureMessaging.doNotUseSM": "Do not use Secure Messaging if you have a medical emergency or an urgent need. It may take a few days for you to get a reply.",
   "statusGlossary.title": "Status Glossary",
   "statusGlossary.active": "A prescription that can be filled at the local VA pharmacy. If this prescription is refillable, you may request a refill of this VA prescription.",

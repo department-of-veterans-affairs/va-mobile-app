@@ -26,6 +26,10 @@ export enum ButtonDecoratorType {
   FilledRadio = 'FilledRadio',
   /** Disabled radio button decorator */
   DisabledRadio = 'DisabledRadio',
+  /** Empty radio button decorator */
+  EmptyCheckBox = 'EmptyCheckBox',
+  /** Filled radio button decorator */
+  FilledCheckBox = 'FilledCheckBox',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>

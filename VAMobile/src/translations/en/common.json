@@ -97,6 +97,8 @@
   "reset":"Reset",
   "save": "Save",
   "save.a11yHint": "Saves changes and navigates to the previous page",
+  "selected": "selected",
+  "option": "option",
   "skip": "Skip",
   "text.raw": "{{text}}",
   "tryAgain": "Try again",
