@@ -8,8 +8,8 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
-import { bytesToFinalSizeDisplay } from 'utils/common'
-import { getFormattedDateTimeYear } from 'utils/formattingUtils'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
+import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
@@ -31,9 +31,9 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
-  const dateTime = getFormattedDateTimeYear(sentDate)
+  const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
 
   const onPress = (expandedValue?: boolean): void => {
@@ -72,10 +72,10 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
                   <AttachmentLink
                     name={a.filename}
                     formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
+                    formattedSizeA11y={bytesToFinalSizeDisplayA11y(a.size, tFunction)}
                     a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
                     a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
                     onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
-                    load={`attachment-${a.id}` === loadingFileKey && loadingFile}
                   />
                 </Box>
               ))}

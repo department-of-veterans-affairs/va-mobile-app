@@ -41,17 +41,18 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 - Chika Adibemma - Engineer
 - Narin Ratana - Engineer
 - Jayson Perkins - Engineer
-- Andrew Herzberg, Engineer
-- Jon Bindbeutel, Engineer
-- Kris Pethtel, Engineer
-- Tim Roettger, Engineer
-- Raf Arroyo, Engineer
-- Jason Conigliari, Engineer
-- John Marchi, Engineer
-- Ken Li, Engineer
+- Raf Arroyo - Engineer
+- John Marchi - Engineer
+- Ken Li - Engineer
+- Andrew Herzberg - Engineer
+- Jon Bindbeutel - Engineer
+- Tim Roettger - Engineer
+- Jason Conigliari - Engineer
+- Kris Pethtel - Engineer
+- Dylan Nienberg - Engineer
 - Ken Harrison - QA Support
-- Tom Gammons, Engineer, QA
-- Therese Dickson, Engineer, QA
+- Tom Gammons - Engineer, QA
+- Therese Dickson - Engineer, QA
 
 ## Communications
 - Slack: #va-mobile-app

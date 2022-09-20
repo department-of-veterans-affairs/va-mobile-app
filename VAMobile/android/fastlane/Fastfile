@@ -43,7 +43,7 @@ platform :android do
     puts 'Run the review lane'
     update_version_and_build(options[:version ])
     bundle("Release")
-    upload("Pre-Prod Stash")
+    upload("Pre-Prod Stash", false)
     tag_build
     message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
     slack_sent_for_review(ENV['BUILD_NUM'], ENV['VERSION_NAME'], message, "Android", ENV['SLACK_THREAD_TS'])
@@ -119,7 +119,7 @@ platform :android do
   error do |lane, exception, options|
     puts("ERROR REPORT")
     puts exception
-#     slack_build_error(exception, options[:version], "Android Build Failed", "Android", ENV['SLACK_THREAD_TS'])
+    slack_build_error(exception, options[:version], "Android Build Failed", "Android", ENV['SLACK_THREAD_TS'])
   end
 
 # method to update the version and build in the repo
@@ -145,10 +145,10 @@ platform :android do
 
 # method to get the highest build number from all tracks in the Play Store
   def get_latest_build_num
-    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office", "Pre-Prod Stash"]
+    allLanes = ["production", "Development Team", "Pre-Prod Stash"]
     highest = 0
     allLanes.each do |track|
-      builds = google_play_track_version_codes(track:track.to_s)
+      builds = google_play_track_version_codes(track:track.to_s, package_name:"gov.va.mobileapp")
       if builds.max > highest
         highest = builds.max
       end
@@ -158,10 +158,10 @@ platform :android do
 
 # method to get the highest version number from all tracks in the Play Store
   def get_latest_version_name
-  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office", "Pre-Prod Stash"]
+  allLanes = ["production", "Development Team", "Pre-Prod Stash"]
       highest = "0.0.0"
       allLanes.each do |track|
-        versions = google_play_track_release_names(track:track.to_s)
+        versions = google_play_track_release_names(track:track.to_s, package_name:"gov.va.mobileapp")
         max = versions.max_by{ |s| Gem::Version.new(s) }
         if Gem::Version.new(max) > Gem::Version.new(highest)
           highest = max
@@ -187,8 +187,16 @@ platform :android do
     gradle(task: "bundle", build_type: type)
   end
 
-  def upload(track)
-    supply(track: track, package_name: "gov.va.mobileapp")
+  def upload(track, skip_meta = true)
+    puts "Skip meta: " + skip_meta.to_s
+    supply(
+      track: track, 
+      package_name: "gov.va.mobileapp",
+      skip_upload_metadata: skip_meta,
+      skip_upload_changelogs: skip_meta,
+      skip_upload_images: skip_meta,
+      skip_upload_screenshots: skip_meta
+    )
   end
 
   def promote_pre_prod

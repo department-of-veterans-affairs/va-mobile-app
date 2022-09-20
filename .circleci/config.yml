@@ -5,7 +5,7 @@ executors:
       - image: cimg/ruby:3.0.2-node
   android:
     docker:
-      - image: cimg/android:2021.10.2-node
+      - image: cimg/android:2022.09.2-node
     resource_class: large
   ios:
     macos:
@@ -218,7 +218,7 @@ commands:
             - get_slack_thread
       - run:
           working_directory: ~/project/VAMobile/android
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" psTrack:"<<parameters.ps_track>>"
+          command: bundle exec fastlane <<parameters.lane>> --verbose version:<<parameters.version>> notes:"<<parameters.notes>>" psTrack:"<<parameters.ps_track>>"
   run_script:
     description: "Runs a bash script. Takes the working directory, script name and script options as params"
     parameters:

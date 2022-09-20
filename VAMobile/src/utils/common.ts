@@ -1,6 +1,6 @@
+import { Animated, Dimensions, TextInput } from 'react-native'
 import { Asset } from 'react-native-image-picker'
 import { DateTime } from 'luxon'
-import { Dimensions, TextInput } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { RefObject } from 'react'
 import { contains, isEmpty, map } from 'underscore'
@@ -10,6 +10,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { ErrorObject } from 'store/api'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { PhoneData } from 'store/api/types/PhoneData'
+import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
@@ -340,7 +341,11 @@ export const getA11yLabelText = (itemTexts: Array<TextLine>): string => {
  * @param t - translation function
  * @param fileSizeParens - whether to include parenthesis around the file size
  */
-export const getFileDisplay = (attachment: ImagePickerResponse | DocumentPickerResponse, t: TFunction, fileSizeParens: boolean): { fileName: string; fileSize: string } => {
+export const getFileDisplay = (
+  attachment: ImagePickerResponse | DocumentPickerResponse,
+  t: TFunction,
+  fileSizeParens: boolean,
+): { fileName: string; fileSize: string; fileSizeA11y: string } => {
   let fileName: string | undefined
   let fileSize: number | undefined
 
@@ -356,5 +361,32 @@ export const getFileDisplay = (attachment: ImagePickerResponse | DocumentPickerR
 
   const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, t, fileSizeParens) : ''
 
-  return { fileName: fileName || '', fileSize: formattedFileSize }
+  const formattedFileSizeA11y = fileSize ? bytesToFinalSizeDisplayA11y(fileSize, t, fileSizeParens) : ''
+
+  return { fileName: fileName || '', fileSize: formattedFileSize, fileSizeA11y: formattedFileSizeA11y }
+}
+
+// function to animate a full screen panel into half the size
+export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  // height of the visible application window
+  const windowHeight = Dimensions.get('window').height
+
+  const translateY = Animated.multiply(
+    current.progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [windowHeight, windowHeight / 2], // modify constant for size of panel
+      extrapolate: 'clamp',
+    }),
+    inverted,
+  )
+  const overlayOpacity = current.progress.interpolate({
+    inputRange: [0, 1, 1.0001, 2],
+    outputRange: [0, 0.3, 1, 1],
+  })
+  return {
+    cardStyle: {
+      transform: [{ translateY }],
+    },
+    overlayStyle: { opacity: overlayOpacity },
+  }
 }
