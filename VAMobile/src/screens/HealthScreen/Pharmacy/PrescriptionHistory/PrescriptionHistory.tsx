@@ -19,8 +19,6 @@ import {
   LinkTypeOptionsConstants,
   LinkUrlIconType,
   LoadingComponent,
-  MultiTouchCard,
-  MultiTouchCardProps,
   Pagination,
   PaginationProps,
   TabBar,
@@ -51,6 +49,9 @@ import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+/** TODO: This back compat version of the card is the old component. Using this until the implementation
+ * of the new style card is done so we don't lose functionality while working on the updates */
+import MultiTouchCardBackCompat, { MultiTouchCardBackCompatProps } from 'components/MultiTouchCard_BACKWARDS_COMPAT'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -267,7 +268,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       const refillStatus = prescription.attributes.refillStatus
       const refillStatusText = getTextForRefillStatus(refillStatus, t)
 
-      let cardProps: MultiTouchCardProps = {
+      let cardProps: MultiTouchCardBackCompatProps = {
         topOnPress: navigateTo('StatusGlossary', { display: refillStatusText, value: refillStatus }),
         topText: refillStatusText,
         topBackgroundColor: getTagColorForStatus(refillStatus),
@@ -308,7 +309,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
       return (
         <Box mt={theme.dimensions.standardMarginBetween} key={idx}>
-          <MultiTouchCard {...cardProps} />
+          <MultiTouchCardBackCompat {...cardProps} />
         </Box>
       )
     })

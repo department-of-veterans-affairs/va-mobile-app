@@ -62,6 +62,7 @@ export type VATextColors = {
   tabSelectorInactive: string
   tabSelectorActive: string
   closePanel: string
+  labelTag: string
 }
 
 export type VAIconColors = {

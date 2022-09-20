@@ -18,6 +18,8 @@ export type radioOption<T> = {
   headerText?: string
   /** optional accessibilityLabel */
   a11yLabel?: string
+  /** Additional text to present under label key */
+  additionalLabelText?: Array<string>
 }
 
 /**
@@ -113,6 +115,13 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
         }
       }
       const textLines: Array<TextLine> = [{ text: option.labelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' }]
+
+      if (option.additionalLabelText && option.additionalLabelText.length > 0) {
+        textLines[0].variant = 'MobileBodyBold'
+        option.additionalLabelText.forEach((item) => {
+          textLines.push({ text: item, variant: 'MobileBody' })
+        })
+      }
 
       const radioButton: DefaultListItemObj = {
         textLines,
