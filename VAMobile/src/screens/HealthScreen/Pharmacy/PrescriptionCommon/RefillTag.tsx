@@ -30,6 +30,7 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
   const pressableProps: PressableProps = {
     onPress: navigateTo('StatusGlossary', { display: statusText, value: status }),
     accessible: true,
+    accessibilityLabel: statusText,
     accessibilityRole: 'button',
     accessibilityHint: t('prescription.history.a11yHint.top'),
   }
