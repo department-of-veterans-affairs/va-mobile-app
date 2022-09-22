@@ -179,7 +179,7 @@
   "prescription.help.item4": "Self-entered medications",
   "prescription.help.listHeader": "Medications not included:",
   "prescription.history.a11yValue": "Prescription {{idx}} of {{total}}",
-  "prescription.history.a11yHint.top": "Review status definition",
+  "prescription.history.a11yHint.status": "Review status definition",
   "prescription.history.empty.title": "No matches found",
   "prescription.history.empty.message": "We can’t find any VA prescriptions that match the criteria for this list.",
   "prescription.history.list.title": "VA prescriptions ({{count}})",
