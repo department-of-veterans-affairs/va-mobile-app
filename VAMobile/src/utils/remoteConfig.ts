@@ -12,7 +12,7 @@ export let overrideRemote = false
 
 export type FeatureToggleType = 'testFeature'
 
-export type FeatureToggleValues = {
+type FeatureToggleValues = {
   testFeature: boolean
 }
 

@@ -70,18 +70,22 @@ const RemoteConfigScreen: FC = () => {
         </Box>
 
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
-          App Values {override && '(Overriding)'}
+          App Values
         </TextView>
         <Box mb={theme.dimensions.condensedMarginBetween}>
           {Object.keys(getFeatureToggles()).map((key: string) => {
             if (key === 'error') {
               return null
             }
+            const value = featureEnabled(key as FeatureToggleType).toString()
+            const isOverridden = override && featureEnabled(key as FeatureToggleType) !== remoteConfig().getValue(key).asBoolean()
             return (
               <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea>
-                  <TextView variant="MobileBodyBold">{key}</TextView>
-                  <TextView>{featureEnabled(key as FeatureToggleType).toString()}</TextView>
+                  <TextView variant="MobileBodyBold">
+                    {key} {isOverridden && '(overridden)'}
+                  </TextView>
+                  <TextView>{value}</TextView>
                 </TextArea>
               </Box>
             )
