@@ -15,6 +15,8 @@ import {
   CollapsibleAlert,
   CollapsibleAlertProps,
   ErrorComponent,
+  FooterButton,
+  FooterButtonProps,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -541,6 +543,20 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     )
   }
 
+  const getRequestRefillButton = () => {
+    if (currentTab !== PrescriptionHistoryTabConstants.ALL) {
+      return <></>
+    }
+
+    const requestRefillButtonProps: FooterButtonProps = {
+      text: t('prescription.history.startRefillRequest'),
+      backGroundColor: 'buttonPrimary',
+      textColor: 'navBar',
+      onPress: navigateTo('RefillScreenModal'),
+    }
+    return <FooterButton {...requestRefillButtonProps} />
+  }
+
   const getContent = () => {
     if (hasNoItems) {
       return noMatchDisplayEl
@@ -581,6 +597,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         </Box>
         {getContent()}
       </VAScrollView>
+      {getRequestRefillButton()}
     </Box>
   )
 }

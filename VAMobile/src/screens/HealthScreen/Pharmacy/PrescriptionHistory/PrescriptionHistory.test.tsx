@@ -6,9 +6,10 @@ import {render, context, RenderAPI, waitFor, findByTypeWithText, mockNavProps} f
 import PrescriptionHistory from './PrescriptionHistory'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import {PrescriptionsGetData} from 'store/api'
+import { PrescriptionHistoryTabs, PrescriptionsGetData } from 'store/api'
 import { initialAuthState, initialPrescriptionState, InitialState} from 'store/slices'
-import { TextView } from 'components'
+import { FooterButton, TextView } from 'components'
+import { PrescriptionHistoryTabConstants } from 'store/api/types'
 
 const prescriptionData: PrescriptionsGetData = {
   data: [
@@ -223,10 +224,10 @@ context('PrescriptionHistory', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (includeTransferred = false) => {
-  const props = mockNavProps(undefined, {
+  const initializeTestInstance = (includeTransferred = false, startingTab?: PrescriptionHistoryTabs) => {
+    const props = mockNavProps(undefined, {
       setOptions: jest.fn(),
-    }, { params: { } })
+    }, { params: { startingTab } })
 
     const data = prescriptionData.data
 
@@ -312,6 +313,34 @@ context('PrescriptionHistory', () => {
 
       expect(findByTypeWithText(testInstance, TextView, 'We can\'t refill some of your prescriptions in the app')).toBeTruthy()
 
+    })
+  })
+
+  describe('StartRefillRequestButton', () => {
+    describe('when currentTab is PrescriptionHistoryTabConstants.ALL', () => {
+      it('should show StartRefillRequest footer button', async () => {
+        await waitFor(() => {
+          initializeTestInstance()
+        })
+        const footerButtons = testInstance.findAllByType(FooterButton)
+        // [0] and [1] are Apply buttons from the sort and filter
+        expect(footerButtons.length).toEqual(3)
+        expect(footerButtons[2].props.text).toEqual('Start refill request')
+      })
+    })
+
+    describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
+      it('should not show StartRefillRequest footer button', async () => {
+        await waitFor(() => {
+          initializeTestInstance(false, PrescriptionHistoryTabConstants.SHIPPED)
+        })
+
+        const footerButtons = testInstance.findAllByType(FooterButton)
+        // [0] and [1] are Apply buttons from the sort and filter
+        expect(footerButtons.length).toEqual(2)
+        expect(footerButtons[0].props.text).not.toEqual('Start refill request')
+        expect(footerButtons[1].props.text).not.toEqual('Start refill request')
+      })
     })
   })
 })

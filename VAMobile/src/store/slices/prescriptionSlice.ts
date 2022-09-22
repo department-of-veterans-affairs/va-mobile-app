@@ -44,7 +44,6 @@ export type PrescriptionState = {
   refillableCount?: number
   nonRefillableCount?: number
   refillablePrescriptions?: PrescriptionsList
-  nonRefillablePrescriptions?: PrescriptionsList
   needsRefillableLoaded: boolean
   loadingRefillable: boolean
   loadingTrackingInfo: boolean
@@ -304,6 +303,7 @@ const prescriptionSlice = createSlice({
       const processingPrescriptions: PrescriptionData[] = []
       const shippedPrescriptions: PrescriptionData[] = []
       const transferredPrescriptions: PrescriptionData[] = []
+      const refillablePrescriptions: PrescriptionData[] = []
 
       prescriptions.forEach((prescription) => {
         prescriptionsById[prescription.id] = prescription
@@ -319,6 +319,10 @@ const prescriptionSlice = createSlice({
         if (prescription.attributes.refillStatus === RefillStatusConstants.TRANSFERRED) {
           transferredPrescriptions.push(prescription)
         }
+
+        if (prescription.attributes.isRefillable) {
+          refillablePrescriptions.push(prescription)
+        }
       })
 
       state.prescriptions = prescriptions
@@ -326,6 +330,7 @@ const prescriptionSlice = createSlice({
       state.processingPrescriptions = processingPrescriptions
       state.shippedPrescriptions = shippedPrescriptions
       state.transferredPrescriptions = transferredPrescriptions
+      state.refillablePrescriptions = refillablePrescriptions
 
       state.loadingHistory = false
       state.prescriptionPagination = { ...meta?.pagination }
