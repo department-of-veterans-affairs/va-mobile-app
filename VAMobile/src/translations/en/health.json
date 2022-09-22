@@ -184,7 +184,6 @@
   "prescription.history.empty.message": "We can’t find any VA prescriptions that match the criteria for this list.",
   "prescription.history.list.title": "VA prescriptions ({{count}})",
   "prescription.history.reviewDetails": "Review more prescription details",
-  "prescription.history.reviewDetails.a11yHint": "Review prescription details",
   "prescription.history.tag.active": "Active",
   "prescription.history.tag.active.hold": "Active: On Hold",
   "prescription.history.tag.active.inProgress": "Active: Refill in Process",
