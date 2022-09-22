@@ -114,6 +114,7 @@ context('ComposeMessage', () => {
     props = mockNavProps(
       undefined,
       {
+        addListener: mockUseComposeCancelConfirmationSpy,
         navigate: navigateSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
@@ -284,7 +285,6 @@ context('ComposeMessage', () => {
 
       await waitFor(() => {
         navHeaderSpy.back.props.onPress()
-        expect(goBack).not.toHaveBeenCalled()
         expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
       })
     })
