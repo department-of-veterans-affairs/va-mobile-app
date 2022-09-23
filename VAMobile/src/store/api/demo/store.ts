@@ -3,6 +3,7 @@ import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } fr
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
+import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
 import { Params } from '../api'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
 import {
@@ -30,7 +31,8 @@ export type DemoStore = AppointmentsDemoStore &
   VaccineDemoStore &
   DisabilityRatingDemoStore &
   LettersDemoStore &
-  PaymenDemoStore
+  PaymenDemoStore &
+  NotificationDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -44,6 +46,7 @@ type DemoApiReturns =
   | DisabilityRatingDemoApiReturnTypes
   | LettersDemoApiReturnTypes
   | PaymentsDemoReturnTypes
+  | NotificationDemoApiReturnTypes
 
 let store: DemoStore | undefined
 
@@ -68,6 +71,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/disablityRating.json'),
     import('./mocks/letters.json'),
     import('./mocks/payments.json'),
+    import('./mocks/notifications.json'),
   ])
   setDemoStore(data.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
@@ -108,6 +112,10 @@ export const transform = (callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
 const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
   if (!store) {
     return undefined
+  }
+
+  if (endpoint.startsWith('/v0/push/prefs/')) {
+    return store['/v0/push/prefs'] as DemoApiReturns
   }
 
   switch (endpoint) {

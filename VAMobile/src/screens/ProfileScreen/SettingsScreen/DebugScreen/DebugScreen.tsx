@@ -2,7 +2,6 @@ import { pick } from 'underscore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useState } from 'react'
-import remoteConfig from '@react-native-firebase/remote-config'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 
@@ -11,12 +10,10 @@ import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { RootState } from 'store'
-import { featureEnabled, getFeatureToggles, toggleFeature } from 'utils/remoteConfig'
-import { logout } from 'store/slices'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv, { EnvVars } from 'utils/env'
 
@@ -26,6 +23,7 @@ const DebugScreen: FC = ({}) => {
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
 
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
@@ -72,17 +70,17 @@ const DebugScreen: FC = ({}) => {
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
-        <Box mt={theme.dimensions.contentMarginTop}>
+        <Box>
           <TextArea>
             <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
-        <Box mt={theme.dimensions.contentMarginTop}>
+        <Box>
           <TextArea>
             <VAButton onPress={resetInAppReview} label={'Reset in-app review actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
-        <Box mt={theme.dimensions.contentMarginTop}>
+        <Box>
           <TextArea>
             <VAButton
               onPress={onClickFirebaseDebugMode}
@@ -91,7 +89,11 @@ const DebugScreen: FC = ({}) => {
             />
           </TextArea>
         </Box>
-
+        <Box>
+          <TextArea>
+            <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
@@ -111,45 +113,6 @@ const DebugScreen: FC = ({}) => {
             </Box>
           )
         })}
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextArea>
-            <TextView variant="BitterBoldHeading">Remote Config</TextView>
-          </TextArea>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextArea>
-              <TextView variant="MobileBodyBold">Last fetch status</TextView>
-              <TextView>{remoteConfig().lastFetchStatus}</TextView>
-            </TextArea>
-          </Box>
-          {getFeatureToggles().map((key: string) => {
-            if (key === 'error') {
-              return null
-            }
-            const val = remoteConfig().getValue(key)
-            return (
-              <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
-                <TextArea>
-                  <TextView variant="MobileBodyBold">{key}</TextView>
-                  <TextView>{`${val.asBoolean().toString()} (${val.getSource()})`}</TextView>
-                  {key === 'SIS' && (
-                    <Box mt={theme.dimensions.contentMarginTop}>
-                      <VAButton
-                        onPress={() => {
-                          toggleFeature('SIS')
-                          dispatch(logout())
-                        }}
-                        label={`${featureEnabled('SIS') ? 'Disable' : 'Enable'} SIS`}
-                        buttonType={ButtonTypesConstants.buttonPrimary}
-                      />
-                    </Box>
-                  )}
-                </TextArea>
-              </Box>
-            )
-          })}
-        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Authorized Services</TextView>
