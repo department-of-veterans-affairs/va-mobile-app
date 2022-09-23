@@ -32,7 +32,7 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
     accessible: true,
     accessibilityLabel: statusText,
     accessibilityRole: 'button',
-    accessibilityHint: t('prescription.history.a11yHint.top'),
+    accessibilityHint: t('prescription.history.a11yHint.status'),
   }
 
   const tagBoxProps: BoxProps = {

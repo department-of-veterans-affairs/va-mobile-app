@@ -21,6 +21,8 @@ import {
   LinkTypeOptionsConstants,
   LinkUrlIconType,
   LoadingComponent,
+  MultiTouchCard,
+  MultiTouchCardProps,
   Pagination,
   PaginationProps,
   TabBar,
@@ -46,14 +48,11 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getFilterArgsForFilter, getSortOrderOptionsForSortBy, getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
+import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-/** TODO: This back compat version of the card is the old component. Using this until the implementation
- * of the new style card is done so we don't lose functionality while working on the updates */
-import MultiTouchCardBackCompat, { MultiTouchCardBackCompatProps } from 'components/MultiTouchCard_BACKWARDS_COMPAT'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -267,21 +266,30 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     const total = currentPrescriptions?.length
 
     const listItems: Array<ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
-      const refillStatus = prescription.attributes.refillStatus
-      const refillStatusText = getTextForRefillStatus(refillStatus, t)
+      const detailsPressableProps: PressableProps = {
+        onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
+        accessible: true,
+        accessibilityRole: 'button',
+        accessibilityLabel: t('prescription.history.reviewDetails'),
+      }
 
-      let cardProps: MultiTouchCardBackCompatProps = {
-        topOnPress: navigateTo('StatusGlossary', { display: refillStatusText, value: refillStatus }),
-        topText: refillStatusText,
-        topBackgroundColor: getTagColorForStatus(refillStatus),
-        topTextColor: 'statusDescription',
-        topIconColor: 'statusInfoIcon',
+      const mainContent = (
+        <>
+          <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
+          <Pressable {...detailsPressableProps}>
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} height={theme.dimensions.touchableMinHeight} pt={5}>
+              <TextView variant={'HelperTextBold'} color={'link'}>
+                {t('prescription.history.reviewDetails')}
+              </TextView>
+              <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
+            </Box>
+          </Pressable>
+        </>
+      )
+
+      let cardProps: MultiTouchCardProps = {
         a11yValue: t('prescription.history.a11yValue', { idx: idx + 1, total: total }),
-        topA11yHint: t('prescription.history.a11yHint.top'),
-        middleOnPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
-        middleA11yHint: t('prescription.history.a11yHint.middle'),
-        middleContent: <PrescriptionListItem prescription={prescription.attributes} />,
-        bottomOnPress: () => {},
+        mainContent,
       }
 
       if (prescription.attributes.isTrackable) {
@@ -311,7 +319,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
       return (
         <Box mt={theme.dimensions.standardMarginBetween} key={idx}>
-          <MultiTouchCardBackCompat {...cardProps} />
+          <MultiTouchCard {...cardProps} />
         </Box>
       )
     })
