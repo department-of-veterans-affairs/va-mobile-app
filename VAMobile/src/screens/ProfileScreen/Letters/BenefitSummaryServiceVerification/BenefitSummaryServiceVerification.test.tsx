@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { Linking, Pressable, Switch as RNSwitch } from 'react-native'
+import { Linking, Pressable, Switch as RNSwitch, TouchableWithoutFeedback } from 'react-native'
 
 import { BasicError, ErrorComponent, LoadingComponent, Switch, TextView } from 'components'
 import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
@@ -197,10 +197,10 @@ context('BenefitSummaryServiceVerification', () => {
     })
   })
 
-  describe('on click of send a message', () => {
+  describe('on click of go to ask va', () => {
     it('should launch external link', async () => {
       await waitFor(() => {
-        findByTestID(testInstance, 'send-us-a-message').props.onPress()
+        testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
         expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://ask.va.gov/')
       })
     })
