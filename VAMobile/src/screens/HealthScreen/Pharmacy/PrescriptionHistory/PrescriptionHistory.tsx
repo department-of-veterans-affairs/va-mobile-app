@@ -268,6 +268,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
         accessible: true,
         accessibilityRole: 'button',
+        accessibilityLabel: t('prescription.history.reviewDetails'),
       }
 
       const mainContent = (

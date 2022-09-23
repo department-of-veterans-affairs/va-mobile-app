@@ -62,7 +62,7 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
       accessible: true,
       accessibilityRole: 'button',
       accessibilityHint: t('prescription.history.a11yHint.status'),
-      accessibilityLabel: status,
+      accessibilityLabel: statusText,
     }
 
     const infoIconProps: VAIconProps = {
