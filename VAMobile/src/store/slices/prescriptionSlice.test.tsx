@@ -1,12 +1,12 @@
 import _ from 'underscore'
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
-import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
+import { defaultPrescriptionsList as mockData, defaultLoadAllPrescriptionsList as loadAllPrescriptionMockData } from 'utils/tests/prescription'
 import { RootState } from 'store'
 import {
   dispatchClearLoadingRequestRefills,
   getTrackingInfo,
-  initialPrescriptionState,
+  initialPrescriptionState, loadAllPrescriptions,
   requestRefills
 } from './prescriptionSlice'
 import { RefillRequestSummaryItems } from '../api'
@@ -18,6 +18,8 @@ export const ActionTypes: {
   PRESCRIPTION_CLEAR_LOADING_REQUEST_REFILLS: string
   PRESCRIPTION_START_GET_TRACKING_INFO: string
   PRESCRIPTION_FINISH_GET_TRACKING_INFO: string
+  PRESCRIPTION_START_LOAD_ALL_PRESCRIPTIONS: string
+  PRESCRIPTION_FINISH_LOAD_ALL_PRESCRIPTIONS: string
 } = {
   PRESCRIPTION_START_REQUEST_REFILLS: 'prescriptions/dispatchStartRequestRefills',
   PRESCRIPTION_CONTINUE_REQUEST_REFILLS: 'prescriptions/dispatchContinueRequestRefills',
@@ -25,6 +27,8 @@ export const ActionTypes: {
   PRESCRIPTION_CLEAR_LOADING_REQUEST_REFILLS: 'prescriptions/dispatchClearLoadingRequestRefills',
   PRESCRIPTION_START_GET_TRACKING_INFO: 'prescriptions/dispatchStartGetTrackingInfo',
   PRESCRIPTION_FINISH_GET_TRACKING_INFO: 'prescriptions/dispatchFinishGetTrackingInfo',
+  PRESCRIPTION_START_LOAD_ALL_PRESCRIPTIONS: 'prescriptions/dispatchStartLoadAllPrescriptions',
+  PRESCRIPTION_FINISH_LOAD_ALL_PRESCRIPTIONS: 'prescriptions/dispatchFinishLoadAllPrescriptions',
 }
 
 context('Prescription', () => {
@@ -246,6 +250,36 @@ context('Prescription', () => {
       expect(endAction?.state.prescriptions.loadingTrackingInfo).toBeFalsy()
       expect(endAction?.state.prescriptions.trackingInfo).toBeUndefined()
       expect(endAction?.state.prescriptions.error).toEqual(error)
+    })
+  })
+
+  describe('loadAllPrescriptions', () => {
+    it('should filter shipped, processing, transferred, and refillable prescriptions into their own lists', async () => {
+      when(api.get as jest.Mock)
+      .calledWith('/v0/health/rx/prescriptions', expect.anything())
+      .mockResolvedValue({
+        data: loadAllPrescriptionMockData,
+        meta: {}
+      })
+
+      const store = realStore()
+      await store.dispatch(loadAllPrescriptions())
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_LOAD_ALL_PRESCRIPTIONS })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.prescriptions.loadingHistory).toBeTruthy()
+
+      const endAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_LOAD_ALL_PRESCRIPTIONS })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.prescriptions.loadingHistory).toBeFalsy()
+      // Total prescriptions
+      expect(endAction?.state.prescriptions.prescriptions?.length).toEqual(5)
+
+      expect(endAction?.state.prescriptions.processingPrescriptions?.length).toEqual(2)
+      expect(endAction?.state.prescriptions.shippedPrescriptions?.length).toEqual(1)
+      expect(endAction?.state.prescriptions.transferredPrescriptions?.length).toEqual(1)
+      expect(endAction?.state.prescriptions.refillablePrescriptions?.length).toEqual(1)
     })
   })
 })
