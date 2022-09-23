@@ -226,7 +226,7 @@ export const onAddPhotos = (
             { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
             (response: ImagePickerResponse): void => {
               postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
-            }
+            },
           )
           break
         case 1:
@@ -234,7 +234,7 @@ export const onAddPhotos = (
             { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
             (response: ImagePickerResponse): void => {
               postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
-            }
+            },
           )
           break
       }
