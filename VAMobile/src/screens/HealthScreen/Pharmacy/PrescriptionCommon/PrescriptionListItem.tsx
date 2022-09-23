@@ -104,7 +104,11 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
       <TextView mt={condensedMarginBetween} variant={'MobileBodyBold'}>
         {prescriptionName}
       </TextView>
-      <TextView variant={'HelperText'} color={'placeholder'} mt={condensedMarginBetween}>
+      <TextView
+        variant={'HelperText'}
+        color={'placeholder'}
+        mt={condensedMarginBetween}
+        accessibilityLabel={prescriptionNumber ? `${t('prescription.prescriptionNumber.a11yLabel')} ${prescriptionNumber.split('').join(' ')}` : noneNoted}>
         {`${t('prescription.prescriptionNumber')} ${prescriptionNumber || noneNoted}`}
       </TextView>
       {getTemporaryStatusTag()}
