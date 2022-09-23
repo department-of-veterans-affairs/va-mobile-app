@@ -37,6 +37,7 @@ import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
+import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
@@ -62,6 +63,7 @@ import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 const { ENVIRONMENT, IS_TEST } = getEnv()
 
 enableScreens(true)
+injectStore(store)
 
 const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()

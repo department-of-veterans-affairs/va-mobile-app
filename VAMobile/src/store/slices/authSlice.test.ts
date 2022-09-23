@@ -41,24 +41,24 @@ jest.mock('../../utils/platform', () => ({
 
 jest.mock('../../utils/env', () =>
   jest.fn(() => ({
-    AUTH_CLIENT_SECRET: 'TEST_SECRET',
-    AUTH_CLIENT_ID: 'VAMobile',
-    AUTH_REDIRECT_URL: 'vamobile://login-success',
-    AUTH_SCOPES: 'openid',
-    AUTH_ENDPOINT: 'https://test.gov/oauth/authorize',
-    AUTH_TOKEN_EXCHANGE_URL: 'https://test.gov/oauth/token',
-    AUTH_REVOKE_URL: 'https://test.gov/oauth/revoke',
+    AUTH_IAM_CLIENT_SECRET: 'TEST_SECRET',
+    AUTH_IAM_CLIENT_ID: 'VAMobile',
+    AUTH_IAM_REDIRECT_URL: 'vamobile://login-success',
+    AUTH_IAM_SCOPES: 'openid',
+    AUTH_IAM_ENDPOINT: 'https://test.gov/oauth/authorize',
+    AUTH_IAM_TOKEN_EXCHANGE_URL: 'https://test.gov/oauth/token',
+    AUTH_IAM_REVOKE_URL: 'https://test.gov/oauth/revoke',
   })),
 )
 
 const defaultEnvParams = {
-  AUTH_CLIENT_SECRET: 'TEST_SECRET',
-  AUTH_CLIENT_ID: 'VAMobile',
-  AUTH_REDIRECT_URL: 'vamobile://login-success',
-  AUTH_SCOPES: 'openid',
-  AUTH_ENDPOINT: 'https://test.gov/oauth/authorize',
-  AUTH_TOKEN_EXCHANGE_URL: 'https://test.gov/oauth/token',
-  AUTH_REVOKE_URL: 'https://test.gov/oauth/revoke',
+  AUTH_IAM_CLIENT_SECRET: 'TEST_SECRET',
+  AUTH_IAM_CLIENT_ID: 'VAMobile',
+  AUTH_IAM_REDIRECT_URL: 'vamobile://login-success',
+  AUTH_IAM_SCOPES: 'openid',
+  AUTH_IAM_ENDPOINT: 'https://test.gov/oauth/authorize',
+  AUTH_IAM_TOKEN_EXCHANGE_URL: 'https://test.gov/oauth/token',
+  AUTH_IAM_REVOKE_URL: 'https://test.gov/oauth/revoke',
 }
 
 const sampleIdToken =
@@ -135,7 +135,7 @@ context('authAction', () => {
     beforeEach(() => {
       store = realStore()
       store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.LOGIN }))
-      
+
       // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
       global.__DEV__ = false
     })
@@ -199,14 +199,14 @@ context('authAction', () => {
 
       const tokenUrl = 'https://test.gov/oauth/token'
 
-      const tokenPaylaod = expect.objectContaining({
+      const tokenPayload = expect.objectContaining({
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: 'grant_type=authorization_code&client_id=VAMobile&client_secret=TEST_SECRET&code_verifier=mylongcodeverifier&code=FOO34asfa&redirect_uri=vamobile%3A%2F%2Flogin-success',
+        body: 'grant_type=authorization_code&code_verifier=mylongcodeverifier&code=FOO34asfa&client_id=VAMobile&client_secret=TEST_SECRET&redirect_uri=vamobile%3A%2F%2Flogin-success',
       })
-      expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
+      expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPayload)
     })
 
     describe('when biometrics is available and biometrics is preferred', () => {
@@ -262,7 +262,9 @@ context('authAction', () => {
       })
 
       describe('when in the development environment (__DEV__=true)', () => {
-        beforeEach(() => {global.__DEV__ = true})
+        beforeEach(() => {
+          global.__DEV__ = true
+        })
         it('should save the refresh token even if biometrics not available', async () => {
           const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
           kcMockSupported.mockResolvedValue(null)
@@ -422,8 +424,6 @@ context('authAction', () => {
       await store.dispatch(initializeAuth())
 
       const actions = store.getActions()
-      console.log('Hello')
-      console.log(testRefreshToken)
 
       // this is one of the differences between init and bio init
       // we should transition to a loading spinner here with AUTH_START_LOGIN
@@ -439,7 +439,7 @@ context('authAction', () => {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `grant_type=refresh_token&client_id=VAMobile&client_secret=TEST_SECRET&redirect_uri=vamobile%3A%2F%2Flogin-success&refresh_token=${testRefreshToken}`,
+        body: `refresh_token=${testRefreshToken}&grant_type=refresh_token&client_id=VAMobile&client_secret=TEST_SECRET&redirect_uri=vamobile%3A%2F%2Flogin-success`,
       })
 
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)

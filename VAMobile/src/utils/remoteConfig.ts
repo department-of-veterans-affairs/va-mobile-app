@@ -10,18 +10,21 @@ const isProduction = ENVIRONMENT === EnvironmentTypesConstants.Production
 const RC_CACHE_TIME = 43200000 // 12 hours
 export let overrideRemote = false
 
-export type FeatureToggleType = 'testFeature'
+export type FeatureToggleType = 'testFeature' | 'SIS'
 
 type FeatureToggleValues = {
   testFeature: boolean
+  SIS: boolean
 }
 
 let devConfig: FeatureToggleValues = {
   testFeature: true,
+  SIS: true,
 }
 
 const productionDefaults: FeatureToggleValues = {
   testFeature: false,
+  SIS: false,
 }
 
 /**
