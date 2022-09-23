@@ -15,25 +15,36 @@ echo "" > .env
 if [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
-  AUTH_PREFIX="sqa."
+  AUTH_IAM_PREFIX="sqa."
+  AUTH_SIS_PREFIX="staging."
   API_PREFIX="staging-api."
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET
-  echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
+  echo "AUTH_IAM_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
 else
   echo "Setting up Production environment"
-  AUTH_PREFIX=""
+  AUTH_IAM_PREFIX=""
   API_PREFIX="api."
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET_PROD
-  echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET_PROD}" >> .env
+  echo "AUTH_IAM_CLIENT_SECRET=${APP_CLIENT_SECRET_PROD}" >> .env
 fi
 # set environment
 echo "ENVIRONMENT=$environment" >> .env
 # set api endpoints
 echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
- AUTH_ROOT="https://${AUTH_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
-echo "AUTH_ENDPOINT=${AUTH_ROOT}/authorize" >> .env
-echo "AUTH_TOKEN_EXCHANGE_URL=${AUTH_ROOT}/token" >> .env
-echo "AUTH_REVOKE_URL=${AUTH_ROOT}/revoke" >> .env
+
+# set IAM vars
+AUTH_IAM_ROOT="https://${AUTH_IAM_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
+echo "AUTH_IAM_ENDPOINT=${AUTH_IAM_ROOT}/authorize" >> .env
+echo "AUTH_IAM_TOKEN_EXCHANGE_URL=${AUTH_IAM_ROOT}/token" >> .env
+echo "AUTH_IAM_REVOKE_URL=${AUTH_IAM_ROOT}/revoke" >> .env
+
+# set SIS vars
+AUTH_SIS_ROOT="https://${AUTH_SIS_PREFIX}va.gov"
+echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
+echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
+echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
+echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
+
 if [[ $showDebug == 'true' ]]
 then
   echo true
