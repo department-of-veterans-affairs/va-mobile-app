@@ -52,9 +52,6 @@ const RemoteConfigScreen: FC = () => {
         </TextView>
         <Box mb={theme.dimensions.condensedMarginBetween}>
           {Object.keys(remoteConfig().getAll()).map((key: string) => {
-            if (key === 'error') {
-              return null
-            }
             const val = remoteConfig().getValue(key)
             return (
               <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
@@ -74,9 +71,6 @@ const RemoteConfigScreen: FC = () => {
         </TextView>
         <Box mb={theme.dimensions.condensedMarginBetween}>
           {Object.keys(getFeatureToggles()).map((key: string) => {
-            if (key === 'error') {
-              return null
-            }
             const value = featureEnabled(key as FeatureToggleType).toString()
             const isOverridden = override && featureEnabled(key as FeatureToggleType) !== remoteConfig().getValue(key).asBoolean()
             return (

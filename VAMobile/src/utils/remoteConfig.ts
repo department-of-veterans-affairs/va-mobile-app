@@ -16,7 +16,7 @@ type FeatureToggleValues = {
   testFeature: boolean
 }
 
-let devSettings: FeatureToggleValues = {
+let devConfig: FeatureToggleValues = {
   testFeature: true,
 }
 
@@ -33,7 +33,7 @@ export const activateRemoteConfig = async (): Promise<void> => {
   try {
     console.debug('Remote Config: Setting defaults')
     // Sets defaults for remote config for use prior to fetching and activating
-    await remoteConfig().setDefaults(fetchRemote ? productionDefaults : devSettings)
+    await remoteConfig().setDefaults(fetchRemote ? productionDefaults : devConfig)
 
     /**
      * If in staging or production, fetch and activate remote settings.  Otherwise,
@@ -61,13 +61,13 @@ export const activateRemoteConfig = async (): Promise<void> => {
  * we'll return the value of the key in devSettings, otherwise we return the remoteConfig value
  */
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
-  return !isProduction && overrideRemote ? devSettings[feature] : remoteConfig().getValue(feature)?.asBoolean()
+  return !isProduction && overrideRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
 }
 
 export const setDebugConfig = async (config: FeatureToggleValues): Promise<void> => {
   if (!isProduction) {
     overrideRemote = true
-    devSettings = config
+    devConfig = config
   }
 }
 
@@ -77,7 +77,7 @@ export const setDebugConfig = async (config: FeatureToggleValues): Promise<void>
  */
 export const getFeatureToggles = (): FeatureToggleValues => {
   if (overrideRemote) {
-    return devSettings
+    return devConfig
   }
 
   const toggles = {} as FeatureToggleValues

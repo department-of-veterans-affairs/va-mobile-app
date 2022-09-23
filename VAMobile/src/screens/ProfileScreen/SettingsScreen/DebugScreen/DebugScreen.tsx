@@ -67,8 +67,6 @@ const DebugScreen: FC = ({}) => {
     dispatch(toggleFirebaseDebugMode())
   }
 
-  const onRemoteConfig = navigateTo('RemoteConfig')
-
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
@@ -93,7 +91,7 @@ const DebugScreen: FC = ({}) => {
         </Box>
         <Box>
           <TextArea>
-            <VAButton onPress={onRemoteConfig} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
