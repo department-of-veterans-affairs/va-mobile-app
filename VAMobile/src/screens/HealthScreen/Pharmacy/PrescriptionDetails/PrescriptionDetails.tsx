@@ -134,7 +134,9 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
           <RefillTag status={refillStatus} />
           <TextArea noBorder={true}>
             <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
-            <TextView color={'placeholder'} accessibilityLabel={prescriptionNumber ? prescriptionNumber.split('').join(' ') : noneNoted}>{`${t(
+            <TextView
+              color={'placeholder'}
+              accessibilityLabel={prescriptionNumber ? `${t('prescription.prescriptionNumber.a11yLabel')} ${prescriptionNumber.split('').join(' ')}` : noneNoted}>{`${t(
               'prescription.prescriptionNumber',
             )} ${prescriptionNumber || noneNoted}`}</TextView>
             <DetailsTextSections leftSectionTitle={t('prescription.details.instructionsHeader')} leftSectionValue={instructions || noneNoted} />
