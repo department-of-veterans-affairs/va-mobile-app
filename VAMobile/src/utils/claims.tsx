@@ -3,7 +3,7 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import React, { ReactElement } from 'react'
-
+import { MAX_IMAGE_DIMENSION } from 'constants/secureMessaging'
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
@@ -223,14 +223,20 @@ export const onAddPhotos = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
-          })
+          launchCamera(
+            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
+            },
+          )
           break
         case 1:
-          launchImageLibrary({ selectionLimit: MAX_NUM_PHOTOS, mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
-          })
+          launchImageLibrary(
+            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
+            },
+          )
           break
       }
     },
