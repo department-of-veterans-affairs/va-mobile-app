@@ -3,10 +3,10 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import React, { ReactElement } from 'react'
-import { MAX_IMAGE_DIMENSION } from 'constants/secureMessaging'
+
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
-
+import { MAX_IMAGE_DIMENSION } from 'constants/secureMessaging'
 /** function that determines if a request file has been uploaded or received for a claim's event*/
 export const hasUploadedOrReceived = (event: ClaimEventData): boolean => {
   const { uploaded, type } = event
