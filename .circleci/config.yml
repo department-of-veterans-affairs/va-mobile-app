@@ -160,6 +160,7 @@ commands:
       - run:
           working_directory: ~/project/VAMobile/ios
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" tfGroup:"<<parameters.tf_group>>"
+          no_output_timeout: "30m"
   decode_android_keys:
     description: "Decodes all the keys needed to build and upload to google play"
     steps:
