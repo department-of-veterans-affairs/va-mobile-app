@@ -251,7 +251,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             numberOrUrlLink={LINK_URL_ASK_VA_GOV}
             linkUrlIconType={LinkUrlIconType.Arrow}
             {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
-            accessibilityLabel={t('letters.benefitService.sendMessageA11yLabel')}
+            testID={t('letters.benefitService.sendMessageA11yLabel')}
           />
         </Box>
 
