@@ -67,8 +67,15 @@ context('DebugScreen', () => {
     })
 
     it('pressing the button should toggle the debug mode', async () => {
-      findByOnPressFunction(testInstance, Pressable, 'onClickFirebaseDebugMode')?.props.onPress()
+      const debugModePressable = testInstance.findAllByType(Pressable)
+      debugModePressable[2].props.onPress()
       expect(findByTypeWithText(testInstance, TextView, 'Disable Firebase debug mode')).toBeTruthy()
+    })
+  })
+
+  describe('Remote Config', () => {
+    it('should render the button', async () => {
+      expect(findByTypeWithText(testInstance, TextView, 'Remote Config')).toBeTruthy()
     })
   })
 })

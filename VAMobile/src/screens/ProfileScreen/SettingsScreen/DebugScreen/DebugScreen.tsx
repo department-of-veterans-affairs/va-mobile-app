@@ -67,14 +67,11 @@ const DebugScreen: FC = ({}) => {
     dispatch(toggleFirebaseDebugMode())
   }
 
+  const onRemoteConfig = navigateTo('RemoteConfig')
+
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
-        <Box>
-          <TextArea>
-            <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
-          </TextArea>
-        </Box>
         <Box>
           <TextArea>
             <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
@@ -92,6 +89,11 @@ const DebugScreen: FC = ({}) => {
               label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
+          </TextArea>
+        </Box>
+        <Box>
+          <TextArea>
+            <VAButton onPress={onRemoteConfig} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
