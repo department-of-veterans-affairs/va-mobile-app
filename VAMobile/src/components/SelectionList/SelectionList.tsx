@@ -120,7 +120,7 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
   return (
     <Box>
       <Box {...headerWrapperProps}>
-        <TextView>{t('selected', { selected: numSelected, total: items.length })}</TextView>
+        <TextView>{t('selectedOutOfTotal', { selected: numSelected, total: items.length })}</TextView>
         <Pressable onPress={onSelectAll} accessibilityState={{ checked: numSelected > 0 }} accessibilityRole={'checkbox'}>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <TextView>{t('select.all')}</TextView>
