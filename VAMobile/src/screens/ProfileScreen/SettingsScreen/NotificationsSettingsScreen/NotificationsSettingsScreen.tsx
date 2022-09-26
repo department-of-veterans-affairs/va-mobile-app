@@ -13,7 +13,7 @@ import React, { FC, ReactNode, useEffect } from 'react'
 const NotificationsSettingsScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.PROFILE)
   const { t: ts } = useTranslation(NAMESPACE.SETTINGS)
-  const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTING_SCREEN)
+  const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const { preferences, loadingPreferences, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>((state) => state.notifications)
@@ -24,11 +24,11 @@ const NotificationsSettingsScreen: FC = () => {
   const dispatch = useAppDispatch()
 
   useOnResumeForeground(() => {
-    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTING_SCREEN))
+    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
   })
 
   useEffect(() => {
-    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTING_SCREEN))
+    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
   }, [dispatch])
 
   const alert = (): ReactNode => {
@@ -44,7 +44,7 @@ const NotificationsSettingsScreen: FC = () => {
   }
 
   if (hasError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTING_SCREEN} />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
   }
 
   if (loadingPreferences) {

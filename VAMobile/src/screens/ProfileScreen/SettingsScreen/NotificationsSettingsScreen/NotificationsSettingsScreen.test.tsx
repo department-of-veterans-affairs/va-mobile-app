@@ -103,7 +103,7 @@ context('NotificationsSettingsScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.NOTIFICATIONS_SETTING_SCREEN] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,
