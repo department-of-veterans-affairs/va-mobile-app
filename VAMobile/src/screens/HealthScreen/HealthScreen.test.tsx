@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, mockNavProps, render, RenderAPI, waitFor, fireEvent } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HealthScreen } from './HealthScreen'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
