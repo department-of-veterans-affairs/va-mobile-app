@@ -95,7 +95,7 @@ const RemoteConfigScreen: FC = () => {
               onPress={() => {
                 setOverride(true)
                 dispatch(logout())
-                setDebugConfig(toggles, dispatch)
+                setDebugConfig(toggles)
               }}
               label={'Apply Overrides'}
               buttonType={ButtonTypesConstants.buttonPrimary}
