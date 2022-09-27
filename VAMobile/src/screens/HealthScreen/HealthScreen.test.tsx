@@ -152,7 +152,6 @@ context('HealthScreen', () => {
   describe('on click of the secure messaging button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        component.debug()
         testInstance.findAllByType(Pressable)[1].props.onPress()
         expect(mockNavigateToSecureMessagingSpy).toHaveBeenCalled()
       })
