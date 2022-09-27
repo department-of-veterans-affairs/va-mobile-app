@@ -103,7 +103,7 @@ context('HealthScreen', () => {
 
   describe('prescriptions', () => {
     describe('feature disabled', () => {
-      it('does not display prescripions button if feature toggle disabled', async () => {
+      it('does not display prescriptions button if feature toggle disabled', async () => {
         await waitFor(() => {
           expect(() => component.getByText('Prescriptions')).toThrow()
         })
@@ -111,7 +111,7 @@ context('HealthScreen', () => {
     })
 
     describe('feature enabled', () => {
-      it('does not display prescripions button if feature toggle enabled', async () => {
+      it('does not display prescriptions button if feature toggle enabled', async () => {
         initializeTestInstance(0, true, true)
         await waitFor(() => {
           expect(() => component.getByText('Prescriptions')).not.toThrow()
