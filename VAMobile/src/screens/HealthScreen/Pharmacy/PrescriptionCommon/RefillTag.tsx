@@ -49,7 +49,7 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
   return (
     <Pressable {...pressableProps}>
       <Box {...tagBoxProps}>
-        <TextView variant={'HelperText'} flexWrap={'wrap'} pt={3}>
+        <TextView variant={'HelperText'} flexWrap={'wrap'} color={'labelTag'} pt={3}>
           {statusText}
         </TextView>
         <VAIcon {...infoIconProps} />
