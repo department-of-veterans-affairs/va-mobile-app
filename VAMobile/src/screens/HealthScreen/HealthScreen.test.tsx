@@ -12,7 +12,6 @@ import { TextView, MessagesCountTag } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
 
-const mockFeatureEnabled = featureEnabled as jest.Mock
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
 
@@ -41,6 +40,7 @@ context('HealthScreen', () => {
   let mockNavigateToSecureMessagingSpy: jest.Mock
   let mockNavigateToVAVaccinesSpy: jest.Mock
   let mockNavigateToPharmacySpy: jest.Mock
+  let mockFeatureEnabled = featureEnabled as jest.Mock
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
   const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true, prescriptionsEnabled: boolean = false) => {
