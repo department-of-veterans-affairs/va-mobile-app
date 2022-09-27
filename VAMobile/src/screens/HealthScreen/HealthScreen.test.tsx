@@ -10,6 +10,7 @@ import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
 import { TextView, MessagesCountTag } from 'components'
 import { when } from 'jest-when'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -39,9 +40,10 @@ context('HealthScreen', () => {
   let mockNavigateToSecureMessagingSpy: jest.Mock
   let mockNavigateToVAVaccinesSpy: jest.Mock
   let mockNavigateToPharmacySpy: jest.Mock
+  let mockFeatureEnabled = featureEnabled as jest.Mock
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true) => {
+  const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true, prescriptionsEnabled: boolean = false) => {
     mockNavigateToCrisisLineSpy = jest.fn()
     mockNavigateToAppointmentSpy = jest.fn()
     mockNavigateToSecureMessagingSpy = jest.fn()
@@ -57,7 +59,10 @@ context('HealthScreen', () => {
       .mockReturnValue(mockNavigateToSecureMessagingSpy)
       .calledWith('VaccineList')
       .mockReturnValue(mockNavigateToVAVaccinesSpy)
-        .calledWith('PrescriptionHistory').mockReturnValue(mockNavigateToPharmacySpy)
+      .calledWith('PrescriptionHistory')
+      .mockReturnValue(mockNavigateToPharmacySpy)
+
+    when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
@@ -96,6 +101,26 @@ context('HealthScreen', () => {
     })
   })
 
+  describe('prescriptions', () => {
+    describe('feature disabled', () => {
+      it('does not display prescriptions button if feature toggle disabled', async () => {
+        await waitFor(() => {
+          expect(() => component.getByText('Prescriptions')).toThrow()
+        })
+      })
+    })
+
+    describe('feature enabled', () => {
+      it('does not display prescriptions button if feature toggle enabled', async () => {
+        initializeTestInstance(0, true, true)
+        await waitFor(() => {
+          expect(() => component.getByText('Prescriptions')).not.toThrow()
+          expect(component.getByText('Prescriptions')).toBeDefined()
+        })
+      })
+    })
+  })
+
   describe('on click of the crisis line button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
@@ -107,6 +132,7 @@ context('HealthScreen', () => {
 
   describe('on click of the pharmacy button', () => {
     it('should call useRouteNavigation', async () => {
+      initializeTestInstance(0, true, true)
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
         expect(mockNavigateToPharmacySpy).toHaveBeenCalled()
@@ -117,7 +143,7 @@ context('HealthScreen', () => {
   describe('on click of the appointments button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
+        testInstance.findAllByType(Pressable)[0].props.onPress()
         expect(mockNavigateToAppointmentSpy).toHaveBeenCalled()
       })
     })
@@ -126,7 +152,7 @@ context('HealthScreen', () => {
   describe('on click of the secure messaging button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[2].props.onPress()
+        testInstance.findAllByType(Pressable)[1].props.onPress()
         expect(mockNavigateToSecureMessagingSpy).toHaveBeenCalled()
       })
     })
@@ -135,7 +161,7 @@ context('HealthScreen', () => {
   describe('on click of the vaccines button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[3].props.onPress()
+        testInstance.findAllByType(Pressable)[2].props.onPress()
         expect(mockNavigateToVAVaccinesSpy).toHaveBeenCalled()
       })
     })
@@ -144,7 +170,7 @@ context('HealthScreen', () => {
   describe('on click of the covid-19 updates button', () => {
     it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[4].props.onPress()
+        testInstance.findAllByType(Pressable)[3].props.onPress()
         const expectNavArgs = {
           url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
           displayTitle: 'va.gov',
@@ -158,7 +184,7 @@ context('HealthScreen', () => {
   it('should render messagesCountTag with the correct count number', async () => {
     await waitFor(() => {
       expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
-      expect(testInstance.findAllByType(TextView)[9].props.children).toBe(13)
+      expect(testInstance.findAllByType(TextView)[7].props.children).toBe(13)
     })
   })
 
@@ -166,8 +192,8 @@ context('HealthScreen', () => {
     it('should not render a messagesCountTag', async () => {
       await waitFor(() => {
         initializeTestInstance(0)
-        expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Messages')
-        expect(testInstance.findAllByType(TextView)[9].props.children).toBe('Send and receive secure messages')
+        expect(testInstance.findAllByType(TextView)[6].props.children).toBe('Messages')
+        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Send and receive secure messages')
       })
     })
   })
