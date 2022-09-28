@@ -237,7 +237,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
     {
       value: PrescriptionHistoryTabConstants.PROCESSING,
-      title: t('prescriptions.tabs.processing', { count: tabCounts[PrescriptionHistoryTabConstants.PROCESSING] }),
+      title: t('prescriptions.tabs.pending', { count: tabCounts[PrescriptionHistoryTabConstants.PROCESSING] }),
     },
     {
       value: PrescriptionHistoryTabConstants.SHIPPED,
@@ -489,7 +489,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       case PrescriptionHistoryTabConstants.ALL:
         return t('prescriptions.header.helper.all')
       case PrescriptionHistoryTabConstants.PROCESSING:
-        return t('prescriptions.header.helper.processing')
+        return t('prescriptions.header.helper.pending')
       case PrescriptionHistoryTabConstants.SHIPPED:
         return t('prescriptions.header.helper.shipped')
     }
@@ -500,7 +500,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       case PrescriptionHistoryTabConstants.ALL:
         return t('prescriptions.header.helper.all.a11y')
       case PrescriptionHistoryTabConstants.PROCESSING:
-        return t('prescriptions.header.helper.processing.a11y')
+        return t('prescriptions.header.helper.pending.a11y')
       case PrescriptionHistoryTabConstants.SHIPPED:
         return t('prescriptions.header.helper.shipped')
     }
