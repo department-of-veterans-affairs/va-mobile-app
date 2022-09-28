@@ -20,7 +20,7 @@ import {
   startBiometricsLogin,
   startWebLogin,
 } from './authSlice'
-import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/api/types'
+import { AUTH_STORAGE_TYPE, LoginServiceTypeConstants, LOGIN_PROMPT_TYPE } from 'store/api/types'
 
 export const ActionTypes: {
   AUTH_START_LOGIN: string
@@ -321,6 +321,8 @@ context('authAction', () => {
 
     it('should handle bad auth token response with 200', async () => {
       const kcMock = Keychain.getInternetCredentials as jest.Mock
+      const getItemMock = AsyncStorage.getItem as jest.Mock
+      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
       kcMock.mockResolvedValue(Promise.resolve({ password: generateRandomString() }))
       const tokenResponse = () => {
         return Promise.resolve({
@@ -405,8 +407,9 @@ context('authAction', () => {
     it('should refresh the access token and log the user in', async () => {
       const store = realStore()
       const kcMock = Keychain.getInternetCredentials as jest.Mock
-      const prefMock = AsyncStorage.getItem as jest.Mock
-      prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+      const getItemMock = AsyncStorage.getItem as jest.Mock
+      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
+      when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
       const hic = Keychain.hasInternetCredentials as jest.Mock
       hic.mockResolvedValue(true)
       const gsbt = Keychain.getSupportedBiometryType as jest.Mock
@@ -454,6 +457,25 @@ context('authAction', () => {
           id_token: sampleIdToken,
         }),
       )
+    })
+
+    it.only('should skip token refresh and log the user out if there is a mismatch between refresh token type and sign in service', async () => {
+      const store = realStore()
+      const kcMock = Keychain.getInternetCredentials as jest.Mock
+      const getItemMock = AsyncStorage.getItem as jest.Mock
+      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.SIS)
+      when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+      const hic = Keychain.hasInternetCredentials as jest.Mock
+      hic.mockResolvedValue(true)
+      const gsbt = Keychain.getSupportedBiometryType as jest.Mock
+      gsbt.mockResolvedValue(Keychain.BIOMETRY_TYPE.TOUCH_ID)
+      kcMock.mockResolvedValue(Promise.resolve({ password: testRefreshToken }))
+
+      await store.dispatch(initializeAuth())
+
+      expect(fetch).not.toHaveBeenCalled()
+      expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
+      expect(store.getState().auth.loggedIn).toBeFalsy()
     })
 
     describe('android', () => {
@@ -519,8 +541,9 @@ context('authAction', () => {
       const kcMock = Keychain.getInternetCredentials as jest.Mock
       kcMock.mockResolvedValue(Promise.resolve({ password: generateRandomString() }))
 
-      const prefMock = AsyncStorage.getItem as jest.Mock
-      prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+      const getItemMock = AsyncStorage.getItem as jest.Mock
+      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
+      when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
       const hic = Keychain.hasInternetCredentials as jest.Mock
       hic.mockResolvedValue(true)
       const tokenResponse = () => {
