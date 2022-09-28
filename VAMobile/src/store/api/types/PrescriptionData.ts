@@ -17,11 +17,11 @@ export type PrescriptionHistoryTabs = '0' | '1' | '2'
 export const PrescriptionHistoryTabConstants: {
   ALL: PrescriptionHistoryTabs
   PROCESSING: PrescriptionHistoryTabs
-  SHIPPED: PrescriptionHistoryTabs
+  TRACKING: PrescriptionHistoryTabs
 } = {
   ALL: '0',
   PROCESSING: '1',
-  SHIPPED: '2',
+  TRACKING: '2',
 }
 
 export const RefillStatusConstants: {
