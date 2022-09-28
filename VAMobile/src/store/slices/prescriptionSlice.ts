@@ -116,7 +116,7 @@ export const filterAndSortPrescriptions =
       case PrescriptionHistoryTabConstants.ALL:
         prescriptionsToSort = state.prescriptions.prescriptions || []
         break
-      case PrescriptionHistoryTabConstants.PROCESSING:
+      case PrescriptionHistoryTabConstants.PENDING:
         prescriptionsToSort = state.prescriptions.processingPrescriptions || []
         break
       case PrescriptionHistoryTabConstants.SHIPPED:
