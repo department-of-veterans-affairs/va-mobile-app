@@ -119,7 +119,7 @@ export const filterAndSortPrescriptions =
       case PrescriptionHistoryTabConstants.PROCESSING:
         prescriptionsToSort = state.prescriptions.processingPrescriptions || []
         break
-      case PrescriptionHistoryTabConstants.SHIPPED:
+      case PrescriptionHistoryTabConstants.TRACKING:
         prescriptionsToSort = state.prescriptions.shippedPrescriptions || []
         break
     }

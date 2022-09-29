@@ -240,8 +240,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       title: t('prescriptions.tabs.processing', { count: tabCounts[PrescriptionHistoryTabConstants.PROCESSING] }),
     },
     {
-      value: PrescriptionHistoryTabConstants.SHIPPED,
-      title: t('prescriptions.tabs.shipped', { count: tabCounts[PrescriptionHistoryTabConstants.SHIPPED] }),
+      value: PrescriptionHistoryTabConstants.TRACKING,
+      title: t('prescriptions.tabs.tracking', { count: tabCounts[PrescriptionHistoryTabConstants.TRACKING] }),
     },
   ]
 
@@ -251,7 +251,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
     if (newTab === PrescriptionHistoryTabConstants.PROCESSING) {
       logAnalyticsEvent(Events.vama_rx_processingtab())
-    } else if (newTab === PrescriptionHistoryTabConstants.SHIPPED) {
+    } else if (newTab === PrescriptionHistoryTabConstants.TRACKING) {
       logAnalyticsEvent(Events.vama_rx_trackingtab())
     }
   }
@@ -490,8 +490,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         return t('prescriptions.header.helper.all')
       case PrescriptionHistoryTabConstants.PROCESSING:
         return t('prescriptions.header.helper.processing')
-      case PrescriptionHistoryTabConstants.SHIPPED:
-        return t('prescriptions.header.helper.shipped')
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescriptions.header.helper.tracking')
     }
   }
 
@@ -501,8 +501,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         return t('prescriptions.header.helper.all.a11y')
       case PrescriptionHistoryTabConstants.PROCESSING:
         return t('prescriptions.header.helper.processing.a11y')
-      case PrescriptionHistoryTabConstants.SHIPPED:
-        return t('prescriptions.header.helper.shipped')
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescriptions.header.helper.tracking.a11y')
     }
   }
 
