@@ -268,10 +268,4 @@ jest.mock('@react-native-firebase/perf', () => {
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-jest.mock('utils/remoteConfig', () => {
-  return {
-    featureEnabled: (feature: string): boolean => {
-      return false
-    },
-  }
-})
+jest.mock('utils/remoteConfig')
