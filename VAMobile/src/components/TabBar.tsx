@@ -16,7 +16,7 @@ export type TabsValuesType = Array<{
   a11yHint?: string
 }>
 
-export type TabBarProps = {
+type TabBarProps = {
   /** method to trigger on tab change */
   onChange: (value: string) => void
   /** tab information */
