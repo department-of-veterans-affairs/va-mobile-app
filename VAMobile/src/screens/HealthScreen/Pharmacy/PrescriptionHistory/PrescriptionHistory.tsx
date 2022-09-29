@@ -120,7 +120,7 @@ const filterOptions = {
       value: RefillStatusConstants.UNKNOWN,
     },
   ],
-  processing: [
+  pending: [
     {
       display: 'prescription.filter.all',
       value: '',
@@ -406,7 +406,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
   }
 
-  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PENDING ? filterOptions.processing : filterOptions.all
+  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PENDING ? filterOptions.pending : filterOptions.all
 
   const filterRadioOptions = filterOptionsForTab.map((option) => {
     return {
