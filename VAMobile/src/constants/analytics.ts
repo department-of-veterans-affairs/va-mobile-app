@@ -220,9 +220,9 @@ export const Events = {
       },
     }
   },
-  vama_rx_processingtab: (): Event => {
+  vama_rx_pendingtab: (): Event => {
     return {
-      name: 'vama_rx_processingtab',
+      name: 'vama_rx_pendingtab',
     }
   },
   vama_rx_trackingtab: (): Event => {

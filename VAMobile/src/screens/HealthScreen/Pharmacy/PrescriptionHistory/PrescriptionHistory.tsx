@@ -236,12 +236,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       title: t('prescriptions.tabs.all', { count: tabCounts[PrescriptionHistoryTabConstants.ALL] }),
     },
     {
-      value: PrescriptionHistoryTabConstants.PROCESSING,
-      title: t('prescriptions.tabs.processing', { count: tabCounts[PrescriptionHistoryTabConstants.PROCESSING] }),
+      value: PrescriptionHistoryTabConstants.PENDING,
+      title: t('prescriptions.tabs.pending', { count: tabCounts[PrescriptionHistoryTabConstants.PENDING] }),
     },
     {
-      value: PrescriptionHistoryTabConstants.SHIPPED,
-      title: t('prescriptions.tabs.shipped', { count: tabCounts[PrescriptionHistoryTabConstants.SHIPPED] }),
+      value: PrescriptionHistoryTabConstants.TRACKING,
+      title: t('prescriptions.tabs.tracking', { count: tabCounts[PrescriptionHistoryTabConstants.TRACKING] }),
     },
   ]
 
@@ -249,9 +249,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     setFilterToUse('')
     setCurrentTab(newTab)
 
-    if (newTab === PrescriptionHistoryTabConstants.PROCESSING) {
-      logAnalyticsEvent(Events.vama_rx_processingtab())
-    } else if (newTab === PrescriptionHistoryTabConstants.SHIPPED) {
+    if (newTab === PrescriptionHistoryTabConstants.PENDING) {
+      logAnalyticsEvent(Events.vama_rx_pendingtab())
+    } else if (newTab === PrescriptionHistoryTabConstants.TRACKING) {
       logAnalyticsEvent(Events.vama_rx_trackingtab())
     }
   }
@@ -270,7 +270,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
         accessible: true,
         accessibilityRole: 'button',
-        accessibilityLabel: t('prescription.history.reviewDetails'),
+        accessibilityLabel: t('prescription.history.getDetails'),
       }
 
       const mainContent = (
@@ -279,7 +279,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           <Pressable {...detailsPressableProps}>
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} height={theme.dimensions.touchableMinHeight} pt={5}>
               <TextView variant={'HelperTextBold'} color={'link'}>
-                {t('prescription.history.reviewDetails')}
+                {t('prescription.history.getDetails')}
               </TextView>
               <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
             </Box>
@@ -406,7 +406,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
   }
 
-  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PROCESSING ? filterOptions.processing : filterOptions.all
+  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PENDING ? filterOptions.processing : filterOptions.all
 
   const filterRadioOptions = filterOptionsForTab.map((option) => {
     return {
@@ -488,10 +488,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     switch (currentTab) {
       case PrescriptionHistoryTabConstants.ALL:
         return t('prescriptions.header.helper.all')
-      case PrescriptionHistoryTabConstants.PROCESSING:
-        return t('prescriptions.header.helper.processing')
-      case PrescriptionHistoryTabConstants.SHIPPED:
-        return t('prescriptions.header.helper.shipped')
+      case PrescriptionHistoryTabConstants.PENDING:
+        return t('prescriptions.header.helper.pending')
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescriptions.header.helper.tracking')
     }
   }
 
@@ -499,10 +499,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     switch (currentTab) {
       case PrescriptionHistoryTabConstants.ALL:
         return t('prescriptions.header.helper.all.a11y')
-      case PrescriptionHistoryTabConstants.PROCESSING:
-        return t('prescriptions.header.helper.processing.a11y')
-      case PrescriptionHistoryTabConstants.SHIPPED:
-        return t('prescriptions.header.helper.shipped')
+      case PrescriptionHistoryTabConstants.PENDING:
+        return t('prescriptions.header.helper.pending.a11y')
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescriptions.header.helper.tracking.a11y')
     }
   }
 

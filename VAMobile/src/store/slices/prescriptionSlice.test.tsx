@@ -276,7 +276,7 @@ context('Prescription', () => {
       // Total prescriptions
       expect(endAction?.state.prescriptions.prescriptions?.length).toEqual(5)
 
-      expect(endAction?.state.prescriptions.processingPrescriptions?.length).toEqual(2)
+      expect(endAction?.state.prescriptions.pendingPrescriptions?.length).toEqual(2)
       expect(endAction?.state.prescriptions.shippedPrescriptions?.length).toEqual(1)
       expect(endAction?.state.prescriptions.transferredPrescriptions?.length).toEqual(1)
       expect(endAction?.state.prescriptions.refillablePrescriptions?.length).toEqual(1)
