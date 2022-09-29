@@ -682,7 +682,7 @@ export const handleTokenCallbackUrl =
         }),
       })
       const authCredentials = await processAuthResponse(response)
-      await logAnalyticsEvent(Events.vama_login_success())
+      await logAnalyticsEvent(Events.vama_login_success(SISEnabled))
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
     } catch (error) {
@@ -695,18 +695,18 @@ export const handleTokenCallbackUrl =
   }
 
 export const cancelWebLogin = (): AppThunk => async (dispatch) => {
-  await logAnalyticsEvent(Events.vama_login_closed())
+  await logAnalyticsEvent(Events.vama_login_closed(featureEnabled('SIS')))
   dispatch(dispatchShowWebLogin())
 }
 
 export const sendLoginFailedAnalytics =
   (error: Error): AppThunk =>
   async () => {
-    await logAnalyticsEvent(Events.vama_login_fail(error))
+    await logAnalyticsEvent(Events.vama_login_fail(error, featureEnabled('SIS')))
   }
 
 export const sendLoginStartAnalytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_login_start())
+  await logAnalyticsEvent(Events.vama_login_start(featureEnabled('SIS')))
 }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
