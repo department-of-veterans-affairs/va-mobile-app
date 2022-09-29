@@ -10,9 +10,12 @@ export const Events = {
       name: 'vama_auth_completed',
     }
   },
-  vama_login_closed: (): Event => {
+  vama_login_closed: (isSIS = false): Event => {
     return {
       name: 'vama_login_closed',
+      params: {
+        sis: isSIS.toString(),
+      },
     }
   },
   vama_exchange_failed: (): Event => {

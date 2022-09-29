@@ -658,7 +658,7 @@ export const handleTokenCallbackUrl =
   }
 
 export const cancelWebLogin = (): AppThunk => async (dispatch) => {
-  await logAnalyticsEvent(Events.vama_login_closed())
+  await logAnalyticsEvent(Events.vama_login_closed(featureEnabled('SIS')))
   dispatch(dispatchShowWebLogin())
 }
 
