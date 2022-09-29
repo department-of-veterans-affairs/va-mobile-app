@@ -34,7 +34,7 @@ export type PrescriptionState = {
   loadingHistory: boolean
   loadingCount: boolean
   prescriptions?: PrescriptionsList
-  processingPrescriptions?: PrescriptionsList
+  pendingPrescriptions?: PrescriptionsList
   shippedPrescriptions?: PrescriptionsList
   filteredPrescriptions?: PrescriptionsList
   transferredPrescriptions?: PrescriptionsList
@@ -116,8 +116,8 @@ export const filterAndSortPrescriptions =
       case PrescriptionHistoryTabConstants.ALL:
         prescriptionsToSort = state.prescriptions.prescriptions || []
         break
-      case PrescriptionHistoryTabConstants.PROCESSING:
-        prescriptionsToSort = state.prescriptions.processingPrescriptions || []
+      case PrescriptionHistoryTabConstants.PENDING:
+        prescriptionsToSort = state.prescriptions.pendingPrescriptions || []
         break
       case PrescriptionHistoryTabConstants.TRACKING:
         prescriptionsToSort = state.prescriptions.shippedPrescriptions || []
@@ -300,7 +300,7 @@ const prescriptionSlice = createSlice({
       const { data: prescriptions, meta } = allPrescriptions || ({} as PrescriptionsGetData)
 
       const prescriptionsById: PrescriptionsMap = {}
-      const processingPrescriptions: PrescriptionData[] = []
+      const pendingPrescriptions: PrescriptionData[] = []
       const shippedPrescriptions: PrescriptionData[] = []
       const transferredPrescriptions: PrescriptionData[] = []
       const refillablePrescriptions: PrescriptionData[] = []
@@ -313,7 +313,7 @@ const prescriptionSlice = createSlice({
         }
 
         if (prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS || prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED) {
-          processingPrescriptions.push(prescription)
+          pendingPrescriptions.push(prescription)
         }
 
         if (prescription.attributes.refillStatus === RefillStatusConstants.TRANSFERRED) {
@@ -327,7 +327,7 @@ const prescriptionSlice = createSlice({
 
       state.prescriptions = prescriptions
       state.filteredPrescriptions = prescriptions
-      state.processingPrescriptions = processingPrescriptions
+      state.pendingPrescriptions = pendingPrescriptions
       state.shippedPrescriptions = shippedPrescriptions
       state.transferredPrescriptions = transferredPrescriptions
       state.refillablePrescriptions = refillablePrescriptions
@@ -339,7 +339,7 @@ const prescriptionSlice = createSlice({
 
       state.tabCounts = {
         '0': prescriptions.length,
-        '1': processingPrescriptions.length,
+        '1': pendingPrescriptions.length,
         '2': shippedPrescriptions.length,
       }
     },

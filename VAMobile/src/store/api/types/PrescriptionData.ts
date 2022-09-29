@@ -16,11 +16,11 @@ export type PrescriptionHistoryTabs = '0' | '1' | '2'
 
 export const PrescriptionHistoryTabConstants: {
   ALL: PrescriptionHistoryTabs
-  PROCESSING: PrescriptionHistoryTabs
+  PENDING: PrescriptionHistoryTabs
   TRACKING: PrescriptionHistoryTabs
 } = {
   ALL: '0',
-  PROCESSING: '1',
+  PENDING: '1',
   TRACKING: '2',
 }
 

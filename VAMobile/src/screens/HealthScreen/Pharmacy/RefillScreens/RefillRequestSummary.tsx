@@ -173,7 +173,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           </TextView>
         </Box>
         <VAButton
-          onPress={navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PROCESSING })}
+          onPress={navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })}
           label={t('prescriptions.refillRequestSummary.reviewRefills')}
           buttonType="buttonSecondary"
         />
