@@ -332,7 +332,7 @@ context('PrescriptionHistory', () => {
     describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
       it('should not show StartRefillRequest footer button', async () => {
         await waitFor(() => {
-          initializeTestInstance(false, PrescriptionHistoryTabConstants.SHIPPED)
+          initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
         })
 
         const footerButtons = testInstance.findAllByType(FooterButton)

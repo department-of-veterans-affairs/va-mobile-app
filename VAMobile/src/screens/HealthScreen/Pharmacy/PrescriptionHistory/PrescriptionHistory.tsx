@@ -240,8 +240,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       title: t('prescriptions.tabs.pending', { count: tabCounts[PrescriptionHistoryTabConstants.PENDING] }),
     },
     {
-      value: PrescriptionHistoryTabConstants.SHIPPED,
-      title: t('prescriptions.tabs.shipped', { count: tabCounts[PrescriptionHistoryTabConstants.SHIPPED] }),
+      value: PrescriptionHistoryTabConstants.TRACKING,
+      title: t('prescriptions.tabs.tracking', { count: tabCounts[PrescriptionHistoryTabConstants.TRACKING] }),
     },
   ]
 
@@ -251,7 +251,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
     if (newTab === PrescriptionHistoryTabConstants.PENDING) {
       logAnalyticsEvent(Events.vama_rx_processingtab())
-    } else if (newTab === PrescriptionHistoryTabConstants.SHIPPED) {
+    } else if (newTab === PrescriptionHistoryTabConstants.TRACKING) {
       logAnalyticsEvent(Events.vama_rx_trackingtab())
     }
   }
@@ -270,7 +270,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
         accessible: true,
         accessibilityRole: 'button',
-        accessibilityLabel: t('prescription.history.reviewDetails'),
+        accessibilityLabel: t('prescription.history.getDetails'),
       }
 
       const mainContent = (
@@ -279,7 +279,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           <Pressable {...detailsPressableProps}>
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} height={theme.dimensions.touchableMinHeight} pt={5}>
               <TextView variant={'HelperTextBold'} color={'link'}>
-                {t('prescription.history.reviewDetails')}
+                {t('prescription.history.getDetails')}
               </TextView>
               <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
             </Box>
@@ -490,8 +490,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         return t('prescriptions.header.helper.all')
       case PrescriptionHistoryTabConstants.PENDING:
         return t('prescriptions.header.helper.pending')
-      case PrescriptionHistoryTabConstants.SHIPPED:
-        return t('prescriptions.header.helper.shipped')
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescriptions.header.helper.tracking')
     }
   }
 
@@ -501,8 +501,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         return t('prescriptions.header.helper.all.a11y')
       case PrescriptionHistoryTabConstants.PENDING:
         return t('prescriptions.header.helper.pending.a11y')
-      case PrescriptionHistoryTabConstants.SHIPPED:
-        return t('prescriptions.header.helper.shipped')
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescriptions.header.helper.tracking.a11y')
     }
   }
 
