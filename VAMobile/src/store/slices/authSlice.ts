@@ -303,14 +303,12 @@ const storeRefreshToken = async (refreshToken: string, options: Keychain.Options
       AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
       AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
       AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
-      console.debug(`AsyncStorage.setItem: ${REFRESH_TOKEN_TYPE}: ${LoginServiceTypeConstants.SIS}`),
     ])
   } else {
     await Promise.all([
       Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options),
       AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
       AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.IAM),
-      console.debug(`AsyncStorage.setItem: ${REFRESH_TOKEN_TYPE}: ${LoginServiceTypeConstants.IAM}`),
     ])
   }
 }
@@ -528,33 +526,33 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     }
 
     await CookieManager.clearAll()
-    // const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
+    const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
-    // if (tokenMatchesServiceType) {
-    const response = await fetch(SISEnabled ? AUTH_SIS_REVOKE_URL : AUTH_IAM_REVOKE_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: qs.stringify({
-        ...(!SISEnabled
-          ? {
-              token,
-              client_id: AUTH_IAM_CLIENT_ID,
-              client_secret: AUTH_IAM_CLIENT_SECRET,
-              redirect_uri: AUTH_IAM_REDIRECT_URL,
-            }
-          : {
-              refresh_token: refreshToken,
-            }),
-      }),
-    })
-    console.debug('logout:', response.status)
-    console.debug('logout:', await response.text())
-    // } else {
-    //   console.debug('logout: login service changed. clearing creds only.')
-    // }
+    if (tokenMatchesServiceType) {
+      const response = await fetch(SISEnabled ? AUTH_SIS_REVOKE_URL : AUTH_IAM_REVOKE_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: qs.stringify({
+          ...(!SISEnabled
+            ? {
+                token,
+                client_id: AUTH_IAM_CLIENT_ID,
+                client_secret: AUTH_IAM_CLIENT_SECRET,
+                redirect_uri: AUTH_IAM_REDIRECT_URL,
+              }
+            : {
+                refresh_token: refreshToken,
+              }),
+        }),
+      })
+      console.debug('logout:', response.status)
+      console.debug('logout:', await response.text())
+    } else {
+      console.debug('logout: login service changed. clearing creds only.')
+    }
   } catch (err) {
     logNonFatalErrorToFirebase(err, `logout: ${authNonFatalErrorString}`)
   } finally {
