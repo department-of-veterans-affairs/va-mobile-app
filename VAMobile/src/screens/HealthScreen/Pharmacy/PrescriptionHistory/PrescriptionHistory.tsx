@@ -250,7 +250,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     setCurrentTab(newTab)
 
     if (newTab === PrescriptionHistoryTabConstants.PENDING) {
-      logAnalyticsEvent(Events.vama_rx_processingtab())
+      logAnalyticsEvent(Events.vama_rx_pendingtab())
     } else if (newTab === PrescriptionHistoryTabConstants.TRACKING) {
       logAnalyticsEvent(Events.vama_rx_trackingtab())
     }

@@ -238,7 +238,7 @@ context('PrescriptionHistory', () => {
           ...initialPrescriptionState,
           prescriptions: data,
           filteredPrescriptions: data,
-          processingPrescriptions: data,
+          pendingPrescriptions: data,
           shippedPrescriptions: data,
           transferredPrescriptions: includeTransferred ? [
               {
