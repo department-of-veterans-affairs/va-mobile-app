@@ -76,6 +76,8 @@ context('authAction', () => {
     envMock.mockReturnValue(defaultEnvParams)
 
     when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
+    when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+
     const isAndroidMock = isAndroid as jest.Mock
     isAndroidMock.mockReturnValue(false)
 
@@ -408,7 +410,6 @@ context('authAction', () => {
     it('should refresh the access token and log the user in', async () => {
       const store = realStore()
       const kcMock = Keychain.getInternetCredentials as jest.Mock
-      when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
       const hic = Keychain.hasInternetCredentials as jest.Mock
       hic.mockResolvedValue(true)
       const gsbt = Keychain.getSupportedBiometryType as jest.Mock
@@ -462,7 +463,6 @@ context('authAction', () => {
       const store = realStore()
       const kcMock = Keychain.getInternetCredentials as jest.Mock
       when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.SIS)
-      when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
       const hic = Keychain.hasInternetCredentials as jest.Mock
       hic.mockResolvedValue(true)
       const gsbt = Keychain.getSupportedBiometryType as jest.Mock
@@ -532,16 +532,15 @@ context('authAction', () => {
     let store: TrackedStore
     beforeEach(async () => {
       store = realStore()
-
       const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
       kcMockSupported.mockResolvedValue(Keychain.BIOMETRY_TYPE.TOUCH_ID)
 
       const kcMock = Keychain.getInternetCredentials as jest.Mock
       kcMock.mockResolvedValue(Promise.resolve({ password: generateRandomString() }))
 
-      when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
       const hic = Keychain.hasInternetCredentials as jest.Mock
       hic.mockResolvedValue(true)
+
       const tokenResponse = () => {
         return Promise.resolve({
           access_token: testAccessToken,
