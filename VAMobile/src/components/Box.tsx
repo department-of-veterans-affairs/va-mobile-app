@@ -1,5 +1,5 @@
 import { FlexAlignType, View, ViewProps } from 'react-native'
-import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VAButtonBorderColors, VAListTagColors, VATheme } from 'styles/theme'
+import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VAButtonBorderColors, VATheme } from 'styles/theme'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
@@ -8,8 +8,7 @@ import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
-type VAListTagColorsVariant = keyof VAListTagColors
-export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant | VAListTagColorsVariant
+export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant
 
 type VABorderColorsVariant = keyof VABorderColors
 type VAButtonBorderColorsVariant = keyof VAButtonBorderColors
@@ -179,11 +178,7 @@ const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undef
   if (!bgVariant) {
     return 'transparent'
   }
-  return (
-    theme.colors.background[bgVariant as VABackgroundColorsVariant] ||
-    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant] ||
-    theme.colors.listTag[bgVariant as VAListTagColorsVariant]
-  )
+  return theme.colors.background[bgVariant as VABackgroundColorsVariant] || theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant]
 }
 
 const generateBorderStyles = (

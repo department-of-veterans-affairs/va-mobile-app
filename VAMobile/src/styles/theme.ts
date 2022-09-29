@@ -55,10 +55,8 @@ export type VATextColors = {
   actionBar: string
   actionBarDisabled: string
   bodyText: string
-  showAll: string
   defaultMenuItem: string
   warningTag: string
-  statusDescription: string
   tabSelectorInactive: string
   tabSelectorActive: string
   closePanel: string
@@ -95,9 +93,8 @@ export type VAIconColors = {
   veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
-  statusInfoIcon: string
   infoIcon: string
-  prescriptionHelper: string
+  infoIconContrast: string
 }
 
 export type VATypographyThemeVariants = {
@@ -154,7 +151,6 @@ export type VABackgroundColors = {
   inactiveTag: string
   activeTag: string
   panelHeader: string
-  modalButton: string
 }
 
 export type VABorderColors = {
@@ -175,22 +171,11 @@ export type VABorderColors = {
   menuDivider: string
   tabSelectorInactive: string
   tabSelectorActive: string
-  trackingCard: string
-  trackingCardActive: string
-  prescriptionDivider: string
-  modalButton: string
 }
 
 export type VAFontSizes = {
   fontSize: number
   lineHeight: number
-}
-
-export type VAListTagColors = {
-  tagActive: string
-  tagExpired: string
-  tagSuspended: string
-  tagInProgress: string
 }
 
 export type VAColorScheme = {
@@ -202,7 +187,6 @@ export type VAColorScheme = {
   buttonText: VAButtonTextColors
   buttonBorder: VAButtonBorderColors
   selectCopyText: string
-  listTag: VAListTagColors
 
   control: {
     tintColor: string

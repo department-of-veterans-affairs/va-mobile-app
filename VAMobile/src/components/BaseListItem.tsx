@@ -128,6 +128,7 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           {...decoratorProps}
         />
       )
+
     default:
       return (
         <VAIcon
