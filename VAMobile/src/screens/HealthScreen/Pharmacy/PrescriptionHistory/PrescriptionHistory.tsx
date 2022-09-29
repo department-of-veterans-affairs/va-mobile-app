@@ -270,7 +270,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
         accessible: true,
         accessibilityRole: 'button',
-        accessibilityLabel: t('prescription.history.reviewDetails'),
+        accessibilityLabel: t('prescription.history.getDetails'),
       }
 
       const mainContent = (
@@ -279,7 +279,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           <Pressable {...detailsPressableProps}>
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} height={theme.dimensions.touchableMinHeight} pt={5}>
               <TextView variant={'HelperTextBold'} color={'link'}>
-                {t('prescription.history.reviewDetails')}
+                {t('prescription.history.getDetails')}
               </TextView>
               <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
             </Box>
