@@ -52,6 +52,9 @@ jest.mock('../../utils/env', () =>
   })),
 )
 
+const getItemMock = AsyncStorage.getItem as jest.Mock
+const mockFeatureEnabled = featureEnabled as jest.Mock
+
 const defaultEnvParams = {
   AUTH_IAM_CLIENT_SECRET: 'TEST_SECRET',
   AUTH_IAM_CLIENT_ID: 'VAMobile',
@@ -65,9 +68,6 @@ const defaultEnvParams = {
 const sampleIdToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDAwMDEyMzQ1IiwiYXVkIjoidmFtb2JpbGUiLCJpYXQiOjE2MDMxMjY3MzEsImV4cCI6MjUyNDYwODAwMCwiaXNzIjoiSUFNIFNTT2Ugc2VydmljZSIsIm5vbmNlIjoiRmltYlhLa3M5b3ZOcnI3STl0TEkifQ.DJCdQ45WP3ZUHTb2nqNzlHBxEAUl7dpPhoLm1TKtogs'
 
-let mockFeatureEnabled = featureEnabled as jest.Mock
-const getItemMock = AsyncStorage.getItem as jest.Mock
-
 context('authAction IAM', () => {
   let testAccessToken: string
   let testRefreshToken: string
@@ -79,6 +79,7 @@ context('authAction IAM', () => {
     when(mockFeatureEnabled).calledWith('SIS').mockReturnValue(false)
     when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
 
+    when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
     const isAndroidMock = isAndroid as jest.Mock
     isAndroidMock.mockReturnValue(false)
 

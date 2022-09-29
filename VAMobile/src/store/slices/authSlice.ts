@@ -303,14 +303,12 @@ const storeRefreshToken = async (refreshToken: string, options: Keychain.Options
       AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
       AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
       AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
-      console.debug(`AsyncStorage.setItem: ${REFRESH_TOKEN_TYPE}: ${LoginServiceTypeConstants.SIS}`),
     ])
   } else {
     await Promise.all([
       Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options),
       AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
       AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.IAM),
-      console.debug(`AsyncStorage.setItem: ${REFRESH_TOKEN_TYPE}: ${LoginServiceTypeConstants.IAM}`),
     ])
   }
 }
@@ -382,10 +380,14 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
   }
 }
 
+/**
+ * Checks the SIS feature flag and compares it against the type of refresh token stored
+ * @returns if the login service we're using matches the the type of token we have stored
+ */
 export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
-  const LoginService = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
+  const tokenType = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
   const SISEnabled = featureEnabled('SIS')
-  const tokenMatchesService = (SISEnabled && LoginService === LoginServiceTypeConstants.SIS) || (!SISEnabled && LoginService === LoginServiceTypeConstants.IAM)
+  const tokenMatchesService = (SISEnabled && tokenType === LoginServiceTypeConstants.SIS) || (!SISEnabled && tokenType === LoginServiceTypeConstants.IAM)
   console.debug('refreshTokenMatchesLoginService: ', tokenMatchesService)
   return tokenMatchesService
 }
