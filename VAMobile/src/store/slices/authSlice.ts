@@ -380,10 +380,14 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
   }
 }
 
+/**
+ * Checks the SIS feature flag and compares it against the type of refresh token stored
+ * @returns if the login service we're using matches the the type of token we have stored
+ */
 export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
-  const LoginService = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
+  const tokenType = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
   const SISEnabled = featureEnabled('SIS')
-  const tokenMatchesService = (SISEnabled && LoginService === LoginServiceTypeConstants.SIS) || (!SISEnabled && LoginService === LoginServiceTypeConstants.IAM)
+  const tokenMatchesService = (SISEnabled && tokenType === LoginServiceTypeConstants.SIS) || (!SISEnabled && tokenType === LoginServiceTypeConstants.IAM)
   console.debug('refreshTokenMatchesLoginService: ', tokenMatchesService)
   return tokenMatchesService
 }
