@@ -1,5 +1,4 @@
-import { BackgroundVariant } from '../Box'
-import { ColorVariant, FontVariant } from '../TextView'
+import { LabelTagTypes } from '../LabelTag'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
 
 /**
@@ -20,14 +19,7 @@ export type TextLine = {
 
   /** sets the text to be a tag */
   textTag?: {
-    /** optional background color for tag */
-    backgroundColor?: BackgroundVariant
-
-    /** optional text color for tag */
-    color?: ColorVariant
-
-    /** optional variant for tag text */
-    variant?: FontVariant
+    labelType: LabelTagTypes
   }
 
   /** set margin bottom of this component*/

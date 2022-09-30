@@ -98,6 +98,8 @@ export type VAIconColors = {
   statusInfoIcon: string
   infoIcon: string
   prescriptionHelper: string
+  infoIconContrast: string
+  tagInfoIcon: string
 }
 
 export type VATypographyThemeVariants = {
@@ -150,11 +152,12 @@ export type VABackgroundColors = {
   pickerControls: string
   menu: string
   alertBox: string
-  warningTag: string
-  inactiveTag: string
-  activeTag: string
   panelHeader: string
   modalButton: string
+  tagBlue: string
+  tagInactive: string
+  tagYellow: string
+  tagGreen: string
 }
 
 export type VABorderColors = {
@@ -179,6 +182,10 @@ export type VABorderColors = {
   trackingCardActive: string
   prescriptionDivider: string
   modalButton: string
+  tagBlue: string
+  tagInactive: string
+  tagYellow: string
+  tagGreen: string
 }
 
 export type VAFontSizes = {
