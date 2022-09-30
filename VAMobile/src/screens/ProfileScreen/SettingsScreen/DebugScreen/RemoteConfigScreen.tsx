@@ -94,8 +94,8 @@ const RemoteConfigScreen: FC = () => {
             <VAButton
               onPress={() => {
                 setOverride(true)
-                dispatch(logout())
                 setDebugConfig(toggles)
+                dispatch(logout())
               }}
               label={'Apply Overrides'}
               buttonType={ButtonTypesConstants.buttonPrimary}

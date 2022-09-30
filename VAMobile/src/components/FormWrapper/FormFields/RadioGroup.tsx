@@ -59,11 +59,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
 
     // Render option as simple text
     if (hasSingleOption) {
-      return (
-        <TextView accessibilityLabel={a11yLabel || getTranslation(labelKey, t, labelArgs)} variant="VASelector">
-          {getTranslation(labelKey, t, labelArgs)}
-        </TextView>
-      )
+      return <TextView variant="VASelector">{getTranslation(labelKey, t, labelArgs)}</TextView>
     }
 
     const selected = isEqual(option.value, value)
@@ -130,7 +126,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
         minHeight: 64,
         a11yValue: selected ? tc('selected') : undefined,
         a11yRole: 'radio',
-        testId: `${option.a11yLabel || option.labelKey} ${tc('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
+        testId: `${option.a11yLabel || option.labelKey} ${tc('option', { count: index + 1, totalOptions: options.length })}`,
       }
 
       return radioButton

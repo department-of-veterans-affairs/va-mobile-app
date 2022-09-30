@@ -179,57 +179,6 @@ export const Events = {
       },
     }
   },
-  vama_rx_refill_success: (): Event => {
-    return {
-      name: 'vama_rx_refill_success',
-    }
-  },
-  vama_rx_refill_fail: (): Event => {
-    return {
-      name: 'vama_rx_refill_fail',
-    }
-  },
-  vama_rx_refill_retry: (): Event => {
-    return {
-      name: 'vama_rx_refill_retry',
-    }
-  },
-  vama_rx_filter: (): Event => {
-    return {
-      name: 'vama_rx_filter',
-    }
-  },
-  vama_rx_filter_sel: (filter: string): Event => {
-    return {
-      name: 'vama_rx_filter_sel',
-      params: {
-        filter,
-      },
-    }
-  },
-  vama_rx_sort: (): Event => {
-    return {
-      name: 'vama_rx_sort',
-    }
-  },
-  vama_rx_sort_sel: (sort: string): Event => {
-    return {
-      name: 'vama_rx_sort_sel',
-      params: {
-        sort,
-      },
-    }
-  },
-  vama_rx_pendingtab: (): Event => {
-    return {
-      name: 'vama_rx_pendingtab',
-    }
-  },
-  vama_rx_trackingtab: (): Event => {
-    return {
-      name: 'vama_rx_trackingtab',
-    }
-  },
 }
 
 export const UserAnalytics = {

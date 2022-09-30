@@ -12,8 +12,6 @@ interface HomeNavButtonProps {
   title: string
   /**string secondary text that seats on the second row */
   subText: string
-  /**a11y string secondary text that seats on the second row */
-  subTextA11yLabel?: string
   /**string for accessibility hint */
   a11yHint?: string
   /**function to be called when press occurs */
@@ -47,7 +45,6 @@ interface HomeNavButtonProps {
 const LargeNavButton: FC<HomeNavButtonProps> = ({
   title,
   subText,
-  subTextA11yLabel,
   a11yHint,
   onPress,
   backgroundColor,
@@ -110,7 +107,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText}`.trim()
+  const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subText}`.trim()
 
   return (
     <Box {...boxProps}>
