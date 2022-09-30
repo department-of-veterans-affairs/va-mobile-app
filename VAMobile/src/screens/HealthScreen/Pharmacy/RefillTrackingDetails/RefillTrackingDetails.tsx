@@ -10,7 +10,6 @@ import {
   DefaultList,
   DefaultListItemObj,
   ErrorComponent,
-  LinkUrlIconType,
   LoadingComponent,
   TextArea,
   TextView,
