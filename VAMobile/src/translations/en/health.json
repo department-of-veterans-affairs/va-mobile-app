@@ -256,7 +256,6 @@
   "prescriptions.refillRequestSummary.failed": "Your refill requests failed",
   "prescriptions.refillRequestSummary.mix": "We didn't get {{count}} refill requests",
   "prescriptions.refillRequestSummary.pendingRefills": "Go to all pending refills",
-  "prescriptions.refillRequestSummary.pendingRefills.a11yHint": "Resubmits your failed refill requests",
   "prescriptions.refillRequestSummary.pendingRefills.requestFailed": "Request failed",
   "prescriptions.refillRequestSummary.pendingRefills.requestSubmitted": "Request submitted",
   "prescriptions.refillRequestSummary.success": "We got your refill requests",
