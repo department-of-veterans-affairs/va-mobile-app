@@ -2,7 +2,21 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect } from 'react'
 
-import { Box, BoxProps, ClosePanelButton, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
+import {
+  Box,
+  BoxProps,
+  ClickForActionLink,
+  ClosePanelButton,
+  DefaultList,
+  DefaultListItemObj,
+  ErrorComponent,
+  LinkUrlIconType,
+  LoadingComponent,
+  TextArea,
+  TextView,
+  TextViewProps,
+  VAScrollView,
+} from 'components'
 import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -103,21 +117,19 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     }
 
     const trackingLink = getTrackingLink(deliveryService)
-    const trackingNumberProps: TextViewProps = {
-      variant: trackingLink ? 'MobileBodyLink' : 'MobileBody',
-      onPress: trackingLink
-        ? () => {
-            launchExternalLink(trackingLink + trackingNumber)
-          }
-        : undefined,
-    }
 
     return (
       <>
         <TextView {...commonBoxHeaderProps}>{t('prescriptions.refillTracking.trackingInformation')}</TextView>
         <TextArea>
           <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
-          <TextView {...trackingNumberProps}>{trackingNumber || noneNoted}</TextView>
+          {trackingLink ? (
+            // <ClickForActionLink displayedText={trackingNumber || noneNoted} linkType="url" linkUrlIconType={LinkUrlIconType.Arrow} numberOrUrlLink={trackingLink + trackingNumber} />
+            <ClickForActionLink displayedText={trackingNumber || noneNoted} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} />
+          ) : (
+            <TextView variant={'MobileBody'}>{trackingNumber || noneNoted}</TextView>
+          )}
+
           <Box mt={condensedMarginBetween}>
             <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.deliveryService')}</TextView>
             <TextView variant="MobileBody">{deliveryService || noneNoted}</TextView>

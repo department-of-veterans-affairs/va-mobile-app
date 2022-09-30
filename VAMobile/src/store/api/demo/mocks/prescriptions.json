@@ -696,7 +696,7 @@
   "/v0/health/rx/prescriptions/21142592/tracking": {
     "data": {
       "attributes": {
-        "deliveryService": "DHL",
+        "deliveryService": "USPS",
         "otherPrescriptions": [
           {
             "prescriptionName": "LAMIVUDINE 10MG TAB",
