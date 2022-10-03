@@ -131,14 +131,16 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       <VAScrollView>
         {getBanner()}
         <Box mt={contentMarginTop} mb={contentMarginBottom}>
-          <RefillTag status={refillStatus} />
-          <TextArea noBorder={true}>
+          <TextArea>
             <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
             <TextView
               color={'placeholder'}
               accessibilityLabel={prescriptionNumber ? `${t('prescription.prescriptionNumber.a11yLabel')} ${prescriptionNumber.split('').join(' ')}` : noneNoted}>{`${t(
               'prescription.prescriptionNumber',
             )} ${prescriptionNumber || noneNoted}`}</TextView>
+            <Box pt={theme.dimensions.standardMarginBetween}>
+              <RefillTag status={refillStatus} />
+            </Box>
             <DetailsTextSections leftSectionTitle={t('prescription.details.instructionsHeader')} leftSectionValue={instructions || noneNoted} />
             <DetailsTextSections
               leftSectionTitle={t('prescription.details.refillLeftHeader')}
