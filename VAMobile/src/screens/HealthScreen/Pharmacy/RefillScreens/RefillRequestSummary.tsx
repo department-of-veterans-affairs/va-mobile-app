@@ -130,7 +130,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       const { prescriptionName, prescriptionNumber } = request.data.attributes
       const a11yProps = {
         accessibilityLabel: `${prescriptionName} ${prescriptionNumber} ${
-          request.submitted ? t('prescriptions.refillRequestSummary.reviewRefills.requestSubmitted') : t('prescriptions.refillRequestSummary.reviewRefills.requestFailed')
+          request.submitted ? t('prescriptions.refillRequestSummary.pendingRefills.requestSubmitted') : t('prescriptions.refillRequestSummary.pendingRefills.requestFailed')
         }`,
         accessibilityValue: { text: tc('listPosition', { position: index + 1, total: refillRequestSummaryItems.length }) },
         accessible: true,
@@ -174,7 +174,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         </Box>
         <VAButton
           onPress={navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })}
-          label={t('prescriptions.refillRequestSummary.reviewRefills')}
+          label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType="buttonSecondary"
         />
       </Box>
