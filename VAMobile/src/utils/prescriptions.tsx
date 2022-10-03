@@ -1,4 +1,5 @@
 import { ASCENDING } from '../constants/common'
+import { LabelTagTypeConstants } from 'components/LabelTag'
 import { PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { TFunction } from 'i18next'
 
@@ -91,10 +92,10 @@ export const getFilterArgsForFilter = (filter: string) => {
   return [filter]
 }
 
-export const getTagColorForStatus = (status: string) => {
+export const getTagTypeForStatus = (status: string) => {
   switch (status) {
     case RefillStatusConstants.ACTIVE:
-      return 'tagActive'
+      return LabelTagTypeConstants.tagBlue
     case RefillStatusConstants.DELETED:
     case RefillStatusConstants.DISCONTINUED:
     case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
@@ -102,16 +103,18 @@ export const getTagColorForStatus = (status: string) => {
     case RefillStatusConstants.EXPIRED:
     case RefillStatusConstants.UNKNOWN:
     case RefillStatusConstants.TRANSFERRED:
-      return 'tagExpired'
+      return LabelTagTypeConstants.tagInactive
     case RefillStatusConstants.HOLD:
     case RefillStatusConstants.PROVIDER_HOLD:
     case RefillStatusConstants.SUSPENDED:
     case RefillStatusConstants.ACTIVE_PARKED:
     case RefillStatusConstants.NON_VERIFIED:
     case RefillStatusConstants.SUBMITTED:
-      return 'tagSuspended'
+      return LabelTagTypeConstants.tagYellow
     case RefillStatusConstants.REFILL_IN_PROCESS:
-      return 'tagInProgress'
+      return LabelTagTypeConstants.tagGreen
+    default:
+      return LabelTagTypeConstants.tagInactive
   }
 }
 
