@@ -63,8 +63,8 @@ context('RefillRequestSummary', () => {
 
       // Buttons
       const vaButtons = testInstance.findAllByType(VAButton)
-      expect(vaButtons.length).toEqual(1) // should only be one button 'Review refills in progress'
-      expect(testInstance.findByType(VAButton).props.label).toEqual('Review refills in progress')
+      expect(vaButtons.length).toEqual(1) // should only be one button 'Go to all pending refills'
+      expect(testInstance.findByType(VAButton).props.label).toEqual('Go to all pending refills')
     })
   })
 
@@ -120,9 +120,9 @@ context('RefillRequestSummary', () => {
 
       // Buttons
       const vaButtons = testInstance.findAllByType(VAButton)
-      expect(vaButtons.length).toEqual(2) // should only two buttons 'Try again' and 'Review refills in progress'
+      expect(vaButtons.length).toEqual(2) // should only two buttons 'Try again' and 'Go to all pending refills'
       expect(vaButtons[0].props.label).toEqual('Try again')
-      expect(vaButtons[1].props.label).toEqual('Review refills in progress')
+      expect(vaButtons[1].props.label).toEqual('Go to all pending refills')
 
       const textView = testInstance.findAllByType(TextView)
       // Alert
