@@ -394,8 +394,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       logAnalyticsEvent(Events.vama_rx_sort_sel(selectedSortBy))
     },
     onUpperRightAction: () => {
-      setSelectedSortBy('')
-      setSelectedSortOn('')
+      setSelectedSortBy(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
+      setSelectedSortOn(ASCENDING)
     },
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
