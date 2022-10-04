@@ -66,7 +66,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { messagesById, threads, loading, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
+  const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
 
@@ -171,8 +171,12 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
   }
 
-  if (loading || movingMessage) {
-    return <LoadingComponent text={movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')} />
+  if (loading || loadingFile || movingMessage) {
+    return (
+      <LoadingComponent
+        text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
+      />
+    )
   }
 
   if (!message || !messagesById || !thread) {

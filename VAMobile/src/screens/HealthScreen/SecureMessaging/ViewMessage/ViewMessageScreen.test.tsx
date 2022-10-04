@@ -50,7 +50,7 @@ const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
 // Create a date that's always more than 45 days from now
 const nowInMill = 1643402338567
 const mockDateISO = DateTime.fromMillis(nowInMill).toISO()
-const fortySixDaysAgoISO = DateTime.fromMillis(nowInMill).minus({ days: 45}).toISO()
+const fortySixDaysAgoISO = DateTime.fromMillis(nowInMill).minus({ days: 45 }).toISO()
 
 // Contains message attributes mapped to their ids
 const mockMessagesById: SecureMessagingMessageMap = {
@@ -121,6 +121,7 @@ context('ViewMessageScreen', () => {
     mockMessagesById: SecureMessagingMessageMap,
     threadList: SecureMessagingThreads,
     loading: boolean = false,
+    loadingFile: boolean = false,
     messageID: number = 3,
     messageIDsOfError?: Array<number>,
   ) => {
@@ -144,28 +145,35 @@ context('ViewMessageScreen', () => {
     )
 
     const fromISOSpy = jest.spyOn(DateTime, 'fromISO')
-    when(fromISOSpy).calledWith(mockDateISO).mockReturnValue({
-      diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
-        return {
-          days: -14
-        } as Duration
-      },
-      toFormat: (fmt: string, opts?: LocaleOptions) => {
-        return ''
-      },
-    } as DateTime ).calledWith(fortySixDaysAgoISO).mockReturnValue({
-      diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
-        return {
-          days: -46
-        } as Duration
-      },
-      toFormat: (fmt: string, opts?: LocaleOptions) => {
-        return ''
-      },
-    } as DateTime )
+    when(fromISOSpy)
+      .calledWith(mockDateISO)
+      .mockReturnValue({
+        diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
+          return {
+            days: -14,
+          } as Duration
+        },
+        toFormat: (fmt: string, opts?: LocaleOptions) => {
+          return ''
+        },
+      } as DateTime)
+      .calledWith(fortySixDaysAgoISO)
+      .mockReturnValue({
+        diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
+          return {
+            days: -46,
+          } as Duration
+        },
+        toFormat: (fmt: string, opts?: LocaleOptions) => {
+          return ''
+        },
+      } as DateTime)
 
     navigateToSpy = jest.fn()
-    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} }).mockReturnValue(navigateToSpy)
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+      .mockReturnValue(navigateToSpy)
     onPressSpy = jest.fn(() => {})
 
     component = render(<ViewMessageScreen {...props} />, {
@@ -244,10 +252,20 @@ context('ViewMessageScreen', () => {
     })
   })
 
+  describe('when loadingFile is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance({}, [], false, true)
+
+      await waitFor(() => {
+        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      })
+    })
+  })
+
   describe('when individual messages fail to load', () => {
     describe('when an individual message returns an error and that message is clicked', () => {
       it('should show AlertBox with "Message could not be found" title', async () => {
-        initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1])
+        initializeTestInstance(mockMessagesById, mockThreads, false, false, 3, [1])
 
         await waitFor(() => {
           testInstance.findAllByType(Pressable)[0].props.onPress()
@@ -258,7 +276,7 @@ context('ViewMessageScreen', () => {
     })
     describe('when multiple messages are expanded and fail to load', () => {
       it('should show multiple error components', async () => {
-        initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1, 3])
+        initializeTestInstance(mockMessagesById, mockThreads, false, false, 3, [1, 3])
 
         await waitFor(() => {
           testInstance.findAllByType(Pressable)[0].props.onPress()
@@ -273,7 +291,7 @@ context('ViewMessageScreen', () => {
   describe('when message is older than 45 days', () => {
     // changing to a different message thread by changing to different messageID
     beforeEach(() => {
-      initializeTestInstance(mockMessagesById, mockThreads, false, 45)
+      initializeTestInstance(mockMessagesById, mockThreads, false, false, 45)
     })
 
     it('should show AlertBox with Compose button', async () => {

@@ -4,12 +4,19 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { Switch as RNSwitch } from 'react-native'
 
-import { Switch, TextView } from 'components'
-import { context, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
-import { initialNotificationsState, InitialState } from 'store/slices'
+import { ErrorComponent } from 'components'
+import { context, mockNavProps , render, RenderAPI } from 'testUtils'
+import {
+  ErrorsState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  InitialState
+} from 'store/slices'
 import { PushPreference } from 'store/api'
 import NotificationsSettingsScreen from './NotificationsSettingsScreen'
 import { waitFor } from '@testing-library/react-native'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { CommonErrorTypesConstants } from 'constants/errors'
 
 let mockPushEnabled = false
 jest.mock('utils/notifications', () => {
@@ -52,7 +59,7 @@ context('NotificationsSettingsScreen', () => {
     value: false,
   }
 
-  const initializeTestInstance = (notificationsEnabled: boolean, systemNotificationsOn: boolean, preferences: PushPreference[]) => {
+  const initializeTestInstance = (notificationsEnabled: boolean, systemNotificationsOn: boolean, preferences: PushPreference[], errorsState: ErrorsState = initialErrorsState) => {
     const props = mockNavProps()
     mockPushEnabled = notificationsEnabled
 
@@ -64,6 +71,7 @@ context('NotificationsSettingsScreen', () => {
           preferences,
           systemNotificationsOn,
         },
+        errors: errorsState,
       },
     })
 
@@ -89,6 +97,34 @@ context('NotificationsSettingsScreen', () => {
       initializeTestInstance(false, true, [apptPrefOff])
       const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
       expect(rnSwitch.props.value).toEqual(false)
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorsByScreenID,
+      }
+
+      initializeTestInstance(false, true, [apptPrefOn], errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorsByScreenID,
+      }
+
+      initializeTestInstance(false, true, [apptPrefOn], errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

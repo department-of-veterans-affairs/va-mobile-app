@@ -34,8 +34,8 @@ export const lightTheme = {
     menu: colors.white,
     alertBox: colors.white,
     warningTag: colors.gold,
-    inactiveTag: colors.grayMedium,
-    activeTag: colors.greenDarker,
+    inactiveTag: colors.grayLight,
+    activeTag: colors.greenLight,
     panelHeader: colors.white,
   },
   border: {
@@ -118,6 +118,7 @@ export const lightTheme = {
     tabSelectorInactive: colors.grayDark,
     tabSelectorActive: colors.primary,
     closePanel: colors.primary,
+    labelTag: colors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -197,8 +198,8 @@ export const darkTheme = {
     alertBox: colors.base,
     menu: colors.darkmodeGrayWarmDark,
     warningTag: colors.gold,
-    inactiveTag: colors.grayMedium,
-    activeTag: colors.greenDarker,
+    inactiveTag: colors.grayLight,
+    activeTag: colors.greenLight,
     panelHeader: colors.darkmodeGrayDark,
   },
   border: {
@@ -281,6 +282,7 @@ export const darkTheme = {
     tabSelectorInactive: colors.grayLighter,
     tabSelectorActive: colors.darkmodeLightBlue,
     closePanel: colors.darkmodeLightBlue,
+    labelTag: colors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

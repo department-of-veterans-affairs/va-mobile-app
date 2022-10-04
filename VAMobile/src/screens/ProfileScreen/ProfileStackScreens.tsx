@@ -22,6 +22,7 @@ import PaymentIssue from './PaymentScreen/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from './PaymentScreen/PaymentMissingSceen/PaymentMissingScreen'
 import PaymentScreen from './PaymentScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
+import RemoteConfigScreen from './SettingsScreen/DebugScreen/RemoteConfigScreen'
 import SettingsScreen from './SettingsScreen'
 
 export type ProfileStackParamList = {
@@ -30,6 +31,7 @@ export type ProfileStackParamList = {
   ManageYourAccount: undefined
   DirectDeposit: undefined
   Debug: undefined
+  RemoteConfig: undefined
   PersonalInformation: undefined
   MilitaryInformation: undefined
   NotificationsSettings: undefined
@@ -64,6 +66,7 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'ManageYourAccount'} name="ManageYourAccount" component={ManageYourAccount} />,
     <ProfileStack.Screen key={'DirectDeposit'} name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />,
     <ProfileStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t(`${NAMESPACE.SETTINGS}:debug.title`) }} />,
+    <ProfileStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: t('Remote Config') }} />,
     <ProfileStack.Screen key={'PersonalInformation'} name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />,
     <ProfileStack.Screen key={'MilitaryInformation'} name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />,
     <ProfileStack.Screen

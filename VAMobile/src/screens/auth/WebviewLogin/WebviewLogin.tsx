@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
+import { featureEnabled } from 'utils/remoteConfig'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
@@ -23,21 +24,30 @@ import qs from 'querystringify'
 type WebviewLoginProps = StackScreenProps<WebviewStackParams, 'Webview'>
 const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const { AUTH_CLIENT_ID, AUTH_REDIRECT_URL, AUTH_SCOPES, AUTH_ENDPOINT } = getEnv()
+  const { AUTH_IAM_CLIENT_ID, AUTH_IAM_REDIRECT_URL, AUTH_IAM_SCOPES, AUTH_IAM_ENDPOINT, AUTH_SIS_ENDPOINT } = getEnv()
   const { codeChallenge, authorizeStateParam, authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
   const { t } = useTranslation(NAMESPACE.COMMON)
 
+  const SIS_ENABLED = featureEnabled('SIS')
+
   const params = qs.stringify({
-    client_id: AUTH_CLIENT_ID,
-    redirect_uri: AUTH_REDIRECT_URL,
-    scope: AUTH_SCOPES,
-    response_type: 'code',
-    response_mode: 'query',
-    code_challenge_method: 'S256',
     code_challenge: codeChallenge,
-    state: authorizeStateParam,
+    code_challenge_method: 'S256',
+    ...(SIS_ENABLED
+      ? {
+          application: 'vamobile',
+          oauth: 'true',
+        }
+      : {
+          client_id: AUTH_IAM_CLIENT_ID,
+          redirect_uri: AUTH_IAM_REDIRECT_URL,
+          scope: AUTH_IAM_SCOPES,
+          response_type: 'code',
+          response_mode: 'query',
+          state: authorizeStateParam,
+        }),
   })
-  const webLoginUrl = `${AUTH_ENDPOINT}?${params}`
+  const webLoginUrl = `${SIS_ENABLED ? AUTH_SIS_ENDPOINT : AUTH_IAM_ENDPOINT}?${params}`
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
     position: 'absolute',
