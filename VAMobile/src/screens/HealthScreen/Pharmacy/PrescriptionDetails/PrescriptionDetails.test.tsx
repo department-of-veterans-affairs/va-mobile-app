@@ -89,7 +89,7 @@ context('PrescriptionDetails', () => {
       })
       const texts = testInstance.findAllByType(TextView)
 
-      expect(texts[2].props.children).toEqual('Rx #: None noted')
+      expect(texts[1].props.children).toEqual('Rx #: None noted')
       expect(texts[3].props.children).toEqual('Instructions')
       expect(texts[4].props.children).toEqual('None noted')
       expect(texts[5].props.children).toEqual('Refills left')

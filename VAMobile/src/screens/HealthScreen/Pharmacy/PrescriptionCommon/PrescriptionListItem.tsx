@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, BoxProps, TextView, VAIcon, VAIconProps } from 'components'
+import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionAttributeData } from 'store/api/types'
-import { Pressable, PressableProps } from 'react-native'
 import { formatDateUtc } from 'utils/formattingUtils'
-import { getTagColorForStatus, getTextForRefillStatus } from 'utils/prescriptions'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
+import RefillTag from './RefillTag'
 
 export type PrescriptionListItemProps = {
   /** the prescription info to present */
@@ -28,7 +27,6 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
   const noneNoted = tc('noneNoted')
-  const navigateTo = useRouteNavigation()
 
   const renderInstructions = () => {
     if (hideInstructions) {
@@ -40,61 +38,6 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
         <TextView variant={'HelperText'} my={condensedMarginBetween}>
           {instructions || t('prescription.instructions.noneNoted')}
         </TextView>
-      </Box>
-    )
-  }
-
-  /**
-   * Because the label tag common component needs to be redesigned to support an accessible press area,
-   * using a temporary tag to support being able to see the status modals
-   */
-  const getTemporaryStatusTag = () => {
-    if (!includeRefillTag) {
-      return <></>
-    }
-
-    const status = prescription.refillStatus
-    const statusText = getTextForRefillStatus(status, t)
-    const backgroundColor = getTagColorForStatus(status)
-
-    const statusPressableProps: PressableProps = {
-      onPress: navigateTo('StatusGlossary', { display: statusText, value: status }),
-      accessible: true,
-      accessibilityRole: 'button',
-      accessibilityHint: t('prescription.history.a11yHint.status'),
-      accessibilityLabel: statusText,
-    }
-
-    const infoIconProps: VAIconProps = {
-      name: 'InfoIcon',
-      fill: 'statusInfoIcon',
-      height: 16,
-      width: 16,
-      ml: 10,
-      mt: 3,
-    }
-
-    const tagBoxProps: BoxProps = {
-      justifyContent: 'space-between',
-      alignSelf: 'flex-start',
-      backgroundColor,
-      alignItems: 'center',
-      flexDirection: 'row',
-      height: 44,
-      borderRadius: 100,
-      px: 10,
-    }
-
-    return (
-      <Box mt={20}>
-        <Pressable {...statusPressableProps}>
-          <Box {...tagBoxProps}>
-            <TextView variant={'HelperText'} flexWrap={'wrap'} color={'labelTag'} pt={3}>
-              {statusText}
-            </TextView>
-            <VAIcon {...infoIconProps} />
-          </Box>
-        </Pressable>
       </Box>
     )
   }
@@ -111,7 +54,11 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
         accessibilityLabel={prescriptionNumber ? `${t('prescription.prescriptionNumber.a11yLabel')} ${prescriptionNumber.split('').join(' ')}` : noneNoted}>
         {`${t('prescription.prescriptionNumber')} ${prescriptionNumber || noneNoted}`}
       </TextView>
-      {getTemporaryStatusTag()}
+      {includeRefillTag && (
+        <Box mt={20}>
+          <RefillTag status={prescription.refillStatus} />
+        </Box>
+      )}
       {renderInstructions()}
       <TextView variant={'HelperText'} mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
         {`${t('prescription.refillsLeft')} ${refillRemaining ?? noneNoted}`}
