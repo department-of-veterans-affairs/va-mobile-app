@@ -1,4 +1,4 @@
-import { AccessibilityProps, Pressable, PressableProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
+import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import Box from './Box'
 import React, { FC } from 'react'
 
