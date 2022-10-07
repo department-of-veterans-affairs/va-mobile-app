@@ -28,7 +28,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
       numberOrUrlLink: LINK_URL_CLAIM_APPEAL_STATUS,
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
-      testID: t('appealDetails.visitVAGovA11yLabel'),
+      a11yLabel: t('appealDetails.visitVAGovA11yLabel'),
     }
 
     return (
@@ -45,6 +45,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
 
   const clickToCallProps: LinkButtonProps = {
     displayedText: tc('8008271000.displayText'),
+    a11yLabel: tc('8008271000.displayText.a11yLabel'),
     numberOrUrlLink: tc('8008271000'),
     linkType: LinkTypeOptionsConstants.call,
   }

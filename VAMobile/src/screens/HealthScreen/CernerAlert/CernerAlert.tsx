@@ -49,7 +49,7 @@ const CernerAlert: FC = () => {
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      accessibilityLabel: t('cernerAlert.goToMyVAHealth'),
+      a11yLabel: t('cernerAlert.goToMyVAHealth'),
     }
 
     return (
