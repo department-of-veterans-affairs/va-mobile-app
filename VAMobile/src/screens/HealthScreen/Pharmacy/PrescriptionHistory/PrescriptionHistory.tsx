@@ -1,5 +1,5 @@
-import { Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native'
-import { ReactNode, useEffect, useState } from 'react'
+import { Pressable, PressableProps, ScrollView, StyleProp, ViewStyle } from 'react-native'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -171,6 +171,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const [currentTab, setCurrentTab] = useState<string>(startingTab || PrescriptionHistoryTabConstants.ALL)
 
+  // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change
+  const scrollViewRef = useRef<ScrollView | null>(null)
+
   const pressableProps: PressableProps = {
     onPress: navigateTo('PrescriptionHelp'),
     accessibilityRole: 'button',
@@ -335,9 +338,11 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     const paginationProps: PaginationProps = {
       onNext: () => {
         setPage(page + 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
       onPrev: () => {
         setPage(page - 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
       totalEntries: prescriptions?.length || 0,
       pageSize: pageSize,
@@ -591,7 +596,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   return (
     <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
-      <VAScrollView contentContainerStyle={mainViewStyle}>
+      <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={mainViewStyle}>
         <TabBar {...tabProps} />
         <Box {...filterWrapperProps}>
           <Box {...filterContainerProps}>
