@@ -7,7 +7,6 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-import { halfPanelCardStyleInterpolator } from 'utils/common'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
@@ -177,13 +176,8 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       component={StatusGlossary}
       options={{
         title: t('statusGlossary.title'),
-        presentation: 'transparentModal',
-        cardStyleInterpolator: halfPanelCardStyleInterpolator,
-        cardOverlayEnabled: true,
-        headerStatusBarHeight: 0,
-        cardStyle: {
-          borderRadius: 6,
-        },
+        presentation: 'modal',
+        ...TransitionPresets.ModalTransition,
       }}
     />,
   ]
