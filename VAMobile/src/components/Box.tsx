@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { themeFn } from 'utils/theme'
 
-export type VABackgroundColorsVariant = keyof VABackgroundColors
+type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
 export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant
 
