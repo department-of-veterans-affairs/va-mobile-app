@@ -10,9 +10,12 @@ export const Events = {
       name: 'vama_auth_completed',
     }
   },
-  vama_login_closed: (): Event => {
+  vama_login_closed: (isSIS = false): Event => {
     return {
       name: 'vama_login_closed',
+      params: {
+        sis: isSIS.toString(),
+      },
     }
   },
   vama_exchange_failed: (): Event => {
@@ -28,21 +31,28 @@ export const Events = {
       },
     }
   },
-  vama_login_start: (): Event => {
+  vama_login_start: (isSIS = false): Event => {
     return {
       name: 'vama_login_start',
+      params: {
+        sis: isSIS.toString(),
+      },
     }
   },
-  vama_login_success: (): Event => {
+  vama_login_success: (isSIS = false): Event => {
     return {
       name: 'vama_login_success',
+      params: {
+        sis: isSIS.toString(),
+      },
     }
   },
-  vama_login_fail: (error: Error): Event => {
+  vama_login_fail: (error: Error, isSIS = false): Event => {
     return {
       name: 'vama_login_fail',
       params: {
         error: JSON.stringify(error),
+        sis: isSIS.toString(),
       },
     }
   },
