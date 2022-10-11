@@ -13,7 +13,6 @@ import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/typ
 import { createStackNavigator } from '@react-navigation/stack'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
