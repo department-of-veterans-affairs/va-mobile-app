@@ -85,7 +85,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
   return (
-    <VAScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
+    <VAScrollView>
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
