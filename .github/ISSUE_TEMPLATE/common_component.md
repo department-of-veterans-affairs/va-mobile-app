@@ -5,7 +5,7 @@ title: Common Component Ticket:[Insert name of component here]
 labels: component-documentation, ux
 assignees:
 ---
-<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. It's ok if it's a draft, that's the point. This is just the first step in fleshing out documentation and the Component Committee will help. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
+<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. It's ok if it's a draft, that's the point. This is just the first step in fleshing out documentation and the Component Committee will help. Any section that doesn't need to have info should be labeled as NA -->
 
 # Common Component Ticket
 <!-- Goal of these tickets: Add new common components to, or make updates for existing components in, the VA mobile app design system. Only a subset of these will be applicable for updating a component, mark other ones as NA -->
@@ -18,7 +18,7 @@ assignees:
 <!-- Overview of when the component should (or should not) be used. -->
 
 ### Component
-<!-- Provide screenshots of the component (parts labelled and described), as well as screenshots of key variants (different states, light/dark mode) -->
+<!-- Provide screenshots of the component (parts labeled and described), as well as screenshots of key variants (different states, light/dark mode) -->
 
 ### Accessibility
 <!-- Are there accessibility requirements you want to point out? How should the component behave to be accessible to all? -->
@@ -33,7 +33,7 @@ assignees:
 <!-- Screen shot of example screen from the VA mobile app using the component -->
 
 ### Related Components/Resources
-<!-- Link to live design in Sketch for inspection. -->
+<!-- Link to live design in Figma for inspection. -->
 
 <!-- Links to similar components. Or, for an existing component, link to current listing on documentation site.  -->
 
@@ -44,7 +44,7 @@ assignees:
 <!-- Steps in process: cross-practice review with UX, QA and FE (loop as needed), add to documentation site, then hand off to Eng for implementation. -->
 
 #### After filling out the ticket
-- [ ] Tag Jen Ecker, Narin Ratana, and Therese Dickson in a comment on this ticket, and one of them will be in touch to book a walkthrough with you.
+- [ ] Tag Jen Ecker, Jon Bindbeutel, and Therese Dickson in a comment on this ticket, and one of them will be in touch to add you to an upcoming committee meeting to review.
 
 #### After component committee review is finished
 - [ ] PR submitted to add the component to the Front End > Components section of the documentation site
