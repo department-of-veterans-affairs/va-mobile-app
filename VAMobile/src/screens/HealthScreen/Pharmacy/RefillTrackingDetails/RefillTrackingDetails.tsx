@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect } from 'react'
 
 import { Box, BoxProps, ClosePanelButton, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
+import { ClickForActionLink } from 'components'
 import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,7 +12,7 @@ import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherIte
 import { RootState } from 'store'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDowntime, useError, useExternalLink, usePanelHeaderStyles, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, usePanelHeaderStyles, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
@@ -44,7 +45,6 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
-  const launchExternalLink = useExternalLink()
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID)
   const noneNoted = tc('noneNoted')
@@ -103,21 +103,17 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     }
 
     const trackingLink = getTrackingLink(deliveryService)
-    const trackingNumberProps: TextViewProps = {
-      variant: trackingLink ? 'MobileBodyLink' : 'MobileBody',
-      onPress: trackingLink
-        ? () => {
-            launchExternalLink(trackingLink + trackingNumber)
-          }
-        : undefined,
-    }
 
     return (
       <>
         <TextView {...commonBoxHeaderProps}>{t('prescriptions.refillTracking.trackingInformation')}</TextView>
         <TextArea>
           <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
-          <TextView {...trackingNumberProps}>{trackingNumber || noneNoted}</TextView>
+          {trackingLink ? (
+            <ClickForActionLink displayedText={trackingNumber || noneNoted} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} />
+          ) : (
+            <TextView variant={'MobileBody'}>{trackingNumber || noneNoted}</TextView>
+          )}
           <Box mt={condensedMarginBetween}>
             <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.deliveryService')}</TextView>
             <TextView variant="MobileBody">{deliveryService || noneNoted}</TextView>
