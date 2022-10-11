@@ -127,6 +127,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
         a11yValue: selected ? tc('selected') : undefined,
         a11yRole: 'radio',
         testId: `${option.a11yLabel || option.labelKey} ${tc('option', { count: index + 1, totalOptions: options.length })}`,
+        backgroundColor: selected ? 'listActive' : undefined,
       }
 
       return radioButton
