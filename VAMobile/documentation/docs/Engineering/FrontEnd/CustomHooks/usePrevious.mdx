@@ -1,0 +1,10 @@
+import HooksInfo from '../../../../src/components/HooksInfo'
+
+export const exampleString = `const prevLoadingRequestRefills = usePrevious<boolean>(loadingRequestRefills)
+useEffect(() => {
+  if (prevLoadingRequestRefills && prevLoadingRequestRefills !== loadingRequestRefills) {
+    navigation.navigate('RefillRequestSummary')
+  }
+}, [navigation, loadingRequestRefills, prevLoadingRequestRefills])`
+
+<HooksInfo componentName="usePrevious" example={exampleString}/>
