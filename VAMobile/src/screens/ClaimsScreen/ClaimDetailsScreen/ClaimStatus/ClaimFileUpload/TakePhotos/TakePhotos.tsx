@@ -62,7 +62,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
 
   const collapsibleContent = (): ReactNode => {
     const linkToCallProps: LinkButtonProps = {
-      testID: t('fileUpload.goToVaGov'),
+      a11yLabel: t('fileUpload.goToVaGov.a11yLabel'),
       displayedText: t('fileUpload.goToVaGov'),
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,

@@ -97,6 +97,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
         <Box>
           <ClickForActionLink
             displayedText={`${t('common:directions')}`}
+            a11yLabel={`${t('common:directions')}`}
             linkType={'directions'}
             numberOrUrlLink={getDirectionsUrl(location)}
             {...a11yHintProp(t('common:directions.a11yHint'))}
