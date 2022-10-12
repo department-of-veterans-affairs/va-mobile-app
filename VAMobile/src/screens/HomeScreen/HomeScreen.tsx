@@ -13,7 +13,6 @@ import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/typ
 import { createStackNavigator } from '@react-navigation/stack'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
@@ -85,7 +84,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
   return (
-    <VAScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
+    <VAScrollView>
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
