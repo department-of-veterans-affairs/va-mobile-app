@@ -110,7 +110,12 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
         <TextArea>
           <TextView variant="HelperTextBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
           {trackingLink ? (
-            <ClickForActionLink displayedText={trackingNumber || noneNoted} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} />
+            <ClickForActionLink
+              displayedText={trackingNumber || noneNoted}
+              linkType="externalLink"
+              numberOrUrlLink={trackingLink + trackingNumber}
+              a11yLabel={trackingNumber || noneNoted}
+            />
           ) : (
             <TextView variant={'MobileBody'}>{trackingNumber || noneNoted}</TextView>
           )}

@@ -521,7 +521,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       linkType: LinkTypeOptionsConstants.externalLink,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      accessibilityLabel: tc('goToMyVAHealth'),
+      a11yLabel: tc('goToMyVAHealth'),
     }
 
     const props: CollapsibleAlertProps = {
