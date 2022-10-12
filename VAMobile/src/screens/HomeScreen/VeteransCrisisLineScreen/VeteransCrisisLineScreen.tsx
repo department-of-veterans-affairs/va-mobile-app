@@ -44,7 +44,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <Box mt={standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
-              accessibilityLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+              a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
               linkType={LinkTypeOptionsConstants.call}
               fireAnalytic={fireAnalyticFn}
@@ -54,7 +54,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <Box mt={standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.textNumberDisplayed')}
-              accessibilityLabel={t('veteransCrisisLine.textNumberDisplayed')}
+              a11yLabel={t('veteransCrisisLine.textNumberDisplayed.a11y')}
               numberOrUrlLink={t('veteransCrisisLine.textNumber')}
               linkType={LinkTypeOptionsConstants.text}
               fireAnalytic={fireAnalyticFn}
@@ -64,6 +64,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <Box mt={standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.startConfidentialChat')}
+              a11yLabel={t('veteransCrisisLine.startConfidentialChat')}
               numberOrUrlLink={LINK_URL_VETERANS_CRISIS_LINE_GET_HELP}
               linkType={LinkTypeOptionsConstants.url}
               fireAnalytic={fireAnalyticFn}
@@ -76,7 +77,7 @@ const VeteransCrisisLineScreen: FC = () => {
             </TextView>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
-              accessibilityLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
+              a11yLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
               linkType={LinkTypeOptionsConstants.callTTY}
               fireAnalytic={fireAnalyticFn}

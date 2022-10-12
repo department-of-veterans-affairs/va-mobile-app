@@ -1,10 +1,8 @@
-import { AccessibilityProps, TouchableWithoutFeedback } from 'react-native'
+import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import Box from './Box'
 import React, { FC } from 'react'
 
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
-import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
@@ -64,8 +62,8 @@ export type LinkButtonProps = AccessibilityProps & {
   /** object with additional data needed to perform the given action */
   metaData?: ActionLinkMetaData
 
-  /** optional testID */
-  testID?: string
+  /** Accessibility label for the link, mandatory for every element with a link role */
+  a11yLabel: string
 
   /** optional function to fire analytic events when the link is clicked */
   fireAnalytic?: () => void
@@ -74,7 +72,7 @@ export type LinkButtonProps = AccessibilityProps & {
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, testID, fireAnalytic, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, ...props }) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
@@ -149,8 +147,16 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
     textDecorationColor: 'link',
   }
 
+  const pressableProps: TouchableWithoutFeedbackProps = {
+    onPress: _onPress,
+    accessibilityLabel: a11yLabel,
+    accessibilityRole: 'link',
+    accessible: true,
+    ...props,
+  }
+
   return (
-    <TouchableWithoutFeedback onPress={_onPress} {...testIdProps(testID ? testID : generateTestID(displayedText, ''))} accessibilityRole="link" accessible={true} {...props}>
+    <TouchableWithoutFeedback {...pressableProps}>
       <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
         <VAIcon name={getIconName()} fill={'link'} width={25} height={25} />
         <Box flexShrink={1}>
