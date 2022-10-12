@@ -251,6 +251,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const onTabChange = (newTab: string) => {
     setFilterToUse('')
     setCurrentTab(newTab)
+    setPage(1)
 
     if (newTab === PrescriptionHistoryTabConstants.PENDING) {
       logAnalyticsEvent(Events.vama_rx_pendingtab())
