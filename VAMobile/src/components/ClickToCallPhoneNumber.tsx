@@ -15,10 +15,12 @@ type ClickToCallPhoneNumberProps = {
   displayedText?: string
   /** boolean to align items to the center */
   center?: boolean
+  /** accessibility label - otherwise; defaults to the actual phone number */
+  a11yLabel?: string
 }
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
-const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center }) => {
+const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel }) => {
   const { t } = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
 
@@ -32,7 +34,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     displayedText: displayedText || phoneNumber,
     linkType: LinkTypeOptionsConstants.call,
     numberOrUrlLink: getNumbersFromString(phoneNumber),
-    a11yLabel: getNumberAccessibilityLabelFromString(phoneNumber),
+    a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
   }
 
   const ttyProps: LinkButtonProps = {

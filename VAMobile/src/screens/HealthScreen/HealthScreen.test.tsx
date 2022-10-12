@@ -10,6 +10,7 @@ import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
 import { TextView, MessagesCountTag } from 'components'
 import { when } from 'jest-when'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -38,13 +39,16 @@ context('HealthScreen', () => {
   let mockNavigateToAppointmentSpy: jest.Mock
   let mockNavigateToSecureMessagingSpy: jest.Mock
   let mockNavigateToVAVaccinesSpy: jest.Mock
+  let mockNavigateToPharmacySpy: jest.Mock
+  let mockFeatureEnabled = featureEnabled as jest.Mock
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true) => {
+  const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true, prescriptionsEnabled: boolean = false) => {
     mockNavigateToCrisisLineSpy = jest.fn()
     mockNavigateToAppointmentSpy = jest.fn()
     mockNavigateToSecureMessagingSpy = jest.fn()
     mockNavigateToVAVaccinesSpy = jest.fn()
+    mockNavigateToPharmacySpy = jest.fn()
     when(mockNavigateToSpy)
       .mockReturnValue(() => {})
       .calledWith('VeteransCrisisLine')
@@ -55,6 +59,10 @@ context('HealthScreen', () => {
       .mockReturnValue(mockNavigateToSecureMessagingSpy)
       .calledWith('VaccineList')
       .mockReturnValue(mockNavigateToVAVaccinesSpy)
+      .calledWith('PrescriptionHistory')
+      .mockReturnValue(mockNavigateToPharmacySpy)
+
+    when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
@@ -93,11 +101,41 @@ context('HealthScreen', () => {
     })
   })
 
+  describe('prescriptions', () => {
+    describe('feature disabled', () => {
+      it('does not display prescriptions button if feature toggle disabled', async () => {
+        await waitFor(() => {
+          expect(() => component.getByText('Prescriptions')).toThrow()
+        })
+      })
+    })
+
+    describe('feature enabled', () => {
+      it('does not display prescriptions button if feature toggle enabled', async () => {
+        initializeTestInstance(0, true, true)
+        await waitFor(() => {
+          expect(() => component.getByText('Prescriptions')).not.toThrow()
+          expect(component.getByText('Prescriptions')).toBeDefined()
+        })
+      })
+    })
+  })
+
   describe('on click of the crisis line button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
         expect(mockNavigateToCrisisLineSpy).toHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('on click of the pharmacy button', () => {
+    it('should call useRouteNavigation', async () => {
+      initializeTestInstance(0, true, true)
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(mockNavigateToPharmacySpy).toHaveBeenCalled()
       })
     })
   })

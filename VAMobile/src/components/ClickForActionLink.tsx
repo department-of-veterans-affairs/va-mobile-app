@@ -22,6 +22,7 @@ export const LinkTypeOptionsConstants: {
   url: LinkTypeOptions
   calendar: LinkTypeOptions
   directions: LinkTypeOptions
+  externalLink: LinkTypeOptions
 } = {
   text: 'text',
   call: 'call',
@@ -29,8 +30,9 @@ export const LinkTypeOptionsConstants: {
   url: 'url',
   calendar: 'calendar',
   directions: 'directions',
+  externalLink: 'externalLink',
 }
-type LinkTypeOptions = 'text' | 'call' | 'callTTY' | 'url' | 'calendar' | 'directions'
+type LinkTypeOptions = 'text' | 'call' | 'callTTY' | 'url' | 'calendar' | 'directions' | 'externalLink'
 
 export type CalendarMetaData = {
   title: string
@@ -132,6 +134,8 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
         return 'Calendar'
       case 'directions':
         return 'Directions'
+      case 'externalLink':
+        return 'ExternalLink'
     }
   }
 

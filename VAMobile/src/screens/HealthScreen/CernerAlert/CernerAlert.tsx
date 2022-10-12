@@ -15,6 +15,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const CernerAlert: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { cernerFacilities, facilities } = useSelector<RootState, PatientState>((state) => state.patient)
   const hasCernerFacilities = useHasCernerFacilities()
@@ -45,11 +46,11 @@ const CernerAlert: FC = () => {
     })
 
     const linkToCallProps: LinkButtonProps = {
-      displayedText: t('cernerAlert.goToMyVAHealth'),
+      displayedText: tc('goToMyVAHealth'),
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      a11yLabel: t('cernerAlert.goToMyVAHealth'),
+      a11yLabel: tc('goToMyVAHealth.a11yLabel'),
     }
 
     return (
