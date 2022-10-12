@@ -366,6 +366,7 @@ export const getFileDisplay = (
   return { fileName: fileName || '', fileSize: formattedFileSize, fileSizeA11y: formattedFileSizeA11y }
 }
 
+// TODO #3959 ticket to remove HalfPanel
 // function to animate a full screen panel into half the size
 export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardInterpolationProps): StackCardInterpolatedStyle {
   // height of the visible application window
