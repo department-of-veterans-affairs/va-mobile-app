@@ -23,6 +23,7 @@ import PaymentMissing from './PaymentScreen/PaymentMissingSceen/PaymentMissingSc
 import PaymentScreen from './PaymentScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import RemoteConfigScreen from './SettingsScreen/DebugScreen/RemoteConfigScreen'
+import SandboxScreen from './SettingsScreen/DebugScreen/SandboxScreen/SandboxScreen'
 import SettingsScreen from './SettingsScreen'
 
 export type ProfileStackParamList = {
@@ -56,6 +57,7 @@ export type ProfileStackParamList = {
   }
   PaymentIssue: undefined
   PaymentMissing: undefined
+  Sandbox: undefined
 }
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
@@ -67,6 +69,7 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'DirectDeposit'} name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />,
     <ProfileStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t(`${NAMESPACE.SETTINGS}:debug.title`) }} />,
     <ProfileStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: t('Remote Config') }} />,
+    <ProfileStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: t('Sandbox') }} />,
     <ProfileStack.Screen key={'PersonalInformation'} name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />,
     <ProfileStack.Screen key={'MilitaryInformation'} name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />,
     <ProfileStack.Screen
