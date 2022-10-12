@@ -36,7 +36,7 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
         numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
         linkType={LinkTypeOptionsConstants.url}
         linkUrlIconType={LinkUrlIconType.Arrow}
-        testID={t('noAppointments.visitVAA11yLabel')}
+        a11yLabel={t('noAppointments.visitVAA11yLabel')}
       />
     </Box>
   )

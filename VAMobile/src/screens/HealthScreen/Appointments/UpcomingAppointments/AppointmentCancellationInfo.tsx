@@ -47,7 +47,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     linkType: LinkTypeOptionsConstants.url,
     linkUrlIconType: LinkUrlIconType.Arrow,
     numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-    testID: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
+    a11yLabel: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
     accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
   }
 
