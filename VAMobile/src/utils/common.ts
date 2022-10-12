@@ -386,6 +386,7 @@ export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardI
   return {
     cardStyle: {
       transform: [{ translateY }],
+      maxHeight: Dimensions.get('window').height / 2,
     },
     overlayStyle: { opacity: overlayOpacity },
   }
