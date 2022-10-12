@@ -4,7 +4,6 @@ import React, { FC, useLayoutEffect } from 'react'
 import { Box, ClosePanelButton, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ViewStyle } from 'react-native'
 import { getStatusGlossaryTextForRefillStatus } from 'utils/prescriptions'
 import { isIOS } from 'utils/platform'
 import { usePanelHeaderStyles, useTheme } from 'utils/hooks'
@@ -35,13 +34,8 @@ const StatusGlossary: FC<StatusGlossaryProps> = ({ navigation, route }) => {
     })
   }, [navigation, headerStyle, tc])
 
-  const scrollStyles: ViewStyle = {
-    flex: 1,
-    backgroundColor: theme.colors.background.panelHeader,
-  }
-
   return (
-    <VAScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView backgroundColor={'panelHeader'}>
       <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{display}</TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>
