@@ -10,21 +10,25 @@ const isProduction = ENVIRONMENT === EnvironmentTypesConstants.Production
 const RC_CACHE_TIME = 43200000 // 12 hours
 export let overrideRemote = false
 
-export type FeatureToggleType = 'testFeature' | 'SIS'
+/* Valid feature toggles.  Should match firebase */
+export type FeatureToggleType = 'prescriptions' | 'SIS' | 'testFeature'
 
 type FeatureToggleValues = {
-  testFeature: boolean
+  prescriptions: boolean
   SIS: boolean
+  testFeature: boolean
 }
 
 let devConfig: FeatureToggleValues = {
-  testFeature: true,
+  prescriptions: true,
   SIS: true,
+  testFeature: true,
 }
 
 const productionDefaults: FeatureToggleValues = {
-  testFeature: false,
+  prescriptions: false,
   SIS: false,
+  testFeature: false,
 }
 
 /**
