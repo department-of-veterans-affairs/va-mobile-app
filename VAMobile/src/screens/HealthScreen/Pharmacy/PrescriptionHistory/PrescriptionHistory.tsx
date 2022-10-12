@@ -251,6 +251,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const onTabChange = (newTab: string) => {
     setFilterToUse('')
     setCurrentTab(newTab)
+    setPage(1)
 
     if (newTab === PrescriptionHistoryTabConstants.PENDING) {
       logAnalyticsEvent(Events.vama_rx_pendingtab())
@@ -280,7 +281,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         <>
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
           <Pressable {...detailsPressableProps}>
-            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} height={theme.dimensions.touchableMinHeight} pt={5}>
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} minHeight={theme.dimensions.touchableMinHeight} pt={5}>
               <TextView variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
@@ -521,7 +522,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       linkType: LinkTypeOptionsConstants.externalLink,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      accessibilityLabel: tc('goToMyVAHealth'),
+      a11yLabel: tc('goToMyVAHealth'),
     }
 
     const props: CollapsibleAlertProps = {

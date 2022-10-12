@@ -34,14 +34,14 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     displayedText: displayedText || phoneNumber,
     linkType: LinkTypeOptionsConstants.call,
     numberOrUrlLink: getNumbersFromString(phoneNumber),
-    accessibilityLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
+    a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
   }
 
   const ttyProps: LinkButtonProps = {
     displayedText: t('contactVA.tty.number'),
     linkType: LinkTypeOptionsConstants.callTTY,
     numberOrUrlLink: t('contactVA.tty.number'),
-    accessibilityLabel: t('contactVA.tty.number.a11yLabel'),
+    a11yLabel: t('contactVA.tty.number.a11yLabel'),
   }
 
   return (
