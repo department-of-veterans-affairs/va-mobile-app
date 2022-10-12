@@ -58,7 +58,8 @@
           "lettersAndDocuments",
           "militaryServiceHistory",
           "userProfileUpdate",
-          "secureMessaging"
+          "secureMessaging",
+          "prescriptions"
         ],
         "health": {
           "facilities": [
