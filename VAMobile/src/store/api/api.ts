@@ -180,8 +180,8 @@ export const get = async function <T>(endpoint: string, params: Params = {}, abo
   return call<T>('GET', endpoint, params, undefined, abortSignal)
 }
 
-export const post = async function <T>(endpoint: string, params: Params = {}, contentType?: ContentTypes): Promise<T | undefined> {
-  return call<T>('POST', endpoint, params, contentType)
+export const post = async function <T>(endpoint: string, params: Params = {}, contentType?: ContentTypes, abortSignal?: AbortSignal): Promise<T | undefined> {
+  return call<T>('POST', endpoint, params, contentType, abortSignal)
 }
 
 export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {

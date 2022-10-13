@@ -724,13 +724,13 @@ context('personalInformation', () => {
         .mockResolvedValue(mockStorePersonalInformation)
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .calledWith('/v0/user/addresses/validate', addressPayload, undefined, expect.anything())
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
 
       await store.dispatch(validateAddress(addressPayload as AddressData, snackbarMessages))
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload, undefined, expect.anything())
 
       const actions = store.getActions()
 
@@ -794,7 +794,7 @@ context('personalInformation', () => {
         .mockResolvedValue(mockStorePersonalInformation)
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .calledWith('/v0/user/addresses/validate', addressPayload, undefined, expect.anything())
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
@@ -855,7 +855,7 @@ context('personalInformation', () => {
         .mockResolvedValue(mockStorePersonalInformation)
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .calledWith('/v0/user/addresses/validate', addressPayload, undefined, expect.anything())
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
@@ -913,13 +913,13 @@ context('personalInformation', () => {
       }
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .calledWith('/v0/user/addresses/validate', addressPayload, undefined, expect.anything())
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
 
       await store.dispatch(validateAddress(addressPayload as AddressData, snackbarMessages))
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', addressPayload, undefined, expect.anything())
 
       const actions = store.getActions()
 
