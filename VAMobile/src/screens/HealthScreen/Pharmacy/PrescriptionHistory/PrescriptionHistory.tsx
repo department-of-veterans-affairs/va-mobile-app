@@ -169,7 +169,13 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
-  const [currentTab, setCurrentTab] = useState<string>(startingTab || PrescriptionHistoryTabConstants.ALL)
+  const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
+
+  useEffect(() => {
+    if (startingTab) {
+      setCurrentTab(startingTab)
+    }
+  }, [startingTab])
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change
   const scrollViewRef = useRef<ScrollView | null>(null)
