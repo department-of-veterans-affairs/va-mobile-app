@@ -133,7 +133,7 @@ context('UpcomingAppointmentDetails', () => {
       })
     })
     it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nhome')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect\r\nHome')
     })
     it('should display the how to join your virtual session text', async () => {
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('How to join your virtual session')
