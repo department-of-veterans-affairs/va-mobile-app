@@ -58,6 +58,7 @@ export type PersonalInformationState = {
   validationKey?: number
   showValidation: boolean
   preloadComplete: boolean
+  validateAddressAbortController?: AbortController
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
@@ -69,6 +70,7 @@ export const initialPersonalInformationState: PersonalInformationState = {
   showValidation: false,
   preloadComplete: false,
   phoneNumberSaved: false,
+  validateAddressAbortController: undefined,
 }
 
 const personalInformationNonFatalErrorString = 'Personal Information Service Error'
@@ -448,9 +450,13 @@ export const validateAddress =
     const retryFunction = () => dispatch(validateAddress(addressData, messages, screenID))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
 
+    // create a new signal for this api call, so it can be aborted if a user leaves(goes back) to the previous screen
+    const newAbortController = new AbortController()
+    const signal = newAbortController.signal
+
     try {
-      dispatch(dispatchStartValidateAddress())
-      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params)
+      dispatch(dispatchStartValidateAddress({ abortController: newAbortController }))
+      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params, undefined, signal)
       const suggestedAddresses = getSuggestedAddresses(validationResponse)
       const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)
       const validationKey = getValidationKey(suggestedAddresses)
@@ -570,8 +576,9 @@ const peronalInformationSlice = createSlice({
     dispatchFinishEditAddress: (state) => {
       state.addressSaved = false
     },
-    dispatchStartValidateAddress: (state) => {
+    dispatchStartValidateAddress: (state, action: PayloadAction<{ abortController: AbortController }>) => {
       state.savingAddress = true
+      state.validateAddressAbortController = action.payload.abortController
     },
     dispatchFinishValidateAddress: (
       state,
@@ -594,6 +601,7 @@ const peronalInformationSlice = createSlice({
       state.addressValidationScenario = addressValidationScenario
       state.validationKey = validationKey
       state.showValidation = !!addressData
+      state.validateAddressAbortController = undefined
     },
   },
 })
