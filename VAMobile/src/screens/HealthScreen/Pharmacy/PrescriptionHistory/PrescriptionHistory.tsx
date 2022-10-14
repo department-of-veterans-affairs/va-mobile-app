@@ -142,6 +142,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const dispatch = useAppDispatch()
   const {
     filteredPrescriptions: prescriptions,
+    prescriptions: allPrescriptions,
     loadingHistory,
     tabCounts,
     prescriptionsNeedLoad,
@@ -201,7 +202,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
     dispatch(filterAndSortPrescriptions(filters, currentTab, sortByToUse, sortOnToUse === ASCENDING))
-  }, [dispatch, filterToUse, currentTab, sortByToUse, sortOnToUse])
+  }, [dispatch, filterToUse, currentTab, sortByToUse, sortOnToUse, allPrescriptions])
 
   useEffect(() => {
     const newPrescriptions = prescriptions?.slice((page - 1) * pageSize, page * pageSize)
