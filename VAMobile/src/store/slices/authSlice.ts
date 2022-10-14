@@ -18,6 +18,7 @@ import {
   AuthParamsLoadingStateTypes,
   AuthSetAuthorizeRequestParamsPayload,
   LOGIN_PROMPT_TYPE,
+  LoginServiceTypeConstants,
 } from 'store/api/types'
 import { AppDispatch, AppThunk } from 'store'
 import { EnvironmentTypesConstants } from 'constants/common'
@@ -64,6 +65,7 @@ const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_co
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
+const REFRESH_TOKEN_TYPE = 'refreshTokenType'
 const authNonFatalErrorString = 'Auth Service Error'
 
 export type AuthState = {
@@ -132,6 +134,7 @@ export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
  */
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
+  await AsyncStorage.removeItem(REFRESH_TOKEN_TYPE)
   inMemoryRefreshToken = undefined
 }
 
@@ -293,17 +296,20 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
  */
 const storeRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
-  console.debug('storeRefreshToken')
   if (featureEnabled('SIS')) {
     const splitToken = refreshToken.split('.')
-    console.debug(splitToken)
     await Promise.all([
       Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
       AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
       AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
+      AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
     ])
   } else {
-    await Promise.all([Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options), AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType)])
+    await Promise.all([
+      Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options),
+      AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
+      AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.IAM),
+    ])
   }
 }
 
@@ -374,11 +380,31 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
   }
 }
 
+/**
+ * Checks the SIS feature flag and compares it against the type of refresh token stored
+ * @returns if the login service we're using matches the the type of token we have stored
+ */
+export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
+  const tokenType = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
+  const SISEnabled = featureEnabled('SIS')
+  const tokenMatchesService = (SISEnabled && tokenType === LoginServiceTypeConstants.SIS) || (!SISEnabled && tokenType === LoginServiceTypeConstants.IAM)
+  console.debug('refreshTokenMatchesLoginService: ', tokenMatchesService)
+  return tokenMatchesService
+}
+
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   const SISEnabled = featureEnabled('SIS')
   try {
     await CookieManager.clearAll()
+
+    // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
+    const tokenMatchesService = await refreshTokenMatchesLoginService()
+    if (!tokenMatchesService) {
+      console.debug('refreshAccessToken: Token/service mismatch. Logging out.')
+      return false
+    }
+
     const response = await fetch(SISEnabled ? AUTH_SIS_TOKEN_REFRESH_URL : AUTH_IAM_TOKEN_EXCHANGE_URL, {
       method: 'POST',
       headers: {
@@ -434,6 +460,12 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
   try {
     await CookieManager.clearAll()
     const SISEnabled = featureEnabled('SIS')
+    const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
+
+    if (!refreshTokenMatchesLoginType) {
+      throw new Error('Refresh token/login service mismatch.  Aborting refresh.')
+    }
+
     const response = await fetch(SISEnabled ? AUTH_SIS_TOKEN_REFRESH_URL : AUTH_IAM_TOKEN_EXCHANGE_URL, {
       method: 'POST',
       headers: {
@@ -490,36 +522,41 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(updateDemoMode(false, true))
   }
 
-  const token = api.getAccessToken()
-  let refreshToken = inMemoryRefreshToken
-
-  if (!refreshToken) {
-    refreshToken = await retrieveRefreshToken()
-  }
-
   try {
+    const token = api.getAccessToken()
+    let refreshToken = inMemoryRefreshToken
+    if (!refreshToken) {
+      refreshToken = await retrieveRefreshToken()
+    }
+
     await CookieManager.clearAll()
-    const response = await fetch(SISEnabled ? AUTH_SIS_REVOKE_URL : AUTH_IAM_REVOKE_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: qs.stringify({
-        ...(!SISEnabled
-          ? {
-              token,
-              client_id: AUTH_IAM_CLIENT_ID,
-              client_secret: AUTH_IAM_CLIENT_SECRET,
-              redirect_uri: AUTH_IAM_REDIRECT_URL,
-            }
-          : {
-              refresh_token: refreshToken,
-            }),
-      }),
-    })
-    console.debug('logout:', response.status)
-    console.debug('logout:', await response.text())
+    const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
+
+    if (tokenMatchesServiceType) {
+      const response = await fetch(SISEnabled ? AUTH_SIS_REVOKE_URL : AUTH_IAM_REVOKE_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: qs.stringify({
+          ...(!SISEnabled
+            ? {
+                token,
+                client_id: AUTH_IAM_CLIENT_ID,
+                client_secret: AUTH_IAM_CLIENT_SECRET,
+                redirect_uri: AUTH_IAM_REDIRECT_URL,
+              }
+            : {
+                refresh_token: refreshToken,
+              }),
+        }),
+      })
+      console.debug('logout:', response.status)
+      console.debug('logout:', await response.text())
+    } else {
+      console.debug('logout: login service changed. clearing creds only.')
+    }
   } catch (err) {
     logNonFatalErrorToFirebase(err, `logout: ${authNonFatalErrorString}`)
   } finally {
@@ -645,7 +682,7 @@ export const handleTokenCallbackUrl =
         }),
       })
       const authCredentials = await processAuthResponse(response)
-      await logAnalyticsEvent(Events.vama_login_success())
+      await logAnalyticsEvent(Events.vama_login_success(SISEnabled))
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
     } catch (error) {
@@ -658,18 +695,18 @@ export const handleTokenCallbackUrl =
   }
 
 export const cancelWebLogin = (): AppThunk => async (dispatch) => {
-  await logAnalyticsEvent(Events.vama_login_closed())
+  await logAnalyticsEvent(Events.vama_login_closed(featureEnabled('SIS')))
   dispatch(dispatchShowWebLogin())
 }
 
 export const sendLoginFailedAnalytics =
   (error: Error): AppThunk =>
   async () => {
-    await logAnalyticsEvent(Events.vama_login_fail(error))
+    await logAnalyticsEvent(Events.vama_login_fail(error, featureEnabled('SIS')))
   }
 
 export const sendLoginStartAnalytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_login_start())
+  await logAnalyticsEvent(Events.vama_login_start(featureEnabled('SIS')))
 }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
