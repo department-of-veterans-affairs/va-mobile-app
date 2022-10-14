@@ -168,6 +168,7 @@
   "prescription.filter.sort.reset.a11y": "Reset sort to the default selection",
   "prescription.filter.status": "Status Filter",
   "prescription.help.title": "Prescriptions Help",
+  "prescription.help.button.text": "Help",
   "prescription.help.button.a11yLabel": "Get prescriptions help",
   "prescription.help.footer": "If you have questions about your VA prescriptions, call the VA pharmacy number on your prescription label.",
   "prescription.help.footer.a11yLabel": "If you have questions about your V-A prescriptions, call the V-A pharmacy number on your prescription label.",
