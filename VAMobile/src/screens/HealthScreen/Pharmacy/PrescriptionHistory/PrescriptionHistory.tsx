@@ -142,6 +142,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const dispatch = useAppDispatch()
   const {
     filteredPrescriptions: prescriptions,
+    prescriptions: allPrescriptions,
     loadingHistory,
     tabCounts,
     prescriptionsNeedLoad,
@@ -169,7 +170,13 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
-  const [currentTab, setCurrentTab] = useState<string>(startingTab || PrescriptionHistoryTabConstants.ALL)
+  const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
+
+  useEffect(() => {
+    if (startingTab) {
+      setCurrentTab(startingTab)
+    }
+  }, [startingTab])
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change
   const scrollViewRef = useRef<ScrollView | null>(null)
@@ -198,7 +205,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
     dispatch(filterAndSortPrescriptions(filters, currentTab, sortByToUse, sortOnToUse === ASCENDING))
-  }, [dispatch, filterToUse, currentTab, sortByToUse, sortOnToUse])
+  }, [dispatch, filterToUse, currentTab, sortByToUse, sortOnToUse, allPrescriptions])
 
   useEffect(() => {
     const newPrescriptions = prescriptions?.slice((page - 1) * pageSize, page * pageSize)

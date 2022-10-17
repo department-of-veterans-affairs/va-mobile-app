@@ -326,7 +326,6 @@ const prescriptionSlice = createSlice({
       })
 
       state.prescriptions = prescriptions
-      state.filteredPrescriptions = prescriptions
       state.pendingPrescriptions = pendingPrescriptions
       state.shippedPrescriptions = shippedPrescriptions
       state.transferredPrescriptions = transferredPrescriptions
