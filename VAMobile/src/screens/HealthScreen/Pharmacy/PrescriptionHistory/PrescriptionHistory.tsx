@@ -585,23 +585,62 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     if (hasNoItems) {
       return noMatchDisplayEl
     } else {
-      return (
-        <>
-          {getTransferAlert()}
-          <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
-              {getInstructions()}
-            </TextView>
-            <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-              {t('prescription.history.list.title', { count: prescriptions?.length })}
-            </TextView>
-          </Box>
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-            {prescriptionItems()}
-            <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
-          </Box>
-        </>
-      )
+      switch (currentTab) {
+        case PrescriptionHistoryTabConstants.ALL:
+          return (
+            <>
+              {getTransferAlert()}
+              <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+                <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+                  {getInstructions()}
+                </TextView>
+                <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+                  {t('prescription.history.list.title.all', { count: prescriptions?.length })}
+                </TextView>
+              </Box>
+              <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+                {prescriptionItems()}
+                <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
+              </Box>
+            </>
+          )
+        case PrescriptionHistoryTabConstants.PENDING:
+          return (
+            <>
+              {getTransferAlert()}
+              <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+                <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+                  {getInstructions()}
+                </TextView>
+                <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+                  {t('prescription.history.list.title.pending', { count: prescriptions?.length })}
+                </TextView>
+              </Box>
+              <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+                {prescriptionItems()}
+                <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
+              </Box>
+            </>
+          )
+        case PrescriptionHistoryTabConstants.TRACKING:
+          return (
+            <>
+              {getTransferAlert()}
+              <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+                <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+                  {getInstructions()}
+                </TextView>
+                <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+                  {t('prescription.history.list.title.tracking', { count: prescriptions?.length })}
+                </TextView>
+              </Box>
+              <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+                {prescriptionItems()}
+                <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
+              </Box>
+            </>
+          )
+      }
     }
   }
 
