@@ -33,7 +33,7 @@ const MultiTouchCard: FC<MultiTouchCardProps> = ({ a11yValue, mainContent, botto
     minHeight: theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.gutter,
-    borderBottomWidth: hasBottomContent ? theme.dimensions.borderWidth : 0,
+    borderWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     backgroundColor: background,
@@ -58,6 +58,10 @@ const MultiTouchCard: FC<MultiTouchCardProps> = ({ a11yValue, mainContent, botto
     px: theme.dimensions.gutter,
     backgroundColor: background,
     borderRadiusBottom: 8,
+    borderTopWidth: 0,
+    borderWidth: theme.dimensions.borderWidth,
+    borderColor: 'primary',
+    borderStyle: 'solid',
   }
 
   const getBottomContent = () => {
