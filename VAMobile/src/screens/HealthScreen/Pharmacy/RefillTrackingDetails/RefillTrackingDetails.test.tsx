@@ -57,23 +57,23 @@ context('RefillTrackingDetails', () => {
       })
 
       const texts = testInstance.findAllByType(TextView)
-      // Tracking information
-      expect(texts[1].props.children).toEqual('Tracking number')
-      expect(texts[2].props.children).toEqual('None noted')
-      expect(texts[3].props.children).toEqual('Delivery service')
-      expect(texts[4].props.children).toEqual('None noted')
-      expect(texts[5].props.children).toEqual('Date shipped')
-      expect(texts[6].props.children).toEqual('None noted')
 
-      // Prescription information
-      expect(texts[9].props.children).toEqual('Rx #: None noted')
-      expect(texts[10].props.children).toEqual('Instructions not noted')
-      expect(texts[11].props.children).toEqual('Refills left: None noted')
-      expect(texts[12].props.children).toEqual('Fill date: None noted')
-      expect(texts[13].props.children).toEqual('VA facility: None noted')
+      // Header
+      expect(texts[0].props.children).toEqual('ALLOPURINOL 100MG TAB')
+      expect(texts[1].props.children).toEqual('Rx #: None noted')
+
+      // Disclaimer
+      expect(texts[2].props.children).toEqual('We share tracking information here for up to 15 days, even if you\'ve received your prescription.')
+
+      // Tracking information Card
+      expect(texts[3].props.children).toEqual('Tracking number')
+      expect(texts[4].props.children).toEqual('None noted')
+      expect(texts[5].props.children).toEqual('Delivery service: None noted')
+      expect(texts[6].props.children).toEqual('Date shipped: None noted')
 
       // Other prescriptions
-      expect(texts[15].props.children).toEqual('There are no other prescriptions in this package.')
+      expect(texts[7].props.children).toEqual('Other prescriptions in this package:')
+      expect(texts[8].props.children).toEqual('There are no other prescriptions in this package.')
     })
   })
 
