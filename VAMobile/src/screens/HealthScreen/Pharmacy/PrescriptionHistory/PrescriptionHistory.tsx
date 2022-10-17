@@ -191,8 +191,11 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     navigation.setOptions({
       headerRight: (): ReactNode => (
         <Pressable {...pressableProps}>
-          <Box px={23} height={theme.dimensions.headerHeight} justifyContent={'center'}>
-            <VAIcon preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} />
+          <Box px={23} height={theme.dimensions.headerHeight} flexDirection={'row'} alignItems={'center'}>
+            <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} />
+            <TextView variant="ActionBar" allowFontScaling={false}>
+              {t('prescription.help.button.text')}
+            </TextView>
           </Box>
         </Pressable>
       ),
