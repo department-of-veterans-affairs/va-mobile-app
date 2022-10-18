@@ -6,7 +6,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
-import { PrescriptionHistoryTabConstants } from 'store/api'
+import { PrescriptionHistoryTabConstants } from 'store/api/types'
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
