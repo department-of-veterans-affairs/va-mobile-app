@@ -35,6 +35,7 @@ import {
 import {
   DowntimeFeatureTypeConstants,
   PrescriptionHistoryTabConstants,
+  PrescriptionHistoryTabs,
   PrescriptionSortOptionConstants,
   PrescriptionSortOptions,
   PrescriptionsList,
@@ -53,6 +54,7 @@ import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -480,56 +482,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const hasNoItems = prescriptions?.length === 0
 
-  const noMatchScrollStyles: ViewStyle = {
-    flexGrow: 1,
-    justifyContent: 'center',
-  }
-
-  const getNoMatchContent = () => {
-    switch (currentTab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        return (
-          <>
-            <TextView textAlign={'center'} variant="MobileBodyBold">
-              {t('prescription.history.empty.title')}
-            </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={t('prescription.history.empty.message.a11y')}>
-              {t('prescription.history.empty.message')}
-            </TextView>
-          </>
-        )
-      case PrescriptionHistoryTabConstants.PENDING:
-        return (
-          <>
-            <TextView textAlign={'center'} variant="MobileBodyBold">
-              {t('prescription.history.empty.pending.title')}
-            </TextView>
-            <TextView
-              pt={theme.dimensions.condensedMarginBetween}
-              textAlign={'center'}
-              variant="MobileBody"
-              accessibilityLabel={t('prescription.history.empty.pending.message.a11y')}>
-              {t('prescription.history.empty.pending.message')}
-            </TextView>
-          </>
-        )
-      case PrescriptionHistoryTabConstants.TRACKING:
-        return (
-          <>
-            <TextView textAlign={'center'} variant="MobileBodyBold">
-              {t('prescription.history.empty.tracking.title')}
-            </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody">
-              {t('prescription.history.empty.tracking.p1')}
-            </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={t('prescription.history.empty.tracking.p2.a11y')}>
-              {t('prescription.history.empty.tracking.p2')}
-            </TextView>
-          </>
-        )
-    }
-  }
-
   const getInstructions = () => {
     switch (currentTab) {
       case PrescriptionHistoryTabConstants.ALL:
@@ -613,13 +565,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const getContent = () => {
     if (hasNoItems) {
-      return (
-        <VAScrollView contentContainerStyle={noMatchScrollStyles}>
-          <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-            <Box mt={theme.dimensions.condensedMarginBetween}>{getNoMatchContent()}</Box>
-          </Box>
-        </VAScrollView>
-      )
+      return <PrescriptionHistoryNoMatches currentTab={currentTab as PrescriptionHistoryTabs} />
     } else {
       return (
         <>
