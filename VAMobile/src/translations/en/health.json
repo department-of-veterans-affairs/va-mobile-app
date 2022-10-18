@@ -276,6 +276,7 @@
   "prescriptions.refillTracking.prescriptionInformation": "Prescription information",
   "prescriptions.refillTracking.trackingInformation": "Tracking information",
   "prescriptions.refillTracking.trackingNumber": "Tracking number",
+  "prescriptions.refillTracking.upTo15Days": "We share tracking information here for up to 15 days, even if you've received your prescription.",
   "prescriptions.sort.atoz": "A to Z",
   "prescriptions.sort.by": "Sort by",
   "prescriptions.sort.facility": "Facility name",
