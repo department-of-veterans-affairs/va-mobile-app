@@ -132,7 +132,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
     borderWidth: 1,
     borderColor: 'modalButton',
     borderRadius: 20,
-    py: 8,
+    py: 10,
     px: 15,
     alignSelf: 'flex-start',
   }
