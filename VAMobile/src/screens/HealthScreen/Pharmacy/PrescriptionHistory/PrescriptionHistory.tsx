@@ -518,7 +518,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       case PrescriptionHistoryTabConstants.PENDING:
         return t('prescriptions.header.helper.pending.a11y')
       case PrescriptionHistoryTabConstants.TRACKING:
-        return t('prescriptions.header.helper.tracking.a11y')
+        return t('prescriptions.header.helper.tracking')
     }
   }
 
