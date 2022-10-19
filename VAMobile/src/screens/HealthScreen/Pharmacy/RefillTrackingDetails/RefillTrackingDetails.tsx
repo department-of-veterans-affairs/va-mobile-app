@@ -85,9 +85,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     return <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
   }
 
-  const { trackingNumber, deliveryService, shippedDate, otherPrescriptions } = trackingInfo?.attributes || ({} as PrescriptionTrackingInfoAttributeData)
-
-  const renderOtherPrescription = () => {
+  const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {
     const noOtherPrescriptions = !otherPrescriptions || otherPrescriptions.length === 0
     let otherPrescriptionItems
 
@@ -122,29 +120,44 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     )
   }
 
-  const renderTrackingCard = () => {
-    const trackingLink = getTrackingLink(deliveryService)
+  const renderTrackingCards = () => {
+    const totalTracking = trackingInfo?.length
+    return trackingInfo?.map((prescriptionTrackingInfo, index) => {
+      const { trackingNumber, deliveryService, shippedDate, otherPrescriptions } = prescriptionTrackingInfo?.attributes || ({} as PrescriptionTrackingInfoAttributeData)
+      const trackingLink = getTrackingLink(deliveryService)
 
-    const mainContent = (
-      <>
-        <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
-        {trackingLink && trackingNumber ? (
-          <ClickForActionLink displayedText={trackingNumber} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} a11yLabel={trackingNumber} />
-        ) : (
-          <TextView variant={'MobileBody'}>{trackingNumber || noneNoted}</TextView>
-        )}
-        <Box mt={standardMarginBetween} mb={condensedMarginBetween}>
-          <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryService || noneNoted}`}</TextView>
+      const mainContent = (
+        <>
+          <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
+          {trackingLink && trackingNumber ? (
+            <ClickForActionLink displayedText={trackingNumber} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} a11yLabel={trackingNumber} />
+          ) : (
+            <TextView variant={'MobileBody'}>{trackingNumber || noneNoted}</TextView>
+          )}
+          <Box mt={standardMarginBetween} mb={condensedMarginBetween}>
+            <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryService || noneNoted}`}</TextView>
+          </Box>
+          <TextView variant="HelperText">{`${t('prescriptions.refillTracking.dateShipped')}: ${shippedDate ? `${formatDateUtc(shippedDate, 'MM/dd/yyyy')}` : noneNoted}`}</TextView>
+          {renderOtherPrescription(otherPrescriptions)}
+        </>
+      )
+      const multiTouchCardProps: MultiTouchCardProps = {
+        mainContent: mainContent,
+      }
+
+      return (
+        <Box key={index} mt={30}>
+          {trackingInfo?.length > 1 ? (
+            <Box mb={condensedMarginBetween}>
+              <TextView variant={'MobileBodyBold'}>{`${tc('package')} ${tc('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
+            </Box>
+          ) : (
+            <></>
+          )}
+          <MultiTouchCard {...multiTouchCardProps} />
         </Box>
-        <TextView variant="HelperText">{`${t('prescriptions.refillTracking.dateShipped')}: ${shippedDate ? `${formatDateUtc(shippedDate, 'MM/dd/yyyy')}` : noneNoted}`}</TextView>
-        {renderOtherPrescription()}
-      </>
-    )
-    const multiTouchCardProps: MultiTouchCardProps = {
-      mainContent: mainContent,
-    }
-
-    return <MultiTouchCard {...multiTouchCardProps} />
+      )
+    })
   }
 
   const renderHeader = () => {
@@ -161,10 +174,10 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     <VAScrollView>
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         {renderHeader()}
-        <Box my={standardMarginBetween}>
+        <Box mt={standardMarginBetween}>
           <TextView variant="HelperText">{t('prescriptions.refillTracking.upTo15Days')}</TextView>
         </Box>
-        {renderTrackingCard()}
+        {renderTrackingCards()}
       </Box>
     </VAScrollView>
   )

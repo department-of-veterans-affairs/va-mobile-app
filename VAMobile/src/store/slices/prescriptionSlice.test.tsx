@@ -200,7 +200,7 @@ context('Prescription', () => {
   })
 
   describe('getTrackingInfo', () => {
-    const mockData = {
+    const mockData = [{
       "type": "PrescriptionTracking",
       "id": "13650544",
       "attributes": {
@@ -208,6 +208,8 @@ context('Prescription', () => {
         "trackingNumber": "abcdefg12345",
         "shippedDate": "2022-10-28T04:00:00.000Z",
         "deliveryService": "USPS",
+        "ndcNumber": "00013264681",
+        "prescriptionId": 13650544,
         "otherPrescriptions": [
           {
             "prescriptionName": "Ibuprofen 200mg",
@@ -215,13 +217,13 @@ context('Prescription', () => {
           }
         ]
       }
-    }
+    }]
 
     it('should get tracking info', async () => {
-      when(api.get as jest.Mock).calledWith(`/v0/health/rx/prescriptions/${mockData.id}/tracking`).mockResolvedValue({ data: mockData })
+      when(api.get as jest.Mock).calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/tracking`).mockResolvedValue({ data: mockData })
 
       const store = realStore()
-      await store.dispatch(getTrackingInfo(mockData.id))
+      await store.dispatch(getTrackingInfo(mockData[0].id))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_GET_TRACKING_INFO })
@@ -236,10 +238,10 @@ context('Prescription', () => {
     it('should get error if it cant get data', async () => {
       const error = new Error('error from backend')
 
-      when(api.get as jest.Mock).calledWith(`/v0/health/rx/prescriptions/${mockData.id}/tracking`).mockRejectedValue(error)
+      when(api.get as jest.Mock).calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/tracking`).mockRejectedValue(error)
 
       const store = realStore()
-      await store.dispatch(getTrackingInfo(mockData.id))
+      await store.dispatch(getTrackingInfo(mockData[0].id))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_GET_TRACKING_INFO })
