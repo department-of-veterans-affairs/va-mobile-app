@@ -581,6 +581,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     return <FooterButton {...requestRefillButtonProps} />
   }
 
+  const getHistoryListHeader = () => {
+    switch (currentTab) {
+      case PrescriptionHistoryTabConstants.ALL:
+        return t('prescription.history.list.title.all', { count: prescriptions?.length })
+      case PrescriptionHistoryTabConstants.PENDING:
+        return t('prescription.history.list.title.pending', { count: prescriptions?.length })
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescription.history.list.title.tracking', { count: prescriptions?.length })
+    }
+  }
+
   const getContent = () => {
     if (hasNoItems) {
       return noMatchDisplayEl
@@ -593,7 +604,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
               {getInstructions()}
             </TextView>
             <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-              {t('prescription.history.list.title', { count: prescriptions?.length })}
+              {getHistoryListHeader()}
             </TextView>
           </Box>
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
