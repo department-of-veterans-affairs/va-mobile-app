@@ -176,7 +176,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   useEffect(() => {
     if (startingTab) {
-      setCurrentTab(startingTab)
+      onTabChange(startingTab)
     }
   }, [startingTab])
 
@@ -262,6 +262,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const onTabChange = (newTab: string) => {
     setFilterToUse('')
+    setSelectedFilter('')
     setCurrentTab(newTab)
     setPage(1)
 
