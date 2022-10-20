@@ -1,2 +1,2 @@
-export * from './NotificationManger'
-export { default } from './NotificationManger'
+export * from './NotificationManager'
+export { default } from './NotificationManager'

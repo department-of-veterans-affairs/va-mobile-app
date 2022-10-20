@@ -12,7 +12,7 @@ const foregroundNotifications: Array<string> = []
 /**
  * notification manager component to handle all push logic
  */
-const NotificationManger: FC = ({ children }) => {
+const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
@@ -81,4 +81,4 @@ const NotificationManger: FC = ({ children }) => {
   return <View style={s}>{children}</View>
 }
 
-export default NotificationManger
+export default NotificationManager
