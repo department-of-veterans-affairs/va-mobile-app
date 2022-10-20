@@ -2,10 +2,12 @@ import { AuthState } from 'store/slices'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
 import { View } from 'react-native'
-import { registerDevice } from 'store/slices/notificationSlice'
+import { dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
+
+const foregroundNotifications: Array<string> = []
 
 /**
  * notification manager component to handle all push logic
@@ -37,6 +39,7 @@ const NotificationManger: FC = ({ children }) => {
     // Register callbacks for notifications that happen when the app is in the foreground
     Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
       console.debug('Notification Received - Foreground', notification)
+      foregroundNotifications.push(notification.identifier)
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       completion({ alert: true, sound: true, badge: true })
     })
@@ -46,6 +49,9 @@ const NotificationManger: FC = ({ children }) => {
       /** this should be logged in firebase automatically. Anything here should be actions the app takes when it
        * opens like deep linking, etc
        */
+      if (foregroundNotifications.includes(notification.identifier)) {
+        dispatch(dispatchSetTappedForegroundNotification())
+      }
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()
