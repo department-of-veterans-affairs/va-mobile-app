@@ -107,6 +107,7 @@
   "tty.number": "800-877-8339",
   "viewMoreDetails": "Review more details",
   "webview.vagov": "va.gov",
+  "package": "Package",
   "pagination.info": "{{beginIdx}} to {{endIdx}} of {{totalEntries}}",
   "pagination.previous": "Previous page",
   "pagination.next": "Next page",

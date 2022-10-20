@@ -156,7 +156,10 @@ export const DELIVERY_SERVICE_TYPES: {
 
 export type PrescriptionTrackingInfoAttributeData = {
   prescriptionName: string
+  prescriptionNumber: string
+  prescriptionId: number
   trackingNumber: string
+  ndcNumber: string
   shippedDate: string
   deliveryService: string
   otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
@@ -169,5 +172,5 @@ export type PrescriptionTrackingInfo = {
 }
 
 export type PrescriptionTrackingInfoGetData = {
-  data: PrescriptionTrackingInfo
+  data: Array<PrescriptionTrackingInfo>
 }
