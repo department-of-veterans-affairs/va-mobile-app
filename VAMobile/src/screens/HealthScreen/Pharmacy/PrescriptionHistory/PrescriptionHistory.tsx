@@ -35,6 +35,7 @@ import {
 import {
   DowntimeFeatureTypeConstants,
   PrescriptionHistoryTabConstants,
+  PrescriptionHistoryTabs,
   PrescriptionSortOptionConstants,
   PrescriptionSortOptions,
   PrescriptionsList,
@@ -53,6 +54,7 @@ import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
@@ -481,26 +483,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const hasNoItems = prescriptions?.length === 0
 
-  const noMatchScrollStyles: ViewStyle = {
-    flexGrow: 1,
-    justifyContent: 'center',
-  }
-
-  const noMatchDisplayEl = (
-    <VAScrollView contentContainerStyle={noMatchScrollStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextView textAlign={'center'} variant="MobileBodyBold">
-            {t('prescription.history.empty.title')}
-          </TextView>
-          <TextView textAlign={'center'} variant="MobileBody">
-            {t('prescription.history.empty.message')}
-          </TextView>
-        </Box>
-      </Box>
-    </VAScrollView>
-  )
-
   const getInstructions = () => {
     switch (currentTab) {
       case PrescriptionHistoryTabConstants.ALL:
@@ -595,7 +577,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const getContent = () => {
     if (hasNoItems) {
-      return noMatchDisplayEl
+      return <PrescriptionHistoryNoMatches currentTab={currentTab as PrescriptionHistoryTabs} />
     } else {
       return (
         <>
