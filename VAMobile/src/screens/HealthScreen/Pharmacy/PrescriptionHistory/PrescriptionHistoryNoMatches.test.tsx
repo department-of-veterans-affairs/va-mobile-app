@@ -4,9 +4,10 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, render, RenderAPI } from 'testUtils'
+import {context, findByTypeWithText, render, RenderAPI} from 'testUtils'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import { PrescriptionHistoryTabConstants } from 'store/api/types'
+import {TextView} from "../../../../components";
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -25,12 +26,28 @@ context('PrescriptionHistoryNoMatches', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    component = render(<PrescriptionHistoryNoMatches currentTab={PrescriptionHistoryTabConstants.ALL} />)
+    component = render(<PrescriptionHistoryNoMatches currentTab={PrescriptionHistoryTabConstants.ALL} isFiltered={false} />)
 
     testInstance = component.container
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should show tab based content with no filter', async () => {
+    component = render(<PrescriptionHistoryNoMatches currentTab={PrescriptionHistoryTabConstants.PENDING} isFiltered={false} />)
+    testInstance = component.container
+
+    component.debug()
+    expect(findByTypeWithText(testInstance, TextView, 'This list will only show refills requests you’ve submitted or refills that the VA pharmacy is processing.')).toBeTruthy()
+  })
+
+  it('should show tab based content for filtered lists', async () => {
+    component = render(<PrescriptionHistoryNoMatches currentTab={PrescriptionHistoryTabConstants.TRACKING} isFiltered={true} />)
+    testInstance = component.container
+
+    component.debug()
+    expect(findByTypeWithText(testInstance, TextView, 'We can’t find any refills with tracking information that match your filter selection. Try changing or resetting the filter.')).toBeTruthy()
   })
 })
