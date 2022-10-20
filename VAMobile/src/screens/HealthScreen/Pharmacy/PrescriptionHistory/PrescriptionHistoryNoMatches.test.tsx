@@ -7,7 +7,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import {context, findByTypeWithText, render, RenderAPI} from 'testUtils'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import { PrescriptionHistoryTabConstants } from 'store/api/types'
-import {TextView} from "../../../../components";
+import {TextView} from 'components'
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
