@@ -33,11 +33,6 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
     },
   ]
 
-  const scrollStyles: ViewStyle = {
-    flex: 1,
-    backgroundColor: theme.colors.background.panelHeader,
-  }
-
   useEffect(() => {
     navigation.setOptions({
       ...headerStyle,
@@ -46,7 +41,7 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
   }, [navigation, headerStyle, tc])
 
   return (
-    <VAScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView backgroundColor={'panelHeader'}>
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
         <TextView mt={condensedMarginBetween} variant="MobileBody">
