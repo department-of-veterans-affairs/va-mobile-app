@@ -115,6 +115,7 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'list',
+    flexWrap: 'wrap',
   }
 
   return (
