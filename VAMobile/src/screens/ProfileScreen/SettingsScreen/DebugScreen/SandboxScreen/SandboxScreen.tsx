@@ -3,6 +3,7 @@ import React, { FC, useMemo, useState } from 'react'
 import * as CommonComponents from 'components'
 import { Box, PickerItem, TextView, VAModalPicker, VAScrollView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { OnPressOptions } from './PickerOptions'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhiteList'
@@ -50,9 +51,18 @@ const SandboxScreen: FC = () => {
       return <TextView>{t('text.raw', { text: 'Current option has not been set for Sandbox mode yet' })}</TextView>
     }
 
+    const props = {
+      ...dynamicProps,
+    }
+
+    // convert DEFAULT to arrow function
+    if (!!props.onPress && props.onPress === OnPressOptions.DEFAULT) {
+      props.onPress = () => {}
+    }
+
     // @ts-ignore
     const component = CommonComponents[selectedOption as string]
-    return React.createElement(component, dynamicProps)
+    return React.createElement(component, props)
   }
   const setValues = (value: string, key: string) => {
     const test = {
