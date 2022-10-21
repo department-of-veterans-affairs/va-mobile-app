@@ -91,3 +91,10 @@ export const BooleanOptions = generateBooleanPickerOptions()
 
 // Child options
 export const ChildrenOptions = generateChildrenPickerOptions()
+
+// OnPress Options
+// DEFAULT gets converted into a () => {} in SandboxScreen.tsx
+export const OnPressOptions = {
+  DEFAULT: 'DEFAULT',
+  NONE: undefined,
+}
