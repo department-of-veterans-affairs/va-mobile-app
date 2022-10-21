@@ -73,11 +73,63 @@ export const emptyStateTrackingInfoList = [
     attributes: {
       deliveryService: '',
       otherPrescriptions: [],
+      prescriptionNumber: '',
       prescriptionName: 'ALLOPURINOL 100MG TAB',
       shippedDate: '',
       trackingNumber: '',
+      prescriptionId: '',
+      ndcNumber: '',
     },
     id: '20004342',
+    type: 'PrescriptionTracking',
+  },
+]
+
+export const multipleTrackingInfoList = [
+  {
+    attributes: {
+      deliveryService: 'DHL',
+      otherPrescriptions: [
+        {
+          prescriptionName: 'LAMIVUDINE 10MG TAB',
+          prescriptionNumber: '2336800',
+        },
+        {
+          prescriptionName: 'ZIDOVUDINE 1MG CAP',
+          prescriptionNumber: '',
+        },
+      ],
+      prescriptionName: 'ALLOPURINOL 100MG TAB',
+      prescriptionNumber: '3636691',
+      shippedDate: '2022-06-14T00:00:00.000Z',
+      trackingNumber: '7534533636856',
+      ndcNumber: '00013264681',
+      prescriptionId: 20004342,
+    },
+    id: '20004342',
+    type: 'PrescriptionTracking',
+  },
+  {
+    attributes: {
+      deliveryService: 'USPS',
+      otherPrescriptions: [
+        {
+          prescriptionName: 'AMLODIPINE BESYLATE 10MG TAB',
+          prescriptionNumber: '3636711A',
+        },
+        {
+          prescriptionName: 'ZIDOVUDINE 1MG CAP',
+          prescriptionNumber: '4636722C',
+        },
+      ],
+      prescriptionName: 'ALLOPURINOL 100MG TAB',
+      prescriptionNumber: '3636691',
+      shippedDate: '2022-06-28T00:00:00.000Z',
+      trackingNumber: '5634533636812',
+      ndcNumber: '00013264681',
+      prescriptionId: 20004342,
+    },
+    id: '1000433',
     type: 'PrescriptionTracking',
   },
 ]

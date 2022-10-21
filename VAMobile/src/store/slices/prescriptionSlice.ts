@@ -47,7 +47,7 @@ export type PrescriptionState = {
   needsRefillableLoaded: boolean
   loadingRefillable: boolean
   loadingTrackingInfo: boolean
-  trackingInfo?: PrescriptionTrackingInfo
+  trackingInfo?: Array<PrescriptionTrackingInfo>
   // Request refill (RefillScreen, RefillRequestSummary)
   submittingRequestRefills: boolean
   showLoadingScreenRequestRefills: boolean
@@ -69,7 +69,7 @@ export const initialPrescriptionState: PrescriptionState = {
   needsRefillableLoaded: true,
   loadingRefillable: false,
   loadingTrackingInfo: false,
-  trackingInfo: undefined,
+  trackingInfo: [],
   submittingRequestRefills: false,
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
@@ -285,7 +285,7 @@ const prescriptionSlice = createSlice({
     dispatchStartGetTrackingInfo: (state) => {
       state.loadingTrackingInfo = true
     },
-    dispatchFinishGetTrackingInfo: (state, action: PayloadAction<{ trackingInfo?: PrescriptionTrackingInfo; error?: APIError }>) => {
+    dispatchFinishGetTrackingInfo: (state, action: PayloadAction<{ trackingInfo?: Array<PrescriptionTrackingInfo>; error?: APIError }>) => {
       const { trackingInfo, error } = action.payload
       state.trackingInfo = trackingInfo
       state.error = error
