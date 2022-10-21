@@ -577,7 +577,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const getContent = () => {
     if (hasNoItems) {
-      return <PrescriptionHistoryNoMatches currentTab={currentTab as PrescriptionHistoryTabs} />
+      return <PrescriptionHistoryNoMatches currentTab={currentTab as PrescriptionHistoryTabs} isFiltered={!!filterToUse} />
     } else {
       return (
         <>

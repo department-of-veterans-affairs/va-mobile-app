@@ -8,14 +8,49 @@ import { ViewStyle } from 'react-native'
 import { useTheme } from 'utils/hooks'
 
 type PrescriptionHistoryNoMatchesProps = {
+  /** currently selected tab */
   currentTab: PrescriptionHistoryTabs
+  /** whether a filter has been applied to the results */
+  isFiltered: boolean
 }
 
-const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ currentTab }) => {
+const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ currentTab, isFiltered }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
+  const getFilteredTabString = () => {
+    switch (currentTab) {
+      case PrescriptionHistoryTabConstants.ALL:
+        return t('prescription.history.empty.filtered.all')
+      case PrescriptionHistoryTabConstants.PENDING:
+        return t('prescription.history.empty.filtered.pending')
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescription.history.empty.filtered.tracking')
+    }
+  }
+
+  const getFilteredNoMatch = () => {
+    let contenta11y = {}
+    if (currentTab === PrescriptionHistoryTabConstants.ALL) {
+      contenta11y = { accessibilityLabel: t('prescription.history.empty.filtered.all.a11y') }
+    }
+    return (
+      <>
+        <TextView textAlign={'center'} variant="MobileBodyBold">
+          {t('prescription.history.empty.filtered.title')}
+        </TextView>
+        <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" {...contenta11y}>
+          {getFilteredTabString()}
+        </TextView>
+      </>
+    )
+  }
+
   const getContent = () => {
+    if (isFiltered) {
+      return getFilteredNoMatch()
+    }
+
     switch (currentTab) {
       case PrescriptionHistoryTabConstants.ALL:
         return (
