@@ -30,17 +30,17 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
   let content
   if (isAppointmentPending) {
     if (!typeOfCare) {
-      return <></>
+      content = <></>
+    } else {
+      // pending
+      const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
+      const title = appointmentCanceled ? 'appointments.pending.cancelled.pendingRequestTypeOfCare' : 'appointments.pending.submitted.pendingRequestTypeOfCare'
+      content = (
+        <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} selectable={true}>
+          {t(title, { typeOfCare })}
+        </TextView>
+      )
     }
-
-    // pending
-    const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
-    const title = appointmentCanceled ? 'appointments.pending.cancelled.pendingRequestTypeOfCare' : 'appointments.pending.submitted.pendingRequestTypeOfCare'
-    content = (
-      <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} selectable={true}>
-        {t(title, { typeOfCare })}
-      </TextView>
-    )
   } else if (isAppointmentCanceled) {
     // cancelled
     content = (
