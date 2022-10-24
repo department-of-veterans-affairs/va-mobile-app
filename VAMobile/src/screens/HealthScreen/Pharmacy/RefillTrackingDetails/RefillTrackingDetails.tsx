@@ -137,7 +137,9 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
           {trackingLink && trackingNumber ? (
             <ClickForActionLink displayedText={trackingNumber} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} a11yLabel={trackingNumberA11yLabel} />
           ) : (
-            <TextView variant={'MobileBody'}>{trackingNumber || noneNoted}</TextView>
+            <TextView variant={'MobileBody'} accessibilityLabel={trackingNumberA11yLabel || noneNoted}>
+              {trackingNumber || noneNoted}
+            </TextView>
           )}
           <Box mt={standardMarginBetween} mb={condensedMarginBetween}>
             <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryService || noneNoted}`}</TextView>
