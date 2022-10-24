@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { debuglog } from 'util'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from '../Box'
 import SelectionListItem, { SelectionListItemObj } from './SelectionListItem'
@@ -82,7 +81,7 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
     let name: keyof typeof VA_ICON_MAP
     let fill = 'checkboxEnabledPrimary'
     let stroke = 'checkboxEnabledPrimary'
-    console.debug(numSelected == 0 ? false : numSelected == items.length ? true : 'mixed')
+    
     if (numSelected === items.length) {
       name = 'FilledCheckBox'
     } else if (numSelected > 0) {
