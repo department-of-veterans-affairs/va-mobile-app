@@ -81,7 +81,6 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
     let name: keyof typeof VA_ICON_MAP
     let fill = 'checkboxEnabledPrimary'
     let stroke = 'checkboxEnabledPrimary'
-    
     if (numSelected === items.length) {
       name = 'FilledCheckBox'
     } else if (numSelected > 0) {
