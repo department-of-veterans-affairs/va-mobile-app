@@ -9,7 +9,7 @@ executors:
     resource_class: large
   ios:
     macos:
-      xcode: 14.0.1
+      xcode: 13.4.1
 commands:
   install_deps:
     description: "Install dependencies"
