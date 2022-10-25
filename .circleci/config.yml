@@ -58,14 +58,21 @@ commands:
           working_directory: ~/project/VAMobile
           command: yarn lint:ci
           when: always
-  jest:
+  jest1:
     description: "Run jest"
     steps:
       - run:
           working_directory: ~/project/VAMobile
-          command: |
-                    yarn test src/components -w 1
-                     yarn test src/screens -w 1
+          command: yarn test src/screens -w 1
+          when: always
+      - store_test_results:
+          path: VAMobile/coverage/junit/
+  jest2:
+    description: "Run jest"
+    steps:
+      - run:
+          working_directory: ~/project/VAMobile
+          command: yarn test src/screens -w 1
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
