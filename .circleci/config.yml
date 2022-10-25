@@ -389,7 +389,6 @@ jobs:
           lane: on_demand
           notes: ${CIRCLE_TAG}
           tf_group: Development Team
-          use_slack_thread: false
   build_android_feature:
     executor: android
     steps:
@@ -525,24 +524,24 @@ workflows:
               ignore: /.*/
   feature_build:
     jobs:
-#      - start_slack_thread:
-#          message: "On-demand feature build process starting. Please see :thread: for results. This process may take a while."
-#          filters:
-#            tags:
-#              only: /^feature-build-.+/
-#            branches:
-#              ignore: /.*/
-#      - build_android_feature:
-#          requires:
-#            - start_slack_thread
-#          filters:
-#            tags:
-#              only: /^feature-build-.+/
-#            branches:
-#              ignore: /.*/
+      - start_slack_thread:
+          message: "On-demand feature build process starting. Please see :thread: for results. This process may take a while."
+          filters:
+            tags:
+              only: /^feature-build-.+/
+            branches:
+              ignore: /.*/
+      - build_android_feature:
+          requires:
+            - start_slack_thread
+          filters:
+            tags:
+              only: /^feature-build-.+/
+            branches:
+              ignore: /.*/
       - build_ios_feature:
-#          requires:
-#            - start_slack_thread
+          requires:
+            - start_slack_thread
           filters:
             tags:
               only: /^feature-build-.+/
