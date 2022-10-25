@@ -60,11 +60,12 @@ commands:
           when: always
   jest:
     description: "Run jest"
-    parallelism: 6
     steps:
       - run:
           working_directory: ~/project/VAMobile
-          command: yarn test -w 1
+          command: |
+                    yarn test src/components -w 1
+                     yarn test src/screens -w 1
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
