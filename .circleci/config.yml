@@ -64,7 +64,7 @@ commands:
     steps:
       - run:
           working_directory: ~/project/VAMobile
-          command: yarn test src/components -w 1
+          command: yarn test -w 1
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
