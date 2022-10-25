@@ -58,21 +58,13 @@ commands:
           working_directory: ~/project/VAMobile
           command: yarn lint:ci
           when: always
-  jest1:
+  jest:
     description: "Run jest"
     steps:
       - run:
           working_directory: ~/project/VAMobile
-          command: yarn test src/screens -w 1
-          when: always
-      - store_test_results:
-          path: VAMobile/coverage/junit/
-  jest2:
-    description: "Run jest"
-    steps:
-      - run:
-          working_directory: ~/project/VAMobile
-          command: yarn test src/screens -w 1
+          command: TEST=$(circleci tests glob "src/__tests__/*.js" | circleci tests split --split-by=timings)
+                    yarn test $TEST
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
