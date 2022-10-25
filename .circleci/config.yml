@@ -63,7 +63,7 @@ commands:
     steps:
       - run:
           working_directory: ~/project/VAMobile
-          command: TEST=$(circleci tests glob "src/__tests__/*.js" | circleci tests split --split-by=timings)
+          command: TEST=$(circleci tests | circleci tests split --split-by=timings)
                     yarn test $TEST
           when: always
       - store_test_results:
