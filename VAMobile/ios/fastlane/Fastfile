@@ -27,7 +27,7 @@ platform :ios do
               key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
               in_house: false
             )
-    ensure_xcode_version(version: "14.0")
+    ensure_xcode_version(version: "14", strict: false)
   end
 
   desc "Push a new internal QA build to TestFlight"
