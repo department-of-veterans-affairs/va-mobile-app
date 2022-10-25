@@ -63,7 +63,7 @@ commands:
     steps:
       - run:
           working_directory: ~/project/VAMobile
-          command: circleci tests glob "**/*.tsx" | circleci tests split --split-by=timings
+          command: circleci tests glob "**/*" | circleci tests split --split-by=timings
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
