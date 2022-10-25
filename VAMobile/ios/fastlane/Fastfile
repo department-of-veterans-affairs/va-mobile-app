@@ -28,6 +28,7 @@ platform :ios do
               in_house: false
             )
     ensure_xcode_version(version: "13", strict: false)
+    ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true'
   end
 
   desc "Push a new internal QA build to TestFlight"
