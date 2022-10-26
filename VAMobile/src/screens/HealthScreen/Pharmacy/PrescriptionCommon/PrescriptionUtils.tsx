@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next'
 
-import { a11yLabelDateUTC, a11yLabelID } from 'utils/a11yLabel'
+import { a11yLabelID } from 'utils/a11yLabel'
 import { formatDateUtc } from 'utils/formattingUtils'
 
 /**
@@ -27,6 +27,6 @@ export const getRxNumberTextAndLabel = (healthT: TFunction, prescriptionNumber?:
 export const getDateTextAndLabel = (healthT: TFunction, date: string | null) => {
   const noneNoted = healthT('common:noneNoted')
   const dateMMddyyyy = date ? formatDateUtc(date, 'MM/dd/yyyy') : noneNoted
-  const dateA11yLabel = date ? a11yLabelDateUTC(date) : noneNoted
+  const dateA11yLabel = date ? formatDateUtc(date, 'MMMM dd, yyyy') : noneNoted
   return [dateMMddyyyy, dateA11yLabel]
 }

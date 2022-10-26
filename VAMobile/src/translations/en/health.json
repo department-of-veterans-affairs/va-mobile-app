@@ -281,7 +281,7 @@
   "prescriptions.refillRequestSummary.yourRefills.success.a11y": "We're reviewing your refill request. Once approved, the V-A pharmacy will process your refill. If you have questions about the status of your refill, contact your provider or local V-A pharmacy.",
   "prescription.refillsLeft": "Refills left:",
   "prescription.rxNumber": "Rx #:",
-  "prescription.rxNumber.a11yLabel": "Rx number",
+  "prescription.rxNumber.a11yLabel": "Prescription number",
   "prescriptions.refillTracking.dateShipped": "Date shipped",
   "prescriptions.refillTracking.deliveryService": "Delivery service",
   "prescriptions.refillTracking.loading": "Loading your prescription tracking details...",
