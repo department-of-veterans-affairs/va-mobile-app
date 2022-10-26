@@ -9,7 +9,7 @@ executors:
     resource_class: large
   ios:
     macos:
-      xcode: 14.0.1
+      xcode: 13.4.1
 commands:
   install_deps:
     description: "Install dependencies"
@@ -159,7 +159,7 @@ commands:
             - get_slack_thread
       - run:
           working_directory: ~/project/VAMobile/ios
-          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" tfGroup:"<<parameters.tf_group>>"
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" tfGroup:"<<parameters.tf_group>>" --verbose
           no_output_timeout: "30m"
   decode_android_keys:
     description: "Decodes all the keys needed to build and upload to google play"
