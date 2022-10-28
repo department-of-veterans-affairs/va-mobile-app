@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +8,7 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { RefillTag } from '../PrescriptionCommon'
+import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { useAppDispatch, useDestructiveAlert, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
@@ -46,10 +45,6 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       }
     }, [dispatch, prescriptionsNeedLoad]),
   )
-
-  const getDate = (date?: string | null) => {
-    return date ? DateTime.fromISO(date).toUTC().toFormat('MM/dd/yyyy') : noneNoted
-  }
 
   const redirectLink = (): void => {
     launchExternalLink(LINK_URL_GO_TO_PATIENT_PORTAL)
@@ -118,9 +113,10 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     return <PrescriptionsDetailsBanner />
   }
 
-  const lastRefilledDateFormatted = getDate(refillDate)
-  const expireDateFormatted = getDate(expirationDate)
-  const dateOrderedFormatted = getDate(orderedDate)
+  const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
+  const [lastRefilledDateFormatted, lastRefilledDateFormattedA11yLabel] = getDateTextAndLabel(t, refillDate)
+  const [expireDateFormatted, expireDateFormattedA11yLabel] = getDateTextAndLabel(t, expirationDate)
+  const [dateOrderedFormatted, dateOrderedFormattedA11yLabel] = getDateTextAndLabel(t, orderedDate)
 
   if (loadingHistory) {
     return <LoadingComponent text={t('prescription.details.loading')} />
@@ -133,11 +129,9 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
         <Box mt={contentMarginTop} mb={contentMarginBottom}>
           <TextArea>
             <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
-            <TextView
-              color={'placeholder'}
-              accessibilityLabel={prescriptionNumber ? `${t('prescription.prescriptionNumber.a11yLabel')} ${prescriptionNumber.split('').join(' ')}` : noneNoted}>{`${t(
-              'prescription.prescriptionNumber',
-            )} ${prescriptionNumber || noneNoted}`}</TextView>
+            <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
+              {rxNumber}
+            </TextView>
             <Box pt={theme.dimensions.standardMarginBetween}>
               <RefillTag status={refillStatus} />
             </Box>
@@ -147,13 +141,16 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
               leftSectionValue={refillRemaining ?? noneNoted}
               rightSectionTitle={t('prescription.details.lastFillDateHeader')}
               rightSectionValue={lastRefilledDateFormatted}
+              rightSectionValueLabel={lastRefilledDateFormattedA11yLabel}
             />
             <DetailsTextSections leftSectionTitle={t('prescription.details.quantityHeader')} leftSectionValue={quantity ?? noneNoted} />
             <DetailsTextSections
               leftSectionTitle={t('prescription.details.expiresOnHeader')}
               leftSectionValue={expireDateFormatted}
+              leftSectionValueLabel={expireDateFormattedA11yLabel}
               rightSectionTitle={t('prescription.details.orderedOnHeader')}
               rightSectionValue={dateOrderedFormatted}
+              rightSectionValueLabel={dateOrderedFormattedA11yLabel}
             />
             <DetailsTextSections
               leftSectionTitle={t('prescription.details.vaFacilityHeader')}
