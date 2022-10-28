@@ -52,7 +52,7 @@ declare -a type_opts=(qa release hotfix)
 
 # TestFlight group and options
 TF_GROUP="Development Team"
-declare -a tf_opts=("Development Team" "Ad Hoc Production Testers" "IAM Group" "Push Testing" "UAT Group" "VA 508 Testers" "VA Employee (Wide) Beta" "VA Production Testers" "VA Stakeholders")
+declare -a tf_opts=("Development Team" "Ad Hoc Production Testers" "IAM Group" "Push Testing" "UAT Group" "VA 508 Testers" "VA Employee (Wide) Beta" "VA Production Testers" "VA Stakeholders" "Demo Mode")
 
 # Play Store track default and options
 PS_TRACK="Development Team"
