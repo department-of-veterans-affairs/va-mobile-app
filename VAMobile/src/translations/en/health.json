@@ -277,7 +277,7 @@
   "prescriptions.refillRequestSummary.tryAgain": "We're sorry. Something went wrong on our end. Try again or contact you local VA pharmacy.",
   "prescriptions.refillRequestSummary.tryAgain.a11yLabel": "We're sorry. Something went wrong on our end. Try again or contact you local V-A pharmacy.",
   "prescriptions.refillRequestSummary.whatsNext": "What’s next",
-  "prescriptions.refillRequestSummary.yourRefills.success": "We're reviewing your refill request. Once approved, the VA pharmacy will process your refill. If you have questions about the status of your refill, contact your provider or local VA pharmacy.",
+  "prescriptions.refillRequestSummary.yourRefills.success": "We're reviewing your refill request. Once approved, the VA pharmacy will process your refill. \n\n If you have questions about the status of your refill, contact your provider or local VA pharmacy.",
   "prescriptions.refillRequestSummary.yourRefills.success.a11y": "We're reviewing your refill request. Once approved, the V-A pharmacy will process your refill. If you have questions about the status of your refill, contact your provider or local V-A pharmacy.",
   "prescription.refillsLeft": "Refills left:",
   "prescription.prescriptionNumber": "Rx #:",
