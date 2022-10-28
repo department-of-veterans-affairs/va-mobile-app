@@ -37,7 +37,7 @@ context('MultiTouchCard', () => {
       { text: 'bottom line 2', variant: 'MobileBodyBold' },
     ]
     const props: MultiTouchCardProps = {
-      a11yValue: 'Prescription 1 of 1',
+      orderIdentifier: 'Prescription 1 of 1',
       mainContent: <TextLines listOfText={middleTextLines} />,
       bottomContent: <TextLines listOfText={bottomText} />,
     }
