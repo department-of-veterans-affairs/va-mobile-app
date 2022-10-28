@@ -166,6 +166,10 @@ export const formatDateMMDDYYYY = (date: string): string => {
  * @returns  date string formatted based on formatString
  */
 export const formatDateUtc = (date: string, formatString: string): string => {
+  if (!date) {
+    return ''
+  }
+
   return DateTime.fromISO(date).toUTC().toFormat(formatString)
 }
 
