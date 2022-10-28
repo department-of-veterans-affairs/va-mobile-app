@@ -267,7 +267,7 @@
   "prescriptions.refill.pageHeaderTitle": "Refill Request",
   "prescriptions.refill.submit_one": "Submitting {{ count }} out of {{total}} refill request...",
   "prescriptions.refill.submit_other": "Submitting {{ count }} out of {{total}} refill requests...",
-  "prescriptions.refillRequestSummary": "Refill Request Summary",
+  "prescriptions.refillRequestSummary": "Refill request summary",
   "prescriptions.refillRequestSummary.failed": "Your refill requests failed",
   "prescriptions.refillRequestSummary.mix": "We didn't get {{count}} refill requests",
   "prescriptions.refillRequestSummary.pendingRefills": "Go to all pending refills",
