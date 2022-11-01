@@ -3,8 +3,11 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { AppThunk } from 'store'
-import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference } from '../api'
+import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference, ScreenIDTypes } from '../api'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getDeviceName } from 'utils/deviceData'
+import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { notificationsEnabled } from 'utils/notifications'
@@ -105,19 +108,28 @@ export const setPushPref =
 /**
  * Redux Action to fetch preferences for the device from Vetext.
  */
-export const loadPushPreferences = (): AppThunk => async (dispatch) => {
-  dispatch(dispatchStartLoadPreferences())
-  const systemNotificationsOn = await notificationsEnabled()
-  try {
-    const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
-    const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
-    dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences: response?.data.attributes.preferences }))
-  } catch (e) {
-    logNonFatalErrorToFirebase(e, `loadPushPreferences: ${notificationsNonFatalErrorString}`)
-    console.error(e)
-    dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences: [] }))
+export const loadPushPreferences =
+  (screenID?: ScreenIDTypes): AppThunk =>
+  async (dispatch) => {
+    const retryFunction = () => dispatch(loadPushPreferences(screenID))
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
+
+    dispatch(dispatchStartLoadPreferences())
+    const systemNotificationsOn = await notificationsEnabled()
+    try {
+      const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+      const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
+      dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences: response?.data.attributes.preferences }))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `loadPushPreferences: ${notificationsNonFatalErrorString}`)
+        console.error(error)
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences: [] }))
+      }
+    }
   }
-}
 
 /**
  * Redux slice that will create the actions and reducers

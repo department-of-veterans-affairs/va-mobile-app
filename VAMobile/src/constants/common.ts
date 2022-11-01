@@ -65,7 +65,7 @@ const screensToCloseSnackbarOnNavigation = [
   'UpcomingAppointmentDetails',
   'UploadFile',
   'UploadOrAddPhotos',
-  'ViewMessage',
+  'ViewMessageScreen',
 ]
 
 export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
@@ -83,3 +83,4 @@ export const MAX_DIGITS = 10
 export const MAX_DIGITS_AFTER_FORMAT = 14
 
 export const EMAIL_REGEX_EXP = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
+export const ASCENDING = 'ascending'

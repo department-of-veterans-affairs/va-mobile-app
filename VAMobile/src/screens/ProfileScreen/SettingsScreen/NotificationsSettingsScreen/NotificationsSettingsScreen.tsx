@@ -2,16 +2,18 @@ import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-import { AlertBox, Box, ButtonDecoratorType, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices'
 import { RootState } from 'store'
-import { useAppDispatch, useOnResumeForeground, useTheme } from 'utils/hooks'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 const NotificationsSettingsScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.PROFILE)
   const { t: ts } = useTranslation(NAMESPACE.SETTINGS)
+  const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const { preferences, loadingPreferences, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>((state) => state.notifications)
@@ -22,11 +24,11 @@ const NotificationsSettingsScreen: FC = () => {
   const dispatch = useAppDispatch()
 
   useOnResumeForeground(() => {
-    dispatch(loadPushPreferences())
+    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
   })
 
   useEffect(() => {
-    dispatch(loadPushPreferences())
+    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
   }, [dispatch])
 
   const alert = (): ReactNode => {
@@ -39,6 +41,10 @@ const NotificationsSettingsScreen: FC = () => {
         </AlertBox>
       </Box>
     )
+  }
+
+  if (hasError) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
   }
 
   if (loadingPreferences) {

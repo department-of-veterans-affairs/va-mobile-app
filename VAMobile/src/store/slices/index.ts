@@ -16,6 +16,7 @@ import { initialNotificationsState } from 'store/slices/notificationSlice'
 import { initialPatientState } from 'store/slices/patientSlice'
 import { initialPaymentsState } from 'store/slices/paymentsSlice'
 import { initialPersonalInformationState } from 'store/slices/personalInformationSlice'
+import { initialPrescriptionState } from './prescriptionSlice'
 import { initialRequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
@@ -40,6 +41,7 @@ export * from './snackBarSlice'
 export * from './vaccineSlice'
 export * from './paymentsSlice'
 export * from './requestAppointmentSlice'
+export * from './prescriptionSlice'
 
 export const InitialState: RootState = {
   auth: initialAuthState,
@@ -62,4 +64,5 @@ export const InitialState: RootState = {
   snackBar: initialSnackBarState,
   payments: initialPaymentsState,
   requestAppointment: initialRequestAppointmentState,
+  prescriptions: initialPrescriptionState,
 }

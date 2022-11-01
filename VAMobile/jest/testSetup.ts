@@ -19,6 +19,8 @@ NativeModules.DeviceData = {
   getBuildNumber: jest.fn().mockReturnValue(0),
 }
 
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
+
 jest.mock('react-native-safe-area-context', () => {
   let original = jest.requireActual('react-native-safe-area-context')
   return {
@@ -263,3 +265,7 @@ jest.mock('@react-native-firebase/perf', () => {
     }
   })
 })
+
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
+
+jest.mock('utils/remoteConfig')

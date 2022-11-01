@@ -3,22 +3,31 @@ import { logNonFatalErrorToFirebase } from './analytics'
 import getEnv from 'utils/env'
 import remoteConfig from '@react-native-firebase/remote-config'
 
-const { ENVIRONMENT } = getEnv()
+const { ENVIRONMENT, IS_TEST } = getEnv()
 
+const fetchRemote = !__DEV__ && !IS_TEST
 const isProduction = ENVIRONMENT === EnvironmentTypesConstants.Production
 const RC_CACHE_TIME = 43200000 // 12 hours
+export let overrideRemote = false
 
-type FeatureToggleType = 'testFeature'
+/* Valid feature toggles.  Should match firebase */
+export type FeatureToggleType = 'prescriptions' | 'SIS' | 'testFeature'
 
-export type RemoteConfigValues = {
+type FeatureToggleValues = {
+  prescriptions: boolean
+  SIS: boolean
   testFeature: boolean
 }
 
-const devDefaults: RemoteConfigValues = {
+let devConfig: FeatureToggleValues = {
+  prescriptions: true,
+  SIS: true,
   testFeature: true,
 }
 
-const productionDefaults: RemoteConfigValues = {
+const productionDefaults: FeatureToggleValues = {
+  prescriptions: false,
+  SIS: false,
   testFeature: false,
 }
 
@@ -31,13 +40,13 @@ export const activateRemoteConfig = async (): Promise<void> => {
   try {
     console.debug('Remote Config: Setting defaults')
     // Sets defaults for remote config for use prior to fetching and activating
-    await remoteConfig().setDefaults(isProduction ? productionDefaults : devDefaults)
+    await remoteConfig().setDefaults(fetchRemote ? productionDefaults : devConfig)
 
     /**
-     * If in production, fetch and activate remote settings.  Otherwise,
-     * we'll use the devDefaults for dev and staging defined above.
+     * If in staging or production, fetch and activate remote settings.  Otherwise,
+     * we'll use the devSettings for local development.
      */
-    if (isProduction) {
+    if (fetchRemote) {
       console.debug('Remote Config: Fetching and activating')
       // Activate last fetched config then fetch latest config for use on next app launch
       await remoteConfig().activate()
@@ -53,6 +62,34 @@ export const activateRemoteConfig = async (): Promise<void> => {
   }
 }
 
+/**
+ * @param feature - FeatureToggleType: The name of the feature we want to check the value of
+ * @returns boolean of whether or not the feature is enabled.  If we're overriding the config in debug mode,
+ * we'll return the value of the key in devSettings, otherwise we return the remoteConfig value
+ */
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
-  return remoteConfig().getValue(feature)?.asBoolean()
+  return !isProduction && overrideRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
+}
+
+export const setDebugConfig = async (config: FeatureToggleValues): Promise<void> => {
+  if (!isProduction) {
+    overrideRemote = true
+    devConfig = config
+  }
+}
+
+/**
+ * @returns FeatureToggleValues - Returns an object with all feature toggles and their values.  If we're overriding remote config, we'll return
+ * devSettings. Otherwise we'll return the values from remoteConfig()
+ */
+export const getFeatureToggles = (): FeatureToggleValues => {
+  if (overrideRemote) {
+    return devConfig
+  }
+
+  const toggles = {} as FeatureToggleValues
+  Object.keys(remoteConfig().getAll()).forEach((key) => {
+    toggles[key as FeatureToggleType] = remoteConfig().getValue(key).asBoolean()
+  })
+  return toggles
 }

@@ -14,6 +14,7 @@ import {
 } from 'store/api'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
+import { LabelTagTypeConstants } from '../components/LabelTag'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
 import { getTestIDFromTextLines } from './accessibility'
@@ -205,11 +206,11 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
 
   if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-    textLines.push({ text: t('appointments.canceled'), textTag: { backgroundColor: 'inactiveTag', variant: 'LabelTagBold' }, mb: condensedMarginBetween })
+    textLines.push({ text: t('appointments.canceled'), textTag: { labelType: LabelTagTypeConstants.tagInactive }, mb: condensedMarginBetween })
   } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-    textLines.push({ text: t('appointments.confirmed'), textTag: { backgroundColor: 'activeTag', variant: 'LabelTagBold' }, mb: condensedMarginBetween })
+    textLines.push({ text: t('appointments.confirmed'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mb: condensedMarginBetween })
   } else if (isPendingAppointment) {
-    textLines.push({ text: t('appointments.pending'), textTag: { backgroundColor: 'warningTag', color: 'warningTag', variant: 'LabelTagBold' }, mb: condensedMarginBetween })
+    textLines.push({ text: t('appointments.pending'), textTag: { labelType: LabelTagTypeConstants.tagYellow }, mb: condensedMarginBetween })
   }
 
   // pending appointments

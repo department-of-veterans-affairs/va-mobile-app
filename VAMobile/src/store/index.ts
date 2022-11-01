@@ -16,6 +16,7 @@ import notificationReducer from 'store/slices/notificationSlice'
 import patientReducer from 'store/slices/patientSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
 import personalInformationReducer from 'store/slices/personalInformationSlice'
+import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import requestAppointmentReducer from 'store/slices/requestAppointmentSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
@@ -44,10 +45,13 @@ const store = configureStore({
     vaccine: vaccineReducer,
     payments: paymentsReducer,
     requestAppointment: requestAppointmentReducer,
+    prescriptions: prescriptionsReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }).concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
 })
+
+export type ReduxToolkitStore = typeof store
 
 //creates the typed dispatch to work with the thunk actions
 export type AppDispatch = typeof store.dispatch

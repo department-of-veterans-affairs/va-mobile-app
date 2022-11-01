@@ -21,6 +21,7 @@ export type AuthorizedServicesState = {
   userProfileUpdate: boolean
   secureMessaging: boolean
   scheduleAppointments: boolean
+  prescriptions: boolean
 }
 
 export const initialAuthorizedServicesState: AuthorizedServicesState = {
@@ -35,6 +36,7 @@ export const initialAuthorizedServicesState: AuthorizedServicesState = {
   userProfileUpdate: false,
   secureMessaging: false,
   scheduleAppointments: false,
+  prescriptions: false,
 }
 
 const authorizedServicesSlice = createSlice({
@@ -55,6 +57,7 @@ const authorizedServicesSlice = createSlice({
       const userProfileUpdate = contains(services, VAServicesConstants.UserProfileUpdate)
       const secureMessaging = contains(services, VAServicesConstants.SecureMessaging)
       const scheduleAppointments = contains(services, VAServicesConstants.ScheduleAppointments)
+      const prescriptions = contains(services, VAServicesConstants.Prescriptions)
 
       setAnalyticsUserProperties({
         appeals: appeals.toString(),
@@ -66,6 +69,7 @@ const authorizedServicesSlice = createSlice({
         userProfileUpdate: userProfileUpdate.toString(),
         secureMessaging: secureMessaging.toString(),
         scheduleAppointments: scheduleAppointments.toString(),
+        prescriptions: prescriptions.toString(),
       })
 
       state.hasLoaded = true
@@ -79,6 +83,7 @@ const authorizedServicesSlice = createSlice({
       state.userProfileUpdate = userProfileUpdate
       state.secureMessaging = secureMessaging
       state.scheduleAppointments = scheduleAppointments
+      state.prescriptions = prescriptions
       state.error = error
     },
     dispatchClearAuthorizedServices: () => {

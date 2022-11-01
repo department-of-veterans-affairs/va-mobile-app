@@ -88,6 +88,18 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
 }
 
 /**
+ * Returns the datetime formatted in the format: Month DD, YYYY, HH:MM PM TIMEZONE
+ *
+ * @param dateTime - Full ISO 8601 datetime, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param timeZone - Optional override string for the current timeZone i.e. America/Los_Angeles
+ *
+ * @returns Returns datetime as: Month DD, YYYY, HH:MM PM TIMEZONE
+ */
+export const getFormattedDateAndTimeZone = (dateTime: string, timeZone?: string): string => {
+  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATETIME_MED, timeZone, { month: 'long', timeZoneName: 'short' })
+}
+
+/**
  * Returns the number of seconds UTC from 1970
  *
  * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
@@ -154,6 +166,10 @@ export const formatDateMMDDYYYY = (date: string): string => {
  * @returns  date string formatted based on formatString
  */
 export const formatDateUtc = (date: string, formatString: string): string => {
+  if (!date) {
+    return ''
+  }
+
   return DateTime.fromISO(date).toUTC().toFormat(formatString)
 }
 

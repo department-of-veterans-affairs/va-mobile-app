@@ -102,6 +102,7 @@ context('EditAddressScreen', () => {
       {},
       {
         goBack: goBackSpy,
+        addListener: jest.fn(),
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
