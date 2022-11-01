@@ -536,3 +536,16 @@ export const usePanelHeaderStyles = (): StackNavigationOptions => {
   }
   return headerStyles
 }
+
+/**
+ * Tracks previous value passed in
+ *
+ * @param value - value to track for previous
+ */
+export function usePrevious<T>(value: T): T {
+  const ref = useRef<T>()
+  useEffect(() => {
+    ref.current = value
+  }, [value])
+  return ref.current as T
+}

@@ -30,7 +30,7 @@ const TermsAndConditions: FC = () => {
               linkType={LinkTypeOptionsConstants.url}
               numberOrUrlLink={LINK_URL_GO_TO_MY_HEALTHEVET}
               linkUrlIconType={LinkUrlIconType.Arrow}
-              testID={t('termsAndConditions.goTo.a11yLabel')}
+              a11yLabel={t('termsAndConditions.goTo.a11yLabel')}
               {...a11yHintProp(t('termsAndConditions.goTo.a11yHint'))}
             />
           </Box>

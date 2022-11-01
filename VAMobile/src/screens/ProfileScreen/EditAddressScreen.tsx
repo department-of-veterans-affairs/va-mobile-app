@@ -34,7 +34,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
 import HeaderTitle from 'components/HeaderTitle'
@@ -82,7 +82,9 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressSaved, savingAddress, showValidation } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressSaved, savingAddress, showValidation, validateAddressAbortController } = useSelector<RootState, PersonalInformationState>(
+    (state) => state.personalInformation,
+  )
   const { t } = useTranslation(NAMESPACE.PROFILE)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -158,6 +160,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+
+  useBeforeNavBackListener(navigation, () => {
+    // if saving still when canceling then abort
+    if (savingAddress) {
+      validateAddressAbortController?.abort()
+    }
+  })
 
   const isDomestic = (countryVal: string): boolean => {
     return countryVal === USA_VALUE || !countryVal

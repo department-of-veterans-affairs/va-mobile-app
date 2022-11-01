@@ -26,7 +26,7 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
             if (textTag) {
               return (
                 <Box mb={mb} key={index}>
-                  <LabelTag text={text} key={index} backgroundColor={textTag.backgroundColor} color={textTag.color} variant={textTag.variant} />
+                  <LabelTag text={text} key={index} labelType={textTag.labelType} />
                 </Box>
               )
             }

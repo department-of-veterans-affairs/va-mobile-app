@@ -366,12 +366,16 @@ export const getFileDisplay = (
   return { fileName: fileName || '', fileSize: formattedFileSize, fileSizeA11y: formattedFileSizeA11y }
 }
 
+// TODO #3959 ticket to remove HalfPanel
 // function to animate a full screen panel into half the size
-export function halfPanelCardStyleInterpolator({ current, inverted, layouts: { screen } }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  // height of the visible application window
+  const windowHeight = Dimensions.get('window').height
+
   const translateY = Animated.multiply(
     current.progress.interpolate({
       inputRange: [0, 1],
-      outputRange: [screen.height, screen.height / 2], // modify constant for size of panel
+      outputRange: [windowHeight, windowHeight / 2], // modify constant for size of panel
       extrapolate: 'clamp',
     }),
     inverted,
@@ -383,6 +387,7 @@ export function halfPanelCardStyleInterpolator({ current, inverted, layouts: { s
   return {
     cardStyle: {
       transform: [{ translateY }],
+      maxHeight: Dimensions.get('window').height / 2,
     },
     overlayStyle: { opacity: overlayOpacity },
   }
