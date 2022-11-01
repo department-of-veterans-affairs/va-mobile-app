@@ -18,6 +18,7 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices'
 import { RootNavStackParamList } from 'App'
@@ -106,7 +107,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   const isEmailInvalid = (): boolean => {
     // return true if the email does not contain the @ character
-    const validEmailCondition = new RegExp(/\S+@\S+/)
+    const validEmailCondition = EMAIL_REGEX_EXP
     return !validEmailCondition.test(email)
   }
 

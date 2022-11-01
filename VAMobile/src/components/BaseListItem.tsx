@@ -128,6 +128,29 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           {...decoratorProps}
         />
       )
+    case ButtonDecoratorType.FilledCheckBox:
+      return (
+        <VAIcon
+          name={'FilledCheckBox'}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
+          fill={theme.colors.icon.checkboxEnabledPrimary}
+          stroke={theme.colors.icon.checkboxEnabledPrimary}
+          {...decoratorProps}
+        />
+      )
+    case ButtonDecoratorType.EmptyCheckBox:
+      return (
+        <VAIcon
+          name={'EmptyCheckBox'}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
+          fill={theme.colors.icon.checkboxDisabledContrast}
+          stroke={theme.colors.icon.checkboxDisabled}
+          {...decoratorProps}
+        />
+      )
+
     default:
       return (
         <VAIcon

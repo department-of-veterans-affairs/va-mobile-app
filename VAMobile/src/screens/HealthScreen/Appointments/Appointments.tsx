@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, VAScrollView } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -12,7 +12,7 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
@@ -34,6 +34,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
@@ -41,9 +42,11 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
-  const { appointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { appointments, scheduleAppointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const hasCernerFacilities = useHasCernerFacilities()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const navigateToRequestAppointments = navigateTo('RequestAppointmentScreen')
+  const navigateToNoRequestAppointmentAccess = navigateTo('NoRequestAppointmentAccess')
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -103,22 +106,35 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     flexGrow: 1,
   }
 
+  const onRequestAppointmentPress = () => {
+    scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
+  }
+
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
-      <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+    <>
+      <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
+        <Box flex={1} justifyContent="flex-start">
+          <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <SegmentedControl
+              values={controlValues}
+              titles={controlValues}
+              onChange={setSelectedTab}
+              selected={controlValues.indexOf(selectedTab)}
+              accessibilityHints={a11yHints}
+            />
+          </Box>
+          {serviceErrorAlert()}
+          <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
+            <CernerAlert />
+          </Box>
+          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+            {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
+            {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
+          </Box>
         </Box>
-        {serviceErrorAlert()}
-        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
-          <CernerAlert />
-        </Box>
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
-          {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
-        </Box>
-      </Box>
-    </VAScrollView>
+      </VAScrollView>
+      <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />
+    </>
   )
 }
 
