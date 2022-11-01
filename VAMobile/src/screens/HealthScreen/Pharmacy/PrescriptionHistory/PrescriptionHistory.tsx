@@ -321,7 +321,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         const bottomContent = (
           <Box {...bottomContentProps}>
             <Box mr={8}>
-              <VAIcon name={'Truck'} fill={'link'} />
+              <VAIcon name={'Truck'} fill={'link'} height={16} width={16} />
             </Box>
             <TextView variant={'HelperTextBold'} color={'link'}>
               {t('prescription.history.tracking')}
