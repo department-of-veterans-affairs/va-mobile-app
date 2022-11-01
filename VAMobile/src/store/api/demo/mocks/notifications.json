@@ -1,0 +1,22 @@
+{
+  "/v0/push/prefs": {
+    "data": {
+      "type": "pushGetPrefs",
+      "id": "A3646A8D40C5B7319416179833809496",
+      "attributes": {
+        "preferences": [
+          {
+            "preferenceId": "appointment_reminders",
+            "preferenceName": "Appointment Reminders",
+            "value": true
+          },
+          {
+            "preferenceName": "Secure Message Alerts",
+            "preferenceId": "secure_message_alerts",
+            "value": true
+          }
+        ]
+      }
+    }
+  }
+}

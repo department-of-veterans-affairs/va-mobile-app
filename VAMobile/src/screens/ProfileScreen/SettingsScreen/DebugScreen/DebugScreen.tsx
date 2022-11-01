@@ -1,4 +1,5 @@
 import { pick } from 'underscore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useState } from 'react'
 
@@ -9,13 +10,11 @@ import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
@@ -24,6 +23,7 @@ const DebugScreen: FC = ({}) => {
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
 
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
@@ -70,23 +70,33 @@ const DebugScreen: FC = ({}) => {
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
-        <Box mt={theme.dimensions.contentMarginTop}>
+        <Box>
+          <TextArea>
+            <VAButton onPress={navigateTo('Sandbox')} label={'Sandbox'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
+        <Box>
           <TextArea>
             <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
-        <Box mt={theme.dimensions.contentMarginTop}>
+        <Box>
           <TextArea>
             <VAButton onPress={resetInAppReview} label={'Reset in-app review actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
-        <Box mt={theme.dimensions.contentMarginTop}>
+        <Box>
           <TextArea>
             <VAButton
               onPress={onClickFirebaseDebugMode}
               label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
+          </TextArea>
+        </Box>
+        <Box>
+          <TextArea>
+            <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -108,19 +118,6 @@ const DebugScreen: FC = ({}) => {
             </Box>
           )
         })}
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextArea>
-            <TextView variant="BitterBoldHeading">Remote Config</TextView>
-          </TextArea>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextArea>
-              <TextView variant="MobileBodyBold">testFeature</TextView>
-              <TextView selectable>{featureEnabled('testFeature')?.toString()}</TextView>
-            </TextArea>
-          </Box>
-        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Authorized Services</TextView>

@@ -10,7 +10,7 @@ import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -31,18 +31,18 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
     let requestNumber = 1
 
     return map(requests, (request) => {
-      const { displayName, uploaded } = request
-
+      const { displayName } = request
+      const hasUploaded = hasUploadedOrReceived(request)
       const item: SimpleListItemObj = {
         text: displayName || '',
         testId: displayName,
         onPress: navigateTo('FileRequestDetails', { request }),
         claimsRequestNumber: requestNumber,
-        fileUploaded: uploaded,
+        fileUploaded: hasUploaded,
         a11yHintText: t('fileRequest.buttonA11yHint'),
       }
 
-      if (!uploaded) {
+      if (!hasUploaded) {
         requestNumber++
       }
 

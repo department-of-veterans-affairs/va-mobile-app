@@ -10,11 +10,7 @@ import DebugScreen from './index'
 import { initialAuthState, initialAnalyticsState } from 'store/slices'
 import { Pressable } from 'react-native'
 
-jest.mock('./../../../../utils/remoteConfig', () => ({
-  featureEnabled: jest.fn(() => Promise.resolve(true)),
-}))
-
-const authTokensIdxStart = 3
+const authTokensIdxStart = 5
 context('DebugScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
@@ -71,8 +67,15 @@ context('DebugScreen', () => {
     })
 
     it('pressing the button should toggle the debug mode', async () => {
-      findByOnPressFunction(testInstance, Pressable, 'onClickFirebaseDebugMode')?.props.onPress()
+      const debugModePressable = testInstance.findAllByType(Pressable)
+      debugModePressable[3].props.onPress()
       expect(findByTypeWithText(testInstance, TextView, 'Disable Firebase debug mode')).toBeTruthy()
+    })
+  })
+
+  describe('Remote Config', () => {
+    it('should render the button', async () => {
+      expect(findByTypeWithText(testInstance, TextView, 'Remote Config')).toBeTruthy()
     })
   })
 })

@@ -6,7 +6,7 @@ import React, { ReactNode } from 'react'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
-import { SecureMessagingFormData } from 'store/api/types'
+import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -17,10 +17,16 @@ import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
+import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
+import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
+import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
+import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
+import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import SecureMessaging from './SecureMessaging'
+import StatusGlossary from './Pharmacy/StatusGlossary/StatusGlossary'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
@@ -109,6 +115,21 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   NoRequestAppointmentAccess: undefined
   TypeOfCareNotListedHelpScreen: undefined
+  PrescriptionHistory: {
+    startingTab?: PrescriptionHistoryTabs | undefined
+  }
+  PrescriptionDetails: {
+    prescriptionId: string
+  }
+  RefillScreenModal: undefined
+  RefillTrackingModal: {
+    prescription: PrescriptionData
+  }
+  StatusGlossary: {
+    display: string
+    value: RefillStatus
+  }
+  PrescriptionHelp: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -187,5 +208,35 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
         options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </HealthStack.Group>,
+    <HealthStack.Screen key={'PrescriptionHistory'} name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />,
+    <HealthStack.Screen key={'PrescriptionDetails'} name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />,
+    <HealthStack.Screen
+      key={'RefillScreenModal'}
+      name="RefillScreenModal"
+      component={RefillScreenModal}
+      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
+    />,
+    <HealthStack.Screen
+      key={'RefillTrackingModal'}
+      name="RefillTrackingModal"
+      component={RefillTrackingModal}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescriptions.refillTracking.pageHeaderTitle') }}
+    />,
+    <HealthStack.Screen
+      key={'PrescriptionHelp'}
+      name="PrescriptionHelp"
+      component={PrescriptionHelp}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescription.help.title') }}
+    />,
+    <HealthStack.Screen
+      key={'StatusGlossary'}
+      name="StatusGlossary"
+      component={StatusGlossary}
+      options={{
+        title: t('statusGlossary.title'),
+        presentation: 'modal',
+        ...TransitionPresets.ModalTransition,
+      }}
+    />,
   ]
 }
