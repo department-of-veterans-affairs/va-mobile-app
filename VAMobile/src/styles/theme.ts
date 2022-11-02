@@ -57,6 +57,7 @@ export type VATextColors = {
   bodyText: string
   showAll: string
   defaultMenuItem: string
+  AppointmentRequestCtaBtnText: string
   warningTag: string
   statusDescription: string
   tabSelectorInactive: string
@@ -117,6 +118,7 @@ export type VATypographyThemeVariants = {
   HelperText: string
   HelperTextBold: string
   SnackBarBtnText: string
+  AppointmentRequestCtaBtnText: string
   LabelTag: string
   LabelTagBold: string
 }
