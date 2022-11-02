@@ -11,6 +11,7 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { featureEnabled } from 'utils/remoteConfig'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -133,7 +134,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
           </Box>
         </Box>
       </VAScrollView>
-      <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />
+      {featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}
     </>
   )
 }
