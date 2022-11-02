@@ -2,6 +2,7 @@ import { pick } from 'underscore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useState } from 'react'
+import UserAgent from 'react-native-user-agent'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 
@@ -98,6 +99,15 @@ const DebugScreen: FC = ({}) => {
           <TextArea>
             <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
+        </Box>
+
+        <Box>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <TextArea>
+              <TextView variant="MobileBodyBold">User Agent</TextView>
+              <TextView>{UserAgent.getUserAgent()}</TextView>
+            </TextArea>
+          </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>

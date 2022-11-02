@@ -82,6 +82,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-svg-transformer": "^1.0.0",
     "react-native-toast-notifications": "^3.2.3",
+    "react-native-user-agent": "^2.3.1",
     "react-native-webp-format": "^1.1.2",
     "react-native-webview": "^11.17.1",
     "react-navigation": "^4.4.4",

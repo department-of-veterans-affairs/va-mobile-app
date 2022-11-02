@@ -14,6 +14,8 @@ target 'VAMobile' do
 
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
+  pod 'react-native-user-agent', :path => '../node_modules/react-native-user-agent'
+
   target 'VAMobileTests' do
     inherit! :complete
     # Pods for testing
