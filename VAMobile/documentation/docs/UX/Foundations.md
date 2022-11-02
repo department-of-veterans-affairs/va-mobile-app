@@ -26,10 +26,3 @@ Principles help in establishing a foundation for a system or application. They a
 
 [VA Design Principles](https://design.va.gov/about/principles)
 
-## Information Architecture
-[Information architecture (IA) focuses on organizing, structuring, and labeling content in an effective and sustainable way](https://www.usability.gov/what-and-why/information-architecture.html).
-
-The [sitemap/flow diagram](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design/information-architecture) outlines the information architecture that the current (post-MVP) VA Mobile App's navigation follows. The goal of this diagram is to outline all the current screens and actions in the app.
-
-### IA Principles [TK]
-Our IA principles are used to help Veterans find information and complete tasks within the app. 
