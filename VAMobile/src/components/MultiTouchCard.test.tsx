@@ -2,14 +2,13 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { Pressable } from 'react-native'
 import { ReactTestInstance } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
-import {TextLine} from "./types";
-import MultiTouchCard, {MultiTouchCardProps} from "./MultiTouchCard";
-import {TextLines} from "./TextLines";
+import {TextLine} from './types'
+import MultiTouchCard, {MultiTouchCardProps} from './MultiTouchCard'
+import {TextLines} from './TextLines'
 
 context('MultiTouchCard', () => {
   let component: RenderAPI

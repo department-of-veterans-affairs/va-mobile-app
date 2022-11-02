@@ -72,6 +72,11 @@ const DebugScreen: FC = ({}) => {
       <VAScrollView>
         <Box>
           <TextArea>
+            <VAButton onPress={navigateTo('Sandbox')} label={'Sandbox'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
+        <Box>
+          <TextArea>
             <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>

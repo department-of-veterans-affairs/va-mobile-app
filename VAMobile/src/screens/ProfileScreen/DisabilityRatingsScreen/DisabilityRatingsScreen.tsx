@@ -186,7 +186,7 @@ const DisabilityRatingsScreen: FC = () => {
     linkUrlIconType: LinkUrlIconType.Arrow,
     numberOrUrlLink: LINK_URL_ABOUT_DISABILITY_RATINGS,
     accessibilityHint: t('disabilityRating.learnAboutLinkTitle.a11yHint'),
-    accessibilityLabel: t('disabilityRating.learnAboutLinkTitle.a11yLabel'),
+    a11yLabel: t('disabilityRating.learnAboutLinkTitle.a11yLabel'),
   }
 
   const titleProps: TextViewProps = {

@@ -104,7 +104,7 @@ context('PastAppointmentDetails', () => {
 
       allTextViews = testInstance.findAllByType(TextView)
       expect(allTextViews.length).toEqual(4)
-      expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nhome')
+      expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nHome')
     })
   })
 

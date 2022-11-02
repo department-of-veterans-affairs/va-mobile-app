@@ -23,7 +23,7 @@ context('IncorrectServiceInfo', () => {
   })
 
   it('should call DMDC on press', async () => {
-    findByTestID(testInstance, '800-538-9552').props.onPress()
+    testInstance.findByProps({accessibilityLabel: '8 0 0 5 3 8 9 5 5 2'}).props.onPress()
     expect(Linking.openURL).toHaveBeenCalledWith('tel:8005389552')
   })
 })

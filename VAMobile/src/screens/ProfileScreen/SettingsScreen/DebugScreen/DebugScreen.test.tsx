@@ -10,7 +10,7 @@ import DebugScreen from './index'
 import { initialAuthState, initialAnalyticsState } from 'store/slices'
 import { Pressable } from 'react-native'
 
-const authTokensIdxStart = 4
+const authTokensIdxStart = 5
 context('DebugScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
@@ -68,7 +68,7 @@ context('DebugScreen', () => {
 
     it('pressing the button should toggle the debug mode', async () => {
       const debugModePressable = testInstance.findAllByType(Pressable)
-      debugModePressable[2].props.onPress()
+      debugModePressable[3].props.onPress()
       expect(findByTypeWithText(testInstance, TextView, 'Disable Firebase debug mode')).toBeTruthy()
     })
   })
