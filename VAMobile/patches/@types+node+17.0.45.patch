@@ -1,5 +1,5 @@
 diff --git a/node_modules/@types/node/globals.d.ts b/node_modules/@types/node/globals.d.ts
-index 4533f1c..fcf4c3d 100755
+index da49994..c5d51f1 100755
 --- a/node_modules/@types/node/globals.d.ts
 +++ b/node_modules/@types/node/globals.d.ts
 @@ -44,36 +44,36 @@ declare var gc: undefined | (() => void);
