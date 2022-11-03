@@ -3386,10 +3386,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.12.tgz#f7aa331b27f08244888c47b7df126184bc2339c5"
   integrity sha512-4YpbAsnJXWYK/fpTVFlMIcUIho2AYCi4wg5aNPrG1ng7fn/1/RZfCIpRCiBX+12RVa34RluilnvCqD+g3KiSiA==
 
-"@types/node@^17.0.45":
-  version "17.0.45"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.45.tgz#2c0fafd78705e7a18b7906b5201a522719dc5190"
-  integrity sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==
+"@types/node@^18.11.9":
+  version "18.11.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
+  integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
 
 "@types/object-inspect@^1.8.0":
   version "1.8.1"
@@ -3430,19 +3430,19 @@
   resolved "https://registry.yarnpkg.com/@types/querystringify/-/querystringify-2.0.0.tgz#d1eab3214ee2b57c3bd7eba0ab94b231028522fb"
   integrity sha512-9WgEGTevECrXJC2LSWPqiPYWq8BRmeaOyZn47js/3V6UF0PWtcVfvvR43YjeO8BzBsthTz98jMczujOwTw+WYg==
 
+"@types/react-native@0.66.15":
+  version "0.66.15"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.66.15.tgz#d332d82b04635adabbd8e1976f9547ce8662300b"
+  integrity sha512-qNK3LZhNpSd2Hdr0OFdvQ/VOb1qcjNhmw96LsOtxIN+1RtXHO/1dVzxYUlWnKMCtV+E5WSaWM703c9Q7gG9tyg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-native@^0.65":
   version "0.65.20"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.65.20.tgz#14e7e2a70ef57393150d26df10c86497ce2949ea"
   integrity sha512-LIgRFtJOYKRwu792iMvXQxWRCYVloglO+r10V+0O2wsg2LTWimpZLemcxMPMOu3ZS7/tcG6bzPnUKrIVEmsMZQ==
   dependencies:
     "@types/react" "*"
-
-"@types/react-native@^0.66.24":
-  version "0.66.24"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.66.24.tgz#12bb1ad794625aee0902c6f8d49623e3993b374d"
-  integrity sha512-3YR4yfs1u6FmzcONstdPW5i0TUhHI8rg05fSLT6hLdcTYqfAw9oEAujavx28CPzTp7EO9CdP1aKjRTCj5oc70Q==
-  dependencies:
-    "@types/react" "^17"
 
 "@types/react-redux@^7.1.16", "@types/react-redux@^7.1.20":
   version "7.1.20"
