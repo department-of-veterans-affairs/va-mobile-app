@@ -10,7 +10,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
 import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
 import { RootState } from 'store'
-import { formatDateUtc } from 'utils/formattingUtils'
+import { a11yLabelID } from 'utils/a11yLabel'
+import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { isIOS } from 'utils/platform'
 import { useAppDispatch, useDowntime, useError, usePanelHeaderStyles, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -85,9 +86,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     return <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
   }
 
-  const { trackingNumber, deliveryService, shippedDate, otherPrescriptions } = trackingInfo?.attributes || ({} as PrescriptionTrackingInfoAttributeData)
-
-  const renderOtherPrescription = () => {
+  const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {
     const noOtherPrescriptions = !otherPrescriptions || otherPrescriptions.length === 0
     let otherPrescriptionItems
 
@@ -100,11 +99,12 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     } else {
       otherPrescriptionItems = otherPrescriptions.map((item: PrescriptionTrackingInfoOtherItem) => {
         const { prescriptionName, prescriptionNumber } = item
-        const rxNumber = `${t('prescription.prescriptionNumber')} ${prescriptionNumber || noneNoted}`
+        const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
+
         return (
           <Box key={prescriptionName} mt={condensedMarginBetween}>
             <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
-            <TextView variant="HelperText" color="placeholder">
+            <TextView accessibilityLabel={rxNumberA11yLabel} variant="HelperText" color="placeholder">
               {rxNumber}
             </TextView>
           </Box>
@@ -122,37 +122,63 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     )
   }
 
-  const renderTrackingCard = () => {
-    const trackingLink = getTrackingLink(deliveryService)
+  const renderTrackingCards = () => {
+    const totalTracking = trackingInfo?.length
+    return trackingInfo?.map((prescriptionTrackingInfo, index) => {
+      const { trackingNumber, deliveryService, shippedDate, otherPrescriptions } = prescriptionTrackingInfo?.attributes || ({} as PrescriptionTrackingInfoAttributeData)
+      const trackingLink = getTrackingLink(deliveryService)
 
-    const mainContent = (
-      <>
-        <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
-        {trackingLink && trackingNumber ? (
-          <ClickForActionLink displayedText={trackingNumber} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} a11yLabel={trackingNumber} />
-        ) : (
-          <TextView variant={'MobileBody'}>{trackingNumber || noneNoted}</TextView>
-        )}
-        <Box mt={standardMarginBetween} mb={condensedMarginBetween}>
-          <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryService || noneNoted}`}</TextView>
+      const [shippedDateMMddyyyy, shippedDateA11yLabel] = getDateTextAndLabel(t, shippedDate)
+      const trackingNumberA11yLabel = a11yLabelID(trackingNumber)
+
+      const mainContent = (
+        <>
+          <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
+          {trackingLink && trackingNumber ? (
+            <ClickForActionLink displayedText={trackingNumber} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} a11yLabel={trackingNumberA11yLabel} />
+          ) : (
+            <TextView variant={'MobileBody'} accessibilityLabel={trackingNumberA11yLabel || noneNoted}>
+              {trackingNumber || noneNoted}
+            </TextView>
+          )}
+          <Box mt={standardMarginBetween} mb={condensedMarginBetween}>
+            <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryService || noneNoted}`}</TextView>
+          </Box>
+          <TextView variant="HelperText" accessibilityLabel={`${t('prescriptions.refillTracking.dateShipped')}: ${shippedDateA11yLabel}`}>{`${t(
+            'prescriptions.refillTracking.dateShipped',
+          )}: ${shippedDateMMddyyyy}`}</TextView>
+          {renderOtherPrescription(otherPrescriptions)}
+        </>
+      )
+      const multiTouchCardProps: MultiTouchCardProps = {
+        mainContent: mainContent,
+      }
+
+      return (
+        <Box key={index} mt={30}>
+          {trackingInfo?.length > 1 ? (
+            <Box mb={condensedMarginBetween}>
+              <TextView variant={'MobileBodyBold'}>{`${tc('package')} ${tc('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
+            </Box>
+          ) : (
+            <></>
+          )}
+          <MultiTouchCard {...multiTouchCardProps} />
         </Box>
-        <TextView variant="HelperText">{`${t('prescriptions.refillTracking.dateShipped')}: ${shippedDate ? `${formatDateUtc(shippedDate, 'MM/dd/yyyy')}` : noneNoted}`}</TextView>
-        {renderOtherPrescription()}
-      </>
-    )
-    const multiTouchCardProps: MultiTouchCardProps = {
-      mainContent: mainContent,
-    }
-
-    return <MultiTouchCard {...multiTouchCardProps} />
+      )
+    })
   }
 
   const renderHeader = () => {
     const { prescriptionName, prescriptionNumber } = prescription?.attributes
+    const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
+
     return (
       <>
         <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
-        <TextView variant={'HelperText'}>{`${t('prescription.prescriptionNumber')} ${prescriptionNumber || noneNoted}`}</TextView>
+        <TextView variant={'HelperText'} accessibilityLabel={rxNumberA11yLabel}>
+          {rxNumber}
+        </TextView>
       </>
     )
   }
@@ -161,10 +187,10 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     <VAScrollView>
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         {renderHeader()}
-        <Box my={standardMarginBetween}>
+        <Box mt={standardMarginBetween}>
           <TextView variant="HelperText">{t('prescriptions.refillTracking.upTo15Days')}</TextView>
         </Box>
-        {renderTrackingCard()}
+        {renderTrackingCards()}
       </Box>
     </VAScrollView>
   )

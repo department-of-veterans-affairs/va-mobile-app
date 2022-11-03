@@ -81,7 +81,6 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
     let name: keyof typeof VA_ICON_MAP
     let fill = 'checkboxEnabledPrimary'
     let stroke = 'checkboxEnabledPrimary'
-
     if (numSelected === items.length) {
       name = 'FilledCheckBox'
     } else if (numSelected > 0) {
@@ -115,13 +114,14 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'list',
+    flexWrap: 'wrap',
   }
 
   return (
     <Box>
       <Box {...headerWrapperProps}>
         <TextView>{t('selectedOutOfTotal', { selected: numSelected, total: items.length })}</TextView>
-        <Pressable onPress={onSelectAll} accessibilityState={{ checked: numSelected > 0 }} accessibilityRole={'checkbox'}>
+        <Pressable onPress={onSelectAll} accessibilityState={{ checked: numSelected === 0 ? false : numSelected === items.length ? true : 'mixed' }} accessibilityRole={'checkbox'}>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <TextView>{t('select.all')}</TextView>
             {getSelectAllIcon()}

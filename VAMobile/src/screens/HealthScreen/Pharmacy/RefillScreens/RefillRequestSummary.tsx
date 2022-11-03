@@ -8,6 +8,7 @@ import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/ty
 import { PrescriptionState, requestRefills } from 'store/slices'
 import { RefillStackParamList } from './RefillScreen'
 import { RootState } from 'store'
+import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, usePanelHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -128,18 +129,22 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       }
 
       const { prescriptionName, prescriptionNumber } = request.data.attributes
+      const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
       const a11yProps = {
-        accessibilityLabel: `${prescriptionName} ${prescriptionNumber} ${
+        accessibilityLabel: `${prescriptionName}. ${rxNumberA11yLabel}. ${
           request.submitted ? t('prescriptions.refillRequestSummary.pendingRefills.requestSubmitted') : t('prescriptions.refillRequestSummary.pendingRefills.requestFailed')
         }`,
         accessibilityValue: { text: tc('listPosition', { position: index + 1, total: refillRequestSummaryItems.length }) },
         accessible: true,
       }
+
       return (
         <Box key={index} {...boxProps} {...a11yProps}>
           <Box flex={1}>
             <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
-            <TextView variant="HelperText" color="placeholder">{`${t('prescription.prescriptionNumber')} ${prescriptionNumber}`}</TextView>
+            <TextView variant="HelperText" color="placeholder">
+              {rxNumber}
+            </TextView>
           </Box>
           <VAIcon {...vaIconProps} />
         </Box>

@@ -509,28 +509,6 @@
         "attributes":
         {
           "dispensedDate": "2022-08-02T04:00:00.000Z",
-          "expirationDate": "2023-05-15T04:00:00.000Z",
-          "facilityName": "SLC10 TEST LAB",
-          "instructions": "TAKE ONE TABLET TWO (2) TIMES A DAY FOR 30 DAYS",
-          "isRefillable": true,
-          "isTrackable": true,
-          "orderedDate": "2022-05-14T04:00:00.000Z",
-          "prescriptionName": "CAPECITABINE 500MG TAB",
-          "prescriptionNumber": "3636856",
-          "quantity": 60,
-          "refillDate": "2022-07-05T04:00:00.000Z",
-          "refillRemaining": 1,
-          "refillStatus": "active",
-          "refillSubmitDate": "2022-08-04T13:59:40.000Z",
-          "stationNumber": "979"
-        },
-        "id": "21142592",
-        "type": "Prescription"
-      },
-      {
-        "attributes":
-        {
-          "dispensedDate": "2022-08-02T04:00:00.000Z",
           "expirationDate": null,
           "facilityName": "",
           "instructions": "",
@@ -682,7 +660,7 @@
         "currentPage": 1,
         "perPage": 10000,
         "totalPages": 1,
-        "totalEntries": 32
+        "totalEntries": 31
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=3",
@@ -694,38 +672,70 @@
     }
   },
   "/v0/health/rx/prescriptions/21142592/tracking": {
-    "data": {
-      "attributes": {
-        "deliveryService": "DHL",
-        "otherPrescriptions": [
-          {
-            "prescriptionName": "LAMIVUDINE 10MG TAB",
-            "prescriptionNumber": "2336800"
-          },
-          {
-            "prescriptionName": "ZIDOVUDINE 1MG CAP",
-            "prescriptionNumber": ""
-          }
-        ],
-        "prescriptionName": "CAPECITABINE 500MG TAB",
-        "shippedDate": "2022-06-14T00:00:00.000Z",
-        "trackingNumber": "7534533636856"
-      },
-      "id": "21142592",
-      "type": "PrescriptionTracking"
-    }
+    "data": [
+      {
+        "attributes": {
+          "deliveryService": "DHL",
+          "otherPrescriptions": [
+            {
+              "prescriptionName": "LAMIVUDINE 10MG TAB",
+              "prescriptionNumber": "2336800"
+            },
+            {
+              "prescriptionName": "ZIDOVUDINE 1MG CAP",
+              "prescriptionNumber": ""
+            }
+          ],
+          "prescriptionName": "CAPECITABINE 500MG TAB",
+          "prescriptionNumber": "3636856",
+          "shippedDate": "2022-06-14T00:00:00.000Z",
+          "trackingNumber": "7534533636856",
+          "ndcNumber": "00013264681",
+          "prescriptionId": 21142592
+        },
+        "id": "21142592",
+        "type": "PrescriptionTracking"
+      }
+    ]
   },
   "/v0/health/rx/prescriptions/21142623/tracking": {
-    "data": {
-      "attributes":  {
-        "deliveryService": "",
-        "otherPrescriptions": [],
-        "prescriptionName": "LAMIVUDINE 100MG TAB",
-        "shippedDate": "",
-        "trackingNumber": ""
+    "data": [
+      {
+        "attributes":
+        {
+          "prescriptionName": "HALCINONIDE 0.1% OINT",
+          "prescriptionNumber": "2720334",
+          "ndcNumber": "00013264681",
+          "prescriptionId": 21142623,
+          "trackingNumber": "77298027203980000000398",
+          "shippedDate": "2022-10-15T00:00:00.000Z",
+          "deliveryService": "UPS",
+          "otherPrescriptions": []
+        }
       },
-      "id": "21142623",
-      "type": "PrescriptionTracking"
-    }
+      {
+        "attributes":  {
+          "deliveryService": "USPS",
+          "otherPrescriptions": [
+            {
+              "prescriptionName": "CAPECITABINE 10MG TAB",
+              "prescriptionNumber": "2336800"
+            },
+            {
+              "prescriptionName": "ZIDOVUDINE 1MG CAP",
+              "prescriptionNumber": "6236811"
+            }
+          ],
+          "prescriptionName": "LAMIVUDINE 100MG TAB",
+          "shippedDate": "2022-10-22T00:00:00.000Z",
+          "trackingNumber": "9205 5000 0000 0000 0000 00",
+          "ndcNumber": "",
+          "prescriptionId": null,
+          "prescriptionNumber": ""
+        },
+        "id": "21142623",
+        "type": "PrescriptionTracking"
+      }
+    ]
   }
 }
