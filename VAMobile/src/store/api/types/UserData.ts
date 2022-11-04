@@ -61,6 +61,7 @@ export type VAServices =
   | 'militaryServiceHistory'
   | 'userProfileUpdate'
   | 'secureMessaging'
+  | 'scheduleAppointments'
   | 'prescriptions'
 
 export const VAServicesConstants: {
@@ -73,6 +74,7 @@ export const VAServicesConstants: {
   MilitaryServiceHistory: VAServices
   UserProfileUpdate: VAServices
   SecureMessaging: VAServices
+  ScheduleAppointments: VAServices
   Prescriptions: VAServices
 } = {
   Appeals: 'appeals',
@@ -84,6 +86,7 @@ export const VAServicesConstants: {
   MilitaryServiceHistory: 'militaryServiceHistory',
   UserProfileUpdate: 'userProfileUpdate',
   SecureMessaging: 'secureMessaging',
+  ScheduleAppointments: 'scheduleAppointments',
   Prescriptions: 'prescriptions',
 }
 

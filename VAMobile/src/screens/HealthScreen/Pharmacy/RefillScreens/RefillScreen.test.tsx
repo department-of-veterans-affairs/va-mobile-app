@@ -60,7 +60,7 @@ context('RefillScreen', () => {
       await waitFor(() => {
         initializeTestInstance(
           {
-            needsRefillableLoaded: false,
+            prescriptionsNeedLoad: false,
             refillablePrescriptions: mockData
           }
         )

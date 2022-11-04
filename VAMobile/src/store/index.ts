@@ -17,6 +17,7 @@ import patientReducer from 'store/slices/patientSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
 import personalInformationReducer from 'store/slices/personalInformationSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
+import requestAppointmentReducer from 'store/slices/requestAppointmentSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 import vaccineReducer from 'store/slices/vaccineSlice'
@@ -43,6 +44,7 @@ const store = configureStore({
     snackBar: snackbarReducer,
     vaccine: vaccineReducer,
     payments: paymentsReducer,
+    requestAppointment: requestAppointmentReducer,
     prescriptions: prescriptionsReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }).concat(logger),

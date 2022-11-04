@@ -11,21 +11,24 @@ const RC_CACHE_TIME = 43200000 // 12 hours
 export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
-export type FeatureToggleType = 'prescriptions' | 'SIS' | 'testFeature'
+export type FeatureToggleType = 'appointmentRequests' | 'prescriptions' | 'SIS' | 'testFeature'
 
 type FeatureToggleValues = {
+  appointmentRequests: boolean
   prescriptions: boolean
   SIS: boolean
   testFeature: boolean
 }
 
 let devConfig: FeatureToggleValues = {
+  appointmentRequests: true,
   prescriptions: true,
   SIS: true,
   testFeature: true,
 }
 
 const productionDefaults: FeatureToggleValues = {
+  appointmentRequests: false,
   prescriptions: false,
   SIS: false,
   testFeature: false,
