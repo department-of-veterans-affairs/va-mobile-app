@@ -50,7 +50,7 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
 
   return (
     <Box>
-      <TextView mt={condensedMarginBetween} variant={'MobileBodyBold'} accessibilityLabel={`${prescriptionName}.`}>
+      <TextView variant={'MobileBodyBold'} accessibilityLabel={`${prescriptionName}.`}>
         {prescriptionName}
       </TextView>
       <TextView variant={'HelperText'} color={'placeholder'} mt={condensedMarginBetween} accessibilityLabel={`${rxNumberA11yLabel}.`}>
