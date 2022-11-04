@@ -44,7 +44,6 @@ export type PrescriptionState = {
   refillableCount?: number
   nonRefillableCount?: number
   refillablePrescriptions?: PrescriptionsList
-  needsRefillableLoaded: boolean
   loadingRefillable: boolean
   loadingTrackingInfo: boolean
   trackingInfo?: Array<PrescriptionTrackingInfo>
@@ -66,7 +65,6 @@ export const initialPrescriptionState: PrescriptionState = {
   prescriptionPagination: {} as PrescriptionsPaginationData,
   refillableCount: 0,
   nonRefillableCount: 0,
-  needsRefillableLoaded: true,
   loadingRefillable: false,
   loadingTrackingInfo: false,
   trackingInfo: [],
@@ -257,15 +255,13 @@ const prescriptionSlice = createSlice({
       // RefillRequestSummary
       state.showLoadingScreenRequestRefillsRetry = false
 
-      // do a reload on refill data if some successfully submitted
-      const shouldReload = refillRequestSummaryItems.some((item) => item.submitted)
-
       // Both
       state.refillRequestSummaryItems = refillRequestSummaryItems
-      state.needsRefillableLoaded = shouldReload
-
-      // PrescriptionDetails
-      state.prescriptionsNeedLoad = shouldReload
+    },
+    dispatchSetPrescriptionsNeedLoad: (state) => {
+      const { refillRequestSummaryItems } = state
+      // do a reload on refill data if some successfully submitted
+      state.prescriptionsNeedLoad = refillRequestSummaryItems.some((item) => item.submitted)
     },
     dispatchClearLoadingRequestRefills: (state) => {
       // Both
@@ -368,5 +364,6 @@ export const {
   dispatchFinishLoadAllPrescriptions,
   dispatchStartFilterAndSortPrescriptions,
   dispatchFinishFilterAndSortPrescriptions,
+  dispatchSetPrescriptionsNeedLoad,
 } = prescriptionSlice.actions
 export default prescriptionSlice.reducer
