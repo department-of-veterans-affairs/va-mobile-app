@@ -20,6 +20,7 @@ export type AuthorizedServicesState = {
   militaryServiceHistory: boolean
   userProfileUpdate: boolean
   secureMessaging: boolean
+  scheduleAppointments: boolean
   prescriptions: boolean
 }
 
@@ -34,6 +35,7 @@ export const initialAuthorizedServicesState: AuthorizedServicesState = {
   militaryServiceHistory: false,
   userProfileUpdate: false,
   secureMessaging: false,
+  scheduleAppointments: false,
   prescriptions: false,
 }
 
@@ -54,6 +56,7 @@ const authorizedServicesSlice = createSlice({
       const militaryServiceHistory = contains(services, VAServicesConstants.MilitaryServiceHistory)
       const userProfileUpdate = contains(services, VAServicesConstants.UserProfileUpdate)
       const secureMessaging = contains(services, VAServicesConstants.SecureMessaging)
+      const scheduleAppointments = contains(services, VAServicesConstants.ScheduleAppointments)
       const prescriptions = contains(services, VAServicesConstants.Prescriptions)
 
       setAnalyticsUserProperties({
@@ -65,6 +68,7 @@ const authorizedServicesSlice = createSlice({
         militaryServiceHistory: militaryServiceHistory.toString(),
         userProfileUpdate: userProfileUpdate.toString(),
         secureMessaging: secureMessaging.toString(),
+        scheduleAppointments: scheduleAppointments.toString(),
         prescriptions: prescriptions.toString(),
       })
 
@@ -78,6 +82,7 @@ const authorizedServicesSlice = createSlice({
       state.militaryServiceHistory = militaryServiceHistory
       state.userProfileUpdate = userProfileUpdate
       state.secureMessaging = secureMessaging
+      state.scheduleAppointments = scheduleAppointments
       state.prescriptions = prescriptions
       state.error = error
     },
