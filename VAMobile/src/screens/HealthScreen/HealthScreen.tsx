@@ -7,7 +7,6 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
@@ -60,19 +59,17 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps('Health-care-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        {featureEnabled('prescriptions') && (
-          <LargeNavButton
-            title={t('prescription.title')}
-            subText={t('prescription.subText')}
-            subTextA11yLabel={t('prescription.subText.a11yLabel')}
-            a11yHint={t('prescription.A11yHint')}
-            onPress={onPharmacy}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-        )}
+        <LargeNavButton
+          title={t('prescription.title')}
+          subText={t('prescription.subText')}
+          subTextA11yLabel={t('prescription.subText.a11yLabel')}
+          a11yHint={t('prescription.A11yHint')}
+          onPress={onPharmacy}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+        />
         <LargeNavButton
           title={t('appointments.title')}
           subText={t('appointments.subText')}

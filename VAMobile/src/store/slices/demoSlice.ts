@@ -8,7 +8,7 @@ export type DemoState = {
 }
 
 export const initialDemoState: DemoState = {
-  demoMode: true,
+  demoMode: false,
 }
 
 /**
