@@ -12,6 +12,9 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { AlertBox, ErrorComponent } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
+import { featureEnabled } from 'utils/remoteConfig'
+import { when } from 'jest-when'
+import { request } from 'http'
 
 type mockAppointmentServiceErrors = {
   pastVaServiceError?: boolean
@@ -24,11 +27,19 @@ context('AppointmentsScreen', () => {
   let component: RenderAPI
   let testInstance: any
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, serviceErrors: mockAppointmentServiceErrors = {}, appointmentsAuthorized = true) => {
+  const initializeTestInstance = (
+    errorsState: ErrorsState = initialErrorsState,
+    serviceErrors: mockAppointmentServiceErrors = {},
+    appointmentsAuthorized = true,
+    requestsEnabled: boolean = false,
+  ) => {
     const appointments: AppointmentsState = {
       ...initialAppointmentsState,
       ...serviceErrors,
     }
+
+    let mockFeatureEnabled = featureEnabled as jest.Mock
+    when(mockFeatureEnabled).calledWith('appointmentRequests').mockReturnValue(requestsEnabled)
 
     const props = mockNavProps()
 
@@ -215,6 +226,22 @@ context('AppointmentsScreen', () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
         })
+      })
+    })
+  })
+
+  describe('Appointment Requessts', () => {
+    it('does not display prescriptions button if feature toggle disabled', async () => {
+      await waitFor(() => {
+        expect(() => component.getByText('Request appointment')).toThrow()
+      })
+    })
+
+    it('does not display prescriptions button if feature toggle enabled', async () => {
+      initializeTestInstance(undefined, undefined, true, true)
+      await waitFor(() => {
+        expect(() => component.getByText('Request appointment')).not.toThrow()
+        expect(component.getByText('Request appointment')).toBeDefined()
       })
     })
   })

@@ -5,6 +5,7 @@ import React, { ReactNode } from 'react'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
+import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Appointments from './Appointments'
@@ -13,6 +14,7 @@ import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/Atta
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
@@ -22,6 +24,7 @@ import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
+import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import SecureMessaging from './SecureMessaging'
 import StatusGlossary from './Pharmacy/StatusGlossary/StatusGlossary'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
@@ -102,6 +105,16 @@ export type HealthStackParamList = WebviewStackParams & {
   VaccineDetails: {
     vaccineId: string
   }
+  RequestAppointmentScreen: undefined
+  GeneralHelpScreen: {
+    title: string
+    description: string
+  }
+  SubTypeHelpScreen: {
+    careTypeId: string
+  }
+  NoRequestAppointmentAccess: undefined
+  TypeOfCareNotListedHelpScreen: undefined
   PrescriptionHistory: {
     startingTab?: PrescriptionHistoryTabs | undefined
   }
@@ -150,6 +163,51 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
     <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
+
+    <HealthStack.Screen
+      key={'NoRequestAppointmentAccess'}
+      name="NoRequestAppointmentAccess"
+      component={NoRequestAppointmentAccess}
+      options={{ title: t('appointments.appointments') }}
+    />,
+    <HealthStack.Group
+      key={'ModalsScreens'}
+      screenOptions={{
+        presentation: 'modal',
+        ...TransitionPresets.ModalTransition,
+        headerShown: true,
+      }}>
+      <HealthStack.Screen
+        key={'GeneralHelpScreen'}
+        name="GeneralHelpScreen"
+        component={GeneralHelpScreen}
+        options={{
+          title: t('requestAppointments.generalHelpPageTitle'),
+        }}
+      />
+      <HealthStack.Screen
+        key={'SubTypeHelpScreen'}
+        name="SubTypeHelpScreen"
+        component={SubTypeHelpScreen}
+        options={{
+          title: t('requestAppointment.modalNeedHelpChoosingLinkTitle'),
+        }}
+      />
+      <HealthStack.Screen
+        key={'TypeOfCareNotListedHelpScreen'}
+        name="TypeOfCareNotListedHelpScreen"
+        component={TypeOfCareNotListedHelpScreen}
+        options={{
+          title: t('requestAppointment.typeOfCareNotListedModalTitle'),
+        }}
+      />
+      <HealthStack.Screen
+        key={'RequestAppointmentScreen'}
+        name="RequestAppointmentScreen"
+        component={RequestAppointmentScreen}
+        options={{ ...TransitionPresets.SlideFromRightIOS }}
+      />
+    </HealthStack.Group>,
     <HealthStack.Screen key={'PrescriptionHistory'} name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />,
     <HealthStack.Screen key={'PrescriptionDetails'} name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />,
     <HealthStack.Screen
