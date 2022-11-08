@@ -11,6 +11,7 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
+import { featureEnabled } from 'utils/remoteConfig'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -82,7 +83,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     greeting = t('greetings.evening')
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
-
+  const isRXRefillEnable = true
   return (
     <VAScrollView>
       <Box flex={1} justifyContent="flex-start">
@@ -104,7 +105,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('healthCare.title')}
-            subText={t('healthCare.subText')}
+            subText={featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
