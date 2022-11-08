@@ -299,7 +299,7 @@ const prescriptionSlice = createSlice({
       const transferredPrescriptions: PrescriptionData[] = []
       const refillablePrescriptions: PrescriptionData[] = []
 
-      prescriptions.forEach((prescription) => {
+      prescriptions?.forEach((prescription) => {
         prescriptionsById[prescription.id] = prescription
 
         if (prescription.attributes.isTrackable) {
@@ -331,7 +331,7 @@ const prescriptionSlice = createSlice({
       state.prescriptionsNeedLoad = false
 
       state.tabCounts = {
-        '0': prescriptions.length,
+        '0': prescriptions?.length,
         '1': pendingPrescriptions.length,
         '2': shippedPrescriptions.length,
       }
