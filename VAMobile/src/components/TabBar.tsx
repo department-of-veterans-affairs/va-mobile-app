@@ -1,8 +1,7 @@
-import { ViewStyle } from 'react-native'
+import { Pressable, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { BorderColorVariant, Box, TextView } from 'components'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useTheme } from 'utils/hooks'
 
 export type TabsValuesType = Array<{
@@ -63,7 +62,7 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
             accessible={true}
             accessibilityState={{ selected: isSelected }}
             accessibilityValue={{ text: `tab position ${index + 1} of ${tabs.length}` }}>
-            <TouchableWithoutFeedback onPress={() => onChange(value)} style={tabButtonStyle}>
+            <Pressable onPress={() => onChange(value)} style={tabButtonStyle}>
               <TextView
                 maxFontSizeMultiplier={1.5}
                 variant={isSelected ? 'MobileBodyBold' : 'MobileBody'}
@@ -71,7 +70,7 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
                 textAlign="center">
                 {title}
               </TextView>
-            </TouchableWithoutFeedback>
+            </Pressable>
           </Box>
         )
       })}
