@@ -44,7 +44,6 @@ export type PrescriptionState = {
   refillableCount?: number
   nonRefillableCount?: number
   refillablePrescriptions?: PrescriptionsList
-  loadingRefillable: boolean
   loadingTrackingInfo: boolean
   trackingInfo?: Array<PrescriptionTrackingInfo>
   // Request refill (RefillScreen, RefillRequestSummary)
@@ -65,7 +64,6 @@ export const initialPrescriptionState: PrescriptionState = {
   prescriptionPagination: {} as PrescriptionsPaginationData,
   refillableCount: 0,
   nonRefillableCount: 0,
-  loadingRefillable: false,
   loadingTrackingInfo: false,
   trackingInfo: [],
   submittingRequestRefills: false,
