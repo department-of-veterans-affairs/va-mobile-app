@@ -59,8 +59,8 @@ context('RefillRequestSummary', () => {
 
       // Whats next
       expect(textView[4].props.children).toEqual('What’s next')
-      expect(textView[5].props.children).toEqual('We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill.\n\nIf you have questions about the status of your refill, contact your provider or local VA pharmacy.')
-
+      expect(textView[5].props.children).toEqual('We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill.')
+      expect(textView[6].props.children).toEqual('If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
       // Buttons
       const vaButtons = testInstance.findAllByType(VAButton)
       expect(vaButtons.length).toEqual(1) // should only be one button 'Go to all pending refills'
@@ -138,7 +138,8 @@ context('RefillRequestSummary', () => {
 
       // Whats next
       expect(textView[8].props.children).toEqual( 'What’s next')
-      expect(textView[9].props.children).toEqual( 'We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill.\n\nIf you have questions about the status of your refill, contact your provider or local VA pharmacy.')
+      expect(textView[9].props.children).toEqual( 'We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill.')
+      expect(textView[10].props.children).toEqual( 'If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
     })
   })
 })
