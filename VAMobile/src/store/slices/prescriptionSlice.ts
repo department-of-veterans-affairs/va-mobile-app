@@ -17,13 +17,13 @@ import {
   put,
 } from '../api'
 import { AppThunk } from 'store'
-import { Events } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 
 const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
@@ -191,6 +191,7 @@ export const requestRefills =
       }
     }
 
+    setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
     dispatch(dispatchFinishRequestRefills({ refillRequestSummaryItems: results }))
   }
 
@@ -205,6 +206,7 @@ export const getTrackingInfo =
     try {
       const trackingInfo = await api.get<PrescriptionTrackingInfoGetData>(`/v0/health/rx/prescriptions/${id}/tracking`)
       dispatch(dispatchFinishGetTrackingInfo({ trackingInfo: trackingInfo?.data }))
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `getTrackingInfo : ${prescriptionNonFatalErrorString}`)
