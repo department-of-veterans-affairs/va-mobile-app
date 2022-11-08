@@ -34,15 +34,8 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
-  const {
-    loadingRefillable,
-    submittingRequestRefills,
-    refillablePrescriptions,
-    prescriptionsNeedLoad,
-    showLoadingScreenRequestRefills,
-    submittedRequestRefillCount,
-    totalSubmittedRequestRefill,
-  } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittedRequestRefillCount, submittingRequestRefills, totalSubmittedRequestRefill } =
+    useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []
   const prevLoadingRequestRefills = usePrevious<boolean>(submittingRequestRefills)
 
@@ -55,10 +48,10 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
     React.useCallback(() => {
-      if (prescriptionsNeedLoad && !prescriptionInDowntime) {
+      if (!prescriptionInDowntime) {
         dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID))
       }
-    }, [dispatch, prescriptionsNeedLoad, prescriptionInDowntime]),
+    }, [dispatch, prescriptionInDowntime]),
   )
 
   useEffect(() => {
@@ -111,7 +104,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     return <NoRefills />
   }
 
-  if (loadingRefillable) {
+  if (loadingHistory) {
     return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
   }
 
