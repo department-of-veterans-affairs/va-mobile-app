@@ -1,6 +1,6 @@
 {
   "name": "React-Core",
-  "version": "0.67.4",
+  "version": "0.68.0",
   "summary": "The core of React Native.",
   "homepage": "https://reactnative.dev/",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.67.4"
+    "tag": "v0.68.0"
   },
   "resource_bundles": {
     "AccessibilityResources": [
@@ -21,7 +21,7 @@
   "header_dir": "React",
   "frameworks": "JavaScriptCore",
   "pod_target_xcconfig": {
-    "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/RCT-Folly\" \"${PODS_ROOT}/Headers/Public/React-hermes\" \"${PODS_ROOT}/Headers/Public/hermes-engine\"",
+    "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/RCT-Folly\" \"${PODS_ROOT}/Headers/Public/React-hermes\" \"${PODS_ROOT}/Headers/Public/hermes-engine\" \"${PODS_ROOT}/Headers/Public/FlipperKit\" \"$(PODS_ROOT)/Headers/Public/ReactCommon\" \"$(PODS_ROOT)/Headers/Public/React-RCTFabric\"",
     "DEFINES_MODULE": "YES"
   },
   "user_target_xcconfig": {
@@ -33,16 +33,16 @@
       "2021.06.28.00-v2"
     ],
     "React-cxxreact": [
-      "0.67.4"
+      "0.68.0"
     ],
     "React-perflogger": [
-      "0.67.4"
+      "0.68.0"
     ],
     "React-jsi": [
-      "0.67.4"
+      "0.68.0"
     ],
     "React-jsiexecutor": [
-      "0.67.4"
+      "0.68.0"
     ],
     "Yoga": [
 
@@ -73,13 +73,13 @@
       ],
       "dependencies": {
         "React-Core/Default": [
-          "0.67.4"
+          "0.68.0"
         ],
         "React-Core/RCTWebSocket": [
-          "0.67.4"
+          "0.68.0"
         ],
         "React-jsinspector": [
-          "0.67.4"
+          "0.68.0"
         ]
       }
     },
@@ -88,7 +88,7 @@
       "source_files": "Libraries/WebSocket/*.{h,m}",
       "dependencies": {
         "React-Core/Default": [
-          "0.67.4"
+          "0.68.0"
         ]
       }
     },
