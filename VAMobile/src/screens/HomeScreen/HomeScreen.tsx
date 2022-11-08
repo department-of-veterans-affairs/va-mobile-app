@@ -83,7 +83,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     greeting = t('greetings.evening')
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
-  const isRXRefillEnable = true
+
   return (
     <VAScrollView>
       <Box flex={1} justifyContent="flex-start">
