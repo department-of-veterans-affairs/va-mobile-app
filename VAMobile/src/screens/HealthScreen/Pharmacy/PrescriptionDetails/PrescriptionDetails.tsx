@@ -10,6 +10,8 @@ import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/s
 import { RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
+import { UserAnalytics } from 'constants/analytics'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useAppDispatch, useDestructiveAlert, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import DetailsTextSections from './DetailsTextSections'
@@ -43,6 +45,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       if (prescriptionsNeedLoad) {
         dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID))
       }
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
     }, [dispatch, prescriptionsNeedLoad]),
   )
 
