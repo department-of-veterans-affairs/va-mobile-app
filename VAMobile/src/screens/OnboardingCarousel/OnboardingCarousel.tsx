@@ -26,10 +26,10 @@ const OnboardingHealth: FC = () => {
   const { t } = useTranslation(NAMESPACE.LOGIN)
   return (
     <GenericOnboarding
-      header={t('onboarding.health.appointments.header')}
+      header={t('onboarding.health.header')}
       text={featureEnabled('prescriptions') ? t('onboarding.health.prescriptions.details') : t('onboarding.health.appointments.details')}
       testID="Onboarding-appointments-page"
-      headerA11yLabel={t('onboarding.health.appointments.header.a11y')}
+      headerA11yLabel={t('onboarding.health.header.a11y')}
       textA11yLabel={featureEnabled('prescriptions') ? t('onboarding.health.prescriptions.details.a11y') : t('onboarding.health.appointments.details.a11y')}
     />
   )
