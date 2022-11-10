@@ -267,6 +267,12 @@ export const UserAnalytics = {
       value: 'true',
     }
   },
+  vama_uses_rx: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_rx',
+      value: 'true',
+    }
+  },
   vama_uses_sm: (): UserAnalytic => {
     return {
       name: 'vama_uses_sm',
