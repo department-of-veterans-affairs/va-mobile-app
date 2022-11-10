@@ -38,7 +38,7 @@ context('HomeScreen', () => {
   let props: any
   let mockFeatureEnabled = featureEnabled as jest.Mock
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (prescriptionsEnabled: boolean = false) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
