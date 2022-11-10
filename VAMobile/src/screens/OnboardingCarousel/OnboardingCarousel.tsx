@@ -7,6 +7,7 @@ import { capitalizeWord } from 'utils/formattingUtils'
 
 import { PersonalInformationState, completeFirstTimeLogin } from 'store/slices'
 import { RootState } from 'store'
+import { featureEnabled } from 'utils/remoteConfig'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
@@ -23,7 +24,15 @@ const OnboardingClaimsAndAppeals: FC = () => {
 
 const OnboardingHealth: FC = () => {
   const { t } = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.appointments.header')} text={t('onboarding.appointments.details')} testID="Onboarding-appointments-page" />
+  return (
+    <GenericOnboarding
+      header={t('onboarding.appointments.header')}
+      text={featureEnabled('prescriptions') ? t('onboarding.prescriptions.details') : t('onboarding.appointments.details')}
+      testID="Onboarding-appointments-page"
+      headerA11yLabel={t('onboarding.appointments.header.a11y')}
+      textA11yLabel={featureEnabled('prescriptions') ? t('onboarding.prescriptions.details.a11y') : t('onboarding.appointments.details.a11y')}
+    />
+  )
 }
 
 const OnboardingAppOverview: FC = () => {
