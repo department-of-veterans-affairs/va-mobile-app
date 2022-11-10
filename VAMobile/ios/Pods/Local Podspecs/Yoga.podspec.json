@@ -11,7 +11,7 @@
   "authors": "Facebook",
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.68.5"
+    "tag": "v0.69.0"
   },
   "module_name": "yoga",
   "header_dir": "yoga",
@@ -24,12 +24,27 @@
     "-fexceptions",
     "-Wall",
     "-Werror",
-    "-std=c++1y",
+    "-std=c++17",
     "-fPIC"
   ],
   "platforms": {
-    "ios": "11.0"
+    "ios": "12.4"
   },
-  "source_files": "yoga/**/*.{cpp,h}",
-  "public_header_files": "yoga/{Yoga,YGEnums,YGMacros,YGNode,YGStyle,YGValue}.h"
+  "source_files": [
+    "yoga/**/*.{cpp,h}",
+    "Yoga-umbrella.h"
+  ],
+  "module_map": "Yoga.modulemap",
+  "script_phases": {
+    "name": "Copy umbrella header",
+    "input_files": [
+      "$PODS_ROOT/Headers/Public/Yoga/yoga/Yoga-umbrella.h"
+    ],
+    "output_files": [
+      "$PODS_ROOT/Headers/Private/Yoga/Yoga-umbrella.h"
+    ],
+    "execution_position": "before_compile",
+    "shell_path": "/bin/bash",
+    "script": "cp -f \"$PODS_ROOT/Headers/Public/Yoga/yoga/Yoga-umbrella.h\" \"$PODS_ROOT/Headers/Private/Yoga/Yoga-umbrella.h\" || true"
+  }
 }
