@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton, VAButton } from 'components'
 import { DateTime } from 'luxon'
+import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
@@ -31,6 +32,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.fullName || ''
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   useEffect(() => {
     // Fetch the profile information
@@ -91,7 +93,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     console.debug('Skip Pressed')
   }
 
-  const getEncourageUpdateAlert = (updateRequired = true) => {
+  const getEncourageUpdateAlert = (updateRequired = false) => {
     if (updateRequired) {
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
@@ -138,7 +140,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             {heading}
           </TextView>
         </Box>
-        {getEncourageUpdateAlert()}
+        {getEncourageUpdateAlert(demoMode)}
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
