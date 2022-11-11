@@ -97,36 +97,36 @@ context('HomeScreen', () => {
     })
   })
 
-  describe('rendering the update alert', () => {
-    it('should render if the local version is behind the store version and a previous skip not recorded for that store version', async () => {
+  // describe('rendering the update alert', () => {
+  //   it('should render if the local version is behind the store version and a previous skip not recorded for that store version', async () => {
       
-    })
-    it('should render the update now button', async () => {
+  //   })
+  //   it('should render the update now button', async () => {
       
-    })
+  //   })
 
-    it('should render the skip this update button', async () => {
+  //   it('should render the skip this update button', async () => {
       
-    })
-    it('should not render if the local version is the same as the store version', async () => {
+  //   })
+  //   it('should not render if the local version is the same as the store version', async () => {
       
-    })
-    it('should not render if the local version is behind the store version and a previous skip was recorded for that store version', async () => {
+  //   })
+  //   it('should not render if the local version is behind the store version and a previous skip was recorded for that store version', async () => {
       
-    })
-  })
+  //   })
+  // })
 
-  describe('when update now is pressed', () => {
-    it('should call update pressed', async () => {
+  // describe('when update now is pressed', () => {
+  //   it('should call update pressed', async () => {
       
-    })
-  })
+  //   })
+  // })
 
-  describe('when skip this update is pressed', () => {
-    it('should call skip pressed', async () => {
+  // describe('when skip this update is pressed', () => {
+  //   it('should call skip pressed', async () => {
       
-    })
-  })
+  //   })
+  // })
 
   describe('when rendering the home nav buttons', () => {
     it('should render the claims button', async () => {
