@@ -97,7 +97,7 @@ context('HomeScreen', () => {
     })
   })
 
-  describe('when showing the update alert', () => {
+  describe('rendering the update alert', () => {
     it('should render if the local version is behind the store version and a previous skip not recorded for that store version', async () => {
       
     })
