@@ -2,8 +2,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
-import { CrisisLineCta, LargeNavButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
+import { CrisisLineCta, LargeNavButton, VAButton } from 'components'
 import { DateTime } from 'luxon'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -83,6 +83,52 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
+  const onUpdatePressed = (): void => {
+    console.debug('Update Pressed')
+  }
+
+  const onSkipPressed = (): void => {
+    console.debug('Skip Pressed')
+  }
+
+  const getEncourageUpdateAlert = (updateRequired = true) => {
+    if (updateRequired) {
+      return (
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
+          <AlertBox
+            title={t('encourageUpdate.title')}
+            text={t('encourageUpdate.body')}
+            border="informational"
+            titleA11yLabel={t('encourageUpdate.title')}
+            textA11yLabel={t('encourageUpdate.body')}>
+            <Box>
+              <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
+                <VAButton
+                  onPress={onUpdatePressed}
+                  label={t('encourageUpdate.update')}
+                  buttonType={ButtonTypesConstants.buttonPrimary}
+                  testID="updateEncouragedUpdate"
+                  a11yHint={t('encourageUpdate.update')}
+                />
+              </Box>
+              <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
+                <VAButton
+                  onPress={onSkipPressed}
+                  label={t('encourageUpdate.skip')}
+                  buttonType={ButtonTypesConstants.buttonSecondary}
+                  testID="skipEncouragedUpdate"
+                  a11yHint={t('encourageUpdate.skip')}
+                />
+              </Box>
+            </Box>
+          </AlertBox>
+        </Box>
+      )
+    } else {
+      return <></>
+    }
+  }
+
   return (
     <VAScrollView>
       <Box flex={1} justifyContent="flex-start">
@@ -92,6 +138,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             {heading}
           </TextView>
         </Box>
+        {getEncourageUpdateAlert()}
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
