@@ -97,30 +97,13 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     if (updateRequired) {
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
-          <AlertBox
-            title={t('encourageUpdate.title')}
-            text={t('encourageUpdate.body')}
-            border="informational"
-            titleA11yLabel={t('encourageUpdate.title')}
-            textA11yLabel={t('encourageUpdate.body')}>
+          <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
             <Box>
               <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
-                <VAButton
-                  onPress={onUpdatePressed}
-                  label={t('encourageUpdate.update')}
-                  buttonType={ButtonTypesConstants.buttonPrimary}
-                  testID="updateEncouragedUpdate"
-                  a11yHint={t('encourageUpdate.update')}
-                />
+                <VAButton onPress={onUpdatePressed} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />
               </Box>
               <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
-                <VAButton
-                  onPress={onSkipPressed}
-                  label={t('encourageUpdate.skip')}
-                  buttonType={ButtonTypesConstants.buttonSecondary}
-                  testID="skipEncouragedUpdate"
-                  a11yHint={t('encourageUpdate.skip')}
-                />
+                <VAButton onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonTypesConstants.buttonSecondary} />
               </Box>
             </Box>
           </AlertBox>
