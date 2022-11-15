@@ -23,7 +23,7 @@ const mockAddress: AddressData = {
   zipCode: '95403',
 }
 
-const snackbarMessages : SnackbarMessages = {
+const snackbarMessages: SnackbarMessages = {
   successMsg: 'address saved',
   errorMsg: 'address could not be saved',
 }

@@ -17,13 +17,13 @@ import {
   put,
 } from '../api'
 import { AppThunk } from 'store'
-import { Events } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 
 const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
@@ -44,8 +44,6 @@ export type PrescriptionState = {
   refillableCount?: number
   nonRefillableCount?: number
   refillablePrescriptions?: PrescriptionsList
-  needsRefillableLoaded: boolean
-  loadingRefillable: boolean
   loadingTrackingInfo: boolean
   trackingInfo?: Array<PrescriptionTrackingInfo>
   // Request refill (RefillScreen, RefillRequestSummary)
@@ -66,8 +64,6 @@ export const initialPrescriptionState: PrescriptionState = {
   prescriptionPagination: {} as PrescriptionsPaginationData,
   refillableCount: 0,
   nonRefillableCount: 0,
-  needsRefillableLoaded: true,
-  loadingRefillable: false,
   loadingTrackingInfo: false,
   trackingInfo: [],
   submittingRequestRefills: false,
@@ -193,6 +189,7 @@ export const requestRefills =
       }
     }
 
+    setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
     dispatch(dispatchFinishRequestRefills({ refillRequestSummaryItems: results }))
   }
 
@@ -207,6 +204,7 @@ export const getTrackingInfo =
     try {
       const trackingInfo = await api.get<PrescriptionTrackingInfoGetData>(`/v0/health/rx/prescriptions/${id}/tracking`)
       dispatch(dispatchFinishGetTrackingInfo({ trackingInfo: trackingInfo?.data }))
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `getTrackingInfo : ${prescriptionNonFatalErrorString}`)
@@ -257,15 +255,13 @@ const prescriptionSlice = createSlice({
       // RefillRequestSummary
       state.showLoadingScreenRequestRefillsRetry = false
 
-      // do a reload on refill data if some successfully submitted
-      const shouldReload = refillRequestSummaryItems.some((item) => item.submitted)
-
       // Both
       state.refillRequestSummaryItems = refillRequestSummaryItems
-      state.needsRefillableLoaded = shouldReload
-
-      // PrescriptionDetails
-      state.prescriptionsNeedLoad = shouldReload
+    },
+    dispatchSetPrescriptionsNeedLoad: (state) => {
+      const { refillRequestSummaryItems } = state
+      // do a reload on refill data if some successfully submitted
+      state.prescriptionsNeedLoad = refillRequestSummaryItems.some((item) => item.submitted)
     },
     dispatchClearLoadingRequestRefills: (state) => {
       // Both
@@ -305,7 +301,7 @@ const prescriptionSlice = createSlice({
       const transferredPrescriptions: PrescriptionData[] = []
       const refillablePrescriptions: PrescriptionData[] = []
 
-      prescriptions.forEach((prescription) => {
+      prescriptions?.forEach((prescription) => {
         prescriptionsById[prescription.id] = prescription
 
         if (prescription.attributes.isTrackable) {
@@ -337,7 +333,7 @@ const prescriptionSlice = createSlice({
       state.prescriptionsNeedLoad = false
 
       state.tabCounts = {
-        '0': prescriptions.length,
+        '0': prescriptions?.length,
         '1': pendingPrescriptions.length,
         '2': shippedPrescriptions.length,
       }
@@ -368,5 +364,6 @@ export const {
   dispatchFinishLoadAllPrescriptions,
   dispatchStartFilterAndSortPrescriptions,
   dispatchFinishFilterAndSortPrescriptions,
+  dispatchSetPrescriptionsNeedLoad,
 } = prescriptionSlice.actions
 export default prescriptionSlice.reducer

@@ -1,12 +1,13 @@
 import { Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement } from 'react'
 
-import { useTheme } from '../utils/hooks'
+import { HiddenA11yElement } from 'styles/common'
+import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 
 export type MultiTouchCardProps = {
-  /** accessibility value used by all three buttons */
-  a11yValue?: string
+  /** read by screen readers to identify the cards place in a list */
+  orderIdentifier?: string
   /** accessibility label for the main section */
   mainA11yLabel?: string
   /** content to display in the main section */
@@ -21,7 +22,7 @@ export type MultiTouchCardProps = {
   bottomA11yLabel?: string
 }
 
-const MultiTouchCard: FC<MultiTouchCardProps> = ({ a11yValue, mainContent, bottomContent, bottomOnPress, bottomA11yHint, mainA11yLabel, bottomA11yLabel }) => {
+const MultiTouchCard: FC<MultiTouchCardProps> = ({ orderIdentifier, mainContent, bottomContent, bottomOnPress, bottomA11yHint, mainA11yLabel, bottomA11yLabel }) => {
   const theme = useTheme()
 
   const hasBottomContent = !!bottomContent
@@ -49,7 +50,6 @@ const MultiTouchCard: FC<MultiTouchCardProps> = ({ a11yValue, mainContent, botto
     onPress: bottomOnPress,
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityValue: { text: a11yValue },
     accessibilityHint: bottomA11yHint,
   }
 
@@ -86,6 +86,7 @@ const MultiTouchCard: FC<MultiTouchCardProps> = ({ a11yValue, mainContent, botto
 
   return (
     <>
+      {orderIdentifier && <HiddenA11yElement accessibilityLabel={orderIdentifier}>{orderIdentifier}</HiddenA11yElement>}
       <Box {...mainBoxProps}>{mainContent}</Box>
       {hasBottomContent && getBottomContent()}
     </>

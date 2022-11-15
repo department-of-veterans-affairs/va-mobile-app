@@ -8,10 +8,11 @@ import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionState, dispatchClearLoadingRequestRefills, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
+import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { useAppDispatch, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
+import { useFocusEffect } from '@react-navigation/native'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
@@ -33,15 +34,8 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
-  const {
-    loadingRefillable,
-    submittingRequestRefills,
-    refillablePrescriptions,
-    needsRefillableLoaded,
-    showLoadingScreenRequestRefills,
-    submittedRequestRefillCount,
-    totalSubmittedRequestRefill,
-  } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittedRequestRefillCount, submittingRequestRefills, totalSubmittedRequestRefill } =
+    useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []
   const prevLoadingRequestRefills = usePrevious<boolean>(submittingRequestRefills)
 
@@ -51,11 +45,14 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     })
   }, [navigation, headerStyle])
 
-  useEffect(() => {
-    if (needsRefillableLoaded && !prescriptionInDowntime) {
-      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID))
-    }
-  }, [dispatch, needsRefillableLoaded, prescriptionInDowntime])
+  // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!prescriptionInDowntime) {
+        dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID))
+      }
+    }, [dispatch, prescriptionInDowntime]),
+  )
 
   useEffect(() => {
     if (prevLoadingRequestRefills && prevLoadingRequestRefills !== submittingRequestRefills) {
@@ -107,7 +104,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     return <NoRefills />
   }
 
-  if (loadingRefillable) {
+  if (loadingHistory) {
     return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
   }
 
@@ -188,6 +185,7 @@ const RefillStackScreen: FC<RefillStackScreenProps> = () => {
         component={RefillScreen}
         listeners={{
           beforeRemove: () => {
+            dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
           },
         }}

@@ -305,7 +305,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       )
 
       let cardProps: MultiTouchCardProps = {
-        a11yValue: t('prescription.history.a11yValue', { idx: idx + 1, total: total }),
+        orderIdentifier: t('prescription.history.orderIdentifier', { idx: idx + 1, total: total }),
         mainContent,
       }
 
@@ -321,7 +321,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         const bottomContent = (
           <Box {...bottomContentProps}>
             <Box mr={8}>
-              <VAIcon name={'Truck'} fill={'link'} />
+              <VAIcon name={'Truck'} fill={'link'} height={16} width={16} />
             </Box>
             <TextView variant={'HelperTextBold'} color={'link'}>
               {t('prescription.history.tracking')}

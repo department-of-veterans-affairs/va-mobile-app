@@ -8,6 +8,8 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
 import { LargeNavButton, TextView } from 'components'
+import { when } from 'jest-when'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -34,8 +36,10 @@ context('HomeScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
+  let mockFeatureEnabled = featureEnabled as jest.Mock
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (prescriptionsEnabled: boolean = false) => {
+    when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     component = render(<HomeScreen {...props} />)
