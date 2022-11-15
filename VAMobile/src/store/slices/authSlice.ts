@@ -69,6 +69,7 @@ const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
 const authNonFatalErrorString = 'Auth Service Error'
+const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
 
 export type AuthState = {
   loading: boolean
@@ -512,6 +513,22 @@ export const setBiometricsPreference =
     dispatch(dispatchUpdateStoreBiometricsPreference(value))
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(value))
   }
+
+/**
+ * stores version skipped for encouraged update
+ */
+export const setVersionSkipped = async (versionSkipped: string): Promise<void> => {
+  await Promise.all([AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)])
+}
+
+/**
+ * retunrs version skipped for encouraged update
+ */
+export const retrieveVersionSkipped = async (): Promise<string> => {
+  const result = await Promise.all([AsyncStorage.getItem(APP_VERSION_SKIPPED_UPDATE_VAL)])
+  const reconstructedToken = result[0] ? `${result[0]}` : '0.0.0'
+  return reconstructedToken
+}
 
 export const logout = (): AppThunk => async (dispatch, getState) => {
   const SISEnabled = featureEnabled('SIS')

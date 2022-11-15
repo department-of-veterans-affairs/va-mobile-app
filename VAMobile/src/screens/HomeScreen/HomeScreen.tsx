@@ -1,6 +1,7 @@
+import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton, VAButton } from 'components'
@@ -12,13 +13,17 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
+import { getVersionName } from 'utils/deviceData'
+import { isIOS } from 'utils/platform'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { requestStorePopup, requestStoreVersion } from 'utils/rnStoreVersion'
+import { retrieveVersionSkipped, setVersionSkipped } from 'store/slices/authSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { APPLE_STORE_LINK, WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
@@ -33,6 +38,32 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.fullName || ''
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const [localVersionName, setVersionName] = useState<string>()
+  const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
+  const [storeVersion, setStoreVersionScreen] = useState<string>()
+
+  useEffect(() => {
+    async function getVersion() {
+      const version = await getVersionName()
+      setVersionName(version)
+    }
+
+    async function checkSkippedVersion() {
+      const version = await retrieveVersionSkipped()
+      setSkippedVersionHomeScreen(version)
+    }
+
+    async function checkStoreVersion() {
+      const result = await requestStoreVersion()
+      const parsedString = result.split(', ')
+      const version = parsedString[0] + '.'
+      setStoreVersionScreen(version)
+    }
+
+    checkStoreVersion()
+    checkSkippedVersion()
+    getVersion()
+  }, [])
 
   useEffect(() => {
     // Fetch the profile information
@@ -85,12 +116,33 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
+  const callRequestStorePopup = async () => {
+    const result = await requestStorePopup()
+    if (result) {
+      openAppStore()
+    }
+  }
+
+  const openAppStore = () => {
+    const link = 'itms-apps:' + APPLE_STORE_LINK
+    Linking.canOpenURL(link).then(
+      (supported) => {
+        supported && Linking.openURL(link)
+      },
+      (err) => console.log(err),
+    )
+  }
+
   const onUpdatePressed = (): void => {
-    console.debug('Update Pressed')
+    if (isIOS()) {
+      callRequestStorePopup()
+    } else {
+    }
   }
 
   const onSkipPressed = (): void => {
-    console.debug('Skip Pressed')
+    setVersionSkipped(storeVersion ? storeVersion : '0.0.0.')
+    setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
   }
 
   const getEncourageUpdateAlert = (updateRequired = false) => {
@@ -140,7 +192,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             {heading}
           </TextView>
         </Box>
-        {getEncourageUpdateAlert(demoMode)}
+        {getEncourageUpdateAlert(demoMode && skippedVersion !== storeVersion && localVersionName !== storeVersion)}
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
