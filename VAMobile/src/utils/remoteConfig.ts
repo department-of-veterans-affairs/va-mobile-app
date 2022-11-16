@@ -44,35 +44,35 @@ const productionDefaults: FeatureToggleValues = {
  */
 export const activateRemoteConfig = async (): Promise<void> => {
   try {
+    console.debug('Remote Config: Setting defaults')
+    // Sets defaults for remote config for use prior to fetching and activating
+    const defaults = fetchRemote ? productionDefaults : devConfig
+    await remoteConfig().setDefaults(defaults)
+    console.debug('Remote Config: Defaults set', defaults)
+
     /**
      * If in staging or production, fetch and activate remote settings.  Otherwise,
      * we'll use the devConfig for local development.
      */
     if (fetchRemote) {
-      console.debug('Remote Config: Setting defaults')
-      // Sets defaults for remote config for use prior to fetching and activating
-      await remoteConfig().setDefaults(productionDefaults)
       console.debug('Remote Config: Fetching and activating')
       // Activate last fetched config then fetch latest config for use on next app launch
       await remoteConfig().activate()
       console.debug('Remote Config: Activated last fetched config')
       await remoteConfig().fetch(RC_CACHE_TIME)
       console.debug('Remote Config: Fetched latest remote config')
-    } else {
-      console.debug('Remote Config: Setting defaults')
-      // Check if we have any overrides stored in AsyncStorage, otherwise use devConfig
+    }
+
+    if (!isProduction) {
+      // Check if we have any overrides stored in AsyncStorage
       const overrides = await AsyncStorage.getItem(REMOTE_CONFIG_OVERRIDES_KEY)
-      let config
       if (overrides) {
         console.debug('Remote Config: Found overrides in AsyncStorage. Applying')
-        config = JSON.parse(overrides)
         overrideRemote = true
+        devConfig = JSON.parse(overrides) as FeatureToggleValues
       } else {
         console.debug('Remote Config: No overrides found in AsyncStorage. Applying dev defaults')
-        config = devConfig
       }
-      await remoteConfig().setDefaults(config)
-      console.debug('Remote Config: Defaults set', config)
     }
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
