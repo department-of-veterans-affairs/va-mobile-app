@@ -46,28 +46,31 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   useEffect(() => {
     async function getVersion() {
       const version = await getVersionName()
-      setVersionName(version)
+      if (componentMounted.current) {
+        setVersionName(version)
+      }
     }
 
     async function checkSkippedVersion() {
       const version = await retrieveVersionSkipped()
-      setSkippedVersionHomeScreen(version)
+      if (componentMounted.current) {
+        setSkippedVersionHomeScreen(version)
+      }
     }
 
     async function checkStoreVersion() {
       const result = await requestStoreVersion()
       const parsedString = result.split(', ')
       const version = parsedString[0] + '.'
-      setStoreVersionScreen(version)
+      if (componentMounted.current) {
+        setStoreVersionScreen(version)
+      }
     }
-
-    if (componentMounted.current) {
-      checkStoreVersion()
-      checkSkippedVersion()
-      getVersion()
-    }
+    checkStoreVersion()
+    checkSkippedVersion()
+    getVersion()
     return () => {
-      componentMounted.current = false 
+      componentMounted.current = false
     }
   }, [])
 
