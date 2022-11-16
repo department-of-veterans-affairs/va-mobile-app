@@ -1,7 +1,7 @@
 import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton, VAButton } from 'components'
@@ -41,6 +41,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const [localVersionName, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
+  const componentMounted = useRef(true)
 
   useEffect(() => {
     async function getVersion() {
@@ -60,9 +61,15 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       setStoreVersionScreen(version)
     }
 
-    checkStoreVersion()
-    checkSkippedVersion()
-    getVersion()
+    if (componentMounted.current) {
+      checkStoreVersion()
+      checkSkippedVersion()
+      getVersion()
+    }
+    return () => {
+      // This code runs when component is unmounted
+      componentMounted.current = false // (4) set it to false when we leave the page
+    }
   }, [])
 
   useEffect(() => {
