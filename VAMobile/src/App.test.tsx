@@ -9,6 +9,7 @@ import { handleTokenCallbackUrl, initialAuthState, initialSnackBarState } from '
 
 jest.mock('./utils/remoteConfig', () => ({
   activateRemoteConfig: jest.fn(() => Promise.resolve()),
+  featureEnabled: jest.fn(() => false),
 }))
 
 jest.mock('./store/slices', () => {
