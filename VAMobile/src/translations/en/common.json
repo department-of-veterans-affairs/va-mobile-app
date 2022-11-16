@@ -103,6 +103,7 @@
   "selected": "selected",
   "option": "option",
   "skip": "Skip",
+  "tabPositionOf": "tab position {{ position }} of {{ tabTotal }}",
   "text.raw": "{{text}}",
   "tryAgain": "Try again",
   "tty.display": "TTY: 800-877-8339",
