@@ -5,6 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
+import * as api from 'store/api'
 import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
@@ -132,6 +133,11 @@ context('ComposeMessage', () => {
         ...InitialState,
         secureMessaging: {
           ...InitialState.secureMessaging,
+          signature: {
+            signatureName: 'signatureName',
+            includeSignature: false,
+            signatureTitle: 'Title',
+          },
           sendMessageFailed: sendMessageFailed,
           recipients: noRecipientsReturned
             ? []
@@ -213,6 +219,10 @@ context('ComposeMessage', () => {
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/messaging/health/recipients')
+        .mockRejectedValue({ networkError: true } as api.APIError)
+
       await waitFor(() => {
         initializeTestInstance(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
         expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
@@ -267,7 +277,6 @@ context('ComposeMessage', () => {
 
       expect(textViews[9].props.children).toEqual(['Subject Line', ' ', '(Required)'])
     })
-
   })
 
   describe('when pressing the back button', () => {
@@ -371,6 +380,10 @@ context('ComposeMessage', () => {
       await waitFor(() => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
+
+      expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Attachments')).toBeTruthy()
     })
   })
