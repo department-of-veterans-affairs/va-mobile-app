@@ -67,8 +67,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       getVersion()
     }
     return () => {
-      // This code runs when component is unmounted
-      componentMounted.current = false // (4) set it to false when we leave the page
+      componentMounted.current = false 
     }
   }, [])
 
