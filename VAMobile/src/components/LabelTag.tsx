@@ -42,13 +42,14 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
   const theme = useTheme()
 
   const textView = (
-    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} px={12} py={4}>
+    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} maxFontSizeMultiplier={1.2}>
       {text}
     </TextView>
   )
 
   let wrapperProps: BoxProps = {
     minWidth: theme.dimensions.tagMinWidth,
+    maxWidth: '100%',
     minHeight: theme.dimensions.touchableMinHeight,
     justifyContent: 'center',
     alignSelf: 'flex-start',
@@ -58,6 +59,8 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
     borderColor: labelType,
     borderWidth: 1,
     borderRadius: 100,
+    px: 12,
+    py: 11,
   }
 
   const getContent = () => {
@@ -97,7 +100,8 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
       fill: 'tagInfoIcon',
       height: 16,
       width: 16,
-      mr: 10,
+      ml: 8,
+      preventScaling: true,
     }
 
     return (

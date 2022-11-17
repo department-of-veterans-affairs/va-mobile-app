@@ -85,6 +85,8 @@ export type BoxProps = ViewProps & {
   width?: number | string
   /** sets the min width of this component*/
   minWidth?: number | string
+  /** sets the max width of this component*/
+  maxWidth?: number | string
   /** sets the height of this component*/
   height?: number | string
   /** sets the min height of this component*/
@@ -123,6 +125,10 @@ export type BoxProps = ViewProps & {
   borderRadiusTop?: number | string
   /** sets the border radius just for the bottom of the component */
   borderRadiusBottom?: number | string
+  /** sets the border radius just for the left of the component */
+  borderRadiusLeft?: number | string
+  /** sets the border radius just for the right of the component */
+  borderRadiusRight?: number | string
 }
 
 const toDimen = (val?: string | number): string | undefined => {
@@ -210,6 +216,37 @@ const generateBorderStyles = (
   return styles
 }
 
+const generateBorderRadiusStyles = (props: BoxProps): { [key: string]: string | undefined } => {
+  const styles: { [key: string]: string | undefined } = {}
+  const { borderRadius, borderRadiusTop, borderRadiusBottom, borderRadiusLeft, borderRadiusRight } = props
+
+  if (borderRadius) {
+    styles['border-radius'] = typeof props.borderRadius === 'number' ? `${props.borderRadius}px` : props.borderRadius
+  }
+
+  if (borderRadiusTop) {
+    styles['border-top-left-radius'] = typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop
+    styles['border-top-right-radius'] = typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop
+  }
+
+  if (borderRadiusBottom) {
+    styles['border-bottom-left-radius'] = typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom
+    styles['border-bottom-right-radius'] = typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom
+  }
+
+  if (borderRadiusLeft) {
+    styles['border-top-left-radius'] = typeof props.borderRadiusLeft === 'number' ? `${props.borderRadiusLeft}px` : props.borderRadiusLeft
+    styles['border-bottom-left-radius'] = typeof props.borderRadiusLeft === 'number' ? `${props.borderRadiusLeft}px` : props.borderRadiusLeft
+  }
+
+  if (borderRadiusRight) {
+    styles['border-top-right-radius'] = typeof props.borderRadiusRight === 'number' ? `${props.borderRadiusRight}px` : props.borderRadiusRight
+    styles['border-bottom-right-radius'] = typeof props.borderRadiusRight === 'number' ? `${props.borderRadiusRight}px` : props.borderRadiusRight
+  }
+
+  return styles
+}
+
 export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
   const { m, mt, ml, mr, mb, mx, my } = props
   const mStyles = generateBoxStyles('margin', m, mt, ml, mr, mb, mx, my)
@@ -226,6 +263,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
   const blStyles = generateBorderStyles(theme, 'left', borderLeftWidth, borderStyle, borderLeftColor)
   const { borderRightWidth, borderRightColor } = props
   const brStyles = generateBorderStyles(theme, 'right', borderRightWidth, borderStyle, borderRightColor)
+  const borderRadiusStyles = generateBorderRadiusStyles(props)
 
   const styles = {
     position: props.position,
@@ -239,6 +277,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     'align-self': props.alignSelf,
     width: typeof props.width === 'number' ? `${props.width}px` : props.width,
     minWidth: typeof props.minWidth === 'number' ? `${props.minWidth}px` : props.minWidth,
+    maxWidth: typeof props.maxWidth === 'number' ? `${props.maxWidth}px` : props.maxWidth,
     height: typeof props.height === 'number' ? `${props.height}px` : props.height,
     minHeight: typeof props.minHeight === 'number' ? `${props.minHeight}px` : props.minHeight,
     flex: props.flex,
@@ -257,11 +296,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     ...bbStyles,
     ...blStyles,
     ...brStyles,
-    'border-radius': typeof props.borderRadius === 'number' ? `${props.borderRadius}px` : props.borderRadius,
-    'border-top-left-radius': typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
-    'border-top-right-radius': typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
-    'border-bottom-left-radius': typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
-    'border-bottom-right-radius': typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
+    ...borderRadiusStyles,
   }
 
   return _.map(styles, (v, k) => {
