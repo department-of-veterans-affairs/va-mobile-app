@@ -53,10 +53,11 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
         const isSelected = selected === value
 
         const a11yProps: AccessibilityProps = {
-          accessibilityLabel: `${a11yLabel || title}. ${t('tabPositionOf', { position: index + 1, tabTotal: tabs.length })}`,
+          accessibilityLabel: a11yLabel || title,
           accessibilityHint: a11yHint,
           accessibilityRole: 'tab',
           accessibilityState: { selected: isSelected },
+          accessibilityValue: { text: t('positionOf', { position: index + 1, tabTotal: tabs.length }) },
         }
         return (
           <Box key={index} flexGrow={1} flexShrink={0} borderBottomColor={getBorderColor(isSelected)} borderBottomWidth={2.5}>
