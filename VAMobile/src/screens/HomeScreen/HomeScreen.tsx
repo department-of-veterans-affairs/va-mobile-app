@@ -13,7 +13,7 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
-import { getVersionName } from 'utils/deviceData'
+import { getBuildNumber, getVersionName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { requestStorePopup, requestStoreVersion } from 'utils/rnStoreVersion'
@@ -45,9 +45,16 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     async function getVersion() {
-      const version = await getVersionName()
-      if (componentMounted.current) {
-        setVersionName(version)
+      if (isIOS()) {
+        const version = await getVersionName()
+        if (componentMounted.current) {
+          setVersionName(version)
+        }
+      } else {
+        const version = await getBuildNumber()
+        if (componentMounted.current) {
+          setVersionName(version.toString())
+        }
       }
     }
 
@@ -60,10 +67,17 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
     async function checkStoreVersion() {
       const result = await requestStoreVersion()
-      const parsedString = result.split(', ')
-      const version = parsedString[0] + '.'
-      if (componentMounted.current) {
-        setStoreVersionScreen(version)
+      if (isIOS()) {
+        // includes minimumOsVersion and supported devices
+        const parsedString = result.split(', ')
+        const version = parsedString[0] + '.'
+        if (componentMounted.current) {
+          setStoreVersionScreen(version)
+        }
+      } else {
+        if (componentMounted.current) {
+          setStoreVersionScreen(result)
+        }
       }
     }
     checkStoreVersion()

@@ -42,7 +42,7 @@ class RNStoreVersion: NSObject, RCTBridgeModule {
      resolve(resolvedString)
     }
    } catch _ as NSError {
-     resolve("0.0.0.0")
+     resolve("0.0.0")
    }
      
    }
