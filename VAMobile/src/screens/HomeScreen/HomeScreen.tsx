@@ -143,6 +143,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     const result = await requestStorePopup()
     if (result && isIOS()) {
       openAppStore()
+    } else if (result) {
+      setVersionName(storeVersion ? storeVersion : '0.0.0')
     }
   }
 
