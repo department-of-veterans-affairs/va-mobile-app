@@ -12,14 +12,9 @@ export const exampleString = `const middleTextLines: Array<TextLine> =
 ]\n
 const bottomText: Array<TextLine> = [{ text: 'bottom line 1', variant: 'MobileBodyBold' }]\n
 const props: MultiTouchCardProps = {
-    topText: 'top part',
-    topTextColor: 'primaryContrast',
-    a11yValue: 'Prescription 1 of 1',
-    topA11yHint: 'Review status definition',
-    topIconColor: 'infoIconContrast',
-    middleContent: <TextLines listOfText={middleTextLines} />,
-    middleA11yHint: 'Review prescription details',
-    topBackgroundColor: 'completedPhase',
+    orderIdentifier: 'Prescription 1 of 1',
+    mainContent: <TextLines listOfText={middleTextLines} />,
+    mainA11yLabel: 'Review prescription details',
     bottomContent: <TextLines listOfText={bottomText} />,
     bottomA11yHint: 'Review tracking details',
 }\n

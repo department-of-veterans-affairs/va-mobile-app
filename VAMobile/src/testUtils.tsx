@@ -5,7 +5,6 @@ import { ThemeProvider } from 'styled-components'
 import React, { ElementType } from 'react'
 import i18nReal from 'utils/i18n'
 import { RootState } from 'store'
-import { SuiteFunction } from 'mocha'
 import path from 'path'
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
 import { NavigationContainer } from '@react-navigation/native'
@@ -30,6 +29,7 @@ import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 import vaccineReducer from 'store/slices/vaccineSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
+import requestAppoitnmentReducer from 'store/slices/requestAppointmentSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import { InitialState } from 'store/slices'
 import theme from 'styles/themes/standardTheme'
@@ -147,6 +147,7 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       snackBar: snackbarReducer,
       vaccine: vaccineReducer,
       payments: paymentsReducer,
+      requestAppointment: requestAppoitnmentReducer,
       prescriptions: prescriptionsReducer,
     },
     middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
@@ -226,7 +227,7 @@ ctxFn.skip = (name: string, fn: () => void) => {
   return ctxReq(name, fn, false, true)
 }
 
-export const context: SuiteFunction = ctxFn
+export const context = ctxFn
 
 //@ts-ignore
 function render(ui, { preloadedState, navigationProvided = false, ...renderOptions } = {}) {

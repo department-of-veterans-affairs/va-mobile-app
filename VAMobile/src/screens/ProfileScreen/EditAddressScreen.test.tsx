@@ -17,7 +17,7 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
 import { SnackbarMessages } from 'components/SnackBar'
 
-const snackbarMessages : SnackbarMessages = {
+const snackbarMessages: SnackbarMessages = {
   successMsg: 'Mailing address saved',
   errorMsg: 'Mailing address could not be saved',
 }

@@ -42,6 +42,7 @@ export const getSortOrderOptionsForSortBy = (sortBy: PrescriptionSortOptions | '
         {
           value: ASCENDING,
           labelKey: t('prescriptions.sort.atoz'),
+          a11yLabel: t('prescriptions.sort.atoz.a11y'),
         },
         {
           value: '',
