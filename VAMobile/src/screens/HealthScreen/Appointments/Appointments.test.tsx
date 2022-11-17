@@ -13,8 +13,6 @@ import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import { featureEnabled } from 'utils/remoteConfig'
-import { when } from 'jest-when'
-import { request } from 'http'
 
 type mockAppointmentServiceErrors = {
   pastVaServiceError?: boolean
