@@ -76,7 +76,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         }
       } else {
         if (componentMounted.current) {
-          setStoreVersionScreen(result)
+          setStoreVersionScreen(result.toString())
         }
       }
     }
@@ -141,7 +141,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   const callRequestStorePopup = async () => {
     const result = await requestStorePopup()
-    if (result) {
+    if (result && isIOS()) {
       openAppStore()
     }
   }
@@ -157,10 +157,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const onUpdatePressed = (): void => {
-    if (isIOS()) {
-      callRequestStorePopup()
-    } else {
-    }
+    callRequestStorePopup()
   }
 
   const onSkipPressed = (): void => {
