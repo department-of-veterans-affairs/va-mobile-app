@@ -7,7 +7,15 @@ import { context, findByTestID, mockStore, render, RenderAPI } from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
-import { ErrorsState, initialAuthorizedServicesState, initialAuthState, initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState } from 'store/slices'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  initialMilitaryServiceState,
+  MilitaryServiceState,
+} from 'store/slices'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -27,7 +35,7 @@ context('MilitaryInformationScreen', () => {
     },
   ]
 
-  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState, needDataLoad = true) => {
+  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState, needsDataLoad = true) => {
     component = render(<MilitaryInformationScreen />, {
       preloadedState: {
         auth: { ...initialAuthState },
@@ -36,8 +44,8 @@ context('MilitaryInformationScreen', () => {
           loading,
           serviceHistory,
           mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
-          needDataLoad,
-        },
+          needDataLoad: needsDataLoad,
+        } as MilitaryServiceState,
         authorizedServices: {
           ...initialAuthorizedServicesState,
           militaryServiceHistory: true,
