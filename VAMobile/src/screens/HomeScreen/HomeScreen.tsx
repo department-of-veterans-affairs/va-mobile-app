@@ -133,7 +133,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const openAppStore = () => {
-    const link = 'itms-apps:' + APPLE_STORE_LINK
+    const link = APPLE_STORE_LINK
     Linking.canOpenURL(link).then(
       (supported) => {
         supported && Linking.openURL(link)
