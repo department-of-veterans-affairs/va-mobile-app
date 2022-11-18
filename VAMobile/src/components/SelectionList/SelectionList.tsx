@@ -1,4 +1,4 @@
-import { Pressable } from 'react-native'
+import { Pressable, PressableProps } from 'react-native'
 import { mapObject, values } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
@@ -117,11 +117,18 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
     flexWrap: 'wrap',
   }
 
+  const pressableProps: PressableProps = {
+    onPress: onSelectAll,
+    accessibilityState: { checked: numSelected === 0 ? false : numSelected === items.length ? true : 'mixed' },
+    accessibilityRole: 'checkbox',
+    accessibilityLabel: t('select.all'),
+  }
+
   return (
     <Box>
       <Box {...headerWrapperProps}>
         <TextView variant={'HelperText'}>{t('selectedOutOfTotal', { selected: numSelected, total: items.length })}</TextView>
-        <Pressable onPress={onSelectAll} accessibilityState={{ checked: numSelected === 0 ? false : numSelected === items.length ? true : 'mixed' }} accessibilityRole={'checkbox'}>
+        <Pressable {...pressableProps}>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <TextView variant={'HelperText'}>{t('select.all')}</TextView>
             {getSelectAllIcon()}
