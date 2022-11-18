@@ -38,6 +38,7 @@
   "greetings.afternoon": "Good afternoon",
   "greetings.evening": "Good evening",
   "healthCare.subText": "Review your appointments, send messages, and get your vaccine records",
+  "healthCare.subText.rxRefill.enabled": "Manage your VA prescriptions, review your appointments, send messages, and get your vaccine records",
   "healthCare.title": "Health care",
   "letters.title": "Letters",
   "letters.subText": "Download common VA letters and documents",
