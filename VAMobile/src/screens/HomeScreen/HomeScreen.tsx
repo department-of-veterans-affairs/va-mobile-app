@@ -6,7 +6,6 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton, VAButton } from 'components'
 import { DateTime } from 'luxon'
-import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
@@ -38,7 +37,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.fullName || ''
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const [localVersionName, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
@@ -194,7 +192,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             {heading}
           </TextView>
         </Box>
-        {demoMode && skippedVersion !== storeVersion && localVersionName !== storeVersion && getEncourageUpdateAlert()}
+        {skippedVersion !== storeVersion && localVersionName !== storeVersion && getEncourageUpdateAlert()}
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('claimsAndAppeals.title')}

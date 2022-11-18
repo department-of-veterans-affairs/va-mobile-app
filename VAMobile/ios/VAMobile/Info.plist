@@ -86,10 +86,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>itms-apps</string>
-	</array>
 	<key>aps-environment</key>
 	<string>production</string>
 </dict>
