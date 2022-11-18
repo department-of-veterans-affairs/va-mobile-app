@@ -15,6 +15,7 @@ import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/typ
 import { createStackNavigator } from '@react-navigation/stack'
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
+import { featureEnabled } from 'utils/remoteConfig'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { requestStorePopup, requestStoreVersion } from 'utils/rnStoreVersion'
 import { retrieveVersionSkipped, setVersionSkipped } from 'store/slices/authSlice'
@@ -206,7 +207,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('healthCare.title')}
-            subText={t('healthCare.subText')}
+            subText={featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
