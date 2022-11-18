@@ -322,10 +322,10 @@ context('PrescriptionHistory', () => {
         await waitFor(() => {
           initializeTestInstance()
         })
+        
         const footerButtons = testInstance.findAllByType(FooterButton)
-        // [0] and [1] are Apply buttons from the sort and filter
-        expect(footerButtons.length).toEqual(3)
-        expect(footerButtons[2].props.text).toEqual('Start refill request')
+        expect(footerButtons.length).toEqual(1)
+        expect(footerButtons[0].props.text).toEqual('Start refill request')
       })
     })
 
@@ -336,10 +336,7 @@ context('PrescriptionHistory', () => {
         })
 
         const footerButtons = testInstance.findAllByType(FooterButton)
-        // [0] and [1] are Apply buttons from the sort and filter
-        expect(footerButtons.length).toEqual(2)
-        expect(footerButtons[0].props.text).not.toEqual('Start refill request')
-        expect(footerButtons[1].props.text).not.toEqual('Start refill request')
+        expect(footerButtons.length).toEqual(0)
       })
     })
   })

@@ -3,12 +3,12 @@ import React from 'react'
 import * as api from 'store/api'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, waitForElementToBeRemoved, when } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
 
 import AppealDetailsScreen from './AppealDetailsScreen'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { appeal as appealData } from '../appealData'
-import {ErrorComponent, LoadingComponent, SegmentedControl, TextView} from 'components'
+import { ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
 import AppealStatus from './AppealStatus/AppealStatus'
 import AppealIssues from './AppealIssues/AppealIssues'
 import { AppealEventData, AppealTypes } from 'store/api/types'
@@ -28,16 +28,17 @@ context('AppealDetailsScreen', () => {
 
   const mockApiCall = (type?: AppealTypes, events?: Array<AppealEventData>) => {
     when(api.get as jest.Mock)
-        .calledWith(`/v0/appeal/0`, {}, expect.anything())
-        .mockResolvedValue({ data: {
-            ...appealData,
-            type: type ? type : 'appeal',
-            attributes: {
-              ...appealData.attributes,
-              events: events || appealData.attributes.events,
-            },
-          }
-        })
+      .calledWith(`/v0/appeal/0`, {}, expect.anything())
+      .mockResolvedValue({
+        data: {
+          ...appealData,
+          type: type ? type : 'appeal',
+          attributes: {
+            ...appealData.attributes,
+            events: events || appealData.attributes.events,
+          },
+        },
+      })
 
     initializeTestInstance()
   }
@@ -45,16 +46,20 @@ context('AppealDetailsScreen', () => {
   const initializeTestInstance = (loadingAppeal: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
     goBack = jest.fn()
     abortLoadSpy = jest.fn()
-    props = mockNavProps(undefined, {
-      navigate: jest.fn(),
-      addListener: jest.fn(),
-      setOptions: (options: Partial<StackNavigationOptions>) => {
-        navHeaderSpy = {
-          back: options.headerLeft ? options.headerLeft({}) : undefined,
-        }
+    props = mockNavProps(
+      undefined,
+      {
+        navigate: jest.fn(),
+        addListener: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+          }
+        },
+        goBack,
       },
-      goBack,
-    }, { params: { appealID: '0' } })
+      { params: { appealID: '0' } },
+    )
 
     component = render(<AppealDetailsScreen {...props} />, {
       preloadedState: {
@@ -63,7 +68,7 @@ context('AppealDetailsScreen', () => {
           ...InitialState.claimsAndAppeals,
           loadingAppeal,
           cancelLoadingDetailScreen: {
-            abort: abortLoadSpy
+            abort: abortLoadSpy,
           },
         },
         errors: errorsState,
@@ -83,7 +88,7 @@ context('AppealDetailsScreen', () => {
   describe('when loadingClaim is set to true', () => {
     it('should show loading screen', async () => {
       await waitFor(() => {
-        initializeTestInstance( true)
+        initializeTestInstance(true)
         expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
       })
     })
@@ -169,7 +174,7 @@ context('AppealDetailsScreen', () => {
   describe('when the type is appeal', () => {
     it('should display "Appeal for {{ programArea }}" as the title', async () => {
       await waitFor(async () => {
-        mockApiCall('appeal', )
+        mockApiCall('appeal')
         initializeTestInstance()
       })
 
@@ -222,18 +227,15 @@ context('AppealDetailsScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockRejectedValue({ networkError: true } as api.APIError)
 
       await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+        initializeTestInstance(false)
       })
+
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async () => {
