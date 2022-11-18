@@ -45,7 +45,7 @@
     "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/picker": "^1.8.1",
-    "@react-native-cookies/cookies": "^6.0.11",
+    "@react-native-cookies/cookies": "^6.2.1",
     "@react-native-firebase/analytics": "^14.5.0",
     "@react-native-firebase/app": "^14.5.0",
     "@react-native-firebase/crashlytics": "^14.5.0",
