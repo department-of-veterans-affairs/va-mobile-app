@@ -60,8 +60,8 @@ context('ClaimDetailsScreen', () => {
           loadingClaim,
           claim: claim,
           cancelLoadingDetailScreen: {
-            abort: abortLoadSpy
-          }
+            abort: abortLoadSpy,
+          },
         },
         errors: errorsState,
       },
@@ -122,18 +122,15 @@ context('ClaimDetailsScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .mockRejectedValue({ networkError: true } as api.APIError)
 
       await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+        initializeTestInstance(false)
       })
+
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async () => {

@@ -2,8 +2,8 @@ import 'react-native'
 import React from 'react'
 import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, render } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, findByTestID, findByTypeWithName, mockNavProps, render } from 'testUtils'
 
 import PastAppointments from './PastAppointments'
 import {} from 'store/slices'
@@ -15,9 +15,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getAppointmentsInDateRange, ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import VAModalPicker from 'components/FormWrapper/FormFields/Picker/VAModalPicker'
 import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
-import { bookedAppointmentsList } from 'store/slices/appointmentsSlice.test'
 import { RenderAPI, waitFor } from '@testing-library/react-native'
-import waitForClickable from 'webdriverio/build/commands/element/waitForClickable'
 
 const mockNavigationSpy = jest.fn()
 const mockNavigateToSpy = jest.fn()
@@ -206,7 +204,7 @@ context('PastAppointments', () => {
     it('should render the first line of the appointment item as the text "Canceled"', async () => {
       await waitFor(() => {
         initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED))
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('CANCELED')
+        expect(findByTypeWithName(testInstance, TextView, 'CANCELED')).toBeTruthy()
       })
     })
   })
@@ -215,7 +213,7 @@ context('PastAppointments', () => {
     it('should render the first line of the appointment item as the text "CANCELLED"', async () => {
       await waitFor(() => {
         initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED, true))
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('CANCELED')
+        expect(findByTypeWithName(testInstance, TextView, 'CANCELED')).toBeTruthy()
       })
     })
   })
@@ -225,7 +223,7 @@ context('PastAppointments', () => {
     it('should render the first line of the appointment item as the text "PENDING"', async () => {
       await waitFor(() => {
         initializeTestInstance(appointmentData(AppointmentStatusConstants.SUBMITTED, true))
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('PENDING')
+        expect(findByTypeWithName(testInstance, TextView, 'PENDING')).toBeTruthy()
       })
     })
   })

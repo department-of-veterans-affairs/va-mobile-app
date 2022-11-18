@@ -8,7 +8,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { initialAuthState } from 'store/slices'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
 import { ClickForActionLink, FooterButton, TextView} from 'components'
-import { PrescriptionAttributeData, RefillStatus, RefillStatusConstants } from 'store/api/types'
+import { PrescriptionAttributeData, RefillStatusConstants } from 'store/api/types'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 context('PrescriptionDetails', () => {
@@ -139,7 +139,8 @@ context('PrescriptionDetails', () => {
 
         const footerButton = testInstance.findAllByType(FooterButton)
         expect(footerButton.length).toBe(1)
-        expect(footerButton[0].props.text).toEqual('Request refill')
+        // Due to conditional nature, doesn't pull display text because of _zero, _one, _other suffixes in health.json
+        expect(footerButton[0].props.text).toEqual('prescriptions.refill.RequestRefillButtonTitle')
       })
     })
 

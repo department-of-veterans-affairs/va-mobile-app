@@ -4,7 +4,8 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
+import * as api from 'store/api'
+import { context, findByTypeWithText, mockNavProps, render, RenderAPI, when } from 'testUtils'
 import { initialAuthState, initialErrorsState, initialVaccineState } from 'store/slices'
 import { LoadingComponent, TextView } from 'components'
 import VaccineListScreen from './VaccineListScreen'
@@ -15,6 +16,37 @@ context('VaccineListScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
+  const vaccineData: api.VaccineList = [
+    {
+      id: 'I2-A7XD2XUPAZQ5H4Y5D6HJ352GEQ000000',
+      type: 'immunization',
+      attributes: {
+        cvxCode: 140,
+        date: '2009-03-19T12:24:55Z',
+        doseNumber: 'Booster',
+        doseSeries: 1,
+        groupName: 'FLU',
+        manufacturer: null,
+        note: 'Dose #45 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.',
+        shortDescription: 'Influenza  seasonal  injectable  preservative free',
+      },
+    },
+    {
+      id: 'I2-N7A6Q5AU6W5C6O4O7QEDZ3SJXM000000',
+      type: 'immunization',
+      attributes: {
+        cvxCode: 207,
+        date: '2020-12-18T12:24:55Z',
+        doseNumber: null,
+        doseSeries: null,
+        groupName: 'COVID-19',
+        manufacturer: null,
+        note: 'Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.',
+        shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
+      },
+    },
+  ]
+
   const initializeTestInstance = (loaded: boolean = true, noVaccines: boolean = false) => {
     props = mockNavProps()
 
@@ -23,38 +55,6 @@ context('VaccineListScreen', () => {
         auth: { ...initialAuthState },
         vaccine: {
           ...initialVaccineState,
-          vaccines: noVaccines
-            ? []
-            : [
-                {
-                  id: 'I2-A7XD2XUPAZQ5H4Y5D6HJ352GEQ000000',
-                  type: 'immunization',
-                  attributes: {
-                    cvxCode: 140,
-                    date: '2009-03-19T12:24:55Z',
-                    doseNumber: 'Booster',
-                    doseSeries: 1,
-                    groupName: 'FLU',
-                    manufacturer: null,
-                    note: 'Dose #45 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.',
-                    shortDescription: 'Influenza  seasonal  injectable  preservative free',
-                  },
-                },
-                {
-                  id: 'I2-N7A6Q5AU6W5C6O4O7QEDZ3SJXM000000',
-                  type: 'immunization',
-                  attributes: {
-                    cvxCode: 207,
-                    date: '2020-12-18T12:24:55Z',
-                    doseNumber: null,
-                    doseSeries: null,
-                    groupName: 'COVID-19',
-                    manufacturer: null,
-                    note: 'Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.',
-                    shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
-                  },
-                },
-              ],
           loading: !loaded,
         },
         errors: initialErrorsState,
@@ -82,20 +82,30 @@ context('VaccineListScreen', () => {
 
   describe('when showing the list', () => {
     it('should show the correct list items', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/immunizations', expect.anything())
+        .mockResolvedValue({ data: vaccineData })
+
       await waitFor(() => {
         initializeTestInstance()
-        expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'FLU vaccine')).toBeTruthy()
       })
+
+      expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'FLU vaccine')).toBeTruthy()
     })
   })
 
   describe('when there are no vaccines', () => {
     it('should show no Vaccine Records', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/immunizations', expect.anything())
+        .mockResolvedValue({ data: [] })
+
       await waitFor(() => {
         initializeTestInstance(true, true)
-        expect(findByTypeWithText(testInstance, TextView, "We couldn't find information about your V\ufeffA vaccines")).toBeTruthy()
       })
+
+      expect(findByTypeWithText(testInstance, TextView, "We couldn't find information about your V\ufeffA vaccines")).toBeTruthy()
     })
   })
 })
