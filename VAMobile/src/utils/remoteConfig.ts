@@ -23,14 +23,14 @@ type FeatureToggleValues = {
   testFeature: boolean
 }
 
-let devConfig: FeatureToggleValues = {
+export let devConfig: FeatureToggleValues = {
   appointmentRequests: true,
   prescriptions: true,
   SIS: true,
   testFeature: true,
 }
 
-const productionDefaults: FeatureToggleValues = {
+export const productionDefaults: FeatureToggleValues = {
   appointmentRequests: false,
   prescriptions: false,
   SIS: false,
@@ -64,21 +64,27 @@ export const activateRemoteConfig = async (): Promise<void> => {
     }
 
     if (!isProduction) {
-      // Check if we have any overrides stored in AsyncStorage
-      const overrides = await AsyncStorage.getItem(REMOTE_CONFIG_OVERRIDES_KEY)
-      if (overrides) {
-        console.debug('Remote Config: Found overrides in AsyncStorage. Applying')
-        overrideRemote = true
-        devConfig = JSON.parse(overrides) as FeatureToggleValues
-      } else {
-        console.debug('Remote Config: No overrides found in AsyncStorage. Applying dev defaults')
-      }
+      await loadOverrides()
     }
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
     console.debug('activateRemoteConfig: Failed to activate remote config')
     console.error(err)
     return undefined
+  }
+}
+
+/**
+ * Checks if we have any feature toggle overrides stored in AsyncStorage and loads them if so
+ */
+export const loadOverrides = async (): Promise<void> => {
+  const overrides = await AsyncStorage.getItem(REMOTE_CONFIG_OVERRIDES_KEY)
+  if (overrides) {
+    console.debug('Remote Config: Found overrides in AsyncStorage. Applying')
+    overrideRemote = true
+    devConfig = JSON.parse(overrides) as FeatureToggleValues
+  } else {
+    console.debug('Remote Config: No overrides found in AsyncStorage')
   }
 }
 
