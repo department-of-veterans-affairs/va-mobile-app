@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
@@ -12,18 +11,17 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
-import { getBuildNumber, getVersionName } from 'utils/deviceData'
-import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/encourageUpdate'
+import { isIOS } from 'utils/platform'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { requestStorePopup, requestStoreVersion } from 'utils/rnStoreVersion'
-import { retrieveVersionSkipped, setVersionSkipped } from 'store/slices/authSlice'
+import { requestStorePopup } from 'utils/rnStoreVersion'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
-const { APPLE_STORE_LINK, WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
@@ -43,45 +41,29 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const componentMounted = useRef(true)
 
   useEffect(() => {
-    async function getVersion() {
-      if (isIOS()) {
-        const version = await getVersionName()
-        if (componentMounted.current) {
-          setVersionName(version)
-        }
-      } else {
-        const version = await getBuildNumber()
-        if (componentMounted.current) {
-          setVersionName(version.toString())
-        }
+    async function checkLocalVersion() {
+      const version = await getEncourageUpdateLocalVersion()
+      if (componentMounted.current) {
+        setVersionName(version)
       }
     }
 
     async function checkSkippedVersion() {
-      const version = await retrieveVersionSkipped()
+      const version = await getVersionSkipped()
       if (componentMounted.current) {
         setSkippedVersionHomeScreen(version)
       }
     }
 
     async function checkStoreVersion() {
-      const result = await requestStoreVersion()
-      if (isIOS()) {
-        // includes minimumOsVersion and supported devices
-        const parsedString = result.split(', ')
-        const version = parsedString[0] + '.'
-        if (componentMounted.current) {
-          setStoreVersionScreen(version)
-        }
-      } else {
-        if (componentMounted.current) {
-          setStoreVersionScreen(result.toString())
-        }
+      const result = await getStoreVersion()
+      if (componentMounted.current) {
+        setStoreVersionScreen(result)
       }
     }
     checkStoreVersion()
     checkSkippedVersion()
-    getVersion()
+    checkLocalVersion()
     return () => {
       componentMounted.current = false
     }
@@ -145,16 +127,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     } else if (result) {
       setVersionName(storeVersion ? storeVersion : '0.0.0')
     }
-  }
-
-  const openAppStore = () => {
-    const link = APPLE_STORE_LINK
-    Linking.canOpenURL(link).then(
-      (supported) => {
-        supported && Linking.openURL(link)
-      },
-      (err) => console.log(err),
-    )
   }
 
   const onUpdatePressed = (): void => {

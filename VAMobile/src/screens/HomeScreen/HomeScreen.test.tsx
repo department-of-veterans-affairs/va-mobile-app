@@ -1,15 +1,18 @@
 import 'react-native'
+import { NativeModules } from 'react-native'
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
-import { LargeNavButton, TextView } from 'components'
+import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
+
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -32,6 +35,22 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+const getItemMock = AsyncStorage.getItem as jest.Mock
+
+NativeModules.DeviceData = {
+  deviceName: 'Device Name',
+  getDeviceName: jest.fn().mockReturnValue('Device Name'),
+  versionName: 'v0.0.0',
+  getVersionName: jest.fn().mockReturnValue('v0.0.0'),
+  buildNumber: 0,
+  getBuildNumber: jest.fn().mockReturnValue(0),
+}
+
+NativeModules.RNStoreVersion = {
+  storeVersion: '2.0.0',
+  requestStoreVersion: jest.fn().mockReturnValue('2.0.0'),
+}
+
 context('HomeScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
@@ -40,6 +59,7 @@ context('HomeScreen', () => {
 
   const initializeTestInstance = (prescriptionsEnabled: boolean = false) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
+    when(getItemMock).calledWith('@store_app_version_skipped').mockResolvedValue('1.0.0')
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     component = render(<HomeScreen {...props} />)
@@ -101,36 +121,18 @@ context('HomeScreen', () => {
     })
   })
 
-  // describe('rendering the update alert', () => {
-  //   it('should render if the local version is behind the store version and a previous skip not recorded for that store version', async () => {
-      
-  //   })
-  //   it('should render the update now button', async () => {
-      
-  //   })
+  describe('rendering the update alert', () => {
+    it('should render the UI', async () => {
+      expect(testInstance.findAllByType(AlertBox)[0].props.title).toEqual('Update available')
+    })
+    it('should render the update now button', async () => {
+      expect(testInstance.findAllByType(VAButton)[0].props.label).toEqual('Update now')
+    })
 
-  //   it('should render the skip this update button', async () => {
-      
-  //   })
-  //   it('should not render if the local version is the same as the store version', async () => {
-      
-  //   })
-  //   it('should not render if the local version is behind the store version and a previous skip was recorded for that store version', async () => {
-      
-  //   })
-  // })
-
-  // describe('when update now is pressed', () => {
-  //   it('should call update pressed', async () => {
-      
-  //   })
-  // })
-
-  // describe('when skip this update is pressed', () => {
-  //   it('should call skip pressed', async () => {
-      
-  //   })
-  // })
+    it('should render the skip this update button', async () => {
+      expect(testInstance.findAllByType(VAButton)[1].props.label).toEqual('Skip this update')
+    })
+  })
 
   describe('when rendering the home nav buttons', () => {
     it('should render the claims button', async () => {
