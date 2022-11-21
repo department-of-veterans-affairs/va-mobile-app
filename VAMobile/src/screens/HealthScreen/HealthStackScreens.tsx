@@ -11,6 +11,7 @@ import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
+import ChildTemplate from 'templates/FeatureLandingAndChildTemplate'
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
@@ -35,6 +36,7 @@ import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
   Appointments: undefined
+  AppointmentsPROTOTYPE: undefined
   UpcomingAppointmentDetails: {
     appointmentID: string
   }
@@ -144,6 +146,12 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     //   options={{ title: t('secure_messaging.inbox_messages') }}
     // />,
     <HealthStack.Screen key={'Appointments'} name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />,
+    <HealthStack.Screen
+      key={'AppointmentsPROTOTYPE'}
+      name="AppointmentsPROTOTYPE"
+      component={ChildTemplate}
+      options={{ headerShown: false, title: t('appointments.appointments') }}
+    />,
     <HealthStack.Screen
       key={'UpcomingAppointmentDetails'}
       name="UpcomingAppointmentDetails"

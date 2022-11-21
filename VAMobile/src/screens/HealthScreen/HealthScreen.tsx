@@ -33,7 +33,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const hasCernerFacilities = useHasCernerFacilities()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
-  const onAppointments = navigateTo('Appointments')
+  const onAppointments = navigateTo('AppointmentsPROTOTYPE')
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
   const onPharmacy = navigateTo('PrescriptionHistory')
