@@ -36,6 +36,7 @@ jest.mock('utils/hooks', () => {
 })
 
 const getItemMock = AsyncStorage.getItem as jest.Mock
+const mockFeatureEnabled = featureEnabled as jest.Mock
 
 NativeModules.DeviceData = {
   deviceName: 'Device Name',
