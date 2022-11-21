@@ -56,6 +56,7 @@ context('HomeScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
+  let mockFeatureEnabled = featureEnabled as jest.Mock
 
   const initializeTestInstance = (prescriptionsEnabled: boolean = false) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
