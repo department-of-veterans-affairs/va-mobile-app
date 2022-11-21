@@ -130,7 +130,7 @@
     "detox": "^19.8.1",
     "eslint": "^8.28.0",
     "eslint-plugin-react": "^7.31.11",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.0.0",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "jest": "^27.4.7",
