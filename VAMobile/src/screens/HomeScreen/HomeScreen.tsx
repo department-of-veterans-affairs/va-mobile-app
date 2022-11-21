@@ -1,10 +1,11 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
-import { CrisisLineCta, LargeNavButton, VAButton } from 'components'
+import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
+import { CrisisLineCta, LargeNavButton } from 'components'
 import { DateTime } from 'luxon'
+import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
@@ -12,10 +13,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/encourageUpdate'
-import { isIOS } from 'utils/platform'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { requestStorePopup } from 'utils/rnStoreVersion'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -35,39 +33,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.fullName || ''
-  const [localVersionName, setVersionName] = useState<string>()
-  const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
-  const [storeVersion, setStoreVersionScreen] = useState<string>()
-  const componentMounted = useRef(true)
-
-  useEffect(() => {
-    async function checkLocalVersion() {
-      const version = await getEncourageUpdateLocalVersion()
-      if (componentMounted.current) {
-        setVersionName(version)
-      }
-    }
-
-    async function checkSkippedVersion() {
-      const version = await getVersionSkipped()
-      if (componentMounted.current) {
-        setSkippedVersionHomeScreen(version)
-      }
-    }
-
-    async function checkStoreVersion() {
-      const result = await getStoreVersion()
-      if (componentMounted.current) {
-        setStoreVersionScreen(result)
-      }
-    }
-    checkStoreVersion()
-    checkSkippedVersion()
-    checkLocalVersion()
-    return () => {
-      componentMounted.current = false
-    }
-  }, [])
 
   useEffect(() => {
     // Fetch the profile information
@@ -120,41 +85,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
-  const callRequestStorePopup = async () => {
-    const result = await requestStorePopup()
-    if (result && isIOS()) {
-      openAppStore()
-    } else if (result) {
-      setVersionName(storeVersion ? storeVersion : '0.0.0')
-    }
-  }
-
-  const onUpdatePressed = (): void => {
-    callRequestStorePopup()
-  }
-
-  const onSkipPressed = (): void => {
-    setVersionSkipped(storeVersion ? storeVersion : '0.0.0.')
-    setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
-  }
-
-  const getEncourageUpdateAlert = () => {
-    return (
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
-        <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
-          <Box>
-            <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={onUpdatePressed} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />
-            </Box>
-            <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
-              <VAButton onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonTypesConstants.buttonSecondary} />
-            </Box>
-          </Box>
-        </AlertBox>
-      </Box>
-    )
-  }
-
   return (
     <VAScrollView>
       <Box flex={1} justifyContent="flex-start">
@@ -164,7 +94,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             {heading}
           </TextView>
         </Box>
-        {skippedVersion !== storeVersion && localVersionName !== storeVersion && getEncourageUpdateAlert()}
+        <EncourageUpdateAlert />
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
