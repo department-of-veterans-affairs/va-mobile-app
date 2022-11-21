@@ -15,8 +15,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
 
-jest.mock('utils/remoteConfig')
-
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default

@@ -23,8 +23,6 @@ type mockAppointmentServiceErrors = {
   upcomingCcServiceError?: boolean
 }
 
-jest.mock('utils/remoteConfig')
-
 context('AppointmentsScreen', () => {
   let component: RenderAPI
   let testInstance: any
