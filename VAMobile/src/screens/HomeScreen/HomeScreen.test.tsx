@@ -1,5 +1,5 @@
 import 'react-native'
-import { NativeModules } from 'react-native'
+import { Alert, NativeModules } from 'react-native'
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor, findByTypeWithText } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
 import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
 import { when } from 'jest-when'
@@ -37,29 +37,30 @@ jest.mock('utils/hooks', () => {
 
 const getItemMock = AsyncStorage.getItem as jest.Mock
 
-NativeModules.DeviceData = {
-  deviceName: 'Device Name',
-  getDeviceName: jest.fn().mockReturnValue('Device Name'),
-  versionName: 'v0.0.0',
-  getVersionName: jest.fn().mockReturnValue('v0.0.0'),
-  buildNumber: 0,
-  getBuildNumber: jest.fn().mockReturnValue(0),
-}
-
-NativeModules.RNStoreVersion = {
-  storeVersion: '2.0.0',
-  requestStoreVersion: jest.fn().mockReturnValue('2.0.0'),
-}
-
 context('HomeScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
   let mockFeatureEnabled = featureEnabled as jest.Mock
 
-  const initializeTestInstance = (prescriptionsEnabled: boolean = false) => {
+  const initializeTestInstance = (prescriptionsEnabled: boolean = false, skippedVersion: string = '1.0.0', storeVersion: string = '2.0.0', localVersion: string = '0.0.0') => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
-    when(getItemMock).calledWith('@store_app_version_skipped').mockResolvedValue('1.0.0')
+    when(getItemMock).calledWith('@store_app_version_skipped').mockResolvedValue(skippedVersion)
+
+    NativeModules.DeviceData = {
+      deviceName: 'Device Name',
+      getDeviceName: jest.fn().mockReturnValue('Device Name'),
+      versionName: localVersion,
+      getVersionName: jest.fn().mockReturnValue(localVersion),
+      buildNumber: localVersion,
+      getBuildNumber: jest.fn().mockReturnValue(localVersion),
+    }
+    
+    NativeModules.RNStoreVersion = {
+      storeVersion: storeVersion,
+      requestStoreVersion: jest.fn().mockReturnValue(storeVersion),
+    }
+
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     component = render(<HomeScreen {...props} />)
@@ -136,6 +137,22 @@ context('HomeScreen', () => {
     it('should render the skip this update button', async () => {
       await waitFor(() => {
         expect(testInstance.findAllByType(VAButton)[1].props.label).toEqual('Skip this update')
+      })
+    })
+
+    it('should not render if skip version is the same as store version', async () => {
+      
+      await waitFor(() => {
+        initializeTestInstance(false, '1.0.0', '1.0.0', '0.0.0')
+        expect(testInstance.findAllByType(AlertBox)).toBeFalsy()
+      })
+    })
+
+    it('should not render if local version is the same as store version', async () => {
+      
+      await waitFor(() => {
+        initializeTestInstance(false, '0.0.0', '1.0.0', '1.0.0')
+        expect(testInstance.findAllByType(AlertBox)).toBeFalsy()
       })
     })
   })
