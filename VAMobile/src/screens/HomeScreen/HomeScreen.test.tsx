@@ -36,7 +36,6 @@ jest.mock('utils/hooks', () => {
 })
 
 const getItemMock = AsyncStorage.getItem as jest.Mock
-const mockFeatureEnabled = featureEnabled as jest.Mock
 
 NativeModules.DeviceData = {
   deviceName: 'Device Name',
@@ -124,14 +123,20 @@ context('HomeScreen', () => {
 
   describe('rendering the update alert', () => {
     it('should render the UI', async () => {
-      expect(testInstance.findAllByType(AlertBox)[0].props.title).toEqual('Update available')
+      await waitFor(() => {
+        expect(testInstance.findAllByType(AlertBox)[0].props.title).toEqual('Update available')
+      })
     })
     it('should render the update now button', async () => {
-      expect(testInstance.findAllByType(VAButton)[0].props.label).toEqual('Update now')
+      await waitFor(() => {
+        expect(testInstance.findAllByType(VAButton)[0].props.label).toEqual('Update now')
+      })
     })
 
     it('should render the skip this update button', async () => {
-      expect(testInstance.findAllByType(VAButton)[1].props.label).toEqual('Skip this update')
+      await waitFor(() => {
+        expect(testInstance.findAllByType(VAButton)[1].props.label).toEqual('Skip this update')
+      })
     })
   })
 
