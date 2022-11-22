@@ -38,6 +38,7 @@ On VA.gov today, nearly 40% of all traffic comes from users on their mobile devi
 ### Engineering
 - Patrick Saxton - Engineer Leadership
 - Chika Adibemma - Engineer
+- Chris Alexander - Engineer
 - Theo Bentum - Engineer
 - Jon Bindbeutel - Engineer
 - Jason Conigliari - Engineer
