@@ -4,7 +4,7 @@ import { context, realStore, when } from 'testUtils'
 import { defaultPrescriptionsList as mockData, defaultLoadAllPrescriptionsList as loadAllPrescriptionMockData } from 'utils/tests/prescription'
 import { RootState } from 'store'
 import {
-  dispatchClearLoadingRequestRefills,
+  dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad,
   getTrackingInfo,
   initialPrescriptionState, loadAllPrescriptions,
   requestRefills
@@ -20,6 +20,7 @@ export const ActionTypes: {
   PRESCRIPTION_FINISH_GET_TRACKING_INFO: string
   PRESCRIPTION_START_LOAD_ALL_PRESCRIPTIONS: string
   PRESCRIPTION_FINISH_LOAD_ALL_PRESCRIPTIONS: string
+  PRESCRIPTION_SET_PRESCRIPTIONS_NEED_LOAD: string
 } = {
   PRESCRIPTION_START_REQUEST_REFILLS: 'prescriptions/dispatchStartRequestRefills',
   PRESCRIPTION_CONTINUE_REQUEST_REFILLS: 'prescriptions/dispatchContinueRequestRefills',
@@ -29,6 +30,7 @@ export const ActionTypes: {
   PRESCRIPTION_FINISH_GET_TRACKING_INFO: 'prescriptions/dispatchFinishGetTrackingInfo',
   PRESCRIPTION_START_LOAD_ALL_PRESCRIPTIONS: 'prescriptions/dispatchStartLoadAllPrescriptions',
   PRESCRIPTION_FINISH_LOAD_ALL_PRESCRIPTIONS: 'prescriptions/dispatchFinishLoadAllPrescriptions',
+  PRESCRIPTION_SET_PRESCRIPTIONS_NEED_LOAD: 'prescriptions/dispatchSetPrescriptionsNeedLoad',
 }
 
 context('Prescription', () => {
@@ -61,64 +63,6 @@ context('Prescription', () => {
       expect(finishAction).toBeTruthy()
       expect(finishAction?.state.prescriptions.submittedRequestRefillCount).toEqual(2)
       expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
-    })
-
-    describe('if some successfully submit', () => {
-      it('should set needsRefillableLoaded and prescriptionsNeedLoad to true', async () => {
-        when(api.put as jest.Mock)
-            .calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/refill`)
-            .mockResolvedValue({})
-            .calledWith(`/v0/health/rx/prescriptions/${mockData[1].id}/refill`)
-            .mockRejectedValue({})
-
-        const store = realStore()
-        await store.dispatch(requestRefills(mockData))
-        const actions = store.getActions()
-
-        const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
-        expect(finishAction).toBeTruthy()
-        expect(finishAction?.state.prescriptions.refillRequestSummaryItems).toEqual([
-          {
-            data: mockData[0],
-            submitted: true,
-          },
-          {
-            data: mockData[1],
-            submitted: false,
-          }
-        ] as RefillRequestSummaryItems)
-        expect(finishAction?.state.prescriptions.needsRefillableLoaded).toBeTruthy()
-        expect(finishAction?.state.prescriptions.prescriptionsNeedLoad).toBeTruthy()
-      })
-    })
-
-    describe('if all failed to submit', () => {
-      it('should set needsRefillableLoaded and prescriptionsNeedLoad to false', async () => {
-        when(api.put as jest.Mock)
-            .calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/refill`)
-            .mockRejectedValue({})
-            .calledWith(`/v0/health/rx/prescriptions/${mockData[1].id}/refill`)
-            .mockRejectedValue({})
-
-        const store = realStore()
-        await store.dispatch(requestRefills(mockData))
-        const actions = store.getActions()
-
-        const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
-        expect(finishAction).toBeTruthy()
-        expect(finishAction?.state.prescriptions.refillRequestSummaryItems).toEqual([
-          {
-            data: mockData[0],
-            submitted: false,
-          },
-          {
-            data: mockData[1],
-            submitted: false,
-          }
-        ] as RefillRequestSummaryItems)
-        expect(finishAction?.state.prescriptions.needsRefillableLoaded).toBeFalsy()
-        expect(finishAction?.state.prescriptions.prescriptionsNeedLoad).toBeFalsy()
-      })
     })
 
     describe('on RefillScreen', () => {
@@ -166,6 +110,62 @@ context('Prescription', () => {
         expect(finishAction).toBeTruthy()
         expect(finishAction?.state.prescriptions.submittingRequestRefills).toBeFalsy()
         expect(finishAction?.state.prescriptions.showLoadingScreenRequestRefillsRetry).toBeFalsy() // stop spinning
+      })
+    })
+  })
+
+  describe('dispatchSetPrescriptionsNeedLoad', () => {
+    describe('if some successfully submit', () => {
+      it('should set prescriptionsNeedLoad to true', async () => {
+        const store = realStore({
+          prescriptions: {
+            ...initialPrescriptionState,
+            prescriptionsNeedLoad: false,
+            refillRequestSummaryItems: [
+              {
+                data: mockData[0],
+                submitted: true,
+              },
+              {
+                data: mockData[1],
+                submitted: false,
+              }
+            ]
+          }
+        })
+        await store.dispatch(dispatchSetPrescriptionsNeedLoad())
+        const actions = store.getActions()
+
+        const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_SET_PRESCRIPTIONS_NEED_LOAD })
+        expect(finishAction).toBeTruthy()
+        expect(finishAction?.state.prescriptions.prescriptionsNeedLoad).toBeTruthy()
+      })
+    })
+
+    describe('if all failed to submit', () => {
+      it('should set prescriptionsNeedLoad to false', async () => {
+        const store = realStore({
+          prescriptions: {
+            ...initialPrescriptionState,
+            prescriptionsNeedLoad: true,
+            refillRequestSummaryItems: [
+              {
+                data: mockData[0],
+                submitted: false,
+              },
+              {
+                data: mockData[1],
+                submitted: false,
+              }
+            ]
+          }
+        })
+        await store.dispatch(dispatchSetPrescriptionsNeedLoad())
+        const actions = store.getActions()
+
+        const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_SET_PRESCRIPTIONS_NEED_LOAD })
+        expect(finishAction).toBeTruthy()
+        expect(finishAction?.state.prescriptions.prescriptionsNeedLoad).toBeFalsy()
       })
     })
   })

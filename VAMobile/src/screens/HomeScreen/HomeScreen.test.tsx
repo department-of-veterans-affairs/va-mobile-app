@@ -8,6 +8,8 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
 import { LargeNavButton, TextView } from 'components'
+import { when } from 'jest-when'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -34,8 +36,10 @@ context('HomeScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
+  let mockFeatureEnabled = featureEnabled as jest.Mock
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (prescriptionsEnabled: boolean = false) => {
+    when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     component = render(<HomeScreen {...props} />)
@@ -96,6 +100,37 @@ context('HomeScreen', () => {
       })
     })
   })
+
+  // describe('rendering the update alert', () => {
+  //   it('should render if the local version is behind the store version and a previous skip not recorded for that store version', async () => {
+      
+  //   })
+  //   it('should render the update now button', async () => {
+      
+  //   })
+
+  //   it('should render the skip this update button', async () => {
+      
+  //   })
+  //   it('should not render if the local version is the same as the store version', async () => {
+      
+  //   })
+  //   it('should not render if the local version is behind the store version and a previous skip was recorded for that store version', async () => {
+      
+  //   })
+  // })
+
+  // describe('when update now is pressed', () => {
+  //   it('should call update pressed', async () => {
+      
+  //   })
+  // })
+
+  // describe('when skip this update is pressed', () => {
+  //   it('should call skip pressed', async () => {
+      
+  //   })
+  // })
 
   describe('when rendering the home nav buttons', () => {
     it('should render the claims button', async () => {

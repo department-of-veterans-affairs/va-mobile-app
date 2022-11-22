@@ -1,8 +1,9 @@
-import { ViewStyle } from 'react-native'
+import { AccessibilityProps, Pressable, ViewStyle } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { BorderColorVariant, Box, TextView } from 'components'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 export type TabsValuesType = Array<{
@@ -27,6 +28,7 @@ export type TabBarProps = {
 
 const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const mainContainerStyle: ViewStyle = {
     flexDirection: 'row',
@@ -50,20 +52,16 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
         const { a11yHint, title, a11yLabel, value } = tab
         const isSelected = selected === value
 
+        const a11yProps: AccessibilityProps = {
+          accessibilityLabel: a11yLabel || title,
+          accessibilityHint: a11yHint,
+          accessibilityRole: 'tab',
+          accessibilityState: { selected: isSelected },
+          accessibilityValue: { text: t('positionOf', { position: index + 1, tabTotal: tabs.length }) },
+        }
         return (
-          <Box
-            key={index}
-            flexGrow={1}
-            flexShrink={0}
-            borderBottomColor={getBorderColor(isSelected)}
-            borderBottomWidth={2.5}
-            accessibilityLabel={a11yLabel}
-            accessibilityHint={a11yHint}
-            accessibilityRole={'tab'}
-            accessible={true}
-            accessibilityState={{ selected: isSelected }}
-            accessibilityValue={{ text: `tab position ${index + 1} of ${tabs.length}` }}>
-            <TouchableWithoutFeedback onPress={() => onChange(value)} style={tabButtonStyle}>
+          <Box key={index} flexGrow={1} flexShrink={0} borderBottomColor={getBorderColor(isSelected)} borderBottomWidth={2.5}>
+            <Pressable {...a11yProps} onPress={() => onChange(value)} style={tabButtonStyle}>
               <TextView
                 maxFontSizeMultiplier={1.5}
                 variant={isSelected ? 'MobileBodyBold' : 'MobileBody'}
@@ -71,7 +69,7 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
                 textAlign="center">
                 {title}
               </TextView>
-            </TouchableWithoutFeedback>
+            </Pressable>
           </Box>
         )
       })}

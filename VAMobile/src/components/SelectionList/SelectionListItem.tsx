@@ -25,7 +25,7 @@ const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn,
     borderColor: 'primary',
     borderStyle: 'solid',
     px: theme.dimensions.gutter,
-    py: 16,
+    py: theme.dimensions.condensedMarginBetween,
     backgroundColor: isSelected ? 'buttonSecondaryActive' : 'list',
   }
 
