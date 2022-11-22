@@ -25,7 +25,7 @@ Today, nearly 40% of all traffic to VA.gov comes from users on their mobile devi
 
 
 ### UX
-- Jen Ecker - UX Leadership
+- Jennifer Ecker - UX Leadership
 - Holly Collier - Design
 - Melissa Lefevre - Design
 - Lauren Russell - Design
