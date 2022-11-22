@@ -5,7 +5,7 @@ import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/encourageUpdate'
 import { isIOS } from 'utils/platform'
-import { requestStorePopup } from 'utils/rnStoreVersion'
+import { requestStorePopup } from 'utils/rnInAppUpdate'
 import { useTheme } from 'utils/hooks'
 
 export const EncourageUpdateAlert = () => {

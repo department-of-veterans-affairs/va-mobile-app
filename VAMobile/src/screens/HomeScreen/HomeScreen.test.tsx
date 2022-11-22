@@ -1,8 +1,6 @@
 import 'react-native'
-import { NativeModules } from 'react-native'
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'

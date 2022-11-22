@@ -1,5 +1,5 @@
 //
-//  RNStoreVersion.swift
+//  RNInAppUpdate.swift
 //  VAMobile
 //
 //  Created by Dylan Nienberg on 11/11/22.
@@ -7,12 +7,12 @@
 
 import Foundation
 
-@objc(RNStoreVersion)
-class RNStoreVersion: NSObject, RCTBridgeModule {
+@objc(RNInAppUpdate)
+class RNInAppUpdate: NSObject, RCTBridgeModule {
   /// This sends the name of the module to React Native so that it can be imported from NativeModules
-  /// - Returns: "RNStoreVersion"
+  /// - Returns: "RNInAppUpdate"
   static func moduleName() -> String! {
-    return "RNStoreVersion"
+    return "RNInAppUpdate"
   }
   
   /// Tells Native OS to set this module up on the Main thread
