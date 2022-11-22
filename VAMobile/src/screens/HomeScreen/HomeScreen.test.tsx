@@ -6,13 +6,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
+import { mocked } from 'ts-jest/utils'
 
 import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
 import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
-
+import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/encourageUpdate'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -35,17 +36,17 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-const getItemMock = AsyncStorage.getItem as jest.Mock
-
 context('HomeScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
   let mockFeatureEnabled = featureEnabled as jest.Mock
 
-  const initializeTestInstance = (prescriptionsEnabled: boolean = false, mockSkippedVersion: string = '1.0.0.', mockLocalVersion: string = '0.0.0') => {
+  const initializeTestInstance = (prescriptionsEnabled: boolean = false, skippedVersion: string = '1.0.0.', localVersion: string = '0.0.0', storeVersion: string = '2.0.0') => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
-    when(getItemMock).calledWith('@store_app_version_skipped').mockResolvedValue(mockSkippedVersion)
+    mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve(skippedVersion))
+    mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve(localVersion))
+    mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve(storeVersion))
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
@@ -134,7 +135,6 @@ context('HomeScreen', () => {
     })
 
     it('should not render if local version is the same as store version', async () => {
-      
       await waitFor(() => {
         initializeTestInstance(false, '1.0.0.', '2.0.0')
         expect(() => component.getByText('Update available')).toThrow()

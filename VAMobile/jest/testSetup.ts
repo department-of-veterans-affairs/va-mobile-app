@@ -274,3 +274,11 @@ jest.mock('@react-native-firebase/perf', () => {
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 jest.mock('utils/remoteConfig')
+
+jest.mock('utils/encourageUpdate', () => {
+  return {
+    getVersionSkipped: jest.fn(),
+    getStoreVersion: jest.fn(),
+    getEncourageUpdateLocalVersion: jest.fn(),
+  }
+})
