@@ -19,6 +19,11 @@ NativeModules.DeviceData = {
   getBuildNumber: jest.fn().mockReturnValue(0),
 }
 
+NativeModules.RNStoreVersion = {
+  storeVersion: '2.0.0',
+  requestStoreVersion: jest.fn().mockReturnValue('2.0.0'),
+}
+
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 jest.mock('react-native-safe-area-context', () => {
