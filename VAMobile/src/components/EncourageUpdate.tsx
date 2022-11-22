@@ -63,10 +63,6 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
   }
 
-  console.debug('ENCOURAGED UPDATE: localVersionName', localVersionName)
-  console.debug('ENCOURAGED UPDATE: skippedVersion', skippedVersion)
-  console.debug('ENCOURAGED UPDATE: storeVersion', storeVersion)
-
   if (skippedVersion !== storeVersion && localVersionName !== storeVersion) {
     return (
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
