@@ -170,27 +170,27 @@ context('UpcomingAppointments', () => {
 
   describe('when the status is CANCELLED', () => {
     it('should render the first line of the appointment item as the text "Canceled"', async () => {
-      appointmentsByYearData['2020']['3'][0].attributes.status = 'CANCELLED'
+      appointmentsByYearData['2020']['3'][0].attributes.status = 'Canceled'
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('CANCELED')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Canceled')
     })
   })
 
   describe('when the status is CANCELLED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "CANCELLED"', async () => {
+    it('should render the first line of the appointment item as the text "Canceled"', async () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.CANCELLED
       appointmentsByYearData['2020']['3'][0].attributes.isPending = true
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('CANCELED')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Canceled')
     })
   })
 
   describe('when the status is SUBMITTED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "PENDING"', async () => {
+    it('should render the first line of the appointment item as the text "Pending"', async () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.SUBMITTED
       appointmentsByYearData['2020']['3'][0].attributes.isPending = true
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('PENDING')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Pending')
     })
   })
 
