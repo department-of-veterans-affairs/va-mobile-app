@@ -33,7 +33,7 @@ class RNInAppUpdate(val reactContext: ReactApplicationContext) : ReactContextBas
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             promise.resolve(appUpdateInfo.availableVersionCode())
         }.addOnFailureListener { err: Exception ->
-            promise.resolve("checkAppUpdate failure: " + err.toString())
+            promise.resolve("checkAppUpdate failure: $err")
         }
     }
 
