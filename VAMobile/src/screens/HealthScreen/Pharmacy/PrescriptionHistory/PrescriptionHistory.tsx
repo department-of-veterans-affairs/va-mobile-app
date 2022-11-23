@@ -147,7 +147,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     prescriptions: allPrescriptions,
     loadingHistory,
     tabCounts,
-    prescriptionsNeedLoad,
     transferredPrescriptions,
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -217,10 +216,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
     React.useCallback(() => {
-      if (prescriptionsNeedLoad && prescriptionsAuthorized && !prescriptionInDowntime) {
+      if (prescriptionsAuthorized && !prescriptionInDowntime) {
         dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
       }
-    }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized, prescriptionInDowntime]),
+    }, [dispatch, prescriptionsAuthorized, prescriptionInDowntime]),
   )
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
