@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { featureEnabled } from 'utils/remoteConfig'
 import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/encourageUpdate'
 import { isIOS } from 'utils/platform'
 import { requestStorePopup } from 'utils/rnInAppUpdate'
@@ -63,7 +64,7 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
   }
 
-  if (skippedVersion !== storeVersion && localVersionName !== storeVersion) {
+  if (featureEnabled('inAppUpdates') && skippedVersion !== storeVersion && localVersionName !== storeVersion) {
     return (
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
