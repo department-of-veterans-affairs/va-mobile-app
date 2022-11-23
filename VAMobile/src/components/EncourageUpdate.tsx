@@ -50,7 +50,6 @@ export const EncourageUpdateAlert = () => {
 
   const callRequestStorePopup = async () => {
     const result = await requestStorePopup()
-    logAnalyticsEvent(Events.vama_eu_updated())
     if (result && isIOS()) {
       logAnalyticsEvent(Events.vama_eu_updated_success())
       openAppStore()
@@ -61,6 +60,7 @@ export const EncourageUpdateAlert = () => {
   }
 
   const onUpdatePressed = (): void => {
+    logAnalyticsEvent(Events.vama_eu_updated())
     callRequestStorePopup()
   }
 
