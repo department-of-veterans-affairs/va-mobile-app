@@ -325,7 +325,7 @@ context('PrescriptionHistory', () => {
         const vaButtons = testInstance.findAllByType(VAButton)
         // [0] and [1] are Apply buttons from the sort and filter
         expect(vaButtons.length).toEqual(1)
-        expect(vaButtons[0].props.title).toEqual('Start refill request')
+        expect(vaButtons[0].props.label).toEqual('Start refill request')
       })
     })
 
