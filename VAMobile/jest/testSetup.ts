@@ -266,6 +266,18 @@ jest.mock('@react-native-firebase/perf', () => {
   })
 })
 
-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
+jest.mock('@react-native-firebase/remote-config', () => {
+  return jest.fn(() => {
+    return {
+      setDefaults: jest.fn(() => Promise.resolve()),
+      activate: jest.fn(() => Promise.resolve()),
+      fetch: jest.fn(() => Promise.resolve()),
+      getValue: jest.fn(() => ({
+        asBoolean: () => false,
+      })),
+      getAll: jest.fn(() => false),
+    }
+  })
+})
 
-jest.mock('utils/remoteConfig')
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
