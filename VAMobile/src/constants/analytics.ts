@@ -250,6 +250,11 @@ export const Events = {
       name: 'vama_eu_skipped',
     }
   },
+  vama_eu_updated_success: (): Event => {
+    return {
+      name: 'vama_eu_updated_success',
+    }
+  },
   vama_eu_updated: (): Event => {
     return {
       name: 'vama_eu_updated',

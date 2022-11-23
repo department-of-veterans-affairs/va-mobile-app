@@ -50,11 +50,12 @@ export const EncourageUpdateAlert = () => {
 
   const callRequestStorePopup = async () => {
     const result = await requestStorePopup()
+    logAnalyticsEvent(Events.vama_eu_updated())
     if (result && isIOS()) {
-      logAnalyticsEvent(Events.vama_eu_updated())
+      logAnalyticsEvent(Events.vama_eu_updated_success())
       openAppStore()
     } else if (result) {
-      logAnalyticsEvent(Events.vama_eu_updated())
+      logAnalyticsEvent(Events.vama_eu_updated_success())
       setVersionName(storeVersion ? storeVersion : '0.0.0')
     }
   }
