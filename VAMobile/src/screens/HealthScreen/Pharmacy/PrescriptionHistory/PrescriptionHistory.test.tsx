@@ -8,7 +8,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 
 import { PrescriptionHistoryTabs, PrescriptionsGetData } from 'store/api'
 import { initialAuthState, initialPrescriptionState, InitialState} from 'store/slices'
-import { FooterButton, TextView } from 'components'
+import { VAButton, TextView } from 'components'
 import { PrescriptionHistoryTabConstants } from 'store/api/types'
 
 const prescriptionData: PrescriptionsGetData = {
@@ -318,28 +318,25 @@ context('PrescriptionHistory', () => {
 
   describe('StartRefillRequestButton', () => {
     describe('when currentTab is PrescriptionHistoryTabConstants.ALL', () => {
-      it('should show StartRefillRequest footer button', async () => {
+      it('should show StartRefillRequest button', async () => {
         await waitFor(() => {
           initializeTestInstance()
         })
-        const footerButtons = testInstance.findAllByType(FooterButton)
+        const vaButtons = testInstance.findAllByType(VAButton)
         // [0] and [1] are Apply buttons from the sort and filter
-        expect(footerButtons.length).toEqual(3)
-        expect(footerButtons[2].props.text).toEqual('Start refill request')
+        expect(vaButtons.length).toEqual(1)
+        expect(vaButtons[0].props.text).toEqual('Start refill request')
       })
     })
 
     describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
-      it('should not show StartRefillRequest footer button', async () => {
+      it('should not show StartRefillRequest button', async () => {
         await waitFor(() => {
           initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
         })
 
-        const footerButtons = testInstance.findAllByType(FooterButton)
-        // [0] and [1] are Apply buttons from the sort and filter
-        expect(footerButtons.length).toEqual(2)
-        expect(footerButtons[0].props.text).not.toEqual('Start refill request')
-        expect(footerButtons[1].props.text).not.toEqual('Start refill request')
+        const vaButtons = testInstance.findAllByType(VAButton)
+        expect(vaButtons.length).toEqual(0)
       })
     })
   })
