@@ -1,11 +1,11 @@
 /* eslint-disable sort-imports-es6-autofix/sort-imports-es6 */
 import { DateTime } from 'luxon'
-import { Animated, Platform, ScrollView, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { Animated, Platform, ScrollView, StatusBar, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, TextView, VAScrollView } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -20,6 +20,7 @@ import CernerAlert from '../screens/HealthScreen/CernerAlert'
 import NoMatchInRecords from '../screens/HealthScreen/Appointments/NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from '../screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import UpcomingAppointments from '../screens/HealthScreen/Appointments/UpcomingAppointments/UpcomingAppointments'
+import { default as stylesTheme } from 'styles/themes/standardTheme'
 
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
 
@@ -50,10 +51,10 @@ export type ChildTemplateProps = {
   content: ReactNode
 }
 
-const HEADER_MAX_HEIGHT = 200
-const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 60 : 73
-const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
-const SUBHEADER_MAX_HEIGHT = 75
+const HEADER_MAX_HEIGHT = 111
+// const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 60 : 73
+// const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
+const SUBHEADER_MAX_HEIGHT = 67
 
 const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -75,40 +76,40 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
   const [initialScrollY, setInitialScrollY] = useState(new Animated.Value(Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT - SUBHEADER_MAX_HEIGHT : 0))
   const scrollY = Animated.add(initialScrollY, Platform.OS === 'ios' ? HEADER_MAX_HEIGHT + SUBHEADER_MAX_HEIGHT : 0)
 
-  const headerTranslate = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [0, -HEADER_SCROLL_DISTANCE],
-    extrapolate: 'clamp',
-  })
+  // const headerTranslate = scrollY.interpolate({
+  //   inputRange: [0, HEADER_SCROLL_DISTANCE],
+  //   outputRange: [0, -HEADER_SCROLL_DISTANCE],
+  //   extrapolate: 'clamp',
+  // })
 
-  const imageOpacity = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-    outputRange: [1, 1, 0],
-    extrapolate: 'clamp',
-  })
+  // const imageOpacity = scrollY.interpolate({
+  //   inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+  //   outputRange: [1, 1, 0],
+  //   extrapolate: 'clamp',
+  // })
 
-  const imageTranslate = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [0, 100],
-    extrapolate: 'clamp',
-  })
+  // const imageTranslate = scrollY.interpolate({
+  //   inputRange: [0, HEADER_SCROLL_DISTANCE],
+  //   outputRange: [0, 100],
+  //   extrapolate: 'clamp',
+  // })
 
   const subtitleTranslate = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [0, -HEADER_SCROLL_DISTANCE * 1.5],
+    inputRange: [0, SUBHEADER_MAX_HEIGHT],
+    outputRange: [0, -SUBHEADER_MAX_HEIGHT],
     extrapolate: 'clamp',
   })
 
-  const titleScale = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-    outputRange: [1, 1, 0.8],
-    extrapolate: 'clamp',
-  })
-  const titleTranslate = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-    outputRange: [0, 0, -8],
-    extrapolate: 'clamp',
-  })
+  // const titleScale = scrollY.interpolate({
+  //   inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+  //   outputRange: [1, 1, 0.8],
+  //   extrapolate: 'clamp',
+  // })
+  // const titleTranslate = scrollY.interpolate({
+  //   inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+  //   outputRange: [0, 0, -8],
+  //   extrapolate: 'clamp',
+  // })
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -174,6 +175,15 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
 
   return (
     <View style={styles.fill}>
+      <StatusBar translucent barStyle="dark-content" />
+      <Animated.View style={[styles.bar]}>
+        <TextView variant="BitterBoldHeading">VA</TextView>
+      </Animated.View>
+      <Animated.View style={[styles.subheader, { transform: [{ translateY: subtitleTranslate }] }]}>
+        <TextView variant="BitterBoldHeading" m={theme.dimensions.condensedMarginBetween}>
+          Appointments
+        </TextView>
+      </Animated.View>
       <Animated.ScrollView
         style={styles.fill}
         scrollEventThrottle={1}
@@ -208,30 +218,6 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
         </Box>
       </Animated.ScrollView>
       {/* </VAScrollView> */}
-      <Animated.View pointerEvents="none" style={[styles.header, { transform: [{ translateY: headerTranslate }] }]}>
-        <Animated.Image
-          style={[
-            styles.backgroundImage,
-            {
-              opacity: imageOpacity,
-              transform: [{ translateY: imageTranslate }],
-            },
-          ]}
-          source={require('../../assets/cat.jpeg')}
-        />
-      </Animated.View>
-      <Animated.View
-        style={[
-          styles.bar,
-          {
-            transform: [{ scale: titleScale }, { translateY: titleTranslate }],
-          },
-        ]}>
-        <Text style={styles.title}>Title</Text>
-      </Animated.View>
-      <Animated.View style={[styles.subheader, { transform: [{ translateY: subtitleTranslate }] }]}>
-        <Text style={styles.subtitle}>Sub Title</Text>
-      </Animated.View>
     </View>
   )
 }
@@ -243,20 +229,18 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#03A9F4',
-    overflow: 'hidden',
-    height: HEADER_MAX_HEIGHT,
-    zIndex: 2,
-  },
+  // header: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   backgroundColor: stylesTheme.colors.background.main,
+  //   overflow: 'hidden',
+  //   height: HEADER_MAX_HEIGHT,
+  //   zIndex: 2,
+  // },
   subheader: {
     position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
     top: HEADER_MAX_HEIGHT,
     left: 0,
     right: 0,
@@ -265,19 +249,10 @@ const styles = StyleSheet.create({
     height: SUBHEADER_MAX_HEIGHT,
     zIndex: 1,
   },
-  backgroundImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    width: '100%',
-    height: HEADER_MAX_HEIGHT,
-    resizeMode: 'cover',
-  },
   bar: {
-    backgroundColor: 'transparent',
-    marginTop: Platform.OS === 'ios' ? 28 : 38,
-    height: 32,
+    backgroundColor: stylesTheme.colors.background.main,
+    paddingTop: Platform.OS === 'ios' ? 28 : 38,
+    height: HEADER_MAX_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
@@ -287,7 +262,7 @@ const styles = StyleSheet.create({
     zIndex: 4,
   },
   title: {
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     zIndex: 5,
   },
@@ -298,13 +273,6 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     // iOS uses content inset, which acts like padding.
     paddingTop: Platform.OS !== 'ios' ? HEADER_MAX_HEIGHT : 0,
-  },
-  row: {
-    height: 40,
-    margin: 16,
-    backgroundColor: '#D3D3D3',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 })
 
