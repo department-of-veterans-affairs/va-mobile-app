@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AppointmentAttributes } from 'store/api'
+import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { isAPendingAppointment } from 'utils/appointments'
@@ -39,10 +39,10 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
             <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
           </TextView>
         )}
-        {!!bestTimeToCall?.length && (
+        {!!bestTimeToCall?.length && attributes.appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && (
           <TextView variant="MobileBodyBold">
             {`${tc('call')}: `}
-            <TextView variant="MobileBody">{bestTimeToCall?.join(' ')}</TextView>
+            <TextView variant="MobileBody">{bestTimeToCall?.join()}</TextView>
           </TextView>
         )}
       </Box>
