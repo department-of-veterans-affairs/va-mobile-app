@@ -172,7 +172,7 @@ context('UpcomingAppointments', () => {
     it('should render the first line of the appointment item as the text "Canceled"', async () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = 'CANCELLED'
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('CANCELED')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Canceled')
     })
   })
 
@@ -181,7 +181,7 @@ context('UpcomingAppointments', () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.CANCELLED
       appointmentsByYearData['2020']['3'][0].attributes.isPending = true
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('CANCELED')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Canceled')
     })
   })
 
