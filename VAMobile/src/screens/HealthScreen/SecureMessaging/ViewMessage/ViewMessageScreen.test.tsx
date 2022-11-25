@@ -234,7 +234,7 @@ context('ViewMessageScreen', () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
         testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(testInstance.findAllByType(TextView)[4].props.children).toBe('message 1 body text')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('message 1 body text')
         // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
         expect(testInstance.findAllByType(TextView)[7].props.children).toBe('mock sender 3')
         expect(testInstance.findAllByType(TextView)[8].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
