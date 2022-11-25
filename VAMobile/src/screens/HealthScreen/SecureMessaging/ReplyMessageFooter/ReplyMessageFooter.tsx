@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { FooterButton } from 'components'
+import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type ReplyMessageFooterProps = {
   messageID: number
@@ -12,17 +12,21 @@ export type ReplyMessageFooterProps = {
 const ReplyMessageFooter: FC<ReplyMessageFooterProps> = ({ messageID }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-
+  const theme = useTheme()
   const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
+  const requestRefillButtonProps: VAButtonProps = {
+    label: t('secureMessaging.composeMessage'),
+    buttonType: ButtonTypesConstants.buttonPrimary,
+    onPress: onPress,
+    a11yHint: t('secureMessaging.composeMessage.a11yHint'),
+    iconProps: { name: 'Compose' },
+  }
+
   return (
-    <FooterButton
-      onPress={onPress}
-      text={t('secureMessaging.reply')}
-      iconProps={{ name: 'Reply' }}
-      a11yHint={t('secureMessaging.reply.a11yHint')}
-      testID={t('secureMessaging.reply.testID')}
-    />
+    <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+      <VAButton {...requestRefillButtonProps} />
+    </Box>
   )
 }
 
