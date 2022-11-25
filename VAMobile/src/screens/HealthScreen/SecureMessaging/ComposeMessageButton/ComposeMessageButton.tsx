@@ -11,7 +11,7 @@ const ComposeMessageButton: FC = () => {
   const theme = useTheme()
   const onPress = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
-  const requestRefillButtonProps: VAButtonProps = {
+  const composeMessageButtonProps: VAButtonProps = {
     label: t('secureMessaging.composeMessage'),
     buttonType: ButtonTypesConstants.buttonPrimary,
     onPress: onPress,
@@ -21,7 +21,7 @@ const ComposeMessageButton: FC = () => {
 
   return (
     <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-      <VAButton {...requestRefillButtonProps} />
+      <VAButton {...composeMessageButtonProps} />
     </Box>
   )
 }
