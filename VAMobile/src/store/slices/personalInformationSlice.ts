@@ -18,7 +18,6 @@ import {
 } from '../api'
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { MockUsersEmail } from 'constants/common'
 import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
@@ -102,16 +101,6 @@ export const getProfileInfo =
     try {
       dispatch(dispatchStartGetProfileInfo())
       const user = await get<UserData>('/v1/user')
-
-      // TODO: delete in story #19175
-      const userEmail = user?.data.attributes.profile.signinEmail
-      if (userEmail === MockUsersEmail.user_1401) {
-        throw { status: 408 }
-      } else if (userEmail === MockUsersEmail.user_1414) {
-        // TODO mock user to have SM for story #25035
-        user?.data.attributes.authorizedServices.push(VAServicesConstants.SecureMessaging)
-      }
-
       const profile = user?.data.attributes.profile
       const authorizedServices = user?.data.attributes.authorizedServices
       dispatch(dispatchFinishGetProfileInfo({ profile }))
