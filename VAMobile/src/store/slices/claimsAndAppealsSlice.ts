@@ -154,7 +154,7 @@ export const prefetchClaimsAndAppeals =
     dispatch(dispatchStartPrefetchGetClaimsAndAppeals())
 
     try {
-      let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined 
+      let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
       let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
 
       const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals

@@ -6,8 +6,6 @@ import {
   AppointmentCancellationStatusTypes,
   AppointmentData,
   AppointmentStatusConstants,
-  AppointmentTimeZone,
-  AppointmentTypeConstants,
   AppointmentsErrorServiceTypesConstants,
   AppointmentsGetData,
   AppointmentsGroupedByYear,

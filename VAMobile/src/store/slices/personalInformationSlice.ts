@@ -12,7 +12,6 @@ import {
   SuggestedAddress,
   UserData,
   UserDataProfile,
-  VAServicesConstants,
   addressPouTypes,
   get,
 } from '../api'
