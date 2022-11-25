@@ -6,7 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
 import ComposeMessageButton from './ComposeMessageButton'
-import { FooterButton } from 'components'
+import { VAButton } from 'components'
 import { waitFor } from '@testing-library/react-native'
 
 let mockNavigationSpy = jest.fn()
@@ -42,7 +42,7 @@ context('ComposeMessageFooter', () => {
   describe('on click of the footer button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findByType(FooterButton).props.onPress()
+        testInstance.findByType(VAButton).props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
         expect(mockNavigateToSpy).toHaveBeenCalled()
       })

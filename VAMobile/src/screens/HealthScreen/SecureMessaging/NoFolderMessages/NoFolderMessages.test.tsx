@@ -94,12 +94,13 @@ context('NoDrafts', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe("You don't have any drafts in your Drafts folder")
+    expect(texts[1].props.children).toBe("You don't have any drafts in your Drafts folder")
   })
 
   describe('on click of the go to inbox button', () => {
     it('should call updateSecureMessagingTab and useRouteNavigation', async () => {
-      testInstance.findByType(VAButton).props.onPress()
+      //first button is now the compose a message button
+      testInstance.findAllByType(VAButton)[1].props.onPress()
       expect(updateSecureMessagingTab).toHaveBeenCalled()
       expect(mockNavigateToSpy).toHaveBeenCalled()
     })
