@@ -223,7 +223,7 @@ context('ViewMessageScreen', () => {
 
   it("should render last accordion's body text since it should be expanded", async () => {
     await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
     })
   })
 
