@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
-import { FooterButton } from 'components'
+import { VAButton } from 'components'
 import ReplyMessageButton from './ReplyMessageButton'
 import { waitFor } from '@testing-library/react-native'
 
@@ -43,7 +43,7 @@ context('ReplyMessageButton', () => {
 
   describe('on click of the footer button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findByType(FooterButton).props.onPress()
+      testInstance.findByType(VAButton).props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalledWith('ReplyMessage', {'attachmentFileToAdd': {}, 'attachmentFileToRemove': {}, 'messageID': 1})
       expect(navigateToSpy).toHaveBeenCalled()
     })
