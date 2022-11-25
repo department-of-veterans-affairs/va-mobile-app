@@ -15,7 +15,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
-import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
+import ComposeMessageButton from './ComposeMessageButton/ComposeMessageButton'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
 import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
@@ -91,6 +91,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   return (
     <>
       <VAScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
+        <ComposeMessageButton />
         <Box flex={1} justifyContent="flex-start">
           <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
             <SegmentedControl
@@ -109,7 +110,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
           </Box>
         </Box>
       </VAScrollView>
-      <ComposeMessageFooter />
     </>
   )
 }

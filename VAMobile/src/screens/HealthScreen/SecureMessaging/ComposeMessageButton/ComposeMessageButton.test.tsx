@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
-import ComposeMessageFooter from './ComposeMessageFooter'
+import ComposeMessageButton from './ComposeMessageButton'
 import { FooterButton } from 'components'
 import { waitFor } from '@testing-library/react-native'
 
@@ -30,7 +30,7 @@ context('ComposeMessageFooter', () => {
   beforeEach(() => {
     mockNavigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
-    component = render(<ComposeMessageFooter />)
+    component = render(<ComposeMessageButton />)
 
     testInstance = component.container
   })
