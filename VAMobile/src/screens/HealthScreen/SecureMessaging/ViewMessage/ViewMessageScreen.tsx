@@ -211,6 +211,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   return (
     <>
       <VAScrollView {...testIdProps('ViewMessage-page')} scrollViewRef={scrollRef}>
+        {!replyExpired && <ReplyMessageButton messageID={messageID} />}
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
             <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
@@ -234,7 +235,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           </Box>
         )}
       </VAScrollView>
-      {!replyExpired && <ReplyMessageButton messageID={messageID} />}
     </>
   )
 }
