@@ -61,7 +61,7 @@ context('NoFolderMessages', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe("You don't have any messages in your test folder")
+    expect(texts[1].props.children).toBe("You don't have any messages in your test folder")
   })
 
   describe('on click of the go to inbox button', () => {
