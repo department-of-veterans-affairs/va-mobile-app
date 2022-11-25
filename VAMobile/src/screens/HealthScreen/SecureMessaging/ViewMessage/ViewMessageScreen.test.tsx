@@ -268,7 +268,7 @@ context('ViewMessageScreen', () => {
         initializeTestInstance(mockMessagesById, mockThreads, false, false, 3, [1])
 
         await waitFor(() => {
-          testInstance.findAllByType(Pressable)[0].props.onPress()
+          testInstance.findAllByType(Pressable)[1].props.onPress()
           expect(testInstance.findByType(IndividualMessageErrorComponent)).toBeTruthy()
           expect(testInstance.findByProps({ title: 'Message could not be found' })).toBeTruthy()
         })
