@@ -5,29 +5,29 @@ import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-export type ReplyMessageFooterProps = {
+export type ReplyMessageButtonProps = {
   messageID: number
 }
 
-const ReplyMessageFooter: FC<ReplyMessageFooterProps> = ({ messageID }) => {
+const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
-  const requestRefillButtonProps: VAButtonProps = {
-    label: t('secureMessaging.composeMessage'),
+  const replyButtonProps: VAButtonProps = {
+    label: t('secureMessaging.reply'),
     buttonType: ButtonTypesConstants.buttonPrimary,
     onPress: onPress,
-    a11yHint: t('secureMessaging.composeMessage.a11yHint'),
-    iconProps: { name: 'Compose' },
+    a11yHint: t('secureMessaging.reply.a11yHint'),
+    iconProps: { name: 'Reply' },
   }
 
   return (
     <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-      <VAButton {...requestRefillButtonProps} />
+      <VAButton {...replyButtonProps} />
     </Box>
   )
 }
 
-export default ReplyMessageFooter
+export default ReplyMessageButton

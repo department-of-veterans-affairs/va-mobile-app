@@ -21,7 +21,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
-import ReplyMessageFooter from '../ReplyMessageFooter/ReplyMessageFooter'
+import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -234,7 +234,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           </Box>
         )}
       </VAScrollView>
-      {!replyExpired && <ReplyMessageFooter messageID={messageID} />}
+      {!replyExpired && <ReplyMessageButton messageID={messageID} />}
     </>
   )
 }
