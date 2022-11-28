@@ -4,53 +4,50 @@ sidebar_position: 1
 
 
 
-# Intro
+# Intro to the VA Mobile App
 
 ## Background
-On VA.gov today, nearly 40% of all traffic comes from users on their mobile devices. This traffic is typically driven by users that want to complete quick transactions, such as viewing Claims Status or Facility Locator. Our team has a hypothesis, validated by user research, that native functionality in a mobile app will allow Veterans to more easily complete key transactions across VA Health and Benefits services.
+Nearly 40% of all traffic to VA.gov comes from users on their mobile devices. This traffic is typically driven by users that want to complete quick transactions, such as viewing Claims Status or Facility Locator. Our team has a hypothesis, validated by user research, that native functionality in a mobile app will allow Veterans to more easily complete key transactions across VA Health and Benefits services.
 
 ## Team
 
 ### VA Product Owners
 - Chris Johnston
+- Rachel Han
 - Martha Wilkes (part time design and accessibility)
 
 ### Product and Program Management
 - Matt Hall - Product Leadership
-- Brenda Cudone - Product
+- Adam Bischoff - Product
 - Meko Hong - Product
-- Ashley Matthews - Product
-- Brenda Rocha - Product
+- Kelly Lein - Product
 - Seth Eheart - Program
 
 
 ### UX
-- Jen Ecker - UX Leadership
-- Melissa Lefevre - Design
-- Esther Kitavi - Design
-- Lauren Russell - Design
+- Jennifer Ecker - UX Leadership
 - Holly Collier - Design
+- Melissa Lefevre - Design
+- Lauren Russell - Design
 - Brea Blackwelder - Accessibility Design
 - Liz Straghalis - Research
-- Misty Milliron-Grant - Writer
+- Misty Milliron-Grant - Content Strategist
 - Alex Taylor - Principal UX Designer
 
 
 ### Engineering
 - Patrick Saxton - Engineer Leadership
 - Chika Adibemma - Engineer
-- Narin Ratana - Engineer
-- Jayson Perkins - Engineer
-- Raf Arroyo - Engineer
-- John Marchi - Engineer
-- Ken Li - Engineer
-- Andrew Herzberg - Engineer
+- Chris Alexander - Engineer
+- Theo Bentum - Engineer
 - Jon Bindbeutel - Engineer
-- Tim Roettger - Engineer
 - Jason Conigliari - Engineer
-- Kris Pethtel - Engineer
+- Andrew Herzberg - Engineer
 - Dylan Nienberg - Engineer
-- Ken Harrison - QA Support
+- Jayson Perkins - Engineer
+- Kris Pethtel - Engineer
+- Narin Ratana - Engineer
+- Tim Roettger - Engineer
 - Tom Gammons - Engineer, QA
 - Therese Dickson - Engineer, QA
 
