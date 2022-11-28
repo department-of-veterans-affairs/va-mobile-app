@@ -20,6 +20,7 @@ const mockOverrides = {
   prescriptions: true,
   SIS: true,
   testFeature: false,
+  inAppUpdates: false,
 }
 
 describe('activate', () => {
