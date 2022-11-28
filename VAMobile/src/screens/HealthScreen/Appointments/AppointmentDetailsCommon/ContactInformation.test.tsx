@@ -20,7 +20,8 @@ context('ContactInformation', () => {
       patientPhoneNumber: '145-141-2523',
       bestTimeToCall: ['Noon'],
       isPending: true,
-      status: AppointmentStatusConstants.SUBMITTED
+      status: AppointmentStatusConstants.SUBMITTED,
+      appointmentType: 'COMMUNITY_CARE'
     }
 
     component = render(<ContactInformation attributes={props} />, {
