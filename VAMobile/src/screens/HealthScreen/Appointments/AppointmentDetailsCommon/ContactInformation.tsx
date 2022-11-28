@@ -17,7 +17,7 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { patientEmail, patientPhoneNumber, bestTimeToCall } = attributes || ({} as AppointmentAttributes)
+  const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType } = attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending) {
     return (
@@ -39,7 +39,7 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
             <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
           </TextView>
         )}
-        {!!bestTimeToCall?.length && attributes.appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && (
+        {!!bestTimeToCall?.length && appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && (
           <TextView variant="MobileBodyBold">
             {`${tc('call')}: `}
             <TextView variant="MobileBody">{bestTimeToCall?.join()}</TextView>
