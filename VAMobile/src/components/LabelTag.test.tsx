@@ -17,7 +17,7 @@ context('LabelTag', () => {
 
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
-    component = render(<LabelTag text={'READ'} labelType={'tagGreen'} onPress={onPressSpy} />)
+    component = render(<LabelTag text={'Read'} labelType={'tagGreen'} onPress={onPressSpy} />)
     testInstance = component.container
   })
 
@@ -25,10 +25,10 @@ context('LabelTag', () => {
     expect(component).toBeTruthy()
   })
 
-  it("should render text as 'READ'", async () => {
+  it("should render text as 'Read'", async () => {
     const texts = testInstance.findAllByType(TextView)
     expect(texts.length).toBe(1)
-    expect(texts[0].props.children).toBe('READ')
+    expect(texts[0].props.children).toBe('Read')
   })
 
   it ("should call the press action if it exists", async () => {
