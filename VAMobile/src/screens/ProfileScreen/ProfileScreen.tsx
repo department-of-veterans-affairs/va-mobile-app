@@ -127,7 +127,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       <VAScrollView>
         <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <SignoutButton />
+          <SimpleList items={getLastSection()} />
         </Box>
       </VAScrollView>
     )
@@ -153,9 +153,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       </Box>
       <Box mb={theme.dimensions.standardMarginBetween}>
         <SimpleList items={getLastSection()} />
-      </Box>
-      <Box px={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-        <SignoutButton />
       </Box>
     </VAScrollView>
   )
