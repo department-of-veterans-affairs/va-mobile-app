@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* VAMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* VAMobileTests.m */; };
+		1101F1DD291F0F8D00366337 /* RNInAppUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1101F1DC291F0F8D00366337 /* RNInAppUpdate.m */; };
+		1101F1DF291F0FB300366337 /* RNInAppUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1101F1DE291F0FB300366337 /* RNInAppUpdate.swift */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -53,6 +55,8 @@
 		00E356F21AD99517003FC87E /* VAMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VAMobileTests.m; sourceTree = "<group>"; };
 		063E6E51934F27E13811FC7D /* Pods-VAMobile.rc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.rc.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.rc.xcconfig"; sourceTree = "<group>"; };
 		0709DA7CCB7531ED28466003 /* Pods-VAMobile-VAMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.release.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		1101F1DC291F0F8D00366337 /* RNInAppUpdate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInAppUpdate.m; sourceTree = "<group>"; };
+		1101F1DE291F0FB300366337 /* RNInAppUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNInAppUpdate.swift; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* VAMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VAMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = VAMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = VAMobile/AppDelegate.m; sourceTree = "<group>"; };
@@ -155,6 +159,8 @@
 				40AAB02A26A088D200BA109B /* RNReviews.swift */,
 				40AAB02C26A088E900BA109B /* RNReviews.m */,
 				4EF6FBF92727104E009917AA /* Colors.xcassets */,
+				1101F1DC291F0F8D00366337 /* RNInAppUpdate.m */,
+				1101F1DE291F0FB300366337 /* RNInAppUpdate.swift */,
 			);
 			name = VAMobile;
 			sourceTree = "<group>";
@@ -554,12 +560,14 @@
 			files = (
 				4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				1101F1DF291F0FB300366337 /* RNInAppUpdate.swift in Sources */,
 				40F6C1AF26691F0900852B10 /* RNAuthSession.m in Sources */,
 				40AAB02B26A088D200BA109B /* RNReviews.swift in Sources */,
 				40B4AE292682CC8A00BD1DD9 /* RNSecureRandom.swift in Sources */,
 				4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */,
 				40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				1101F1DD291F0F8D00366337 /* RNInAppUpdate.m in Sources */,
 				4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */,
 				40F6C1AB266919E300852B10 /* RNAuthSession.swift in Sources */,
 				40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */,
