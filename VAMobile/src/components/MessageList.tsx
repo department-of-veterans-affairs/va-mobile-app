@@ -41,7 +41,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
     const { inlineTextWithIcons, testId, ...listItemObj } = item
     let testIdToUse = testId ? testId : generateTestIDForInlineTextIconList(inlineTextWithIcons, t)
 
-    // We want to display black 'READ' tag only for sent messages that have been seen by the recipients
+    // We want to display black 'Read' tag only for sent messages that have been seen by the recipients
     const isSentReadTag = item.isSentFolder && item.readReceipt === READ
     const sentReadTagA11y = isSentReadTag ? t('secureMessaging.folders.sent.read.a11y') : ''
 
