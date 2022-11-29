@@ -33,6 +33,7 @@ import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
 import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchProfileLogout } from './personalInformationSlice'
+import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchVaccineLogout } from './vaccineSlice'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -621,7 +622,16 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
 }
 
-export const initializeAuth = (): AppThunk => async (dispatch) => {
+export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
+  const { loggedIn } = getState().auth
+  const { tappedForegroundNotification } = getState().notifications
+
+  if (loggedIn && tappedForegroundNotification) {
+    console.debug('User tapped foreground notification. Skipping initializeAuth.')
+    dispatch(dispatchResetTappedForegroundNotification())
+    return
+  }
+
   let refreshToken: string | undefined
   await dispatch(checkFirstTimeLogin())
   const pType = await getAuthLoginPromptType()

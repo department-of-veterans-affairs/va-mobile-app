@@ -59,7 +59,7 @@ context('MessageList', () => {
           } as InlineTextWithIconsProps,
         ],
         isSentFolder: true,
-        readReceipt: 'READ',
+        readReceipt: 'Read',
         a11yHintText: 'hint2',
         onPress: onPressSpy,
       },
@@ -85,7 +85,7 @@ context('MessageList', () => {
   })
 
   it('should render READ tag for read sent message', async () => {
-    expect(testInstance.findByType(LabelTag).props.text).toEqual('READ')
+    expect(testInstance.findByType(LabelTag).props.text).toEqual('Read')
   })
 
   it('should render the VAIcon components for unread item with attachment', async () => {

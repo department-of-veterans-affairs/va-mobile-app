@@ -23,6 +23,7 @@ export type NotificationsState = {
   loadingPreferences: boolean
   settingPreference: boolean
   systemNotificationsOn: boolean
+  tappedForegroundNotification?: boolean
 }
 
 export const initialNotificationsState: NotificationsState = {
@@ -32,6 +33,7 @@ export const initialNotificationsState: NotificationsState = {
   loadingPreferences: false,
   settingPreference: false,
   systemNotificationsOn: false,
+  tappedForegroundNotification: false,
 }
 
 /**
@@ -171,6 +173,13 @@ const notificationSlice = createSlice({
       state.systemNotificationsOn = systemNotificationsOn
       state.loadingPreferences = false
     },
+
+    dispatchSetTappedForegroundNotification: (state) => {
+      state.tappedForegroundNotification = true
+    },
+    dispatchResetTappedForegroundNotification: (state) => {
+      state.tappedForegroundNotification = false
+    },
   },
 })
 
@@ -181,5 +190,7 @@ export const {
   dispatchStartRegisterDevice,
   dispatchStartSetPreference,
   dispatchUpdateDeviceToken,
+  dispatchSetTappedForegroundNotification,
+  dispatchResetTappedForegroundNotification,
 } = notificationSlice.actions
 export default notificationSlice.reducer

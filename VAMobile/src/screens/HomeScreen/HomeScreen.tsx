@@ -5,12 +5,14 @@ import React, { FC, useEffect } from 'react'
 import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
 import { DateTime } from 'luxon'
+import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
+import { featureEnabled } from 'utils/remoteConfig'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -92,6 +94,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             {heading}
           </TextView>
         </Box>
+        <EncourageUpdateAlert />
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
@@ -104,7 +107,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('healthCare.title')}
-            subText={t('healthCare.subText')}
+            subText={featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
