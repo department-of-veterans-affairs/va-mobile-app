@@ -3,7 +3,6 @@ import { find, map, sortBy } from 'underscore'
 
 import * as api from '../api'
 import { AppThunk } from 'store'
-import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import {
   AppealData,
   ClaimData,
@@ -19,9 +18,8 @@ import {
   ScreenIDTypes,
 } from 'store/api/types'
 import { Asset } from 'react-native-image-picker'
-import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DEFAULT_PAGE_SIZE, MockUsersEmail } from 'constants/common'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
@@ -156,157 +154,31 @@ export const prefetchClaimsAndAppeals =
     dispatch(dispatchStartPrefetchGetClaimsAndAppeals())
 
     try {
-      // TODO mock errors. Remove ##19175
-      const activeClaimsAndAppealsList: ClaimsAndAppealsList = [
-        {
-          id: '1',
-          type: 'appeal',
-          attributes: {
-            subtype: 'supplementalClaim',
-            completed: false,
-            dateFiled: '2020-10-22',
-            updatedAt: '2020-10-28',
-            displayTitle: 'supplemental claim for disability compensation',
-          },
-        },
-        {
-          id: '0',
-          type: 'claim',
-          attributes: {
-            subtype: 'Disability',
-            completed: false,
-            dateFiled: '2020-11-13',
-            updatedAt: '2020-11-30',
-            displayTitle: 'Disability',
-          },
-        },
-        {
-          id: '4',
-          type: 'claim',
-          attributes: {
-            subtype: 'Compensation',
-            completed: false,
-            dateFiled: '2020-06-11',
-            updatedAt: '2020-12-07',
-            displayTitle: 'Compensation',
-          },
-        },
-      ]
+      let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
+      let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
 
-      const closedClaimsAndAppealsList: ClaimsAndAppealsList = [
-        {
-          id: '2',
-          type: 'appeal',
-          attributes: {
-            subtype: 'Disability',
-            completed: true,
-            dateFiled: '2020-07-24',
-            updatedAt: '2020-09-15',
-            displayTitle: 'Disability',
-          },
-        },
-        {
-          id: '3',
-          type: 'claim',
-          attributes: {
-            subtype: 'Compensation',
-            completed: true,
-            dateFiled: '2020-11-18',
-            updatedAt: '2020-12-05',
-            displayTitle: 'Compensation',
-          },
-        },
-      ]
+      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
+      const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
+      const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
 
-      const mockMeta = {
-        dataFromStore: false,
-        errors: [],
-        pagination: {
-          totalEntries: 0,
-          currentPage: 1,
-          perPage: DEFAULT_PAGE_SIZE,
-        },
-      }
-
-      let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
-        data: activeClaimsAndAppealsList,
-        meta: { ...mockMeta },
-      }
-
-      let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
-        data: closedClaimsAndAppealsList,
-        meta: { ...mockMeta },
-      }
-
-      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      // simulate common error try again
-      if (signInEmail === MockUsersEmail.user_1414) {
-        throw {
-          status: 503,
-        }
-      } else if (signInEmail === MockUsersEmail.user_1402) {
-        // appeals unavailable with no claims
-        activeClaimsAndAppeals.meta = {
-          dataFromStore: false,
-          errors: [
-            {
-              service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
-            },
-          ],
-          pagination: {
-            currentPage: 1,
-            totalEntries: 1,
-            perPage: 10,
-          },
-        }
-        closedClaimsAndAppeals.meta = activeClaimsAndAppeals.meta
-        activeClaimsAndAppeals.data = []
-        closedClaimsAndAppeals.data = []
-      } else if (signInEmail === MockUsersEmail.user_1401) {
-        // claims unavailable with appeals
-        activeClaimsAndAppeals.meta = {
-          dataFromStore: false,
-          errors: [
-            {
-              service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
-            },
-          ],
-          pagination: {
-            currentPage: 1,
-            totalEntries: 1,
-            perPage: 10,
-          },
-        }
-        activeClaimsAndAppeals.data = activeClaimsAndAppeals.data.filter((item) => {
-          return item.type === 'appeal'
+      if (activeLoadedClaimsAndAppeals) {
+        activeClaimsAndAppeals = activeLoadedClaimsAndAppeals
+      } else {
+        activeClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+          'page[number]': '1',
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          showCompleted: 'false',
         })
-        closedClaimsAndAppeals.data = closedClaimsAndAppeals.data.filter((item) => {
-          return item.type === 'appeal'
+      }
+
+      if (closedLoadedClaimsAndAppeals) {
+        closedClaimsAndAppeals = closedLoadedClaimsAndAppeals
+      } else {
+        closedClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+          'page[number]': '1',
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          showCompleted: 'true',
         })
-      } else if (signInEmail !== MockUsersEmail.user_366) {
-        const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
-        const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
-        const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
-
-        if (activeLoadedClaimsAndAppeals) {
-          activeClaimsAndAppeals = activeLoadedClaimsAndAppeals
-        } else {
-          activeClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
-            'page[number]': '1',
-            'page[size]': DEFAULT_PAGE_SIZE.toString(),
-            showCompleted: 'false',
-          })
-        }
-
-        if (closedLoadedClaimsAndAppeals) {
-          closedClaimsAndAppeals = closedLoadedClaimsAndAppeals
-        } else {
-          closedClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
-            'page[number]': '1',
-            'page[size]': DEFAULT_PAGE_SIZE.toString(),
-            showCompleted: 'true',
-          })
-        }
       }
 
       dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }))
@@ -370,18 +242,7 @@ export const getClaim =
     dispatch(dispatchStartGetClaim({ abortController: newAbortController }))
 
     try {
-      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-
-      // TODO: remove once file upload flow checked
-      let singleClaim
-      if (signInEmail === MockUsersEmail.user_366) {
-        singleClaim = {
-          data: Claim,
-        }
-      } else {
-        singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`, {}, signal)
-      }
-
+      const singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`, {}, signal)
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
       const [totalTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
@@ -413,16 +274,7 @@ export const getAppeal =
 
     dispatch(dispatchStartGetAppeal({ abortController: newAbortController }))
     try {
-      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      let appeal
-      if (signInEmail === MockUsersEmail.user_226) {
-        appeal = {
-          data: Appeal,
-        }
-      } else {
-        appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`, {}, signal)
-      }
-
+      const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`, {}, signal)
       const [totalTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
       await dispatch(resetAnalyticsActionStart())
