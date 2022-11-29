@@ -132,7 +132,7 @@
             "attachment": false,
             "sentDate": "2021-10-26T22:22:06.000Z",
             "senderId": 1835650,
-            "senderName": "RATANA, NARIN ",
+            "senderName": "MARTHA KAPLAN, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "UNREAD"
@@ -147,12 +147,12 @@
           "attributes": {
             "messageId": 2092803,
             "category": "COVID",
-            "subject": "Your requested info",
+            "subject": "Prepping for your visit",
             "body": null,
             "attachment": true,
             "sentDate": "2021-10-26T22:21:11.000Z",
             "senderId": 1835650,
-            "senderName": "RATANA, NARIN ",
+            "senderName": "DIANA PERSSON, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "UNREAD"
@@ -166,13 +166,13 @@
           "type": "messages",
           "attributes": {
             "messageId": 2092789,
-            "category": "COVID",
-            "subject": "Vaccine Booster",
+            "category": "MEDICATIONS",
+            "subject": "Your requested info",
             "body": null,
             "attachment": false,
             "sentDate": "2021-10-26T22:17:38.000Z",
             "senderId": 1835650,
-            "senderName": "RATANA, NARIN ",
+            "senderName": "SARAH KOTAGAL, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "UNREAD"
@@ -187,12 +187,12 @@
           "attributes": {
             "messageId": 2092775,
             "category": "APPOINTMENTS",
-            "subject": "Preparing for your visit",
+            "subject": "Please read and prepare appropriately",
             "body": null,
             "attachment": false,
             "sentDate": "2021-10-26T22:14:45.000Z",
             "senderId": 1835650,
-            "senderName": "RATANA, NARIN ",
+            "senderName": "CHERYL RODGER, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ"
@@ -206,13 +206,13 @@
           "type": "messages",
           "attributes": {
             "messageId": 2088259,
-            "category": "COVID",
-            "subject": "COVID vaccine booster?",
+            "category": "APPOINTMENTS",
+            "subject": "Summary of visit",
             "body": null,
             "attachment": false,
             "sentDate": "2021-10-21T15:59:15.000Z",
             "senderId": 1835650,
-            "senderName": "RATANA, NARIN ",
+            "senderName": "VIJA A. RAVI, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "READ"
