@@ -4,12 +4,14 @@ import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
+import { mocked } from 'ts-jest/utils'
 
 import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
-import { LargeNavButton, TextView } from 'components'
+import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/encourageUpdate'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -32,14 +34,19 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+jest.mock('utils/remoteConfig')
+
 context('HomeScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
-  let mockFeatureEnabled = featureEnabled as jest.Mock
 
-  const initializeTestInstance = (prescriptionsEnabled: boolean = false) => {
-    when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
+  const initializeTestInstance = (inAppUpdatesEnabled: boolean = true, skippedVersion: string = '1.0.0.', localVersion: string = '0.0.0', storeVersion: string = '2.0.0') => {
+    when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(inAppUpdatesEnabled)
+    mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve(skippedVersion))
+    mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve(localVersion))
+    mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve(storeVersion))
+
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     component = render(<HomeScreen {...props} />)
@@ -101,36 +108,38 @@ context('HomeScreen', () => {
     })
   })
 
-  // describe('rendering the update alert', () => {
-  //   it('should render if the local version is behind the store version and a previous skip not recorded for that store version', async () => {
-      
-  //   })
-  //   it('should render the update now button', async () => {
-      
-  //   })
+  describe('rendering the update alert', () => {
+    it('should render the UI', async () => {
+      await waitFor(() => {
+        expect(testInstance.findAllByType(AlertBox)[0].props.title).toEqual('Update available')
+      })
+    })
+    it('should render the update now button', async () => {
+      await waitFor(() => {
+        expect(testInstance.findAllByType(VAButton)[0].props.label).toEqual('Update now')
+      })
+    })
 
-  //   it('should render the skip this update button', async () => {
-      
-  //   })
-  //   it('should not render if the local version is the same as the store version', async () => {
-      
-  //   })
-  //   it('should not render if the local version is behind the store version and a previous skip was recorded for that store version', async () => {
-      
-  //   })
-  // })
+    it('should render the skip this update button', async () => {
+      await waitFor(() => {
+        expect(testInstance.findAllByType(VAButton)[1].props.label).toEqual('Skip this update')
+      })
+    })
 
-  // describe('when update now is pressed', () => {
-  //   it('should call update pressed', async () => {
-      
-  //   })
-  // })
+    it('should not render if skip version is the same as store version', async () => {
+      await waitFor(() => {
+        initializeTestInstance(false, '2.0.0.', '0.0.0')
+        expect(() => component.getByText('Update available')).toThrow()
+      })
+    })
 
-  // describe('when skip this update is pressed', () => {
-  //   it('should call skip pressed', async () => {
-      
-  //   })
-  // })
+    it('should not render if local version is the same as store version', async () => {
+      await waitFor(() => {
+        initializeTestInstance(false, '1.0.0.', '2.0.0')
+        expect(() => component.getByText('Update available')).toThrow()
+      })
+    })
+  })
 
   describe('when rendering the home nav buttons', () => {
     it('should render the claims button', async () => {
