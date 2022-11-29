@@ -103,7 +103,7 @@
       "attributes": {
         "dateFiled": "2021-01-01",
         "minEstDate": "2021-09-04",
-        "maxEstDate": "2021-11-14",
+        "maxEstDate": "2030-11-14",
         "phaseChangeDate": "2021-05-05",
         "open": true,
         "waiverSubmitted": false,
@@ -692,7 +692,7 @@
       "attributes": {
         "dateFiled": "2021-07-20",
         "minEstDate": "2021-11-05",
-        "maxEstDate": "2022-01-23",
+        "maxEstDate": "2024-11-23",
         "phaseChangeDate": "2021-07-20",
         "open": true,
         "waiverSubmitted": false,
