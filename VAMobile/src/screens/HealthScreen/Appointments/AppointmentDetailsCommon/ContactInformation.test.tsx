@@ -7,7 +7,7 @@ import { context, findByTypeWithSubstring, render, RenderAPI } from 'testUtils'
 import { InitialState } from 'store/slices'
 import ContactInformation from './ContactInformation'
 import { TextView } from 'components'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+import { AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 
 context('ContactInformation', () => {
   let component: RenderAPI
@@ -20,7 +20,8 @@ context('ContactInformation', () => {
       patientPhoneNumber: '145-141-2523',
       bestTimeToCall: ['Noon'],
       isPending: true,
-      status: AppointmentStatusConstants.SUBMITTED
+      status: AppointmentStatusConstants.SUBMITTED,
+      appointmentType: AppointmentTypeConstants.COMMUNITY_CARE
     }
 
     component = render(<ContactInformation attributes={props} />, {
