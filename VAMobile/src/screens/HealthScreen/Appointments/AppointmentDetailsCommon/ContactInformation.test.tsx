@@ -7,7 +7,7 @@ import { context, findByTypeWithSubstring, render, RenderAPI } from 'testUtils'
 import { InitialState } from 'store/slices'
 import ContactInformation from './ContactInformation'
 import { TextView } from 'components'
-import { AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api'
+import { AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 
 context('ContactInformation', () => {
   let component: RenderAPI
