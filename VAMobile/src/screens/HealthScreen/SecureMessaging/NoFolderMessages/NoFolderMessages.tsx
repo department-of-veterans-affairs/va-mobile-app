@@ -8,7 +8,7 @@ import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { ViewStyle } from 'react-native'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
+import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 
 export type NoFolderMessagesProps = {
   folderName: string
@@ -35,6 +35,7 @@ const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
   return (
     <>
       <VAScrollView contentContainerStyle={scrollStyles}>
+        <ComposeMessageButton />
         <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
           <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
             {t(noEntriesTextKey, { folderName })}
@@ -44,7 +45,6 @@ const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
           </Box>
         </Box>
       </VAScrollView>
-      <ComposeMessageFooter />
     </>
   )
 }
