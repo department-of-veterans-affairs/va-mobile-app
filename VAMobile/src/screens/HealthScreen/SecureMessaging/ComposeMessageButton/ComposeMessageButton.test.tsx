@@ -5,8 +5,8 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
-import ComposeMessageFooter from './ComposeMessageFooter'
-import { FooterButton } from 'components'
+import ComposeMessageButton from './ComposeMessageButton'
+import { VAButton } from 'components'
 import { waitFor } from '@testing-library/react-native'
 
 let mockNavigationSpy = jest.fn()
@@ -30,7 +30,7 @@ context('ComposeMessageFooter', () => {
   beforeEach(() => {
     mockNavigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
-    component = render(<ComposeMessageFooter />)
+    component = render(<ComposeMessageButton />)
 
     testInstance = component.container
   })
@@ -42,7 +42,7 @@ context('ComposeMessageFooter', () => {
   describe('on click of the footer button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findByType(FooterButton).props.onPress()
+        testInstance.findByType(VAButton).props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
         expect(mockNavigateToSpy).toHaveBeenCalled()
       })
