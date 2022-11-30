@@ -139,8 +139,7 @@ context('PrescriptionDetails', () => {
 
         const footerButton = testInstance.findAllByType(FooterButton)
         expect(footerButton.length).toBe(1)
-        // Due to conditional nature, doesn't pull display text because of _zero, _one, _other suffixes in health.json
-        expect(footerButton[0].props.text).toEqual('prescriptions.refill.RequestRefillButtonTitle')
+        expect(footerButton[0].props.text).toEqual('Request refill')
       })
     })
 

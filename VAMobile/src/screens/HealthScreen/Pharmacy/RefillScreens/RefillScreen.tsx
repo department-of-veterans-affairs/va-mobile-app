@@ -69,7 +69,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
           text: tc('cancel'),
         },
         {
-          text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }),
+          text: t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
           onPress: () => {
             const prescriptionsToRefill: PrescriptionsList = []
             // todo add params
