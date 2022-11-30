@@ -35,6 +35,8 @@ export const ActionTypes: {
   AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: 'auth/dispatchSetDisplayBiometricsPreferenceScreen',
 }
 
+jest.mock('utils/remoteConfig')
+
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),
   isIOS: jest.fn(),
