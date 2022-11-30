@@ -66,7 +66,6 @@ context('NoFolderMessages', () => {
 
   describe('on click of the go to inbox button', () => {
     it('should call updateSecureMessagingTab and useRouteNavigation', async () => {
-      //button 0 is the compose a message button now
       testInstance.findAllByType(VAButton)[1].props.onPress()
       expect(updateSecureMessagingTab).toHaveBeenCalled()
       expect(mockNavigateToSpy).toHaveBeenCalled()
@@ -100,7 +99,6 @@ context('NoDrafts', () => {
 
   describe('on click of the go to inbox button', () => {
     it('should call updateSecureMessagingTab and useRouteNavigation', async () => {
-      //first button is now the compose a message button
       testInstance.findAllByType(VAButton)[1].props.onPress()
       expect(updateSecureMessagingTab).toHaveBeenCalled()
       expect(mockNavigateToSpy).toHaveBeenCalled()
