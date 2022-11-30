@@ -46,7 +46,6 @@ const screensToCloseSnackbarOnNavigation = [
   'PersonalInformation',
   'ReplyMessage',
   'SecureMessaging',
-  'SecureMessaging',
   'SelectFile',
   'TakePhotos',
   'UpcomingAppointmentDetails',
