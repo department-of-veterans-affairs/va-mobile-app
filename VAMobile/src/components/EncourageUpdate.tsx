@@ -71,7 +71,7 @@ export const EncourageUpdateAlert = () => {
   }
 
   if (featureEnabled('inAppUpdates') && skippedVersion !== storeVersion && localVersionName !== storeVersion) {
-    logAnalyticsEvent(Events.vama_eu_appeared())
+    logAnalyticsEvent(Events.vama_eu_shown())
     return (
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
