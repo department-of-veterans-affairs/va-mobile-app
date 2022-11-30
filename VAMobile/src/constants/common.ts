@@ -31,6 +31,7 @@ export const SnackBarConstants: {
 }
 
 const screensToCloseSnackbarOnNavigation = [
+  'Appointments',
   'AppealDetailsScreen',
   'AskForClaimDecision',
   'ClaimDetails',
