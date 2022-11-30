@@ -34,15 +34,15 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+jest.mock('utils/remoteConfig')
+
 context('HomeScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
-  let mockFeatureEnabled = featureEnabled as jest.Mock
 
-  const initializeTestInstance = (prescriptionsEnabled: boolean = false, inAppUpdatesEnabled: boolean = true, skippedVersion: string = '1.0.0.', localVersion: string = '0.0.0', storeVersion: string = '2.0.0') => {
-    when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
-    when(mockFeatureEnabled).calledWith('inAppUpdates').mockReturnValue(inAppUpdatesEnabled)
+  const initializeTestInstance = (inAppUpdatesEnabled: boolean = true, skippedVersion: string = '1.0.0.', localVersion: string = '0.0.0', storeVersion: string = '2.0.0') => {
+    when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(inAppUpdatesEnabled)
     mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve(skippedVersion))
     mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve(localVersion))
     mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve(storeVersion))
@@ -128,14 +128,14 @@ context('HomeScreen', () => {
 
     it('should not render if skip version is the same as store version', async () => {
       await waitFor(() => {
-        initializeTestInstance(false, true, '2.0.0.', '0.0.0')
+        initializeTestInstance(false, '2.0.0.', '0.0.0')
         expect(() => component.getByText('Update available')).toThrow()
       })
     })
 
     it('should not render if local version is the same as store version', async () => {
       await waitFor(() => {
-        initializeTestInstance(false, true, '1.0.0.', '2.0.0')
+        initializeTestInstance(false, '1.0.0.', '2.0.0')
         expect(() => component.getByText('Update available')).toThrow()
       })
     })
