@@ -2,10 +2,12 @@ import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/encourageUpdate'
 import { isIOS } from 'utils/platform'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { requestStorePopup } from 'utils/rnInAppUpdate'
 import { useTheme } from 'utils/hooks'
 
@@ -49,22 +51,27 @@ export const EncourageUpdateAlert = () => {
   const callRequestStorePopup = async () => {
     const result = await requestStorePopup()
     if (result && isIOS()) {
+      logAnalyticsEvent(Events.vama_eu_updated_success())
       openAppStore()
     } else if (result) {
+      logAnalyticsEvent(Events.vama_eu_updated_success())
       setVersionName(storeVersion ? storeVersion : '0.0.0')
     }
   }
 
   const onUpdatePressed = (): void => {
+    logAnalyticsEvent(Events.vama_eu_updated())
     callRequestStorePopup()
   }
 
   const onSkipPressed = (): void => {
+    logAnalyticsEvent(Events.vama_eu_skipped())
     setVersionSkipped(storeVersion ? storeVersion : '0.0.0.')
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
   }
 
   if (featureEnabled('inAppUpdates') && skippedVersion !== storeVersion && localVersionName !== storeVersion) {
+    logAnalyticsEvent(Events.vama_eu_shown())
     return (
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
