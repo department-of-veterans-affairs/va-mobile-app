@@ -18,7 +18,7 @@ import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAutoScrollToElement, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
