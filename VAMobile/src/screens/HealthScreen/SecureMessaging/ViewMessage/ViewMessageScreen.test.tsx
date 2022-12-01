@@ -9,6 +9,7 @@ import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads }
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
 import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
+import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import Mock = jest.Mock
 import { Pressable } from 'react-native'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
@@ -297,14 +298,7 @@ context('ViewMessageScreen', () => {
     it('should show AlertBox with Compose button', async () => {
       await waitFor(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
-        expect(testInstance.findByProps({ label: 'Compose a new message' })).toBeTruthy()
-      })
-    })
-
-    it('should use route navigation when Compose button is clicked', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ label: 'Compose a new message' }).props.onPress()
-        expect(navigateToSpy).toHaveBeenCalled()
+        expect(testInstance.findByType(ComposeMessageButton)).toBeTruthy()
       })
     })
   })
