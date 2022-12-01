@@ -11,12 +11,11 @@ import { AuthorizedServicesState } from 'store/slices'
 import {
   Box,
   BoxProps,
+  ButtonTypesConstants,
   ClickForActionLink,
   CollapsibleAlert,
   CollapsibleAlertProps,
   ErrorComponent,
-  FooterButton,
-  FooterButtonProps,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -29,6 +28,8 @@ import {
   TabBarProps,
   TabsValuesType,
   TextView,
+  VAButton,
+  VAButtonProps,
   VAIcon,
   VAScrollView,
 } from 'components'
@@ -554,13 +555,16 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       return <></>
     }
 
-    const requestRefillButtonProps: FooterButtonProps = {
-      text: t('prescription.history.startRefillRequest'),
-      backGroundColor: 'buttonPrimary',
-      textColor: 'navBar',
+    const requestRefillButtonProps: VAButtonProps = {
+      label: t('prescription.history.startRefillRequest'),
+      buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: navigateTo('RefillScreenModal'),
     }
-    return <FooterButton {...requestRefillButtonProps} />
+    return (
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+        <VAButton {...requestRefillButtonProps} />
+      </Box>
+    )
   }
 
   const getHistoryListHeader = () => {
@@ -600,6 +604,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   return (
     <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
+      {getRequestRefillButton()}
       <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={mainViewStyle}>
         <TabBar {...tabProps} />
         <Box {...filterWrapperProps}>
@@ -614,7 +619,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         </Box>
         {getContent()}
       </VAScrollView>
-      {getRequestRefillButton()}
     </Box>
   )
 }
