@@ -446,8 +446,6 @@
   "secureMessaging.attachments.sizeRequirements.A11yLabel": "The file size for a single attachment cannot exceed 3 megabytes and the total size of the attachments cannot exceed 6 megabytes.",
   "secureMessaging.attachments.youMayAttach": "You may attach up to 4 files which must be in one of the following formats:",
   "secureMessaging.composeMessage": "Compose a Message",
-  "secureMessaging.composeMessage.new": "Compose a new message",
-  "secureMessaging.composeMessage.new.a11yHint": "Go to the compose a message page",
   "secureMessaging.composeMessage.attach": "Attach",
   "secureMessaging.composeMessage.attach.cancel.a11yHint": "cancel and return to your message",
   "secureMessaging.composeMessage.attach.a11yHint": "attach file to your message",
