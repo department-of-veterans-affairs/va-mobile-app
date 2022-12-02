@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAButton, VAIconProps, VAModalPicker, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
@@ -18,10 +18,11 @@ import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAutoScrollToElement, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
-import ReplyMessageFooter from '../ReplyMessageFooter/ReplyMessageFooter'
+import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
+import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -63,7 +64,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
@@ -187,8 +187,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
-  const onPressCompose = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
-
   const onMove = (value: string) => {
     setShouldFocus(false)
     const currentFolder = Number(folderWhereMessageIs.current)
@@ -211,6 +209,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   return (
     <>
       <VAScrollView {...testIdProps('ViewMessage-page')} scrollViewRef={scrollRef}>
+        {!replyExpired ? (
+          <ReplyMessageButton messageID={messageID} />
+        ) : (
+          <Box>
+            <ComposeMessageButton />
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
+            </Box>
+          </Box>
+        )}
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
             <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
@@ -219,22 +227,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           </Box>
           {renderMessages(message, messagesById, thread, messageRef)}
         </Box>
-        {replyExpired && (
-          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-            <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
-              <Box mt={theme.dimensions.standardMarginBetween}>
-                <VAButton
-                  label={t('secureMessaging.composeMessage.new')}
-                  onPress={onPressCompose}
-                  buttonType={'buttonPrimary'}
-                  a11yHint={t('secureMessaging.composeMessage.new.a11yHint')}
-                />
-              </Box>
-            </AlertBox>
-          </Box>
-        )}
       </VAScrollView>
-      {!replyExpired && <ReplyMessageFooter messageID={messageID} />}
     </>
   )
 }

@@ -134,7 +134,7 @@
     "eslint-plugin-react-native": "^4.0.0",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "jest": "^27.4.7",
-    "jest-junit": "^13.0.0",
+    "jest-junit": "^14.0.1",
     "jest-styled-components": "^7.1.1",
     "jest-when": "^3.5.0",
     "metro-react-native-babel-preset": "^0.72.3",
@@ -153,6 +153,7 @@
     "outputName": "junit-vamobile.xml",
     "suiteNameTemplate": "vamobile.\"{title}\"",
     "classNameTemplate": "vamobile.\"{classname}\"",
-    "outputDirectory": "./coverage/junit"
+    "outputDirectory": "./coverage/junit",
+    "addFileAttribute": "true"
   }
 }

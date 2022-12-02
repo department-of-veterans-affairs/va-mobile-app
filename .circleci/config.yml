@@ -59,13 +59,17 @@ commands:
           command: yarn lint:ci
           when: always
   jest:
-    description: "Run jest"
+    description: "Run jest with time splitting"
     steps:
       - run:
           working_directory: ~/project/VAMobile
-          command: yarn test -w 1
+          command: |
+            TEST=$(circleci tests glob "src/**/*.test.ts*" | circleci tests split --split-by=timings)
+            yarn test $TEST -w 2
           when: always
       - store_test_results:
+          path: VAMobile/coverage/junit/
+      - store_artifacts:
           path: VAMobile/coverage/junit/
   install_pods:
     description: "install cocoa pods"
@@ -330,17 +334,20 @@ commands:
           working_directory: ~/project/VAMobile
           command: python3 queue-builds.py
 jobs:
-  test:
+  lint:
     executor: default
     steps:
       - checkout
       - install_deps
       - lint
-      - jest
-  run:
+  test:
     executor: default
     steps:
-      - run: echo "run"
+      - checkout
+      - install_deps
+      - jest
+    parallelism: 5
+    resource_class: xlarge
   start_slack_thread:
     executor: default
     parameters:
@@ -479,8 +486,8 @@ jobs:
 workflows:
   pr:
     jobs:
+      - lint
       - test
-      - run
   qa_build:
     triggers:
       - schedule:
