@@ -204,7 +204,7 @@ context('PastAppointments', () => {
     it('should render the first line of the appointment item as the text "Canceled"', async () => {
       await waitFor(() => {
         initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED))
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Canceled')
+        expect(findByTypeWithName(testInstance, TextView, 'Canceled')).toBeTruthy()
       })
     })
   })
@@ -213,7 +213,7 @@ context('PastAppointments', () => {
     it('should render the first line of the appointment item as the text "Canceled"', async () => {
       await waitFor(() => {
         initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED, true))
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Canceled')
+        expect(findByTypeWithName(testInstance, TextView, 'Canceled')).toBeTruthy()
       })
     })
   })
@@ -222,7 +222,7 @@ context('PastAppointments', () => {
     it('should render the first line of the appointment item as the text "Pending"', async () => {
       await waitFor(() => {
         initializeTestInstance(appointmentData(AppointmentStatusConstants.SUBMITTED, true))
-        expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Pending')
+        expect(findByTypeWithName(testInstance, TextView, 'Pending')).toBeTruthy()
       })
     })
   })
