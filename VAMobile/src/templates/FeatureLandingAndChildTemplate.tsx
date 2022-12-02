@@ -1,11 +1,11 @@
 /* eslint-disable sort-imports-es6-autofix/sort-imports-es6 */
 import { DateTime } from 'luxon'
-import { Animated, Platform, ScrollView, StatusBar, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { Animated, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableWithoutFeedback, View, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, TextView, VAScrollView } from 'components'
+import { AlertBox, DescriptiveBackButton, Box, ButtonWithIcon, ErrorComponent, FooterButton, SegmentedControl, TextView, VAScrollView, VAIcon } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -21,6 +21,8 @@ import NoMatchInRecords from '../screens/HealthScreen/Appointments/NoMatchInReco
 import PastAppointments from '../screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import UpcomingAppointments from '../screens/HealthScreen/Appointments/UpcomingAppointments/UpcomingAppointments'
 import { default as stylesTheme } from 'styles/themes/standardTheme'
+import styled from 'styled-components'
+import { themeFn } from 'utils/theme'
 
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
 
@@ -51,10 +53,10 @@ export type ChildTemplateProps = {
   content: ReactNode
 }
 
-const HEADER_MAX_HEIGHT = 111
+const HEADER_MAX_HEIGHT = 91
 // const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 60 : 73
 // const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
-const SUBHEADER_MAX_HEIGHT = 67
+const SUBHEADER_MAX_HEIGHT = 52
 
 const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -173,11 +175,41 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
     scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
   }
 
+  const StyledLabel = styled(Text)`
+	color: ${themeFn((styleTheme) => styleTheme.colors.icon.active)}
+	align-self: center;
+	margin-top: 24px;
+	font-size: 12px;
+	letter-spacing: -0.2px;
+`
+
   return (
     <View style={styles.fill}>
       <StatusBar translucent barStyle="dark-content" />
       <Animated.View style={[styles.bar]}>
-        <TextView variant="BitterBoldHeading">VA</TextView>
+        <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
+          <Box display="flex" width="25%">
+            <DescriptiveBackButton label={'Health'} onPress={navigateTo('HealthTab')} />
+          </Box>
+          <Box display="flex" flex={1} flexDirection={'row'} m={theme.dimensions.headerButtonSpacing} justifyContent={'center'} alignItems={'center'}>
+            <TextView variant="BitterBoldHeading" selectable={false}>
+              VA
+            </TextView>
+          </Box>
+          <Box display="flex" width="25%" alignItems="center">
+            <TouchableWithoutFeedback>
+              {/* {...props} */}
+              {/* <Box flex={1} display="flex" flexDirection="column" mt={7}> */}
+              <>
+                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
+                  <VAIcon name={'ExclamationTriangleSolid'} fill={'active'} height={22} width={22} />
+                </Box>
+                <StyledLabel allowFontScaling={false}>{'Title'}</StyledLabel>
+              </>
+              {/* </Box> */}
+            </TouchableWithoutFeedback>
+          </Box>
+        </Box>
       </Animated.View>
       <Animated.View style={[styles.subheader, { transform: [{ translateY: subtitleTranslate }] }]}>
         <TextView variant="BitterBoldHeading" m={theme.dimensions.condensedMarginBetween}>

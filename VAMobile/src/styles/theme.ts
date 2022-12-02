@@ -33,6 +33,7 @@ export type VAButtonTextColors = {
 }
 
 export type VATextColors = {
+  descriptiveBackButton: string
   footerButton: string
   footerButtonActive: string
   navBar: string
