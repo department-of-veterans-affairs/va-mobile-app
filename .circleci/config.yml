@@ -534,8 +534,8 @@ workflows:
       #       branches:
       #         ignore: /.*/
       - build_android_feature:
-          requires:
-            - start_slack_thread
+          # requires:
+          #   - start_slack_thread
           filters:
             tags:
               only: /^feature-build-.+/
