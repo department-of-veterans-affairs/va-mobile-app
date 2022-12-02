@@ -517,7 +517,7 @@ PODS:
     - React-Core
   - RNLocalize (2.1.7):
     - React-Core
-  - RNScreens (3.10.2):
+  - RNScreens (3.18.2):
     - React-Core
     - React-RCTImage
   - RNSVG (12.1.1):
@@ -852,7 +852,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
   RNLocalize: f567ea0e35116a641cdffe6683b0d212d568f32a
-  RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
+  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   SDWebImage: 631cf572cc93dfdfe54162e556410a61f1141928
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
