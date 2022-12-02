@@ -373,7 +373,6 @@ jobs:
       - ios_fastlane
   build_android_qa:
     executor: android
-    resource_class: xlarge
     steps:
       - checkout
       - install_deps
@@ -399,6 +398,7 @@ jobs:
           tf_group: Development Team
   build_android_feature:
     executor: android
+    resource_class: xlarge
     steps:
       - checkout
       - install_deps
