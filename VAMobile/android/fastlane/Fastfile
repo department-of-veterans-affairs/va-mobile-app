@@ -184,7 +184,7 @@ platform :android do
 
   def bundle(type)
     gradle(task: "clean")
-    gradle(task: "bundle", build_type: type, flags: "--stacktrace --debug")
+    gradle(task: "bundle", build_type: type, flags: "--stacktrace")
   end
 
   def upload(track, skip_meta = true)
