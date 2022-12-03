@@ -13,6 +13,7 @@ import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { useAppDispatch, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import LargePanel from 'components/Templates/LargePanel'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
@@ -112,56 +113,65 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: totalSubmittedRequestRefill })} />
   }
 
+  const onLeftTitleButtonPress = () => {
+    console.debug('leftButtonPressed')
+    return
+  }
+
+  const requestRefill = () => {
+    if (selectedPrescriptionsCount === 0) {
+      setAlert(true)
+      return
+    }
+    onSubmitPressed()
+  }
+
   return (
     <>
-      <VAScrollView>
-        {showAlert && (
-          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
-          </Box>
-        )}
-        <Box mx={theme.dimensions.gutter}>
-          <TextView my={theme.dimensions.standardMarginBetween} variant={'HelperText'}>
-            {t('prescriptions.refill.instructions.requestRefills')}
-            <TextView variant={'HelperTextBold'}>
-              {t('prescriptions.refill.instructions.fifteenDays')}
-              <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
+      <LargePanel
+        leftButtonText="cancel"
+        onLeftTitleButtonPress={onLeftTitleButtonPress}
+        title={'Full panel title'}
+        rightButtonText="Done"
+        footerButtonText={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
+        onFooterButtonPress={requestRefill}>
+        <VAScrollView>
+          {showAlert && (
+            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+              <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
+            </Box>
+          )}
+          <Box mx={theme.dimensions.gutter}>
+            <TextView my={theme.dimensions.standardMarginBetween} variant={'HelperText'}>
+              {t('prescriptions.refill.instructions.requestRefills')}
+              <TextView variant={'HelperTextBold'}>
+                {t('prescriptions.refill.instructions.fifteenDays')}
+                <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
+              </TextView>
             </TextView>
-          </TextView>
-          <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
-            {t('prescriptions.refill.weWillMailText')}
-          </TextView>
-          <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-            {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
-          </TextView>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <SelectionList
-            items={getListItems()}
-            onSelectionChange={(items) => {
-              const newSelectedCount = Object.values(items).reduce((acc, item) => (item === true ? ++acc : acc), 0)
-              // only update if the count changes
-              if (selectedPrescriptionsCount !== newSelectedCount) {
-                setAlert(false)
-                setSelectedPrescriptionsCount(newSelectedCount)
-                setSelectedValues(items)
-              }
-            }}
-          />
-        </Box>
-      </VAScrollView>
-      <FooterButton
-        text={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
-        backGroundColor="buttonPrimary"
-        textColor={'navBar'}
-        onPress={() => {
-          if (selectedPrescriptionsCount === 0) {
-            setAlert(true)
-            return
-          }
-          onSubmitPressed()
-        }}
-      />
+            <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
+              {t('prescriptions.refill.weWillMailText')}
+            </TextView>
+            <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+              {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
+            </TextView>
+          </Box>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <SelectionList
+              items={getListItems()}
+              onSelectionChange={(items) => {
+                const newSelectedCount = Object.values(items).reduce((acc, item) => (item === true ? ++acc : acc), 0)
+                // only update if the count changes
+                if (selectedPrescriptionsCount !== newSelectedCount) {
+                  setAlert(false)
+                  setSelectedPrescriptionsCount(newSelectedCount)
+                  setSelectedValues(items)
+                }
+              }}
+            />
+          </Box>
+        </VAScrollView>
+      </LargePanel>
     </>
   )
 }
@@ -179,7 +189,7 @@ const RefillStackScreen: FC<RefillStackScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
   return (
-    <RefillScreenStack.Navigator initialRouteName="RefillScreen" screenOptions={{ title: t('prescriptions.refill.pageHeaderTitle'), ...TransitionPresets.SlideFromRightIOS }}>
+    <RefillScreenStack.Navigator initialRouteName="RefillScreen" screenOptions={{ headerShown: false }}>
       <RefillScreenStack.Screen
         name="RefillScreen"
         component={RefillScreen}
