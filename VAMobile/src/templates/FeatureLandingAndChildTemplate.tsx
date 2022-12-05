@@ -1,6 +1,19 @@
 /* eslint-disable sort-imports-es6-autofix/sort-imports-es6 */
 import { DateTime } from 'luxon'
-import { Animated, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableWithoutFeedback, View, ViewStyle } from 'react-native'
+import {
+  Animated,
+  Easing,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+  ViewStyle,
+} from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
@@ -102,6 +115,12 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
     extrapolate: 'clamp',
   })
 
+  const [opacity2, setOpacity2] = useState(1)
+  // let opacity2 = 1
+  const setOpacity = (val: number) => {
+    setOpacity2(1 - val / SUBHEADER_MAX_HEIGHT)
+  }
+
   // const titleScale = scrollY.interpolate({
   //   inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
   //   outputRange: [1, 1, 0.8],
@@ -192,7 +211,7 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
             <DescriptiveBackButton label={'Health'} onPress={navigateTo('HealthTab')} />
           </Box>
           <Box display="flex" flex={1} flexDirection={'row'} m={theme.dimensions.headerButtonSpacing} justifyContent={'center'} alignItems={'center'}>
-            <TextView variant="BitterBoldHeading" selectable={false}>
+            <TextView variant="BitterBoldHeading" selectable={false} opacity={opacity2}>
               VA
             </TextView>
           </Box>
@@ -219,7 +238,12 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
       <Animated.ScrollView
         style={styles.fill}
         scrollEventThrottle={1}
-        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: initialScrollY } } }], { useNativeDriver: true })}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: initialScrollY } } }], {
+          listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+            setOpacity(event.nativeEvent.contentOffset.y + HEADER_MAX_HEIGHT + SUBHEADER_MAX_HEIGHT)
+          },
+          useNativeDriver: true,
+        })}
         // iOS offset for RefreshControl
         contentInset={{
           top: HEADER_MAX_HEIGHT + SUBHEADER_MAX_HEIGHT,
