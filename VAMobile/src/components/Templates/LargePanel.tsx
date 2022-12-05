@@ -36,9 +36,9 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
     display: 'flex',
     flexDirection: 'row',
     height: 64,
-    backgroundColor: theme.colors.background.main,
+    backgroundColor: 'main',
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border.menuDivider,
+    borderBottomColor: 'menuDivider',
   }
 
   const boxProps: BoxProps = {
@@ -66,7 +66,7 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
         {
           text: t('close'),
           onPress: () => {
-            navigation.goBack(null)
+            navigation.goBack()
           },
         },
       ],
@@ -78,7 +78,7 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
     if (onRightButtonPress) {
       onRightButtonPress
     }
-    navigation.goBack(null)
+    navigation.goBack()
     return
   }
 
