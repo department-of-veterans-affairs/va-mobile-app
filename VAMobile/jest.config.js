@@ -35,8 +35,7 @@ module.exports = {
 	],
 
 	"setupFilesAfterEnv": [
-		"./jest/testSetup.runner.ts",
-		"@testing-library/jest-native/extend-expect"
+		"./jest/testSetup.runner.ts"
 	],
 	"transformIgnorePatterns": [
 		"/node_modules/(?!native-base)/"

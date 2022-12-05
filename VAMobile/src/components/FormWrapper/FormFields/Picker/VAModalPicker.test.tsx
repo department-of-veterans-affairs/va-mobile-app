@@ -1,12 +1,10 @@
 import 'react-native'
 import React from 'react'
-import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, mockStore, render, waitFor, findByTypeWithSubstring } from 'testUtils'
+import { context, render, waitFor } from 'testUtils'
 import { PickerItem } from './VAModalPicker'
-import Mock = jest.Mock
 import VAModalPicker from './VAModalPicker'
 import TextView from 'components/TextView'
 import BaseListItem from 'components/BaseListItem'
@@ -17,18 +15,27 @@ context('VAModalPicker', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let selected: string
-  let setSelected: Mock
   let pickerOptions: Array<PickerItem>
   let doneButton: any
   let cancelButton: any
   let selectionButtons: any
 
-  const initializeTestInstance = (selectedValue: string, labelKey?: string, helperTextKey = '', error = '', isRequiredField = false, testID = '', isRunning = false): void => {
+  const initializeTestInstance = async (
+    selectedValue: string,
+    labelKey?: string,
+    helperTextKey = '',
+    error = '',
+    isRequiredField = false,
+    testID = '',
+    isRunning = false,
+  ): Promise<void> => {
     selected = selectedValue
-    setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
+    const setSelected = (updatedSelected: string) => {
+      selected = updatedSelected
+    }
 
     const props = {
-      selectedValue: selected,
+      selectedValue: selectedValue,
       onSelectionChange: setSelected,
       pickerOptions,
       labelKey,
@@ -49,12 +56,17 @@ context('VAModalPicker', () => {
 
     testInstance = component.container
 
+    await waitFor(() => {
+      const showButton = testInstance.findByProps({ accessibilityRole: 'spinbutton' })
+      showButton.props.onPress()
+    })
+
     doneButton = testInstance.findByProps({ accessibilityLabel: 'Done' })
     cancelButton = testInstance.findByProps({ accessibilityLabel: 'Cancel' })
     selectionButtons = testInstance.findAllByType(BaseListItem)
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     pickerOptions = [
       { label: 'Java', value: 'java' },
       { label: 'JavaScript', value: 'js' },
@@ -62,7 +74,7 @@ context('VAModalPicker', () => {
       { label: 'JavaScript3', value: 'js3' },
     ]
 
-    initializeTestInstance('js', 'profile:editPhoneNumber.number')
+    await initializeTestInstance('js', 'profile:editPhoneNumber.number')
   })
 
   it('initializes correctly', async () => {
@@ -73,11 +85,13 @@ context('VAModalPicker', () => {
     it('should update selected to the value of that option and select done', async () => {
       await waitFor(() => {
         selectionButtons[0].props.onPress()
-
-        doneButton.props.onPress()
-
-        expect(selected).toEqual('java')
       })
+
+      await waitFor(() => {
+        doneButton.props.onPress()
+      })
+
+      expect(selected).toEqual('java')
     })
 
     it('should not update selected to the value of that option and select cancel', async () => {
@@ -94,21 +108,21 @@ context('VAModalPicker', () => {
   describe('when labelKey exists', () => {
     it('should render a textview for the label', async () => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[7].props.children).toEqual(['Number',' ',''])
+      expect(textViews[7].props.children).toEqual(['Number', ' ', ''])
       expect(textViews.length).toEqual(9)
     })
   })
 
   describe('when there is helper text', () => {
     it('should display it', async () => {
-      initializeTestInstance('js', 'label', 'common:back.a11yHint')
+      await initializeTestInstance('js', 'label', 'common:back.a11yHint')
       expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Navigates to the previous page')
     })
   })
 
   describe('when there is an error', () => {
     it('should display it', async () => {
-      initializeTestInstance('email', 'label', '', 'ERROR')
+      await initializeTestInstance('email', 'label', '', 'ERROR')
       const allTextViews = testInstance.findAllByType(TextView)
       expect(allTextViews[allTextViews.length - 2].props.children).toEqual('ERROR')
     })
@@ -116,9 +130,9 @@ context('VAModalPicker', () => {
 
   describe('when isRequiredField is true', () => {
     it('should display (Required)', async () => {
-      initializeTestInstance('email', 'label', '', '', true)
+      await initializeTestInstance('email', 'label', '', '', true)
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[7].props.children).toEqual(['label',' ','(Required)'])
+      expect(textViews[7].props.children).toEqual(['label', ' ', '(Required)'])
       expect(textViews.length).toEqual(9)
     })
   })

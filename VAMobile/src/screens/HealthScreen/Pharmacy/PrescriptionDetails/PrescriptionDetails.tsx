@@ -82,19 +82,19 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
 
   const getRequestRefillButton = () => {
     const requestRefillButtonProps: FooterButtonProps = {
-      text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }),
+      text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
       backGroundColor: 'buttonPrimary',
       textColor: 'navBar',
       onPress: () => {
         submitRefillAlert({
-          title: t('prescriptions.refill.confirmationTitle', { count: 0 }),
+          title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
           cancelButtonIndex: 0,
           buttons: [
             {
               text: tc('cancel'),
             },
             {
-              text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 0 }),
+              text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
               onPress: () => {
                 // Call refill request so its starts the loading screen and then go to the modal
                 dispatch(requestRefills([prescription]))
