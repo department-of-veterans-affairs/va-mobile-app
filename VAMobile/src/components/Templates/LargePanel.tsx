@@ -1,10 +1,9 @@
 import { Pressable } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import Box from 'components/Box'
 import React, { FC } from 'react'
-import TextView from 'components/TextView'
 
-import { BoxProps, FooterButton, TextViewProps } from 'components'
+import { Box, BoxProps, FooterButton, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveAlert, useTheme } from 'utils/hooks'
 /*To use this template to rap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
@@ -24,12 +23,11 @@ export type LargePanelProps = {
   onFooterButtonPress?: () => void
   /** function called when right button is pressed and a save action is needed */
   onRightButtonPress?: () => void
-  /* Navigation component to process pressing the done/cancel buttons* */
-  navigation?: any
 }
 
-const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, rightButtonText, footerButtonText, onRightButtonPress, onFooterButtonPress, navigation }) => {
+const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, rightButtonText, footerButtonText, onRightButtonPress, onFooterButtonPress }) => {
   const theme = useTheme()
+  const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
 
