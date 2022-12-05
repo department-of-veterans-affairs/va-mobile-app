@@ -1,12 +1,16 @@
 import { Pressable } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import Box from 'components/Box'
 import React, { FC } from 'react'
 import TextView from 'components/TextView'
 
-import { ButtonTypesConstants } from 'components/VAButton'
-import { FooterButton } from 'components'
-import { VABackgroundColors, VAButtonBackgroundColors, VATextColors } from 'styles/theme'
-import VAButton from 'components/VAButton'
+import { BoxProps, FooterButton, TextViewProps } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { useDestructiveAlert, useTheme } from 'utils/hooks'
+/*To use this template to rap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
+in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
+Use 'options={{headerShown: false}}' in the individual screen if only an individual screen is supposed to do it.
+*/
 
 export type LargePanelProps = {
   leftButtonText?: string
@@ -16,44 +20,104 @@ export type LargePanelProps = {
   rightButtonText?: string
   /** text of the footer button(no text it doesn't appear) */
   footerButtonText?: string
-  /** optional accessibility label for the left button text */
-  leftButtonA11yLabel?: string
-  /** optional accessibility label for the title */
-  titleA11yLabel?: string
-  /** optional accessibility label for the right button text */
-  rightButtonA11yLabel?: string
-  /** optional accessibility label for the footer button text */
-  footerButtonA11yLabel?: string
-  /** function called when left title button is pressed */
-  onLeftTitleButtonPress?: () => void
-  /** function called when right title button is pressed */
-  onRightTitleButtonPress?: () => void
-  /** function called when footer button is pressed */
+  /** function called when footer button is pressed(no function it doesn't appear) */
   onFooterButtonPress?: () => void
+  /** function called when right button is pressed and a save action is needed */
+  onRightButtonPress?: () => void
+  /* Navigation component to process pressing the done/cancel buttons* */
+  navigation?: any
 }
 
-const LargePanel: FC<LargePanelProps> = ({
-  children,
-  leftButtonText,
-  title,
-  rightButtonText,
-  footerButtonText,
-  leftButtonA11yLabel,
-  titleA11yLabel,
-  rightButtonA11yLabel,
-  footerButtonA11yLabel,
-  onLeftTitleButtonPress,
-  onRightTitleButtonPress,
-  onFooterButtonPress,
-}) => {
+const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, rightButtonText, footerButtonText, onRightButtonPress, onFooterButtonPress, navigation }) => {
+  const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const confirmAlert = useDestructiveAlert()
+
+  const titleBannerProps: BoxProps = {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    height: 64,
+    backgroundColor: theme.colors.background.main,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border.menuDivider,
+  }
+
+  const boxProps: BoxProps = {
+    alignItems: 'center',
+    p: theme.dimensions.buttonPadding,
+    minHeight: 64,
+  }
+
+  const textViewProps: TextViewProps = {
+    color: 'footerButton',
+  }
+  const message = t('areYouSure')
+
+  const onLeftTitleButtonPress = () => {
+    confirmAlert({
+      title: '',
+      message,
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('cancel'),
+          onPress: () => {},
+        },
+        {
+          text: t('close'),
+          onPress: () => {
+            navigation.goBack(null)
+          },
+        },
+      ],
+    })
+    return
+  }
+
+  const onRightTitleButtonPress = () => {
+    if (onRightButtonPress) {
+      onRightButtonPress
+    }
+    navigation.goBack(null)
+    return
+  }
+
   return (
     <>
-      <Box>
-        <Pressable onPress={onLeftTitleButtonPress} accessible={true} accessibilityRole={'button'} testID={title} accessibilityLabel={leftButtonA11yLabel}>
-          <Box>
-            <TextView>{leftButtonText}</TextView>
-          </Box>
-        </Pressable>
+      <Box {...titleBannerProps}>
+        <Box ml={theme.dimensions.buttonPadding} flex={1}>
+          {leftButtonText && (
+            <Pressable onPress={onLeftTitleButtonPress} accessibilityRole="button" accessible={true}>
+              <Box {...boxProps}>
+                <Box display="flex" flexDirection="row" alignItems="center">
+                  <TextView {...textViewProps}>{leftButtonText}</TextView>
+                </Box>
+              </Box>
+            </Pressable>
+          )}
+        </Box>
+        <Box flex={3}>
+          {title && (
+            <Box {...boxProps}>
+              <Box display="flex" flexDirection="row" alignItems="center">
+                <TextView>{title}</TextView>
+              </Box>
+            </Box>
+          )}
+        </Box>
+        <Box mr={theme.dimensions.buttonPadding} flex={1}>
+          {rightButtonText && (
+            <Pressable onPress={onRightTitleButtonPress} accessibilityRole="button" accessible={true}>
+              <Box {...boxProps}>
+                <Box display="flex" flexDirection="row" alignItems="center">
+                  <TextView {...textViewProps}>{rightButtonText}</TextView>
+                </Box>
+              </Box>
+            </Pressable>
+          )}
+        </Box>
       </Box>
       {children}
       {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
