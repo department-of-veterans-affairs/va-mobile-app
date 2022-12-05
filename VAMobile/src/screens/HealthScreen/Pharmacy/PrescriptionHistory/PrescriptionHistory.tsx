@@ -606,7 +606,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   return (
     <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
       <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={mainViewStyle}>
-      {getRequestRefillButton()}
+        {getRequestRefillButton()}
         <TabBar {...tabProps} />
         <Box {...filterWrapperProps}>
           <Box {...filterContainerProps}>
