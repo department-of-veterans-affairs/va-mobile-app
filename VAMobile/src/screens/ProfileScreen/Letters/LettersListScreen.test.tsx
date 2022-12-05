@@ -5,7 +5,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, mockNavProps, waitFor, render, RenderAPI } from 'testUtils'
 import { ErrorsState, initialAuthorizedServicesState, initialErrorsState, initializeErrorsByScreenID, initialLettersState, InitialState } from 'store/slices'
-import { LettersList } from 'store/api/types'
+import { APIError, LettersList } from 'store/api/types'
 import { LettersListScreen } from './index'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import NoLettersScreen from './NoLettersScreen'
@@ -13,6 +13,7 @@ import { Pressable } from 'react-native'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { when } from 'jest-when'
+import * as api from 'store/api'
 
 let mockNavigationSpy = jest.fn()
 
@@ -93,7 +94,7 @@ context('LettersListScreen', () => {
   let mockNavigateToProofOfPrescriptionLetterSpy: jest.Mock
   let mockNavigateToProofOfMinimumEssentialLetterSpy: jest.Mock
 
-  const initializeTestInstance = (lettersList: LettersList | null, loading = false, errorsState: ErrorsState = initialErrorsState, lettersAndDocuments: boolean = true) => {
+  const initializeTestInstance = (lettersList: LettersList | null, loading = false, throwError: boolean = false, lettersAndDocuments: boolean = true) => {
     mockNavigateToBenefitSummarySpy = jest.fn()
     mockNavigateToServiceVerificationLetterSpy = jest.fn()
     mockNavigateToCommissaryLetterSpy = jest.fn()
@@ -103,15 +104,33 @@ context('LettersListScreen', () => {
     mockNavigateToProofOfPrescriptionLetterSpy = jest.fn()
     mockNavigateToProofOfMinimumEssentialLetterSpy = jest.fn()
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('BenefitSummaryServiceVerificationLetter').mockReturnValue(mockNavigateToBenefitSummarySpy)
-        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'service_verification' })).mockReturnValue(mockNavigateToServiceVerificationLetterSpy)
-        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'commissary' })).mockReturnValue(mockNavigateToCommissaryLetterSpy)
-        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'civil_service' })).mockReturnValue(mockNavigateToCivilServiceLetterSpy)
-        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'benefit_verification' })).mockReturnValue(mockNavigateToBenefitVerificationSpy)
-        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'proof_of_service' })).mockReturnValue(mockNavigateToProofOfServiceLetterSpy)
-        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'medicare_partd' })).mockReturnValue(mockNavigateToProofOfPrescriptionLetterSpy)
-        .calledWith('GenericLetter',  expect.objectContaining({ letterType: 'minimum_essential_coverage' })).mockReturnValue(mockNavigateToProofOfMinimumEssentialLetterSpy)
+      .mockReturnValue(() => {})
+      .calledWith('BenefitSummaryServiceVerificationLetter')
+      .mockReturnValue(mockNavigateToBenefitSummarySpy)
+      .calledWith('GenericLetter', expect.objectContaining({ letterType: 'service_verification' }))
+      .mockReturnValue(mockNavigateToServiceVerificationLetterSpy)
+      .calledWith('GenericLetter', expect.objectContaining({ letterType: 'commissary' }))
+      .mockReturnValue(mockNavigateToCommissaryLetterSpy)
+      .calledWith('GenericLetter', expect.objectContaining({ letterType: 'civil_service' }))
+      .mockReturnValue(mockNavigateToCivilServiceLetterSpy)
+      .calledWith('GenericLetter', expect.objectContaining({ letterType: 'benefit_verification' }))
+      .mockReturnValue(mockNavigateToBenefitVerificationSpy)
+      .calledWith('GenericLetter', expect.objectContaining({ letterType: 'proof_of_service' }))
+      .mockReturnValue(mockNavigateToProofOfServiceLetterSpy)
+      .calledWith('GenericLetter', expect.objectContaining({ letterType: 'medicare_partd' }))
+      .mockReturnValue(mockNavigateToProofOfPrescriptionLetterSpy)
+      .calledWith('GenericLetter', expect.objectContaining({ letterType: 'minimum_essential_coverage' }))
+      .mockReturnValue(mockNavigateToProofOfMinimumEssentialLetterSpy)
+
+    if (throwError) {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/letters')
+        .mockRejectedValue({ networkError: true } as APIError)
+    } else {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/letters')
+        .mockResolvedValue({ data: { attributes: { letters: lettersList } } })
+    }
 
     const storeVals = {
       ...InitialState,
@@ -120,7 +139,6 @@ context('LettersListScreen', () => {
         lettersAndDocuments: lettersAndDocuments,
       },
       letters: { ...initialLettersState, loading },
-      errors: errorsState,
     }
 
     if (lettersList) {
@@ -157,90 +175,123 @@ context('LettersListScreen', () => {
   it('should display the correct list of letters', async () => {
     await waitFor(() => {
       initializeTestInstance(lettersData)
-      const texts = testInstance.findAllByType(TextView)
-      expect(texts.length).toBe(8)
-
-      expect(texts[0].props.children).toBe('Commissary letter')
-      expect(texts[1].props.children).toBe('Proof of service card')
-      expect(texts[2].props.children).toBe('Proof of creditable prescription drug coverage letter')
-      expect(texts[3].props.children).toBe('Proof of minimum essential coverage letter')
-      expect(texts[4].props.children).toBe('Service verification letter')
-      expect(texts[5].props.children).toBe('Civil service preference letter')
-      expect(texts[6].props.children).toBe('Benefit summary letter')
-      expect(texts[7].props.children).toBe('Benefit verification letter')
     })
+
+    const texts = testInstance.findAllByType(TextView)
+    expect(texts.length).toBe(8)
+
+    expect(texts[0].props.children).toBe('Benefit summary letter')
+    expect(texts[1].props.children).toBe('Benefit verification letter')
+    expect(texts[2].props.children).toBe('Civil service preference letter')
+    expect(texts[3].props.children).toBe('Commissary letter')
+    expect(texts[4].props.children).toBe('Proof of creditable prescription drug coverage letter')
+    expect(texts[5].props.children).toBe('Proof of minimum essential coverage letter')
+    expect(texts[6].props.children).toBe('Proof of service card')
+    expect(texts[7].props.children).toBe('Service verification letter')
   })
 
   describe('when a link is clicked', () => {
     it('should call navigations navigate for Benefit Summary Service Verification Letter', async () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
-        testInstance.findAllByType(Pressable)[6].props.onPress()
-        expect(mockNavigateToBenefitSummarySpy).toHaveBeenCalled()
       })
-    })
 
-    it('should call navigations navigate for Service Verification Letter', async () => {
       await waitFor(() => {
-        initializeTestInstance(lettersData)
-        testInstance.findAllByType(Pressable)[4].props.onPress()
-        expect(mockNavigateToServiceVerificationLetterSpy).toHaveBeenCalled()
-      })
-    })
-
-    it('should call navigations navigate for Commissary Letter', async () => {
-      await waitFor(() => {
-        initializeTestInstance(lettersData)
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigateToCommissaryLetterSpy).toHaveBeenCalled()
       })
-    })
 
-    it('should call navigations navigate for Civil Service Letter', async () => {
-      await waitFor(() => {
-        initializeTestInstance(lettersData)
-        testInstance.findAllByType(Pressable)[5].props.onPress()
-        expect(mockNavigateToCivilServiceLetterSpy).toHaveBeenCalled()
-      })
+      expect(mockNavigateToBenefitSummarySpy).toHaveBeenCalled()
     })
 
     it('should call navigations navigate for Benefit Verification Letter', async () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
-        testInstance.findAllByType(Pressable)[7].props.onPress()
-        expect(mockNavigateToBenefitVerificationSpy).toHaveBeenCalled()
       })
+
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[1].props.onPress()
+      })
+
+      expect(mockNavigateToBenefitVerificationSpy).toHaveBeenCalled()
     })
 
-    it('should call navigations navigate for Proof of Service Letter', async () => {
+    it('should call navigations navigate for Civil Service Letter', async () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(mockNavigateToProofOfServiceLetterSpy).toHaveBeenCalled()
       })
+
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[2].props.onPress()
+      })
+
+      expect(mockNavigateToCivilServiceLetterSpy).toHaveBeenCalled()
+    })
+
+    it('should call navigations navigate for Commissary Letter', async () => {
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+      })
+
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[3].props.onPress()
+      })
+
+      expect(mockNavigateToCommissaryLetterSpy).toHaveBeenCalled()
     })
 
     it('should call navigations navigate for Proof of Creditable Prescription Drug Coverage Letter', async () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
-        testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(mockNavigateToProofOfPrescriptionLetterSpy).toHaveBeenCalled()
       })
+
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[4].props.onPress()
+      })
+
+      expect(mockNavigateToProofOfPrescriptionLetterSpy).toHaveBeenCalled()
     })
 
     it('should call navigations navigate for Proof of Minimum Essential Coverage Letter', async () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
-        testInstance.findAllByType(Pressable)[3].props.onPress()
-        expect(mockNavigateToProofOfMinimumEssentialLetterSpy).toHaveBeenCalled()
       })
+
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[5].props.onPress()
+      })
+
+      expect(mockNavigateToProofOfMinimumEssentialLetterSpy).toHaveBeenCalled()
+    })
+
+    it('should call navigations navigate for Proof of Service Letter', async () => {
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+      })
+
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[6].props.onPress()
+      })
+
+      expect(mockNavigateToProofOfServiceLetterSpy).toHaveBeenCalled()
+    })
+
+    it('should call navigations navigate for Service Verification Letter', async () => {
+      await waitFor(() => {
+        initializeTestInstance(lettersData)
+      })
+      
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[7].props.onPress()
+      })
+
+      expect(mockNavigateToServiceVerificationLetterSpy).toHaveBeenCalled()
     })
   })
 
   describe('when lettersAndDocuments is set to false', () => {
     it('should show noLettersScreen', async () => {
       await waitFor(() => {
-        initializeTestInstance(lettersData, false, initialErrorsState, false)
+        initializeTestInstance(lettersData, false, false, false)
         expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
       })
     })
@@ -250,8 +301,9 @@ context('LettersListScreen', () => {
     it('should show No Letters Screen', async () => {
       await waitFor(() => {
         initializeTestInstance(null)
-        expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
       })
+
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
     })
   })
 
@@ -259,24 +311,19 @@ context('LettersListScreen', () => {
     it('should show No Letters Screen', async () => {
       await waitFor(() => {
         initializeTestInstance([])
-        expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
       })
+
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
     })
   })
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
       await waitFor(() => {
-        initializeTestInstance([], undefined, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+        initializeTestInstance([], undefined, true)
       })
+
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async () => {
@@ -289,7 +336,7 @@ context('LettersListScreen', () => {
       }
 
       await waitFor(() => {
-        initializeTestInstance([], undefined, errorState)
+        initializeTestInstance([], undefined, false)
         expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
       })
     })
