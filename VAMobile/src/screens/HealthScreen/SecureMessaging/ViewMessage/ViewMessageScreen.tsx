@@ -1,7 +1,6 @@
-import { PixelRatio, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, Ref, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker, VAScrollView } from 'components'
@@ -18,7 +17,7 @@ import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAutoScrollToElement, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
