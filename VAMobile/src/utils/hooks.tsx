@@ -295,6 +295,15 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
 /**
  * Hook to autoscroll to an element
  * @returns ref to the scrollView and the elemnt to scroll to and the function to call the manual scroll
+ *
+ * notes on how to implement in the future, retired from ViewMessageScreen.tsx:
+ * const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
+ *
+ *   useEffect(() => {
+    if (!loading) {
+      scrollToSelectedMessage()
+    }
+  }, [loading, scrollToSelectedMessage])
  */
 export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void, React.Dispatch<React.SetStateAction<boolean>>] {
   const scrollRef = useRef<ScrollView>(null)
