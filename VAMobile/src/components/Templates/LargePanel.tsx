@@ -12,6 +12,7 @@ Use 'options={{headerShown: false}}' in the individual screen if only an individ
 */
 
 export type LargePanelProps = {
+  /** text of the title bar left button(no text it doesn't appear) */
   leftButtonText?: string
   /** text of the title bar title(no text it doesn't appear) */
   title?: string
