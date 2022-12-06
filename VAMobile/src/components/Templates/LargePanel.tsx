@@ -50,6 +50,11 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
   const textViewProps: TextViewProps = {
     color: 'footerButton',
   }
+
+  const titleTextProps: TextViewProps = {
+    variant: 'MobileBodyBold',
+  }
+
   const message = t('areYouSure')
 
   const onLeftTitleButtonPress = () => {
@@ -100,7 +105,7 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
           {title && (
             <Box {...boxProps}>
               <Box display="flex" flexDirection="row" alignItems="center">
-                <TextView>{title}</TextView>
+                <TextView {...titleTextProps}>{title}</TextView>
               </Box>
             </Box>
           )}
