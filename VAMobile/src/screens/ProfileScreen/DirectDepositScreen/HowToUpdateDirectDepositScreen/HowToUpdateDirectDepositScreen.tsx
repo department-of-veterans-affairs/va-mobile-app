@@ -5,7 +5,6 @@ import { AlertBox, Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import ProfileBanner from '../../ProfileBanner'
 
 /**
  * Screen for displaying information on updating direct deposit information for MHV/DS logon users
@@ -19,7 +18,6 @@ const HowToUpdateDirectDepositScreen: FC = () => {
   return (
     <>
       <VAScrollView {...testIdProps('Direct-deposit: How-to-update-direct-deposit-page')}>
-        <ProfileBanner />
         <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertBox title={t('howToUpdateDirectDeposit.alert.title')} border="warning" text={t('howToUpdateDirectDeposit.alert.body')} />
         </Box>

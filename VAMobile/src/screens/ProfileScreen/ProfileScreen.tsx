@@ -14,7 +14,6 @@ import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
@@ -136,7 +135,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   if (militaryInformationLoading || personalInformationLoading || disabilityRatingLoading) {
     return (
       <React.Fragment>
-        <ProfileBanner />
         <LoadingComponent text={t('profile.loading')} />
       </React.Fragment>
     )
@@ -144,7 +142,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   return (
     <VAScrollView {...testIdProps('Profile-page')}>
-      <ProfileBanner />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
         <SimpleList items={getTopSection()} />
       </Box>

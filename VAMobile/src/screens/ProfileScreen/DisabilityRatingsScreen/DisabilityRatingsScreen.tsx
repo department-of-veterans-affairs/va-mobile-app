@@ -30,7 +30,6 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
-import ProfileBanner from '../ProfileBanner'
 import getEnv from 'utils/env'
 
 const DisabilityRatingsScreen: FC = () => {
@@ -170,7 +169,6 @@ const DisabilityRatingsScreen: FC = () => {
   if (loading) {
     return (
       <React.Fragment>
-        <ProfileBanner showRating={false} />
         <LoadingComponent text={t('disabilityRating.loading')} />
       </React.Fragment>
     )
@@ -199,7 +197,6 @@ const DisabilityRatingsScreen: FC = () => {
 
   return (
     <VAScrollView {...testIdProps('Disability-Ratings-page')}>
-      <ProfileBanner showRating={false} />
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />

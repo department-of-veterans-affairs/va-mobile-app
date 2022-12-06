@@ -12,7 +12,6 @@ import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } f
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
-import ProfileBanner from '../ProfileBanner'
 
 /**
  * Screen for displaying direct deposit information and help numbers
@@ -75,7 +74,6 @@ const DirectDepositScreen: FC = () => {
   if (loading) {
     return (
       <React.Fragment>
-        <ProfileBanner />
         <LoadingComponent text={t('directDeposit.loading')} />
       </React.Fragment>
     )
@@ -83,9 +81,6 @@ const DirectDepositScreen: FC = () => {
 
   return (
     <VAScrollView>
-      <Box>
-        <ProfileBanner />
-      </Box>
       <Box>
         <Box mx={gutter} mt={contentMarginTop}>
           <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>

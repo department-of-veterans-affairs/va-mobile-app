@@ -15,7 +15,6 @@ import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } f
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useSelector } from 'react-redux'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
-import ProfileBanner from '../ProfileBanner'
 
 const MilitaryInformationScreen: FC = () => {
   const dispatch = useAppDispatch()
@@ -77,7 +76,6 @@ const MilitaryInformationScreen: FC = () => {
 
   return (
     <VAScrollView {...testIdProps('Military-Information-page')} contentContainerStyle={scrollStyles}>
-      <ProfileBanner />
       {loading ? (
         <LoadingComponent />
       ) : !accessToMilitaryInfo ? (

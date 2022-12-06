@@ -6,9 +6,8 @@ import { Pressable } from 'react-native'
 
 import PersonalInformationScreen from './index'
 import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
-import { profileAddressOptions } from '../AddressSummary'
 import {
   ErrorsState,
   initialAuthorizedServicesState,
@@ -173,41 +172,9 @@ context('PersonalInformationScreen', () => {
     })
   })
 
-  describe('when profile does not exist', () => {
-    it('should display empty string in the profile banner for the name', async () => {
-      store = {
-        auth: { ...initialAuthState },
-        personalInformation: { ...personalInformationState },
-      }
-
-      await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
-      })
-
-      testInstance = component.container
-
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('')
-    })
-
-    it('should not display string for most recent military branch in the profile banner', async () => {
-      store = {
-        auth: { ...initialAuthState },
-        personalInformation: { ...personalInformationState },
-      }
-
-      await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
-      })
-
-      testInstance = component.container
-
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Any updates you make here will also update in your VA.gov profile.')
-    })
-  })
-
   describe('when there is a birth date', () => {
     it('should display the birth date in the format Month day, year', async () => {
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('May 08, 1990')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('May 08, 1990')
     })
   })
 
@@ -230,14 +197,14 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('This information is not available right now')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('This information is not available right now')
     })
   })
 
   describe('when there is a mailing address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Tiburon, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
+      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Tiburon, CA, 94920')
     })
   })
 
@@ -256,29 +223,14 @@ context('PersonalInformationScreen', () => {
         component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
       testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Add your mailing address')
-
-      profile = {} as UserDataProfile
-      store = {
-        auth: { ...initialAuthState },
-        personalInformation: {
-          ...personalInformationState,
-          profile,
-        },
-        ...authorizedMilitaryState,
-      }
-      await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
-      })
-      testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Add your mailing address')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Add your mailing address')
     })
   })
 
   describe('when there is a residential address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('10 Laurel Way')
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Novato, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('10 Laurel Way')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Novato, CA, 94920')
     })
   })
 
@@ -297,17 +249,17 @@ context('PersonalInformationScreen', () => {
         component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
       testInstance = component.container
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Add your home address')
+      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Add your home address')
     })
   })
 
-  describe('where is a home number', () => {
+  describe('when there is a home number', () => {
     it('should display the formatted home phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('(858)-690-1289')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('(858)-690-1289')
     })
   })
 
-  describe('where is no home number', () => {
+  describe('when there is no home number', () => {
     it('should display the message Add your home phone number', async () => {
       profile.formattedHomePhone = ''
 
@@ -326,17 +278,17 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('Add your home phone number')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Add your home phone number')
     })
   })
 
-  describe('where is a work number', () => {
+  describe('when there is a work number', () => {
     it('should display the formatted work phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('(858)-690-1287')
+      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('(858)-690-1287')
     })
   })
 
-  describe('where is no work number', () => {
+  describe('when there is no work number', () => {
     it('should display the message Add your work phone number', async () => {
       profile.formattedWorkPhone = ''
 
@@ -355,13 +307,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Add your work phone number')
+      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('Add your work phone number')
     })
   })
 
   describe('where is a cell number', () => {
     it('should display the formatted cell phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('(858)-690-1288')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('(858)-690-1288')
     })
   })
 
@@ -384,13 +336,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Add your cell phone number')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Add your cell phone number')
     })
   })
 
   describe('when there is an email address', () => {
     it('should display the email address', async () => {
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('ben@gmail.com')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('ben@gmail.com')
     })
   })
 
@@ -413,7 +365,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.container
 
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Add your email address')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Add your email address')
     })
   })
 

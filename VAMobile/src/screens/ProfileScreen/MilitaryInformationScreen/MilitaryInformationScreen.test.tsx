@@ -1,11 +1,10 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, findByTestID, mockStore, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, findByTestID, render, RenderAPI } from 'testUtils'
 
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
-import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
 import {
   ErrorsState,
@@ -67,15 +66,12 @@ context('MilitaryInformationScreen', () => {
     await waitFor(() => {
       expect(component).toBeTruthy()
 
-      const profileBanner = testInstance.findAllByType(ProfileBanner)
-      expect(profileBanner).toBeTruthy()
-
       const header = findByTestID(testInstance, 'Period of service')
       expect(header.props.children).toBe('Period of service')
 
       const texts = testInstance.findAllByType(TextView)
-      expect(texts[3].props.children).toBe('United States Marine Corps')
-      expect(texts[4].props.children).toBe('June 04, 1993 - July 10, 1995')
+      expect(texts[1].props.children).toBe('United States Marine Corps')
+      expect(texts[2].props.children).toBe('June 04, 1993 - July 10, 1995')
 
       const link = testInstance.findByProps({ accessibilityRole: 'link' })
       expect(link.props.children).toBe("What if my military service information doesn't look right?")

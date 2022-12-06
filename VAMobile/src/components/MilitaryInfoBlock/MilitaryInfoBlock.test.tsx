@@ -1,21 +1,20 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance} from 'react-test-renderer'
 
-import { context, findByTestID, findByTypeWithText, mockStore, render, RenderAPI } from 'testUtils'
-import ProfileBanner from './ProfileBanner'
-import { initialAuthorizedServicesState, initialDisabilityRatingState, InitialState } from 'store/slices'
+import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import MilitaryInfoBlock from './MilitaryInfoBlock'
+import { initialAuthorizedServicesState, InitialState } from 'store/slices'
 import { TextView } from 'components'
 import { ServiceData } from 'store/api/types'
 
-context('ProfileBanner', () => {
+context('MilitaryInfoBlock', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const prepInstanceWithStore = (mostRecentBranch?: string) => {
-    component = render(<ProfileBanner />, {
+    component = render(<MilitaryInfoBlock />, {
       preloadedState: {
         ...InitialState,
         personalInformation: {
@@ -133,7 +132,7 @@ context('ProfileBanner', () => {
 
   describe('when the service history is empty', () => {
     it('should not display the Branch name', async () => {
-      component = render(<ProfileBanner />, {
+      component = render(<MilitaryInfoBlock />, {
         preloadedState: {
           ...InitialState,
           militaryService: {
@@ -155,7 +154,7 @@ context('ProfileBanner', () => {
 
   describe('when the user does not have militaryServiceHistory authorized service', () => {
     it('should not display the Branch name', async () => {
-      component = render(<ProfileBanner />, {
+      component = render(<MilitaryInfoBlock />, {
         preloadedState: {
           ...InitialState,
           authorizedServices: {
@@ -168,40 +167,6 @@ context('ProfileBanner', () => {
       testInstance = component.container
 
       expect(testInstance.findAllByType(TextView)).toHaveLength(1)
-    })
-  })
-
-  describe('disability rating', () => {
-    it('should display the disability rating component', async () => {
-      const disabilityRating = findByTypeWithText(testInstance, TextView, '100% service connected')
-      const yourDisabilityRating = findByTypeWithText(testInstance, TextView, 'Your disability rating: ')
-
-      expect(disabilityRating).toBeTruthy()
-      expect(yourDisabilityRating).toBeTruthy()
-    })
-
-    it('should display the disability rating component', async () => {
-      component = render(<ProfileBanner />, {
-        preloadedState: {
-          ...InitialState,
-          militaryService: {
-            ...InitialState.militaryService,
-            mostRecentBranch: 'United States Air Force',
-            serviceHistory: [{} as ServiceData],
-          },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
-          },
-          disabilityRating: {
-            ...initialDisabilityRatingState,
-            ratingData: undefined,
-          },
-        },
-      })
-
-      testInstance = component.container
-      expect(testInstance.findAllByType(TextView)).toHaveLength(2)
     })
   })
 })
