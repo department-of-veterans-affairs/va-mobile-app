@@ -8,7 +8,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { initialAuthState } from 'store/slices'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
 import { ClickForActionLink, FooterButton, TextView} from 'components'
-import { PrescriptionAttributeData, RefillStatus, RefillStatusConstants } from 'store/api/types'
+import { PrescriptionAttributeData, RefillStatusConstants } from 'store/api/types'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 context('PrescriptionDetails', () => {
