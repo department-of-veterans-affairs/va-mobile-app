@@ -53,7 +53,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
     variant: 'TableHeaderBold',
     mx: gutter,
     mb: condensedMarginBetween,
-    mt: condensedMarginBetween,
+    mt: standardMarginBetween,
     accessibilityRole: 'header',
   }
 
