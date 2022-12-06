@@ -85,7 +85,7 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box ml={theme.dimensions.buttonPadding} flex={1}>
+        <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1}>
           {leftButtonText && (
             <Pressable onPress={onLeftTitleButtonPress} accessibilityRole="button" accessible={true}>
               <Box {...boxProps}>
@@ -96,7 +96,7 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
             </Pressable>
           )}
         </Box>
-        <Box flex={3}>
+        <Box mt={theme.dimensions.buttonPadding} flex={3}>
           {title && (
             <Box {...boxProps}>
               <Box display="flex" flexDirection="row" alignItems="center">
@@ -105,7 +105,7 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
             </Box>
           )}
         </Box>
-        <Box mr={theme.dimensions.buttonPadding} flex={1}>
+        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1}>
           {rightButtonText && (
             <Pressable onPress={onRightTitleButtonPress} accessibilityRole="button" accessible={true}>
               <Box {...boxProps}>
