@@ -4,17 +4,17 @@ import 'jest-styled-components'
 import { ReactTestInstance} from 'react-test-renderer'
 
 import { context, findByTestID, render, RenderAPI } from 'testUtils'
-import MilitaryInfoBlock from './MilitaryInfoBlock'
+import Nametag from './Nametag'
 import { initialAuthorizedServicesState, InitialState } from 'store/slices'
 import { TextView } from 'components'
 import { ServiceData } from 'store/api/types'
 
-context('MilitaryInfoBlock', () => {
+context('Nametag', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const prepInstanceWithStore = (mostRecentBranch?: string) => {
-    component = render(<MilitaryInfoBlock />, {
+    component = render(<Nametag />, {
       preloadedState: {
         ...InitialState,
         personalInformation: {
@@ -132,7 +132,7 @@ context('MilitaryInfoBlock', () => {
 
   describe('when the service history is empty', () => {
     it('should not display the Branch name', async () => {
-      component = render(<MilitaryInfoBlock />, {
+      component = render(<Nametag />, {
         preloadedState: {
           ...InitialState,
           militaryService: {
@@ -154,7 +154,7 @@ context('MilitaryInfoBlock', () => {
 
   describe('when the user does not have militaryServiceHistory authorized service', () => {
     it('should not display the Branch name', async () => {
-      component = render(<MilitaryInfoBlock />, {
+      component = render(<Nametag />, {
         preloadedState: {
           ...InitialState,
           authorizedServices: {

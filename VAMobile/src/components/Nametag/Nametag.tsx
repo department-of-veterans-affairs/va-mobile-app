@@ -9,7 +9,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
 
-export const MilitaryInfoBlock: FC = () => {
+export const Nametag: FC = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
@@ -72,4 +72,4 @@ export const MilitaryInfoBlock: FC = () => {
   )
 }
 
-export default MilitaryInfoBlock
+export default Nametag
