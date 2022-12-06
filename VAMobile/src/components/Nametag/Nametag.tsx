@@ -5,7 +5,6 @@ import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
-import { testIdProps } from 'utils/accessibility'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
 
@@ -20,10 +19,6 @@ export const Nametag: FC = () => {
   const branch = mostRecentBranch || ''
 
   const getBranchSeal = (): React.ReactNode => {
-    if (!accessToMilitaryInfo) {
-      return <></>
-    }
-
     const dimensions = {
       width: 50,
       height: 50,
@@ -31,38 +26,28 @@ export const Nametag: FC = () => {
 
     switch (branch) {
       case BranchesOfServiceConstants.AirForce:
-        return <VAIcon name="Airforce" {...dimensions} {...testIdProps('Airforce')} />
+        return <VAIcon name="Airforce" {...dimensions} />
       case BranchesOfServiceConstants.Army:
-        return <VAIcon name="Army" {...dimensions} {...testIdProps('Army')} />
+        return <VAIcon name="Army" {...dimensions} />
       case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon name="CoastGuard" {...dimensions} {...testIdProps('Coast-Guard')} />
+        return <VAIcon name="CoastGuard" {...dimensions} />
       case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon name="Marines" {...dimensions} {...testIdProps('Marine-Corps')} />
+        return <VAIcon name="Marines" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
-        return <VAIcon name="Navy" {...dimensions} {...testIdProps('Navy')} />
+        return <VAIcon name="Navy" {...dimensions} />
     }
   }
 
   return (
-    <Box width="100%" backgroundColor="profileBanner" minHeight={85} display="flex" justifyContent="center">
+    <Box width="100%" backgroundColor="profileBanner" minHeight={85} display="flex" justifyContent="center" mb={theme.dimensions.standardMarginBetween} accessible={true}>
       <Box py={accessToMilitaryInfo ? theme.dimensions.cardPadding : 0} display="flex" flexDirection="row">
-        {accessToMilitaryInfo && (
-          <Box pl={theme.dimensions.cardPadding} {...testIdProps(`${branch}-seal`)} accessibilityRole="image">
-            {getBranchSeal()}
-          </Box>
-        )}
+        {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
         <Box ml={20} flex={1}>
-          <TextView
-            textTransform="capitalize"
-            mb={theme.dimensions.textIconMargin}
-            variant="BitterBoldHeading"
-            color="primaryContrast"
-            {...testIdProps(name)}
-            accessibilityRole="text">
+          <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
             {name}
           </TextView>
           {accessToMilitaryInfo && (
-            <TextView textTransform="capitalize" variant="MobileBodyBold" color="primaryContrast" {...testIdProps(branch)} accessibilityRole="text">
+            <TextView textTransform="capitalize" variant="MobileBodyBold" color="primaryContrast">
               {branch}
             </TextView>
           )}
