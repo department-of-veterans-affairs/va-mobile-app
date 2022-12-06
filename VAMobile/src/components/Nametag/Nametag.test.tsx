@@ -103,14 +103,14 @@ context('Nametag', () => {
   describe('when the military branch is United States Coast Guard', () => {
     it('should display the Coastal_Guard component', async () => {
       prepInstanceWithStore('United States Coast Guard')
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Coast-Guard')
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('CoastGuard')
     })
   })
 
   describe('when the military branch is United States Marine Corps', () => {
     it('should display the Marine_Corps component', async () => {
       prepInstanceWithStore('United States Marine Corps')
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Marine-Corps')
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Marines')
     })
   })
 
