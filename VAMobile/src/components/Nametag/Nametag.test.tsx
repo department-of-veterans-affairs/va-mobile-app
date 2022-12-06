@@ -6,7 +6,7 @@ import { ReactTestInstance} from 'react-test-renderer'
 import { context, findByTestID, render, RenderAPI } from 'testUtils'
 import Nametag from './Nametag'
 import { initialAuthorizedServicesState, InitialState } from 'store/slices'
-import { TextView } from 'components'
+import { TextView, VAIcon } from 'components'
 import { ServiceData } from 'store/api/types'
 
 context('Nametag', () => {
@@ -89,44 +89,35 @@ context('Nametag', () => {
 
   describe('when the military branch is United States Air Force', () => {
     it('should display the Air_Force component', async () => {
-      const airForce = findByTestID(testInstance, 'Airforce')
-      expect(airForce).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Airforce')
     })
   })
 
   describe('when the military branch is United States Army', () => {
     it('should display the Army component', async () => {
       prepInstanceWithStore('United States Army')
-
-      const army = findByTestID(testInstance, 'Army')
-      expect(army).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Army')
     })
   })
 
   describe('when the military branch is United States Coast Guard', () => {
     it('should display the Coastal_Guard component', async () => {
       prepInstanceWithStore('United States Coast Guard')
-
-      const coastalGuard = findByTestID(testInstance, 'Coast-Guard')
-      expect(coastalGuard).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Coast-Guard')
     })
   })
 
   describe('when the military branch is United States Marine Corps', () => {
     it('should display the Marine_Corps component', async () => {
       prepInstanceWithStore('United States Marine Corps')
-
-      const marineCorps = findByTestID(testInstance, 'Marine-Corps')
-      expect(marineCorps).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Marine-Corps')
     })
   })
 
   describe('when the military branch is United States Navy', () => {
     it('should display the Navy component', async () => {
       prepInstanceWithStore('United States Navy')
-
-      const navy = findByTestID(testInstance, 'Navy')
-      expect(navy).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Navy')
     })
   })
 
