@@ -336,7 +336,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       }
 
       return (
-        <Box mt={theme.dimensions.standardMarginBetween} key={idx}>
+        <Box key={idx}>
           <MultiTouchCard {...cardProps} />
         </Box>
       )
@@ -587,10 +587,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         <>
           {getTransferAlert()}
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
               {getInstructions()}
             </TextView>
-            <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+            <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
               {getHistoryListHeader()}
             </TextView>
           </Box>
