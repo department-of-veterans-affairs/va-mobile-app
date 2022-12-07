@@ -70,7 +70,7 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
   }
 
-  if (featureEnabled('inAppUpdates') && skippedVersion !== storeVersion && localVersionName !== storeVersion) {
+  if (featureEnabled('inAppUpdates') && skippedVersion !== storeVersion && localVersionName !== storeVersion && storeVersion && localVersionName && skippedVersion) {
     logAnalyticsEvent(Events.vama_eu_shown())
     return (
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
