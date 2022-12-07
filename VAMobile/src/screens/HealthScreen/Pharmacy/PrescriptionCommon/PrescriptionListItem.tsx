@@ -53,7 +53,7 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
       <TextView variant={'MobileBodyBold'} accessibilityLabel={`${prescriptionName}.`}>
         {prescriptionName}
       </TextView>
-      <TextView variant={'HelperText'} color={'placeholder'} mt={condensedMarginBetween} accessibilityLabel={`${rxNumberA11yLabel}.`}>
+      <TextView variant={'HelperText'} color={'placeholder'} accessibilityLabel={`${rxNumberA11yLabel}.`}>
         {rxNumber}
       </TextView>
       {includeRefillTag && (
