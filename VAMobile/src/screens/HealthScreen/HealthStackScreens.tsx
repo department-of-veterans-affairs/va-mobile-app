@@ -13,7 +13,6 @@ import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachment
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
-import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
@@ -25,7 +24,6 @@ import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTracking
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
-import SecureMessaging from './SecureMessaging'
 import StatusGlossary from './Pharmacy/StatusGlossary/StatusGlossary'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
@@ -152,8 +150,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     />,
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
     <HealthStack.Screen key={'PastAppointmentDetails'} name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />,
-    <HealthStack.Screen key={'Messages'} name="Messages" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
-    <HealthStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />,
     <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage.title') }} />,
     <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,

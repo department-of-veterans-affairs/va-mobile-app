@@ -15,6 +15,8 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from './CernerAlert'
+import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import SecureMessaging from './SecureMessaging'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
@@ -137,6 +139,8 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
   return (
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('page.title') }} />
+      <HealthScreenStack.Screen name="Messages" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />
+      <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />
     </HealthScreenStack.Navigator>
   )
 }
