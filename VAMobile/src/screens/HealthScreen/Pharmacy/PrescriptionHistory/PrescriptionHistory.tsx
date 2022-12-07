@@ -296,7 +296,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
           <Pressable {...detailsPressableProps}>
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} minHeight={theme.dimensions.touchableMinHeight} pt={5}>
-              <TextView variant={'HelperTextBold'} color={'link'}>
+              <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
               <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
@@ -336,7 +336,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       }
 
       return (
-        <Box mt={theme.dimensions.standardMarginBetween} key={idx}>
+        <Box key={idx}>
           <MultiTouchCard {...cardProps} />
         </Box>
       )
@@ -587,10 +587,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         <>
           {getTransferAlert()}
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
               {getInstructions()}
             </TextView>
-            <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+            <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
               {getHistoryListHeader()}
             </TextView>
           </Box>
