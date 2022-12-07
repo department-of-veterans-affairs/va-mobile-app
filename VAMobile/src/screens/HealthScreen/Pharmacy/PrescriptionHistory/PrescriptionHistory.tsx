@@ -296,7 +296,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
           <Pressable {...detailsPressableProps}>
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} minHeight={theme.dimensions.touchableMinHeight} pt={5}>
-              <TextView variant={'HelperTextBold'} color={'link'}>
+              <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
               <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
