@@ -224,6 +224,21 @@ context('PersonalInformationScreen', () => {
       })
       testInstance = component.container
       expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Add your mailing address')
+
+      profile = {} as UserDataProfile
+      store = {
+        auth: { ...initialAuthState },
+        personalInformation: {
+          ...personalInformationState,
+          profile,
+        },
+        ...authorizedMilitaryState,
+      }
+      await waitFor(() => {
+        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
+      })
+      testInstance = component.container
+      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Add your mailing address')
     })
   })
 
