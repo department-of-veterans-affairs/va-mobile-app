@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, BoxProps, FooterButton, TextView, TextViewProps } from 'components'
+import { Box, BoxProps, FooterButton, TextView, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveAlert, useTheme } from 'utils/hooks'
 /*To use this template to rap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
@@ -123,8 +123,10 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
           )}
         </Box>
       </Box>
-      {children}
-      {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+      <VAScrollView>
+        {children}
+        {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+      </VAScrollView>
     </>
   )
 }
