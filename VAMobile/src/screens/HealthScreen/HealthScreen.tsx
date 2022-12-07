@@ -139,7 +139,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
   return (
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('page.title') }} />
-      <HealthScreenStack.Screen name="Messages" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />
+      <HealthScreenStack.Screen name="SecureMessaging" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />
     </HealthScreenStack.Navigator>
   )

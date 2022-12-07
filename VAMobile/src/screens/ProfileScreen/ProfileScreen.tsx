@@ -14,6 +14,9 @@ import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import DirectDepositScreen from './DirectDepositScreen'
+import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
+import PaymentScreen from './PaymentScreen'
 import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -172,6 +175,9 @@ const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
   return (
     <ProfileScreenStack.Navigator screenOptions={headerStyles}>
       <ProfileScreenStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
+      <ProfileScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+      <ProfileScreenStack.Screen name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+      <ProfileScreenStack.Screen name="Payments" component={PaymentScreen} options={{ title: t('home:payments.title') }} />
     </ProfileScreenStack.Navigator>
   )
 }

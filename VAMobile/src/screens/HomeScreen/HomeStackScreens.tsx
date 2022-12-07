@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-import SecureMessaging from '../HealthScreen/SecureMessaging'
+//import SecureMessaging from '../HealthScreen/SecureMessaging'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 
 export type HomeStackParamList = WebviewStackParams & {
@@ -21,6 +21,6 @@ const HomeStack = createStackNavigator<HomeStackParamList>()
 export const getHomeScreens = (t: TFunction): Array<ReactNode> => {
   return [
     <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />,
-    <HomeStack.Screen key={'SecureMessaging'} name="SecureMessaging" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
+    // <HomeStack.Screen key={'SecureMessaging'} name="SecureMessaging" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
   ]
 }
