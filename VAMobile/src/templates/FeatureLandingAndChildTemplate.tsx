@@ -115,11 +115,57 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
     extrapolate: 'clamp',
   })
 
-  const [opacity2, setOpacity2] = useState(1)
-  // let opacity2 = 1
-  const setOpacity = (val: number) => {
-    setOpacity2(1 - val / SUBHEADER_MAX_HEIGHT)
+  const [titleShowing, setTitleShowing] = useState(false)
+  const [titleFade, setTitleFade] = useState(new Animated.Value(0))
+  const [VaOpacity, setVaOpacity] = useState(1)
+
+  const updateOffset = (offsetValue: number) => {
+    setVaOpacity(1 - offsetValue / SUBHEADER_MAX_HEIGHT)
+    setTitleShowing(offsetValue > SUBHEADER_MAX_HEIGHT)
+    if (offsetValue > 4 * SUBHEADER_MAX_HEIGHT) {
+      titleFade.setValue(1)
+      // setTitleFade(new Animated.Value(1))
+    }
   }
+
+  const [altTitleShowing, setAltTitleShowing] = useState(true)
+  const [altTitleFade] = useState(new Animated.Value(0))
+
+  useEffect(() => {
+    titleShowing === false &&
+      Animated.timing(titleFade, {
+        toValue: 0,
+        duration: 10,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+
+    titleShowing === true &&
+      Animated.timing(titleFade, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+  })
+
+  useEffect(() => {
+    altTitleShowing === false &&
+      Animated.timing(altTitleFade, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+
+    altTitleShowing === true &&
+      Animated.timing(altTitleFade, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+  })
 
   // const titleScale = scrollY.interpolate({
   //   inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
@@ -211,9 +257,17 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
             <DescriptiveBackButton label={'Health'} onPress={navigateTo('HealthTab')} />
           </Box>
           <Box display="flex" flex={1} flexDirection={'row'} m={theme.dimensions.headerButtonSpacing} justifyContent={'center'} alignItems={'center'}>
-            <TextView variant="BitterBoldHeading" selectable={false} opacity={opacity2}>
-              VA
-            </TextView>
+            {titleShowing ? (
+              <Animated.View style={{ opacity: titleFade }}>
+                <TextView variant="MobileBody" selectable={false}>
+                  Appointments
+                </TextView>
+              </Animated.View>
+            ) : (
+              <TextView variant="BitterBoldHeading" selectable={false} opacity={VaOpacity}>
+                VA
+              </TextView>
+            )}
           </Box>
           <Box display="flex" width="25%" alignItems="center">
             <TouchableWithoutFeedback>
@@ -240,7 +294,7 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
         scrollEventThrottle={1}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: initialScrollY } } }], {
           listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-            setOpacity(event.nativeEvent.contentOffset.y + HEADER_MAX_HEIGHT + SUBHEADER_MAX_HEIGHT)
+            updateOffset(event.nativeEvent.contentOffset.y + HEADER_MAX_HEIGHT + SUBHEADER_MAX_HEIGHT)
           },
           useNativeDriver: true,
         })}
