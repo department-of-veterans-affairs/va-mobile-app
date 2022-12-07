@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
@@ -127,7 +127,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       <VAScrollView>
         <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <SignoutButton />
+          <SimpleList items={getLastSection()} />
         </Box>
       </VAScrollView>
     )
@@ -153,9 +153,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       </Box>
       <Box mb={theme.dimensions.standardMarginBetween}>
         <SimpleList items={getLastSection()} />
-      </Box>
-      <Box px={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-        <SignoutButton />
       </Box>
     </VAScrollView>
   )

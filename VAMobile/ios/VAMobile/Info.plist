@@ -49,7 +49,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app needs this permission in order to save your appointments to your calendar.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs this permission in order to take and upload photos.</string>
+	<string>This app needs this permission in order to take and upload photos for claims evidence or Secure Messages.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>This lets you add appointments to your shared calendars.
 </string>
@@ -58,7 +58,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs this permission in order to upload your photos from the camera roll.</string>
+	<string>This app needs this permission in order to upload your photos from the camera roll for claims or Secure Messages.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Bitter-Bold.ttf</string>

@@ -10,6 +10,7 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.wix.reactnativenotifications.core.AppLaunchHelper;
 import com.wix.reactnativenotifications.core.AppLifecycleFacade;
@@ -26,6 +27,7 @@ import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
 import gov.va.mobileapp.native_modules.RNNotificationPrefsPackage;
 import gov.va.mobileapp.native_modules.RNReviewPackage;
 import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
+import gov.va.mobileapp.native_modules.RNInAppUpdatePackage;
 import gov.va.mobileapp.notifications.VAPushNotifications;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -51,6 +53,7 @@ public class MainApplication extends Application implements ReactApplication, IN
             packages.add(new RNNotificationPrefsPackage());
             packages.add(new RNSecureRandomPackage());
             packages.add(new RNReviewPackage());
+            packages.add(new RNInAppUpdatePackage());
             packages.add(new LottiePackage());
 
             return packages;

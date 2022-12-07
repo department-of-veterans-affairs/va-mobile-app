@@ -11,12 +11,11 @@ import { AuthorizedServicesState } from 'store/slices'
 import {
   Box,
   BoxProps,
+  ButtonTypesConstants,
   ClickForActionLink,
   CollapsibleAlert,
   CollapsibleAlertProps,
   ErrorComponent,
-  FooterButton,
-  FooterButtonProps,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -29,6 +28,8 @@ import {
   TabBarProps,
   TabsValuesType,
   TextView,
+  VAButton,
+  VAButtonProps,
   VAIcon,
   VAScrollView,
 } from 'components'
@@ -295,7 +296,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
           <Pressable {...detailsPressableProps}>
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} minHeight={theme.dimensions.touchableMinHeight} pt={5}>
-              <TextView variant={'HelperTextBold'} color={'link'}>
+              <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
               <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
@@ -323,7 +324,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
             <Box mr={8}>
               <VAIcon name={'Truck'} fill={'link'} height={16} width={16} />
             </Box>
-            <TextView variant={'HelperTextBold'} color={'link'}>
+            <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
               {t('prescription.history.tracking')}
             </TextView>
           </Box>
@@ -335,7 +336,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       }
 
       return (
-        <Box mt={theme.dimensions.standardMarginBetween} key={idx}>
+        <Box key={idx}>
           <MultiTouchCard {...cardProps} />
         </Box>
       )
@@ -555,13 +556,16 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       return <></>
     }
 
-    const requestRefillButtonProps: FooterButtonProps = {
-      text: t('prescription.history.startRefillRequest'),
-      backGroundColor: 'buttonPrimary',
-      textColor: 'navBar',
+    const requestRefillButtonProps: VAButtonProps = {
+      label: t('prescription.history.startRefillRequest'),
+      buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: navigateTo('RefillScreenModal'),
     }
-    return <FooterButton {...requestRefillButtonProps} />
+    return (
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+        <VAButton {...requestRefillButtonProps} />
+      </Box>
+    )
   }
 
   const getHistoryListHeader = () => {
@@ -583,10 +587,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         <>
           {getTransferAlert()}
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
               {getInstructions()}
             </TextView>
-            <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+            <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
               {getHistoryListHeader()}
             </TextView>
           </Box>
@@ -602,6 +606,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   return (
     <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
       <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={mainViewStyle}>
+        {getRequestRefillButton()}
         <TabBar {...tabProps} />
         <Box {...filterWrapperProps}>
           <Box {...filterContainerProps}>
@@ -615,7 +620,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         </Box>
         {getContent()}
       </VAScrollView>
-      {getRequestRefillButton()}
     </Box>
   )
 }

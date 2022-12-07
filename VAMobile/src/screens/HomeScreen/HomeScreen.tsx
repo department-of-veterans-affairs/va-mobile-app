@@ -2,16 +2,17 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
-import { CrisisLineCta, LargeNavButton, VAButton } from 'components'
+import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
+import { CrisisLineCta, LargeNavButton } from 'components'
 import { DateTime } from 'luxon'
-import { DemoState } from 'store/slices/demoSlice'
+import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
+import { featureEnabled } from 'utils/remoteConfig'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -32,7 +33,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.fullName || ''
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   useEffect(() => {
     // Fetch the profile information
@@ -85,35 +85,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
-  const onUpdatePressed = (): void => {
-    console.debug('Update Pressed')
-  }
-
-  const onSkipPressed = (): void => {
-    console.debug('Skip Pressed')
-  }
-
-  const getEncourageUpdateAlert = (updateRequired = false) => {
-    if (updateRequired) {
-      return (
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.buttonPadding}>
-          <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
-            <Box>
-              <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
-                <VAButton onPress={onUpdatePressed} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />
-              </Box>
-              <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
-                <VAButton onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonTypesConstants.buttonSecondary} />
-              </Box>
-            </Box>
-          </AlertBox>
-        </Box>
-      )
-    } else {
-      return <></>
-    }
-  }
-
   return (
     <VAScrollView>
       <Box flex={1} justifyContent="flex-start">
@@ -123,7 +94,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             {heading}
           </TextView>
         </Box>
-        {getEncourageUpdateAlert(demoMode)}
+        <EncourageUpdateAlert />
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
@@ -136,7 +107,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('healthCare.title')}
-            subText={t('healthCare.subText')}
+            subText={featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}

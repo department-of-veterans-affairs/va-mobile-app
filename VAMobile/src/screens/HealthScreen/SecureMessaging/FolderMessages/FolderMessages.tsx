@@ -14,7 +14,7 @@ import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
+import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
@@ -120,13 +120,13 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <>
       <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
+        <ComposeMessageButton />
         <MessageList
           items={getMessagesListItems(messages, t, onMessagePress, folderName)}
           title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}
         />
         {renderPagination()}
       </VAScrollView>
-      <ComposeMessageFooter />
     </>
   )
 }

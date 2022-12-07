@@ -1,10 +1,9 @@
-import { PixelRatio, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, Ref, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAButton, VAIconProps, VAModalPicker, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
@@ -18,10 +17,11 @@ import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
-import ReplyMessageFooter from '../ReplyMessageFooter/ReplyMessageFooter'
+import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
+import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -29,22 +29,10 @@ type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessag
  * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by
  * sentDate ascending, and returns an array of <CollapsibleMessages/>
  */
-export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>, messageRef?: Ref<View>): ReactNode => {
-  const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate < message2.sentDate ? -1 : 1))
+export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>): ReactNode => {
+  const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate > message2.sentDate ? -1 : 1))
 
-  return threadMessages.map(
-    (m) =>
-      m &&
-      m.messageId && (
-        <CollapsibleMessage
-          key={m.messageId}
-          message={m}
-          isInitialMessage={m.messageId === message.messageId}
-          // if it is the only message in the thread no point of scrolling it will only scroll on large text and if there is more than one thread message
-          collapsibleMessageRef={m.messageId === message.messageId && (threadMessages.length > 1 || PixelRatio.getFontScale() > 1) ? messageRef : undefined}
-        />
-      ),
-  )
+  return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={m.messageId === message.messageId} />)
 }
 
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
@@ -52,7 +40,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const currentFolderIdParam = Number(route.params.folderID)
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
-  const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
 
   /* useref is used to persist the folder the message is in Example the message was first in test folder and the user moves it to test2. The user is still under folder
@@ -63,7 +50,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
@@ -80,12 +66,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
     dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
-
-  useEffect(() => {
-    if (!loading) {
-      scrollToSelectedMessage()
-    }
-  }, [loading, scrollToSelectedMessage])
 
   useEffect(() => {
     if (isUndo || moveMessageFailed) {
@@ -187,10 +167,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
-  const onPressCompose = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
-
   const onMove = (value: string) => {
-    setShouldFocus(false)
     const currentFolder = Number(folderWhereMessageIs.current)
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
@@ -210,31 +187,26 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   return (
     <>
-      <VAScrollView {...testIdProps('ViewMessage-page')} scrollViewRef={scrollRef}>
+      <VAScrollView {...testIdProps('ViewMessage-page')}>
+        {!replyExpired ? (
+          <ReplyMessageButton messageID={messageID} />
+        ) : (
+          <Box>
+            <ComposeMessageButton />
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
+            </Box>
+          </Box>
+        )}
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
             <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
               {formatSubject(category, subject, t)}
             </TextView>
           </Box>
-          {renderMessages(message, messagesById, thread, messageRef)}
+          {renderMessages(message, messagesById, thread)}
         </Box>
-        {replyExpired && (
-          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-            <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
-              <Box mt={theme.dimensions.standardMarginBetween}>
-                <VAButton
-                  label={t('secureMessaging.composeMessage.new')}
-                  onPress={onPressCompose}
-                  buttonType={'buttonPrimary'}
-                  a11yHint={t('secureMessaging.composeMessage.new.a11yHint')}
-                />
-              </Box>
-            </AlertBox>
-          </Box>
-        )}
       </VAScrollView>
-      {!replyExpired && <ReplyMessageFooter messageID={messageID} />}
     </>
   )
 }

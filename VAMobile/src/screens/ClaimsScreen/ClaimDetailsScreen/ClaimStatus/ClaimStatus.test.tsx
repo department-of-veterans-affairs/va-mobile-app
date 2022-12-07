@@ -63,7 +63,7 @@ context('ClaimStatus', () => {
   describe('when the claimType is ACTIVE', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', async () => {
-        testInstance.findAllByType(Pressable)[5].props.onPress()
+        testInstance.findAllByType(Pressable)[4].props.onPress()
         expect(mockNavigationSpy).toHaveBeenNthCalledWith(1, 'ConsolidatedClaimsNote')
         expect(mockNavigateToConsolidatedClaimsNoteSpy).toHaveBeenCalled()
       })
@@ -71,7 +71,7 @@ context('ClaimStatus', () => {
 
     describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
       it('should call useRouteNavigation', async () => {
-        testInstance.findAllByType(Pressable)[6].props.onPress()
+        testInstance.findAllByType(Pressable)[5].props.onPress()
         expect(mockNavigationSpy).toHaveBeenNthCalledWith(2, 'WhatDoIDoIfDisagreement')
         expect(mockNavigateToWhatDoIDoIfDisagreementSpy).toHaveBeenCalled()
       })

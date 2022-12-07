@@ -113,7 +113,7 @@ export const lightTheme = {
     primaryContrast: colors.grayLightest,
     secondary: colors.black,
     error: colors.secondaryDark, //'#CD2026',
-    link: colors.linkDefault,
+    link: colors.primary,
     placeholder: colors.grayMedium, //#757575
     checkboxDisabled: colors.grayMedium,
     covid19Vaccinations: colors.white,

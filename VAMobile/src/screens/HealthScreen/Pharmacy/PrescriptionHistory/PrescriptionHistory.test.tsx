@@ -1,14 +1,14 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {render, context, RenderAPI, waitFor, findByTypeWithText, mockNavProps} from 'testUtils'
+import { render, context, RenderAPI, waitFor, findByTypeWithText, mockNavProps } from 'testUtils'
 
 import PrescriptionHistory from './PrescriptionHistory'
 import { ReactTestInstance } from 'react-test-renderer'
 
 import { PrescriptionHistoryTabs, PrescriptionsGetData } from 'store/api'
-import { initialAuthState, initialPrescriptionState, InitialState} from 'store/slices'
-import { FooterButton, TextView } from 'components'
+import { initialAuthState, initialPrescriptionState, InitialState } from 'store/slices'
+import { VAButton, TextView } from 'components'
 import { PrescriptionHistoryTabConstants } from 'store/api/types'
 
 const prescriptionData: PrescriptionsGetData = {
@@ -225,58 +225,65 @@ context('PrescriptionHistory', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (includeTransferred = false, startingTab?: PrescriptionHistoryTabs) => {
-    const props = mockNavProps(undefined, {
-      setOptions: jest.fn(),
-    }, { params: { startingTab } })
+    const props = mockNavProps(
+      undefined,
+      {
+        setOptions: jest.fn(),
+      },
+      { params: { startingTab } },
+    )
 
     const data = prescriptionData.data
 
-
-    component = render(<PrescriptionHistory {...props} />, { preloadedState: {
-      auth: { ...initialAuthState },
+    component = render(<PrescriptionHistory {...props} />, {
+      preloadedState: {
+        auth: { ...initialAuthState },
         prescriptions: {
           ...initialPrescriptionState,
           prescriptions: data,
           filteredPrescriptions: data,
           pendingPrescriptions: data,
           shippedPrescriptions: data,
-          transferredPrescriptions: includeTransferred ? [
-              {
-                id: '2000434908349',
-                type: 'Prescription',
-                attributes: {
-                  refillStatus: 'transferred',
-                  refillSubmitDate: '2021-07-15T18:50:27.000Z',
-                  refillDate: '2021-08-04T04:00:00.000Z',
-                  refillRemaining: 8,
-                  facilityName: 'SLC10 TEST LAB',
-                  orderedDate: '2021-05-09T04:00:00.000Z',
-                  quantity: 30,
-                  expirationDate: '2022-05-10T04:00:00.000Z',
-                  prescriptionNumber: '3636697',
-                  prescriptionName: 'ADEFOVIR DIPIVOXIL 10MG TAB',
-                  dispensedDate: null,
-                  stationNumber: '979',
-                  isRefillable: false,
-                  isTrackable: false,
-                  instructions: 'TAKE ONE TABLET EVERY DAY FOR 30 DAYS',
+          transferredPrescriptions: includeTransferred
+            ? [
+                {
+                  id: '2000434908349',
+                  type: 'Prescription',
+                  attributes: {
+                    refillStatus: 'transferred',
+                    refillSubmitDate: '2021-07-15T18:50:27.000Z',
+                    refillDate: '2021-08-04T04:00:00.000Z',
+                    refillRemaining: 8,
+                    facilityName: 'SLC10 TEST LAB',
+                    orderedDate: '2021-05-09T04:00:00.000Z',
+                    quantity: 30,
+                    expirationDate: '2022-05-10T04:00:00.000Z',
+                    prescriptionNumber: '3636697',
+                    prescriptionName: 'ADEFOVIR DIPIVOXIL 10MG TAB',
+                    dispensedDate: null,
+                    stationNumber: '979',
+                    isRefillable: false,
+                    isTrackable: false,
+                    instructions: 'TAKE ONE TABLET EVERY DAY FOR 30 DAYS',
+                  },
                 },
-              },
-            ] : [],
-            prescriptionPagination: prescriptionData.meta.pagination,
+              ]
+            : [],
+          prescriptionPagination: prescriptionData.meta.pagination,
           prescriptionsNeedLoad: false,
           loadingHistory: false,
           tabCounts: {
             '0': 8,
             '1': 4,
             '2': 3,
-          }
+          },
         },
         authorizedServices: {
           ...InitialState.authorizedServices,
           prescriptions: true,
         },
-      }})
+      },
+    })
     testInstance = component.container
   }
 
@@ -297,11 +304,12 @@ context('PrescriptionHistory', () => {
       })
 
       expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY')).toBeTruthy()
+      expect(
+        findByTypeWithText(testInstance, TextView, 'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY'),
+      ).toBeTruthy()
 
       expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 325MG TAB')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
-
     })
   })
 
@@ -311,35 +319,31 @@ context('PrescriptionHistory', () => {
         initializeTestInstance(true)
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'We can\'t refill some of your prescriptions in the app')).toBeTruthy()
-
+      expect(findByTypeWithText(testInstance, TextView, "We can't refill some of your prescriptions in the app")).toBeTruthy()
     })
   })
 
   describe('StartRefillRequestButton', () => {
     describe('when currentTab is PrescriptionHistoryTabConstants.ALL', () => {
-      it('should show StartRefillRequest footer button', async () => {
+      it('should show StartRefillRequest button', async () => {
         await waitFor(() => {
           initializeTestInstance()
         })
-        const footerButtons = testInstance.findAllByType(FooterButton)
+        const vaButtons = testInstance.findAllByType(VAButton)
         // [0] and [1] are Apply buttons from the sort and filter
-        expect(footerButtons.length).toEqual(3)
-        expect(footerButtons[2].props.text).toEqual('Start refill request')
+        expect(vaButtons.length).toEqual(1)
+        expect(vaButtons[0].props.label).toEqual('Start refill request')
       })
     })
 
     describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
-      it('should not show StartRefillRequest footer button', async () => {
+      it('should not show StartRefillRequest button', async () => {
         await waitFor(() => {
           initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
         })
 
-        const footerButtons = testInstance.findAllByType(FooterButton)
-        // [0] and [1] are Apply buttons from the sort and filter
-        expect(footerButtons.length).toEqual(2)
-        expect(footerButtons[0].props.text).not.toEqual('Start refill request')
-        expect(footerButtons[1].props.text).not.toEqual('Start refill request')
+        const vaButtons = testInstance.findAllByType(VAButton)
+        expect(vaButtons.length).toEqual(0)
       })
     })
   })
