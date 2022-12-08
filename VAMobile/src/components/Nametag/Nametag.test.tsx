@@ -1,21 +1,20 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance} from 'react-test-renderer'
 
-import { context, findByTestID, findByTypeWithText, mockStore, render, RenderAPI } from 'testUtils'
-import ProfileBanner from './ProfileBanner'
-import { initialAuthorizedServicesState, initialDisabilityRatingState, InitialState } from 'store/slices'
-import { TextView } from 'components'
+import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import Nametag from './Nametag'
+import { initialAuthorizedServicesState, InitialState } from 'store/slices'
+import { TextView, VAIcon } from 'components'
 import { ServiceData } from 'store/api/types'
 
-context('ProfileBanner', () => {
+context('Nametag', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   const prepInstanceWithStore = (mostRecentBranch?: string) => {
-    component = render(<ProfileBanner />, {
+    component = render(<Nametag />, {
       preloadedState: {
         ...InitialState,
         personalInformation: {
@@ -90,50 +89,41 @@ context('ProfileBanner', () => {
 
   describe('when the military branch is United States Air Force', () => {
     it('should display the Air_Force component', async () => {
-      const airForce = findByTestID(testInstance, 'Airforce')
-      expect(airForce).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Airforce')
     })
   })
 
   describe('when the military branch is United States Army', () => {
     it('should display the Army component', async () => {
       prepInstanceWithStore('United States Army')
-
-      const army = findByTestID(testInstance, 'Army')
-      expect(army).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Army')
     })
   })
 
   describe('when the military branch is United States Coast Guard', () => {
     it('should display the Coastal_Guard component', async () => {
       prepInstanceWithStore('United States Coast Guard')
-
-      const coastalGuard = findByTestID(testInstance, 'Coast-Guard')
-      expect(coastalGuard).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('CoastGuard')
     })
   })
 
   describe('when the military branch is United States Marine Corps', () => {
     it('should display the Marine_Corps component', async () => {
       prepInstanceWithStore('United States Marine Corps')
-
-      const marineCorps = findByTestID(testInstance, 'Marine-Corps')
-      expect(marineCorps).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Marines')
     })
   })
 
   describe('when the military branch is United States Navy', () => {
     it('should display the Navy component', async () => {
       prepInstanceWithStore('United States Navy')
-
-      const navy = findByTestID(testInstance, 'Navy')
-      expect(navy).toBeTruthy()
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Navy')
     })
   })
 
   describe('when the service history is empty', () => {
     it('should not display the Branch name', async () => {
-      component = render(<ProfileBanner />, {
+      component = render(<Nametag />, {
         preloadedState: {
           ...InitialState,
           militaryService: {
@@ -155,7 +145,7 @@ context('ProfileBanner', () => {
 
   describe('when the user does not have militaryServiceHistory authorized service', () => {
     it('should not display the Branch name', async () => {
-      component = render(<ProfileBanner />, {
+      component = render(<Nametag />, {
         preloadedState: {
           ...InitialState,
           authorizedServices: {
@@ -168,40 +158,6 @@ context('ProfileBanner', () => {
       testInstance = component.container
 
       expect(testInstance.findAllByType(TextView)).toHaveLength(1)
-    })
-  })
-
-  describe('disability rating', () => {
-    it('should display the disability rating component', async () => {
-      const disabilityRating = findByTypeWithText(testInstance, TextView, '100% service connected')
-      const yourDisabilityRating = findByTypeWithText(testInstance, TextView, 'Your disability rating: ')
-
-      expect(disabilityRating).toBeTruthy()
-      expect(yourDisabilityRating).toBeTruthy()
-    })
-
-    it('should display the disability rating component', async () => {
-      component = render(<ProfileBanner />, {
-        preloadedState: {
-          ...InitialState,
-          militaryService: {
-            ...InitialState.militaryService,
-            mostRecentBranch: 'United States Air Force',
-            serviceHistory: [{} as ServiceData],
-          },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
-          },
-          disabilityRating: {
-            ...initialDisabilityRatingState,
-            ratingData: undefined,
-          },
-        },
-      })
-
-      testInstance = component.container
-      expect(testInstance.findAllByType(TextView)).toHaveLength(2)
     })
   })
 })

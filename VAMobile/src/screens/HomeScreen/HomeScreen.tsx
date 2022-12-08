@@ -17,6 +17,7 @@ import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import Nametag from 'components/Nametag'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -95,6 +96,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           </TextView>
         </Box>
         <EncourageUpdateAlert />
+        <Nametag />
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('claimsAndAppeals.title')}

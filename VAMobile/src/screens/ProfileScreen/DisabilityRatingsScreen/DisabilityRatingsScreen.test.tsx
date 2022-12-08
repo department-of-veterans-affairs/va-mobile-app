@@ -1,12 +1,11 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
 import { LoadingComponent, TextView, ErrorComponent } from 'components'
-import ProfileBanner from '../ProfileBanner'
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { RatingData, ScreenIDTypesConstants } from 'store/api/types'
@@ -82,9 +81,6 @@ context('DisabilityRatingsScreen', () => {
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
 
-    const profileBanner = testInstance.findAllByType(ProfileBanner)
-    expect(profileBanner).toBeTruthy()
-
     const headers = testInstance.findAllByProps({ accessibilityRole: 'header' })
     expect(headers[5].props.children).toBe('Combined disability rating')
     expect(headers[15].props.children).toBe('Individual ratings')
@@ -92,20 +88,20 @@ context('DisabilityRatingsScreen', () => {
     expect(headers[30].props.children).toBe('Need Help?')
 
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[2].props.children).toBe('70%')
-    expect(texts[3].props.children).toBe(
+    expect(texts[1].props.children).toBe('70%')
+    expect(texts[2].props.children).toBe(
       "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
     )
 
-    expect(texts[5].props.children).toBe('50%')
-    expect(texts[6].props.children).toBe('PTSD')
-    expect(texts[7].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[8].props.children).toBe('Effective date:  12/01/2012')
+    expect(texts[4].props.children).toBe('50%')
+    expect(texts[5].props.children).toBe('PTSD')
+    expect(texts[6].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[7].props.children).toBe('Effective date:  12/01/2012')
 
-    expect(texts[9].props.children).toBe('30%')
-    expect(texts[10].props.children).toBe('Headaches, migraine')
-    expect(texts[11].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[12].props.children).toBe('Effective date:  08/09/2013')
+    expect(texts[8].props.children).toBe('30%')
+    expect(texts[9].props.children).toBe('Headaches, migraine')
+    expect(texts[10].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[11].props.children).toBe('Effective date:  08/09/2013')
 
     const links = testInstance.findAllByProps({ accessibilityRole: 'link' })
     expect(links[0].findByType(TextView).props.children).toBe('About VA disability ratings')

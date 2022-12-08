@@ -351,7 +351,6 @@ const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: Se
 
 return (
     <VAScrollView {...testIdProps('Military-Information-page')}>
-    <ProfileBanner />
     <Box mb={theme.dimensions.standardMarginBetween}>
         <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
     </Box>
