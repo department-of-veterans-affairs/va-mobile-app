@@ -1,5 +1,5 @@
 import { Pressable } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -30,6 +30,8 @@ export type FullScreenSubtaskProps = {
   secondaryContentButtonText?: string
   /** function called when primary content button is pressed(no function it doesn't appear) */
   onSecondaryContentButtonPress?: () => void
+  /** screen to navigate to after multiStep Cancel  */
+  navigationMultiStepCancelScreen?: number
 }
 
 const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -42,6 +44,7 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   onPrimaryContentButtonPress,
   secondaryContentButtonText,
   onSecondaryContentButtonPress,
+  navigationMultiStepCancelScreen,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
@@ -93,7 +96,11 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         {
           text: t('close'),
           onPress: () => {
-            navigation.goBack()
+            if (navigationMultiStepCancelScreen) {
+              navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+            } else {
+              navigation.goBack()
+            }
           },
         },
       ],
