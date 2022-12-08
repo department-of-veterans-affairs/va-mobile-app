@@ -79,6 +79,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
       case 'Claims':
       case 'Profile':
       case 'Home':
+      case 'Payments':
         const iconProps = {
           id: `${routeName.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
           name: `${routeName}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,

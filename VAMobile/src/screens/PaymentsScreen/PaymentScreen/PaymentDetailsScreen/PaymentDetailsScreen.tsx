@@ -8,14 +8,14 @@ import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentState, getPayment } from 'store/slices'
 import { PaymentsAttributeData } from 'store/api'
+import { PaymentsStackParamList } from '../../../PaymentsScreen/PaymentsStackScreens'
 import { Pressable } from 'react-native'
-import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { RootState } from 'store'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
-type PaymentDetailsScreenProps = StackScreenProps<ProfileStackParamList, 'PaymentDetails'>
+type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 
 const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
   const { paymentID } = route.params

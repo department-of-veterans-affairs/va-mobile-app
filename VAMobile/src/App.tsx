@@ -23,7 +23,8 @@ import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
-import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen } from 'screens'
+// import { ProfileScreen } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
@@ -36,7 +37,8 @@ import { activateRemoteConfig } from 'utils/remoteConfig'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
-import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
+import { getPaymentsScreens } from 'screens/PaymentsScreen/PaymentsStackScreens'
+// import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
@@ -45,7 +47,7 @@ import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles } from 'ut
 import { useColorScheme } from 'styles/themes/colorScheme'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
-import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
+import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import LoaGate from './screens/auth/LoaGate'
@@ -96,6 +98,7 @@ type RootTabNavParamList = {
   HomeTab: undefined
   HealthTab: undefined
   ClaimsTab: undefined
+  PaymentsTab: undefined
   ProfileTab: undefined
 }
 ;`
@@ -274,7 +277,7 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
+  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE, NAMESPACE.PAYMENTS])
 
   return (
     <>
@@ -282,7 +285,8 @@ export const AppTabs: FC = () => {
         <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="ClaimsTab" component={ClaimsScreen} options={{ title: t('claims:title') }} />
         <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} />
+        {/* <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} /> */}
+        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('payments:title') }} />
       </TabNav.Navigator>
     </>
   )
@@ -293,9 +297,10 @@ export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
 
   const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME).t)
-  const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE).t)
+  // const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE).t)
   const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS).t)
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
+  const paymentsScreens = getPaymentsScreens(useTranslation(NAMESPACE.PAYMENTS).t)
 
   return (
     <>
@@ -319,7 +324,8 @@ export const AuthedApp: FC = () => {
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
         <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
         {homeScreens}
-        {profileScreens}
+        {/* {profileScreens} */}
+        {paymentsScreens}
         {claimsScreens}
         {healthScreens}
       </RootNavStack.Navigator>

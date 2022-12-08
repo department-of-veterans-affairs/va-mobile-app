@@ -9,7 +9,7 @@ import { Box, ErrorComponent, LoadingComponent, Pagination, PaginationProps, Tex
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentState, getPayments } from 'store/slices'
 import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
-import { ProfileStackParamList } from '../ProfileStackScreens'
+import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
@@ -17,7 +17,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
-type PaymentScreenProps = StackScreenProps<ProfileStackParamList, 'Payments'>
+type PaymentScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
 const PaymentScreen: FC<PaymentScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.PROFILE)

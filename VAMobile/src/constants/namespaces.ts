@@ -6,6 +6,7 @@ export const NAMESPACE: {
   PROFILE: i18n_NS
   CLAIMS: i18n_NS
   SETTINGS: i18n_NS
+  PAYMENTS: i18n_NS
 } = {
   COMMON: 'common',
   HOME: 'home',
@@ -14,6 +15,7 @@ export const NAMESPACE: {
   PROFILE: 'profile',
   CLAIMS: 'claims',
   SETTINGS: 'settings',
+  PAYMENTS: 'payments',
 }
 
-export type i18n_NS = 'common' | 'home' | 'login' | 'profile' | 'claims' | 'settings' | 'health'
+export type i18n_NS = 'common' | 'home' | 'login' | 'profile' | 'claims' | 'settings' | 'health' | 'payments'

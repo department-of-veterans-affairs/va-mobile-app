@@ -11,7 +11,7 @@ interface HomeNavButtonProps {
   /**string for header and used to create testID for accessibility*/
   title: string
   /**string secondary text that seats on the second row */
-  subText: string
+  subText?: string
   /**a11y string secondary text that seats on the second row */
   subTextA11yLabel?: string
   /**string for accessibility hint */

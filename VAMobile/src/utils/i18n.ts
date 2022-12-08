@@ -3,6 +3,7 @@ import * as commonEN from 'translations/en/common.json'
 import * as healthEN from 'translations/en/health.json'
 import * as homeEN from 'translations/en/home.json'
 import * as loginEN from 'translations/en/login.json'
+import * as paymentsEN from 'translations/en/payments.json'
 import * as profileEN from 'translations/en/profile.json'
 import * as settingsEN from 'translations/en/settings.json'
 
@@ -24,6 +25,7 @@ export const resources = {
     login: loginEN,
     profile: profileEN,
     settings: settingsEN,
+    payments: paymentsEN,
   },
 } as const
 
