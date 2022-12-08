@@ -7,7 +7,7 @@ export const ProfileE2eIdConstants = {
   PERSONAL_CONTACT_INFO_ROW_TEXT: 'Personal and contact information',
   MILITARY_INFO_ROW_TEXT: 'Military information',
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
-  LETTERS_ROW_LABEL: 'V-A letters and documents',
+  LETTERS_ROW_ID: 'V-A letters and documents',
   PAYMENTS_ROW_TEXT: 'Payments',
   BANNER_BRANCH_ICON_ID: 'United States Coast Guard-seal', // all banner elements specific to demo mode user
   BANNER_NAME_ID: 'KIMBERLY WASHINGTON',
@@ -33,7 +33,7 @@ describe('Profile Screen', () => {
     await expect(element(by.text(ProfileE2eIdConstants.PERSONAL_CONTACT_INFO_ROW_TEXT))).toExist()
     await expect(element(by.text(ProfileE2eIdConstants.MILITARY_INFO_ROW_TEXT))).toExist() 
     await expect(element(by.text(ProfileE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT))).toExist()
-    await expect(element(by.label(ProfileE2eIdConstants.LETTERS_ROW_LABEL))).toExist()
+    await expect(element(by.label(ProfileE2eIdConstants.LETTERS_ROW_ID))).toExist()
     await expect(element(by.text(ProfileE2eIdConstants.PAYMENTS_ROW_TEXT))).toExist() 
     await expect(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toExist()
   })
