@@ -100,10 +100,10 @@ context('DirectDepositScreen', () => {
   describe('when there is bank data', () => {
     it('should display the button with the given bank data', async () => {
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Account')
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('BoA')
-        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('******1234')
-        expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Savings account')
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Account')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('BoA')
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('******1234')
+        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Savings account')
       })
     })
   })
@@ -124,7 +124,7 @@ context('DirectDepositScreen', () => {
 
       testInstance = component.container
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Add your bank account information')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Add your bank account information')
       })
 
       component = render(<DirectDepositScreen />, {
@@ -141,23 +141,7 @@ context('DirectDepositScreen', () => {
 
       testInstance = component.container
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Add your bank account information')
-      })
-    })
-  })
-
-  describe('when no profile data', () => {
-    it('should only render the button with the text Account', async () => {
-      component = render(<DirectDepositScreen />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-          ...authorizedMilitaryState,
-        },
-      })
-
-      testInstance = component.container
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Account')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Add your bank account information')
       })
     })
   })

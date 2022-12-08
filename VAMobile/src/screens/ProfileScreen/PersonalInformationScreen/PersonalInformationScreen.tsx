@@ -19,7 +19,6 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
-import ProfileBanner from '../ProfileBanner'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
@@ -166,7 +165,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   if (loading) {
     return (
       <React.Fragment>
-        <ProfileBanner />
         <LoadingComponent text={t('personalInformation.loading')} />
       </React.Fragment>
     )
@@ -174,7 +172,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   return (
     <VAScrollView {...testIdProps('Personal-information-page')}>
-      <ProfileBanner />
       <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}
       </TextView>

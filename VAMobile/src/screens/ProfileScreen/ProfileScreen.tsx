@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
-import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
+import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, NameTag, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
@@ -17,7 +16,6 @@ import { useSelector } from 'react-redux'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentScreen from './PaymentScreen'
-import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
@@ -34,11 +32,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     needsDataLoad: personalInformationNeedsUpdate,
     profile,
   } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
-  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
 
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
 
   useEffect(() => {
     navigation.setOptions({
@@ -63,8 +59,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     if (militaryInfoAuthorization) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-
-    dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -80,13 +74,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
   }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, mhNotInDowntime])
-
-  useEffect(() => {
-    // Get the service history to populate the profile banner
-    if (disabilityRatingNeedsUpdate && drNotInDowntime) {
-      dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
-    }
-  }, [dispatch, disabilityRatingNeedsUpdate, drNotInDowntime])
 
   const isIDMEOrLoginGovSignin = profile?.signinService === SigninServiceTypesConstants.IDME || profile?.signinService === SigninServiceTypesConstants.LOGINGOV
 
@@ -136,10 +123,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (militaryInformationLoading || personalInformationLoading || disabilityRatingLoading) {
+  if (militaryInformationLoading || personalInformationLoading) {
     return (
       <React.Fragment>
-        <ProfileBanner />
+        <NameTag />
         <LoadingComponent text={t('profile.loading')} />
       </React.Fragment>
     )
@@ -147,7 +134,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   return (
     <VAScrollView {...testIdProps('Profile-page')}>
-      <ProfileBanner />
+      <NameTag />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
         <SimpleList items={getTopSection()} />
       </Box>
@@ -170,6 +157,7 @@ const ProfileScreenStack = createStackNavigator()
  */
 const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: th } = useTranslation(NAMESPACE.HOME)
   const headerStyles = useHeaderStyles()
 
   return (
@@ -177,7 +165,7 @@ const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
       <ProfileScreenStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
       <ProfileScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
       <ProfileScreenStack.Screen name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
-      <ProfileScreenStack.Screen name="Payments" component={PaymentScreen} options={{ title: t('home:payments.title') }} />
+      <ProfileScreenStack.Screen name="Payments" component={PaymentScreen} options={{ title: th('payments.title') }} />
     </ProfileScreenStack.Navigator>
   )
 }
