@@ -30,7 +30,7 @@ export type FullScreenSubtaskProps = {
   secondaryContentButtonText?: string
   /** function called when primary content button is pressed(no function it doesn't appear) */
   onSecondaryContentButtonPress?: () => void
-  /** screen to navigate to after multiStep Cancel  */
+  /** how many screens to pop after multiStep Cancel  */
   navigationMultiStepCancelScreen?: number
 }
 
