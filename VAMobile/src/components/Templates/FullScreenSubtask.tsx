@@ -10,7 +10,7 @@ import VAIcon, { VAIconProps } from 'components/VAIcon'
 
 /*To use this template to rap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
-Use 'options={{headerShown: false}}' in the individual screen if only an individual screen is supposed to do it.
+Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
 */
 
 export type FullScreenSubtaskProps = {
@@ -52,22 +52,29 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    height: 64,
+    height: theme.dimensions.touchableMinHeight,
     backgroundColor: 'main',
+    mt: theme.dimensions.fullScreenNavigationBarOffset,
   }
 
   const boxProps: BoxProps = {
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
-    minHeight: 64,
+    height: theme.dimensions.touchableMinHeight,
   }
 
-  const textViewProps: TextViewProps = {
+  const textNoIconViewProps: TextViewProps = {
     color: 'footerButton',
+    variant: 'MobileBody',
+  }
+
+  const textWithIconViewProps: TextViewProps = {
+    color: 'footerButton',
+    variant: rightVAIconProps ? 'textWithIconButton' : 'MobileBody',
   }
 
   const titleTextProps: TextViewProps = {
-    variant: 'MobileBodyBold',
+    variant: 'BitterBoldHeading',
   }
 
   const message = t('areYouSure')
@@ -102,25 +109,25 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1}>
+        <Box ml={theme.dimensions.buttonPadding} flex={1}>
           {leftButtonText && (
             <Pressable onPress={onLeftTitleButtonPress} accessibilityRole="button" accessible={true}>
               <Box {...boxProps}>
                 <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...textViewProps}>{leftButtonText}</TextView>
+                  <TextView {...textNoIconViewProps}>{leftButtonText}</TextView>
                 </Box>
               </Box>
             </Pressable>
           )}
         </Box>
-        <Box mt={theme.dimensions.buttonPadding} flex={3} />
-        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1}>
+        <Box flex={2} />
+        <Box mr={theme.dimensions.buttonPadding} flex={1}>
           {rightButtonText && (
             <Pressable onPress={onRightTitleButtonPress} accessibilityRole="button" accessible={true}>
               <Box {...boxProps}>
                 {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
                 <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...textViewProps}>{rightButtonText}</TextView>
+                  <TextView {...textWithIconViewProps}>{rightButtonText}</TextView>
                 </Box>
               </Box>
             </Pressable>
@@ -129,8 +136,8 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       </Box>
       <VAScrollView>
         {title && (
-          <Box mt={theme.dimensions.buttonPadding} flex={1}>
-            <Box {...boxProps}>
+          <Box mt={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
+            <Box>
               <Box display="flex" flexDirection="row" alignItems="center">
                 <TextView {...titleTextProps}>{title}</TextView>
               </Box>
@@ -139,11 +146,19 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         )}
         {children}
         {primaryContentButtonText && onPrimaryContentButtonPress && (
-          <Box>
+          <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
             {secondaryContentButtonText && onSecondaryContentButtonPress && (
-              <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+              <Box ml={theme.dimensions.gutter} flex={1} height={theme.dimensions.fullScreenContentButtonHeight}>
+                <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+              </Box>
             )}
-            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <Box
+              ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
+              mr={theme.dimensions.gutter}
+              flex={1}
+              height={theme.dimensions.fullScreenContentButtonHeight}>
+              <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
+            </Box>
           </Box>
         )}
       </VAScrollView>
