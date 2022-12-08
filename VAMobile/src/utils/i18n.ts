@@ -31,6 +31,7 @@ export const defaultNS = NAMESPACE.COMMON
 
 // Initialize the internationalization library
 i18n.use(initReactI18next).init({
+  compatibilityJSON: 'v3',
   lng: defaultLanguage.languageTag,
   resources,
   defaultNS,

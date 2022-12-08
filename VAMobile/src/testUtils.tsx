@@ -5,7 +5,6 @@ import { ThemeProvider } from 'styled-components'
 import React, { ElementType } from 'react'
 import i18nReal from 'utils/i18n'
 import { RootState } from 'store'
-import { SuiteFunction } from 'mocha'
 import path from 'path'
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
 import { NavigationContainer } from '@react-navigation/native'
@@ -228,7 +227,7 @@ ctxFn.skip = (name: string, fn: () => void) => {
   return ctxReq(name, fn, false, true)
 }
 
-export const context: SuiteFunction = ctxFn
+export const context = ctxFn
 
 //@ts-ignore
 function render(ui, { preloadedState, navigationProvided = false, ...renderOptions } = {}) {
