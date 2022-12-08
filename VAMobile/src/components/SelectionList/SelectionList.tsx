@@ -127,7 +127,9 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
   return (
     <Box>
       <Box {...headerWrapperProps}>
-        <TextView variant={'HelperText'}>{t('selectedOutOfTotal', { selected: numSelected, total: items.length })}</TextView>
+        <TextView variant={'HelperText'} accessibilityLabel={t('selectedOutOfTotal.a11yLabel', { selected: numSelected, total: items.length })}>
+          {t('selectedOutOfTotal', { selected: numSelected, total: items.length })}
+        </TextView>
         <Pressable {...pressableProps}>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <TextView variant={'HelperText'}>{t('select.all')}</TextView>
