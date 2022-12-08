@@ -250,7 +250,7 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
 
   return (
     <View style={styles.fill}>
-      <StatusBar translucent barStyle="dark-content" />
+      <StatusBar translucent barStyle="dark-content" backgroundColor={theme.colors.background.main} />
       <Animated.View style={[styles.bar]}>
         <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
           <Box display="flex" width="25%">
@@ -290,11 +290,11 @@ const ChildTemplate: FC<AppointmentsScreenProps> = ({}) => {
         </TextView>
       </Animated.View>
       <Animated.ScrollView
-        style={styles.fill}
+        style={styles.scrollViewContent}
         scrollEventThrottle={1}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: initialScrollY } } }], {
           listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-            updateOffset(event.nativeEvent.contentOffset.y + HEADER_MAX_HEIGHT + SUBHEADER_MAX_HEIGHT)
+            updateOffset(Platform.OS === 'ios' ? event.nativeEvent.contentOffset.y + HEADER_MAX_HEIGHT + SUBHEADER_MAX_HEIGHT : event.nativeEvent.contentOffset.y)
           },
           useNativeDriver: true,
         })}
@@ -354,14 +354,14 @@ const styles = StyleSheet.create({
     top: HEADER_MAX_HEIGHT,
     left: 0,
     right: 0,
-    backgroundColor: '#FFF',
+    backgroundColor: stylesTheme.colors.background.main,
     overflow: 'hidden',
     height: SUBHEADER_MAX_HEIGHT,
     zIndex: 1,
   },
   bar: {
     backgroundColor: stylesTheme.colors.background.main,
-    paddingTop: Platform.OS === 'ios' ? 28 : 38,
+    paddingTop: Platform.OS === 'ios' ? 28 : 28,
     height: HEADER_MAX_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     // iOS uses content inset, which acts like padding.
-    paddingTop: Platform.OS !== 'ios' ? HEADER_MAX_HEIGHT : 0,
+    paddingTop: Platform.OS !== 'ios' ? HEADER_MAX_HEIGHT + SUBHEADER_MAX_HEIGHT : 0,
   },
 })
 
