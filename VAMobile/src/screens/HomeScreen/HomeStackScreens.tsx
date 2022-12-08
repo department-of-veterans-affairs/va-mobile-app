@@ -19,8 +19,5 @@ export type HomeStackParamList = WebviewStackParams & {
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
 export const getHomeScreens = (t: TFunction): Array<ReactNode> => {
-  return [
-    <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />,
-    // <HomeStack.Screen key={'SecureMessaging'} name="SecureMessaging" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
-  ]
+  return [<HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />]
 }
