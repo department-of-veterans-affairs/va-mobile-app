@@ -294,6 +294,7 @@ export const AppTabs: FC = () => {
 
 export const AuthedApp: FC = () => {
   const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tp } = useTranslation(NAMESPACE.PAYMENTS)
   const headerStyles = useHeaderStyles()
 
   const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME).t)
@@ -322,7 +323,7 @@ export const AuthedApp: FC = () => {
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
         <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
-        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: tp('directDeposit.title') }} />
         {homeScreens}
         {/* {profileScreens} */}
         {paymentsScreens}

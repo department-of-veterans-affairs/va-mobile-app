@@ -17,7 +17,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
-type PaymentScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
+type PaymentScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
 const PaymentScreen: FC<PaymentScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.PROFILE)

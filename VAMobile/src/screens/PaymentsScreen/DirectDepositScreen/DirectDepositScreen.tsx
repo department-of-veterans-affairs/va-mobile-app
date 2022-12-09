@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux'
 const DirectDepositScreen: FC = () => {
   const { paymentAccount: bankData, loading } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.PAYMENTS)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()

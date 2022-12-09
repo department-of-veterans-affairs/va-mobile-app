@@ -22,17 +22,17 @@ const PaymentsScreen: FC<PaymentsScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   const theme = useTheme()
-  const { t: th } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.PAYMENTS)
   const navigateTo = useRouteNavigation()
 
-  const onPayments = navigateTo('Payments')
+  const onPayments = navigateTo('PaymentHistory')
   const onDirectDeposit = directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
 
   return (
     <VAScrollView>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
-          title={th('payments.title')}
+          title={t('vaPaymentHistory')}
           onPress={onPayments}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
@@ -41,7 +41,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = ({ navigation }) => {
         />
         {directDepositBenefits && (
           <LargeNavButton
-            title={th('directDeposit.information')}
+            title={t('directDeposit.information')}
             onPress={onDirectDeposit}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
