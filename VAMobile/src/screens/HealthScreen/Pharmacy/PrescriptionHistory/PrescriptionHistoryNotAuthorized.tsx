@@ -59,7 +59,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
           <Box mt={standardMarginBetween}>
             <TextView {...linkProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
           </Box>
-          <TextView mt={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+          <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
           <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
