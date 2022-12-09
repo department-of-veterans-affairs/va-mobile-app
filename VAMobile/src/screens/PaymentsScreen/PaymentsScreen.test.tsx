@@ -103,7 +103,7 @@ context('PaymentsScreen', () => {
     describe('when user did not signs in through IDME and does not have directDepositBenefits', () => {
       it('should navigate to HowToUpdateDirectDeposit', async () => {
         await waitFor(() => {
-          initializeTestInstance(false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
+          initializeTestInstance(true, false, initialErrorsState, SigninServiceTypesConstants.MHV)
         })
         testInstance.findAllByType(LargeNavButton)[1].props.onPress()
         expect(navigateToHowToUpdateDirectDepositSpy).toHaveBeenCalled()
