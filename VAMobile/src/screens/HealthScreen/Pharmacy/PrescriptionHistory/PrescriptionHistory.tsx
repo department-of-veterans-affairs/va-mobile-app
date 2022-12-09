@@ -453,6 +453,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     topRightButtonText: tc('reset'),
     topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
     onConfirm: () => {
+      setPage(1)
       setFilterToUse(selectedFilter)
       logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
     },
