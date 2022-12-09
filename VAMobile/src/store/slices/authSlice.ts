@@ -82,6 +82,7 @@ export type AuthState = {
   authCredentials?: AuthCredentialData
   canStoreWithBiometric: boolean
   shouldStoreWithBiometric: boolean
+  settingBiometricPreference: boolean
   supportedBiometric?: string
   firstTimeLogin: boolean
   showLaoGate: boolean
@@ -102,6 +103,7 @@ export const initialAuthState: AuthState = {
   firstTimeLogin: false,
   canStoreWithBiometric: false,
   shouldStoreWithBiometric: false,
+  settingBiometricPreference: false,
   displayBiometricsPreferenceScreen: false,
   showLaoGate: false,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
@@ -504,12 +506,14 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
 export const setBiometricsPreference =
   (value: boolean): AppThunk =>
   async (dispatch) => {
+    dispatch(dispatchStartSetBiometricPreference())
     // resave the token with the new preference
     const prefToSet = value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE
     await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, prefToSet)
 
     await saveRefreshToken(inMemoryRefreshToken || '')
     dispatch(dispatchUpdateStoreBiometricsPreference(value))
+    dispatch(dispatchFinishSetBiometricPreference())
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(value))
   }
 
@@ -839,6 +843,12 @@ const authSlice = createSlice({
       state.syncing = false
       state.loggingOut = false
     },
+    dispatchStartSetBiometricPreference: (state) => {
+      state.settingBiometricPreference = true
+    },
+    dispatchFinishSetBiometricPreference: (state) => {
+      state.settingBiometricPreference = false
+    },
   },
 })
 
@@ -856,6 +866,8 @@ export const {
   dispatchDemoLogin,
   dispatchFinishLogout,
   dispatchStartLogout,
+  dispatchStartSetBiometricPreference,
+  dispatchFinishSetBiometricPreference,
 } = authSlice.actions
 
 export default authSlice.reducer
