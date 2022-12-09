@@ -44,6 +44,7 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
 const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tp } = useTranslation(NAMESPACE.PAYMENTS)
   const { t: tc } = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
@@ -59,8 +60,8 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
   const snackbarMessages: SnackbarMessages = {
-    successMsg: t('directDeposit.saved'),
-    errorMsg: t('directDeposit.saved.error'),
+    successMsg: tp('directDeposit.saved'),
+    errorMsg: tp('directDeposit.saved.error'),
   }
 
   const accountOptions: Array<PickerItem> = AccountOptions.map((option) => {
