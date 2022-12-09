@@ -11,6 +11,7 @@ import {
   initialErrorsState,
 
 } from 'store/slices'
+import { LargeNavButton } from 'components'
 import { SigninServiceTypes, SigninServiceTypesConstants } from 'store/api/types'
 import { waitFor } from '@testing-library/react-native'
 import { when } from 'jest-when'
@@ -75,7 +76,7 @@ context('PaymentsScreen', () => {
         await waitFor(() => {
           initializeTestInstance(true)
         })
-        expect(findByTestID(testInstance, 'direct-deposit-information')).toBeTruthy()
+        expect(testInstance.findAllByType(LargeNavButton)[1]).toBeTruthy()
       })
     })
 
@@ -84,7 +85,7 @@ context('PaymentsScreen', () => {
         await waitFor(() => {
           initializeTestInstance(true, true)
         })
-        findByTestID(testInstance, 'direct-deposit-information').props.onPress()
+        testInstance.findAllByType(LargeNavButton)[1].props.onPress()
         expect(navigateToDirectDepositSpy).toHaveBeenCalled()
       })
     })
@@ -94,7 +95,7 @@ context('PaymentsScreen', () => {
         await waitFor(() => {
           initializeTestInstance(true, true, undefined, SigninServiceTypesConstants.LOGINGOV)
         })
-        findByTestID(testInstance, 'direct-deposit-information').props.onPress()
+        testInstance.findAllByType(LargeNavButton)[1].props.onPress()
         expect(navigateToDirectDepositSpy).toHaveBeenCalled()
       })
     })
@@ -104,7 +105,7 @@ context('PaymentsScreen', () => {
         await waitFor(() => {
           initializeTestInstance(false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
         })
-        findByTestID(testInstance, 'direct-deposit-information').props.onPress()
+        testInstance.findAllByType(LargeNavButton)[1].props.onPress()
         expect(navigateToHowToUpdateDirectDepositSpy).toHaveBeenCalled()
       })
     })
