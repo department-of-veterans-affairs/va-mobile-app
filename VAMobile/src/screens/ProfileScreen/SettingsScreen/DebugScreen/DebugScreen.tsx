@@ -1,7 +1,7 @@
 import { pick } from 'underscore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Clipboard from '@react-native-community/clipboard'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 
@@ -10,6 +10,7 @@ import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { RootState } from 'store'
+import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped } from 'utils/encourageUpdate'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
@@ -24,7 +25,39 @@ const DebugScreen: FC = ({}) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const [localVersionName, setVersionName] = useState<string>()
+  const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
+  const [storeVersion, setStoreVersionScreen] = useState<string>()
+  const componentMounted = useRef(true)
 
+  useEffect(() => {
+    async function checkLocalVersion() {
+      const version = await getEncourageUpdateLocalVersion()
+      if (componentMounted.current) {
+        setVersionName(version)
+      }
+    }
+
+    async function checkSkippedVersion() {
+      const version = await getVersionSkipped()
+      if (componentMounted.current) {
+        setSkippedVersionHomeScreen(version)
+      }
+    }
+
+    async function checkStoreVersion() {
+      const result = await getStoreVersion()
+      if (componentMounted.current) {
+        setStoreVersionScreen(result)
+      }
+    }
+    checkStoreVersion()
+    checkSkippedVersion()
+    checkLocalVersion()
+    return () => {
+      componentMounted.current = false
+    }
+  }, [])
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
     const asyncVal = (await AsyncStorage.getItem(key)) || ''
@@ -162,6 +195,17 @@ const DebugScreen: FC = ({}) => {
               </Box>
             )
           })}
+        </Box>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <TextArea>
+            <TextView variant="BitterBoldHeading">Encouraged Update Versions</TextView>
+            <TextView variant="MobileBodyBold">Local Version</TextView>
+            <TextView>{localVersionName}</TextView>
+            <TextView variant="MobileBodyBold">Store Version</TextView>
+            <TextView>{storeVersion}</TextView>
+            <TextView variant="MobileBodyBold">Skipped Version</TextView>
+            <TextView>{skippedVersion}</TextView>
+          </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
