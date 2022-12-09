@@ -23,7 +23,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   const bulletOne = {
     text: t('prescriptions.notAuthorized.enrolled'),
     boldedText: ' ' + tc('and'),
-    a11yLabel: t('prescriptions.notAuthorized.enrolled.a11y'),
+    a11yLabel: t('prescriptions.notAuthorized.enrolled.a11y') + ' ' + tc('and'),
   }
 
   const bulletTwo = {
