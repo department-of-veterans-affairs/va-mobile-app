@@ -1,7 +1,7 @@
 ---
 name: Common Component
 about: Template for new common component for VA mobile app
-title: Common Component Ticket:[Insert name of component here]
+title: Component:[Insert name of component here]
 labels: component-documentation, ux
 assignees:
 ---
@@ -14,14 +14,14 @@ assignees:
 ### Purpose
 <!-- [name of component] provides [purpose of component]. Ex: The loading indicator provides the status of an indeterminate loading time. -->
 
+### Image or Figma embed
+<!-- [component image or Figma embed link goes here] -->
+
 ### Usage
 <!-- Overview of when the component should (or should not) be used. -->
 
-### Component
+### Example in practice
 <!-- Provide screenshots of the component (parts labeled and described), as well as screenshots of key variants (different states, light/dark mode) -->
-
-### Accessibility
-<!-- Are there accessibility requirements you want to point out? How should the component behave to be accessible to all? -->
 
 ### Best Practices
 <!-- Guidelines that give more context, edge cases, etc. Example: Component should use established color patterns. -->
@@ -29,8 +29,8 @@ assignees:
 ### Content Guideline
 <!-- Guidelines to follow for content. Example: Use a single word to describe the status of an object.-->
 
-### Example
-<!-- Screen shot of example screen from the VA mobile app using the component -->
+### Accessibility
+<!-- Are there accessibility requirements you want to point out? How should the component behave to be accessible to all? -->
 
 ### Related Components/Resources
 <!-- Link to live design in Figma for inspection. -->
