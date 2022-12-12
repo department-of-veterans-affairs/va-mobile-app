@@ -59,7 +59,7 @@ context('MessageList', () => {
           } as InlineTextWithIconsProps,
         ],
         isSentFolder: true,
-        readReceipt: 'Read',
+        readReceipt: 'READ',
         a11yHintText: 'hint2',
         onPress: onPressSpy,
       },
@@ -84,7 +84,7 @@ context('MessageList', () => {
     findByTestID(testInstance, 'test3-recipient test3-sent-item-with-read-tag Recipient has read your message').props.onPress()
   })
 
-  it('should render READ tag for read sent message', async () => {
+  it('should render Read tag for read sent message', async () => {
     expect(testInstance.findByType(LabelTag).props.text).toEqual('Read')
   })
 

@@ -6,9 +6,9 @@ export const MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES = 6291456
 
 export const MAX_IMAGE_DIMENSION = 1375
 
-export const READ = 'Read'
+export const READ = 'READ'
 
-export const UNREAD = 'Unread'
+export const UNREAD = 'UNREAD'
 
 export const TRASH_FOLDER_NAME = 'Trash'
 
