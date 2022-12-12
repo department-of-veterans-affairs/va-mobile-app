@@ -2,12 +2,13 @@ import { DateTime } from 'luxon'
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, VAScrollView } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { FeatureLandingTemplate } from 'templates/FeatureLandingAndChildTemplate'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -111,30 +112,41 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
   }
 
+  const appointmentsContent: ReactNode = (
+    <Box flex={1} justifyContent="flex-start">
+      <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+        <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+      </Box>
+      {serviceErrorAlert()}
+      <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
+        <CernerAlert />
+      </Box>
+      <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+        {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
+        {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
+      </Box>
+    </Box>
+  )
+
+  const wtf = (
+    <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+      <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+    </Box>
+  )
+
   return (
     <>
-      <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
-        <Box flex={1} justifyContent="flex-start">
-          <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlValues}
-              onChange={setSelectedTab}
-              selected={controlValues.indexOf(selectedTab)}
-              accessibilityHints={a11yHints}
-            />
-          </Box>
-          {serviceErrorAlert()}
-          <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
-            <CernerAlert />
-          </Box>
-          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-            {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
-            {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
-          </Box>
-        </Box>
-      </VAScrollView>
-      {featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}
+      <FeatureLandingTemplate
+        backLabel="Health"
+        backLabelOnPress={navigateTo('HealthTab')}
+        title="Appointments"
+        content={appointmentsContent}
+        headerButton={{ label: 'Title', icon: { name: 'ProfileSelected' }, onPress: () => {} }}
+        headerContent={wtf}
+        footerContent={featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}>
+        {/* <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}> */}
+        {/* </VAScrollView> */}
+      </FeatureLandingTemplate>
     </>
   )
 }

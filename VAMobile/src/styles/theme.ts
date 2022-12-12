@@ -1,3 +1,5 @@
+import { ColorSchemeTypes } from './themes/standardTheme'
+
 export type VAButtonBackgroundColors = {
   buttonPrimary: string
   buttonPrimaryActive: string
@@ -122,6 +124,7 @@ export type VATypographyThemeVariants = {
   AppointmentRequestCtaBtnText: string
   LabelTag: string
   LabelTagBold: string
+  DescriptiveBackButton: string
 }
 
 export type VABackgroundColors = {
@@ -281,4 +284,5 @@ export type VATheme = {
     HelperTextBold: VAFontSizes
   }
   typography: VATypographyThemeVariants
+  mode: ColorSchemeTypes
 }

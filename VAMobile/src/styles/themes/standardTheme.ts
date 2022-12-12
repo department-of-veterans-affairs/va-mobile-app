@@ -28,6 +28,7 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
     ...theme,
     colors: { ...colorScheme },
     typography: buildTypography(colorScheme),
+    mode: scheme,
   }
 }
 
@@ -104,6 +105,10 @@ const fontSizes = {
     fontSize: 18,
     lineHeight: 25,
   },
+  DescriptiveBackButton: {
+    fontSize: 12,
+    lineHeight: 18,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -138,6 +143,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
+    DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
   }
 }
 
@@ -198,6 +204,7 @@ let theme: VATheme = {
     LabelTag: fontSizes.LabelTag,
     LabelTagBold: fontSizes.LabelTagBold,
   },
+  mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',
   typography: buildTypography(colorScheme),
 }
 

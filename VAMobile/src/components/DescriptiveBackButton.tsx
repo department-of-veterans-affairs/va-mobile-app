@@ -23,7 +23,7 @@ export type DescBackButtonProps = {
 }
 
 /**
- * Button used by the stack navigation to go back to the previous screen
+ * Descriptive button used by the stack navigation to go back to the previous screen
  */
 export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label, a11yHint, focusOnButton = true }) => {
   const theme = useTheme()
@@ -37,8 +37,8 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
   return (
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
       <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} alignItems={'center'}>
-        <VAIcon mt={1} name={'ArrowLeft'} fill={theme.colors.icon.link} />
-        <TextView variant="ActionBar" color="descriptiveBackButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
+        <VAIcon mt={1} name={'ArrowLeft'} fill={theme.colors.icon.link} height={13} />
+        <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {label}
         </TextView>
       </Box>
