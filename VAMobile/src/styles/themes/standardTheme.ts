@@ -27,8 +27,8 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
   theme = {
     ...theme,
     colors: { ...colorScheme },
-    typography: buildTypography(colorScheme),
     mode: scheme,
+    typography: buildTypography(colorScheme),
   }
 }
 
@@ -40,6 +40,10 @@ const fontSizes = {
   BitterBoldHeading: {
     fontSize: 26,
     lineHeight: 32,
+  },
+  DescriptiveBackButton: {
+    fontSize: 12,
+    lineHeight: 18,
   },
   MobileBody: {
     fontSize: 20,
@@ -105,10 +109,6 @@ const fontSizes = {
     fontSize: 18,
     lineHeight: 25,
   },
-  DescriptiveBackButton: {
-    fontSize: 12,
-    lineHeight: 18,
-  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -127,6 +127,7 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
@@ -143,7 +144,6 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
-    DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
   }
 }
 

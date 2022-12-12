@@ -9,8 +9,6 @@ import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import styled from 'styled-components'
 
-export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
-
 type headerButton = {
   label: string
   labelA11y?: string
@@ -28,44 +26,35 @@ export type ChildTemplateProps = {
 
   headerButton?: headerButton
 
-  headerContent?: ReactNode // Content pinned above the scrollable space
   content: ReactNode
   footerContent?: ReactNode // Content pinned below the scrollable space
 
   scrollViewProps?: VAScrollViewProps
 }
 
+export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
+
 const HEADER_HEIGHT = 91
 const SUBHEADER_HEIGHT = 52
 const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + SUBHEADER_HEIGHT
 
-export const ChildTemplate: FC<ChildTemplateProps> = ({
-  backLabel,
-  backLabelA11y,
-  backLabelOnPress,
-  title,
-  titleA11y,
-  headerButton,
-  headerContent,
-  content,
-  footerContent,
-  scrollViewProps,
-}) => {
+export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, content, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
   const [initialScrollY] = useState(new Animated.Value(Platform.OS === 'ios' ? -TOTAL_HEADER_HEIGHT : 0))
   const scrollY = Animated.add(initialScrollY, Platform.OS === 'ios' ? TOTAL_HEADER_HEIGHT : 0)
 
+  const [VaOpacity, setVaOpacity] = useState(1)
+
+  const [titleShowing, setTitleShowing] = useState(false)
+  const [titleFade] = useState(new Animated.Value(0))
+
   const subtitleTranslate = scrollY.interpolate({
     inputRange: [0, SUBHEADER_HEIGHT],
     outputRange: [0, -SUBHEADER_HEIGHT],
     extrapolate: 'clamp',
   })
-
-  const [titleShowing, setTitleShowing] = useState(false)
-  const [titleFade] = useState(new Animated.Value(0))
-  const [VaOpacity, setVaOpacity] = useState(1)
 
   const updateOffset = (offsetValue: number) => {
     setVaOpacity(1 - offsetValue / SUBHEADER_HEIGHT)
@@ -98,6 +87,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     flex: 1,
   }
 
+  // Copied from VAScrollView to address bug
   const scrollViewStyle: ViewStyle = {
     paddingRight: insets.right,
     paddingLeft: insets.left,
@@ -109,7 +99,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
 
   const headerStyle: ViewStyle = {
     backgroundColor: theme.colors.background.main,
-    paddingTop: Platform.OS === 'ios' ? 28 : 28,
+    paddingTop: Platform.OS === 'ios' ? 28 : 18,
     height: HEADER_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
@@ -141,12 +131,13 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
 
   return (
     <View style={fillStyle}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+      <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <Animated.View style={headerStyle}>
         <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
           <Box display="flex" width="25%">
             <DescriptiveBackButton label={backLabel} a11yHint={backLabelA11y} onPress={backLabelOnPress} />
           </Box>
+
           <Box display="flex" flex={1} flexDirection={'row'} m={theme.dimensions.headerButtonSpacing} justifyContent={'center'} alignItems={'center'}>
             {titleShowing ? (
               <Animated.View style={{ opacity: titleFade }}>
@@ -160,6 +151,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
               </TextView>
             )}
           </Box>
+
           <Box display="flex" width="25%" alignItems="center">
             {headerButton ? (
               <Pressable onPress={headerButton.onPress} accessibilityRole="button" accessible={true}>
@@ -172,11 +164,13 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           </Box>
         </Box>
       </Animated.View>
+
       <Animated.View style={[subheaderStyle, { transform: [{ translateY: subtitleTranslate }] }]}>
         <TextView variant="BitterBoldHeading" m={theme.dimensions.condensedMarginBetween} accessibilityLabel={titleA11y ? titleA11y : title}>
           {title}
         </TextView>
       </Animated.View>
+
       <>
         <Animated.ScrollView
           scrollEventThrottle={1}

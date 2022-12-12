@@ -4,16 +4,15 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton, SegmentedControl } from 'components' // , VAScrollView
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { FeatureLandingTemplate } from 'templates/FeatureLandingAndChildTemplate'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { testIdProps } from 'utils/accessibility'
+// import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
@@ -128,21 +127,16 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     </Box>
   )
 
-  const wtf = (
-    <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-      <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
-    </Box>
-  )
-
+  // TODO: REVERT FILE BEFORE COMMITTING TO DEVELOP
   return (
     <>
       <FeatureLandingTemplate
-        backLabel="Health"
+        backLabel="Health Care"
         backLabelOnPress={navigateTo('HealthTab')}
         title="Appointments"
+        scrollViewProps={{ style: scrollStyles }}
         content={appointmentsContent}
         headerButton={{ label: 'Title', icon: { name: 'ProfileSelected' }, onPress: () => {} }}
-        headerContent={wtf}
         footerContent={featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}>
         {/* <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}> */}
         {/* </VAScrollView> */}

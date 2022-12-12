@@ -108,6 +108,7 @@ export type VAIconColors = {
 
 export type VATypographyThemeVariants = {
   BitterBoldHeading: string
+  DescriptiveBackButton: string
   MobileBody: string
   MobileBodyBold: string
   UnreadMessagesTag: string
@@ -124,7 +125,6 @@ export type VATypographyThemeVariants = {
   AppointmentRequestCtaBtnText: string
   LabelTag: string
   LabelTagBold: string
-  DescriptiveBackButton: string
 }
 
 export type VABackgroundColors = {
@@ -283,6 +283,6 @@ export type VATheme = {
     HelperText: VAFontSizes
     HelperTextBold: VAFontSizes
   }
-  typography: VATypographyThemeVariants
   mode: ColorSchemeTypes
+  typography: VATypographyThemeVariants
 }

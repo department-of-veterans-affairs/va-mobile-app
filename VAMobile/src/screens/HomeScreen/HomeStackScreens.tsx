@@ -23,6 +23,7 @@ export const getHomeScreens = (t: TFunction): Array<ReactNode> => {
   return [
     <HomeStack.Screen key={'ContactVA'} name="ContactVA" component={ContactVAScreen} options={{ title: t('contactVA.title') }} />,
     <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />,
-    <HomeStack.Screen key={'SecureMessaging'} name="SecureMessaging" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
+    // TODO: REVERT headerShown BEFORE COMMITTING TO DEVELOP
+    <HomeStack.Screen key={'SecureMessaging'} name="SecureMessaging" component={SecureMessaging} options={{ headerShown: false, title: t('secureMessaging.title') }} />,
   ]
 }

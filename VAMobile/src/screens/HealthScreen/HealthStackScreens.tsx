@@ -35,7 +35,6 @@ import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
   Appointments: undefined
-  AppointmentsPROTOTYPE: undefined
   UpcomingAppointmentDetails: {
     appointmentID: string
   }
@@ -144,6 +143,7 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     //   component={InboxMessages}
     //   options={{ title: t('secure_messaging.inbox_messages') }}
     // />,
+    // TODO: REVERT headerShown BEFORE COMMITTING TO DEVELOP
     <HealthStack.Screen key={'Appointments'} name="Appointments" component={Appointments} options={{ headerShown: false, title: t('appointments.appointments') }} />,
     <HealthStack.Screen
       key={'UpcomingAppointmentDetails'}
@@ -153,7 +153,8 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     />,
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
     <HealthStack.Screen key={'PastAppointmentDetails'} name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />,
-    <HealthStack.Screen key={'Messages'} name="Messages" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
+    // TODO: REVERT headerShown BEFORE COMMITTING TO DEVELOP
+    <HealthStack.Screen key={'Messages'} name="Messages" component={SecureMessaging} options={{ headerShown: false, title: t('secureMessaging.title') }} />,
     <HealthStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />,
     <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage.title') }} />,
     <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
