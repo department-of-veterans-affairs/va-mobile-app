@@ -103,7 +103,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
           const routeName = route.name.replace('Tab', '')
-          const translatedName = translation(`${routeName.toLowerCase()}:title`)
+          const translatedName = routeName.toLowerCase() === 'payments' ? translation('common:payments') : translation(`${routeName.toLowerCase()}:title`)
 
           type TouchableProps = {
             key: string

@@ -273,7 +273,7 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
+  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE, NAMESPACE.COMMON])
 
   return (
     <>
