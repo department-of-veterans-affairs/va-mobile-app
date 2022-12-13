@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, FooterButton, FooterButtonProps, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView, VAButton, VAButtonProps, VAScrollView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
@@ -53,7 +53,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     launchExternalLink(LINK_URL_GO_TO_PATIENT_PORTAL)
   }
 
-  const getFooterButton = () => {
+  const getRefillVAHealthButton = () => {
     if (refillStatus === RefillStatusConstants.TRANSFERRED) {
       return getGoToMyVAHealthButton()
     } else if (isRefillable) {
@@ -63,11 +63,10 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     return <></>
   }
   const getGoToMyVAHealthButton = () => {
-    const footerButtonProps: FooterButtonProps = {
-      text: tc('goToMyVAHealth'),
+    const buttonProps: VAButtonProps = {
+      label: tc('goToMyVAHealth'),
       testID: tc('goToMyVAHealth.a11yLabel'),
-      backGroundColor: 'buttonPrimary',
-      textColor: 'navBar',
+      buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: redirectLink,
       iconProps: {
         name: 'WebviewOpen',
@@ -77,14 +76,17 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
         preventScaling: true,
       },
     }
-    return <FooterButton {...footerButtonProps} />
+    return (
+      <Box mt={theme.dimensions.buttonPadding}>
+        <VAButton {...buttonProps} />
+      </Box>
+    )
   }
 
   const getRequestRefillButton = () => {
-    const requestRefillButtonProps: FooterButtonProps = {
-      text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
-      backGroundColor: 'buttonPrimary',
-      textColor: 'navBar',
+    const requestRefillButtonProps: VAButtonProps = {
+      label: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
+      buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: () => {
         submitRefillAlert({
           title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
@@ -105,7 +107,11 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
         })
       },
     }
-    return <FooterButton {...requestRefillButtonProps} />
+    return (
+      <Box mt={theme.dimensions.buttonPadding}>
+        <VAButton {...requestRefillButtonProps} />
+      </Box>
+    )
   }
 
   const getBanner = () => {
@@ -129,6 +135,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     <>
       <VAScrollView>
         {getBanner()}
+        {getRefillVAHealthButton()}
         <Box mt={contentMarginTop} mb={contentMarginBottom}>
           <TextArea>
             <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
@@ -164,7 +171,6 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
           </TextArea>
         </Box>
       </VAScrollView>
-      {getFooterButton()}
     </>
   )
 }
