@@ -59,7 +59,7 @@ type PaymentsStackScreenProps = Record<string, unknown>
 const PaymentsScreenStack = createStackNavigator()
 
 /**
- * Stack screen for the Profile tab. Screens placed within this stack will appear in the context of the app level tab navigator
+ * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.PAYMENTS)

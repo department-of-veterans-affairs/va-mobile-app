@@ -24,7 +24,6 @@ export type ProfileStackParamList = {
   Profile: undefined
   Settings: undefined
   ManageYourAccount: undefined
-  DirectDeposit: undefined
   Debug: undefined
   RemoteConfig: undefined
   PersonalInformation: undefined

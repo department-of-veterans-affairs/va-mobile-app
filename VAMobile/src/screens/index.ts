@@ -1,6 +1,12 @@
 export { default as HealthScreen } from './HealthScreen'
+export { getHealthScreens as getHealthScreens } from './HealthScreen'
 export { default as ClaimsScreen } from './ClaimsScreen'
+export { getClaimsScreens as getClaimsScreens } from './ClaimsScreen'
 export { default as HomeScreen } from './HomeScreen'
+export { getHomeScreens as getHomeScreens } from './HomeScreen'
 export { default as ProfileScreen } from './ProfileScreen'
-export { default as LoginScreen } from './auth/LoginScreen'
+export { getProfileScreens as getProfileScreens } from './ProfileScreen'
 export { default as PaymentsScreen } from './PaymentsScreen'
+export { getPaymentsScreens as getPaymentsScreens} from './PaymentsScreen'
+export { default as LoginScreen } from './auth/LoginScreen'
+

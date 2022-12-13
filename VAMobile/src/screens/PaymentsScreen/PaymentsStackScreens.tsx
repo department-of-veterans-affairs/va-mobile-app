@@ -4,10 +4,10 @@ import React, { ReactNode } from 'react'
 
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
-import PaymentDetailsScreen from './PaymentScreen/PaymentDetailsScreen/PaymentDetailsScreen'
-import PaymentIssue from './PaymentScreen/PaymentIssueScreen/PaymentIssueScreen'
-import PaymentMissing from './PaymentScreen/PaymentMissingSceen/PaymentMissingScreen'
-import PaymentScreen from './PaymentScreen/PaymentHistoryScreen'
+import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
+import PaymentIssue from './PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
+import PaymentMissing from './PaymentHistory/PaymentMissingSceen/PaymentMissingScreen'
+import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 
 export type PaymentsStackParamList = {
   Payments: undefined
@@ -32,7 +32,7 @@ export const getPaymentsScreens = (t: TFunction): Array<ReactNode> => {
       component={HowToUpdateDirectDepositScreen}
       options={{ title: t('directDeposit.title') }}
     />,
-    <PaymentsStack.Screen key={'PaymentHistory'} name="PaymentHistory" component={PaymentScreen} options={{ title: t('home:payments.title') }} />,
+    <PaymentsStack.Screen key={'PaymentHistory'} name="PaymentHistory" component={PaymentHistoryScreen} options={{ title: t('home:payments.title') }} />,
     <PaymentsStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ title: t('paymentDetails.title') }} />,
     <PaymentsStack.Screen key={'PaymentIssue'} name="PaymentIssue" component={PaymentIssue} />,
     <PaymentsStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} />,

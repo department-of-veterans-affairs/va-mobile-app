@@ -7,7 +7,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, findByTypeWithText, render, RenderAPI, waitFor, when } from 'testUtils'
 import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID, initialPaymentsState } from 'store/slices'
 import { DefaultList, ErrorComponent, LoadingComponent, TextView, VAModalPicker } from 'components'
-import PaymentScreen from './PaymentHistoryScreen'
+import PaymentHistoryScreen from './PaymentHistoryScreen'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -40,7 +40,7 @@ jest.mock('store/slices', () => {
   }
 })
 
-context('PaymentScreen', () => {
+context('PaymentHistoryScreen', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
@@ -60,7 +60,7 @@ context('PaymentScreen', () => {
       })
       .mockReturnValue(navigatePaymentDetailsSpy)
 
-    component = render(<PaymentScreen {...props} />, {
+    component = render(<PaymentHistoryScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         payments: {
