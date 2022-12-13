@@ -47,6 +47,7 @@ export const getSortOrderOptionsForSortBy = (sortBy: PrescriptionSortOptions | '
         {
           value: '',
           labelKey: t('prescriptions.sort.ztoa'),
+          a11yLabel: t('prescriptions.sort.ztoa.a11y'),
         },
       ]
     case PrescriptionSortOptionConstants.REFILL_DATE:
