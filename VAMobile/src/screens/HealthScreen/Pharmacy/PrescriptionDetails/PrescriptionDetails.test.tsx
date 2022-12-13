@@ -116,7 +116,7 @@ context('PrescriptionDetails', () => {
 
         const button = testInstance.findAllByType(VAButton)
         expect(button.length).toBe(1)
-        expect(button[0].props.text).toEqual('Go to My VA Health')
+        expect(button[0].props.label).toEqual('Go to My VA Health')
       })
     })
 
@@ -139,7 +139,7 @@ context('PrescriptionDetails', () => {
 
         const button = testInstance.findAllByType(VAButton)
         expect(button.length).toBe(1)
-        expect(button[0].props.text).toEqual('Request refill')
+        expect(button[0].props.label).toEqual('Request refill')
       })
     })
 
