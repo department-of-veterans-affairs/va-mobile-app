@@ -1,2 +1,2 @@
 export { default } from './ProfileScreen'
-export {getProfileScreens} from './ProfileStackScreens'
+export { getProfileScreens } from './ProfileStackScreens'

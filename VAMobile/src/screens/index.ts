@@ -9,4 +9,3 @@ export { getProfileScreens } from './ProfileScreen'
 export { default as PaymentsScreen } from './PaymentsScreen'
 export { getPaymentsScreens } from './PaymentsScreen'
 export { default as LoginScreen } from './auth/LoginScreen'
-

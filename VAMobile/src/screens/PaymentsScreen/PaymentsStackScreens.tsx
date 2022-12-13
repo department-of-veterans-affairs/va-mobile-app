@@ -5,9 +5,9 @@ import React, { ReactNode } from 'react'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
+import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 import PaymentIssue from './PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from './PaymentHistory/PaymentMissingSceen/PaymentMissingScreen'
-import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 
 export type PaymentsStackParamList = {
   Payments: undefined

@@ -23,7 +23,7 @@ import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
-import { ClaimsScreen, getClaimsScreens, HealthScreen, getHealthScreens, HomeScreen, getHomeScreens, PaymentsScreen, getPaymentsScreens, LoginScreen } from 'screens'
+import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getClaimsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 // import { ProfileScreen } from 'screens'
 // import { getProfileScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
