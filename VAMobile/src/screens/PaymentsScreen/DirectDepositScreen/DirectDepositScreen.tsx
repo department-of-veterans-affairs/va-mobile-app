@@ -19,8 +19,7 @@ import { useSelector } from 'react-redux'
 const DirectDepositScreen: FC = () => {
   const { paymentAccount: bankData, loading } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.PAYMENTS)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
@@ -98,7 +97,7 @@ const DirectDepositScreen: FC = () => {
         </Box>
       </Box>
       <Box mx={gutter} mb={contentMarginBottom}>
-        <ClickToCallPhoneNumber phone={tc('8008271000.displayText')} />
+        <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
       </Box>
     </VAScrollView>
   )

@@ -43,8 +43,7 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
  */
 const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tp } = useTranslation(NAMESPACE.PAYMENTS)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
@@ -60,8 +59,8 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
   const snackbarMessages: SnackbarMessages = {
-    successMsg: tp('directDeposit.saved'),
-    errorMsg: tp('directDeposit.saved.error'),
+    successMsg: t('directDeposit.saved'),
+    errorMsg: t('directDeposit.saved.error'),
   }
 
   const accountOptions: Array<PickerItem> = AccountOptions.map((option) => {
@@ -111,13 +110,13 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
-        labelKey: 'profile:editDirectDeposit.routingNumber',
+        labelKey: 'editDirectDeposit.routingNumber',
         inputType: 'phone',
         onChange: setRoutingNumber,
         maxLength: MAX_ROUTING_DIGITS,
         value: routingNumber,
         isRequiredField: true,
-        helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
+        helperTextKey: 'editDirectDeposit.routingNumberHelperText',
       },
       fieldErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
       validationList: [
@@ -130,14 +129,14 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
-        labelKey: 'profile:editDirectDeposit.accountNumber',
+        labelKey: 'editDirectDeposit.accountNumber',
         inputType: 'phone',
         onChange: setAccountNumber,
         maxLength: MAX_ACCOUNT_DIGITS,
         value: accountNumber,
         inputRef: accountNumRef,
         isRequiredField: true,
-        helperTextKey: 'profile:editDirectDeposit.accountNumberHelperText',
+        helperTextKey: 'editDirectDeposit.accountNumberHelperText',
       },
       fieldErrorMessage: t('editDirectDeposit.accountNumberFieldError'),
       validationList: [
@@ -162,7 +161,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     {
       fieldType: FieldType.Selector,
       fieldProps: {
-        labelKey: 'profile:editDirectDeposit.confirm',
+        labelKey: 'editDirectDeposit.confirm',
         selected: confirmed,
         onSelectionChange: setConfirmed,
         a11yHint: t('editDirectDeposit.confirmHint'),

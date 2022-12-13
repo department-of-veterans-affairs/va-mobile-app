@@ -273,7 +273,7 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE, NAMESPACE.PAYMENTS])
+  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
 
   return (
     <>
@@ -282,7 +282,7 @@ export const AppTabs: FC = () => {
         <TabNav.Screen name="ClaimsTab" component={ClaimsScreen} options={{ title: t('claims:title') }} />
         <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
         {/* <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} /> */}
-        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('payments:title') }} />
+        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('common:payments') }} />
       </TabNav.Navigator>
     </>
   )
@@ -290,14 +290,14 @@ export const AppTabs: FC = () => {
 
 export const AuthedApp: FC = () => {
   const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tp } = useTranslation(NAMESPACE.PAYMENTS)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
   const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME).t)
   // const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE).t)
   const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS).t)
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
-  const paymentsScreens = getPaymentsScreens(useTranslation(NAMESPACE.PAYMENTS).t)
+  const paymentsScreens = getPaymentsScreens(useTranslation(NAMESPACE.COMMON).t)
 
   return (
     <>
@@ -319,7 +319,7 @@ export const AuthedApp: FC = () => {
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
         <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
-        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: tp('directDeposit.title') }} />
+        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: tc('directDeposit.title') }} />
         {homeScreens}
         {/* {profileScreens} */}
         {paymentsScreens}

@@ -22,7 +22,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PAYMENTS)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
   const onPayments = navigateTo('PaymentHistory')
@@ -62,12 +62,12 @@ const PaymentsScreenStack = createStackNavigator()
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.PAYMENTS)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
   return (
     <PaymentsScreenStack.Navigator screenOptions={headerStyles}>
-      <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ title: t('title') }} />
+      <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ title: t('payments') }} />
     </PaymentsScreenStack.Navigator>
   )
 }
