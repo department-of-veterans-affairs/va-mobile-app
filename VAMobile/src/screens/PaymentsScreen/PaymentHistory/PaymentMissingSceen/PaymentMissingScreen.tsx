@@ -5,11 +5,11 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from 'screens/ProfileScreen/ProfileStackScreens'
+import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-type PaymentMissingScreenProps = StackScreenProps<ProfileStackParamList, 'PaymentMissing'>
+type PaymentMissingScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentMissing'>
 
 const PaymentMissing: FC<PaymentMissingScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.PROFILE)

@@ -15,6 +15,8 @@ import HealthSelected from './svgs/navIcon/healthSelected.svg'
 import HealthUnselected from './svgs/navIcon/healthUnselected.svg'
 import HomeSelected from './svgs/navIcon/homeSelected.svg'
 import HomeUnselected from './svgs/navIcon/homeUnselected.svg'
+import PaymentsSelected from './svgs/navIcon/paymentsSelected.svg'
+import PaymentsUnselected from './svgs/navIcon/paymentsUnselected.svg'
 import ProfileSelected from './svgs/navIcon/profileSelected.svg'
 import ProfileUnselected from './svgs/navIcon/profileUnselected.svg'
 
@@ -104,6 +106,8 @@ export const VA_ICON_MAP = {
   ClaimsUnselected,
   ProfileSelected,
   ProfileUnselected,
+  PaymentsSelected,
+  PaymentsUnselected,
   Add,
   ArrowDown,
   ArrowUp,

@@ -11,7 +11,7 @@ interface HomeNavButtonProps {
   /**string for header and used to create testID for accessibility*/
   title: string
   /**string secondary text that seats on the second row */
-  subText: string
+  subText?: string
   /**a11y string secondary text that seats on the second row */
   subTextA11yLabel?: string
   /**string for accessibility hint */
@@ -131,9 +131,11 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             </TextView>
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
-          <TextView variant={'MobileBody'} color={textColor}>
-            {subText}
-          </TextView>
+          {subText && (
+            <TextView variant={'MobileBody'} color={textColor}>
+              {subText}
+            </TextView>
+          )}
         </Box>
         <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>
