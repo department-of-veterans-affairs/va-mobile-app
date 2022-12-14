@@ -3,7 +3,7 @@ import { ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
 import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
