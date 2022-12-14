@@ -108,7 +108,7 @@ context('FullScreenSubtask', () => {
         const contentButtons = testInstance.findAllByType(VAButton)
         expect(contentButtons.length).toEqual(0)
     })
-    it('should not be there when text is added', async () => {
+    it('should not be there when only text is added', async () => {
         initializeTestInstance(undefined, undefined, undefined, undefined, 'Primary')
         const contentButtons = testInstance.findAllByType(VAButton)
         expect(contentButtons.length).toEqual(0)
@@ -131,13 +131,13 @@ context('FullScreenSubtask', () => {
         const contentButtons = testInstance.findAllByType(VAButton)
         expect(contentButtons.length).toEqual(0)
     })
-    it('should not be there when text is added', async () => {
+    it('should not be there when only text is added', async () => {
         initializeTestInstance(undefined, undefined, undefined, undefined, undefined, undefined, 'Secondary')
         const contentButtons = testInstance.findAllByType(VAButton)
         expect(contentButtons.length).toEqual(0)
     })
 
-    it('should not be there when onPress is added', async () => {
+    it('should not be there when only onPress is added', async () => {
         initializeTestInstance(undefined, undefined, undefined, undefined, undefined, undefined, undefined, onPressSpy)
         const contentButtons = testInstance.findAllByType(VAButton)
         expect(contentButtons.length).toEqual(0)
