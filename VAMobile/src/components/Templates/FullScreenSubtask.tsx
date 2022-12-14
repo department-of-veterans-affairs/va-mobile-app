@@ -1,5 +1,5 @@
+import { Pressable, PressableProps, View } from 'react-native'
 import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native'
-import { TouchableWithoutFeedback } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -50,7 +50,7 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
-  const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+  const [focusRef, setFocus] = useAccessibilityFocus<PressableProps & View>()
   useFocusEffect(setFocus)
 
   const titleBannerProps: BoxProps = {
@@ -120,25 +120,25 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       <Box {...titleBannerProps}>
         <Box ml={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
           {leftButtonText && (
-            <TouchableWithoutFeedback ref={focusRef} onPress={onLeftTitleButtonPress} accessibilityRole="button">
+            <Pressable ref={focusRef} onPress={onLeftTitleButtonPress} accessibilityRole="button">
               <Box {...boxProps}>
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <TextView {...textNoIconViewProps}>{leftButtonText}</TextView>
                 </Box>
               </Box>
-            </TouchableWithoutFeedback>
+            </Pressable>
           )}
         </Box>
         <Box mr={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
           {rightButtonText && (
-            <TouchableWithoutFeedback ref={focusRef} onPress={onRightTitleButtonPress} accessibilityRole="button">
+            <Pressable ref={focusRef} onPress={onRightTitleButtonPress} accessibilityRole="button">
               <Box {...boxProps}>
                 {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <TextView {...textWithIconViewProps}>{rightButtonText}</TextView>
                 </Box>
               </Box>
-            </TouchableWithoutFeedback>
+            </Pressable>
           )}
         </Box>
       </Box>
