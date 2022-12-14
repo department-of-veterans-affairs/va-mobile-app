@@ -38,10 +38,6 @@ describe('Profile Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toExist()
   })
 
-  it('should show sign out button', async () => {
-    await expect(element(by.id(CommonE2eIdConstants.SIGN_OUT_BTN_ID))).toExist()
-  })
-
   it('should show profile banner elements', async () => {
     await expect(element(by.id(ProfileE2eIdConstants.BANNER_BRANCH_ICON_ID))).toExist()
     await expect(element(by.id(ProfileE2eIdConstants.BANNER_NAME_ID))).toExist()
