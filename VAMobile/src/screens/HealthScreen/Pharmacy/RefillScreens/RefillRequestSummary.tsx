@@ -30,7 +30,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
-  const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry, submittedRequestRefillCount } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const navigateTo = useRouteNavigation()
 
   useEffect(() => {
@@ -190,7 +190,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   }
 
   if (showLoadingScreenRequestRefillsRetry) {
-    return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: requestFailed.length })} />
+    return <LoadingComponent text={t('prescriptions.refill.submit', { total: requestFailed.length })} />
   }
 
   return (

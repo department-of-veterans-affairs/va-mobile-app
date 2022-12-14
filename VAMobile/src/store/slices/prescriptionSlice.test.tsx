@@ -35,35 +35,35 @@ export const ActionTypes: {
 
 context('Prescription', () => {
   describe('requestRefills', () => {
-    it('should update submittedRequestRefillCount for each request submitted', async () => {
-      when(api.put as jest.Mock)
-          .calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/refill`)
-          .mockResolvedValue({})
-          .calledWith(`/v0/health/rx/prescriptions/${mockData[1].id}/refill`)
-          .mockResolvedValue({})
+    // it('should update submittedRequestRefillCount for each request submitted', async () => {
+    //   when(api.put as jest.Mock)
+    //       .calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/refill`)
+    //       .mockResolvedValue({})
+    //       .calledWith(`/v0/health/rx/prescriptions/${mockData[1].id}/refill`)
+    //       .mockResolvedValue({})
 
-      const store = realStore()
-      await store.dispatch(requestRefills(mockData))
-      const actions = store.getActions()
+    //   const store = realStore()
+    //   await store.dispatch(requestRefills(mockData))
+    //   const actions = store.getActions()
 
-      // Initial/start request
-      const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_REQUEST_REFILLS })
-      expect(startAction).toBeTruthy()
-      expect(startAction?.state.prescriptions.submittedRequestRefillCount).toEqual(1)
-      expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
+    //   // Initial/start request
+    //   const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_REQUEST_REFILLS })
+    //   expect(startAction).toBeTruthy()
+    //   expect(startAction?.state.prescriptions.submittedRequestRefillCount).toEqual(1)
+    //   expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
 
-      // Submitting second request
-      const continueAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_CONTINUE_REQUEST_REFILLS })
-      expect(continueAction).toBeTruthy()
-      expect(continueAction?.state.prescriptions.submittedRequestRefillCount).toEqual(2)
-      expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
+    //   // Submitting second request
+    //   const continueAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_CONTINUE_REQUEST_REFILLS })
+    //   expect(continueAction).toBeTruthy()
+    //   expect(continueAction?.state.prescriptions.submittedRequestRefillCount).toEqual(2)
+    //   expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
 
-      // finish should stay the same
-      const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
-      expect(finishAction).toBeTruthy()
-      expect(finishAction?.state.prescriptions.submittedRequestRefillCount).toEqual(2)
-      expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
-    })
+    //   // finish should stay the same
+    //   const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
+    //   expect(finishAction).toBeTruthy()
+    //   expect(finishAction?.state.prescriptions.submittedRequestRefillCount).toEqual(2)
+    //   expect(startAction?.state.prescriptions.totalSubmittedRequestRefill).toEqual(2)
+    // })
 
     describe('on RefillScreen', () => {
       it('should continue to show loading spinner after completing', async () => {
@@ -176,8 +176,6 @@ context('Prescription', () => {
         prescriptions: {
           ...initialPrescriptionState,
           // Properties for refill
-          submittedRequestRefillCount: 1,
-          totalSubmittedRequestRefill: 1,
           showLoadingScreenRequestRefills: true,
           submittingRequestRefills: true,
           showLoadingScreenRequestRefillsRetry: true
@@ -190,8 +188,6 @@ context('Prescription', () => {
       const clearAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_CLEAR_LOADING_REQUEST_REFILLS })
       expect(clearAction).toBeTruthy()
       expect(clearAction?.state.prescriptions).toEqual(expect.objectContaining({
-        submittedRequestRefillCount: 0,
-        totalSubmittedRequestRefill: 0,
         showLoadingScreenRequestRefills: false,
         submittingRequestRefills: false,
         showLoadingScreenRequestRefillsRetry: false
