@@ -8,7 +8,7 @@ import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AddressSummary, { addressDataField, profileAddressOptions } from '../AddressSummary'
+import AddressSummary, { addressDataField, profileAddressOptions } from '../../ProfileScreen/AddressSummary'
 
 type LettersOverviewProps = Record<string, unknown>
 
@@ -16,7 +16,8 @@ type LettersOverviewProps = Record<string, unknown>
  * Landing page for the letters flow. Shows the current address and the button to go to the letters list
  */
 const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const { t: tc } = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
@@ -24,7 +25,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   const onViewPressed = navigateTo('LettersList')
 
   const onAddressPress = navigateTo('EditAddress', {
-    displayTitle: t('personalInformation.mailingAddress'),
+    displayTitle: tc('personalInformation.mailingAddress'),
     addressType: profileAddressOptions.MAILING_ADDRESS,
   })
 

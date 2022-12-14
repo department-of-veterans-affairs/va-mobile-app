@@ -36,8 +36,7 @@ const { LINK_URL_ASK_VA_GOV } = getEnv()
 type BenefitSummaryServiceVerificationProps = Record<string, unknown>
 
 const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
@@ -59,39 +58,39 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           textLines: [
             { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold' },
             {
-              text: tc('text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
+              text: t('text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
             },
           ],
-          a11yValue: tc('listPosition', { position: 1, total: 4 }),
+          a11yValue: t('listPosition', { position: 1, total: 4 }),
         },
         {
           textLines: [
             { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold' },
             {
-              text: tc('text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
+              text: t('text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
             },
           ],
-          a11yValue: tc('listPosition', { position: 2, total: 4 }),
+          a11yValue: t('listPosition', { position: 2, total: 4 }),
         },
         {
           textLines: [
             { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold' },
             {
-              text: tc('text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
+              text: t('text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
             },
           ],
           testId: `${t('letters.benefitService.activeDutyStart')} ${formatDateMMMMDDYYYY(periodOfService.enteredDate || '')}`,
-          a11yValue: tc('listPosition', { position: 3, total: 4 }),
+          a11yValue: t('listPosition', { position: 3, total: 4 }),
         },
         {
           textLines: [
             { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold' },
             {
-              text: tc('text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
+              text: t('text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
             },
           ],
           testId: `${t('letters.benefitService.separationDate')} ${formatDateMMMMDDYYYY(periodOfService.releasedDate || '')}`,
-          a11yValue: tc('listPosition', { position: 4, total: 4 }),
+          a11yValue: t('listPosition', { position: 4, total: 4 }),
         },
       ]
       return (

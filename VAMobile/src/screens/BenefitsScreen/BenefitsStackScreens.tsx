@@ -4,6 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import { ClaimEventData } from 'store/api/types'
+import { LetterTypes, ScreenIDTypes } from 'store/api/types'
+import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
+import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
+import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
+
 import { ClaimType } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
@@ -33,6 +38,16 @@ export type DocumentPickerResponse = {
 export type BenefitsStackParamList = {
   Benefits: undefined
   DisabilityRatings: undefined
+  LettersOverview: undefined
+  LettersList: undefined
+  BenefitSummaryServiceVerificationLetter: undefined
+  GenericLetter: {
+    header: string
+    description: string
+    letterType: LetterTypes
+    screenID: ScreenIDTypes
+    descriptionA11yLabel?: string
+  }
   Claims: undefined
   ClaimDetailsScreen: {
     claimID: string
@@ -77,6 +92,15 @@ const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
 export const getBenefitsScreens = (t: TFunction): Array<ReactNode> => {
   return [
     <BenefitsStack.Screen key={'DisabilityRatings'} name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ title: t('disabilityRatingDetails.title') }} />,
+    <BenefitsStack.Screen key={'LettersOverview'} name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />,
+    <BenefitsStack.Screen key={'LettersList'} name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />,
+    <BenefitsStack.Screen
+      key={'BenefitSummaryServiceVerificationLetter'}
+      name="BenefitSummaryServiceVerificationLetter"
+      component={BenefitSummaryServiceVerification}
+      options={{ title: t('letters.overview.title') }}
+    />,
+    <BenefitsStack.Screen key={'GenericLetter'} name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />,
     <BenefitsStack.Screen key={'Claims'} name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />,
     <BenefitsStack.Screen key={'ClaimDetailsScreen'} name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('statusDetails.title') }} />,
     <BenefitsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />,

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
@@ -11,13 +12,12 @@ import { LetterTypes } from 'store/api/types'
 import { LettersState, getLetters } from 'store/slices/lettersSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressHandler, useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { ProfileStackParamList } from '../ProfileStackScreens'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
 import NoLettersScreen from './NoLettersScreen'
 
-type LettersListScreenProps = StackScreenProps<ProfileStackParamList, 'LettersList'>
+type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
 
 const LettersListScreen: FC<LettersListScreenProps> = () => {
   const dispatch = useAppDispatch()
@@ -25,8 +25,7 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tCommon } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
 
   const letterPressFn = (letterType: LetterTypes, letterName: string): OnPressHandler | undefined => {
@@ -94,7 +93,7 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
     letterName = letterName.charAt(0).toUpperCase() + letterName.slice(1).toLowerCase()
 
     const letterButton: SimpleListItemObj = {
-      text: tCommon('text.raw', { text: letterName }),
+      text: t('text.raw', { text: letterName }),
       a11yHintText: t('letters.list.a11y', { letter: letterName }),
       onPress: letterPressFn(letter.letterType, letterName),
     }

@@ -2,12 +2,8 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
-import { LetterTypes, ScreenIDTypes } from 'store/api/types'
-import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { NAMESPACE } from 'constants/namespaces'
-import BenefitSummaryServiceVerification from './Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import DebugScreen from './SettingsScreen/DebugScreen'
-import GenericLetter from './Letters/GenericLetter/GenericLetter'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
@@ -31,16 +27,6 @@ export type ProfileStackParamList = {
   HowDoIUpdate: undefined
   HowWillYou: undefined
   IncorrectServiceInfo: undefined
-  LettersOverview: undefined
-  LettersList: undefined
-  BenefitSummaryServiceVerificationLetter: undefined
-  GenericLetter: {
-    header: string
-    description: string
-    letterType: LetterTypes
-    screenID: ScreenIDTypes
-    descriptionA11yLabel?: string
-  }
   Sandbox: undefined
 }
 
@@ -64,14 +50,5 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} />,
     <ProfileStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} />,
     <ProfileStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} />,
-    <ProfileStack.Screen key={'LettersOverview'} name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />,
-    <ProfileStack.Screen key={'LettersList'} name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />,
-    <ProfileStack.Screen
-      key={'BenefitSummaryServiceVerificationLetter'}
-      name="BenefitSummaryServiceVerificationLetter"
-      component={BenefitSummaryServiceVerification}
-      options={{ title: t('letters.overview.title') }}
-    />,
-    <ProfileStack.Screen key={'GenericLetter'} name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />,
   ]
 }

@@ -6,7 +6,7 @@ import { context, mockStore, render, RenderAPI } from 'testUtils'
 
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
-import { profileAddressOptions } from '../AddressSummary'
+import { profileAddressOptions } from '../../ProfileScreen/AddressSummary'
 import { InitialState, initialPersonalInformationState } from 'store/slices'
 import { LoadingComponent } from 'components'
 import { when } from 'jest-when'
@@ -32,8 +32,10 @@ context('LettersOverviewScreen', () => {
 
   const initializeTestInstance = (personalInformationLoading = false) => {
     mockNavigateToSpy = jest.fn()
-    when(mockNavigationSpy).mockReturnValue(() => {})
-        .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS }).mockReturnValue(mockNavigateToSpy)
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
+      .mockReturnValue(mockNavigateToSpy)
 
     component = render(<LettersOverviewScreen />, {
       preloadedState: {

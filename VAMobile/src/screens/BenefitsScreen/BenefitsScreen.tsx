@@ -41,6 +41,15 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
           borderStyle={'solid'}
           subText=""
         />
+        <LargeNavButton
+          title={t('lettersAndDocs.title')}
+          onPress={navigateTo('LettersOverview')}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+          subText=""
+        />
       </Box>
     </VAScrollView>
   )
