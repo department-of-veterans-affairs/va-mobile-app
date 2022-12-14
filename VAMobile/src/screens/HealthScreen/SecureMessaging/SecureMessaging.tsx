@@ -4,15 +4,15 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components' // , VAScrollView
+import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
-// import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { testIdProps } from 'utils/accessibility'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import ComposeMessageButton from './ComposeMessageButton/ComposeMessageButton'
@@ -31,7 +31,6 @@ export const getInboxUnreadCount = (state: RootState): number => {
 const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
@@ -89,36 +88,28 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
     flexGrow: 1,
   }
 
-  const messagingContent = (
-    <>
-      <ComposeMessageButton />
-      <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            values={controlValues}
-            titles={controlLabels}
-            onChange={onTabUpdate}
-            selected={controlValues.indexOf(secureMessagingTab || SecureMessagingTabTypesConstants.INBOX)}
-            accessibilityHints={a11yHints}
-          />
-        </Box>
-        <CernerAlert />
-        {serviceErrorAlert()}
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
-          {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
-        </Box>
-      </Box>
-    </>
-  )
-
-  // TODO: REVERT FILE BEFORE COMMITTING TO DEVELOP
   return (
     <>
-      <FeatureLandingTemplate backLabel="Health Care" backLabelOnPress={navigateTo('HealthTab')} title="Messages" scrollViewProps={{ style: scrollStyles }}>
-        {messagingContent}
-      </FeatureLandingTemplate>
-      {/* <VAScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}></VAScrollView> */}
+      <VAScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
+        <ComposeMessageButton />
+        <Box flex={1} justifyContent="flex-start">
+          <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <SegmentedControl
+              values={controlValues}
+              titles={controlLabels}
+              onChange={onTabUpdate}
+              selected={controlValues.indexOf(secureMessagingTab || SecureMessagingTabTypesConstants.INBOX)}
+              accessibilityHints={a11yHints}
+            />
+          </Box>
+          <CernerAlert />
+          {serviceErrorAlert()}
+          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+            {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
+            {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
+          </Box>
+        </Box>
+      </VAScrollView>
     </>
   )
 }

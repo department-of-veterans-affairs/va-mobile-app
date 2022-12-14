@@ -2,9 +2,9 @@ import { DateTime } from 'luxon'
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton, SegmentedControl } from 'components' // , VAScrollView
+import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, VAScrollView } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -12,7 +12,7 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-// import { testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
@@ -111,36 +111,30 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
   }
 
-  const appointmentsContent: ReactNode = (
-    <Box flex={1} justifyContent="flex-start">
-      <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-        <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
-      </Box>
-      {serviceErrorAlert()}
-      <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
-        <CernerAlert />
-      </Box>
-      <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-        {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
-        {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
-      </Box>
-    </Box>
-  )
-
-  // TODO: REVERT FILE BEFORE COMMITTING TO DEVELOP
   return (
     <>
-      <FeatureLandingTemplate
-        backLabel="Health Care"
-        backLabelOnPress={navigateTo('HealthTab')}
-        title="Appointments"
-        scrollViewProps={{ style: scrollStyles }}
-        headerButton={{ label: 'Title', icon: { name: 'ProfileSelected' }, onPress: () => {} }}
-        footerContent={featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}>
-        {/* <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}> */}
-        {/* </VAScrollView> */}
-        {appointmentsContent}
-      </FeatureLandingTemplate>
+      <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
+        <Box flex={1} justifyContent="flex-start">
+          <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <SegmentedControl
+              values={controlValues}
+              titles={controlValues}
+              onChange={setSelectedTab}
+              selected={controlValues.indexOf(selectedTab)}
+              accessibilityHints={a11yHints}
+            />
+          </Box>
+          {serviceErrorAlert()}
+          <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
+            <CernerAlert />
+          </Box>
+          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+            {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
+            {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
+          </Box>
+        </Box>
+      </VAScrollView>
+      {featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}
     </>
   )
 }
