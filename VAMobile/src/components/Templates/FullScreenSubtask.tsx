@@ -28,7 +28,7 @@ export type FullScreenSubtaskProps = {
   onPrimaryContentButtonPress?: () => void
   /** text of the footer button(no text it doesn't appear) */
   secondaryContentButtonText?: string
-  /** function called when primary content button is pressed(no function it doesn't appear) */
+  /** function called when secondary content button is pressed(no function it doesn't appear) */
   onSecondaryContentButtonPress?: () => void
   /** how many screens to pop after multiStep Cancel  */
   navigationMultiStepCancelScreen?: number
