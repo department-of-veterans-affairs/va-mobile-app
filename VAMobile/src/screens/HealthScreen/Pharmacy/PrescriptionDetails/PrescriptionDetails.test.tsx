@@ -7,7 +7,7 @@ import PrescriptionDetails from './PrescriptionDetails'
 import { ReactTestInstance } from 'react-test-renderer'
 import { initialAuthState } from 'store/slices'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
-import { ClickForActionLink, FooterButton, TextView} from 'components'
+import { ClickForActionLink, FooterButton, TextView, VAButton} from 'components'
 import { PrescriptionAttributeData, RefillStatusConstants } from 'store/api/types'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
@@ -114,9 +114,9 @@ context('PrescriptionDetails', () => {
           refillStatus: RefillStatusConstants.TRANSFERRED
         })
 
-        const footerButton = testInstance.findAllByType(FooterButton)
-        expect(footerButton.length).toBe(1)
-        expect(footerButton[0].props.text).toEqual('Go to My VA Health')
+        const button = testInstance.findAllByType(VAButton)
+        expect(button.length).toBe(1)
+        expect(button[0].props.label).toEqual('Go to My VA Health')
       })
     })
 
@@ -124,8 +124,8 @@ context('PrescriptionDetails', () => {
       it('should not display FooterButton', async () => {
         initializeTestInstance()
 
-        const footerButton = testInstance.findAllByType(FooterButton)
-        expect(footerButton.length).toBe(0)
+        const button = testInstance.findAllByType(VAButton)
+        expect(button.length).toBe(0)
       })
     })
   })
@@ -137,9 +137,9 @@ context('PrescriptionDetails', () => {
           isRefillable: true
         })
 
-        const footerButton = testInstance.findAllByType(FooterButton)
-        expect(footerButton.length).toBe(1)
-        expect(footerButton[0].props.text).toEqual('Request refill')
+        const button = testInstance.findAllByType(VAButton)
+        expect(button.length).toBe(1)
+        expect(button[0].props.label).toEqual('Request refill')
       })
     })
 
@@ -147,8 +147,8 @@ context('PrescriptionDetails', () => {
       it('should not display FooterButton', async () => {
         initializeTestInstance()
 
-        const footerButton = testInstance.findAllByType(FooterButton)
-        expect(footerButton.length).toBe(0)
+        const button = testInstance.findAllByType(VAButton)
+        expect(button.length).toBe(0)
       })
     })
   })
