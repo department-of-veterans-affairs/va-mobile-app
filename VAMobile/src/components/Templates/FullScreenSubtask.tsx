@@ -131,7 +131,7 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         </Box>
         <Box mr={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
           {rightButtonText && (
-            <Pressable onPress={onRightTitleButtonPress} accessibilityRole="button">
+            <Pressable ref={focusRef} onPress={onRightTitleButtonPress} accessibilityRole="button">
               <Box {...boxProps}>
                 {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
                 <Box display="flex" flexDirection="row" alignItems="center">
