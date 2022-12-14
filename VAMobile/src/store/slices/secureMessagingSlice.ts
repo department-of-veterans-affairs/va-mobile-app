@@ -32,7 +32,7 @@ import {
   SecureMessagingThreads,
 } from 'store/api/types'
 import { AppDispatch, AppThunk } from 'store'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Params, contentTypes } from 'store/api/api'

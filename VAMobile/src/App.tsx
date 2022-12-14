@@ -23,7 +23,7 @@ import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
-import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getClaimsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
+import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 // import { ProfileScreen } from 'screens'
 // import { getProfileScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
@@ -93,7 +93,7 @@ export type RootNavStackParamList = WebviewStackParams & {
 type RootTabNavParamList = {
   HomeTab: undefined
   HealthTab: undefined
-  ClaimsTab: undefined
+  BenefitsTab: undefined
   PaymentsTab: undefined
   ProfileTab: undefined
 }
@@ -273,16 +273,16 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE, NAMESPACE.COMMON])
+  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
 
   return (
     <>
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
         <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="ClaimsTab" component={ClaimsScreen} options={{ title: t('claims:title') }} />
+        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('common:benefits.title') }} />
         <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
         {/* <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} /> */}
-        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('common:payments') }} />
+        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('common:payments.title') }} />
       </TabNav.Navigator>
     </>
   )
@@ -295,7 +295,7 @@ export const AuthedApp: FC = () => {
 
   const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME).t)
   // const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE).t)
-  const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS).t)
+  const benefitsScreens = getBenefitsScreens(useTranslation(NAMESPACE.COMMON).t)
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens(useTranslation(NAMESPACE.COMMON).t)
 
@@ -323,7 +323,7 @@ export const AuthedApp: FC = () => {
         {homeScreens}
         {/* {profileScreens} */}
         {paymentsScreens}
-        {claimsScreens}
+        {benefitsScreens}
         {healthScreens}
       </RootNavStack.Navigator>
     </>

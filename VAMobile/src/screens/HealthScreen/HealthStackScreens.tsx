@@ -3,7 +3,7 @@ import { TFunction } from 'i18next'
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'

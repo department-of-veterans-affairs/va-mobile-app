@@ -6,7 +6,7 @@ import DocumentPicker from 'react-native-document-picker'
 import _ from 'underscore'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import {
   FolderNameTypeConstants,
   MAX_IMAGE_DIMENSION,

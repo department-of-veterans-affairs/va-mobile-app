@@ -36,7 +36,7 @@ const DisabilityRatingsScreen: FC = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation([NAMESPACE.CLAIMS, NAMESPACE.COMMON])
+  const { t: tc } = useTranslation([NAMESPACE.COMMON])
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
@@ -152,8 +152,8 @@ const DisabilityRatingsScreen: FC = () => {
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" selectable={false} accessibilityLabel={tc('claims:claimDetails.callVA.a11yLabel')}>
-            {tc('claims:claimDetails.callVA')}
+          <TextView variant="MobileBody" selectable={false} accessibilityLabel={tc('common:claimDetails.callVA.a11yLabel')}>
+            {tc('common:claimDetails.callVA')}
           </TextView>
         </Box>
 
