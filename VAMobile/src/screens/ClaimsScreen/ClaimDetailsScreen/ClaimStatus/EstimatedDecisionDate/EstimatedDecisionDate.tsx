@@ -25,6 +25,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
     launchExternalLink(LINK_URL_COMPENSATION_CLAIM_EXAM)
   }
 
+  //Opting to leave this code in place...because removing it will clearly kickstart pandemic part 4000.
   if (showCovidMessage) {
     return (
       <Box mx={theme.dimensions.gutter}>

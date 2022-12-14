@@ -20,20 +20,6 @@ export const WebProtocolTypesConstants: {
   http: 'http',
 }
 
-export const MockUsersEmail: {
-  user_1414: string
-  user_1401: string
-  user_1402: string
-  user_226: string
-  user_366: string
-} = {
-  user_1414: 'vets.gov.user+1414@gmail.com',
-  user_1401: 'vets.gov.user+1401@gmail.com',
-  user_1402: 'vets.gov.user+1402@gmail.com',
-  user_226: 'vets.gov.user+226@gmail.com',
-  user_366: 'vets.gov.user+366@gmail.com',
-}
-
 export const COVID19 = 'COVID-19'
 
 export const SnackBarConstants: {
@@ -46,6 +32,7 @@ export const SnackBarConstants: {
 
 const screensToCloseSnackbarOnNavigation = [
   'AppealDetailsScreen',
+  'Appointments',
   'AskForClaimDecision',
   'ClaimDetails',
   'ClaimDetailsScreen',
@@ -58,7 +45,6 @@ const screensToCloseSnackbarOnNavigation = [
   'FolderMessages',
   'PersonalInformation',
   'ReplyMessage',
-  'SecureMessaging',
   'SecureMessaging',
   'SelectFile',
   'TakePhotos',
