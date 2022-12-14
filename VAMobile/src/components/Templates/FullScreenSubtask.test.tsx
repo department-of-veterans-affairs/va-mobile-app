@@ -91,7 +91,7 @@ context('FullScreenSubtask', () => {
         const icon = testInstance.findAllByType(VAIcon)
         expect(icon.length).toEqual(0) 
     })
-    it('should have an icon when icon props are supplied', async () => {
+    it('should have an icon w/ text button when both text and icon props are supplied', async () => {
         const rightIconProps: VAIconProps = {
             name: 'ProfileSelected',
             fill: 'largeNav',
