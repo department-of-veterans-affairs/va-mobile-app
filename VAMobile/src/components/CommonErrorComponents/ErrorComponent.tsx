@@ -50,9 +50,9 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
         return (
           <CallHelpCenter
-            titleText={t('profile:disabilityRating.errorTitle')}
-            titleA11yHint={t('profile:disabilityRating.errorTitleA11y')}
-            callPhone={t('profile:disabilityRating.errorPhoneNumber')}
+            titleText={t('common:disabilityRating.errorTitle')}
+            titleA11yHint={t('common:disabilityRating.errorTitleA11y')}
+            callPhone={t('common:disabilityRating.errorPhoneNumber')}
           />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:

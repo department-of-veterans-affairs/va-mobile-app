@@ -4,20 +4,21 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import { ClaimEventData } from 'store/api/types'
-import { ClaimType } from './ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimType } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import AppealDetailsScreen from './ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
-import AskForClaimDecision from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
-import ClaimDetailsScreen from './ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
-import ClaimsScreen from './ClaimsScreen/ClaimsScreen'
-import ConsolidatedClaimsNote from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
-import FileRequest from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
-import FileRequestDetails from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
-import SelectFile from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
-import TakePhotos from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
-import UploadFile from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
-import UploadOrAddPhotos from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
-import WhatDoIDoIfDisagreement from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
+import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
+import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
+import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
+import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
+import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
+import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
+import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
+import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
+import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
+import TakePhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
+import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
+import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
+import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 
 export type DocumentPickerResponse = {
   uri: string
@@ -31,6 +32,7 @@ export type DocumentPickerResponse = {
 
 export type BenefitsStackParamList = {
   Benefits: undefined
+  DisabilityRatings: undefined
   Claims: undefined
   ClaimDetailsScreen: {
     claimID: string
@@ -74,6 +76,7 @@ const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
 
 export const getBenefitsScreens = (t: TFunction): Array<ReactNode> => {
   return [
+    <BenefitsStack.Screen key={'DisabilityRatings'} name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ title: t('disabilityRatingDetails.title') }} />,
     <BenefitsStack.Screen key={'Claims'} name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />,
     <BenefitsStack.Screen key={'ClaimDetailsScreen'} name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('statusDetails.title') }} />,
     <BenefitsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />,
