@@ -55,7 +55,6 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    height: theme.dimensions.touchableMinHeight,
     backgroundColor: 'main',
     mt: theme.dimensions.fullScreenNavigationBarOffset,
   }
@@ -63,7 +62,6 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const boxProps: BoxProps = {
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
-    height: theme.dimensions.touchableMinHeight,
   }
 
   const textNoIconViewProps: TextViewProps = {
@@ -116,7 +114,7 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box ml={theme.dimensions.buttonPadding} flex={1}>
+        <Box ml={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
           {leftButtonText && (
             <Pressable onPress={onLeftTitleButtonPress} accessibilityRole="button" accessible={true}>
               <Box {...boxProps}>
@@ -127,8 +125,7 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
             </Pressable>
           )}
         </Box>
-        <Box flex={2} />
-        <Box mr={theme.dimensions.buttonPadding} flex={1}>
+        <Box mr={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
           {rightButtonText && (
             <Pressable onPress={onRightTitleButtonPress} accessibilityRole="button" accessible={true}>
               <Box {...boxProps}>
