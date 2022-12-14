@@ -9,7 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 const NoDisabilityRatings: FC = () => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const bodyText = t('disabilityRating.noDisabilityRatings.body')
 
   const mainViewStyle: StyleProp<ViewStyle> = {

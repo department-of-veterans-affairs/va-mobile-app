@@ -42,7 +42,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
 
   /**

@@ -35,8 +35,7 @@ import getEnv from 'utils/env'
 const DisabilityRatingsScreen: FC = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation([NAMESPACE.COMMON])
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
@@ -152,12 +151,12 @@ const DisabilityRatingsScreen: FC = () => {
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" selectable={false} accessibilityLabel={tc('common:claimDetails.callVA.a11yLabel')}>
-            {tc('common:claimDetails.callVA')}
+          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claimDetails.callVA.a11yLabel')}>
+            {t('claimDetails.callVA')}
           </TextView>
         </Box>
 
-        <ClickToCallPhoneNumber phone={tc('common:8008271000.displayText')} />
+        <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
       </TextArea>
     )
   }

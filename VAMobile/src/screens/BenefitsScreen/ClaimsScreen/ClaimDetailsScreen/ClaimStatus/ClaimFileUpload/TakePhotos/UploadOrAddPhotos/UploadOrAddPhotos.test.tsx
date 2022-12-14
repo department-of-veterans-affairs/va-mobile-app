@@ -9,9 +9,9 @@ import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { InitialState } from 'store/slices'
 
 const mockNavigationSpy = jest.fn()
-jest.mock('../../../../../../../utils/hooks', () => {
-  const original = jest.requireActual('../../../../../../../utils/hooks')
-  const theme = jest.requireActual('../../../../../../../styles/themes/standardTheme').default
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {

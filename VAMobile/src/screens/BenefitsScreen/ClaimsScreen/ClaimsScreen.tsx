@@ -17,7 +17,7 @@ import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppe
 
 type IClaimsScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
-const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
+const ClaimsScreen: FC<IClaimsScreen> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -51,12 +51,6 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
   }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  }, [navigation])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
