@@ -78,7 +78,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       },
     }
     return (
-      <Box mt={theme.dimensions.buttonPadding}>
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
         <VAButton {...buttonProps} />
       </Box>
     )
@@ -111,7 +111,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       },
     }
     return (
-      <Box mt={theme.dimensions.buttonPadding}>
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
         <VAButton {...requestRefillButtonProps} />
       </Box>
     )
