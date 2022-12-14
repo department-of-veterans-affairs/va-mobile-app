@@ -9,6 +9,13 @@ import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import styled from 'styled-components'
 
+/* To use these templates:
+1. Wrap the screen content you want in <FeatureLandingTemplate> </FeatureLandingTemplate> or <ChildTemplate> </ChildTemplate> and
+  supply the appropriate props for desired functionality
+2. In the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
+  Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
+*/
+
 type headerButton = {
   label: string
   labelA11y?: string
@@ -18,15 +25,12 @@ type headerButton = {
 
 export type ChildTemplateProps = {
   backLabel: string
-  backLabelA11y?: string
   backLabelOnPress: () => void
 
   title: string
-  titleA11y?: string
 
   headerButton?: headerButton
 
-  content: ReactNode
   footerContent?: ReactNode // Content pinned below the scrollable space
 
   scrollViewProps?: VAScrollViewProps
@@ -38,7 +42,7 @@ const HEADER_HEIGHT = 91
 const SUBHEADER_HEIGHT = 52
 const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + SUBHEADER_HEIGHT
 
-export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, content, footerContent, scrollViewProps }) => {
+export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPress, title, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
@@ -135,13 +139,21 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
       <Animated.View style={headerStyle}>
         <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
           <Box display="flex" width="25%">
-            <DescriptiveBackButton label={backLabel} a11yHint={backLabelA11y} onPress={backLabelOnPress} />
+            <DescriptiveBackButton label={backLabel} onPress={backLabelOnPress} />
           </Box>
 
-          <Box display="flex" flex={1} flexDirection={'row'} m={theme.dimensions.headerButtonSpacing} justifyContent={'center'} alignItems={'center'}>
+          <Box
+            display="flex"
+            flex={1}
+            flexDirection={'row'}
+            m={theme.dimensions.headerButtonSpacing}
+            justifyContent={'center'}
+            alignItems={'center'}
+            accessibilityElementsHidden={true}
+            importantForAccessibility="no-hide-descendants">
             {titleShowing ? (
               <Animated.View style={{ opacity: titleFade }}>
-                <TextView variant="MobileBody" selectable={false} accessibilityLabel={titleA11y ? titleA11y : title}>
+                <TextView variant="MobileBody" selectable={false}>
                   {title}
                 </TextView>
               </Animated.View>
@@ -166,7 +178,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
       </Animated.View>
 
       <Animated.View style={[subheaderStyle, { transform: [{ translateY: subtitleTranslate }] }]}>
-        <TextView variant="BitterBoldHeading" m={theme.dimensions.condensedMarginBetween} accessibilityLabel={titleA11y ? titleA11y : title}>
+        <TextView variant="BitterBoldHeading" m={theme.dimensions.condensedMarginBetween}>
           {title}
         </TextView>
       </Animated.View>
@@ -194,7 +206,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
           scrollIndicatorInsets={{ right: 1 }}
           {...scrollViewProps}
           style={scrollViewStyle}>
-          {content}
+          {children}
         </Animated.ScrollView>
         {footerContent}
       </>

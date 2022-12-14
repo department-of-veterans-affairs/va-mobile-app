@@ -135,11 +135,11 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
         backLabelOnPress={navigateTo('HealthTab')}
         title="Appointments"
         scrollViewProps={{ style: scrollStyles }}
-        content={appointmentsContent}
         headerButton={{ label: 'Title', icon: { name: 'ProfileSelected' }, onPress: () => {} }}
         footerContent={featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}>
         {/* <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}> */}
         {/* </VAScrollView> */}
+        {appointmentsContent}
       </FeatureLandingTemplate>
     </>
   )

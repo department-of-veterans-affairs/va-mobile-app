@@ -115,13 +115,9 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   // TODO: REVERT FILE BEFORE COMMITTING TO DEVELOP
   return (
     <>
-      <FeatureLandingTemplate
-        backLabel="Health Care"
-        backLabelOnPress={navigateTo('HealthTab')}
-        title="Messages"
-        content={messagingContent}
-        scrollViewProps={{ style: scrollStyles }}
-      />
+      <FeatureLandingTemplate backLabel="Health Care" backLabelOnPress={navigateTo('HealthTab')} title="Messages" scrollViewProps={{ style: scrollStyles }}>
+        {messagingContent}
+      </FeatureLandingTemplate>
       {/* <VAScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}></VAScrollView> */}
     </>
   )
