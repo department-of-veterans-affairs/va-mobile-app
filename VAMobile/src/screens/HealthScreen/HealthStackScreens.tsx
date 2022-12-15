@@ -136,13 +136,6 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 
 export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
   return [
-    //TODO add next level of nav
-    // <SecureMessagingStack.Screen
-    //   key={'InboxMessages'}
-    //   name="InboxMessages"
-    //   component={InboxMessages}
-    //   options={{ title: t('secure_messaging.inbox_messages') }}
-    // />,
     <HealthStack.Screen key={'Appointments'} name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />,
     <HealthStack.Screen
       key={'UpcomingAppointmentDetails'}

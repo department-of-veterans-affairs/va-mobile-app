@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
-import { Box, ButtonDecoratorType, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, ButtonDecoratorType, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
@@ -31,7 +31,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   const onToggleTouchId = (): void => {
@@ -106,6 +106,10 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
         <SimpleList items={debugButton} />
       </Box>
     )
+  }
+
+  if (settingBiometricPreference) {
+    return <LoadingComponent text={t('biometricsPreference.saving')} />
   }
 
   return (

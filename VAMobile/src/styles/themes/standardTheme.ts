@@ -27,6 +27,7 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
   theme = {
     ...theme,
     colors: { ...colorScheme },
+    mode: scheme,
     typography: buildTypography(colorScheme),
   }
 }
@@ -39,6 +40,10 @@ const fontSizes = {
   BitterBoldHeading: {
     fontSize: 26,
     lineHeight: 32,
+  },
+  DescriptiveBackButton: {
+    fontSize: 12,
+    lineHeight: 18,
   },
   MobileBody: {
     fontSize: 20,
@@ -104,6 +109,10 @@ const fontSizes = {
     fontSize: 18,
     lineHeight: 25,
   },
+  textWithIconButton: {
+    fontSize: 12,
+    lineHeight: 12,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -122,6 +131,7 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
@@ -138,6 +148,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
+    textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.textWithIconButton),
   }
 }
 
@@ -174,6 +185,8 @@ let theme: VATheme = {
     chevronListItemHeight: 15,
     headerButtonSpacing: 10,
     headerLeftButtonFromTextPadding: 14,
+    fullScreenNavigationBarOffset: isIOS() ? 30 : 0, // this is done due to how the top of the screens differ between the two systems
+    fullScreenContentButtonHeight: 60,
   },
 
   fontFace: {
@@ -198,6 +211,7 @@ let theme: VATheme = {
     LabelTag: fontSizes.LabelTag,
     LabelTagBold: fontSizes.LabelTagBold,
   },
+  mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',
   typography: buildTypography(colorScheme),
 }
 
