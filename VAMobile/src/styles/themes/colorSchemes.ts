@@ -134,6 +134,7 @@ export const lightTheme = {
     tabSelectorInactive: colors.grayDark,
     tabSelectorActive: colors.primary,
     backButton: colors.white,
+    descriptiveBackButton: colors.primary,
     snackBarText: colors.white,
     showAll: colors.primary,
     statusDescription: colors.base,
@@ -298,6 +299,7 @@ export const darkTheme = {
     tagInfoIcon: colors.base,
   },
   text: {
+    descriptiveBackButton: colors.darkmodeLightBlue,
     footerButton: colors.darkmodeLightBlue,
     footerButtonActive: colors.darkmodeLightBlue,
     navBar: colors.grayLightest,

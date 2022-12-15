@@ -27,6 +27,7 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
   theme = {
     ...theme,
     colors: { ...colorScheme },
+    mode: scheme,
     typography: buildTypography(colorScheme),
   }
 }
@@ -39,6 +40,10 @@ const fontSizes = {
   BitterBoldHeading: {
     fontSize: 26,
     lineHeight: 32,
+  },
+  DescriptiveBackButton: {
+    fontSize: 12,
+    lineHeight: 18,
   },
   MobileBody: {
     fontSize: 20,
@@ -126,6 +131,7 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
@@ -205,6 +211,7 @@ let theme: VATheme = {
     LabelTag: fontSizes.LabelTag,
     LabelTagBold: fontSizes.LabelTagBold,
   },
+  mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',
   typography: buildTypography(colorScheme),
 }
 
