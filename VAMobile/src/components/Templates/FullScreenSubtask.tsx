@@ -50,8 +50,10 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
-  const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-  useFocusEffect(setFocus)
+  const [leftFocusRef, setLeftFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+  const [rightFocusRef, setRightFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+  useFocusEffect(setLeftFocus)
+  useFocusEffect(setRightFocus)
 
   const titleBannerProps: BoxProps = {
     alignItems: 'center',
@@ -120,7 +122,7 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       <Box {...titleBannerProps}>
         <Box ml={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
           {leftButtonText && (
-            <TouchableWithoutFeedback ref={focusRef} onPress={onLeftTitleButtonPress} accessibilityRole="button">
+            <TouchableWithoutFeedback ref={leftFocusRef} onPress={onLeftTitleButtonPress} accessibilityRole="button">
               <Box {...boxProps}>
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <TextView {...textNoIconViewProps}>{leftButtonText}</TextView>
@@ -131,7 +133,7 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         </Box>
         <Box mr={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
           {rightButtonText && (
-            <TouchableWithoutFeedback ref={focusRef} onPress={onRightTitleButtonPress} accessibilityRole="button">
+            <TouchableWithoutFeedback ref={rightFocusRef} onPress={onRightTitleButtonPress} accessibilityRole="button">
               <Box {...boxProps}>
                 {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
                 <Box display="flex" flexDirection="row" alignItems="center">
