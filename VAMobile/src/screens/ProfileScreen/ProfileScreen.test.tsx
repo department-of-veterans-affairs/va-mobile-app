@@ -121,17 +121,6 @@ context('ProfileScreen', () => {
     })
   })
 
-  describe('disability rating', () => {
-    describe('when user has disability ratings', () => {
-      it('should be shown', async () => {
-        await waitFor(() => {
-          initializeTestInstance(true)
-        })
-        expect(findByTestID(testInstance, 'disability-rating')).toBeTruthy()
-      })
-    })
-  })
-
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()

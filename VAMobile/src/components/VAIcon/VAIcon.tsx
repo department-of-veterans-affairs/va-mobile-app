@@ -9,8 +9,8 @@ import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 import { Box, BoxProps } from 'components'
 // New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
 // Navigation
-import ClaimsSelected from './svgs/navIcon/claimsSelected.svg'
-import ClaimsUnselected from './svgs/navIcon/claimsUnselected.svg'
+import BenefitsSelected from './svgs/navIcon/benefitsSelected.svg'
+import BenefitsUnselected from './svgs/navIcon/benefitsUnselected.svg'
 import HealthSelected from './svgs/navIcon/healthSelected.svg'
 import HealthUnselected from './svgs/navIcon/healthUnselected.svg'
 import HomeSelected from './svgs/navIcon/homeSelected.svg'
@@ -102,8 +102,8 @@ export const VA_ICON_MAP = {
   HomeUnselected,
   HealthSelected,
   HealthUnselected,
-  ClaimsSelected,
-  ClaimsUnselected,
+  BenefitsSelected,
+  BenefitsUnselected,
   ProfileSelected,
   ProfileUnselected,
   PaymentsSelected,

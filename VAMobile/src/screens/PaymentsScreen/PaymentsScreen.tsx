@@ -67,7 +67,7 @@ const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
 
   return (
     <PaymentsScreenStack.Navigator screenOptions={headerStyles}>
-      <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ title: t('payments') }} />
+      <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ title: t('payments.title') }} />
     </PaymentsScreenStack.Navigator>
   )
 }

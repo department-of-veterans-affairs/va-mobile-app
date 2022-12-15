@@ -42,7 +42,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
 
   /**
@@ -77,8 +76,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const getTopSection = (): Array<SimpleListItemObj> => {
     const buttonDataList: Array<SimpleListItemObj> = []
 
-    buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: navigateTo('DisabilityRatings') })
-
     if (userProfileUpdate) {
       buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: navigateTo('PersonalInformation') })
     }
@@ -95,13 +92,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
 
     return buttonDataList
-  }
-
-  const getMiddleSection = (): Array<SimpleListItemObj> => {
-    return [
-      { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: navigateTo('LettersOverview') },
-      { text: th('payments.title'), a11yHintText: t('payments.a11yHint'), onPress: navigateTo('Payments') },
-    ]
   }
 
   const getLastSection = (): Array<SimpleListItemObj> => {
@@ -134,9 +124,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       <NameTag />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
         <SimpleList items={getTopSection()} />
-      </Box>
-      <Box mb={theme.dimensions.standardMarginBetween}>
-        <SimpleList items={getMiddleSection()} />
       </Box>
       <Box mb={theme.dimensions.standardMarginBetween}>
         <SimpleList items={getLastSection()} />

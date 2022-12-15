@@ -6,7 +6,7 @@ import { RefObject } from 'react'
 import { contains, isEmpty, map } from 'underscore'
 
 import { AppDispatch } from 'store'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ErrorObject } from 'store/api'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { PhoneData } from 'store/api/types/PhoneData'

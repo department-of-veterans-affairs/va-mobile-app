@@ -10,7 +10,7 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import Attachments from './Attachments'
 import { AlertBox, TextView, VAButton } from 'components'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { when } from 'jest-when'
 
 let mockShowActionSheetWithOptions = jest.fn()
@@ -51,9 +51,9 @@ context('Attachments', () => {
     mockNavigateToEditDraftSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('EditDraft', { attachmentFileToAdd: {name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
-        .mockReturnValue(mockNavigateToEditDraftSpy)
+      .mockReturnValue(() => {})
+      .calledWith('EditDraft', { attachmentFileToAdd: { name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
+      .mockReturnValue(mockNavigateToEditDraftSpy)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentsList } })
 
