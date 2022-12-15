@@ -79,7 +79,7 @@ const { t: tCommon } = useTranslation(NAMESPACE.COMMON)
 or create one translation function for multiple namespaces where the usage will be prefixed with the desired namespace
 
 ```
-const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.COMMON])
+const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH])
 
-const myCommonString = t('common:key.in.common')
+const myCommonString = t('health:key.in.health')
 ```
