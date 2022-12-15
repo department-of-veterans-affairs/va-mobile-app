@@ -1,11 +1,11 @@
-import { Pressable } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { TouchableWithoutFeedback } from 'react-native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, FooterButton, TextView, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useDestructiveAlert, useTheme } from 'utils/hooks'
 /*To use this template to rap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
 Use 'options={{headerShown: false}}' in the individual screen if only an individual screen is supposed to do it.
@@ -31,12 +31,15 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
+  const [leftFocusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+  const [rightFocusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+  useFocusEffect(setFocus)
 
   const titleBannerProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    height: 64,
+    minHeight: 64,
     backgroundColor: 'main',
     borderBottomWidth: 1,
     borderBottomColor: 'menuDivider',
@@ -91,18 +94,18 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1}>
+        <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
           {leftButtonText && (
-            <Pressable onPress={onLeftTitleButtonPress} accessibilityRole="button" accessible={true}>
+            <TouchableWithoutFeedback ref={leftFocusRef} onPress={onLeftTitleButtonPress} accessibilityRole="button" accessible={true}>
               <Box {...boxProps}>
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <TextView {...textViewProps}>{leftButtonText}</TextView>
                 </Box>
               </Box>
-            </Pressable>
+            </TouchableWithoutFeedback>
           )}
         </Box>
-        <Box mt={theme.dimensions.buttonPadding} flex={3}>
+        <Box mt={theme.dimensions.buttonPadding} flex={3} alignItems="center">
           {title && (
             <Box {...boxProps}>
               <Box display="flex" flexDirection="row" alignItems="center">
@@ -111,15 +114,15 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
             </Box>
           )}
         </Box>
-        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1}>
+        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
           {rightButtonText && (
-            <Pressable onPress={onRightTitleButtonPress} accessibilityRole="button" accessible={true}>
+            <TouchableWithoutFeedback ref={rightFocusRef} onPress={onRightTitleButtonPress} accessibilityRole="button" accessible={true}>
               <Box {...boxProps}>
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <TextView {...textViewProps}>{rightButtonText}</TextView>
                 </Box>
               </Box>
-            </Pressable>
+            </TouchableWithoutFeedback>
           )}
         </Box>
       </Box>
