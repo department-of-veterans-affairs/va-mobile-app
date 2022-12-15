@@ -1,3 +1,5 @@
+import { ColorSchemeTypes } from './themes/standardTheme'
+
 export type VAButtonBackgroundColors = {
   buttonPrimary: string
   buttonPrimaryActive: string
@@ -33,6 +35,7 @@ export type VAButtonTextColors = {
 }
 
 export type VATextColors = {
+  descriptiveBackButton: string
   footerButton: string
   footerButtonActive: string
   navBar: string
@@ -105,6 +108,7 @@ export type VAIconColors = {
 
 export type VATypographyThemeVariants = {
   BitterBoldHeading: string
+  DescriptiveBackButton: string
   MobileBody: string
   MobileBodyBold: string
   UnreadMessagesTag: string
@@ -279,5 +283,6 @@ export type VATheme = {
     HelperText: VAFontSizes
     HelperTextBold: VAFontSizes
   }
+  mode: ColorSchemeTypes
   typography: VATypographyThemeVariants
 }

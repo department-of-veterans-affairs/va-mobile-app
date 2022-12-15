@@ -1,3 +1,4 @@
+import { AccessibilityInfo } from 'react-native'
 import { isEqual, map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { ReactElement, useEffect } from 'react'
@@ -5,6 +6,7 @@ import React, { ReactElement, useEffect } from 'react'
 import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SelectorType, TextLine, TextView, VASelector } from '../../index'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTranslation } from 'utils/formattingUtils'
+import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
@@ -113,6 +115,8 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
       const selected = isEqual(option.value, value)
       const onSelectorChange = (): void => {
         if (!disabled && !option.notSelectableRadioBtn) {
+          // Prevents VoiceOver from repeating accessibility label twice on changes
+          isIOS() && AccessibilityInfo.announceForAccessibility('')
           onChange(option.value)
         }
       }
