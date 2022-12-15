@@ -31,9 +31,10 @@ const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, righ
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
-  const [leftFocusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-  const [rightFocusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-  useFocusEffect(setFocus)
+  const [leftFocusRef, setLeftFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+  const [rightFocusRef, setRightFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+  useFocusEffect(setLeftFocus)
+  useFocusEffect(setRightFocus)
 
   const titleBannerProps: BoxProps = {
     alignItems: 'center',
