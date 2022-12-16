@@ -2,22 +2,14 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
-import { LetterTypes, ScreenIDTypes } from 'store/api/types'
-import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { NAMESPACE } from 'constants/namespaces'
-import BenefitSummaryServiceVerification from './Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import DebugScreen from './SettingsScreen/DebugScreen'
-import DisabilityRatingsScreen from './DisabilityRatingsScreen'
-import GenericLetter from './Letters/GenericLetter/GenericLetter'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
 import ManageYourAccount from './SettingsScreen/ManageYourAccount/ManageYourAccount'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import NotificationsSettingsScreen from './SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
-import PaymentDetailsScreen from './PaymentScreen/PaymentDetailsScreen/PaymentDetailsScreen'
-import PaymentIssue from './PaymentScreen/PaymentIssueScreen/PaymentIssueScreen'
-import PaymentMissing from './PaymentScreen/PaymentMissingSceen/PaymentMissingScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import RemoteConfigScreen from './SettingsScreen/DebugScreen/RemoteConfigScreen'
 import SandboxScreen from './SettingsScreen/DebugScreen/SandboxScreen/SandboxScreen'
@@ -27,7 +19,6 @@ export type ProfileStackParamList = {
   Profile: undefined
   Settings: undefined
   ManageYourAccount: undefined
-  DirectDeposit: undefined
   Debug: undefined
   RemoteConfig: undefined
   PersonalInformation: undefined
@@ -36,24 +27,6 @@ export type ProfileStackParamList = {
   HowDoIUpdate: undefined
   HowWillYou: undefined
   IncorrectServiceInfo: undefined
-  LettersOverview: undefined
-  LettersList: undefined
-  BenefitSummaryServiceVerificationLetter: undefined
-  GenericLetter: {
-    header: string
-    description: string
-    letterType: LetterTypes
-    screenID: ScreenIDTypes
-    descriptionA11yLabel?: string
-  }
-  DisabilityRatings: undefined
-  HowToUpdateDirectDeposit: undefined
-  Payments: undefined
-  PaymentDetails: {
-    paymentID: string
-  }
-  PaymentIssue: undefined
-  PaymentMissing: undefined
   Sandbox: undefined
 }
 
@@ -77,18 +50,5 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} />,
     <ProfileStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} />,
     <ProfileStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} />,
-    <ProfileStack.Screen key={'LettersOverview'} name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />,
-    <ProfileStack.Screen key={'LettersList'} name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />,
-    <ProfileStack.Screen
-      key={'BenefitSummaryServiceVerificationLetter'}
-      name="BenefitSummaryServiceVerificationLetter"
-      component={BenefitSummaryServiceVerification}
-      options={{ title: t('letters.overview.title') }}
-    />,
-    <ProfileStack.Screen key={'GenericLetter'} name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />,
-    <ProfileStack.Screen key={'DisabilityRatings'} name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ title: t('disabilityRatingDetails.title') }} />,
-    <ProfileStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ title: t('paymentDetails.title') }} />,
-    <ProfileStack.Screen key={'PaymentIssue'} name="PaymentIssue" component={PaymentIssue} />,
-    <ProfileStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} />,
   ]
 }

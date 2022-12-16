@@ -3,7 +3,7 @@ import { TFunction } from 'i18next'
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
@@ -134,13 +134,6 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 
 export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
   return [
-    //TODO add next level of nav
-    // <SecureMessagingStack.Screen
-    //   key={'InboxMessages'}
-    //   name="InboxMessages"
-    //   component={InboxMessages}
-    //   options={{ title: t('secure_messaging.inbox_messages') }}
-    // />,
     <HealthStack.Screen key={'Appointments'} name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />,
     <HealthStack.Screen
       key={'UpcomingAppointmentDetails'}

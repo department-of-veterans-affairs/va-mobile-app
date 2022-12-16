@@ -25,7 +25,7 @@ This is an example of a string in the `claims` namespace. The key is `claimPhase
 Translation values are accessed via the `useTranslation` hook. This hook creates a translation function for a namespace or list of namespaces provided as an argument.
 
 ```
-const { t } = useTranslation(NAMESPACE.CLAIMS)
+const { t } = useTranslation(NAMESPACE.COMMON)
 ```
 
 For basic usage, the translation function takes in the desired key as the only argument and will resolve to the display value associated with that key.
@@ -72,15 +72,14 @@ t('listPosition', { position: myPosition, total: totalEntries })
 To use multiple namespaces, either create another function with the desired namespace
 
 ```
-const { t } = useTranslation(NAMESPACE.CLAIMS)
+const { t } = useTranslation(NAMESPACE.COMMON)
 const { t: tCommon } = useTranslation(NAMESPACE.COMMON)
 ```
 
 or create one translation function for multiple namespaces where the usage will be prefixed with the desired namespace
 
 ```
-const { t } = useTranslation([NAMESPACE.CLAIMS, NAMESPACE.COMMON])
+const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH])
 
-const myClaimsString = t('claims:key.in.claims')
-const myCommonString = t('common:key.in.common')
+const myCommonString = t('health:key.in.health')
 ```

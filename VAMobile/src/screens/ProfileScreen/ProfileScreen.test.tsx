@@ -109,47 +109,6 @@ context('ProfileScreen', () => {
     })
   })
 
-  describe('direct deposit', () => {
-    describe('when directDepositBenefits is true', () => {
-      it('should be shown', async () => {
-        await waitFor(() => {
-          initializeTestInstance(true)
-        })
-        expect(findByTestID(testInstance, 'direct-deposit-information')).toBeTruthy()
-      })
-    })
-
-    describe('when user signs in through IDME ', () => {
-      it('should navigate to DirectDeposit', async () => {
-        await waitFor(() => {
-          initializeTestInstance(true, true)
-        })
-        findByTestID(testInstance, 'direct-deposit-information').props.onPress()
-        expect(navigateToDirectDepositSpy).toHaveBeenCalled()
-      })
-    })
-
-    describe('when user signs in through Login.gov ', () => {
-      it('should navigate to DirectDeposit', async () => {
-        await waitFor(() => {
-          initializeTestInstance(true, true, undefined, undefined, undefined, SigninServiceTypesConstants.LOGINGOV)
-        })
-        findByTestID(testInstance, 'direct-deposit-information').props.onPress()
-        expect(navigateToDirectDepositSpy).toHaveBeenCalled()
-      })
-    })
-
-    describe('when user did not signs in through IDME and does not have directDepositBenefits', () => {
-      it('should navigate to HowToUpdateDirectDeposit', async () => {
-        await waitFor(() => {
-          initializeTestInstance(false, false, false, false, initialErrorsState, SigninServiceTypesConstants.MHV)
-        })
-        findByTestID(testInstance, 'direct-deposit-information').props.onPress()
-        expect(navigateToHowToUpdateDirectDepositSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
   describe('personal and contact information', () => {
     describe('when userProfileUpdate is true', () => {
       it('should be shown', async () => {
@@ -158,17 +117,6 @@ context('ProfileScreen', () => {
         })
 
         expect(findByTestID(testInstance, 'personal-and-contact-information')).toBeTruthy()
-      })
-    })
-  })
-
-  describe('disability rating', () => {
-    describe('when user has disability ratings', () => {
-      it('should be shown', async () => {
-        await waitFor(() => {
-          initializeTestInstance(true)
-        })
-        expect(findByTestID(testInstance, 'disability-rating')).toBeTruthy()
       })
     })
   })
