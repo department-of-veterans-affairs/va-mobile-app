@@ -18,7 +18,7 @@ import {
 } from '../api'
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
+import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants, PrescriptionRefillData } from 'store/api/types'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -156,29 +156,29 @@ export const filterAndSortPrescriptions =
 
 export const requestRefills =
   (prescriptions: PrescriptionsList): AppThunk =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     dispatch(dispatchStartRequestRefills())
-    const prescriptionIds = prescriptions.map((prescription) => prescription.id)
-    const results: RefillRequestSummaryItems = []
+    let results: RefillRequestSummaryItems = []
 
     try {
-      // return 204 on success, we just care if it succeeds as any failures will go to the catch
-      await put('/v0/health/rx/prescriptions/refill', {
+      const prescriptionIds = prescriptions.map((prescription) => prescription.id)
+      const response = await put<PrescriptionRefillData>('/v0/health/rx/prescriptions/refill', {
         'ids[]': prescriptionIds,
       })
-      results.push({
-        submitted: true,
-        data: p,
-      })
+      const failedPrescriptionIds = response?.attributes.failedIds || []
+      results = prescriptions.map((prescription) => ({
+        submitted: !failedPrescriptionIds.includes(prescription.id),
+        data: prescription,
+      }))
       await logAnalyticsEvent(Events.vama_rx_refill_success())
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
       }
-      results.push({
+      results = prescriptions.map((prescription) => ({
         submitted: false,
-        data: p,
-      })
+        data: prescription,
+      }))
       await logAnalyticsEvent(Events.vama_rx_refill_fail())
     }
 
