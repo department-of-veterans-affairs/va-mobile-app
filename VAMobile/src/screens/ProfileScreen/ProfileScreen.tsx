@@ -13,9 +13,6 @@ import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import DirectDepositScreen from './DirectDepositScreen'
-import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
-import PaymentScreen from './PaymentScreen'
 
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
@@ -144,15 +141,11 @@ const ProfileScreenStack = createStackNavigator()
  */
 const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
   const headerStyles = useHeaderStyles()
 
   return (
     <ProfileScreenStack.Navigator screenOptions={headerStyles}>
       <ProfileScreenStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
-      <ProfileScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
-      <ProfileScreenStack.Screen name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
-      <ProfileScreenStack.Screen name="Payments" component={PaymentScreen} options={{ title: th('payments.title') }} />
     </ProfileScreenStack.Navigator>
   )
 }

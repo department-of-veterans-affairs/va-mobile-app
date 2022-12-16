@@ -8,27 +8,19 @@ import { FormHeaderType } from 'constants/secureMessaging'
 import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
-import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
-import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
-import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import StatusGlossary from './Pharmacy/StatusGlossary/StatusGlossary'
-import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
-import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
-import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
-import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
@@ -134,25 +126,13 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 
 export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
   return [
-    <HealthStack.Screen key={'Appointments'} name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />,
-    <HealthStack.Screen
-      key={'UpcomingAppointmentDetails'}
-      name="UpcomingAppointmentDetails"
-      component={UpcomingAppointmentDetails}
-      options={{ title: t('appointments.appointment') }}
-    />,
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
-    <HealthStack.Screen key={'PastAppointmentDetails'} name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />,
-    <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage.title') }} />,
     <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={{ title: t('secureMessaging.drafts.edit') }} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
-    <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
-    <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
-
     <HealthStack.Screen
       key={'NoRequestAppointmentAccess'}
       name="NoRequestAppointmentAccess"
@@ -197,8 +177,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
         options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </HealthStack.Group>,
-    <HealthStack.Screen key={'PrescriptionHistory'} name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />,
-    <HealthStack.Screen key={'PrescriptionDetails'} name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />,
     <HealthStack.Screen
       key={'RefillScreenModal'}
       name="RefillScreenModal"

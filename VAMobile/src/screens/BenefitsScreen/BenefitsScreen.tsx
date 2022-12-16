@@ -4,8 +4,15 @@ import React, { FC, useEffect } from 'react'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import { Box, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
+
+import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
+import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
+import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
+import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
+import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
@@ -69,6 +76,13 @@ const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
   return (
     <BenefitsScreenStack.Navigator screenOptions={headerStyles}>
       <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
+      <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('statusDetails.title') }} />
+      <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
+      <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('statusDetails.title') }} />
+      <BenefitsScreenStack.Screen name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ title: t('disabilityRatingDetails.title') }} />
+      <BenefitsScreenStack.Screen name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />
+      <BenefitsScreenStack.Screen name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />
+      <BenefitsScreenStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
     </BenefitsScreenStack.Navigator>
   )
 }

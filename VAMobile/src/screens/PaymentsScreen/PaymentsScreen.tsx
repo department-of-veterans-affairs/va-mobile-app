@@ -9,6 +9,8 @@ import { PaymentsStackParamList } from './PaymentsStackScreens'
 import { RootState } from 'store'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import DirectDepositScreen from './DirectDepositScreen'
+import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
@@ -68,6 +70,8 @@ const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
   return (
     <PaymentsScreenStack.Navigator screenOptions={headerStyles}>
       <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ title: t('payments.title') }} />
+      <PaymentsScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+      <PaymentsScreenStack.Screen name="PaymentHistory" component={PaymentHistoryScreen} options={{ title: t('payments.title') }} />
     </PaymentsScreenStack.Navigator>
   )
 }
