@@ -55,11 +55,6 @@ context('Prescription', () => {
         await store.dispatch(requestRefills(mockData))
         const actions = store.getActions()
   
-        const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_REQUEST_REFILLS })
-        expect(startAction).toBeTruthy()
-        expect(startAction?.state.prescriptions.submittingRequestRefills).toBeTruthy()
-        expect(startAction?.state.prescriptions.showLoadingScreenRequestRefillsRetry).toBeTruthy()
-  
         const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
         expect(finishAction).toBeTruthy()
         expect(finishAction?.state.prescriptions.submittingRequestRefills).toBeFalsy()
