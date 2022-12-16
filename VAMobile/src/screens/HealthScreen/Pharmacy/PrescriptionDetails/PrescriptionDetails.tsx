@@ -181,7 +181,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
               leftSectionTitle={t('prescription.details.vaFacilityHeader')}
               leftSectionValue={facilityName || noneNoted}
               leftSectionTitleLabel={t('prescription.details.vaFacilityHeaderLabel')}>
-              <ClickToCallPhoneNumber phone={facilityPhoneNumber} displayedText={facilityPhoneNumber} />
+              <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
             </DetailsTextSections>
           </TextArea>
         </Box>
