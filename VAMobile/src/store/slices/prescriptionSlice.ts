@@ -18,7 +18,7 @@ import {
 } from '../api'
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants, PrescriptionRefillData } from 'store/api/types'
+import { PrescriptionHistoryTabConstants, PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -165,7 +165,7 @@ export const requestRefills =
       const response = await put<PrescriptionRefillData>('/v0/health/rx/prescriptions/refill', {
         'ids[]': prescriptionIds,
       })
-      const failedPrescriptionIds = response?.attributes.failedIds || []
+      const failedPrescriptionIds = response?.attributes.failedPrescriptionIds || []
       results = prescriptions.map((prescription) => ({
         submitted: !failedPrescriptionIds.includes(prescription.id),
         data: prescription,

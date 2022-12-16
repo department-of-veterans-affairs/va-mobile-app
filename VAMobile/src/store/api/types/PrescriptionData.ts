@@ -180,7 +180,7 @@ export type PrescriptionRefillAttributeData = {
   successfulStationList: string | null
   lastUpdatedTime: string | null
   prescriptionList: string | null
-  failedIds: Array<string>
+  failedPrescriptionIds: Array<string>
 }
 
 export type PrescriptionRefillData = {

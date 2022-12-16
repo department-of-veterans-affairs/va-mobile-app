@@ -45,7 +45,7 @@ context('Prescription', () => {
               "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
               "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
               "prescriptionList": null,
-              "failedIds": [],
+              "failedPrescriptionIds": [],
               "errors": [],
               "infoMessages": []
             }
@@ -89,7 +89,7 @@ context('Prescription', () => {
               "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
               "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
               "prescriptionList": null,
-              "failedIds": [mockData[0].id, mockData[1].id],
+              "failedPrescriptionIds": [mockData[0].id, mockData[1].id],
               "errors": [
                 {
                   "errorCode": 139,
@@ -139,7 +139,7 @@ context('Prescription', () => {
               "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
               "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
               "prescriptionList": null,
-              "failedIds": [mockData[0].id],
+              "failedPrescriptionIds": [mockData[0].id],
               "errors": [
                 {
                   "errorCode": 139,
