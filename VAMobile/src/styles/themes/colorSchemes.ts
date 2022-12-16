@@ -140,6 +140,7 @@ export const lightTheme = {
     statusDescription: colors.base,
     closePanel: colors.primary,
     labelTag: colors.base,
+    textWithIconButton: colors.primary,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -330,6 +331,7 @@ export const darkTheme = {
     statusDescription: colors.base,
     closePanel: colors.darkmodeLightBlue,
     labelTag: colors.base,
+    textWithIconButton: colors.darkmodeLightBlue,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

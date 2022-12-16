@@ -109,6 +109,10 @@ const fontSizes = {
     fontSize: 18,
     lineHeight: 25,
   },
+  textWithIconButton: {
+    fontSize: 12,
+    lineHeight: 12,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -144,6 +148,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
+    textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.textWithIconButton),
   }
 }
 
@@ -180,6 +185,8 @@ let theme: VATheme = {
     chevronListItemHeight: 15,
     headerButtonSpacing: 10,
     headerLeftButtonFromTextPadding: 14,
+    fullScreenNavigationBarOffset: isIOS() ? 30 : 0, // this is done due to how the top of the screens differ between the two systems
+    fullScreenContentButtonHeight: 60,
   },
 
   fontFace: {

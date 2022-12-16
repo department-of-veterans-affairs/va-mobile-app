@@ -67,6 +67,7 @@ export type VATextColors = {
   tabSelectorActive: string
   closePanel: string
   labelTag: string
+  textWithIconButton: string
 }
 
 export type VAIconColors = {
@@ -125,6 +126,7 @@ export type VATypographyThemeVariants = {
   AppointmentRequestCtaBtnText: string
   LabelTag: string
   LabelTagBold: string
+  textWithIconButton: string
 }
 
 export type VABackgroundColors = {
@@ -261,6 +263,8 @@ export type VATheme = {
     chevronListItemHeight: number
     headerButtonSpacing: number
     headerLeftButtonFromTextPadding: number
+    fullScreenNavigationBarOffset: number
+    fullScreenContentButtonHeight: number
   }
   fontFace: {
     regular: string
