@@ -33,6 +33,142 @@ export const ActionTypes: {
 
 context('Prescription', () => {
   describe('requestRefills', () => {
+    describe('when all refills are successful', () => {
+      it('should update refillRequestSummaryItems with all submitted items', async () => {
+        when(api.put as jest.Mock)
+          .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
+          .mockResolvedValue({
+            "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
+            "type": "PrescriptionRefills",
+            "attributes": {
+              "failedStationList": "DAYT29, DAYT29",
+              "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
+              "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
+              "prescriptionList": null,
+              "errors": [],
+              "infoMessages": []
+            }
+          })
+  
+        const store = realStore()
+        await store.dispatch(requestRefills(mockData))
+        const actions = store.getActions()
+  
+        const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_REQUEST_REFILLS })
+        expect(startAction).toBeTruthy()
+        expect(startAction?.state.prescriptions.submittingRequestRefills).toBeTruthy()
+        expect(startAction?.state.prescriptions.showLoadingScreenRequestRefillsRetry).toBeTruthy()
+  
+        const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
+        expect(finishAction).toBeTruthy()
+        expect(finishAction?.state.prescriptions.submittingRequestRefills).toBeFalsy()
+        expect(finishAction?.state.prescriptions.showLoadingScreenRequestRefillsRetry).toBeFalsy()
+        expect(finishAction?.state.prescriptions.refillRequestSummaryItems).toEqual([
+          {
+            data: mockData[0],
+            submitted: true,
+          },
+          {
+            data: mockData[1],
+            submitted: true,
+          }
+        ])
+      })
+    })
+
+    describe('when all refills are unsuccessful', () => {
+      it('should update refillRequestSummaryItems with all non-submitted items', async () => {
+        when(api.put as jest.Mock)
+          .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
+          .mockResolvedValue({
+            "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
+            "type": "PrescriptionRefills",
+            "attributes": {
+              "failedStationList": "DAYT29, DAYT29",
+              "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
+              "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
+              "prescriptionList": null,
+              "errors": [
+                {
+                  "errorCode": 139,
+                  "developerMessage": `Prescription not refillable for id : ${mockData[0].id}`,
+                  "message": "Prescription is not Refillable"
+                },
+                {
+                  "errorCode": 139,
+                  "developerMessage": `Prescription not refillable for id : ${mockData[1].id}`,
+                  "message": "Prescription is not Refillable"
+                }
+              ],
+              "infoMessages": []
+            }
+          })
+  
+        const store = realStore()
+        await store.dispatch(requestRefills(mockData))
+        const actions = store.getActions()
+  
+        const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
+        expect(finishAction).toBeTruthy()
+        expect(finishAction?.state.prescriptions.submittingRequestRefills).toBeFalsy()
+        expect(finishAction?.state.prescriptions.showLoadingScreenRequestRefillsRetry).toBeFalsy()
+        expect(finishAction?.state.prescriptions.refillRequestSummaryItems).toEqual([
+          {
+            data: mockData[0],
+            submitted: false,
+          },
+          {
+            data: mockData[1],
+            submitted: false,
+          }
+        ])
+      })
+    })
+
+    describe('when some refills are successful', () => {
+      it('should update refillRequestSummaryItems with submitted and non-submitted items', async () => {
+        when(api.put as jest.Mock)
+          .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
+          .mockResolvedValue({
+            "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
+            "type": "PrescriptionRefills",
+            "attributes": {
+              "failedStationList": "DAYT29, DAYT29",
+              "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
+              "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
+              "prescriptionList": null,
+              "errors": [
+                {
+                  "errorCode": 139,
+                  "developerMessage": `Prescription not refillable for id : ${mockData[0].id}`,
+                  "message": "Prescription is not Refillable"
+                },
+              ],
+              "infoMessages": []
+            }
+          })
+  
+        const store = realStore()
+        await store.dispatch(requestRefills(mockData))
+        const actions = store.getActions()
+  
+        const finishAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_REQUEST_REFILLS })
+        expect(finishAction).toBeTruthy()
+        expect(finishAction?.state.prescriptions.submittingRequestRefills).toBeFalsy()
+        expect(finishAction?.state.prescriptions.showLoadingScreenRequestRefillsRetry).toBeFalsy()
+        expect(finishAction?.state.prescriptions.refillRequestSummaryItems).toEqual([
+          {
+            data: mockData[0],
+            submitted: false,
+          },
+          {
+            data: mockData[1],
+            submitted: true,
+          }
+        ])
+      })
+    })
+
     describe('on RefillScreen', () => {
       it('should continue to show loading spinner after completing', async () => {
         when(api.put as jest.Mock)
