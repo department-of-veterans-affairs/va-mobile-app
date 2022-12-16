@@ -190,7 +190,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   }
 
   if (showLoadingScreenRequestRefillsRetry) {
-    return <LoadingComponent text={t('prescriptions.refill.submit', { total: requestFailed.length })} />
+    return <LoadingComponent text={t('prescriptions.refill.submit')} />
   }
 
   return (
