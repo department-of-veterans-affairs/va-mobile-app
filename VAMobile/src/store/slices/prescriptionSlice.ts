@@ -175,6 +175,7 @@ export const requestRefills =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
       }
+      // It's safe to assume that if there's an error, none of the refills were successful
       results = prescriptions.map((prescription) => ({
         submitted: false,
         data: prescription,
