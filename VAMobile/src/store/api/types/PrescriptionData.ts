@@ -184,7 +184,9 @@ export type PrescriptionRefillAttributeData = {
 }
 
 export type PrescriptionRefillData = {
-  id: string
-  type: string
-  attributes: PrescriptionRefillAttributeData
+  data: {
+    id: string
+    type: string
+    attributes: PrescriptionRefillAttributeData
+  }
 }
