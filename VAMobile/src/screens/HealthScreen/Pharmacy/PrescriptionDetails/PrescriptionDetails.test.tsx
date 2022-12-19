@@ -33,6 +33,7 @@ context('PrescriptionDetails', () => {
                 refillDate: '2022-10-28T04:00:00.000Z',
                 refillRemaining: 5,
                 facilityName: 'DAYT29',
+                facilityPhoneNumber: '(217) 636-6712',
                 isRefillable: false,
                 isTrackable: false,
                 orderedDate: '2022-10-28T04:00:00.000Z',
