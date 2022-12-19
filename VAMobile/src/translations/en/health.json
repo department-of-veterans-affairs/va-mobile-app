@@ -395,6 +395,7 @@
   "prescriptions.sort.order": "Sort order",
   "prescriptions.sort.refills": "Refills left",
   "prescriptions.sort.ztoa": "Z to A",
+  "prescriptions.sort.ztoa.a11y": "Z to A.",
   "prescriptions.tabs.all": "All ({{count}})",
   "prescriptions.tabs.pending": "Pending ({{count}})",
   "prescriptions.tabs.tracking": "Tracking ({{count}})",
