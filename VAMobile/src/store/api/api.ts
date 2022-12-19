@@ -14,6 +14,7 @@ let _demoMode = false
 let _store: ReduxToolkitStore | undefined
 
 const DEMO_MODE_DELAY = 300
+const METHODS_THAT_ALLOW_PARAMS = ['GET', 'PUT']
 
 export const setAccessToken = (token?: string): void => {
   _token = token
@@ -78,7 +79,8 @@ const doRequest = async function (
     }
     fetchObj.body = contentType === contentTypes.multipart ? (params as unknown as FormData) : JSON.stringify(params)
   }
-  if (['GET', 'PUT'].indexOf(method) > -1) {
+
+  if (METHODS_THAT_ALLOW_PARAMS.indexOf(method) > -1) {
     if (_.keys(params).length > 0) {
       endpoint +=
         '?' +
