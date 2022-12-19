@@ -77,7 +77,8 @@ const doRequest = async function (
       'Content-Type': contentType,
     }
     fetchObj.body = contentType === contentTypes.multipart ? (params as unknown as FormData) : JSON.stringify(params)
-  } else {
+  }
+  if (['GET', 'PUT'].indexOf(method) > -1) {
     if (_.keys(params).length > 0) {
       endpoint +=
         '?' +
