@@ -14,7 +14,17 @@ import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import Appointments from './Appointments'
 import CernerAlert from './CernerAlert'
+import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
+import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
+import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
+import SecureMessaging from './SecureMessaging'
+import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
+import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
+import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
+import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
@@ -137,6 +147,16 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
   return (
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('page.title') }} />
+      <HealthScreenStack.Screen name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />
+      <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />
+      <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />
+      <HealthScreenStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />
+      <HealthScreenStack.Screen name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />
+      <HealthScreenStack.Screen name="SecureMessaging" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />
+      <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ title: t('appointments.appointment') }} />
+      <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />
+      <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />
+      <HealthScreenStack.Screen name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage.title') }} />
     </HealthScreenStack.Navigator>
   )
 }

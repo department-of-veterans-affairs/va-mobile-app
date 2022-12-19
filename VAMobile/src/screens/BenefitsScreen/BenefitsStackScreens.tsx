@@ -5,18 +5,12 @@ import React, { ReactNode } from 'react'
 
 import { ClaimEventData } from 'store/api/types'
 import { LetterTypes, ScreenIDTypes } from 'store/api/types'
-import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
-import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
-import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
 
 import { ClaimType } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
-import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
-import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
+import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
-import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
 import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
 import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
@@ -91,21 +85,14 @@ const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
 
 export const getBenefitsScreens = (t: TFunction): Array<ReactNode> => {
   return [
-    <BenefitsStack.Screen key={'DisabilityRatings'} name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ title: t('disabilityRatingDetails.title') }} />,
-    <BenefitsStack.Screen key={'LettersOverview'} name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />,
-    <BenefitsStack.Screen key={'LettersList'} name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />,
     <BenefitsStack.Screen
       key={'BenefitSummaryServiceVerificationLetter'}
       name="BenefitSummaryServiceVerificationLetter"
       component={BenefitSummaryServiceVerification}
       options={{ title: t('letters.overview.title') }}
     />,
-    <BenefitsStack.Screen key={'GenericLetter'} name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />,
-    <BenefitsStack.Screen key={'Claims'} name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />,
-    <BenefitsStack.Screen key={'ClaimDetailsScreen'} name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('statusDetails.title') }} />,
     <BenefitsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />,
     <BenefitsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />,
-    <BenefitsStack.Screen key={'AppealDetailsScreen'} name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('statusDetails.title') }} />,
     <BenefitsStack.Screen key={'FileRequest'} name="FileRequest" component={FileRequest} options={{ title: t('fileRequest.title') }} />,
     <BenefitsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} options={{ title: t('askForClaimDecision.pageTitle') }} />,
     <BenefitsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ title: stringToTitleCase(t('fileUpload.takeOrSelectPhotos')) }} />,

@@ -17,6 +17,7 @@ import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import Nametag from 'components/Nametag'
 import getEnv from 'utils/env'
 
@@ -157,6 +158,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
   return (
     <HomeScreenStack.Navigator screenOptions={headerStyles}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
+      <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('contactVA.title') }} />
     </HomeScreenStack.Navigator>
   )
 }
