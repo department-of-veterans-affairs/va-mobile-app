@@ -165,7 +165,7 @@ export const requestRefills =
       const response = await put<PrescriptionRefillData>('/v0/health/rx/prescriptions/refill', {
         'ids[]': prescriptionIds,
       })
-      const failedPrescriptionIds = response?.attributes.failedPrescriptionIds || []
+      const failedPrescriptionIds = response?.data.attributes.failedPrescriptionIds || []
       results = prescriptions.map((prescription) => ({
         submitted: !failedPrescriptionIds.includes(prescription.id),
         data: prescription,

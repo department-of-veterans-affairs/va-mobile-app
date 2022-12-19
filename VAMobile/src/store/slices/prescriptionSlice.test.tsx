@@ -38,16 +38,18 @@ context('Prescription', () => {
         when(api.put as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
           .mockResolvedValue({
-            "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
-            "type": "PrescriptionRefills",
-            "attributes": {
-              "failedStationList": "DAYT29, DAYT29",
-              "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
-              "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
-              "prescriptionList": null,
-              "failedPrescriptionIds": [],
-              "errors": [],
-              "infoMessages": []
+            "data": {
+              "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
+              "type": "PrescriptionRefills",
+              "attributes": {
+                "failedStationList": "DAYT29, DAYT29",
+                "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
+                "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
+                "prescriptionList": null,
+                "failedPrescriptionIds": [],
+                "errors": [],
+                "infoMessages": []
+              }
             }
           })
   
@@ -77,27 +79,29 @@ context('Prescription', () => {
         when(api.put as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
           .mockResolvedValue({
-            "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
-            "type": "PrescriptionRefills",
-            "attributes": {
-              "failedStationList": "DAYT29, DAYT29",
-              "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
-              "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
-              "prescriptionList": null,
-              "failedPrescriptionIds": [mockData[0].id, mockData[1].id],
-              "errors": [
-                {
-                  "errorCode": 139,
-                  "developerMessage": `Prescription not refillable for id : ${mockData[0].id}`,
-                  "message": "Prescription is not Refillable"
-                },
-                {
-                  "errorCode": 139,
-                  "developerMessage": `Prescription not refillable for id : ${mockData[1].id}`,
-                  "message": "Prescription is not Refillable"
-                }
-              ],
-              "infoMessages": []
+            "data": {
+              "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
+              "type": "PrescriptionRefills",
+              "attributes": {
+                "failedStationList": "DAYT29, DAYT29",
+                "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
+                "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
+                "prescriptionList": null,
+                "failedPrescriptionIds": [mockData[0].id, mockData[1].id],
+                "errors": [
+                  {
+                    "errorCode": 139,
+                    "developerMessage": `Prescription not refillable for id : ${mockData[0].id}`,
+                    "message": "Prescription is not Refillable"
+                  },
+                  {
+                    "errorCode": 139,
+                    "developerMessage": `Prescription not refillable for id : ${mockData[1].id}`,
+                    "message": "Prescription is not Refillable"
+                  }
+                ],
+                "infoMessages": []
+              }
             }
           })
   
@@ -127,22 +131,24 @@ context('Prescription', () => {
         when(api.put as jest.Mock)
           .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
           .mockResolvedValue({
-            "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
-            "type": "PrescriptionRefills",
-            "attributes": {
-              "failedStationList": "DAYT29, DAYT29",
-              "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
-              "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
-              "prescriptionList": null,
-              "failedPrescriptionIds": [mockData[0].id],
-              "errors": [
-                {
-                  "errorCode": 139,
-                  "developerMessage": `Prescription not refillable for id : ${mockData[0].id}`,
-                  "message": "Prescription is not Refillable"
-                },
-              ],
-              "infoMessages": []
+            "data": {
+              "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
+              "type": "PrescriptionRefills",
+              "attributes": {
+                "failedStationList": "DAYT29, DAYT29",
+                "successfulStationList": "SLC4, VAMCSLC-OUTPTRX",
+                "lastUpdatedTime": "Thu, 08 Dec 2022 12:11:33 EST",
+                "prescriptionList": null,
+                "failedPrescriptionIds": [mockData[0].id],
+                "errors": [
+                  {
+                    "errorCode": 139,
+                    "developerMessage": `Prescription not refillable for id : ${mockData[0].id}`,
+                    "message": "Prescription is not Refillable"
+                  },
+                ],
+                "infoMessages": []
+              }
             }
           })
   
