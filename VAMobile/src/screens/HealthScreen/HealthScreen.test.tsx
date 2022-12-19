@@ -7,7 +7,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HealthScreen } from './HealthScreen'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
+import { initialAuthState, initialErrorsState, initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
 import { TextView, MessagesCountTag } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -32,6 +32,19 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+jest.mock('store/slices', () => {
+  let actual = jest.requireActual('store/slices')
+  return {
+    ...actual,
+    loadAllPrescriptions: jest.fn(() => {
+      return {
+        type: '',
+        payload: {},
+      }
+    }),
+  }
+})
+
 context('HealthScreen', () => {
   let component: RenderAPI
   let props: any
@@ -45,7 +58,7 @@ context('HealthScreen', () => {
   let mockFeatureEnabled = featureEnabled as jest.Mock
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true, prescriptionsEnabled: boolean = false) => {
+  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false) => {
     mockNavigateToCrisisLineSpy = jest.fn()
     mockNavigateToAppointmentSpy = jest.fn()
     mockNavigateToSecureMessagingSpy = jest.fn()
@@ -71,6 +84,7 @@ context('HealthScreen', () => {
     component = render(<HealthScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
+        prescriptions: { prescriptionsNeedLoad },
         secureMessaging: {
           ...initialSecureMessagingState,
           hasLoadedInbox,
@@ -138,6 +152,22 @@ context('HealthScreen', () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
         expect(mockNavigateToPharmacySpy).toHaveBeenCalled()
+      })
+    })
+
+    it('should reload rx data if data is present', async () => {
+      initializeTestInstance(0, true, true, false)
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(loadAllPrescriptions).toHaveBeenCalled()
+      })
+    })
+
+    it('should not reload rx data if data is not present', async () => {
+      initializeTestInstance(0, true, true, true)
+      await waitFor(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(loadAllPrescriptions).not.toHaveBeenCalled()
       })
     })
   })
