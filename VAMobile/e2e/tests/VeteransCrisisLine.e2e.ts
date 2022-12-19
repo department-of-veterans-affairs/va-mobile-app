@@ -17,6 +17,6 @@ describe('Veterans Crisis Line', () => {
       .toExist()
       .withTimeout(2000)
 
-    await expect(element(by.label(VCLE2eIdConstants.VCL_URL_LABEL))).toExist()
+    await expect(element(by.label(VCLE2eIdConstants.VCL_HERE_FOR_YOU_LABEL))).toExist()
   })
 })
