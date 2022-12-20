@@ -48,7 +48,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     a11yHintText: t('biometric.a11yHint', { biometricType: supportedBiometricText }),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
-    decoratorProps: { on: shouldStoreWithBiometric },
+    decoratorProps: { on: shouldStoreWithBiometric, a11yHint: t('biometric.a11yHint', { biometricType: supportedBiometricText }) },
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
