@@ -2,7 +2,8 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { Box, CrisisLineCta, FeatureLandingTemplate, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { CategoryLanding, CategoryLandingProps } from 'components/Templates/CategoryLanding'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -65,9 +66,12 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
     })
   }, [navigation])
 
+  const testButton: Pick<CategoryLandingProps, 'headerButton'> = { headerButton: { label: 'Title', icon: { name: 'ProfileSelected' }, onPress: () => {} } }
+
   return (
-    <VAScrollView {...testIdProps('Health-care-page')}>
-      <CrisisLineCta onPress={onCrisisLine} />
+    // <VAScrollView {...testIdProps('Health-care-page')}>
+    <CategoryLanding backLabel={'Home'} backLabelOnPress={navigateTo('Home')} title={'Health Care'} headerButton={testButton.headerButton}>
+      {/* <CrisisLineCta onPress={onCrisisLine} /> */}
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         {featureEnabled('prescriptions') && (
           <LargeNavButton
@@ -128,7 +132,8 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>
         <CernerAlert />
       </Box>
-    </VAScrollView>
+    </CategoryLanding>
+    // </VAScrollView>
   )
 }
 
@@ -145,7 +150,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
 
   return (
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
-      <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('page.title') }} />
+      <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false, title: t('page.title') }} />
     </HealthScreenStack.Navigator>
   )
 }
