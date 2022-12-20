@@ -177,3 +177,19 @@ export type PrescriptionTrackingInfo = {
 export type PrescriptionTrackingInfoGetData = {
   data: Array<PrescriptionTrackingInfo>
 }
+
+export type PrescriptionRefillAttributeData = {
+  failedStationList: string | null
+  successfulStationList: string | null
+  lastUpdatedTime: string | null
+  prescriptionList: string | null
+  failedPrescriptionIds: Array<string>
+}
+
+export type PrescriptionRefillData = {
+  data: {
+    id: string
+    type: string
+    attributes: PrescriptionRefillAttributeData
+  }
+}
