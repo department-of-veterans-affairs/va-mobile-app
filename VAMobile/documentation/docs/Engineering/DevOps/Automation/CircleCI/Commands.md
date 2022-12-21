@@ -188,7 +188,7 @@ None
 
 ## `decode_ios_keys`
 ### Description
-This command decodes all the files needed to build and sign for iOS. It currently decodes a signing cert and a provisioning profile, but that may not be necessary because of match and can be tested for removal of the IOS_CERTIFICATE_BASE64 and IOS_CERTIFICATE_BASE64.
+This command decodes all the files needed to build and sign for iOS. It currently decodes a signing cert and a provisioning profile, but that may not be necessary because of match and can be tested for removal of the IOS_CERTIFICATE_BASE64 and IOS_PROVISIONING_BASE64.
 
 ### Parameters
 None
@@ -218,10 +218,42 @@ None
 
 ## `ios_fastlane`
 ### Description
+This command runs all of the steps and commands in order to build for iOS. This is a configurable commands that will build and upload to Test Flight based on the configuration options sent in.
+This command loads cached gems at the beginning and saves them at the end for faster builds with fastlane and its plugins.
+This command sets the vendor directory for ruby and updates the fastlane bundle app. 
+If a slack thread is indicated it will get that information from the attached workspace.
+It then runs the fastlane script with the available configuration.
 ### Parameters
+| Name             | Description                                                                                            | type    | default? |
+|------------------|--------------------------------------------------------------------------------------------------------|---------|----------|
+| version          | String value for the build type. Options are 'qa' or a version string like 'v1.1.1'                    | string  | qa       |
+| lane             | String name for the fastlane lane to run [qa, demo, review, release, on_demand, rc]                    | string  | qa       |
+| tf_group         | String name of the Test Flight Group to send to. See Test Flight groups in AppStoreConnect for options | string  |          |
+| use_slack_thread | Boolean value to indicate if a Slack thread should be pulled from an attached workspace
 ### Steps
 ```yaml
-
+- restore_cache:
+  key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
+- run:
+  working_directory: ~/project/VAMobile/ios
+  command: bundle config set --local path 'vendor/bundle' && bundle install
+- run:
+  working_directory: ~/project/VAMobile/ios
+  command: |
+    echo UPDATING FASTLANE
+    bundle update fastlane
+- save_cache:
+  key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}
+  paths:
+    - VAMobile/ios/vendor/bundle
+- when:
+  condition: <<parameters.use_slack_thread>>
+  steps:
+    - get_slack_thread
+- run:
+  working_directory: ~/project/VAMobile/ios
+  command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>> notes:"<<parameters.notes>>" tfGroup:"<<parameters.tf_group>>" --verbose
+  no_output_timeout: '30m'
 ```
 ### Outputs
 
