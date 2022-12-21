@@ -7,7 +7,6 @@ import remoteConfig from '@react-native-firebase/remote-config'
 const { ENVIRONMENT, IS_TEST } = getEnv()
 
 const fetchRemote = !__DEV__ && !IS_TEST
-const isProduction = ENVIRONMENT === EnvironmentTypesConstants.Production
 const RC_CACHE_TIME = 43200000 // 12 hours
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 
@@ -66,9 +65,7 @@ export const activateRemoteConfig = async (): Promise<void> => {
       console.debug('Remote Config: Fetched latest remote config')
     }
 
-    if (!isProduction) {
-      await loadOverrides()
-    }
+    await loadOverrides()
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
     console.debug('activateRemoteConfig: Failed to activate remote config')
@@ -81,13 +78,19 @@ export const activateRemoteConfig = async (): Promise<void> => {
  * Checks if we have any feature toggle overrides stored in AsyncStorage and loads them if so
  */
 export const loadOverrides = async (): Promise<void> => {
-  const overrides = await AsyncStorage.getItem(REMOTE_CONFIG_OVERRIDES_KEY)
-  if (overrides) {
-    console.debug('Remote Config: Found overrides in AsyncStorage. Applying')
-    overrideRemote = true
-    devConfig = JSON.parse(overrides) as FeatureToggleValues
-  } else {
-    console.debug('Remote Config: No overrides found in AsyncStorage')
+  try {
+    const overrides = await AsyncStorage.getItem(REMOTE_CONFIG_OVERRIDES_KEY)
+    if (overrides) {
+      console.debug('Remote Config: Found overrides in AsyncStorage. Applying')
+      overrideRemote = true
+      devConfig = JSON.parse(overrides) as FeatureToggleValues
+    } else {
+      console.debug('Remote Config: No overrides found in AsyncStorage')
+    }
+  } catch (err) {
+    logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
+    console.debug('loadOverrides: Failed to load overrides from AsyncStorage')
+    console.error(err)
   }
 }
 
@@ -97,17 +100,20 @@ export const loadOverrides = async (): Promise<void> => {
  * we'll return the value of the key in devConfig, otherwise we return the remoteConfig value
  */
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
-  return !isProduction && overrideRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
+  return overrideRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
 }
 
+/**
+ * Sets overrideRemote to true with the values passed. The app will use these overrides instead of fetched config or productionDefaults
+ * NOTE: This should ONLY ever be invoked from within of our developer settings UI
+ * @param config - An object of FeatureToggleValues type that contains the config we want to override our remote config with
+ */
 export const setDebugConfig = async (config: FeatureToggleValues): Promise<void> => {
-  if (!isProduction) {
-    overrideRemote = true
-    devConfig = config
+  overrideRemote = true
+  devConfig = config
 
-    // Store overrides in AsyncStorage so they persist with app quits
-    AsyncStorage.setItem(REMOTE_CONFIG_OVERRIDES_KEY, JSON.stringify(config))
-  }
+  // Store overrides in AsyncStorage so they persist with app quits
+  AsyncStorage.setItem(REMOTE_CONFIG_OVERRIDES_KEY, JSON.stringify(config))
 }
 
 /**
