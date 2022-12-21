@@ -90,7 +90,6 @@ export const loadOverrides = async (): Promise<void> => {
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
     console.debug('loadOverrides: Failed to load overrides from AsyncStorage')
-    console.error(err)
   }
 }
 
