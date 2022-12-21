@@ -45,6 +45,8 @@ This command should be used for any setup that is universal to *all* the builds.
 ### Outputs
 None
 
+---
+
 ## `install_python`
 ### Description
 This command is used to install the python dependencies for any hosted runner that does not have it installed by default. Python is required for the queueing scripts.
@@ -61,6 +63,7 @@ None
 ### Outputs
 None
 
+---
 
 ## `bundle_app`
 ### Description
@@ -79,6 +82,151 @@ Bundles the app for the OS specified using the React Native bundle command
 ### Outputs
 None
 
+---
+
+## `lint`
+### Description
+Runs the lint checks for the app. Lints error on any warnings.
+### Parameters
+None
+### Steps
+```yaml
+- run:
+  working_directory: ~/project/VAMobile
+  command: yarn lint:ci
+  when: always
+```
+### Outputs
+None
+
+---
+
+## `jest`
+### Description
+Runs the automated unit tests with jest using [time splitting](https://circleci.com/docs/parallelism-faster-jobs/). 
+### Parameters
+None
+### Steps
+```yaml
+- run:
+  working_directory: ~/project/VAMobile
+  command: |
+    TEST=$(circleci tests glob "src/**/*.test.ts*" | circleci tests split --split-by=timings)
+    yarn test $TEST -w 2
+  when: always
+- store_test_results:
+  path: VAMobile/coverage/junit/
+- store_artifacts:
+  path: VAMobile/coverage/junit/
+```
+### Outputs
+None
+
+---
+
+## `install_pods`
+### Description
+Installs the cocoa pods for any iOS builds. Not needed for Android builds.
+This command loads cached pods with the pod-lock checksum at the start and saves to a cache at the end for faster builds when there have been no changes to those files.
+### Parameters
+None
+### Steps
+```yaml
+- restore_cache:
+  key: pods-v1-{{ checksum "VAMobile/ios/Podfile.lock" }}-{{ arch }}
+- run:
+  working_directory: ~/project/VAMobile/ios
+  command: |
+    echo INSTALL COCOA PODS
+    pod check || pod install
+- save_cache:
+  key: pods-v1-{{ checksum "VAMobile/ios/Podfile.lock" }}-{{ arch }}
+  paths:
+    - VAMobile/ios/Pods
+```
+### Outputs
+None
+
+---
+
+## `create_keys_directory`
+### Description
+creates a directory for the google keys because that folder is ignored by git
+### Parameters
+None
+### Steps
+```yaml
+- run:
+  command: mkdir VAMobile/android/keys
+```
+### Outputs
+None
+
+---
+
+## `decode_file`
+### Description
+Decodes a base64 string to a file and saves it to the specified path
+### Parameters
+| Name         | Description                                      | type   | default? |
+|--------------|--------------------------------------------------|--------|----------|
+| workingDir   | String value for the directory to decode file to | string | none     |
+| secretString | base64 string value to decode                    | string | none     |
+| destination  | Filename to save as                              | string | none     |
+### Steps
+```yaml
+- run:
+  working_directory: <<parameters.workingDir>>
+  command: |
+    # decode base64 secret string
+    echo <<parameters.secretString>> | base64 --decode | tee <<parameters.destination>> >/dev/null
+```
+### Outputs
+None
+
+---
+
+## `decode_ios_keys`
+### Description
+This command decodes all the files needed to build and sign for iOS. It currently decodes a signing cert and a provisioning profile, but that may not be necessary because of match and can be tested for removal of the IOS_CERTIFICATE_BASE64 and IOS_CERTIFICATE_BASE64.
+
+### Parameters
+None
+### Steps
+```yaml
+- decode_file:
+  workingDir: '~/project/VAMobile/ios'
+  secretString: ${IOS_CERTIFICATE_BASE64}
+  destination: ${IOS_CERTIFICATE_PATH}
+- decode_file:
+  workingDir: '~/project/VAMobile/ios'
+  secretString: ${IOS_CERTIFICATE_BASE64}
+  destination: ${IOS_PROVISIONING_PATH}
+- decode_file:
+  workingDir: '~/project/VAMobile/ios'
+  secretString: ${APPSTORE_CONNECT_BASE64}
+  destination: ${APPSTORE_CONNECT_FILEPATH}
+- decode_file:
+  workingDir: '~/project/VAMobile/ios'
+  secretString: ${IOS_GS_PLIST_BASE64}
+  destination: ${IOS_GS_PLIST_PATH}
+```
+### Outputs
+None
+
+---
+
+## `ios_fastlane`
+### Description
+### Parameters
+### Steps
+```yaml
+
+```
+### Outputs
+
+---
+
 ## `Name`
 ### Description
 ### Parameters
@@ -88,14 +236,7 @@ None
 ```
 ### Outputs
 
-## `Name`
-### Description
-### Parameters
-### Steps
-```yaml
-
-```
-### Outputs
+---
 
 ## `Name`
 ### Description
@@ -106,57 +247,6 @@ None
 ```
 ### Outputs
 
-## `Name`
-### Description
-### Parameters
-### Steps
-```yaml
 
-```
-### Outputs
 
-## `Name`
-### Description
-### Parameters
-### Steps
-```yaml
-
-```
-### Outputs
-
-## `Name`
-### Description
-### Parameters
-### Steps
-```yaml
-
-```
-### Outputs
-
-## `Name`
-### Description
-### Parameters
-### Steps
-```yaml
-
-```
-### Outputs
-
-## `Name`
-### Description
-### Parameters
-### Steps
-```yaml
-
-```
-### Outputs
-
-## `Name`
-### Description
-### Parameters
-### Steps
-```yaml
-
-```
-### Outputs
-
+---
