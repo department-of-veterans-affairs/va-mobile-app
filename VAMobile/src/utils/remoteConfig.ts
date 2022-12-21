@@ -1,10 +1,9 @@
-import { EnvironmentTypesConstants } from 'constants/common'
 import { logNonFatalErrorToFirebase } from './analytics'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv from 'utils/env'
 import remoteConfig from '@react-native-firebase/remote-config'
 
-const { ENVIRONMENT, IS_TEST } = getEnv()
+const { IS_TEST } = getEnv()
 
 const fetchRemote = !__DEV__ && !IS_TEST
 const RC_CACHE_TIME = 43200000 // 12 hours
