@@ -24,3 +24,21 @@ The build system currently allows us to build in multiple ways and for multiple 
 :white_check_mark:  Dependency installation and caching to speed up delivery
 
 :white_check_mark:  Slack integration to send useful messages to our DSVA Slack channels to raise errors and to indicate success
+
+## Images
+Current list of runners that we have for each job
+```yaml
+  default:
+    docker:
+      - image: cimg/ruby:3.0.2-node
+  android:
+    docker:
+      - image: cimg/android:2022.09.2-node
+    resource_class: xlarge
+  ios:
+    macos:
+      xcode: 13.4.1
+```
+- [Default](https://circleci.com/docs/circleci-images/#ruby)
+- [Android](https://circleci.com/docs/circleci-images/#android)
+- [Mac](https://circleci.com/docs/using-macos/)
