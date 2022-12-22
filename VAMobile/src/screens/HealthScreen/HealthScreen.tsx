@@ -70,7 +70,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   return (
     // <VAScrollView {...testIdProps('Health-care-page')}>
-    <CategoryLanding backLabel={'Home'} backLabelOnPress={navigateTo('Home')} title={'Health Care'} headerButton={testButton.headerButton}>
+    <CategoryLanding title={'Health Care'} headerButton={testButton.headerButton}>
       {/* <CrisisLineCta onPress={onCrisisLine} /> */}
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         {featureEnabled('prescriptions') && (
