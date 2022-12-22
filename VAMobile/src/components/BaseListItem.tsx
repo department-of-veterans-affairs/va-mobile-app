@@ -264,7 +264,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
         {claimsRequestNumber !== undefined ? <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} /> : <></>}
         {children}
         {showDecorator && (
-          <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+          <Box ml={theme.dimensions.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
             <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
           </Box>
         )}

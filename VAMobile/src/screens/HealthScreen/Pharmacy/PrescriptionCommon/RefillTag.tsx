@@ -5,6 +5,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RefillStatus } from 'store/api/types'
 import { getTagTypeForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { useRouteNavigation } from 'utils/hooks'
+import Box, { BoxProps } from 'components/Box'
 import LabelTag, { LabelTagProps } from 'components/LabelTag'
 
 export type RefillTagProps = {
@@ -17,6 +18,10 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
 
   const statusText = getTextForRefillStatus(status, t) || ''
 
+  const wrapperProps: BoxProps = {
+    alignSelf: 'flex-start',
+  }
+
   const labelTagProps: LabelTagProps = {
     text: statusText,
     a11yLabel: statusText,
@@ -25,7 +30,11 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
     a11yHint: t('prescription.history.a11yHint.status'),
   }
 
-  return <LabelTag {...labelTagProps} />
+  return (
+    <Box {...wrapperProps}>
+      <LabelTag {...labelTagProps} />
+    </Box>
+  )
 }
 
 export default RefillTag
