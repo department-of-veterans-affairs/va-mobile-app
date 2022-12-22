@@ -9,6 +9,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from '../AddressSummary'
+import NoLettersScreen from './NoLettersScreen'
 
 type LettersOverviewProps = Record<string, unknown>
 
@@ -19,7 +20,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   const { t } = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { loading, error } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const onViewPressed = navigateTo('LettersList')
 
@@ -29,6 +30,10 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   })
 
   const addressData: Array<addressDataField> = [{ addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onAddressPress }]
+
+  if (error) {
+    return <NoLettersScreen />
+  }
 
   if (loading) {
     return <LoadingComponent />
