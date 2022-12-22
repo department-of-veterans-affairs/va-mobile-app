@@ -1,4 +1,4 @@
-import { Animated, Easing, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, StatusBar, Text, View, ViewStyle } from 'react-native'
+import { Animated, Easing, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, StatusBar, Text, View, ViewStyle } from 'react-native'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
@@ -34,22 +34,27 @@ export type CategoryLandingProps = {
   scrollViewProps?: VAScrollViewProps
 }
 
-const HEADER_HEIGHT = 91
-const SUBHEADER_HEIGHT = 52
-const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + SUBHEADER_HEIGHT
-
 export const CategoryLanding: FC<CategoryLandingProps> = ({ backLabel, backLabelOnPress, title, headerButton, children, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const [initialScrollY] = useState(new Animated.Value(Platform.OS === 'ios' ? -TOTAL_HEADER_HEIGHT : 0))
+  let headerShrink = 0
+  const HEADER_HEIGHT = 60
+  const SUBHEADER_HEIGHT = 52
+  const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + SUBHEADER_HEIGHT + headerShrink
+
+  const [initialScrollY] = useState(new Animated.Value(Platform.OS === 'ios' ? 0 : 0))
   const scrollY = Animated.add(initialScrollY, Platform.OS === 'ios' ? TOTAL_HEADER_HEIGHT : 0)
 
   const [VaOpacity, setVaOpacity] = useState(1)
 
   const [titleShowing, setTitleShowing] = useState(false)
   const [titleFade] = useState(new Animated.Value(0))
+
+  const [headerHeight, setHeaderHeight] = useState(0)
+  const [initialHeaderHeight, setInitialHeaderHeight] = useState(0)
+  const [contentHeight, setContentHeight] = useState(0)
 
   // const subtitleTranslate = scrollY.interpolate({
   //   inputRange: [0, SUBHEADER_HEIGHT],
@@ -68,6 +73,12 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ backLabel, backLabel
     }
     if (offsetValue >= 0 && offsetValue <= 2 * SUBHEADER_HEIGHT) {
       subtitleTranslate.setValue(-offsetValue)
+      headerShrink = -offsetValue
+    } else if (offsetValue < 0) {
+      subtitleTranslate.setValue(0)
+    }
+    if (offsetValue >= 0 && offsetValue <= SUBHEADER_HEIGHT && headerHeight >= initialHeaderHeight - HEADER_HEIGHT) {
+      setHeaderHeight(initialHeaderHeight - offsetValue)
     }
   }
 
@@ -91,6 +102,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ backLabel, backLabel
 
   const fillStyle: ViewStyle = {
     flex: 1,
+    flexDirection: 'column',
   }
 
   // Copied from VAScrollView to address bug
@@ -135,84 +147,109 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ backLabel, backLabel
 	letter-spacing: -0.2px;
 `
 
+  const headerViewStyle: ViewStyle = headerHeight ? { height: headerHeight } : { flex: 0 }
+
+  const headerOnLayout = (event: LayoutChangeEvent) => {
+    const height = event.nativeEvent.layout.height
+    console.log('header height:' + height)
+    console.log('header y:' + event.nativeEvent.layout.y)
+    if (!headerHeight) {
+      setHeaderHeight(height)
+      setInitialHeaderHeight(height)
+    }
+  }
+
+  const contentViewStyle: ViewStyle = contentHeight ? { height: contentHeight } : { flex: 1 }
+
+  const contentOnLayout = (event: LayoutChangeEvent) => {
+    const height = event.nativeEvent.layout.height
+    console.log('content height:' + height)
+    console.log('content y:' + event.nativeEvent.layout.y)
+    if (!contentHeight) {
+      setContentHeight(height)
+    }
+  }
+
   return (
     <SafeAreaView style={fillStyle}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
-      <Animated.View style={headerStyle}>
-        <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
-          <Box display="flex" width="25%">
-            <DescriptiveBackButton label={backLabel} onPress={backLabelOnPress} />
-          </Box>
+      <View style={headerViewStyle} onLayout={headerOnLayout}>
+        <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+        <Animated.View style={headerStyle}>
+          <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
+            <Box display="flex" width="25%">
+              <DescriptiveBackButton label={backLabel} onPress={backLabelOnPress} />
+            </Box>
 
-          <Box
-            display="flex"
-            flex={1}
-            flexDirection={'row'}
-            m={theme.dimensions.headerButtonSpacing}
-            justifyContent={'center'}
-            alignItems={'center'}
-            accessibilityElementsHidden={true}
-            importantForAccessibility="no-hide-descendants">
-            {titleShowing ? (
-              <Animated.View style={{ opacity: titleFade }}>
-                <TextView variant="MobileBody" selectable={false}>
-                  {title}
+            <Box
+              display="flex"
+              flex={1}
+              flexDirection={'row'}
+              m={theme.dimensions.headerButtonSpacing}
+              justifyContent={'center'}
+              alignItems={'center'}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no-hide-descendants">
+              {titleShowing ? (
+                <Animated.View style={{ opacity: titleFade }}>
+                  <TextView variant="MobileBody" selectable={false}>
+                    {title}
+                  </TextView>
+                </Animated.View>
+              ) : (
+                <TextView variant="BitterBoldHeading" selectable={false} opacity={VaOpacity}>
+                  VA
                 </TextView>
-              </Animated.View>
-            ) : (
-              <TextView variant="BitterBoldHeading" selectable={false} opacity={VaOpacity}>
-                VA
-              </TextView>
-            )}
+              )}
+            </Box>
+
+            <Box display="flex" width="25%" alignItems="center">
+              {headerButton ? (
+                <Pressable onPress={headerButton.onPress} accessibilityRole="button" accessible={true}>
+                  <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
+                    <VAIcon name={headerButton.icon.name} fill={'active'} height={22} width={22} />
+                  </Box>
+                  <StyledLabel allowFontScaling={false}>{headerButton.label}</StyledLabel>
+                </Pressable>
+              ) : null}
+            </Box>
           </Box>
+        </Animated.View>
 
-          <Box display="flex" width="25%" alignItems="center">
-            {headerButton ? (
-              <Pressable onPress={headerButton.onPress} accessibilityRole="button" accessible={true}>
-                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  <VAIcon name={headerButton.icon.name} fill={'active'} height={22} width={22} />
-                </Box>
-                <StyledLabel allowFontScaling={false}>{headerButton.label}</StyledLabel>
-              </Pressable>
-            ) : null}
-          </Box>
-        </Box>
-      </Animated.View>
+        <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
 
-      <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
+        <Animated.View style={[subheaderStyle, { transform: [{ translateY: subtitleTranslate }] }]}>
+          <TextView variant="BitterBoldHeading" m={theme.dimensions.condensedMarginBetween}>
+            {title}
+          </TextView>
+        </Animated.View>
+      </View>
 
-      <Animated.View style={[subheaderStyle, { transform: [{ translateY: subtitleTranslate }] }]}>
-        <TextView variant="BitterBoldHeading" m={theme.dimensions.condensedMarginBetween}>
-          {title}
-        </TextView>
-      </Animated.View>
-
-      <>
+      <View style={contentViewStyle} onLayout={contentOnLayout}>
         <Animated.ScrollView
-          scrollEventThrottle={1}
+          scrollEventThrottle={16}
           onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: initialScrollY } } }], {
             listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-              updateOffset(Platform.OS === 'ios' ? event.nativeEvent.contentOffset.y + TOTAL_HEADER_HEIGHT : event.nativeEvent.contentOffset.y)
+              updateOffset(Platform.OS === 'ios' ? event.nativeEvent.contentOffset.y : event.nativeEvent.contentOffset.y)
             },
             useNativeDriver: true,
           })}
           // contentContainerStyle offsets content for header for Android
           contentContainerStyle={contentContainerStyle}
           // contentInset offsets content for header for iOS
-          contentInset={{
-            top: TOTAL_HEADER_HEIGHT,
-          }}
-          contentOffset={{
-            x: 0,
-            y: -TOTAL_HEADER_HEIGHT,
-          }}
+          // contentInset={{
+          //   top: TOTAL_HEADER_HEIGHT,
+          // }}
+          // contentOffset={{
+          //   x: 0,
+          //   y: -TOTAL_HEADER_HEIGHT,
+          // }}
           // ref={scrollViewRef}
           scrollIndicatorInsets={{ right: 1 }}
           {...scrollViewProps}
           style={scrollViewStyle}>
           {children}
         </Animated.ScrollView>
-      </>
+      </View>
     </SafeAreaView>
   )
 }
