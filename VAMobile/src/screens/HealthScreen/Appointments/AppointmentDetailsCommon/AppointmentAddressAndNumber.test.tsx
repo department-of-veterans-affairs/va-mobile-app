@@ -7,7 +7,7 @@ import { context, render, RenderAPI, waitFor } from 'testUtils'
 import { InitialState } from 'store/slices'
 import { ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'
-import {AppointmentAttributes, AppointmentStatusConstants, AppointmentTypeConstants} from 'store/api/types'
+import { AppointmentAttributes, AppointmentPhone, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 
 context('AppointmentAddressAndNumber', () => {
   let component: RenderAPI
@@ -31,7 +31,7 @@ context('AppointmentAddressAndNumber', () => {
           extension: '',
         },
       },
-      ...(attributes || {})
+      ...(attributes || {}),
     } as AppointmentAttributes
 
     await waitFor(() => {
@@ -49,7 +49,6 @@ context('AppointmentAddressAndNumber', () => {
     await initializeTestInstance({
       appointmentType: AppointmentTypeConstants.VA,
     })
-
   })
 
   it('initializes correctly', async () => {
@@ -118,6 +117,31 @@ context('AppointmentAddressAndNumber', () => {
     })
   })
 
+  describe('when the phone number exists', () => {
+    it('should display the phone number', async () => {
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('123-456-7890')
+    })
+  })
+
+  describe('when the phone number does not exist', () => {
+    it('should not display the phone number', async () => {
+      await initializeTestInstance({
+        appointmentType: AppointmentTypeConstants.VA,
+        location: {
+          name: 'VA Long Beach Healthcare System',
+          address: {
+            street: '5901 East 7th Street',
+            city: 'Long Beach',
+            state: 'CA',
+            zipCode: '90822',
+          },
+          phone: {} as AppointmentPhone,
+        },
+      })
+      expect(testInstance.findAllByType(TextView).length).toEqual(5)
+    })
+  })
+
   describe('default', () => {
     it('should render the Get Directions component', async () => {
       expect(testInstance.findAllByType(ClickForActionLink).length).toBeTruthy()
@@ -133,8 +157,8 @@ context('AppointmentAddressAndNumber', () => {
           isPending: true,
           healthcareProvider: null,
           location: {
-            name: ''
-          }
+            name: '',
+          },
         })
         expect(testInstance.findAllByType(TextView).length).toEqual(0)
       })
