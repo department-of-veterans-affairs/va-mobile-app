@@ -256,6 +256,7 @@ It then runs the fastlane script with the available configuration.
   no_output_timeout: '30m'
 ```
 ### Outputs
+Uploads .ipa file to Test Flight with the configured build
 
 ---
 
