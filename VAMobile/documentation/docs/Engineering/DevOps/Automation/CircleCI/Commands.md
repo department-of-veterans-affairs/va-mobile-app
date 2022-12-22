@@ -1,5 +1,5 @@
 ---
-sidebar_location: 2 
+sidebar_position: 2 
 sidebar_label: Commands
 ---
 

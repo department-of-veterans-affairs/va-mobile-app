@@ -1,8 +1,7 @@
 ---
-sidebar_location: 3
+sidebar_position: 3
 sidebar_label: Jobs
 ---
-
 This is a list of all the reusable commands in CircleCI what they do.
 
 ## `lint`
