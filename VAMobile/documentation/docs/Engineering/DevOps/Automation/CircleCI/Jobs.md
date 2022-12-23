@@ -1,5 +1,5 @@
 ---
-sidebar_location: 3
+sidebar_position: 3
 sidebar_label: Jobs
 ---
 
