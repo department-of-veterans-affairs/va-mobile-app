@@ -2,7 +2,7 @@ import { Animated, Easing, LayoutChangeEvent, NativeScrollEvent, NativeSynthetic
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, CrisisLineCta, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { Box, BoxProps, CrisisLineCta, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -22,8 +22,11 @@ type headerButton = {
 }
 
 export type CategoryLandingProps = {
+  /** Optional title for page that transitions to header */
   title?: string
+  /** Optional header button requiring label, icon, and onPress props */
   headerButton?: headerButton
+  /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
 }
 
@@ -33,38 +36,9 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   const navigateTo = useRouteNavigation()
 
   const [VaOpacity, setVaOpacity] = useState(1)
-
   const [titleShowing, setTitleShowing] = useState(false)
   const [titleFade] = useState(new Animated.Value(0))
-
   const [transitionHeaderHeight, setTransitionHeaderHeight] = useState(0)
-
-  const onScroll = (offsetValue: number) => {
-    if (offsetValue <= transitionHeaderHeight || !titleShowing) {
-      setVaOpacity(1 - offsetValue / transitionHeaderHeight)
-      setTitleShowing(offsetValue >= transitionHeaderHeight)
-    }
-  }
-
-  useEffect(() => {
-    // Revert title to transparent (out of view)
-    titleShowing === false &&
-      Animated.timing(titleFade, {
-        toValue: 0,
-        duration: 10,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start()
-
-    // Trigger transition header animation when titleShowing becomes true
-    titleShowing === true &&
-      Animated.timing(titleFade, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start()
-  })
 
   const fillStyle: ViewStyle = {
     paddingTop: insets.top,
@@ -76,6 +50,17 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     height: theme.dimensions.navBarHeight,
     alignItems: 'center',
     justifyContent: 'center',
+  }
+
+  const headerTitleBoxProps: BoxProps = {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+    m: theme.dimensions.headerButtonSpacing,
+    justifyContent: 'center',
+    alignItems: 'center',
+    accessibilityElementsHidden: true,
+    importantForAccessibility: 'no-hide-descendants',
   }
 
   const subtitleProps: TextViewProps = {
@@ -94,6 +79,53 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
 	letter-spacing: -0.2px;
 `
 
+  /**
+   * Handles which onScroll behavior is used
+   * @param event - Native scroll event
+   * @returns A logic for transitioning the header or a function that does nothing (no title)
+   */
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    return title ? transitionHeader(event.nativeEvent.contentOffset.y) : () => {}
+  }
+
+  /**
+   * With useEffect below, handles carrying out transitioning header functionality
+   * @param offsetValue - The scroll offset position in pixels
+   */
+  const transitionHeader = (offsetValue: number) => {
+    if (offsetValue <= transitionHeaderHeight || !titleShowing) {
+      setVaOpacity(1 - offsetValue / transitionHeaderHeight)
+      setTitleShowing(offsetValue >= transitionHeaderHeight)
+    }
+  }
+
+  /**
+   * Handles animation effect on the title
+   */
+  useEffect(() => {
+    // Revert title to transparent (out of view)
+    titleShowing === false &&
+      Animated.timing(titleFade, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+
+    // Trigger transition header animation when titleShowing becomes true
+    titleShowing === true &&
+      Animated.timing(titleFade, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+  })
+
+  /**
+   * At (re)render time, gets and sets the height for transitioning header behavior
+   * @param event - Layout change event wrapping the Veteran's Crisis Line and subtitle
+   */
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
     // Subtract out bottom padding to closely align transition with subtitle fully disappearing
     const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween
@@ -107,15 +139,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
         <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
           <Box display="flex" width="25%" />
 
-          <Box
-            display="flex"
-            flex={1}
-            flexDirection={'row'}
-            m={theme.dimensions.headerButtonSpacing}
-            justifyContent={'center'}
-            alignItems={'center'}
-            accessibilityElementsHidden={true}
-            importantForAccessibility="no-hide-descendants">
+          <Box {...headerTitleBoxProps}>
             {titleShowing ? (
               <Animated.View style={{ opacity: titleFade }}>
                 <TextView variant="MobileBody" selectable={false} allowFontScaling={false}>
@@ -142,15 +166,10 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
         </Box>
       </View>
 
-      <VAScrollView
-        scrollEventThrottle={1}
-        onScroll={(event: NativeSyntheticEvent<NativeScrollEvent>) => {
-          onScroll(event.nativeEvent.contentOffset.y)
-        }}
-        {...scrollViewProps}>
+      <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
           <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
-          <TextView {...subtitleProps}>{title}</TextView>
+          {title ? <TextView {...subtitleProps}>{title}</TextView> : null}
         </View>
         {children}
       </VAScrollView>
