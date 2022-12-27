@@ -1,12 +1,12 @@
-import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native'
-import { TouchableWithoutFeedback } from 'react-native'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, BoxProps, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useAccessibilityFocus, useDestructiveAlert, useTheme } from 'utils/hooks'
-import VAIcon, { VAIconProps } from 'components/VAIcon'
+import { VAIconProps } from 'components/VAIcon'
+import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -16,10 +16,16 @@ Use 'options={{headerShown: false}}'(preferred method for subtask) in the indivi
 export type FullScreenSubtaskProps = {
   /** text of the title bar left button(no text it doesn't appear) */
   leftButtonText?: string
+  /** a11y label for left button text */
+  leftButtonA11yLabel?: string
   /** text of the title bar title(no text it doesn't appear) */
   title?: string
+  /** a11y label for title text */
+  titleA11yLabel?: string
   /** text of the title bar right button(no text it doesn't appear) */
   rightButtonText?: string
+  /** a11y label for right button text */
+  rightButtonA11yLabel?: string
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
   /** text of the primary content button(no text it doesn't appear) */
@@ -37,8 +43,11 @@ export type FullScreenSubtaskProps = {
 const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   children,
   leftButtonText,
+  leftButtonA11yLabel,
   title,
+  titleA11yLabel,
   rightButtonText,
+  rightButtonA11yLabel,
   rightVAIconProps,
   primaryContentButtonText,
   onPrimaryContentButtonPress,
@@ -50,43 +59,15 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
-  const [leftFocusRef, setLeftFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-  const [rightFocusRef, setRightFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-  useFocusEffect(setLeftFocus)
-  useFocusEffect(setRightFocus)
-
-  const titleBannerProps: BoxProps = {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: 'main',
-    mt: theme.dimensions.fullScreenNavigationBarOffset,
-    minHeight: theme.dimensions.touchableMinHeight,
-  }
-
-  const boxProps: BoxProps = {
-    alignItems: 'center',
-    p: theme.dimensions.buttonPadding,
-    minHeight: theme.dimensions.touchableMinHeight,
-  }
-
-  const textNoIconViewProps: TextViewProps = {
-    color: 'footerButton',
-    variant: 'MobileBody',
-  }
-
-  const textWithIconViewProps: TextViewProps = {
-    color: 'footerButton',
-    variant: rightVAIconProps ? 'textWithIconButton' : 'MobileBody',
-  }
 
   const titleTextProps: TextViewProps = {
     variant: 'BitterBoldHeading',
+    accessibilityLabel: titleA11yLabel,
   }
 
   const message = t('areYouSure')
 
-  const onLeftTitleButtonPress = () => {
+  const leftTitleButtonPress = () => {
     confirmAlert({
       title: '',
       message,
@@ -112,38 +93,27 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     return
   }
 
-  const onRightTitleButtonPress = () => {
+  const rightTitleButtonPress = () => {
     navigation.goBack()
     return
   }
 
+  const headerProps: HeaderBannerProps = {
+    leftButtonText: leftButtonText,
+    leftButtonA11yLabel: leftButtonA11yLabel,
+    rightButtonText: rightButtonText,
+    rightButtonA11yLabel: rightButtonA11yLabel,
+    onLeftTitleButtonPress: leftTitleButtonPress,
+    onRightTitleButtonPress: rightTitleButtonPress,
+    bannerDivider: false,
+    rightVAIconProps: rightVAIconProps,
+    focusLeftButton: leftButtonText ? true : false,
+    focusRightButton: !leftButtonText && !title && rightButtonText ? true : false,
+  }
+
   return (
     <>
-      <Box {...titleBannerProps}>
-        <Box ml={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
-          {leftButtonText && (
-            <TouchableWithoutFeedback ref={leftFocusRef} onPress={onLeftTitleButtonPress} accessibilityRole="button">
-              <Box {...boxProps}>
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...textNoIconViewProps}>{leftButtonText}</TextView>
-                </Box>
-              </Box>
-            </TouchableWithoutFeedback>
-          )}
-        </Box>
-        <Box mr={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
-          {rightButtonText && (
-            <TouchableWithoutFeedback ref={rightFocusRef} onPress={onRightTitleButtonPress} accessibilityRole="button">
-              <Box {...boxProps}>
-                {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...textWithIconViewProps}>{rightButtonText}</TextView>
-                </Box>
-              </Box>
-            </TouchableWithoutFeedback>
-          )}
-        </Box>
-      </Box>
+      <HeaderBanner {...headerProps} />
       <VAScrollView>
         {title && (
           <Box mt={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
