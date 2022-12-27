@@ -8,6 +8,7 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import styled from 'styled-components'
+import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use these templates:
 1. Wrap the screen content you want in <FeatureLandingTemplate> </FeatureLandingTemplate> or <ChildTemplate> </ChildTemplate> and
@@ -132,49 +133,39 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
 	font-size: 12px;
 	letter-spacing: -0.2px;
 `
+  const leftIconProps : VAIconProps = {
+    name: 'ArrowLeft',
+    fill: theme.colors.icon.link,
+    height: 13,
+    mt: 1,
+  }
+
+  const rightIconProps : VAIconProps = {
+    name: headerButton ? headerButton.icon.name : undefined,
+    fill: 'active',
+    height: 22,
+    width: 22,
+  }
+
+  const headerProps: HeaderBannerProps = {
+    leftButtonText: backLabel,
+    title: titleShowing ? title : 'VA',
+    rightButtonText: headerButton ? headerButton.label : undefined,
+    rightButtonA11yLabel: headerButton ? headerButton.labelA11y : undefined,
+    onLeftTitleButtonPress: backLabelOnPress,
+    onRightTitleButtonPress: headerButton ? headerButton.onPress : undefined,
+    bannerDivider: false,
+    leftVAIconProps: leftIconProps,
+    rightVAIconProps: headerButton ? rightIconProps : undefined,
+    focusLeftButton: backLabel ? true : false,
+    titleAccesibilityHidden: true,
+  }
 
   return (
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <Animated.View style={headerStyle}>
-        <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
-          <Box display="flex" width="25%">
-            <DescriptiveBackButton label={backLabel} onPress={backLabelOnPress} />
-          </Box>
-
-          <Box
-            display="flex"
-            flex={1}
-            flexDirection={'row'}
-            m={theme.dimensions.headerButtonSpacing}
-            justifyContent={'center'}
-            alignItems={'center'}
-            accessibilityElementsHidden={true}
-            importantForAccessibility="no-hide-descendants">
-            {titleShowing ? (
-              <Animated.View style={{ opacity: titleFade }}>
-                <TextView variant="MobileBody" selectable={false}>
-                  {title}
-                </TextView>
-              </Animated.View>
-            ) : (
-              <TextView variant="BitterBoldHeading" selectable={false} opacity={VaOpacity}>
-                VA
-              </TextView>
-            )}
-          </Box>
-
-          <Box display="flex" width="25%" alignItems="center">
-            {headerButton ? (
-              <Pressable onPress={headerButton.onPress} accessibilityRole="button" accessible={true}>
-                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  <VAIcon name={headerButton.icon.name} fill={'active'} height={22} width={22} />
-                </Box>
-                <StyledLabel allowFontScaling={false}>{headerButton.label}</StyledLabel>
-              </Pressable>
-            ) : null}
-          </Box>
-        </Box>
+        <HeaderBanner {...headerProps}/>
       </Animated.View>
 
       <Animated.View style={[subheaderStyle, { transform: [{ translateY: subtitleTranslate }] }]}>
