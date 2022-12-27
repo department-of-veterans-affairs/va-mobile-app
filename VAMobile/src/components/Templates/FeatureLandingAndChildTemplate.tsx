@@ -1,14 +1,14 @@
-import { Animated, Easing, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, StatusBar, Text, View, ViewStyle } from 'react-native'
+import { Animated, Easing, NativeScrollEvent, NativeSyntheticEvent, Platform, StatusBar, Text, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { Box, DescriptiveBackButton, TextView, VAIcon, VAIconProps } from 'components'
+import { TextView, VAIconProps } from 'components'
 import { VABackgroundColors } from 'styles/theme'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
-import styled from 'styled-components'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
+import styled from 'styled-components'
 
 /* To use these templates:
 1. Wrap the screen content you want in <FeatureLandingTemplate> </FeatureLandingTemplate> or <ChildTemplate> </ChildTemplate> and
@@ -133,14 +133,14 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
 	font-size: 12px;
 	letter-spacing: -0.2px;
 `
-  const leftIconProps : VAIconProps = {
+  const leftIconProps: VAIconProps = {
     name: 'ArrowLeft',
     fill: theme.colors.icon.link,
     height: 13,
     mt: 1,
   }
 
-  const rightIconProps : VAIconProps = {
+  const rightIconProps: VAIconProps = {
     name: headerButton ? headerButton.icon.name : undefined,
     fill: 'active',
     height: 22,
@@ -165,7 +165,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <Animated.View style={headerStyle}>
-        <HeaderBanner {...headerProps}/>
+        <HeaderBanner {...headerProps} />
       </Animated.View>
 
       <Animated.View style={[subheaderStyle, { transform: [{ translateY: subtitleTranslate }] }]}>
