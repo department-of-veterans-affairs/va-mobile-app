@@ -80,7 +80,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     p: theme.dimensions.buttonPadding,
     minHeight: 64,
     accessibilityElementsHidden: titleAccesibilityHidden ? true : false,
-    importantForAccessibility: titleAccesibilityHidden ? "no-hide-descendants" : "".
+    importantForAccessibility: titleAccesibilityHidden ? "no-hide-descendants" : "",
   }
 
   const leftBoxProps: BoxProps = {
