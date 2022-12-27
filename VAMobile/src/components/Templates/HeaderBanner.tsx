@@ -53,7 +53,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   titleA11yLabel,
   focusLeftButton,
   focusRightButton,
-  titleAccesibilityHidden
+  titleAccesibilityHidden,
 }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -80,7 +80,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     p: theme.dimensions.buttonPadding,
     minHeight: 64,
     accessibilityElementsHidden: titleAccesibilityHidden ? true : false,
-    importantForAccessibility: titleAccesibilityHidden ? "no-hide-descendants" : "",
+    importantForAccessibility: titleAccesibilityHidden ? 'no-hide-descendants' : '',
   }
 
   const leftBoxProps: BoxProps = {
