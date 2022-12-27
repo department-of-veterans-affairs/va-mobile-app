@@ -51,6 +51,13 @@ export const getInputBorderColor = (error: string | undefined, isFocused: boolea
 }
 
 /**
+ * Returns the border width of the picker and text input components
+ */
+export const getInputBorderWidth = (theme: VATheme, error: string | undefined, isFocused: boolean): number => {
+  return isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth
+}
+
+/**
  * Returns the box wrapper props for the picker and text input components
  */
 export const getInputWrapperProps = (theme: VATheme, error: string | undefined, isFocused: boolean): BoxProps => {
@@ -61,7 +68,7 @@ export const getInputWrapperProps = (theme: VATheme, error: string | undefined, 
     backgroundColor: isFocused || !!error ? 'textBox' : 'textBoxInactive',
     minHeight: theme.dimensions.touchableMinHeight,
     borderColor: getInputBorderColor(error, isFocused),
-    borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
+    borderWidth: getInputBorderWidth(theme, error, isFocused),
     px: 8,
   }
 }
