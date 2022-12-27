@@ -37,8 +37,20 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const { contentMarginTop, contentMarginBottom } = theme.dimensions
 
   const prescription = prescriptionsById[prescriptionId]
-  const { refillStatus, prescriptionName, isRefillable, instructions, refillRemaining, refillDate, quantity, facilityName, prescriptionNumber, expirationDate, orderedDate } =
-    prescription?.attributes
+  const {
+    refillStatus,
+    prescriptionName,
+    isRefillable,
+    instructions,
+    refillRemaining,
+    refillDate,
+    quantity,
+    facilityName,
+    facilityPhoneNumber,
+    prescriptionNumber,
+    expirationDate,
+    orderedDate,
+  } = prescription?.attributes
 
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
@@ -169,7 +181,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
               leftSectionTitle={t('prescription.details.vaFacilityHeader')}
               leftSectionValue={facilityName || noneNoted}
               leftSectionTitleLabel={t('prescription.details.vaFacilityHeaderLabel')}>
-              <ClickToCallPhoneNumber phone={tc('8773270022')} displayedText={tc('8773270022.displayText')} />
+              <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
             </DetailsTextSections>
           </TextArea>
         </Box>

@@ -34,8 +34,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
-  const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittedRequestRefillCount, submittingRequestRefills, totalSubmittedRequestRefill } =
-    useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittingRequestRefills } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []
   const prevLoadingRequestRefills = usePrevious<boolean>(submittingRequestRefills)
 
@@ -103,7 +102,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (showLoadingScreenRequestRefills) {
-    return <LoadingComponent text={t('prescriptions.refill.submit', { count: submittedRequestRefillCount, total: totalSubmittedRequestRefill })} />
+    return <LoadingComponent text={t('prescriptions.refill.submit')} />
   }
 
   return (

@@ -1,12 +1,13 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, mockStore, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, render, RenderAPI } from 'testUtils'
 
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from '../../ProfileScreen/AddressSummary'
+import NoLettersScreen from './NoLettersScreen'
 import { InitialState, initialPersonalInformationState } from 'store/slices'
 import { LoadingComponent } from 'components'
 import { when } from 'jest-when'
@@ -30,7 +31,7 @@ context('LettersOverviewScreen', () => {
   let testInstance: ReactTestInstance
   let mockNavigateToSpy: jest.Mock
 
-  const initializeTestInstance = (personalInformationLoading = false) => {
+  const initializeTestInstance = (personalInformationLoading = false, personalInformationError = false) => {
     mockNavigateToSpy = jest.fn()
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
@@ -43,6 +44,7 @@ context('LettersOverviewScreen', () => {
         personalInformation: {
           ...initialPersonalInformationState,
           loading: personalInformationLoading,
+          error: personalInformationError ? { networkError: true } : undefined,
         },
       },
     })
@@ -62,6 +64,13 @@ context('LettersOverviewScreen', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
+  })
+
+  describe('when an error occurs loading profile info', () => {
+    it('should show No Letters screen', async () => {
+      initializeTestInstance(false, true)
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
     })
   })
 

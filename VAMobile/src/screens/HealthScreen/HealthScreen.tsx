@@ -6,6 +6,7 @@ import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView 
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
@@ -41,12 +42,20 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
+  const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
-  const onPharmacy = navigateTo('PrescriptionHistory')
+  const pharmacyNavHandler = navigateTo('PrescriptionHistory')
+  const onPharmacy = () => {
+    // If rx list is already loaded, reload it to ensure freshness
+    if (!prescriptionsNeedLoad) {
+      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
+    }
+    pharmacyNavHandler()
+  }
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.covidUpdates.loading') })
