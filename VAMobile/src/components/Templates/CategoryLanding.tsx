@@ -4,8 +4,8 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
+import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
 /* To use these templates:
 1. Wrap the screen content you want in <CategoryLanding> </CategoryLanding> and supply the appropriate props for desired functionality
