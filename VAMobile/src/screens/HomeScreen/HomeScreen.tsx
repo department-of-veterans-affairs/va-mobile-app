@@ -2,8 +2,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
-import { CrisisLineCta, LargeNavButton } from 'components'
+import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { CategoryLanding } from 'components/Templates/CategoryLanding'
 import { DateTime } from 'luxon'
 import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -12,10 +12,9 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
-import { featureEnabled } from 'utils/remoteConfig'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import Nametag from 'components/Nametag'
@@ -34,7 +33,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const name = profile?.fullName || ''
+  const name = profile?.firstName || ''
 
   useEffect(() => {
     // Fetch the profile information
@@ -49,26 +48,21 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     })
   }, [navigation])
 
-  const onClaimsAndAppeals = navigateTo('ClaimsTab')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.valocation.loading') })
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-  const onLetters = navigateTo('LettersOverview')
-  const onHealthCare = navigateTo('HealthTab')
-  const onPaymentHistory = navigateTo('PaymentHistory')
 
   const buttonDataList: Array<SimpleListItemObj> = [
+    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
     {
       text: t('findLocation.title'),
       a11yHintText: t('findLocation.a11yHint'),
       onPress: onFacilityLocator,
       testId: t('findLocation.titleA11yLabel'),
     },
-    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
     { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: t('coronavirusFaqs.title') },
   ]
 
@@ -87,10 +81,22 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
+  const profileIconProps: VAIconProps = {
+    name: 'ProfileUnselected',
+    fill: 'inactive',
+  }
+
+  const headerButton = {
+    label: tc('profile.title'),
+    icon: profileIconProps,
+    onPress: () => {
+      return null
+    },
+  }
+
   return (
-    <VAScrollView>
+    <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
-        <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
           <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
             {heading}
@@ -98,49 +104,16 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         </Box>
         <EncourageUpdateAlert />
         <Nametag />
-        <Box mx={theme.dimensions.gutter}>
-          <LargeNavButton
-            title={t('claimsAndAppeals.title')}
-            subText={t('claimsAndAppeals.subText')}
-            onPress={onClaimsAndAppeals}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('healthCare.title')}
-            subText={featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')}
-            onPress={onHealthCare}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('letters.title')}
-            subText={t('letters.subText')}
-            onPress={onLetters}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('payments.title')}
-            subText={t('payments.subText')}
-            onPress={onPaymentHistory}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant={'MobileBodyBold'} accessibilityLabel={tc('aboutVA.a11yLabel')}>
+            {tc('aboutVA')}
+          </TextView>
         </Box>
-        <Box my={theme.dimensions.contentMarginBottom}>
+        <Box mb={theme.dimensions.contentMarginBottom}>
           <SimpleList items={buttonDataList} />
         </Box>
       </Box>
-    </VAScrollView>
+    </CategoryLanding>
   )
 }
 
@@ -153,7 +126,7 @@ const HomeScreenStack = createStackNavigator()
  */
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.HOME)
-  const headerStyles = useHeaderStyles()
+  const headerStyles = { headerShown: false }
 
   return (
     <HomeScreenStack.Navigator screenOptions={headerStyles}>
