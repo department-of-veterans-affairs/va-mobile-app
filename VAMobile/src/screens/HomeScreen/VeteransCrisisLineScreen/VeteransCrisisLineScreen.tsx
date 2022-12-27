@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useExternalLink, useTheme } from 'utils/hooks'
+import LargePanel from 'components/Templates/LargePanel'
 import getEnv from 'utils/env'
 
 const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
@@ -18,6 +19,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } 
  */
 const VeteransCrisisLineScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.HOME)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
@@ -32,7 +34,7 @@ const VeteransCrisisLineScreen: FC = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Veterans-Crisis-Line-page')}>
+    <LargePanel title={tc('veteransCrisisLine.title')} rightButtonText={tc('done')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
@@ -102,7 +104,7 @@ const VeteransCrisisLineScreen: FC = () => {
           </Box>
         </TextArea>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 
