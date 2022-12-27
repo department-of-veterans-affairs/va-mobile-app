@@ -111,13 +111,6 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     mt: 1,
   }
 
-  const rightIconProps: VAIconProps = {
-    name: headerButton ? headerButton.icon.name : undefined,
-    fill: 'active',
-    height: 22,
-    width: 22,
-  }
-
   const headerProps: HeaderBannerProps = {
     title: titleShowing ? title : 'VA',
     rightButtonText: headerButton ? headerButton.label : undefined,
@@ -125,7 +118,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     onRightTitleButtonPress: headerButton ? headerButton.onPress : undefined,
     bannerDivider: false,
     leftVAIconProps: leftIconProps,
-    rightVAIconProps: headerButton ? rightIconProps : undefined,
+    rightVAIconProps: headerButton ? headerButton.icon : undefined,
     titleAccesibilityHidden: true,
   }
 
