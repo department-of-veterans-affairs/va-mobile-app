@@ -34,6 +34,8 @@ export type HeaderBannerProps = {
   focusLeftButton?: boolean
   /** focus on right Button */
   focusRightButton?: boolean
+  /** hide title accessibility */
+  titleAccesibilityHidden?: boolean
 }
 
 const HeaderBanner: FC<HeaderBannerProps> = ({
@@ -51,6 +53,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   titleA11yLabel,
   focusLeftButton,
   focusRightButton,
+  titleAccesibilityHidden
 }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -70,6 +73,14 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
     minHeight: 64,
+  }
+
+  const titleBoxProps: BoxProps = {
+    alignItems: 'center',
+    p: theme.dimensions.buttonPadding,
+    minHeight: 64,
+    accessibilityElementsHidden: titleAccesibilityHidden ? true : false,
+    importantForAccessibility: titleAccesibilityHidden ? "no-hide-descendants" : "".
   }
 
   const leftBoxProps: BoxProps = {
@@ -113,7 +124,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
         </Box>
         {title && (
           <Box mt={theme.dimensions.buttonPadding} flex={3}>
-            <Box {...boxProps}>
+            <Box {...titleBoxProps}>
               <Box display="flex" flexDirection="row" alignItems="center">
                 <TextView {...titleTextProps}>{title}</TextView>
               </Box>

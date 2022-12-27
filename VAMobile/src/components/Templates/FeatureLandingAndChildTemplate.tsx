@@ -1,14 +1,12 @@
-import { Animated, Easing, NativeScrollEvent, NativeSyntheticEvent, Platform, StatusBar, Text, View, ViewStyle } from 'react-native'
+import { Animated, Easing, NativeScrollEvent, NativeSyntheticEvent, Platform, StatusBar, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { TextView, VAIconProps } from 'components'
 import { VABackgroundColors } from 'styles/theme'
 import { VAScrollViewProps } from 'components/VAScrollView'
-import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
-import styled from 'styled-components'
 
 /* To use these templates:
 1. Wrap the screen content you want in <FeatureLandingTemplate> </FeatureLandingTemplate> or <ChildTemplate> </ChildTemplate> and
@@ -50,8 +48,6 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
   const [initialScrollY] = useState(new Animated.Value(Platform.OS === 'ios' ? -TOTAL_HEADER_HEIGHT : 0))
   const scrollY = Animated.add(initialScrollY, Platform.OS === 'ios' ? TOTAL_HEADER_HEIGHT : 0)
 
-  const [VaOpacity, setVaOpacity] = useState(1)
-
   const [titleShowing, setTitleShowing] = useState(false)
   const [titleFade] = useState(new Animated.Value(0))
 
@@ -62,7 +58,6 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
   })
 
   const updateOffset = (offsetValue: number) => {
-    setVaOpacity(1 - offsetValue / SUBHEADER_HEIGHT)
     setTitleShowing(offsetValue > SUBHEADER_HEIGHT)
     // On fast scroll, pop in fully opaque title
     if (offsetValue > 4 * SUBHEADER_HEIGHT) {
@@ -126,13 +121,6 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
     zIndex: 1,
   }
 
-  const StyledLabel = styled(Text)`
-	color: ${themeFn((styleTheme) => styleTheme.colors.icon.active)}
-	align-self: center;
-	margin-top: 24px;
-	font-size: 12px;
-	letter-spacing: -0.2px;
-`
   const leftIconProps: VAIconProps = {
     name: 'ArrowLeft',
     fill: theme.colors.icon.link,
