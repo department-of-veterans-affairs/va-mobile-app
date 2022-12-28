@@ -24,7 +24,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
   useEffect(() => {
     setFocus()
-  }, [expanded])
+  }, [expanded, setFocus])
 
   const onPress = (): void => {
     setExpanded(!expanded)
