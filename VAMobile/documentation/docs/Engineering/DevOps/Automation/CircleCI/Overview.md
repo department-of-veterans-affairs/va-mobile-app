@@ -42,3 +42,7 @@ Current list of runners that we have for each job
 - [Default](https://circleci.com/docs/circleci-images/#ruby)
 - [Android](https://circleci.com/docs/circleci-images/#android)
 - [Mac](https://circleci.com/docs/using-macos/)
+
+## Local Testing
+You can run and check your `.config` file locally with the [CircleCI CLI Tool](https://circleci.com/docs/local-cli/)
+
