@@ -16,7 +16,7 @@ const ComposeMessageButton: FC = () => {
     buttonType: ButtonTypesConstants.buttonPrimary,
     onPress: onPress,
     a11yHint: t('secureMessaging.composeMessage.a11yHint'),
-    iconProps: { name: 'Compose' },
+    iconProps: { name: 'Compose', fill: 'navBar' },
   }
 
   return (

@@ -103,7 +103,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
             {...a11yHintProp(t('common:directions.a11yHint'))}
           />
         </Box>
-        {!appointmentIsAtlas && phone && <ClickToCallPhoneNumber phone={phone} />}
+        {!appointmentIsAtlas && phone?.number && <ClickToCallPhoneNumber phone={phone} />}
       </>
     )
   }
