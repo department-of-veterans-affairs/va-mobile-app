@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { CrisisLineCta } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -20,6 +20,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HOME)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <VAScrollView {...testIdProps('Contact-V-A-page')}>
+    <FeatureLandingTemplate backLabel={tc('home')} backLabelOnPress={navigation.goBack} title={tc('contactVA')} titleA11y={tc('contactVA.a11y')}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
@@ -47,7 +48,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
           <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />
         </TextArea>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

@@ -26,7 +26,7 @@ export type LargePanelProps = {
   onRightButtonPress?: () => void
 }
 
-const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, rightButtonText, footerButtonText, onRightButtonPress, onFooterButtonPress }) => {
+export const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, title, rightButtonText, footerButtonText, onRightButtonPress, onFooterButtonPress }) => {
   const theme = useTheme()
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)

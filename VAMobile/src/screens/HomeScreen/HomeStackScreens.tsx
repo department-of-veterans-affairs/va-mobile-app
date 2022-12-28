@@ -1,5 +1,4 @@
-import { TFunction } from 'i18next'
-import { createStackNavigator } from '@react-navigation/stack'
+import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
@@ -18,6 +17,13 @@ export type HomeStackParamList = WebviewStackParams & {
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
-export const getHomeScreens = (t: TFunction): Array<ReactNode> => {
-  return [<HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />]
+export const getHomeScreens = (): Array<ReactNode> => {
+  return [
+    <HomeStack.Screen
+      key={'VeteransCrisisLine'}
+      name="VeteransCrisisLine"
+      component={VeteransCrisisLineScreen}
+      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
+    />,
+  ]
 }

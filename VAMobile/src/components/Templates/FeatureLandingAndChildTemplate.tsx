@@ -26,13 +26,10 @@ type headerButton = {
 export type ChildTemplateProps = {
   backLabel: string
   backLabelOnPress: () => void
-
   title: string
-
+  titleA11y?: string
   headerButton?: headerButton
-
   footerContent?: ReactNode // Content pinned below the scrollable space
-
   scrollViewProps?: VAScrollViewProps
 }
 
@@ -42,7 +39,7 @@ const HEADER_HEIGHT = 91
 const SUBHEADER_HEIGHT = 52
 const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + SUBHEADER_HEIGHT
 
-export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPress, title, headerButton, children, footerContent, scrollViewProps }) => {
+export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
@@ -153,7 +150,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
             importantForAccessibility="no-hide-descendants">
             {titleShowing ? (
               <Animated.View style={{ opacity: titleFade }}>
-                <TextView variant="MobileBody" selectable={false}>
+                <TextView variant="MobileBody" selectable={false} accessibilityLabel={titleA11y}>
                   {title}
                 </TextView>
               </Animated.View>
