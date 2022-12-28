@@ -16,8 +16,8 @@ import IconsPathSection from '@site/src/components/IconsPathSection'
 
 Name | Icon | File Name 
 :---: | :---: | :---: 
-Benefits Selected | <BenefitsSelected  className="icons"/> | claimsSelected.svg 
-Benefits Unselected | <BenefitsUnselected  className="icons"/> | claimsUnselected.svg 
+Benefits Selected | <BenefitsSelected  className="icons"/> | benefitsSelected.svg 
+Benefits Unselected | <BenefitsUnselected  className="icons"/> | benefitsUnselected.svg 
 Health Selected | <HealthSelected className="icons"/> | healthSelected.svg 
 Health Unselected | <HealthUnselected  className="icons"/> | healthUnselected.svg 
 Home Selected | <HomeSelected  className="icons"/> | homeSelected.svg 

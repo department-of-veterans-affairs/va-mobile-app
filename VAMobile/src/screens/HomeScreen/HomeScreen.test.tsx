@@ -140,28 +140,4 @@ context('HomeScreen', () => {
       })
     })
   })
-
-  describe('when rendering the home nav buttons', () => {
-    it('should render the claims button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[0].props.title).toEqual('Claims and appeals')
-      })
-    })
-    it('should render the health button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Health care')
-      })
-    })
-    it('should render the letters button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Letters')
-      })
-    })
-
-    it('should render the payments button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Payments')
-      })
-    })
-  })
 })
