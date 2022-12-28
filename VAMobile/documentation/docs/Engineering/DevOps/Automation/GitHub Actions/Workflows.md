@@ -347,25 +347,72 @@ Runs when called by another Workflow
 
 ---
 
-## `Name`
+## `slash_commands`
 ### Description
+Workflow sets up any slash commands that have been created to run in a newly created issue. 
+
+Uses the [Slash Command Dispatch Action](https://github.com/peter-evans/slash-command-dispatch) from GitHub Marketplace
+
+This can be used to add any more "chat ops"-type automations in the future by adding to the `commands:` option
 ### Trigger
+Runs on every issue created comment and fires any slash commands installed if found.
 ### Steps/Source
-[See in repository](#)
+```yaml
+slashCommandDispatch:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Slash Command Dispatch
+      uses: peter-evans/slash-command-dispatch@v2
+      with:
+        token: ${{ secrets.GH_ACTIONS_PAT }}
+        reaction-token: ${{ secrets.GH_ACTIONS_PAT }}
+        permission: admin
+        commands: |
+          approve
+```
 
 ---
 
-## `Name`
+## `start_test_rail_run`
 ### Description
+This workflow creates a new TestRail Test Run for QA when called from another Workflow.
 ### Trigger
+Runs when called by another Workflow
+### Parameters
+#### Inputs
+Name    | Description                 | type   | required? |
+|---------|-----------------------------|--------|-----------|
+| version | Version Number (eg. v1.1.0) | string | yes       |
+| releaseDate  | Go-live date for release (eg. 06/21/2022)               | string | yes       |
+| ticketNumber | Issue number for release ticket (eg. 3333)              | string | yes       |
+| milestoneId  | TestRail Milestone ID for the run to be associated with | string | yes       |
+
+#### Secrets
+| Name           | Description                                                                                                                          | type   | required? |
+|----------------|--------------------------------------------------------------------------------------------------------------------------------------|--------|-----------|
+| TEST_RAIL_USER | Testrail robot userid. User and id received from the VA testing tools team. See Github Robot PAT for Testrail in VA Mobile 1Password | string | yes       |
+| TEST_RAIL_KEY  | TestRail API key. See Github Robot PAT for Testrail in VA Mobile 1Password                                                           | string | yes       |
+#### Outputs
+| Name        | Description                                   | type   |
+|-------------|-----------------------------------------------|--------|
+| testrailUrl | URL String for the newly created TestRail run | string |
+
 ### Steps/Source
+[See in repository](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/.github/workflows/start_test_rail_run.yml)
 
 ---
 
-## `Name`
+## `update_testrail_run`
 ### Description
+This Workflow runs on a repository dispatch is received from automated TestRail webhooks. 
+
+When the TestRail run is updated, it sends a webhook to the repository. This workflow is fired and then updated the mermaid diagram in the Release Ticket issue with the testing results so far in the run
+
+NOTE: Currently, TestRail does not fire a webhook when a test is completed in the run, only when top-level meta-data has been updated in the Run. We have requested an enhancement to TestRail to change this, but there is no documented tracking available for enhancement requests from the TestRail team. This will typically only fire and update once the QA team marks the Run as complete.
 ### Trigger
+Runs when a webhook from TestRail is sent
 ### Steps/Source
+[See in repository](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/.github/workflows/update_testrail_run.yml)
 
 ---
 
