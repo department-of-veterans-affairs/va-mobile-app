@@ -81,8 +81,15 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
 
   const getGroups = () =>
     groups.map((group, idx) => {
+      let mt = 0
+      if (group.title) {
+        // When title is present, <List> component adds mt: standardMarginBetween. We want less margin
+        // on the first group, and more on subsequent groups to differentiate them
+        mt = idx === 0 ? -theme.dimensions.condensedMarginBetween : theme.dimensions.condensedMarginBetween
+      }
+
       return (
-        <Box key={idx}>
+        <Box key={idx} mt={mt}>
           <RadioGroup options={group.items} onChange={group.onSetOption} isRadioList={true} radioListTitle={group.title} value={group.selectedValue} />
         </Box>
       )

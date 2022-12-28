@@ -1,3 +1,5 @@
+import { AppointmentPhone } from './AppointmentData'
+
 export type PrescriptionSortOptions = 'facilityName' | 'refillDate' | 'prescriptionName' | 'refillRemaining'
 
 export const PrescriptionSortOptionConstants: {
@@ -82,6 +84,7 @@ export type PrescriptionAttributeData = {
   refillDate: string | null
   refillRemaining: number
   facilityName: string
+  facilityPhoneNumber: string | AppointmentPhone | undefined
   isRefillable: boolean
   isTrackable: boolean
   orderedDate: string | null
@@ -173,4 +176,20 @@ export type PrescriptionTrackingInfo = {
 
 export type PrescriptionTrackingInfoGetData = {
   data: Array<PrescriptionTrackingInfo>
+}
+
+export type PrescriptionRefillAttributeData = {
+  failedStationList: string | null
+  successfulStationList: string | null
+  lastUpdatedTime: string | null
+  prescriptionList: string | null
+  failedPrescriptionIds: Array<string>
+}
+
+export type PrescriptionRefillData = {
+  data: {
+    id: string
+    type: string
+    attributes: PrescriptionRefillAttributeData
+  }
 }

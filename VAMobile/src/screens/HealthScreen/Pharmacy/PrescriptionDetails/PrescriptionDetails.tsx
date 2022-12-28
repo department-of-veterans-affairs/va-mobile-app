@@ -3,16 +3,16 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, FooterButton, FooterButtonProps, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView, VAButton, VAButtonProps, VAScrollView } from 'components'
+import { DowntimeFeatureTypeConstants, RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
-import { RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { UserAnalytics } from 'constants/analytics'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useAppDispatch, useDestructiveAlert, useExternalLink, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
@@ -29,6 +29,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const launchExternalLink = useExternalLink()
   const submitRefillAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const noneNoted = tc('noneNoted')
@@ -36,8 +37,20 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const { contentMarginTop, contentMarginBottom } = theme.dimensions
 
   const prescription = prescriptionsById[prescriptionId]
-  const { refillStatus, prescriptionName, isRefillable, instructions, refillRemaining, refillDate, quantity, facilityName, prescriptionNumber, expirationDate, orderedDate } =
-    prescription?.attributes
+  const {
+    refillStatus,
+    prescriptionName,
+    isRefillable,
+    instructions,
+    refillRemaining,
+    refillDate,
+    quantity,
+    facilityName,
+    facilityPhoneNumber,
+    prescriptionNumber,
+    expirationDate,
+    orderedDate,
+  } = prescription?.attributes
 
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
@@ -53,7 +66,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     launchExternalLink(LINK_URL_GO_TO_PATIENT_PORTAL)
   }
 
-  const getFooterButton = () => {
+  const getRefillVAHealthButton = () => {
     if (refillStatus === RefillStatusConstants.TRANSFERRED) {
       return getGoToMyVAHealthButton()
     } else if (isRefillable) {
@@ -63,11 +76,10 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     return <></>
   }
   const getGoToMyVAHealthButton = () => {
-    const footerButtonProps: FooterButtonProps = {
-      text: tc('goToMyVAHealth'),
+    const buttonProps: VAButtonProps = {
+      label: tc('goToMyVAHealth'),
       testID: tc('goToMyVAHealth.a11yLabel'),
-      backGroundColor: 'buttonPrimary',
-      textColor: 'navBar',
+      buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: redirectLink,
       iconProps: {
         name: 'WebviewOpen',
@@ -77,14 +89,17 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
         preventScaling: true,
       },
     }
-    return <FooterButton {...footerButtonProps} />
+    return (
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+        <VAButton {...buttonProps} />
+      </Box>
+    )
   }
 
   const getRequestRefillButton = () => {
-    const requestRefillButtonProps: FooterButtonProps = {
-      text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
-      backGroundColor: 'buttonPrimary',
-      textColor: 'navBar',
+    const requestRefillButtonProps: VAButtonProps = {
+      label: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
+      buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: () => {
         submitRefillAlert({
           title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
@@ -97,7 +112,9 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
               text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
               onPress: () => {
                 // Call refill request so its starts the loading screen and then go to the modal
-                dispatch(requestRefills([prescription]))
+                if (!prescriptionInDowntime) {
+                  dispatch(requestRefills([prescription]))
+                }
                 navigation.navigate('RefillScreenModal')
               },
             },
@@ -105,7 +122,11 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
         })
       },
     }
-    return <FooterButton {...requestRefillButtonProps} />
+    return (
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+        <VAButton {...requestRefillButtonProps} />
+      </Box>
+    )
   }
 
   const getBanner = () => {
@@ -129,6 +150,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     <>
       <VAScrollView>
         {getBanner()}
+        {getRefillVAHealthButton()}
         <Box mt={contentMarginTop} mb={contentMarginBottom}>
           <TextArea>
             <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
@@ -159,12 +181,11 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
               leftSectionTitle={t('prescription.details.vaFacilityHeader')}
               leftSectionValue={facilityName || noneNoted}
               leftSectionTitleLabel={t('prescription.details.vaFacilityHeaderLabel')}>
-              <ClickToCallPhoneNumber phone={tc('8773270022')} displayedText={tc('8773270022.displayText')} />
+              <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
             </DetailsTextSections>
           </TextArea>
         </Box>
       </VAScrollView>
-      {getFooterButton()}
     </>
   )
 }

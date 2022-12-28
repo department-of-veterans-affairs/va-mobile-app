@@ -18,7 +18,7 @@ import {
 } from '../api'
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { PrescriptionHistoryTabConstants, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
+import { PrescriptionHistoryTabConstants, PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -50,8 +50,6 @@ export type PrescriptionState = {
   submittingRequestRefills: boolean
   showLoadingScreenRequestRefills: boolean
   showLoadingScreenRequestRefillsRetry: boolean
-  submittedRequestRefillCount: number
-  totalSubmittedRequestRefill: number
   refillRequestSummaryItems: RefillRequestSummaryItems
   tabCounts: TabCounts
   prescriptionsNeedLoad: boolean
@@ -69,8 +67,6 @@ export const initialPrescriptionState: PrescriptionState = {
   submittingRequestRefills: false,
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
-  submittedRequestRefillCount: 0,
-  totalSubmittedRequestRefill: 0,
   refillRequestSummaryItems: [],
   tabCounts: {},
   prescriptionsNeedLoad: true,
@@ -160,33 +156,31 @@ export const filterAndSortPrescriptions =
 
 export const requestRefills =
   (prescriptions: PrescriptionsList): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchStartRequestRefills({ totalSubmittedRequestRefill: prescriptions.length }))
-    const results: RefillRequestSummaryItems = []
-    for (const p of prescriptions) {
-      try {
-        // return 204 on success, we just care if it succeeds as any failures will go to the catch
-        await put(`/v0/health/rx/prescriptions/${p.id}/refill`)
-        results.push({
-          submitted: true,
-          data: p,
-        })
-        await logAnalyticsEvent(Events.vama_rx_refill_success())
-      } catch (error) {
-        if (isErrorObject(error)) {
-          logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
-        }
-        results.push({
-          submitted: false,
-          data: p,
-        })
-        await logAnalyticsEvent(Events.vama_rx_refill_fail())
-      } finally {
-        const { submittedRequestRefillCount } = getState().prescriptions
-        if (submittedRequestRefillCount < prescriptions.length) {
-          dispatch(dispatchContinueRequestRefills())
-        }
+  async (dispatch) => {
+    dispatch(dispatchStartRequestRefills())
+    let results: RefillRequestSummaryItems = []
+
+    try {
+      const prescriptionIds = prescriptions.map((prescription) => prescription.id)
+      const response = await put<PrescriptionRefillData>('/v0/health/rx/prescriptions/refill', {
+        'ids[]': prescriptionIds,
+      })
+      const failedPrescriptionIds = response?.data.attributes.failedPrescriptionIds || []
+      results = prescriptions.map((prescription) => ({
+        submitted: !failedPrescriptionIds.includes(prescription.id),
+        data: prescription,
+      }))
+      await logAnalyticsEvent(Events.vama_rx_refill_success())
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
       }
+      // It's safe to assume that if there's an error, none of the refills were successful
+      results = prescriptions.map((prescription) => ({
+        submitted: false,
+        data: prescription,
+      }))
+      await logAnalyticsEvent(Events.vama_rx_refill_fail())
     }
 
     setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
@@ -231,21 +225,13 @@ const prescriptionSlice = createSlice({
       state.prescriptionPagination = { ...meta?.pagination }
       state.prescriptionsById = prescriptionsById
     },
-    dispatchStartRequestRefills: (state, action: PayloadAction<{ totalSubmittedRequestRefill: number }>) => {
-      const { totalSubmittedRequestRefill } = action.payload
+    dispatchStartRequestRefills: (state) => {
       // RefillScreen
       state.submittingRequestRefills = true
       state.showLoadingScreenRequestRefills = true
 
       // RefillRequestSummary
       state.showLoadingScreenRequestRefillsRetry = true
-
-      // Both
-      state.submittedRequestRefillCount = 1
-      state.totalSubmittedRequestRefill = totalSubmittedRequestRefill
-    },
-    dispatchContinueRequestRefills: (state) => {
-      state.submittedRequestRefillCount += 1
     },
     dispatchFinishRequestRefills: (state, action: PayloadAction<{ refillRequestSummaryItems: RefillRequestSummaryItems }>) => {
       const { refillRequestSummaryItems } = action.payload
@@ -264,10 +250,6 @@ const prescriptionSlice = createSlice({
       state.prescriptionsNeedLoad = refillRequestSummaryItems.some((item) => item.submitted)
     },
     dispatchClearLoadingRequestRefills: (state) => {
-      // Both
-      state.submittedRequestRefillCount = 0
-      state.totalSubmittedRequestRefill = 0
-
       // RefillScreen
       state.showLoadingScreenRequestRefills = false
       state.submittingRequestRefills = false
@@ -354,7 +336,6 @@ export const {
   dispatchStartGetPrescriptions,
   dispatchFinishGetPrescriptions,
   dispatchStartRequestRefills,
-  dispatchContinueRequestRefills,
   dispatchFinishRequestRefills,
   dispatchClearLoadingRequestRefills,
   dispatchClearPrescriptionLogout,
