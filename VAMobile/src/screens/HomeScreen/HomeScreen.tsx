@@ -2,8 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
-import { CategoryLanding } from 'components/Templates/CategoryLanding'
+import { Box, CategoryLanding, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { DateTime } from 'luxon'
 import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
