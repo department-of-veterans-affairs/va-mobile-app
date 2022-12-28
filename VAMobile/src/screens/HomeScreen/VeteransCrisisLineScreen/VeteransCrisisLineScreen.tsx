@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useExternalLink, useTheme } from 'utils/hooks'
-import LargePanel from 'components/Templates/LargePanel'
 import getEnv from 'utils/env'
 
 const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
