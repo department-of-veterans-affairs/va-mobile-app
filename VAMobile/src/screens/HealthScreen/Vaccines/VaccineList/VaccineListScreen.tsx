@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect } from 'react'
 
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAScrollView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextLine, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -22,7 +22,7 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
 /**
  * Screen containing a list of vaccines on record and a link to their details view
  */
-const VaccineListScreen: FC<VaccineListScreenProps> = () => {
+const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
@@ -93,12 +93,12 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Letters-list-page')}>
+    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>
       {renderPagination()}
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

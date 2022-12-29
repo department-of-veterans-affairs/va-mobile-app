@@ -147,15 +147,15 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
   return (
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />
+      <HealthScreenStack.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />
-      <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />
+      <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />
       <HealthScreenStack.Screen name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />
       <HealthScreenStack.Screen name="SecureMessaging" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />
-      <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ title: t('appointments.appointment') }} />
-      <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />
-      <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />
+      <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ headerShown: false }} />
+      <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={{ headerShown: false }} />
+      <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage.title') }} />
     </HealthScreenStack.Navigator>
   )
