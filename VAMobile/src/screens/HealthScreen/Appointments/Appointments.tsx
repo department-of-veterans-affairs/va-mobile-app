@@ -104,10 +104,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     return <></>
   }
 
-  const scrollStyles: ViewStyle = {
-    flexGrow: 1,
-  }
-
   const onRequestAppointmentPress = () => {
     scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
   }

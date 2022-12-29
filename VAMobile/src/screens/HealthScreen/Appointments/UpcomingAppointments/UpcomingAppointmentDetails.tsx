@@ -37,7 +37,6 @@ import {
   TextViewProps,
   VAButton,
   VAButtonProps,
-  VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
