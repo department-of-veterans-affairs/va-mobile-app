@@ -2,7 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -12,7 +12,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import Appointments from './Appointments'
@@ -44,7 +43,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const hasCernerFacilities = useHasCernerFacilities()
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onVaVaccines = navigateTo('VaccineList')
@@ -76,25 +74,10 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   return (
-    <VAScrollView {...testIdProps('Health-care-page')}>
-      <CrisisLineCta onPress={onCrisisLine} />
+    <CategoryLanding title={tc('health')}>
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        {featureEnabled('prescriptions') && (
-          <LargeNavButton
-            title={t('prescription.title')}
-            subText={t('prescription.subText')}
-            subTextA11yLabel={t('prescription.subText.a11yLabel')}
-            a11yHint={t('prescription.A11yHint')}
-            onPress={onPharmacy}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-        )}
         <LargeNavButton
           title={t('appointments.title')}
-          subText={t('appointments.subText')}
           a11yHint={t('appointments.a11yHint')}
           onPress={onAppointments}
           borderWidth={theme.dimensions.buttonBorderWidth}
@@ -104,7 +87,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          subText={t('secureMessaging.subText')}
           a11yHint={t('secureMessaging.a11yHint')}
           onPress={onSecureMessaging}
           borderWidth={theme.dimensions.buttonBorderWidth}
@@ -114,9 +96,19 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           tagCount={unreadCount}
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
+        {featureEnabled('prescriptions') && (
+          <LargeNavButton
+            title={t('prescription.title')}
+            a11yHint={t('prescription.A11yHint')}
+            onPress={onPharmacy}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
+        )}
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
-          subText={t('vaVaccines.subText')}
           a11yHint={t('vaVaccines.a11yHint')}
           onPress={onVaVaccines}
           borderWidth={theme.dimensions.buttonBorderWidth}
@@ -126,7 +118,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('covid19Updates.title')}
-          subText={t('covid19Updates.subText')}
           a11yHint={t('covid19Updates.a11yHint')}
           onPress={onCoronaVirusFAQ}
           borderWidth={theme.dimensions.buttonBorderWidth}
@@ -138,7 +129,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>
         <CernerAlert />
       </Box>
-    </VAScrollView>
+    </CategoryLanding>
   )
 }
 
@@ -155,7 +146,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
 
   return (
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
-      <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('page.title') }} />
+      <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />
       <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />
