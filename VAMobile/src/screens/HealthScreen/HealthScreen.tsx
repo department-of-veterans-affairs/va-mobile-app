@@ -2,7 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, CrisisLineCta, FocusedNavHeaderText, LargeNavButton } from 'components'
+import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
