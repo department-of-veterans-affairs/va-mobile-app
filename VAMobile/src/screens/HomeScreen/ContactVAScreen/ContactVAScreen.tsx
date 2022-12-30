@@ -1,14 +1,12 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { CrisisLineCta } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import HeaderTitle from 'components/HeaderTitle'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -22,13 +20,6 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HOME)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-
-  useEffect(() => {
-    navigation.setOptions({
-      // using react-navigation internal HeaderTitle component to easily maintain font and styling while being able to add an accessibilityLabel
-      headerTitle: (header) => <HeaderTitle {...testIdProps(t('contactVA.title.a11yLabel'))} headerTitle={header.children} />,
-    })
-  })
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 

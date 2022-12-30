@@ -2,7 +2,6 @@ import { TransitionPresets, createStackNavigator } from '@react-navigation/stack
 import React, { ReactNode } from 'react'
 
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-//import SecureMessaging from '../HealthScreen/SecureMessaging'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 
 export type HomeStackParamList = WebviewStackParams & {

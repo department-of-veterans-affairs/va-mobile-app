@@ -25,6 +25,7 @@ type headerButton = {
 
 export type ChildTemplateProps = {
   backLabel: string
+  backLabelA11y?: string
   backLabelOnPress: () => void
   title: string
   titleA11y?: string
@@ -39,7 +40,7 @@ const HEADER_HEIGHT = 91
 const SUBHEADER_HEIGHT = 52
 const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + SUBHEADER_HEIGHT
 
-export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
+export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
@@ -136,7 +137,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
       <Animated.View style={headerStyle}>
         <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
           <Box display="flex" width="25%">
-            <DescriptiveBackButton label={backLabel} onPress={backLabelOnPress} />
+            <DescriptiveBackButton label={backLabel} labelA11y={backLabelA11y} onPress={backLabelOnPress} />
           </Box>
 
           <Box
