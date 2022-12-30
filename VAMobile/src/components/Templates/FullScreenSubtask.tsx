@@ -34,7 +34,7 @@ export type FullScreenSubtaskProps = {
   navigationMultiStepCancelScreen?: number
 }
 
-const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
+export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   children,
   leftButtonText,
   title,
@@ -155,23 +155,23 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           </Box>
         )}
         {children}
-        {primaryContentButtonText && onPrimaryContentButtonPress && (
-          <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-            {secondaryContentButtonText && onSecondaryContentButtonPress && (
-              <Box ml={theme.dimensions.gutter} flex={1} height={theme.dimensions.fullScreenContentButtonHeight}>
-                <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
-              </Box>
-            )}
-            <Box
-              ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
-              mr={theme.dimensions.gutter}
-              flex={1}
-              height={theme.dimensions.fullScreenContentButtonHeight}>
-              <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
-            </Box>
-          </Box>
-        )}
       </VAScrollView>
+      {primaryContentButtonText && onPrimaryContentButtonPress && (
+        <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+          {secondaryContentButtonText && onSecondaryContentButtonPress && (
+            <Box ml={theme.dimensions.gutter} flex={1} height={theme.dimensions.fullScreenContentButtonHeight}>
+              <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+            </Box>
+          )}
+          <Box
+            ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
+            mr={theme.dimensions.gutter}
+            flex={1}
+            height={theme.dimensions.fullScreenContentButtonHeight}>
+            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </Box>
+        </Box>
+      )}
     </>
   )
 }

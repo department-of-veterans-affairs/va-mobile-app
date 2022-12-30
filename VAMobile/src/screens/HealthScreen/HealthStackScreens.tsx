@@ -187,20 +187,20 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       key={'RefillTrackingModal'}
       name="RefillTrackingModal"
       component={RefillTrackingModal}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescriptions.refillTracking.pageHeaderTitle') }}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
     <HealthStack.Screen
       key={'PrescriptionHelp'}
       name="PrescriptionHelp"
       component={PrescriptionHelp}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescription.help.title') }}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
     <HealthStack.Screen
       key={'StatusGlossary'}
       name="StatusGlossary"
       component={StatusGlossary}
       options={{
-        title: t('statusGlossary.title'),
+        headerShown: false,
         presentation: 'modal',
         ...TransitionPresets.ModalTransition,
       }}
