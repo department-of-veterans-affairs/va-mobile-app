@@ -35,7 +35,7 @@ export type HeaderBannerProps = {
   /** focus on right Button */
   focusRightButton?: boolean
   /** hide title accessibility */
-  titleAccesibilityHidden?: boolean
+  titleAccessibilityHidden?: boolean
 }
 
 const HeaderBanner: FC<HeaderBannerProps> = ({
