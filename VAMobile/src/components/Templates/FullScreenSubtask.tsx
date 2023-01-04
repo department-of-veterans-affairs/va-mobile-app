@@ -101,7 +101,11 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           text: t('close'),
           onPress: () => {
             if (navigationMultiStepCancelScreen) {
-              navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+              if (navigationMultiStepCancelScreen === 1) {//use if you need to grab parent to dismiss
+                navigation.getParent()?.goBack()
+              } else {
+                navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+              }
             } else {
               navigation.goBack()
             }

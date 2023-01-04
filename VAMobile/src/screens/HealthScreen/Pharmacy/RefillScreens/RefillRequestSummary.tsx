@@ -10,7 +10,7 @@ import { RefillStackParamList } from './RefillScreen'
 import { RootState } from 'store'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, usePanelHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
@@ -23,7 +23,6 @@ const enum REQUEST_STATUS {
 }
 
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
-  const headerStyle = usePanelHeaderStyles()
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -55,7 +54,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       headerShown: false,
       presentation: 'card',
     })
-  }, [navigation, headerStyle, tc])
+  }, [navigation])
 
   const renderAlert = (): ReactElement => {
     let alertBoxProps: AlertBoxProps
@@ -188,7 +187,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
 
   return (
     <>
-      <FullScreenSubtask leftButtonText={tc('close')} title={t('prescriptions.refill.pageHeaderTitle')} navigationMultiStepCancelScreen={2}>
+      <FullScreenSubtask leftButtonText={tc('close')} title={t('prescriptions.refill.pageHeaderTitle')} navigationMultiStepCancelScreen={1}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>
