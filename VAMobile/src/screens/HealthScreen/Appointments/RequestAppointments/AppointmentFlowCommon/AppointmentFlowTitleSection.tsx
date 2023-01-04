@@ -40,7 +40,7 @@ const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ ti
           {extraInformationText}
         </TextView>
       )}
-      <AppointmentFlowErrorAlert errorMessage={errorMessage} mx={gutter} mb={standardMarginBetween} mt={standardMarginBetween} />
+      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={standardMarginBetween} mt={standardMarginBetween} />
     </>
   )
 }

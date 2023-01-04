@@ -22,7 +22,6 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.valocation.loading') })
 
   const containerStyles = {
-    mx: gutter,
     mt: 30,
     mb: contentMarginBottom,
   }

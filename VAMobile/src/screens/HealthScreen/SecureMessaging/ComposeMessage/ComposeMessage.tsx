@@ -337,17 +337,15 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const renderContent = (): ReactNode => {
     if (noProviderError) {
       return (
-        <Box mx={theme.dimensions.gutter}>
-          <AlertBox
-            title={t('secureMessaging.composeMessage.noMatchWithProvider')}
-            text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
-            textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
-            border="error">
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
-            </Box>
-          </AlertBox>
-        </Box>
+        <AlertBox
+          title={t('secureMessaging.composeMessage.noMatchWithProvider')}
+          text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
+          textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
+          border="error">
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </Box>
+        </AlertBox>
       )
     }
 
