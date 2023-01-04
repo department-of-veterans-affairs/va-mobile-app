@@ -1,13 +1,11 @@
 ---
 title: Information Architecture
-sidebar_position: 2
+sidebar_position: 5
 ---
-This guide is intended to help designers and content maintainers understand what’s guiding the app’s current information architecture and make future decisions that are in line with the existing organization, navigation, labeling, and indexing systems.
 
-### What is information architecture?
-*”Information Architecture ("IA") focuses on organizing, structuring, and labeling content…The goal is to help users find information and complete tasks.“* - [Usability.gov](https://www.usability.gov/what-and-why/information-architecture.html)
+## Defining information architecture
+Information architecture (IA) is the practice of organizing, structuring, and labeling content in an effective and sustainable way. This guide is intended to help designers and content maintainers make content within the VA mobile app usable and findable to Veterans.
  
-
 
 ## Information Architecture principles
 The following guiding principles are used to help Veterans find information and complete tasks within the VA Health and Benefits app:
@@ -18,9 +16,14 @@ The following guiding principles are used to help Veterans find information and 
 * **Informed by Veterans:** IA decisions are based on user research conducted with Veterans, examining their mental models around the organization of common tasks and undertanding of labels, as well as getting feedback on proposed solutions. 
 * **Keeps it simple:** Content is prioiritized and includes only what’s absolutely necessary—the fewer elements (number of levels in the hierarchy, number of screens, number of links on a screen) the better.
 
+References:
+[VA.gov Information Architecture (IA) team](https://github.com/department-of-veterans-affairs/va.gov-team/tree/69833737d9fe22b8990bb987e7c50de13205c5d5/platform/information-architecture)
+[Best Practices for IA on VA.gov](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/platform/information-architecture/ia-best-practices.md)
+[VA.gov Design principles](https://design.va.gov/about/principles)  
 
 
-### When should you think about IA?
+
+## When tp think about IA
 * Launching a new feature in the VA Health and Benefits app
 * Adding a new category or subsection to the VA Health and Benefits app
 * Rewriting content and needing to split or merge an existing screen
@@ -29,7 +32,9 @@ The following guiding principles are used to help Veterans find information and 
 * Changing the UX of global navigational elements (i.e. tab bar/bottom navigation, top bar, including treatments for back buttons, contextual actions and screen titles)
 
 
-## Information Architecture documentation
+## IA documentation
+Understanding what’s guiding the app’s current information architecture and make future decisions that are in line with the existing organization, navigation, labeling, and indexing systems.
+
 ### Background
 The VA Health and Benefits app’s Information Architecture and navigation model are based on the findings and output from a multi-stage, collaborative and cross-functional design and research process: [Information Architecture and Navigation - High Level Project Summary](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-design/information-architecture-navigation/High%20Level%20Project%20Summary.md)
 * [**Phase I:** Two rounds of card sorting](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research/information-architecture) (open and closed) with Veterans
@@ -53,10 +58,11 @@ The VA Health and Benefits app’s IA contains four top level categories: Home, 
 ### Sitemap/flow diagram 
 A sitemap is a planning tool that visually shows how information will be grouped and labeled, where content will be located, and how a user will move through the app. This adaptation of a standard sitemap includes the system display logic for screens that have variants, key actions (buttons, links), common processes and points where it makes use of native mobile integrations. **This is the source of truth for the app’s IA.** 
 * Pre-redesign: [VA Mobile App: Detailed Sitemap/flow diagram](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-design/information-architecture/readme.md) (Feb 2022)
-* Post redesign: VA Mobile App: Detailed Sitemap/flow diagram [png](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-research/usability-testing/new%20navigation%20usability/Detailed%20sitemap%20(future%20state%206-23-22).png) | [mural](https://app.mural.co/t/adhoccorporateworkspace2583/m/adhoccorporateworkspace2583/1655989910332/d0f78565904f80b730fb70285eef9f4002279aef?sender=u28718b63c8993f515e0b2240) (June 2022) 
+* Post redesign: VA Mobile App: Detailed Sitemap/flow diagram (June 2022)[png](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-research/usability-testing/new%20navigation%20usability/Detailed%20sitemap%20(future%20state%206-23-22).png) | [mural](https://app.mural.co/t/adhoccorporateworkspace2583/m/adhoccorporateworkspace2583/1655989910332/d0f78565904f80b730fb70285eef9f4002279aef?sender=u28718b63c8993f515e0b2240)  
 
-### Adding to the app’s Information Architecture
-1. **A feature’s placement within the app’s navigation and taxonomy should take user mental models, business goals, and the feature type into account.** [Determining Navigation and Information Architecture Placement for New VA Mobile App Features] is a guide intended to help teams decide where a new feature belongs in this app’s sitemap and navigation model. 
+
+## Adding new itemsto the app’s Information Architecture
+1. **A feature’s placement within the app’s navigation and taxonomy should take user mental models, business goals, and the feature type into account.** [Determining Navigation and Information Architecture Placement for New VA Mobile App Features](https://docs.google.com/document/d/1XQcYxnCifloaBFNKL2C9JNS7KIj6wEhb4VokPGxBZU8/edit#) is a guide intended to help teams decide where a new feature belongs in this app’s sitemap and navigation model. 
 1. **Always try to find a placement in an existing category first** before proposing a new top-level category for a feature. Confirm new category names and contents with card sort research before adding to the app.
 1. **Within a category, keep the hierarchy as flat as possible** in terms of screens (limit the levels it’s possible to drill down through in order to get to child screens), but without inlcuding too many options on a single screen. 
 1. **If there are many features within a category, group the features and label the groups** at category level before introducing additional levels into the screen hierarchy—this helps avoid cognitive overload.

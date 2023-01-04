@@ -5,6 +5,8 @@ sidebar_position: 2
 
 It is important that the VA mobile app is usable and accessible to all Veterans. Disabilities can be temporary or permanent and can affect how Veterans move, see, hear, communicate, learn, understand, and process information. As a result, our app is designed with accessibility in mind from the start and is a factor in every step of our process from discovery to QA. 
 
+## Accessibility principles
+
 ### Based on VA standards
 The [VA design system](https://design.va.gov/) does not have comprehensive accessibility guidelines. However it does [provide accessibility samples and guidelines](https://design.va.gov/design/#accessibility) when it comes to design, content, and components. We base our design system on this existing system with modifications for native mobile. 
 
