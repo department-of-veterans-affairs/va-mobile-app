@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
-import { AlertBox, AlertBoxProps, Box, BoxProps, ClosePanelButton, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps, VAScrollView } from 'components'
+import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
@@ -9,11 +9,11 @@ import { PrescriptionState, requestRefills } from 'store/slices'
 import { RefillStackParamList } from './RefillScreen'
 import { RootState } from 'store'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
-import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, usePanelHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 type RefillRequestSummaryProps = StackScreenProps<RefillStackParamList, 'RefillRequestSummary'>
 
 const enum REQUEST_STATUS {
@@ -52,15 +52,8 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      ...headerStyle,
-      headerLeft: () => (
-        <ClosePanelButton
-          buttonText={tc('close')}
-          onPress={navigation.getParent()?.goBack}
-          buttonTextColor={'showAll'}
-          focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
-        />
-      ),
+      headerShown: false,
+      presentation: 'card',
     })
   }, [navigation, headerStyle, tc])
 
@@ -195,7 +188,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
 
   return (
     <>
-      <VAScrollView>
+      <FullScreenSubtask leftButtonText={tc('close')} title={t('prescriptions.refill.pageHeaderTitle')} navigationMultiStepCancelScreen={2}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>
@@ -203,7 +196,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
             {renderWhatsNext()}
           </TextArea>
         </Box>
-      </VAScrollView>
+      </FullScreenSubtask>
     </>
   )
 }
