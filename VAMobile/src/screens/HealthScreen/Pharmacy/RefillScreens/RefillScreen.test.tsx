@@ -9,7 +9,7 @@ import NoRefills from './NoRefills'
 import { RootState } from 'store'
 import { ErrorsState, initialErrorsState, initialPrescriptionState, PrescriptionState } from 'store/slices'
 import { DateTime } from 'luxon'
-import { AlertBox, ErrorComponent, FooterButton } from 'components'
+import { AlertBox, ErrorComponent, VAButton } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
@@ -67,7 +67,7 @@ context('RefillScreen', () => {
       })
 
       await waitFor(() => {
-        const button = testInstance.findByType(FooterButton)
+        const button = testInstance.findByType(VAButton)
         button.props.onPress()
       })
 
