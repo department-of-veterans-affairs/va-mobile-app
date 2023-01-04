@@ -18,7 +18,7 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { gutter, contentMarginBottom, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, standardMarginBetween } = theme.dimensions
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.valocation.loading') })
 
   const containerStyles = {
