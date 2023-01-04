@@ -34,7 +34,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
     onPress,
     accessibilityState: { expanded },
     accessibilityLabel: a11yLabel,
-    accessibilityRole: 'spinbutton',
+    accessibilityRole: 'tab',
   }
 
   const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
@@ -67,6 +67,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
     ...leftBorderProps,
     borderBottomColor: 'primary',
     borderBottomWidth: theme.dimensions.borderWidth,
+    accessibilityRole: 'tablist',
   }
 
   return (
