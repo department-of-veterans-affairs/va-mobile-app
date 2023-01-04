@@ -101,7 +101,8 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           text: t('close'),
           onPress: () => {
             if (navigationMultiStepCancelScreen) {
-              if (navigationMultiStepCancelScreen === 1) {//use if you need to grab parent to dismiss
+              if (navigationMultiStepCancelScreen === 1) {
+                //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
                 navigation.getParent()?.goBack()
               } else {
                 navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
