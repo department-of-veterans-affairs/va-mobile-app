@@ -309,7 +309,7 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
  * @returns snackbar
  */
 export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
-  snackBar.hideAll()
+  snackBar?.hideAll()
   dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
   snackBar.show(message, {
     type: 'custom_snackbar',

@@ -93,7 +93,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     if (!disabled) {
       setIsFocused(true)
       setModalVisible(true)
-      snackBar.hideAll()
+      snackBar?.hideAll()
     }
   }
 
