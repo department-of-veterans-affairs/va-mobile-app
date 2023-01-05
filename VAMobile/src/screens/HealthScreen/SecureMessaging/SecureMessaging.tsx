@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl, VAScrollView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
 import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -82,10 +82,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
     if (secureMessagingTab !== tab) {
       dispatch(updateSecureMessagingTab(tab))
     }
-  }
-
-  const scrollStyles: ViewStyle = {
-    flexGrow: 1,
   }
 
   return (
