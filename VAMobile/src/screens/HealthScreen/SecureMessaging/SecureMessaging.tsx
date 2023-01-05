@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
