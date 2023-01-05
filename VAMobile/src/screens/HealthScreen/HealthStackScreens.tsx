@@ -131,7 +131,12 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={{ title: t('secureMessaging.drafts.edit') }} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
-    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} />,
+    <HealthStack.Screen
+      key={'AttachmentsFAQ'}
+      name="AttachmentsFAQ"
+      component={AttachmentsFAQ}
+      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
+    />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen
       key={'NoRequestAppointmentAccess'}

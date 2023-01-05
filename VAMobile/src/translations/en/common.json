@@ -639,5 +639,6 @@
   "vaVaccines": "VA vaccines",
   "vaVaccines.a11y": "V-A vaccines",
   "messages": "Messages",
-  "compose": "Compose"
+  "compose": "Compose",
+  "messagesHelp.title": "Messages Help"
 }
