@@ -28,19 +28,17 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
   //Opting to leave this code in place...because removing it will clearly kickstart pandemic part 4000.
   if (showCovidMessage) {
     return (
-      <Box mx={theme.dimensions.gutter}>
-        <AlertBox border="warning" text={t('claimDetails.covidMessage')}>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              onPress={onAlertLinkPress}
-              testID={t('claimDetails.reviewLocations')}
-              label={t('claimDetails.reviewLocations')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-              a11yHint={t('claimDetails.reviewLocationsA11yHint')}
-            />
-          </Box>
-        </AlertBox>
-      </Box>
+      <AlertBox border="warning" text={t('claimDetails.covidMessage')}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <VAButton
+            onPress={onAlertLinkPress}
+            testID={t('claimDetails.reviewLocations')}
+            label={t('claimDetails.reviewLocations')}
+            buttonType={ButtonTypesConstants.buttonPrimary}
+            a11yHint={t('claimDetails.reviewLocationsA11yHint')}
+          />
+        </Box>
+      </AlertBox>
     )
   }
 

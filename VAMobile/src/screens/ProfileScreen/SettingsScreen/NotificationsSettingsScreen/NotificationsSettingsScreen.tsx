@@ -33,13 +33,11 @@ const NotificationsSettingsScreen: FC = () => {
 
   const alert = (): ReactNode => {
     return (
-      <Box mx={gutter}>
-        <AlertBox border={'secondary'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
-          <Box mt={standardMarginBetween}>
-            <VAButton onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} buttonType={'buttonPrimary'} />
-          </Box>
-        </AlertBox>
-      </Box>
+      <AlertBox border={'secondary'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
+        <Box mt={standardMarginBetween}>
+          <VAButton onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} buttonType={'buttonPrimary'} />
+        </Box>
+      </AlertBox>
     )
   }
 
