@@ -637,5 +637,6 @@
   "appointments": "Appointments",
   "details": "Details",
   "vaVaccines": "VA vaccines",
-  "vaVaccines.a11y": "V-A vaccines"
+  "vaVaccines.a11y": "V-A vaccines",
+  "messages": "Messages"
 }

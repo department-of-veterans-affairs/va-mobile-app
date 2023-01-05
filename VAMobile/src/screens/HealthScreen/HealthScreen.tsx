@@ -152,7 +152,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
       <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />
       <HealthScreenStack.Screen name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />
-      <HealthScreenStack.Screen name="SecureMessaging" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />
+      <HealthScreenStack.Screen name="SecureMessaging" component={SecureMessaging} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={{ headerShown: false }} />
