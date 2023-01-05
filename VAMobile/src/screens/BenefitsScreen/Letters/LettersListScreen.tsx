@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
@@ -19,7 +19,7 @@ import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
 
-const LettersListScreen: FC<LettersListScreenProps> = () => {
+const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { lettersAndDocuments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
@@ -120,11 +120,11 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Letters-list-page')}>
+    <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.list.title')} {...testIdProps('Letters-list-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <SimpleList items={letterButtons} />
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

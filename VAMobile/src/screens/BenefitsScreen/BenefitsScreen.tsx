@@ -80,9 +80,9 @@ const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
       <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('statusDetails.title') }} />
       <BenefitsScreenStack.Screen name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ title: t('disabilityRatingDetails.title') }} />
-      <BenefitsScreenStack.Screen name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />
-      <BenefitsScreenStack.Screen name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />
-      <BenefitsScreenStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
+      <BenefitsScreenStack.Screen name="GenericLetter" component={GenericLetter} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="LettersList" component={LettersListScreen} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ headerShown: false }} />
     </BenefitsScreenStack.Navigator>
   )
 }
