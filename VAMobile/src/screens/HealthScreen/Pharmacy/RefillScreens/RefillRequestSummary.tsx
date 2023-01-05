@@ -5,7 +5,7 @@ import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, Tex
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
-import { PrescriptionState, requestRefills } from 'store/slices'
+import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, requestRefills } from 'store/slices'
 import { RefillStackParamList } from './RefillScreen'
 import { RootState } from 'store'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
@@ -173,7 +173,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           </TextView>
         </Box>
         <VAButton
-          onPress={navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })}
+          onPress={() => {
+            dispatch(dispatchSetPrescriptionsNeedLoad())
+            dispatch(dispatchClearLoadingRequestRefills())
+            navigation.navigate('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
+          }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType="buttonSecondary"
         />
