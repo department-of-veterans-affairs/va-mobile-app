@@ -34,7 +34,7 @@ export type FullScreenSubtaskProps = {
   navigationMultiStepCancelScreen?: number
 }
 
-const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
+export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   children,
   leftButtonText,
   title,
@@ -146,7 +146,7 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       </Box>
       <VAScrollView>
         {title && (
-          <Box mt={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
+          <Box my={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
             <Box>
               <Box display="flex" flexDirection="row" alignItems="center">
                 <TextView {...titleTextProps}>{title}</TextView>
