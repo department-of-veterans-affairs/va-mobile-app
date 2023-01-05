@@ -3,24 +3,26 @@ import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'r
 
 import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
-import { RefillStackParamList } from './RefillScreen'
 import { RootState } from 'store'
+import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
-type RefillRequestSummaryProps = StackScreenProps<RefillStackParamList, 'RefillRequestSummary'>
 
 const enum REQUEST_STATUS {
   FAILED,
   SUCCESS,
   MIX,
 }
+
+type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
   const theme = useTheme()
@@ -30,7 +32,6 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
   const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     const requestSubmittedItems = []
@@ -55,6 +56,10 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       presentation: 'card',
     })
   }, [navigation])
+
+  useBeforeNavBackListener(navigation, () => {
+    dispatch(dispatchClearLoadingRequestRefills())
+  })
 
   const renderAlert = (): ReactElement => {
     let alertBoxProps: AlertBoxProps
@@ -173,7 +178,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           </TextView>
         </Box>
         <VAButton
-          onPress={navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })}
+          onPress={() => {
+            dispatch(dispatchSetPrescriptionsNeedLoad())
+            dispatch(dispatchClearLoadingRequestRefills())
+            navigation.navigate('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
+          }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType="buttonSecondary"
         />
@@ -187,7 +196,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
 
   return (
     <>
-      <FullScreenSubtask leftButtonText={tc('close')} title={t('prescriptions.refill.pageHeaderTitle')} navigationMultiStepCancelScreen={1}>
+      <FullScreenSubtask leftButtonText={tc('close')} title={t('prescriptions.refill.pageHeaderTitle')} navigationMultiStepCancelScreen={2}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>

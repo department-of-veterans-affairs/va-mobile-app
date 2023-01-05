@@ -1,5 +1,5 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -11,14 +11,13 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
-import { useAppDispatch, useDestructiveAlert, useDowntime, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useDowntime, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import NoRefills from './NoRefills'
-import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
 
-type RefillScreenProps = StackScreenProps<RefillStackParamList, 'RefillScreen'>
+type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
 export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const theme = useTheme()
@@ -52,6 +51,11 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
       navigation.navigate('RefillRequestSummary')
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
+
+  useBeforeNavBackListener(navigation, () => {
+    dispatch(dispatchSetPrescriptionsNeedLoad())
+    dispatch(dispatchClearLoadingRequestRefills())
+  })
 
   const onSubmitPressed = () => {
     submitRefillAlert({
@@ -157,33 +161,4 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   )
 }
 
-type RefillStackScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
-
-export type RefillStackParamList = {
-  RefillScreen: undefined
-  RefillRequestSummary: undefined
-}
-
-const RefillScreenStack = createStackNavigator<RefillStackParamList>()
-
-const RefillStackScreen: FC<RefillStackScreenProps> = () => {
-  const dispatch = useDispatch()
-  return (
-    <RefillScreenStack.Navigator initialRouteName="RefillScreen">
-      <RefillScreenStack.Screen
-        name="RefillScreen"
-        options={{ headerShown: false, presentation: 'card' }}
-        component={RefillScreen}
-        listeners={{
-          beforeRemove: () => {
-            dispatch(dispatchSetPrescriptionsNeedLoad())
-            dispatch(dispatchClearLoadingRequestRefills())
-          },
-        }}
-      />
-      <RefillScreenStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} />
-    </RefillScreenStack.Navigator>
-  )
-}
-
-export default RefillStackScreen
+export default RefillScreen

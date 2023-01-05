@@ -1,5 +1,5 @@
 import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native'
-import { TouchableWithoutFeedback } from 'react-native'
+import { StatusBar, TouchableWithoutFeedback, View, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -122,8 +122,14 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     return
   }
 
+  const fillStyle: ViewStyle = {
+    backgroundColor: theme.colors.background.main,
+    flex: 1,
+  }
+
   return (
-    <>
+    <View style={fillStyle}>
+      <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <Box {...titleBannerProps}>
         <Box ml={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
           {leftButtonText && (
@@ -177,7 +183,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           </Box>
         </Box>
       )}
-    </>
+    </View>
   )
 }
 
