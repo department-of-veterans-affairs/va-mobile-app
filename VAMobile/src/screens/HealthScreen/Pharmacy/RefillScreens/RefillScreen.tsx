@@ -1,9 +1,9 @@
-import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
+import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ClosePanelButton, ErrorComponent, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,9 +11,9 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
-import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useDowntime, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
@@ -107,7 +107,17 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   return (
     <>
-      <VAScrollView>
+      <FullScreenSubtask
+        leftButtonText={tc('cancel')}
+        title={t('prescriptions.refill.pageHeaderTitle')}
+        primaryContentButtonText={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
+        onPrimaryContentButtonPress={() => {
+          if (selectedPrescriptionsCount === 0) {
+            setAlert(true)
+            return
+          }
+          onSubmitPressed()
+        }}>
         {showAlert && (
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
             <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
@@ -142,19 +152,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
             }}
           />
         </Box>
-      </VAScrollView>
-      <FooterButton
-        text={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
-        backGroundColor="buttonPrimary"
-        textColor={'navBar'}
-        onPress={() => {
-          if (selectedPrescriptionsCount === 0) {
-            setAlert(true)
-            return
-          }
-          onSubmitPressed()
-        }}
-      />
+      </FullScreenSubtask>
     </>
   )
 }
@@ -169,29 +167,12 @@ export type RefillStackParamList = {
 const RefillScreenStack = createStackNavigator<RefillStackParamList>()
 
 const RefillStackScreen: FC<RefillStackScreenProps> = () => {
-  const headerStyle = usePanelHeaderStyles()
-
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   return (
-    <RefillScreenStack.Navigator
-      initialRouteName="RefillScreen"
-      screenOptions={{
-        title: t('prescriptions.refill.pageHeaderTitle'),
-        ...TransitionPresets.SlideFromRightIOS,
-        ...headerStyle,
-        headerLeft: (props) => (
-          <ClosePanelButton
-            buttonText={tc('cancel')}
-            onPress={props.onPress}
-            buttonTextColor={'showAll'}
-            focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
-          />
-        ),
-      }}>
+    <RefillScreenStack.Navigator initialRouteName="RefillScreen">
       <RefillScreenStack.Screen
         name="RefillScreen"
+        options={{ headerShown: false, presentation: 'card' }}
         component={RefillScreen}
         listeners={{
           beforeRemove: () => {

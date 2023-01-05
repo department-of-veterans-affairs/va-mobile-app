@@ -177,12 +177,7 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
         options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </HealthStack.Group>,
-    <HealthStack.Screen
-      key={'RefillScreenModal'}
-      name="RefillScreenModal"
-      component={RefillScreenModal}
-      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
-    />,
+    <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={{ headerShown: false, presentation: 'card' }} />,
     <HealthStack.Screen
       key={'RefillTrackingModal'}
       name="RefillTrackingModal"
