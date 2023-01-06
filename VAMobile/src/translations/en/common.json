@@ -646,5 +646,6 @@
   "drafts": "Drafts",
   "sent": "Sent",
   "editDraft": "Edit draft",
-  "reviewMessage": "Review message"
+  "reviewMessage": "Review message",
+  "reply": "Reply"
 }

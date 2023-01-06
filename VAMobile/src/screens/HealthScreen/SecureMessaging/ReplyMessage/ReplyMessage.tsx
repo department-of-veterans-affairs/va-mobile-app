@@ -14,13 +14,13 @@ import {
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   MessageAlert,
   SaveButton,
   TextArea,
   TextView,
   VAButton,
-  VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -50,6 +50,7 @@ type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -302,13 +303,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Reply-message-page')}>
+    <FullScreenSubtask title={tc('reply')} leftButtonText={tc('cancel')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{renderMessageThread()}</Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

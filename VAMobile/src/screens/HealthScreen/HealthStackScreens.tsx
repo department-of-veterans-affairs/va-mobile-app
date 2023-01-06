@@ -128,7 +128,7 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
   return [
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
     <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ headerShown: false }} />,
-    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,
+    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ headerShown: false }} />,
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={{ headerShown: false }} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ headerShown: false }} />,
     <HealthStack.Screen
