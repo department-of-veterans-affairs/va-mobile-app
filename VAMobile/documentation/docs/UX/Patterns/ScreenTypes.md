@@ -69,9 +69,10 @@ The VA mobile app has 5 main screen types that fall into two categories:
   * **Scroll behavior:** Content (including primary & secondary action buttons) scrolls if it exceeds the panel height.
   * **Button behavior & display logic**
     * Top bar action button behavior & display logic
-      * Left button: Cancel only, must be accompanied by primary embedded action button in content. Closes editable view without saving changes and/or closes entire multi-strep flow without saving changes (Display "Are you sure?" confirmation modal).
+      * Left button: Cancel only, must be accompanied by primary action button. Closes editable view without saving changes and/or closes entire multi-strep flow without saving changes (Display "Are you sure?" confirmation modal).
       * Right button: Done or Close. Does not appear with a primary action button. Closes non-editable view.
-    * Embedded action button behavior & display logic
+    * Bottom action button behavior & display logic
+      * Locked to bottom of screen
       * Primary action button: May appear alone or with a secondary action button. If task is a single step, tap to save/submit and close view. If task is multi-step, tap to advance to next step (mid-task) or save/submit and close view (end of task) Always accompanied by Cancel.
       * Secondary action button: Appears in a multi-step task, accompanied by a primary action button. Tap to go back one step.
 * **Example:** Create an appointment, Refill a prescription
