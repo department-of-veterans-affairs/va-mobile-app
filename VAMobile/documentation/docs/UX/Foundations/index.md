@@ -1,10 +1,11 @@
 ---
-title: Our approach
-sidebar_position: 1
+title: Foundations
+
 ---
+## Our approach 
 As [outlined in our project mission](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/product/Mobile-Roadmap.md#outcomes-roadmap), the VA: Health and Benefits app should be a trusted source for Veterans to quickly and easily check the status of their VA services and complete simple, transactional tasks across their health and benefits. 
 
-## Values
+### Values
 In order to accomplish this we approach our design work by the following values:
 
 * **[Accessibility](Accessibility) first**
@@ -12,7 +13,7 @@ In order to accomplish this we approach our design work by the following values:
 * **Human centered**
   *  In all aspects of the design process, we must understand and connect with Veterans on a human level. 
 
-## Process
+### Process
 Our values are embodied in our design process:
 
 * **Discovery & [research](Research)**
@@ -24,7 +25,7 @@ Our values are embodied in our design process:
 * **Incorporation of standard mobile conventions**
   * In an effort to utilize components and functionality that user’s are most familiar with.
 
-## Principles 
+### Principles 
 Principles help in establishing a foundation for a system or application. They allow teams to have a unifying vision and objective standard of measurement. 
 
 [VA Design Principles](https://design.va.gov/about/principles)
