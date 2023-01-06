@@ -14,13 +14,13 @@ import {
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   MessageAlert,
   PickerItem,
   TextArea,
   TextView,
   VAButton,
-  VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -512,13 +512,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Compose-message-page')}>
+    <FullScreenSubtask title={tc('editDraft')} leftButtonText={tc('cancel')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 
