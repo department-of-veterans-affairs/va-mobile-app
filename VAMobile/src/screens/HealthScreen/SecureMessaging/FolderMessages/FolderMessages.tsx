@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -11,7 +11,6 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
@@ -23,6 +22,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
@@ -118,16 +118,14 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }
 
   return (
-    <>
-      <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
-        <ComposeMessageButton />
-        <MessageList
-          items={getMessagesListItems(messages, t, onMessagePress, folderName)}
-          title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}
+    <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={tc(folderName === FolderNameTypeConstants.sent ? 'sent' : 'drafts')}>
+      <ComposeMessageButton />
+      <MessageList 
+        items={getMessagesListItems(messages, t, onMessagePress, folderName)} 
+        title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName} 
         />
-        {renderPagination()}
-      </VAScrollView>
-    </>
+      {renderPagination()}
+    </ChildTemplate>
   )
 }
 

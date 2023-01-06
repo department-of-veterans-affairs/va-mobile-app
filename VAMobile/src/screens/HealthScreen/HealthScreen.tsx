@@ -148,7 +148,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />
+      <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />
       <HealthScreenStack.Screen name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />
