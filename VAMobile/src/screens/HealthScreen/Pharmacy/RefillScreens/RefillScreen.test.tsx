@@ -20,7 +20,8 @@ context('RefillScreen', () => {
   const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>, errorState?: Partial<ErrorsState>) => {
     const props = mockNavProps({}, {
       setOptions: jest.fn(),
-      navigate: jest.fn()
+      navigate: jest.fn(),
+      addListener: jest.fn()
     })
     const store: Partial<RootState> = {
       prescriptions: {

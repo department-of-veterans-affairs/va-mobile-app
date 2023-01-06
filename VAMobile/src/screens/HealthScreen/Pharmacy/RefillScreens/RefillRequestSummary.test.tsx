@@ -17,7 +17,7 @@ context('RefillRequestSummary', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>) => {
-    const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
+    const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn(), addListener: jest.fn() })
     const store: Partial<RootState> = {
       prescriptions: {
         ...initialPrescriptionState,

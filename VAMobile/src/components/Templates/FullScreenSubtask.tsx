@@ -118,7 +118,16 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
 
   const onRightTitleButtonPress = () => {
-    navigation.goBack()
+    if (navigationMultiStepCancelScreen) {
+      if (navigationMultiStepCancelScreen === 1) {
+        //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
+        navigation.getParent()?.goBack()
+      } else {
+        navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+      }
+    } else {
+      navigation.goBack()
+    }
     return
   }
 
