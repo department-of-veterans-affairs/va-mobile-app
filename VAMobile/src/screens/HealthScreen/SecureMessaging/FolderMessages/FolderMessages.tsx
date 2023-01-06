@@ -120,10 +120,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={tc(folderName === FolderNameTypeConstants.sent ? 'sent' : 'drafts')}>
       <ComposeMessageButton />
-      <MessageList 
-        items={getMessagesListItems(messages, t, onMessagePress, folderName)} 
-        title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName} 
-        />
+      <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName} />
       {renderPagination()}
     </ChildTemplate>
   )
