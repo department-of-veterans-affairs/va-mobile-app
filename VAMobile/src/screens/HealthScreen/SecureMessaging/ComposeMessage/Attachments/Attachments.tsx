@@ -4,7 +4,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, FullScreenSubtask, TextView, VAButton } from 'components'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -14,7 +14,6 @@ import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -134,7 +133,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   return (
-    <VAScrollView {...testIdProps('Attachments-page')}>
+    <FullScreenSubtask title={tc('secureMessaging.composeMessage.attachments.title')} leftButtonText={tc('cancel')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -187,7 +186,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
           </Box>
         )}
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

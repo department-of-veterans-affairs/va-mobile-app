@@ -640,5 +640,6 @@
   "vaVaccines.a11y": "V-A vaccines",
   "messages": "Messages",
   "compose": "Compose",
-  "messagesHelp.title": "Messages Help"
+  "messagesHelp.title": "Messages Help",
+  "secureMessaging.composeMessage.attachments.title": "Attach file"
 }
