@@ -645,5 +645,6 @@
   "folders": "Folders",
   "drafts": "Drafts",
   "sent": "Sent",
-  "editDraft": "Edit draft"
+  "editDraft": "Edit draft",
+  "reviewMessage": "Review message"
 }

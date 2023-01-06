@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
@@ -16,7 +16,6 @@ import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMess
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -50,6 +49,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
@@ -186,28 +186,26 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }
 
   return (
-    <>
-      <VAScrollView {...testIdProps('ViewMessage-page')}>
-        {!replyExpired ? (
-          <ReplyMessageButton messageID={messageID} />
-        ) : (
-          <Box>
-            <ComposeMessageButton />
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
-            </Box>
+    <ChildTemplate backLabel={tc('sent')} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+      {!replyExpired ? (
+        <ReplyMessageButton messageID={messageID} />
+      ) : (
+        <Box>
+          <ComposeMessageButton />
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
           </Box>
-        )}
-        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-          <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-            <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
-              {formatSubject(category, subject, t)}
-            </TextView>
-          </Box>
-          {renderMessages(message, messagesById, thread)}
         </Box>
-      </VAScrollView>
-    </>
+      )}
+      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+          <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
+            {formatSubject(category, subject, t)}
+          </TextView>
+        </Box>
+        {renderMessages(message, messagesById, thread)}
+      </Box>
+    </ChildTemplate>
   )
 }
 
