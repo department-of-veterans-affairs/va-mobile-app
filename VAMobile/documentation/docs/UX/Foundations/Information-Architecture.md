@@ -23,7 +23,7 @@ References:
 
 
 
-## When tp think about IA
+## When to think about IA
 * Launching a new feature in the VA Health and Benefits app
 * Adding a new category or subsection to the VA Health and Benefits app
 * Rewriting content and needing to split or merge an existing screen

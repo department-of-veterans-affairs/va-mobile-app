@@ -30,7 +30,7 @@ sidebar_position: 6
   * Content style guide, components, and patterns include guidance, standards, and tools to help teams build a consistent, intuitive, and Veteran-centered experience across VA.gov.
 
 
-## Archived files
+##  Design: Archived files
 ### Sketch files
 * Mobile App  [Design Library](https://www.sketch.com/s/dc5da595-7a22-4cdd-a850-bd91a80dd377) 
 	* The design library is for finalized components, text styles, and color styles. 

@@ -4,8 +4,14 @@ sidebar_position: 2
 ---
 The VA mobile app has 5 main screen types that fall into two categories:
 
-* **Hierarchical screens:** The categories, features, and child screens that make up much of the app. Make one choice per screen (descending deeper into the app’s hierarchy) until you reach a destination. These screens always display the tab bar.
-* **Modal screens:** The VA Health & Benefits mobile app uses modality for quick actions and contained tasks where the user must maintain focus to complete it. Because they appear on a layer above the hierarchical screens, modal screens generally cover the tab bar.
+**Hierarchical screens:** 
+ * The categories, features, and child screens that make up much of the app. 
+* Make one choice per screen (descending deeper into the app’s hierarchy) until you reach a destination. 
+* These screens always display the tab bar.
+
+**Modal screens:** 
+* The VA Health & Benefits mobile app uses modality for quick actions and contained tasks where the user must maintain focus to complete it. 
+* Because they appear on a layer above the hierarchical screens, modal screens cover the tab bar.
 
 
 ## Hierarchical screens

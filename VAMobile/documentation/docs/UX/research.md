@@ -3,10 +3,10 @@ title: Research
 sidebar_position: 5
 ---
 
-[intro]
+[intro TBD]
 
 ## Our approach
-Needs updating
+TBD
 
 ## VA Mobile app research 
 * [VA mobile app UX research on Github](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research)
