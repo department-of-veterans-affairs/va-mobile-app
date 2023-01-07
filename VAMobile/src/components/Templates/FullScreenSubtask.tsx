@@ -20,6 +20,8 @@ export type FullScreenSubtaskProps = {
   title?: string
   /** text of the title bar right button(no text it doesn't appear) */
   rightButtonText?: string
+  /** function called when right button is pressed(no function it doesn't appear) */
+  onRightButtonPress?: () => void
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
   /** text of the primary content button(no text it doesn't appear) */
@@ -39,6 +41,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   leftButtonText,
   title,
   rightButtonText,
+  onRightButtonPress,
   rightVAIconProps,
   primaryContentButtonText,
   onPrimaryContentButtonPress,
@@ -113,7 +116,11 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
 
   const onRightTitleButtonPress = () => {
-    navigation.goBack()
+    if (onRightButtonPress) {
+      onRightButtonPress()
+    } else {
+      navigation.goBack()
+    }
     return
   }
 
