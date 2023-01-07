@@ -290,7 +290,7 @@ context('EditDraft', () => {
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
         expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
       })
     })
