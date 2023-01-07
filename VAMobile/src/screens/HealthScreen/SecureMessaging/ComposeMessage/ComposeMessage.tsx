@@ -395,7 +395,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask title={tc('compose')} leftButtonText={tc('cancel')}>
+    <FullScreenSubtask
+      title={tc('compose')}
+      leftButtonText={tc('cancel')}
+      rightButtonText={tc('save')}
+      onRightButtonPress={() => {
+        setOnSaveDraftClicked(true)
+        setOnSendClicked(true)
+      }}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
