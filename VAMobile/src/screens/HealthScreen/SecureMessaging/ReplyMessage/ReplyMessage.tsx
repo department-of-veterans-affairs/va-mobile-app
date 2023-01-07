@@ -303,7 +303,14 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask title={tc('reply')} leftButtonText={tc('cancel')}>
+    <FullScreenSubtask
+      title={tc('reply')}
+      leftButtonText={tc('cancel')}
+      rightButtonText={tc('save')}
+      onRightButtonPress={() => {
+        setOnSaveDraftClicked(true)
+        setOnSendClicked(true)
+      }}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
