@@ -299,7 +299,7 @@ context('EditDraft', () => {
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        testInstance.findAllByType(Pressable)[1].props.onPress()
       })
 
       expect(
