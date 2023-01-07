@@ -42,12 +42,14 @@ export type MenuViewActionsType = Array<MenuItemActionsType>
 export type MenuViewProps = {
   /** actions to show in the popup menu */
   actions: MenuViewActionsType
+  /** color for menu icon */
+  iconColor?: keyof VAIconColors
 }
 
 /**
  * Common popup menu component. This component will allow a user to see multiple actions inside a menu
  */
-const MenuView: FC<MenuViewProps> = ({ actions }) => {
+const MenuView: FC<MenuViewProps> = ({ actions, iconColor }) => {
   const elementRef = useRef<View>(null)
   let menuRef: Menu | null = null
   const setMenuRef: (instance: Menu | null) => void = (ref) => (menuRef = ref)
@@ -136,7 +138,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       <SafeAreaView edges={['bottom', 'left', 'right', 'top']} style={mainContainerStyle}>
         <ElementToStick ref={elementRef} style={elementToStickStyle} />
         <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
-          <VAIcon name="EllipsisSolid" fill={'white'} height={18} width={18} />
+          <VAIcon name="EllipsisSolid" fill={iconColor || 'white'} height={18} width={18} />
         </Pressable>
 
         <Menu ref={setMenuRef} style={{ backgroundColor: currentTheme.colors.background.menu }}>

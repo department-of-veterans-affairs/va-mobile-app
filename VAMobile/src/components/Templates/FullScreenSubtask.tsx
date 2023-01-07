@@ -6,6 +6,7 @@ import React, { FC } from 'react'
 import { Box, BoxProps, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useAccessibilityFocus, useDestructiveAlert, useTheme } from 'utils/hooks'
+import MenuView, { MenuViewActionsType } from 'components/Menu'
 import VAIcon, { VAIconProps } from 'components/VAIcon'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
@@ -24,6 +25,8 @@ export type FullScreenSubtaskProps = {
   onRightButtonPress?: () => void
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
+  /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
+  menuViewActions?: MenuViewActionsType
   /** text of the primary content button(no text it doesn't appear) */
   primaryContentButtonText?: string
   /** function called when primary content button is pressed(no function it doesn't appear) */
@@ -43,6 +46,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   rightButtonText,
   onRightButtonPress,
   rightVAIconProps,
+  menuViewActions,
   primaryContentButtonText,
   onPrimaryContentButtonPress,
   secondaryContentButtonText,
@@ -149,6 +153,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
               </Box>
             </TouchableWithoutFeedback>
           )}
+          {!rightButtonText && menuViewActions && <MenuView actions={menuViewActions} iconColor={'link'} />}
         </Box>
       </Box>
       <VAScrollView>
