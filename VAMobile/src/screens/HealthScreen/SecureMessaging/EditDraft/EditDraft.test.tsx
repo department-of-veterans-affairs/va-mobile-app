@@ -7,7 +7,7 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 
 import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import EditDraft from './EditDraft'
-import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
+import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, LoadingComponent, TextView, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
@@ -70,7 +70,6 @@ let mockUseComposeCancelConfirmationSpy = jest.fn()
 let mockUseGoToDraftSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
