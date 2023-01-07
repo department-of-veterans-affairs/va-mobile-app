@@ -512,7 +512,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask title={tc('editDraft')} leftButtonText={tc('cancel')}>
+    <FullScreenSubtask title={tc('editDraft')} leftButtonText={tc('cancel')} menuViewActions={MenViewActions}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
