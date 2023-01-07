@@ -153,7 +153,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
               </Box>
             </TouchableWithoutFeedback>
           )}
-          {!rightButtonText && menuViewActions && <MenuView actions={menuViewActions} iconColor={'link'} />}
+          {!rightButtonText && menuViewActions && <MenuView actions={menuViewActions} menuIconColor={'link'} />}
         </Box>
       </Box>
       <VAScrollView>
