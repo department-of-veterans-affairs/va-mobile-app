@@ -45,6 +45,23 @@ Loading production environment (Rails 6.1.4.1)
 irb(main):001:0>
 ```
 
+## User Tokens
+If IAM and SIS user authentication is not working on review instances, staging user tokens can be generated via the browser via these instructions:
+1. Open a browser and start the authorization process for your review instance (remember your `-api`)
+```
+http://dc02d94d6648a008950cc9c84056a860-api.review.vetsgov-internal/v0/sign_in/authorize?type=idme&code_challenge_method=S256&acr=loa3&client_id=mobile&code_challenge=1BUpxy37SoIPmKw96wbd6MDcvayOYm3ptT-zbe6L_zM=
+```
+2. Open network tab on browser Inspector then complete sign in
+3. After sign in, you should notice a failed request that looks similar to:
+```
+https://staging-api.va.gov/idHlwZSI6ImlkbWUiLCJjbGllbnRfaWQiOiJ3ZWIiLCJjb2RlX2NoYWxsZW5nZSI6IjFCVXB4eTM3U29JUG1Ldzk2d2JkNk1EY3ZheU9ZbTNwdFQtemJlNkxfek0iLCJjbGllbnRfc3RhdGUiOm51bGwsImNvZGUiOiJmYjNmMTVjOWU0ZDcxNWNkNjEyNjBhMmM1NzYxNzY3YyJ9.EINudwac8qI5JCFPpsYsN7Q7AkyJaQb7jzO78ZJU_GWyPsy4VShRUuYRuxegeBClnjrqkXkfqE78vU5Jjp7aViWLDmDcs2WAJaMwsFRwNEwfQi0g-XUXxWqjVup_rWfDTYWMlxNCipj3xhLN2ACMkFjxoXXlWoob_didzURc1vBEuozkseAAcsA0UOPMexnIjAfFvk11dhR6bC5_Ql14aS22WTE7D-rrngtPCTo_J4Fe-vOgpn-PPV_t5AyiLhzpqDkRlaWTbihwJ_6JpZ8FctkT42Vz4zGk6XTS33BjGv8yJvJYwgEwC2FeVpg-Em49zfkc47Bgl7DEjlDNs624lQ&code=8cb3d1e45111430eafd6e2f155f067e0
+```
+4. Replace `https://staging-api.va.gov` with your review instance and go to that url in your browser (still having your network tab open)
+5. Find a response in the network tab that has redirect to the `vamobile:` with a code that can be used to exchange tokens. Code should look something like `7ca6321-ca3e-4b51-8a4f-4b8ecf2f1597`
+6. To get a token with that code, send the following Curl but with your review instance and code:
+```
+curl -X POST http://dbded860eb589f4ccfef2b1470e8472d-api.review.vetsgov-internal/v0/sign_in/token -H 'Content-Type: application/json' -d '{"grant_type": "authorization_code", "code_verifier": "5787d673fb784c90f0e309883241803d", "code": "69a8cdea-6251-413f-8773-0ff7c5c82877"}'
+```
 ## User sessions
 
 Once you've started a Rails console you'll need a user session to test most features. As with the API calls you'll need an [API token](./ApiTokens.md#fetching-api-tokens). Given a token the IAM session manager will create a user for you.
