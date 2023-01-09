@@ -41,4 +41,13 @@ Links you will need:
 2. Get the rating value at the top and copy it to the [ios store rating Tab](https://docs.google.com/spreadsheets/d/1TlhGlT8ker4nvhoOhjxHw5aKwv4kjS_Ucd8KOd1y3tA/edit#gid=774069486)
 
 ## Adding and updating a new month
+1. Go to the [Dashboard in GA](https://datastudio.google.com/u/0/reporting/92cadc84-b31f-4a7a-9be9-6a0c3fe7d572/page/p_hyb9cmea1c/edit)
+2. Select the overflow menu in the top right and click the Refresh data option
+3. Select Page-> Manage Pages
+4. in the Report Pages sidebar, click the overflow menu on the latest monthly report and select Duplicate
+5. Rename the new page to the reporting month
+6. Update the page header to the reporting month
+7. Select all the charts except the Installs chart. Update the default date range to the reporting month start/end dates
+8. Select all the report card charts except the Installs chart and update the comparison dates to the previous month start/end dates
+9. Select the Installs chart and change the default ending date to the last date of the reporting month
 
