@@ -647,5 +647,14 @@
   "sent": "Sent",
   "editDraft": "Edit draft",
   "reviewMessage": "Review message",
-  "reply": "Reply"
+  "reply": "Reply",
+  "prescriptions": "Prescriptions",
+  "prescriptionDetails": "Prescription details",
+  "prescriptionTracking": "Prescription tracking",
+  "prescriptionsHelp": "Prescriptions help",
+  "help": "Help",
+  "statusGlossary": "Status glossary",
+  "refillRequest": "Refill request",
+  "prescriptions.refill.RequestRefillButtonTitle": "Request refill",
+  "prescriptions.refill.RequestRefillButtonTitle_plural": "Request refills"
 }

@@ -1,4 +1,4 @@
-import { Pressable, PressableProps, ScrollView, StyleProp, ViewStyle } from 'react-native'
+import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
@@ -16,6 +16,7 @@ import {
   CollapsibleAlert,
   CollapsibleAlertProps,
   ErrorComponent,
+  FeatureLandingTemplate,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -31,7 +32,7 @@ import {
   VAButton,
   VAButtonProps,
   VAIcon,
-  VAScrollView,
+  VAIconProps,
 } from 'components'
 import {
   DowntimeFeatureTypeConstants,
@@ -345,10 +346,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     return listItems
   }
 
-  const mainViewStyle: StyleProp<ViewStyle> = {
-    flexGrow: 1,
-  }
-
   const renderPagination = (): ReactNode => {
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -604,24 +601,37 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   }
 
+  const helpIconProps: VAIconProps = {
+    mr: 5,
+    preventScaling: true,
+    name: 'QuestionMark',
+    width: 16,
+    height: 16,
+    fill: 'prescriptionHelper',
+  }
+
+  const headerButton = {
+    label: tc('help'),
+    icon: helpIconProps,
+    onPress: navigateTo('PrescriptionHelp'),
+  }
+
   return (
-    <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
-      <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={mainViewStyle}>
-        {getRequestRefillButton()}
-        <TabBar {...tabProps} />
-        <Box {...filterWrapperProps}>
-          <Box {...filterContainerProps}>
-            <Box mr={8} mb={10}>
-              <RadioGroupModal {...filterProps} />
-            </Box>
-            <Box mb={10}>
-              <RadioGroupModal {...sortProps} />
-            </Box>
+    <FeatureLandingTemplate headerButton={headerButton} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+      {getRequestRefillButton()}
+      <TabBar {...tabProps} />
+      <Box {...filterWrapperProps}>
+        <Box {...filterContainerProps}>
+          <Box mr={8} mb={10}>
+            <RadioGroupModal {...filterProps} />
+          </Box>
+          <Box mb={10}>
+            <RadioGroupModal {...sortProps} />
           </Box>
         </Box>
-        {getContent()}
-      </VAScrollView>
-    </Box>
+      </Box>
+      {getContent()}
+    </FeatureLandingTemplate>
   )
 }
 

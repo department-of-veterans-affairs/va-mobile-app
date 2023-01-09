@@ -17,7 +17,7 @@ context('RefillRequestSummary', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>) => {
-    const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
+    const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn(), addListener: jest.fn() })
     const store: Partial<RootState> = {
       prescriptions: {
         ...initialPrescriptionState,
@@ -50,17 +50,17 @@ context('RefillRequestSummary', () => {
 
       const textView = testInstance.findAllByType(TextView)
       // Alert
-      expect(textView[0].props.children).toEqual('We got your refill requests')
+      expect(textView[2].props.children).toEqual('We got your refill requests')
 
       // Summary
-      expect(textView[1].props.children).toEqual('Refill request summary')
-      expect(textView[2].props.children).toEqual('ALLOPURINOL 100MG TAB')
-      expect(textView[3].props.children).toEqual('Rx #: 3636691')
+      expect(textView[3].props.children).toEqual('Refill request summary')
+      expect(textView[4].props.children).toEqual('ALLOPURINOL 100MG TAB')
+      expect(textView[5].props.children).toEqual('Rx #: 3636691')
 
       // Whats next
-      expect(textView[4].props.children).toEqual('What’s next')
-      expect(textView[5].props.children).toEqual('We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill.')
-      expect(textView[6].props.children).toEqual('If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
+      expect(textView[6].props.children).toEqual('What’s next')
+      expect(textView[7].props.children).toEqual('We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill.')
+      expect(textView[8].props.children).toEqual('If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
       // Buttons
       const vaButtons = testInstance.findAllByType(VAButton)
       expect(vaButtons.length).toEqual(1) // should only be one button 'Go to all pending refills'
@@ -83,8 +83,8 @@ context('RefillRequestSummary', () => {
 
       const textView = testInstance.findAllByType(TextView)
       // Alert
-      expect(textView[0].props.children).toEqual( 'We didn\'t get 1 refill requests')
-      expect(textView[1].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact your local VA pharmacy.')
+      expect(textView[2].props.children).toEqual( 'We didn\'t get 1 refill requests')
+      expect(textView[3].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact your local VA pharmacy.')
 
       // Buttons
       const vaButtons = testInstance.findAllByType(VAButton)
@@ -92,9 +92,9 @@ context('RefillRequestSummary', () => {
       expect(vaButtons[0].props.label).toEqual('Try again')
 
       // Summary
-      expect(textView[3].props.children).toEqual( 'Refill request summary')
-      expect(textView[4].props.children).toEqual( 'ALLOPURINOL 100MG TAB')
-      expect(textView[5].props.children).toEqual( 'Rx #: 3636691')
+      expect(textView[5].props.children).toEqual( 'Refill request summary')
+      expect(textView[6].props.children).toEqual( 'ALLOPURINOL 100MG TAB')
+      expect(textView[7].props.children).toEqual( 'Rx #: 3636691')
 
       // Whats next should not show
       expect(findByTypeWithText(testInstance, TextView, 'What’s next')).toBeFalsy()
@@ -126,20 +126,20 @@ context('RefillRequestSummary', () => {
 
       const textView = testInstance.findAllByType(TextView)
       // Alert
-      expect(textView[0].props.children).toEqual( 'We didn\'t get 1 refill requests')
-      expect(textView[1].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact your local VA pharmacy.')
+      expect(textView[2].props.children).toEqual( 'We didn\'t get 1 refill requests')
+      expect(textView[3].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact your local VA pharmacy.')
 
       // Summary
-      expect(textView[3].props.children).toEqual( 'Refill request summary')
-      expect(textView[4].props.children).toEqual( 'ALLOPURINOL 100MG TAB')
-      expect(textView[5].props.children).toEqual( 'Rx #: 3636691')
-      expect(textView[6].props.children).toEqual( 'AMLODIPINE BESYLATE 10MG TAB')
-      expect(textView[7].props.children).toEqual( 'Rx #: 3636711A')
+      expect(textView[5].props.children).toEqual( 'Refill request summary')
+      expect(textView[6].props.children).toEqual( 'ALLOPURINOL 100MG TAB')
+      expect(textView[7].props.children).toEqual( 'Rx #: 3636691')
+      expect(textView[8].props.children).toEqual( 'AMLODIPINE BESYLATE 10MG TAB')
+      expect(textView[9].props.children).toEqual( 'Rx #: 3636711A')
 
       // Whats next
-      expect(textView[8].props.children).toEqual( 'What’s next')
-      expect(textView[9].props.children).toEqual( 'We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill.')
-      expect(textView[10].props.children).toEqual( 'If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
+      expect(textView[10].props.children).toEqual( 'What’s next')
+      expect(textView[11].props.children).toEqual( 'We\'re reviewing your refill request. Once approved, the VA pharmacy will process your refill.')
+      expect(textView[12].props.children).toEqual( 'If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
     })
   })
 })

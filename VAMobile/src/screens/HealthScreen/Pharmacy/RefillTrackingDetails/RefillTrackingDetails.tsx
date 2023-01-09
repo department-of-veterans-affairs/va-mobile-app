@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect } from 'react'
 
-import { Box, ClosePanelButton, ErrorComponent, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView, VAScrollView } from 'components'
+import { Box, ClosePanelButton, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
 import { ClickForActionLink } from 'components'
 import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -184,7 +184,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   }
 
   return (
-    <VAScrollView>
+    <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         {renderHeader()}
         <Box mt={standardMarginBetween}>
@@ -192,7 +192,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
         </Box>
         {renderTrackingCards()}
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 
