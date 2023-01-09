@@ -16,7 +16,6 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   const launchExternalLink = useExternalLink()
 
   const alertWrapperProps: BoxProps = {
-    mx: theme.dimensions.gutter,
     my: standardMarginBetween,
   }
 
