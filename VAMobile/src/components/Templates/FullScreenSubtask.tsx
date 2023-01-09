@@ -1,5 +1,5 @@
 import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native'
-import { TouchableWithoutFeedback } from 'react-native'
+import { StatusBar, TouchableWithoutFeedback, View, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -34,7 +34,7 @@ export type FullScreenSubtaskProps = {
   navigationMultiStepCancelScreen?: number
 }
 
-const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
+export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   children,
   leftButtonText,
   title,
@@ -101,7 +101,12 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           text: t('close'),
           onPress: () => {
             if (navigationMultiStepCancelScreen) {
-              navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+              if (navigationMultiStepCancelScreen === 1) {
+                //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
+                navigation.getParent()?.goBack()
+              } else {
+                navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+              }
             } else {
               navigation.goBack()
             }
@@ -113,12 +118,27 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
 
   const onRightTitleButtonPress = () => {
-    navigation.goBack()
+    if (navigationMultiStepCancelScreen) {
+      if (navigationMultiStepCancelScreen === 1) {
+        //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
+        navigation.getParent()?.goBack()
+      } else {
+        navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+      }
+    } else {
+      navigation.goBack()
+    }
     return
   }
 
+  const fillStyle: ViewStyle = {
+    backgroundColor: theme.colors.background.main,
+    flex: 1,
+  }
+
   return (
-    <>
+    <View style={fillStyle}>
+      <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <Box {...titleBannerProps}>
         <Box ml={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
           {leftButtonText && (
@@ -155,24 +175,24 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           </Box>
         )}
         {children}
-        {primaryContentButtonText && onPrimaryContentButtonPress && (
-          <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-            {secondaryContentButtonText && onSecondaryContentButtonPress && (
-              <Box ml={theme.dimensions.gutter} flex={1} height={theme.dimensions.fullScreenContentButtonHeight}>
-                <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
-              </Box>
-            )}
-            <Box
-              ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
-              mr={theme.dimensions.gutter}
-              flex={1}
-              height={theme.dimensions.fullScreenContentButtonHeight}>
-              <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
-            </Box>
-          </Box>
-        )}
       </VAScrollView>
-    </>
+      {primaryContentButtonText && onPrimaryContentButtonPress && (
+        <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+          {secondaryContentButtonText && onSecondaryContentButtonPress && (
+            <Box ml={theme.dimensions.gutter} flex={1} height={theme.dimensions.fullScreenContentButtonHeight}>
+              <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+            </Box>
+          )}
+          <Box
+            ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
+            mr={theme.dimensions.gutter}
+            flex={1}
+            height={theme.dimensions.fullScreenContentButtonHeight}>
+            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </Box>
+        </Box>
+      )}
+    </View>
   )
 }
 

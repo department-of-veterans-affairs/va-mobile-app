@@ -637,5 +637,14 @@
   "appointments": "Appointments",
   "details": "Details",
   "vaVaccines": "VA vaccines",
-  "vaVaccines.a11y": "V-A vaccines"
+  "vaVaccines.a11y": "V-A vaccines",
+  "prescriptions": "Prescriptions",
+  "prescriptionDetails": "Prescription details",
+  "prescriptionTracking": "Prescription tracking",
+  "prescriptionsHelp": "Prescriptions help",
+  "help": "Help",
+  "statusGlossary": "Status glossary",
+  "refillRequest": "Refill request",
+  "prescriptions.refill.RequestRefillButtonTitle": "Request refill",
+  "prescriptions.refill.RequestRefillButtonTitle_plural": "Request refills"
 }
