@@ -1,4 +1,5 @@
 import { Pressable } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
@@ -89,7 +90,7 @@ export const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, titl
   }
 
   return (
-    <>
+    <SafeAreaView edges={['top']}>
       <Box {...titleBannerProps}>
         <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1}>
           {leftButtonText && (
@@ -127,7 +128,7 @@ export const LargePanel: FC<LargePanelProps> = ({ children, leftButtonText, titl
         {children}
         {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
       </VAScrollView>
-    </>
+    </SafeAreaView>
   )
 }
 
