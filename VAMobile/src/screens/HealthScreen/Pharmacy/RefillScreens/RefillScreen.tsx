@@ -17,6 +17,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
+import { HiddenA11yElement } from 'styles/common'
 
 type RefillScreenProps = StackScreenProps<RefillStackParamList, 'RefillScreen'>
 
@@ -80,9 +81,16 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   const getListItems = () => {
-    const listItems: Array<SelectionListItemObj> = refillable.map((prescription) => {
+    const total = refillablePrescriptions?.length
+    const listItems: Array<SelectionListItemObj> = refillable.map((prescription, idx) => {
+      const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total })
       return {
-        content: <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} hideFillDate={true} />,
+        content: (
+          <>
+            {orderIdentifier && <HiddenA11yElement accessibilityLabel={orderIdentifier}>{orderIdentifier}</HiddenA11yElement>}
+            <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} hideFillDate={true} />
+          </>
+        ),
       }
     })
 
