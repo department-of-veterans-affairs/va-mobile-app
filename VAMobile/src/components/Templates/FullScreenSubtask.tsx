@@ -1,4 +1,3 @@
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useTranslation } from 'react-i18next'
@@ -130,7 +129,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
 
   return (
-    <SafeAreaView edges={['top']}>
+    <>
       <Box {...titleBannerProps}>
         <Box ml={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
           {leftButtonText && (
@@ -185,7 +184,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           </Box>
         )}
       </VAScrollView>
-    </SafeAreaView>
+    </>
   )
 }
 
