@@ -88,7 +88,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     const upcomingAppointmentError = selectedTab === t('appointmentsTab.upcoming') && (upcomingVaServiceError || upcomingCcServiceError)
     if (pastAppointmentError || upcomingAppointmentError) {
       return (
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox
             title={t('appointments.appointmentsStatusSomeUnavailable')}
             text={t('appointments.troubleLoadingSomeAppointments')}

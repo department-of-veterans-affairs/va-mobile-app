@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
 import { Box, BoxProps, ValidationFunctionItems } from '../../index'
-import { getInputBorderColor, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { useTheme } from 'utils/hooks'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
@@ -102,6 +102,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     }
   }
 
+  const inputBorderWidth = getInputBorderWidth(theme, error, isFocused)
+  const textAreaHeight = 201
+
   const inputProps: TextInputProps = {
     value: value,
     textContentType,
@@ -123,7 +126,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       fontFamily: theme.fontFace.regular,
       marginRight: 40,
       color: isFocused ? theme.colors.text.inputFocused : theme.colors.text.input,
-      height: isTextArea ? 201 : undefined,
+      height: isTextArea ? textAreaHeight - inputBorderWidth * 2 : undefined,
     },
     onFocus,
     onBlur,
@@ -133,9 +136,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const textAreaWrapperProps: BoxProps = {
     backgroundColor: 'textBox',
-    height: 201,
+    height: textAreaHeight,
     borderColor: getInputBorderColor(error, isFocused),
-    borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
+    borderWidth: inputBorderWidth,
     pl: 8,
   }
 

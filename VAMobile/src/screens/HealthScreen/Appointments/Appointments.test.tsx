@@ -1,20 +1,18 @@
 import 'react-native'
 import React from 'react'
 
-// Note: test renderer must be required after react-native.
-import { context, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
-import { act } from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
 import { TouchableOpacity } from 'react-native'
 
+import * as api from 'store/api'
 import Appointments from './Appointments'
 import { InitialState, AppointmentsState, initialAppointmentsState, ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { AlertBox, ErrorComponent } from 'components'
+import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import { featureEnabled } from 'utils/remoteConfig'
-import { when } from 'jest-when'
-import { request } from 'http'
 
 type mockAppointmentServiceErrors = {
   pastVaServiceError?: boolean
@@ -22,6 +20,8 @@ type mockAppointmentServiceErrors = {
   upcomingVaServiceError?: boolean
   upcomingCcServiceError?: boolean
 }
+
+jest.mock('utils/remoteConfig')
 
 context('AppointmentsScreen', () => {
   let component: RenderAPI
@@ -79,7 +79,7 @@ context('AppointmentsScreen', () => {
   })
 
   describe('when the user clicks the past appointments segmented tab', () => {
-    it('should update the past appointnents tab to be selected', async () => {
+    it('should update the past appointments tab to be selected', async () => {
       await waitFor(() => {
         const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
         pastButton.props.onPress()
@@ -123,8 +123,19 @@ context('AppointmentsScreen', () => {
 
   describe('when pastVaServiceError exist for past appointments', () => {
     describe('while on past appointments tab', () => {
-      it('should display an alertbox specifying some appointments are not available', async () => {
-        initializeTestInstance(undefined, { pastVaServiceError: true })
+      it('should display an AlertBox specifying some appointments are not available', async () => {
+        await waitFor(() => {
+          when(api.get as jest.Mock)
+            .calledWith(`/v0/appointments`, expect.anything())
+            .mockResolvedValue({
+              data: [],
+              meta: {
+                errors: [{ source: AppointmentsErrorServiceTypesConstants.VA }],
+              },
+            })
+          initializeTestInstance(undefined, { pastVaServiceError: true })
+        })
+
         await waitFor(() => {
           const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
           pastButton.props.onPress()
@@ -144,7 +155,7 @@ context('AppointmentsScreen', () => {
 
     describe('when pastCcServiceError exist for past appointments', () => {
       describe('while on past appointments tab', () => {
-        it('should display an alertbox specifying some appointments are not available', async () => {
+        it('should display an AlertBox specifying some appointments are not available', async () => {
           initializeTestInstance(undefined, { pastCcServiceError: true })
           await waitFor(() => {
             const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
@@ -175,9 +186,13 @@ context('AppointmentsScreen', () => {
         }
 
         await waitFor(() => {
+          when(api.get as jest.Mock)
+            .calledWith(`/v0/appointments`, expect.anything())
+            .mockRejectedValue({ networkError: true } as api.APIError)
           initializeTestInstance(errorState)
-          expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
         })
+
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
       })
 
       it('should not render error component when the stores screenID does not match the components screenID', async () => {
@@ -207,10 +222,14 @@ context('AppointmentsScreen', () => {
         }
 
         await waitFor(() => {
+          when(api.get as jest.Mock)
+            .calledWith(`/v0/appointments`, expect.anything())
+            .mockRejectedValue({ networkError: true } as api.APIError)
           initializeTestInstance(errorState)
-          expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-          expect(testInstance.findByProps({ phone: '877-327-0022' })).toBeTruthy()
         })
+
+        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+        expect(testInstance.findByProps({ phone: '877-327-0022' })).toBeTruthy()
       })
 
       it('should not render error component when the stores screenID does not match the components screenID', async () => {

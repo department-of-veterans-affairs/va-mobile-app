@@ -16,14 +16,13 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   const launchExternalLink = useExternalLink()
 
   const alertWrapperProps: BoxProps = {
-    mx: theme.dimensions.gutter,
     my: standardMarginBetween,
   }
 
   const bulletOne = {
     text: t('prescriptions.notAuthorized.enrolled'),
     boldedText: ' ' + tc('and'),
-    a11yLabel: t('prescriptions.notAuthorized.enrolled.a11y'),
+    a11yLabel: t('prescriptions.notAuthorized.enrolled.a11y') + ' ' + tc('and'),
   }
 
   const bulletTwo = {
@@ -59,7 +58,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
           <Box mt={standardMarginBetween}>
             <TextView {...linkProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
           </Box>
-          <TextView mt={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+          <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
           <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />

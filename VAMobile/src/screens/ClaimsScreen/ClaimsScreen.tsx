@@ -62,8 +62,17 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
     flexGrow: 1,
   }
 
+  const fetchInfoAgain = (): void => {
+    if (claimsAndAppealsAccess) {
+      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    }
+    if (personalInformationNeedsUpdate) {
+      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    }
+  }
+
   if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
+    return <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
   }
 
   if (loadingClaimsAndAppeals || personalInformationLoading) {
@@ -99,7 +108,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
       }
 
       return (
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" />
         </Box>
       )

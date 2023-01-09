@@ -84,7 +84,7 @@ context('RefillRequestSummary', () => {
       const textView = testInstance.findAllByType(TextView)
       // Alert
       expect(textView[0].props.children).toEqual( 'We didn\'t get 1 refill requests')
-      expect(textView[1].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact you local VA pharmacy.')
+      expect(textView[1].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact your local VA pharmacy.')
 
       // Buttons
       const vaButtons = testInstance.findAllByType(VAButton)
@@ -127,7 +127,7 @@ context('RefillRequestSummary', () => {
       const textView = testInstance.findAllByType(TextView)
       // Alert
       expect(textView[0].props.children).toEqual( 'We didn\'t get 1 refill requests')
-      expect(textView[1].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact you local VA pharmacy.')
+      expect(textView[1].props.children).toEqual( 'We\'re sorry. Something went wrong on our end. Try again or contact your local VA pharmacy.')
 
       // Summary
       expect(textView[3].props.children).toEqual( 'Refill request summary')

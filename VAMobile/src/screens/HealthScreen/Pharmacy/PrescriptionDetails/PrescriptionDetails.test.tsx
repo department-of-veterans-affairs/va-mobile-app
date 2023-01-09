@@ -7,8 +7,8 @@ import PrescriptionDetails from './PrescriptionDetails'
 import { ReactTestInstance } from 'react-test-renderer'
 import { initialAuthState } from 'store/slices'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
-import { ClickForActionLink, FooterButton, TextView} from 'components'
-import { PrescriptionAttributeData, RefillStatus, RefillStatusConstants } from 'store/api/types'
+import { ClickForActionLink, FooterButton, TextView, VAButton} from 'components'
+import { PrescriptionAttributeData, RefillStatusConstants } from 'store/api/types'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 context('PrescriptionDetails', () => {
@@ -33,6 +33,7 @@ context('PrescriptionDetails', () => {
                 refillDate: '2022-10-28T04:00:00.000Z',
                 refillRemaining: 5,
                 facilityName: 'DAYT29',
+                facilityPhoneNumber: '(217) 636-6712',
                 isRefillable: false,
                 isTrackable: false,
                 orderedDate: '2022-10-28T04:00:00.000Z',
@@ -114,9 +115,9 @@ context('PrescriptionDetails', () => {
           refillStatus: RefillStatusConstants.TRANSFERRED
         })
 
-        const footerButton = testInstance.findAllByType(FooterButton)
-        expect(footerButton.length).toBe(1)
-        expect(footerButton[0].props.text).toEqual('Go to My VA Health')
+        const button = testInstance.findAllByType(VAButton)
+        expect(button.length).toBe(1)
+        expect(button[0].props.label).toEqual('Go to My VA Health')
       })
     })
 
@@ -124,8 +125,8 @@ context('PrescriptionDetails', () => {
       it('should not display FooterButton', async () => {
         initializeTestInstance()
 
-        const footerButton = testInstance.findAllByType(FooterButton)
-        expect(footerButton.length).toBe(0)
+        const button = testInstance.findAllByType(VAButton)
+        expect(button.length).toBe(0)
       })
     })
   })
@@ -137,9 +138,9 @@ context('PrescriptionDetails', () => {
           isRefillable: true
         })
 
-        const footerButton = testInstance.findAllByType(FooterButton)
-        expect(footerButton.length).toBe(1)
-        expect(footerButton[0].props.text).toEqual('Request refill')
+        const button = testInstance.findAllByType(VAButton)
+        expect(button.length).toBe(1)
+        expect(button[0].props.label).toEqual('Request refill')
       })
     })
 
@@ -147,8 +148,8 @@ context('PrescriptionDetails', () => {
       it('should not display FooterButton', async () => {
         initializeTestInstance()
 
-        const footerButton = testInstance.findAllByType(FooterButton)
-        expect(footerButton.length).toBe(0)
+        const button = testInstance.findAllByType(VAButton)
+        expect(button.length).toBe(0)
       })
     })
   })

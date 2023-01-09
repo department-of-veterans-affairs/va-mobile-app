@@ -9,6 +9,7 @@ import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads }
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
 import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
+import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import Mock = jest.Mock
 import { Pressable } from 'react-native'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
@@ -84,7 +85,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     messageId: 3,
     category: CategoryTypeFields.other,
     subject: '',
-    body: 'Last accordion collapsible should be open, so the body text of this message should display',
+    body: 'First accordion collapsible should be open, so the body text of this message should display',
     attachment: false,
     sentDate: mockDateISO,
     senderId: 2,
@@ -209,35 +210,32 @@ context('ViewMessageScreen', () => {
     })
   })
 
-  it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
+  it('should render the correct text content of thread, and all accordions except the first should be closed', async () => {
     await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toBe('mock sender 1')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('mock sender 3')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
+      expect(testInstance.findAllByType(TextView)[4].props.children).toBe('First accordion collapsible should be open, so the body text of this message should display')
       // Have to use Invalid DateTime values otherwise will fail git tests if in different time zone
-      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[3].props.children).toBe('mock sender 2')
-      expect(testInstance.findAllByType(TextView)[4].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
-    })
-  })
-
-  it("should render last accordion's body text since it should be expanded", async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toBe('mock sender 2')
+      expect(testInstance.findAllByType(TextView)[6].props.children).toBe('Invalid DateTime')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('mock sender 1')
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Invalid DateTime')
+      
     })
   })
 
   describe('when first message and last message is clicked', () => {
-    it('should expand first accordion and close last accordion', async () => {
+    it('should close first accordion and expand last accordion', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-        testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('message 1 body text')
+        testInstance.findAllByType(Pressable)[1].props.onPress()
+        testInstance.findAllByType(Pressable)[3].props.onPress()
+        expect(testInstance.findAllByType(TextView)[4].props.children).toBe('mock sender 2')
         // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
-        expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
-        expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
-        // Reply footer displays properly if latest message in thread is not over 45 days old
-        expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Reply')
+        expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 1')
+        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Invalid DateTime')
+        expect(testInstance.findAllByType(TextView)[8].props.children).toBe('message 1 body text')
+        // Reply button displays properly if latest message in thread is not over 45 days old
+        expect(testInstance.findAllByType(TextView)[0].props.children).toBe('Reply')
       })
     })
   })
@@ -265,10 +263,10 @@ context('ViewMessageScreen', () => {
   describe('when individual messages fail to load', () => {
     describe('when an individual message returns an error and that message is clicked', () => {
       it('should show AlertBox with "Message could not be found" title', async () => {
-        initializeTestInstance(mockMessagesById, mockThreads, false, false, 3, [1])
+        initializeTestInstance(mockMessagesById, mockThreads, false, false, 1, [1])
 
         await waitFor(() => {
-          testInstance.findAllByType(Pressable)[0].props.onPress()
+          testInstance.findAllByType(Pressable)[1].props.onPress()
           expect(testInstance.findByType(IndividualMessageErrorComponent)).toBeTruthy()
           expect(testInstance.findByProps({ title: 'Message could not be found' })).toBeTruthy()
         })
@@ -297,14 +295,7 @@ context('ViewMessageScreen', () => {
     it('should show AlertBox with Compose button', async () => {
       await waitFor(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
-        expect(testInstance.findByProps({ label: 'Compose a new message' })).toBeTruthy()
-      })
-    })
-
-    it('should use route navigation when Compose button is clicked', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ label: 'Compose a new message' }).props.onPress()
-        expect(navigateToSpy).toHaveBeenCalled()
+        expect(testInstance.findByType(ComposeMessageButton)).toBeTruthy()
       })
     })
   })

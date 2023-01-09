@@ -240,6 +240,26 @@ export const Events = {
       name: 'vama_rx_trackingtab',
     }
   },
+  vama_eu_shown: (): Event => {
+    return {
+      name: 'vama_eu_shown',
+    }
+  },
+  vama_eu_skipped: (): Event => {
+    return {
+      name: 'vama_eu_skipped',
+    }
+  },
+  vama_eu_updated_success: (): Event => {
+    return {
+      name: 'vama_eu_updated_success',
+    }
+  },
+  vama_eu_updated: (): Event => {
+    return {
+      name: 'vama_eu_updated',
+    }
+  },
 }
 
 export const UserAnalytics = {
