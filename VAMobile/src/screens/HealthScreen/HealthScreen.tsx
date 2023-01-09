@@ -141,7 +141,6 @@ const HealthScreenStack = createStackNavigator()
  * Stack screen for the Health tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const HealthStackScreen: FC<HealthStackScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
   const headerStyles = useHeaderStyles()
 
   return (
