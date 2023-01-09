@@ -6,6 +6,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { AlertBox, Box, ClosePanelButton, ErrorComponent, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
+import { HiddenA11yElement } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
@@ -17,7 +18,6 @@ import { useFocusEffect } from '@react-navigation/native'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
-import { HiddenA11yElement } from 'styles/common'
 
 type RefillScreenProps = StackScreenProps<RefillStackParamList, 'RefillScreen'>
 
