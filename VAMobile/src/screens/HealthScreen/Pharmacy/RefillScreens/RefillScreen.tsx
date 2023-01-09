@@ -87,7 +87,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
       return {
         content: (
           <>
-            {orderIdentifier && <HiddenA11yElement accessibilityLabel={orderIdentifier}>{orderIdentifier}</HiddenA11yElement>}
+            <HiddenA11yElement accessibilityLabel={orderIdentifier}>{orderIdentifier}</HiddenA11yElement>
             <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} hideFillDate={true} />
           </>
         ),
