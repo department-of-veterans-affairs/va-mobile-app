@@ -1,7 +1,7 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { TFunction } from 'i18next'
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
-import React, { ReactNode } from 'react'
+import React from 'react'
 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
@@ -15,6 +15,7 @@ import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
+import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
@@ -111,6 +112,7 @@ export type HealthStackParamList = WebviewStackParams & {
   PrescriptionDetails: {
     prescriptionId: string
   }
+  RefillRequestSummary: undefined
   RefillScreenModal: undefined
   RefillTrackingModal: {
     prescription: PrescriptionData
@@ -124,7 +126,7 @@ export type HealthStackParamList = WebviewStackParams & {
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
 
-export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
+export const getHealthScreens = (t: TFunction) => {
   return [
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
     <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
@@ -177,6 +179,7 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
         options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </HealthStack.Group>,
+    <HealthStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} options={{ headerShown: false, presentation: 'card' }} />,
     <HealthStack.Screen
       key={'RefillScreenModal'}
       name="RefillScreenModal"
@@ -187,20 +190,20 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       key={'RefillTrackingModal'}
       name="RefillTrackingModal"
       component={RefillTrackingModal}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescriptions.refillTracking.pageHeaderTitle') }}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
     <HealthStack.Screen
       key={'PrescriptionHelp'}
       name="PrescriptionHelp"
       component={PrescriptionHelp}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescription.help.title') }}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
     <HealthStack.Screen
       key={'StatusGlossary'}
       name="StatusGlossary"
       component={StatusGlossary}
       options={{
-        title: t('statusGlossary.title'),
+        headerShown: false,
         presentation: 'modal',
         ...TransitionPresets.ModalTransition,
       }}
