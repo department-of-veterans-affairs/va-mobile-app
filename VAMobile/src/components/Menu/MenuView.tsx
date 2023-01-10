@@ -135,7 +135,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     <>
       <ElementToStick ref={elementRef} style={elementToStickStyle} />
       <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
-        <VAIcon name="EllipsisSolid" fill={'link'} height={18} width={18} />
+        <VAIcon name="EllipsisSolid" fill={'link'} height={22} width={22} />
         <TextView {...textViewProps}>{t('more')}</TextView>
       </Pressable>
 
