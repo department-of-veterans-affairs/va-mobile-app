@@ -21,7 +21,7 @@ export type FullScreenSubtaskProps = {
   title?: string
   /** text of the title bar right button(no text it doesn't appear) */
   rightButtonText?: string
-  /** function called when right button is pressed(no function it doesn't appear) */
+  /** function called when right button is pressed(defaults to back navigation if omitted) */
   onRightButtonPress?: () => void
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
