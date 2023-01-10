@@ -395,7 +395,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const helpIconProps: VAIconProps = {
+  const saveIconProps: VAIconProps = {
     name: 'FolderSolid',
     fill: 'link',
     width: 16,
@@ -408,7 +408,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       title={tc('compose')}
       leftButtonText={tc('cancel')}
       rightButtonText={tc('save')}
-      rightVAIconProps={helpIconProps}
+      rightVAIconProps={saveIconProps}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
