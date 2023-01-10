@@ -23,6 +23,7 @@ import {
   TextArea,
   TextView,
   VAButton,
+  VAIconProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -394,11 +395,20 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const helpIconProps: VAIconProps = {
+    name: 'FolderSolid',
+    fill: 'link',
+    width: 16,
+    height: 16,
+    preventScaling: true,
+  }
+
   return (
     <FullScreenSubtask
       title={tc('compose')}
       leftButtonText={tc('cancel')}
       rightButtonText={tc('save')}
+      rightVAIconProps={helpIconProps}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
