@@ -1,11 +1,6 @@
 ---
 title: Components
-sidebar_position: 5
+sidebar_position: 2
 ---
 
-Component info can be found within the Front End section of this site.
-
-*  [Destructive actions draft on Google Docs](https://docs.google.com/document/d/1g9L7DFoxURr5peRNAz47heXGQe2mzv--sbtMFwv50SY/edit#heading=h.yl5rm31rqvz7) 
-*  [Confirmation actions draft on Google Docs](https://docs.google.com/document/d/1H9anQK-jRzmmkeBAxOqo9QG3iyrXL2OmByD1X8aJk4s/edit) 
-*  [Overflow menu draft on Google Docs](https://docs.google.com/document/d/1VNMjyeD35Tapr6UxXGU0pu5MJW-9Xi65BDPUk4VFaH8/edit) 
-*  [Success & error actions draft on Google Docs](https://docs.google.com/document/d/1uRzt-wMHyXTpU2qBb2bsLwg-yp1aLW_KD_t8XXCS3kA/edit#heading=h.yl5rm31rqvz7)  
+Our design system contains components that help to ensure consistency across features within the VA mobile app. Component descriptions can be found within the [**Front End Componenets**](/docs/Engineering/FrontEnd/ComponentsSection/) section of this site as well as in our [Figma Library](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/branch/rRcjru5nNPz1A4p3xvD6ND/VAMobile-DesignLibrary1.0-%F0%9F%93%90?node-id=501%3A40&t=kaAKRCUzSZOxoRi6-1).
