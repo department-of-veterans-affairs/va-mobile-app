@@ -396,7 +396,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const saveIconProps: VAIconProps = {
-    name: 'FolderSolid',
+    name: 'Save',
     fill: 'link',
     width: 22,
     height: 22,
