@@ -44,9 +44,11 @@ cd ~/vets-api; docker-compose -f docker-compose.review.yml exec vets-api bundle 
 Loading production environment (Rails 6.1.4.1)
 irb(main):001:0>
 ```
+To generate a user session, see section [User Token](#User-Token) below then follow [User Sign-in](StagingInstances.md#User-Sign-in) instructions.
 
-## User Tokens
-If IAM and SIS user authentication is not working on review instances, staging user tokens can be generated via the browser via these instructions:
+## User Token
+Currently, there are two authentication options, IAM and SIS. IAM authentication isn't working for RIs or staging right now for unknown reasons that may not be fixed because IAM is being deprecated for SIS, which is why the instructions in the next section (User Sessions) don't work right now on RIs. 
+We lack the ability to log in via SIS on RIs due to limitations the SIS team is working on. We expect this to be fixed at some point, but in the meantime it means we have to use staging to help us spoof the sign-in process with the instructions below:
 1. Open a browser and start the authorization process for your review instance (remember your `-api`)
 ```
 http://dc02d94d6648a008950cc9c84056a860-api.review.vetsgov-internal/v0/sign_in/authorize?type=idme&code_challenge_method=S256&acr=loa3&client_id=mobile&code_challenge=1BUpxy37SoIPmKw96wbd6MDcvayOYm3ptT-zbe6L_zM=
@@ -62,10 +64,5 @@ https://staging-api.va.gov/idHlwZSI6ImlkbWUiLCJjbGllbnRfaWQiOiJ3ZWIiLCJjb2RlX2No
 ```
 curl -X POST http://dbded860eb589f4ccfef2b1470e8472d-api.review.vetsgov-internal/v0/sign_in/token -H 'Content-Type: application/json' -d '{"grant_type": "authorization_code", "code_verifier": "5787d673fb784c90f0e309883241803d", "code": "69a8cdea-6251-413f-8773-0ff7c5c82877"}'
 ```
-## User sessions
 
-Once you've started a Rails console you'll need a user session to test most features. As with the API calls you'll need an [API token](./ApiTokens.md#fetching-api-tokens). Given a token the IAM session manager will create a user for you.
 
-```
-irb(main):001:0> user = IAMSSOeOAuth::SessionManager.new('EESBp0xiLD6p1g86q4g1').find_or_create_user
-```
