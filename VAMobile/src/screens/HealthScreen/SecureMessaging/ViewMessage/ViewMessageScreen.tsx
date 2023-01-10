@@ -40,6 +40,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
+  const [showModalPicker, setShowModalPicker] = useState(false)
 
   /* useref is used to persist the folder the message is in Example the message was first in test folder and the user moves it to test2. The user is still under folder
     test but the message is not. So if the user selects move again and move to another folder test3 and clicks undo you want the message to go to test2 not test which
@@ -168,6 +169,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
   const onMove = (value: string) => {
+    setShowModalPicker(false)
     const currentFolder = Number(folderWhereMessageIs.current)
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
@@ -185,8 +187,40 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     }
   }
 
+  const backLabel = tc(currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT ? 'sent' : 'messages')
+
+  const moveIconProps: VAIconProps = {
+    name: 'FolderSolid',
+    width: 22,
+    height: 22,
+    preventScaling: true,
+    fill: 'link',
+  }
+
+  const headerButton =
+    currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
+      ? undefined
+      : {
+          label: tc('pickerLaunchBtn'),
+          icon: moveIconProps,
+          onPress: () => setShowModalPicker(true),
+        }
+
   return (
-    <ChildTemplate backLabel={tc('sent')} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton}>
+      {headerButton && showModalPicker && (
+        <VAModalPicker
+          selectedValue={newCurrentFolderID}
+          onSelectionChange={onMove}
+          onClose={() => setShowModalPicker(false)}
+          pickerOptions={getFolders()}
+          labelKey={'common:pickerMoveMessageToFolder'}
+          buttonText={'common:pickerLaunchBtn'}
+          confirmBtnText={'common:pickerLaunchBtn'}
+          key={newCurrentFolderID}
+          showModalByDefault={true}
+        />
+      )}
       {!replyExpired ? (
         <ReplyMessageButton messageID={messageID} />
       ) : (
