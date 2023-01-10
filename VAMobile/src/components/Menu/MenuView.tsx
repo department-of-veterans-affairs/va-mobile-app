@@ -95,7 +95,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   }
 
   const textViewProps: TextViewProps = {
-    color: 'footerButton',
+    color: 'link',
     variant: 'textWithIconButton',
   }
 
