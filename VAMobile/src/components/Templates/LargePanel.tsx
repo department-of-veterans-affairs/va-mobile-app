@@ -6,7 +6,8 @@ import React, { FC } from 'react'
 import { Box, BoxProps, FooterButton, TextView, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveAlert, useTheme } from 'utils/hooks'
-/*To use this template to rap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
+
+/* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
 Use 'options={{headerShown: false}}' in the individual screen if only an individual screen is supposed to do it.
 */
