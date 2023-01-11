@@ -1,4 +1,4 @@
-import { Share, StyleProp, ViewStyle } from 'react-native'
+import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'

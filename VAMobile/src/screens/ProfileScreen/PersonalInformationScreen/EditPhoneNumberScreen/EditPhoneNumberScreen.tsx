@@ -38,7 +38,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useDestructiveAlert()
 
@@ -177,10 +176,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: tc('cancel'),
+          text: t('cancel'),
         },
         {
-          text: tc('remove'),
+          text: t('remove'),
           onPress: onDelete,
         },
       ],

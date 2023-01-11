@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
 
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import MilitaryInformationScreen from './index'
@@ -33,9 +33,16 @@ context('MilitaryInformationScreen', () => {
       formattedEndDate: 'July 10, 1995',
     },
   ]
-
+  const props = mockNavProps(
+    {},
+    {
+      setOptions: jest.fn(),
+      navigate: jest.fn(),
+      addListener: jest.fn(),
+    },
+  )
   const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState, needsDataLoad = true) => {
-    component = render(<MilitaryInformationScreen />, {
+    component = render(<MilitaryInformationScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         militaryService: {
@@ -70,8 +77,8 @@ context('MilitaryInformationScreen', () => {
       expect(header.props.children).toBe('Period of service')
 
       const texts = testInstance.findAllByType(TextView)
-      expect(texts[1].props.children).toBe('United States Marine Corps')
-      expect(texts[2].props.children).toBe('June 04, 1993 - July 10, 1995')
+      expect(texts[4].props.children).toBe('United States Marine Corps')
+      expect(texts[5].props.children).toBe('June 04, 1993 - July 10, 1995')
 
       const link = testInstance.findByProps({ accessibilityRole: 'link' })
       expect(link.props.children).toBe("What if my military service information doesn't look right?")
@@ -123,7 +130,7 @@ context('MilitaryInformationScreen', () => {
 
   describe('when service history is empty', () => {
     it('should render NoMilitaryInformationAccess', async () => {
-      component = render(<MilitaryInformationScreen />, {
+      component = render(<MilitaryInformationScreen {...props} />, {
         preloadedState: {
           auth: { ...initialAuthState },
           militaryService: {
@@ -148,7 +155,7 @@ context('MilitaryInformationScreen', () => {
 
   describe('when military service history authorization is false', () => {
     it('should render NoMilitaryInformationAccess', async () => {
-      component = render(<MilitaryInformationScreen />, {
+      component = render(<MilitaryInformationScreen {...props} />, {
         preloadedState: {
           auth: { ...initialAuthState },
           militaryService: {
@@ -172,7 +179,7 @@ context('MilitaryInformationScreen', () => {
 
   describe('when service history is not empty and military service history authorization is true', () => {
     it('should not render NoMilitaryInformationAccess', async () => {
-      component = render(<MilitaryInformationScreen />, {
+      component = render(<MilitaryInformationScreen {...props} />, {
         preloadedState: {
           auth: { ...initialAuthState },
           militaryService: {

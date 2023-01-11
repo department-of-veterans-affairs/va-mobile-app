@@ -108,35 +108,35 @@ context('SettingsScreen', () => {
     describe('when the biometry type is Face', () => {
       it('should display the text "Use face recognition"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Face Recognition')
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Face Recognition')
       })
     })
 
     describe('when the biometry type is Fingerprint', () => {
       it('should display the text "Use fingerprint"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FINGERPRINT)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Fingerprint')
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Fingerprint')
       })
     })
 
     describe('when the biometry type is Iris', () => {
       it('should display the text "Use iris"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.IRIS)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Iris')
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Iris')
       })
     })
 
     describe('when the biometry type is Touch ID', () => {
       it('should display the text "Use Touch ID"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.TOUCH_ID)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Touch ID')
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Touch ID')
       })
     })
 
     describe('when the biometry type is Face ID', () => {
       it('should display the text "Use Face ID"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Face ID')
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Face ID')
       })
     })
 
