@@ -106,28 +106,28 @@ context('BenefitSummaryServiceVerification', () => {
 
   it('should display the dynamic data', async () => {
     await waitFor(() => {
-      const branchOfService = testInstance.findAllByType(TextView)[5]
+      const branchOfService = testInstance.findAllByType(TextView)[8]
       expect(branchOfService.props.children).toEqual('Army')
 
-      const dischargeType = testInstance.findAllByType(TextView)[7]
+      const dischargeType = testInstance.findAllByType(TextView)[10]
       expect(dischargeType.props.children).toEqual('Honorable')
 
-      const activeDutyStart = testInstance.findAllByType(TextView)[9]
+      const activeDutyStart = testInstance.findAllByType(TextView)[12]
       expect(activeDutyStart.props.children).toEqual('January 01, 1990')
 
-      const activeDutyEnd = testInstance.findAllByType(TextView)[11]
+      const activeDutyEnd = testInstance.findAllByType(TextView)[14]
       expect(activeDutyEnd.props.children).toEqual('October 01, 1993')
 
-      const monthlyAward = testInstance.findAllByType(TextView)[15]
+      const monthlyAward = testInstance.findAllByType(TextView)[18]
       expect(monthlyAward.props.children).toEqual('Your current monthly payment is $123.00. The effective date of the last change to your current payment was June 06, 2013.')
 
-      const combinedRating = testInstance.findAllByType(TextView)[16]
+      const combinedRating = testInstance.findAllByType(TextView)[19]
       expect(combinedRating.props.children).toEqual('Your combined service-connected rating is 88%.')
 
-      const totallyAndPermanent = testInstance.findAllByType(TextView)[17]
+      const totallyAndPermanent = testInstance.findAllByType(TextView)[20]
       expect(totallyAndPermanent.props.children).toEqual("You aren't considered to be totally and permanently disabled solely due to your service-connected disabilities.")
 
-      const haveOneOrMoreDisabilities = testInstance.findAllByType(TextView)[18]
+      const haveOneOrMoreDisabilities = testInstance.findAllByType(TextView)[21]
       expect(haveOneOrMoreDisabilities.props.children).toEqual("You don't have one or more service-connected disabilities.")
     })
   })
@@ -200,7 +200,7 @@ context('BenefitSummaryServiceVerification', () => {
   describe('on click of go to ask va', () => {
     it('should launch external link', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+        testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
         expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://ask.va.gov/')
       })
     })
@@ -235,7 +235,7 @@ context('BenefitSummaryServiceVerification', () => {
     it('should display "Your current monthly award is ${{monthlyAwardAmount}}. The effective date of the last change to your current payment was {{date}}." for that switch', async () => {
       await waitFor(() => {
         initializeTestInstance(123, date, 88)
-        expect(testInstance.findAllByType(TextView)[15].props.children).toEqual(
+        expect(testInstance.findAllByType(TextView)[18].props.children).toEqual(
           'Your current monthly payment is $123.00. The effective date of the last change to your current payment was June 06, 2013.',
         )
       })
@@ -246,7 +246,7 @@ context('BenefitSummaryServiceVerification', () => {
     it('should display "The effective date of the last change to your current award was {{date}}." for that switch', async () => {
       await waitFor(() => {
         initializeTestInstance(undefined, date, 88)
-        expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('The effective date of the last change to your current award was June 06, 2013.')
+        expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('The effective date of the last change to your current award was June 06, 2013.')
       })
     })
   })
@@ -255,7 +255,7 @@ context('BenefitSummaryServiceVerification', () => {
     it('should display "Your current monthly award is ${{monthlyAwardAmount}}." for that switch', async () => {
       await waitFor(() => {
         initializeTestInstance(123, undefined, 88)
-        expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Your current monthly payment is $123.00.')
+        expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Your current monthly payment is $123.00.')
       })
     })
   })

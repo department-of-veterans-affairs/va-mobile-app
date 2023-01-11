@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { context, render, RenderAPI } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
@@ -38,7 +38,9 @@ context('LettersOverviewScreen', () => {
       .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
       .mockReturnValue(mockNavigateToSpy)
 
-    component = render(<LettersOverviewScreen />, {
+    const props = mockNavProps()
+
+    component = render(<LettersOverviewScreen {...props} />, {
       preloadedState: {
         ...InitialState,
         personalInformation: {
