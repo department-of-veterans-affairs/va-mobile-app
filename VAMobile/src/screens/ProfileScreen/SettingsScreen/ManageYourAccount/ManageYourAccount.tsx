@@ -2,13 +2,11 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, TextArea, TextView, VAScrollView } from 'components'
+import { BackButton, Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
-import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 type ManageYourAccountProps = StackScreenProps<ProfileStackParamList, 'ManageYourAccount'>
@@ -31,7 +29,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
   })
 
   return (
-    <VAScrollView {...testIdProps(generateTestID(t('manageAccount.titlePage'), ''))}>
+    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -40,7 +38,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
           <TextView variant="MobileBody">{t('manageAccount.toConfirmOrUpdateEmail')}</TextView>
         </TextArea>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

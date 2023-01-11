@@ -38,18 +38,13 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'ProfileScreen'} name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />,
 
     <ProfileStack.Screen key={'Settings'} name="Settings" component={SettingsScreen} options={{ headerShown: false }} />,
-    <ProfileStack.Screen key={'ManageYourAccount'} name="ManageYourAccount" component={ManageYourAccount} />,
+    <ProfileStack.Screen key={'ManageYourAccount'} name="ManageYourAccount" component={ManageYourAccount} options={{ headerShown: false }} />,
     <ProfileStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t(`${NAMESPACE.COMMON}:debug.title`) }} />,
     <ProfileStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: t('Remote Config') }} />,
     <ProfileStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: t('Sandbox') }} />,
     <ProfileStack.Screen key={'PersonalInformation'} name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />,
     <ProfileStack.Screen key={'MilitaryInformation'} name="MilitaryInformation" component={MilitaryInformationScreen} options={{ headerShown: false }} />,
-    <ProfileStack.Screen
-      key={'NotificationsSettings'}
-      name="NotificationsSettings"
-      component={NotificationsSettingsScreen}
-      options={{ title: t('notifications.settings.title') }}
-    />,
+    <ProfileStack.Screen key={'NotificationsSettings'} name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ headerShown: false }} />,
     <ProfileStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} />,
     <ProfileStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} />,
     <ProfileStack.Screen
