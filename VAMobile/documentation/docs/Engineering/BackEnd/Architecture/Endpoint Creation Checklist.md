@@ -12,5 +12,5 @@
 * Updated openapi.yaml for new endpoint (`modules/mobile/docs/openapi.yaml`)
 * Added endpoint to routes.rb (`modules/mobile/config/routes.rb`)
 * Created JSON schema for endpoint (`modules/mobile/spec/support/schemas`)
-* Re-rendered html file (`modules/mobile/docs/index.html`)
+* Re-rendered HTML file (`modules/mobile/docs/index.html`)
 * Added new endpoint to `api_mobile_components` in [devops repo](https://github.com/department-of-veterans-affairs/devops) (`ansible/deployment/config/revproxy-vagov/vars/nginx_components.yml`)
