@@ -10,7 +10,7 @@ import { useTheme } from 'utils/hooks'
  * Screen for displaying information on updating direct deposit information for MHV/DS logon users
  */
 const HowToUpdateDirectDepositScreen: FC = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween

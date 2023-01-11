@@ -19,7 +19,7 @@ import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 const MilitaryInformationScreen: FC = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()

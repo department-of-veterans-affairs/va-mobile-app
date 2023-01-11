@@ -119,7 +119,7 @@ export type AddressSummaryProps = {
 
 const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const data = getAddressData(profile, t, addressData)
 

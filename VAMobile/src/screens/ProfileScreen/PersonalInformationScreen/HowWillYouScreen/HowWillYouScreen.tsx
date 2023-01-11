@@ -13,7 +13,7 @@ import { useTheme } from 'utils/hooks'
 type HowWillYouScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUpdate'>
 
 const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   useEffect(() => {

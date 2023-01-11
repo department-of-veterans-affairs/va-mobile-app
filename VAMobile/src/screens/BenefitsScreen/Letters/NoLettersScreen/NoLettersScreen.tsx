@@ -8,7 +8,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 const NoLettersScreen: FC = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {

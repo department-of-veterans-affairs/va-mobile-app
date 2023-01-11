@@ -24,17 +24,17 @@ import performance from '@react-native-firebase/perf'
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
-// import { ProfileScreen } from 'screens'
-// import { getProfileScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
+import { ProfileScreen } from 'screens'
 import { SnackBarConstants } from 'constants/common'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { activateRemoteConfig } from 'utils/remoteConfig'
+import { getProfileScreens } from 'screens'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
@@ -273,7 +273,7 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
+  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON, NAMESPACE.HEALTH])
 
   return (
     <>
@@ -289,12 +289,11 @@ export const AppTabs: FC = () => {
 }
 
 export const AuthedApp: FC = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
   const homeScreens = getHomeScreens()
-  // const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE).t)
+  const profileScreens = getProfileScreens(useTranslation(NAMESPACE.COMMON).t)
   const benefitsScreens = getBenefitsScreens(useTranslation(NAMESPACE.COMMON).t)
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens(useTranslation(NAMESPACE.COMMON).t)
@@ -319,9 +318,9 @@ export const AuthedApp: FC = () => {
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
         <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
-        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: tc('directDeposit.title') }} />
+        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
         {homeScreens}
-        {/* {profileScreens} */}
+        {profileScreens}
         {paymentsScreens}
         {benefitsScreens}
         {healthScreens}

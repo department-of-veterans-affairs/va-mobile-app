@@ -19,7 +19,7 @@ type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payme
 
 const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
   const { paymentID } = route.params
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

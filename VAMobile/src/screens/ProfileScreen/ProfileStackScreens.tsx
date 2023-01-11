@@ -11,12 +11,13 @@ import ManageYourAccount from './SettingsScreen/ManageYourAccount/ManageYourAcco
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import NotificationsSettingsScreen from './SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
+import ProfileScreen from '.'
 import RemoteConfigScreen from './SettingsScreen/DebugScreen/RemoteConfigScreen'
 import SandboxScreen from './SettingsScreen/DebugScreen/SandboxScreen/SandboxScreen'
 import SettingsScreen from './SettingsScreen'
 
 export type ProfileStackParamList = {
-  Profile: undefined
+  ProfileScreen: undefined
   Settings: undefined
   ManageYourAccount: undefined
   Debug: undefined
@@ -34,6 +35,8 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
   return [
+    <ProfileStack.Screen key={'ProfileScreen'} name="ProfileScreen" component={ProfileScreen} options={{ title: t('profile.title') }} />,
+
     <ProfileStack.Screen key={'Settings'} name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />,
     <ProfileStack.Screen key={'ManageYourAccount'} name="ManageYourAccount" component={ManageYourAccount} />,
     <ProfileStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t(`${NAMESPACE.SETTINGS}:debug.title`) }} />,

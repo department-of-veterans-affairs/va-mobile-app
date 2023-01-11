@@ -90,7 +90,7 @@ type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'P
 
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 

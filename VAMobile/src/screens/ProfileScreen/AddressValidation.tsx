@@ -26,7 +26,7 @@ export type AddressValidationProps = {
 
 const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId, snackbarMessages }) => {
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
   const theme = useTheme()
 

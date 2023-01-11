@@ -12,7 +12,7 @@ import { useTheme } from 'utils/hooks'
 type PaymentMissingScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentMissing'>
 
 const PaymentMissing: FC<PaymentMissingScreenProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { contentMarginTop } = theme.dimensions

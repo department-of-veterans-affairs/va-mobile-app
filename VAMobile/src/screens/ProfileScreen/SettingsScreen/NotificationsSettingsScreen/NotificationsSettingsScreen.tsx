@@ -11,7 +11,7 @@ import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils
 import React, { FC, ReactNode, useEffect } from 'react'
 
 const NotificationsSettingsScreen: FC = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: ts } = useTranslation(NAMESPACE.SETTINGS)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()

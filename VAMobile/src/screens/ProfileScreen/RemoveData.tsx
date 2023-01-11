@@ -16,7 +16,7 @@ type RemoveDataProps = {
 
 const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const [displayAlert, setDisplayAlert] = useState(false)
 

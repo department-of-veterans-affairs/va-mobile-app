@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, NameTag, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, CategoryLanding, ErrorComponent, FocusedNavHeaderText, LoadingComponent, NameTag, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants, SigninServiceTypesConstants } from 'store/api/types'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
@@ -14,7 +14,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
-type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
+type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'ProfileScreen'>
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const {
@@ -41,7 +41,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
   /**
@@ -140,7 +140,7 @@ const ProfileScreenStack = createStackNavigator()
  * Stack screen for the Profile tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
   return (

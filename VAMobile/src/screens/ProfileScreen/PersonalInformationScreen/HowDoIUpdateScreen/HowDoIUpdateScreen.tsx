@@ -16,7 +16,7 @@ const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 type HowDoIUpdateScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUpdate'>
 
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()

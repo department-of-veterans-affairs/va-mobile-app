@@ -20,7 +20,7 @@ import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
 const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

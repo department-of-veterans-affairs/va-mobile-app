@@ -18,7 +18,7 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<ProfileStackParamList, '
  * Returns incorrectServiceInfoScreen component
  */
 const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 

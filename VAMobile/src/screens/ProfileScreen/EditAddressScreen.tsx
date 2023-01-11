@@ -85,7 +85,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const { profile, addressSaved, savingAddress, showValidation, validateAddressAbortController } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
-  const { t } = useTranslation(NAMESPACE.PROFILE)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

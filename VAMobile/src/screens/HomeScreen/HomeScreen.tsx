@@ -88,9 +88,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const headerButton = {
     label: tc('profile.title'),
     icon: profileIconProps,
-    onPress: () => {
-      return null
-    },
+    onPress: navigateTo('ProfileScreen'),
   }
 
   return (
