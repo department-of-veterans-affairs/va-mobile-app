@@ -12,7 +12,6 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 const NotificationsSettingsScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: ts } = useTranslation(NAMESPACE.SETTINGS)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
@@ -48,11 +47,11 @@ const NotificationsSettingsScreen: FC = () => {
   }
 
   if (loadingPreferences) {
-    return <LoadingComponent text={ts('notifications.loading')} />
+    return <LoadingComponent text={t('notifications.loading')} />
   }
 
   if (settingPreference) {
-    return <LoadingComponent text={ts('notifications.saving')} />
+    return <LoadingComponent text={t('notifications.saving')} />
   }
 
   const personalizeText = systemNotificationsOn

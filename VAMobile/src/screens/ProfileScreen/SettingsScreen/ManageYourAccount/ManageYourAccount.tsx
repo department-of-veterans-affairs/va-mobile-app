@@ -14,7 +14,7 @@ import { useTheme } from 'utils/hooks'
 type ManageYourAccountProps = StackScreenProps<ProfileStackParamList, 'ManageYourAccount'>
 
 const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.SETTINGS)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   useEffect(() => {

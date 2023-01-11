@@ -5,13 +5,12 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
-import { Box, ButtonDecoratorType, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, ButtonDecoratorType, FeatureLandingTemplate, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 
 import { setBiometricsPreference } from 'store/slices/authSlice'
-import { testIdProps } from 'utils/accessibility'
 
 import { AuthState } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
@@ -27,7 +26,7 @@ type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
 const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.SETTINGS)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
@@ -88,10 +87,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
-  const mainViewStyle: StyleProp<ViewStyle> = {
-    flexGrow: 1,
-  }
-
   const debugMenu = (): ReactNode => {
     const debugButton: Array<SimpleListItemObj> = [
       {
@@ -113,7 +108,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Settings-page')} contentContainerStyle={mainViewStyle}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} flex={1}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <SimpleList items={items} />
@@ -124,7 +119,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
         </Box>
       </Box>
       <AppVersionAndBuild />
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 
