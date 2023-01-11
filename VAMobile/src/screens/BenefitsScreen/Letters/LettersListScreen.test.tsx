@@ -178,16 +178,16 @@ context('LettersListScreen', () => {
     })
 
     const texts = testInstance.findAllByType(TextView)
-    expect(texts.length).toBe(8)
+    expect(texts.length).toBe(11)
 
-    expect(texts[0].props.children).toBe('Benefit summary letter')
-    expect(texts[1].props.children).toBe('Benefit verification letter')
-    expect(texts[2].props.children).toBe('Civil service preference letter')
-    expect(texts[3].props.children).toBe('Commissary letter')
-    expect(texts[4].props.children).toBe('Proof of creditable prescription drug coverage letter')
-    expect(texts[5].props.children).toBe('Proof of minimum essential coverage letter')
-    expect(texts[6].props.children).toBe('Proof of service card')
-    expect(texts[7].props.children).toBe('Service verification letter')
+    expect(texts[3].props.children).toBe('Benefit summary letter')
+    expect(texts[4].props.children).toBe('Benefit verification letter')
+    expect(texts[5].props.children).toBe('Civil service preference letter')
+    expect(texts[6].props.children).toBe('Commissary letter')
+    expect(texts[7].props.children).toBe('Proof of creditable prescription drug coverage letter')
+    expect(texts[8].props.children).toBe('Proof of minimum essential coverage letter')
+    expect(texts[9].props.children).toBe('Proof of service card')
+    expect(texts[10].props.children).toBe('Service verification letter')
   })
 
   describe('when a link is clicked', () => {

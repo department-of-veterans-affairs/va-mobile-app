@@ -1,3 +1,4 @@
+import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +12,7 @@ import {
   ClickForActionLink,
   DefaultList,
   DefaultListItemObj,
+  FeatureLandingTemplate,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
   LoadingComponent,
@@ -19,9 +21,9 @@ import {
   TextArea,
   TextView,
   VAButton,
-  VAScrollView,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -33,9 +35,9 @@ import getEnv from 'utils/env'
 
 const { LINK_URL_ASK_VA_GOV } = getEnv()
 
-type BenefitSummaryServiceVerificationProps = Record<string, unknown>
+type BenefitSummaryServiceVerificationProps = StackScreenProps<BenefitsStackParamList, 'BenefitSummaryServiceVerificationLetter'>
 
-const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = () => {
+const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -213,7 +215,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   }
 
   return (
-    <VAScrollView {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
+    <FeatureLandingTemplate
+      backLabel={t('letters.list.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('letters.details.title')}
+      {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -264,7 +270,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           />
         </Box>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

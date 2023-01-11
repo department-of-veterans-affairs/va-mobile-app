@@ -89,7 +89,7 @@ export const getBenefitsScreens = (t: TFunction): Array<ReactNode> => {
       key={'BenefitSummaryServiceVerificationLetter'}
       name="BenefitSummaryServiceVerificationLetter"
       component={BenefitSummaryServiceVerification}
-      options={{ title: t('letters.overview.title') }}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />,
     <BenefitsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />,
