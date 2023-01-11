@@ -3,20 +3,23 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
+import { ProfileStackParamList } from 'screens/ProfileScreen/ProfileStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { ViewStyle } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useSelector } from 'react-redux'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
-const MilitaryInformationScreen: FC = () => {
+type MilitaryInformationScreenProps = StackScreenProps<ProfileStackParamList, 'MilitaryInformation'>
+
+const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -66,16 +69,12 @@ const MilitaryInformationScreen: FC = () => {
     textDecorationColor: 'link',
   }
 
-  const scrollStyles: ViewStyle = {
-    flexGrow: 1,
-  }
-
   if (useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
   }
 
   return (
-    <VAScrollView {...testIdProps('Military-Information-page')} contentContainerStyle={scrollStyles}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
       {loading ? (
         <LoadingComponent />
       ) : !accessToMilitaryInfo ? (
@@ -88,7 +87,7 @@ const MilitaryInformationScreen: FC = () => {
           <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
         </>
       )}
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

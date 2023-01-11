@@ -1,5 +1,5 @@
 import { TFunction } from 'i18next'
-import { createStackNavigator } from '@react-navigation/stack'
+import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
@@ -35,7 +35,7 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
   return [
-    <ProfileStack.Screen key={'ProfileScreen'} name="ProfileScreen" component={ProfileScreen} options={{ title: t('profile.title') }} />,
+    <ProfileStack.Screen key={'ProfileScreen'} name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />,
 
     <ProfileStack.Screen key={'Settings'} name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />,
     <ProfileStack.Screen key={'ManageYourAccount'} name="ManageYourAccount" component={ManageYourAccount} />,
@@ -43,7 +43,7 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: t('Remote Config') }} />,
     <ProfileStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: t('Sandbox') }} />,
     <ProfileStack.Screen key={'PersonalInformation'} name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />,
-    <ProfileStack.Screen key={'MilitaryInformation'} name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />,
+    <ProfileStack.Screen key={'MilitaryInformation'} name="MilitaryInformation" component={MilitaryInformationScreen} options={{ headerShown: false }} />,
     <ProfileStack.Screen
       key={'NotificationsSettings'}
       name="NotificationsSettings"
@@ -52,6 +52,11 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     />,
     <ProfileStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} />,
     <ProfileStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} />,
-    <ProfileStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} />,
+    <ProfileStack.Screen
+      key={'IncorrectServiceInfo'}
+      name="IncorrectServiceInfo"
+      component={IncorrectServiceInfo}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
   ]
 }

@@ -2,12 +2,11 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 
 type IncorrectServiceInfoScreenProps = StackScreenProps<ProfileStackParamList, 'IncorrectServiceInfo'>
@@ -33,7 +32,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
   })
 
   return (
-    <VAScrollView {...testIdProps(generateTestID(t('militaryInformation.incorrectServiceInfo.header'), ''))}>
+    <LargePanel title={t('militaryInformation.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -51,7 +50,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
           />
         </TextArea>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 
