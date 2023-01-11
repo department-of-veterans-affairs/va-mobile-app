@@ -1,7 +1,9 @@
+import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Box, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
@@ -11,12 +13,12 @@ import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from '../../ProfileScreen/AddressSummary'
 import NoLettersScreen from './NoLettersScreen'
 
-type LettersOverviewProps = Record<string, unknown>
+type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
 
 /**
  * Landing page for the letters flow. Shows the current address and the button to go to the letters list
  */
-const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
+const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -40,9 +42,9 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Letters-page')}>
+    <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.title')} {...testIdProps('Letters-page')}>
       <Box {...testIdProps(t('letters.overview.documents'))} accessible={true}>
-        <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
           {t('letters.overview.documents')}
         </TextView>
       </Box>
@@ -60,7 +62,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
           a11yHint={t('letters.overview.viewLetters.hint')}
         />
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

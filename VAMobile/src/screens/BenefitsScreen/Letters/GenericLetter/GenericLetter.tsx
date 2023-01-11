@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, BasicError, Box, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VAButton } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, downloadLetter } from 'store/slices'
@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux'
 
 type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLetter'>
 
-const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
+const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -35,7 +35,11 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
+    <FeatureLandingTemplate
+      backLabel={t('letters.list.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('letters.details.title')}
+      {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {letterType === LetterTypeConstants.serviceVerification && (
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -58,7 +62,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
           />
         </TextArea>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 
