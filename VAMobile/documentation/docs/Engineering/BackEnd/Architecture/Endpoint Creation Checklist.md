@@ -17,6 +17,6 @@
 * Added new endpoint to `SERVICE_GRAPH` (`modules/mobile/app/controllers/mobile/v0/maintenance_windows_controller.rb`) _(only applicable for new upstream services used)_
   * Updated request specs (`modules/mobile/spec/models/service_graph_spec.rb`)
 * Added new endpoint component to `api_mobile_components` in [devops repo](https://github.com/department-of-veterans-affairs/devops) (`ansible/deployment/config/revproxy-vagov/vars/nginx_components.yml`)
-  * Ensured order of components matches the order routes are listed in [`routes.rb`](https://github.com/department-of-veterans-affairs/vets-api/blob/master/modules/mobile/config/routes.rb)
+  * Ensured order of components matches the order routes as listed in [`routes.rb`](https://github.com/department-of-veterans-affairs/vets-api/blob/master/modules/mobile/config/routes.rb)
   * Added mapping of component section to `nginx_api_server.conf.j2` (`ansible/deployment/config/revproxy-vagov/templates/nginx_api_server.conf.j2`) _(if new component section added in `nginx_components.yml`)_
   * Added mapping of component section to `nginx_new_api_server.conf.j2` (`ansible/deployment/config/revproxy-vagov/templates/nginx_new_api_server.conf.j2`) _(if new component section added in `nginx_components.yml`)_
