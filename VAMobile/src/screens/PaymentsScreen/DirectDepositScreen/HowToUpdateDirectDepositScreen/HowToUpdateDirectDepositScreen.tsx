@@ -11,7 +11,6 @@ import { useTheme } from 'utils/hooks'
  */
 const HowToUpdateDirectDepositScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
@@ -29,7 +28,7 @@ const HowToUpdateDirectDepositScreen: FC = () => {
             <Box mt={standardMarginBetween}>
               <TextView variant="MobileBody">{t('howToUpdateDirectDeposit.card.callUs')}</TextView>
             </Box>
-            <ClickToCallPhoneNumber phone={tc('8008271000')} displayedText={tc('8008271000.displayText')} />
+            <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
           </TextArea>
         </Box>
       </VAScrollView>

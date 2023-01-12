@@ -70,7 +70,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: navigateTo('PersonalInformation') })
     }
 
-    buttonDataList.push({ text: t('militaryInformation'), a11yHintText: t('militaryInformation.a11yHint'), onPress: navigateTo('MilitaryInformation') })
+    buttonDataList.push({ text: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: navigateTo('MilitaryInformation') })
     buttonDataList.push(settingsButton)
     return buttonDataList
   }

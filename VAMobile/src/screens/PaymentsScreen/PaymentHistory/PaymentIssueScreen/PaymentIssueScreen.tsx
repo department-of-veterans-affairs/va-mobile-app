@@ -13,7 +13,6 @@ type PaymentIssueScreenProps = StackScreenProps<PaymentsStackParamList, 'Payment
 
 const PaymentIssue: FC<PaymentIssueScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { contentMarginTop } = theme.dimensions
 
@@ -37,7 +36,7 @@ const PaymentIssue: FC<PaymentIssueScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBody" py={6}>
             {t('paymentIssues.body')}
           </TextView>
-          <ClickToCallPhoneNumber phone={tc('8008271000')} displayedText={tc('8008271000.displayText')} />
+          <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
         </TextArea>
       </Box>
     </VAScrollView>
