@@ -3,6 +3,8 @@ title: Resources
 sidebar_position: 6
 ---
 
+VA Mobile app [UX resources on github](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design).
+
 
 ## Design: Working files
 ### Figma
