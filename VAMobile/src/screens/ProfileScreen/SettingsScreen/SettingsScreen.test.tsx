@@ -99,7 +99,7 @@ context('SettingsScreen', () => {
 
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', async () => {
-      findByTestID(testInstance, 'manage-your-account').props.onPress()
+      findByTestID(testInstance, 'manage-account').props.onPress()
       expect(navigateSpy).toHaveBeenCalledWith('ManageYourAccount')
     })
   })
