@@ -16,7 +16,6 @@ type NeedHelpDataProps = {
 const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const AppealData = (): ReactElement => {
     if (!isAppeal) {
@@ -44,9 +43,9 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
   }
 
   const clickToCallProps: LinkButtonProps = {
-    displayedText: tc('8008271000.displayText'),
-    a11yLabel: tc('8008271000.displayText.a11yLabel'),
-    numberOrUrlLink: tc('8008271000'),
+    displayedText: t('8008271000.displayText'),
+    a11yLabel: t('8008271000.displayText.a11yLabel'),
+    numberOrUrlLink: t('8008271000'),
     linkType: LinkTypeOptionsConstants.call,
   }
 

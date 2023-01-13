@@ -28,7 +28,6 @@ type ClaimsAndAppealsListProps = {
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -64,7 +63,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       ]
 
       const position = (currentPage - 1) * perPage + index + 1
-      const a11yValue = tc('listPosition', { position, total: totalEntries })
+      const a11yValue = t('listPosition', { position, total: totalEntries })
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
       listItems.push({
         textLines,

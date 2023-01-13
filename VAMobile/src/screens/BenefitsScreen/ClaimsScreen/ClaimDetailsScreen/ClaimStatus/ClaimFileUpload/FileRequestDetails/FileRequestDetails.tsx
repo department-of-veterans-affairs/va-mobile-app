@@ -16,7 +16,6 @@ type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileReq
 
 const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
@@ -24,7 +23,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
   const { displayName, description, uploadDate, documents } = request
 
   const hasUploaded = hasUploadedOrReceived(request)
-  const noneNoted = tc('noneNoted')
+  const noneNoted = t('noneNoted')
 
   const boxProps: BoxProps = {
     borderStyle: 'solid',

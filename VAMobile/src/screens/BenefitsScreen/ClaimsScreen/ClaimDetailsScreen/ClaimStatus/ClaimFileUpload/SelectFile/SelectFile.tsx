@@ -19,7 +19,6 @@ type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
 
 const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
@@ -78,7 +77,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       return
     }
 
-    const options = [t('fileUpload.fileFolder'), tc('cancel')]
+    const options = [t('fileUpload.fileFolder'), t('cancel')]
 
     showActionSheet(
       {

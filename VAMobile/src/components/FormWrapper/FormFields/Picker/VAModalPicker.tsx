@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { VAIconProps } from 'components/VAIcon'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
@@ -78,7 +77,6 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
   const { t } = useTranslation()
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
 
   const [currentSelectedValue, setCurrentSelectedValue] = useState(selectedValue)
@@ -188,7 +186,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     }
 
     return (
-      <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))} {...a11yHintProp(tc('pickerLaunchBtn.a11yHint'))}>
+      <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))} {...a11yHintProp(t('pickerLaunchBtn.a11yHint'))}>
         <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
             {getTranslation(buttonText || '', t)}
@@ -211,21 +209,21 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const topPadding = insets.top + 60
 
-  const cancelLabel = tc('cancel')
+  const cancelLabel = t('cancel')
   const confirmLabel = getTranslation(confirmBtnText || 'common:done', t)
 
   const cancelButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
     ...testIdProps(cancelLabel),
-    ...a11yHintProp(tc('cancel.picker.a11yHint')),
+    ...a11yHintProp(t('cancel.picker.a11yHint')),
   }
 
   const confirmButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
     ...testIdProps(confirmLabel),
-    ...a11yHintProp(tc('done.picker.a11yHint')),
+    ...a11yHintProp(t('done.picker.a11yHint')),
   }
 
   const commonButtonProps: TextViewProps = {
