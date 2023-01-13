@@ -92,6 +92,7 @@ import PhoneSolid from './svgs/phoneSolid.svg'
 import QuestionMark from './svgs/questionMark.svg'
 import Remove from './svgs/remove.svg'
 import Reply from './svgs/reply.svg'
+import Save from './svgs/folder-medical-solid.svg'
 import TrashSolid from './svgs/trash-solid.svg'
 import Truck from './svgs/truck.svg'
 import UnreadIcon from './svgs/unread_icon.svg'
@@ -165,6 +166,7 @@ export const VA_ICON_MAP = {
   WhiteCloseCircle,
   Truck,
   ExternalLink,
+  Save,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
