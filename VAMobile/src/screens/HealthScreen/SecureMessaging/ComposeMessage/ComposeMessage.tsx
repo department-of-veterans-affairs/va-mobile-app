@@ -15,6 +15,7 @@ import {
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   MessageAlert,
   PickerItem,
@@ -22,7 +23,7 @@ import {
   TextArea,
   TextView,
   VAButton,
-  VAScrollView,
+  VAIconProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -68,6 +69,7 @@ type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessag
 
 const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -393,11 +395,27 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const saveIconProps: VAIconProps = {
+    name: 'Save',
+    fill: 'link',
+    width: 22,
+    height: 22,
+    preventScaling: true,
+  }
+
   return (
-    <VAScrollView {...testIdProps('Compose-message-page')}>
+    <FullScreenSubtask
+      title={tc('compose')}
+      leftButtonText={tc('cancel')}
+      rightButtonText={tc('save')}
+      rightVAIconProps={saveIconProps}
+      onRightButtonPress={() => {
+        setOnSaveDraftClicked(true)
+        setOnSendClicked(true)
+      }}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

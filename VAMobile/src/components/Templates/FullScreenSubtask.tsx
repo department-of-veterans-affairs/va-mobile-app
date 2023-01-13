@@ -6,6 +6,7 @@ import React, { FC } from 'react'
 import { Box, BoxProps, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useAccessibilityFocus, useDestructiveAlert, useTheme } from 'utils/hooks'
+import MenuView, { MenuViewActionsType } from 'components/Menu'
 import VAIcon, { VAIconProps } from 'components/VAIcon'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
@@ -20,8 +21,12 @@ export type FullScreenSubtaskProps = {
   title?: string
   /** text of the title bar right button(no text it doesn't appear) */
   rightButtonText?: string
+  /** function called when right button is pressed(defaults to back navigation if omitted) */
+  onRightButtonPress?: () => void
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
+  /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
+  menuViewActions?: MenuViewActionsType
   /** text of the primary content button(no text it doesn't appear) */
   primaryContentButtonText?: string
   /** function called when primary content button is pressed(no function it doesn't appear) */
@@ -39,7 +44,9 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   leftButtonText,
   title,
   rightButtonText,
+  onRightButtonPress,
   rightVAIconProps,
+  menuViewActions,
   primaryContentButtonText,
   onPrimaryContentButtonPress,
   secondaryContentButtonText,
@@ -118,6 +125,10 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
 
   const onRightTitleButtonPress = () => {
+    if (onRightButtonPress) {
+      onRightButtonPress()
+      return
+    }
     if (navigationMultiStepCancelScreen) {
       if (navigationMultiStepCancelScreen === 1) {
         //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
@@ -162,11 +173,12 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
               </Box>
             </TouchableWithoutFeedback>
           )}
+          {!rightButtonText && menuViewActions && <MenuView actions={menuViewActions} />}
         </Box>
       </Box>
       <VAScrollView>
         {title && (
-          <Box mt={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
+          <Box my={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
             <Box>
               <Box display="flex" flexDirection="row" alignItems="center">
                 <TextView {...titleTextProps}>{title}</TextView>

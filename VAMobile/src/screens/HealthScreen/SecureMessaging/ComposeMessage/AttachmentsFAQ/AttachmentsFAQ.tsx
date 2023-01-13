@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, ClickToCallPhoneNumber, TextArea, TextView, VABulletList, VAScrollView } from 'components'
+import { BackButton, Box, ClickToCallPhoneNumber, LargePanel, TextArea, TextView, VABulletList } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -30,7 +30,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
   })
 
   return (
-    <VAScrollView>
+    <LargePanel title={tc('common:messagesHelp.title')} rightButtonText={tc('common:cancel')}>
       <Box backgroundColor={'alertBox'} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <Box accessible={true} accessibilityRole={'header'}>
@@ -62,7 +62,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
           </Box>
         </TextArea>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 export default AttachmentsFAQ

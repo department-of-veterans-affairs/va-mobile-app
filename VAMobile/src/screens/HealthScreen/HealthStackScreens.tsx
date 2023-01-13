@@ -129,11 +129,16 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 export const getHealthScreens = (t: TFunction) => {
   return [
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
-    <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
-    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,
-    <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={{ title: t('secureMessaging.drafts.edit') }} />,
-    <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
-    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} />,
+    <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ headerShown: false }} />,
+    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ headerShown: false }} />,
+    <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={{ headerShown: false }} />,
+    <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ headerShown: false }} />,
+    <HealthStack.Screen
+      key={'AttachmentsFAQ'}
+      name="AttachmentsFAQ"
+      component={AttachmentsFAQ}
+      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
+    />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen
       key={'NoRequestAppointmentAccess'}
