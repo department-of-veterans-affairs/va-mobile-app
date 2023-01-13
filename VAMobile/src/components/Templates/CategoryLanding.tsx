@@ -22,8 +22,11 @@ type headerButton = {
 }
 
 export type CategoryLandingProps = {
+  /** Optional label for back button  */
   backLabel?: string
+  /** Optional a11y label for back button  */
   backLabelA11y?: string
+  /** Optional onPress function for back button  */
   backLabelOnPress?: () => void
   /** Optional title for page that transitions to header */
   title?: string
