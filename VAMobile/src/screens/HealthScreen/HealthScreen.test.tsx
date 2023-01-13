@@ -206,7 +206,7 @@ context('HealthScreen', () => {
         const expectNavArgs = {
           url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
           displayTitle: 'va.gov',
-          loadingMessage: 'Loading VA COVID-19 updates...',
+          loadingMessage: 'Loading V\ufeffA COVID-19 updates...',
         }
         expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
       })
