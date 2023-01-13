@@ -85,8 +85,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const { profile, addressSaved, savingAddress, showValidation, validateAddressAbortController } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
@@ -134,7 +133,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: tc('cancel'),
+          text: t('cancel'),
         },
         {
           text: t('editAddress.validation.cancelConfirm.confirm'),
@@ -498,10 +497,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: tc('cancel'),
+          text: t('cancel'),
         },
         {
-          text: tc('remove'),
+          text: t('remove'),
           onPress: onDelete,
         },
       ],

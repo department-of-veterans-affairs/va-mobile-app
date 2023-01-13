@@ -19,13 +19,12 @@ type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payme
 
 const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
   const { paymentID } = route.params
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
-  const placeHolder = tc('noneNoted')
+  const placeHolder = t('noneNoted')
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, gutter } = theme.dimensions
   const { payment } = useSelector<RootState, PaymentState>((state) => state.payments)
   const { date, paymentType, paymentMethod, bank, account, amount } = payment?.attributes || ({} as PaymentsAttributeData)

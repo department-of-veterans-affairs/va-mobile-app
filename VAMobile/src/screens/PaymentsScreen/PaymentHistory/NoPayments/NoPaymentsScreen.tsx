@@ -6,8 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 const NoPaymentsScreen: FC = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
@@ -15,7 +14,7 @@ const NoPaymentsScreen: FC = () => {
     <VAScrollView>
       <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
         <AlertBox title={t('payments.noPayments.title')} border="informational" text={t('payments.noPayments.body')}>
-          <ClickToCallPhoneNumber phone={tc('8008271000')} displayedText={tc('8008271000.displayText')} />
+          <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
         </AlertBox>
       </Box>
     </VAScrollView>

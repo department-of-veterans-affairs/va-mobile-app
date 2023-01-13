@@ -2,7 +2,7 @@ import { Animated, Easing, LayoutChangeEvent, NativeScrollEvent, NativeSynthetic
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, BoxProps, CrisisLineCta, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { Box, BoxProps, CrisisLineCta, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -22,6 +22,12 @@ type headerButton = {
 }
 
 export type CategoryLandingProps = {
+  /** Optional label for back button  */
+  backLabel?: string
+  /** Optional a11y label for back button  */
+  backLabelA11y?: string
+  /** Optional onPress function for back button  */
+  backLabelOnPress?: () => void
   /** Optional title for page that transitions to header */
   title?: string
   /** Optional header button requiring label, icon, and onPress props */
@@ -30,7 +36,7 @@ export type CategoryLandingProps = {
   scrollViewProps?: VAScrollViewProps
 }
 
-export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps }) => {
+export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps, backLabel, backLabelA11y, backLabelOnPress }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -137,7 +143,9 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <View style={headerStyle}>
         <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
-          <Box display="flex" width="25%" />
+          <Box display="flex" width="25%">
+            {backLabel && backLabelOnPress && <DescriptiveBackButton label={backLabel} labelA11y={backLabelA11y} onPress={backLabelOnPress} />}
+          </Box>
 
           <Box {...headerTitleBoxProps}>
             {titleShowing ? (

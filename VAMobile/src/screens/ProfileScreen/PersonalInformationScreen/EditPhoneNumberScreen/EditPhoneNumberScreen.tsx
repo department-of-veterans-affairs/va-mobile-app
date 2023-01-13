@@ -37,8 +37,7 @@ type IEditPhoneNumberScreen = StackScreenProps<RootNavStackParamList, 'EditPhone
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useDestructiveAlert()
 
@@ -140,7 +139,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'phone',
-        labelKey: 'profile:editPhoneNumber.number',
+        labelKey: 'common:editPhoneNumber.number',
         onChange: setPhoneNumberOnChange,
         maxLength: MAX_DIGITS_AFTER_FORMAT,
         value: phoneNumber,
@@ -159,7 +158,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'phone',
-        labelKey: 'profile:editPhoneNumber.extension',
+        labelKey: 'common:editPhoneNumber.extension',
         onChange: setExtension,
         value: extension,
       },
@@ -177,10 +176,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: tc('cancel'),
+          text: t('cancel'),
         },
         {
-          text: tc('remove'),
+          text: t('remove'),
           onPress: onDelete,
         },
       ],

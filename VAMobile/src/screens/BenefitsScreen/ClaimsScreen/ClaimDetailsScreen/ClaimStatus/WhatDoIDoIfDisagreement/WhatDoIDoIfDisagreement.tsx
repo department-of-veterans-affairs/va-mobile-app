@@ -17,7 +17,6 @@ type WhatDoIDoIfDisagreementProps = StackScreenProps<BenefitsStackParamList, 'Wh
 
 const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
@@ -49,7 +48,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
             variant="MobileBodyLink"
             mt={theme.dimensions.standardMarginBetween}
             accessibilityRole="link"
-            {...a11yHintProp(`${text} ${tc('mobileBodyLink.a11yHint')}`)}
+            {...a11yHintProp(`${text} ${t('mobileBodyLink.a11yHint')}`)}
             onPress={onDecisionReview}>
             {text}
           </TextView>

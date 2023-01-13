@@ -37,8 +37,7 @@ type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
   const deleteEmailAlert = useDestructiveAlert()
@@ -141,10 +140,10 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: tc('cancel'),
+          text: t('cancel'),
         },
         {
-          text: tc('remove'),
+          text: t('remove'),
           onPress: onDelete,
         },
       ],

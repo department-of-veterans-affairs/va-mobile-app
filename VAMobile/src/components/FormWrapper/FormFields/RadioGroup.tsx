@@ -47,8 +47,7 @@ export type RadioGroupProps<T> = {
 /**A common component to display radio button selectors for a list of selectable items*/
 const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const hasSingleOption = options.length === 1
 
   useEffect(() => {
@@ -143,7 +142,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
         a11yRole: 'radio',
         a11yState: { selected: selected },
         backgroundColor: selected ? 'listActive' : undefined,
-        testId: `${option.a11yLabel || option.labelKey} ${tc('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
+        testId: `${option.a11yLabel || option.labelKey} ${t('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
       }
 
       return radioButton

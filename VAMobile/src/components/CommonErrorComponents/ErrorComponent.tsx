@@ -20,7 +20,7 @@ export type ErrorComponentProps = {
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
+  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH])
   const isInDowntime = useDowntime(DowntimeScreenIDToFeature[props.screenID])
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {

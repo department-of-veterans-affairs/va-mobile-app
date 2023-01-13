@@ -20,8 +20,7 @@ import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
 const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -88,7 +87,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = () => {
         </Box>
       )
     }
-    return getGroupedPayments(newCurrentPagePayments, theme, { t, tc }, onPaymentPress, true, currentPagePagination)
+    return getGroupedPayments(newCurrentPagePayments, theme, { t }, onPaymentPress, true, currentPagePagination)
   }
 
   const fetchPayments = (requestedPage?: number, year?: string) => {

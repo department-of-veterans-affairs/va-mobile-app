@@ -16,7 +16,7 @@ export type SyncScreenProps = Record<string, unknown>
 const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { t } = useTranslation(NAMESPACE.SETTINGS)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const { supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)

@@ -16,8 +16,7 @@ type RemoveDataProps = {
 
 const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.PROFILE)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [displayAlert, setDisplayAlert] = useState(false)
 
   if (!displayAlert) {
@@ -45,12 +44,7 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
           a11yHint={t('personalInformation.confirm.a11yHint', { pageName })}
         />
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <VAButton
-            onPress={() => setDisplayAlert(false)}
-            label={tc('cancel')}
-            buttonType={ButtonTypesConstants.buttonSecondary}
-            a11yHint={tc('cancel.continueEditing.a11yHint')}
-          />
+          <VAButton onPress={() => setDisplayAlert(false)} label={t('cancel')} buttonType={ButtonTypesConstants.buttonSecondary} a11yHint={t('cancel.continueEditing.a11yHint')} />
         </Box>
       </Box>
     </AlertBox>

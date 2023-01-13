@@ -20,7 +20,6 @@ type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOve
  */
 const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: tc } = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { loading, error } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
@@ -28,7 +27,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const onViewPressed = navigateTo('LettersList')
 
   const onAddressPress = navigateTo('EditAddress', {
-    displayTitle: tc('personalInformation.mailingAddress'),
+    displayTitle: t('personalInformation.mailingAddress'),
     addressType: profileAddressOptions.MAILING_ADDRESS,
   })
 
