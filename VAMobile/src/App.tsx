@@ -27,7 +27,6 @@ import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, 
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
-import { PhoneData, PhoneType } from 'store/api/types'
 import { SnackBarConstants } from 'constants/common'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
@@ -44,7 +43,6 @@ import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
-import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import LoaGate from './screens/auth/LoaGate'
 import NotificationManager from './components/NotificationManager'
 import OnboardingCarousel from './screens/OnboardingCarousel'
@@ -83,7 +81,6 @@ const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
   EditEmail: undefined
-  EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
   EditAddress: { displayTitle: string; addressType: profileAddressType }
   EditDirectDeposit: undefined
   Tabs: undefined
@@ -280,7 +277,6 @@ export const AppTabs: FC = () => {
         <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('common:benefits.title') }} />
         <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
-        {/* <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} /> */}
         <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('common:payments.title') }} />
       </TabNav.Navigator>
     </>
@@ -315,7 +311,6 @@ export const AuthedApp: FC = () => {
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email'), headerShown: false }} />
-        <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} options={{ headerShown: false }} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ headerShown: false }} />
         <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
         {homeScreens}
