@@ -150,7 +150,12 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <FullScreenSubtask title={t('personalInformation.email')} leftButtonText={t('cancel')} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
+    <FullScreenSubtask
+      title={t('personalInformation.email')}
+      leftButtonText={t('cancel')}
+      rightButtonText={t('save')}
+      onRightButtonPress={() => setOnSaveClicked(true)}
+      rightButtonDisabled={saveDisabled}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
           <Box mb={theme.dimensions.standardMarginBetween}>
