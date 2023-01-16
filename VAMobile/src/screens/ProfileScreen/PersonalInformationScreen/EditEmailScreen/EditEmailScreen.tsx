@@ -48,14 +48,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [saveDisabled, setSaveDisabled] = useState(false)
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={saveDisabled} />,
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  })
-
-  useEffect(() => {
     if (emailSaved) {
       dispatch(finishEditEmail())
       setDeleting(false)
