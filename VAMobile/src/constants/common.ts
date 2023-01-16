@@ -58,7 +58,7 @@ export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
   if (screenName) {
     const screen = screenName.split('-')[0]
     if (includes(screensToCloseSnackbarOnNavigation, screen)) {
-      snackBar.hideAll()
+      snackBar?.hideAll()
     }
   }
 }

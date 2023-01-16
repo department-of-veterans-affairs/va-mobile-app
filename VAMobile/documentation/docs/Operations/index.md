@@ -1,6 +1,6 @@
 ---
 title: Operations
 ---
- 
- [needs content]
 
+
+VA Mobile app [Incident Response and Operations resources on github](ttps://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/operations)
