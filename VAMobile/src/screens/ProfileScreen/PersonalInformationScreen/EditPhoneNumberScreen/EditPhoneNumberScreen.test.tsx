@@ -36,12 +36,6 @@ context('EditPhoneNumberScreen', () => {
       {},
       {
         navigate: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined,
-          }
-        },
         goBack: jest.fn(),
       },
       {
