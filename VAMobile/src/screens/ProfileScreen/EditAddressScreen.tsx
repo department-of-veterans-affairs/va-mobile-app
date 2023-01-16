@@ -18,7 +18,6 @@ import {
   PickerItem,
   SaveButton,
   VAButton,
-  VAScrollView,
   VATextInputTypes,
   ValidationFunctionItems,
 } from 'components'
@@ -489,7 +488,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     },
   ]
 
-  const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
   const noAddressData = !profile?.[addressType]
 
   const lowerCaseTitle = displayTitle.toLowerCase()
@@ -513,40 +511,33 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask
-      title={displayTitle}
-      leftButtonText={t('cancel')}
-      rightButtonText={t('save')}
-      // rightVAIconProps={saveIconProps}
-      onRightButtonPress={() => setOnSaveClicked(true)}>
-      <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <VAButton
-                onPress={onDeletePressed}
-                label={t('personalInformation.removeData', { pageName: lowerCaseTitle })}
-                buttonType={ButtonTypesConstants.buttonDestructive}
-                a11yHint={t('personalInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
-              />
-            </Box>
-          )}
-          {formContainsError && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox title={t('editAddress.alertError')} border="error" />
-            </Box>
-          )}
-          <FormWrapper
-            fieldsList={formFieldsList}
-            onSave={onSave}
-            setFormContainsError={setFormContainsError}
-            resetErrors={resetErrors}
-            setResetErrors={setResetErrors}
-            onSaveClicked={onSaveClicked}
-            setOnSaveClicked={setOnSaveClicked}
-          />
-        </Box>
-      </VAScrollView>
+    <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <VAButton
+              onPress={onDeletePressed}
+              label={t('personalInformation.removeData', { pageName: lowerCaseTitle })}
+              buttonType={ButtonTypesConstants.buttonDestructive}
+              a11yHint={t('personalInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
+            />
+          </Box>
+        )}
+        {formContainsError && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox title={t('editAddress.alertError')} border="error" />
+          </Box>
+        )}
+        <FormWrapper
+          fieldsList={formFieldsList}
+          onSave={onSave}
+          setFormContainsError={setFormContainsError}
+          resetErrors={resetErrors}
+          setResetErrors={setResetErrors}
+          onSaveClicked={onSaveClicked}
+          setOnSaveClicked={setOnSaveClicked}
+        />
+      </Box>
     </FullScreenSubtask>
   )
 }
