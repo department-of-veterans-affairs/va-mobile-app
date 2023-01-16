@@ -1,12 +1,11 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   AlertBox,
-  BackButton,
   Box,
   ButtonTypesConstants,
   ErrorComponent,
@@ -16,12 +15,10 @@ import {
   FullScreenSubtask,
   LoadingComponent,
   PickerItem,
-  SaveButton,
   VAButton,
   VATextInputTypes,
   ValidationFunctionItems,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
 import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
@@ -33,11 +30,9 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from './AddressSummary'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
-import HeaderTitle from 'components/HeaderTitle'
 
 const MAX_ADDRESS_LENGTH = 35
 const ZIP_CODE_LENGTH = 5
@@ -252,16 +247,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const cancelFn = showValidation ? onConfirmCancel : onCancel
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => <HeaderTitle {...testIdProps(displayTitle)} headerTitle={displayTitle} />,
-      headerLeft: (props): ReactNode => <BackButton onPress={cancelFn} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () => {
-        return !showValidation ? <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} /> : <></>
-      },
-    })
-  })
-
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
   }
@@ -279,7 +264,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       snackbarMessages: snackbarMessages,
     }
     return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')}>
+      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
         <AddressValidation {...addressValidationProps} />
       </FullScreenSubtask>
     )
@@ -511,7 +496,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
+    <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mb={theme.dimensions.standardMarginBetween}>
