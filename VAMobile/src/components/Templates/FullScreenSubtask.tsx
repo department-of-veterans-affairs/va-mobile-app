@@ -17,11 +17,13 @@ Use 'options={{headerShown: false}}'(preferred method for subtask) in the indivi
 export type FullScreenSubtaskProps = {
   /** text of the title bar left button(no text it doesn't appear) */
   leftButtonText?: string
+  /** function called when left button is pressed (defaults to back navigation if omitted) */
+  onLeftButtonPress?: () => void
   /** text of the title bar title(no text it doesn't appear) */
   title?: string
   /** text of the title bar right button(no text it doesn't appear) */
   rightButtonText?: string
-  /** function called when right button is pressed(defaults to back navigation if omitted) */
+  /** function called when right button is pressed (defaults to back navigation if omitted) */
   onRightButtonPress?: () => void
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
@@ -42,6 +44,7 @@ export type FullScreenSubtaskProps = {
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   children,
   leftButtonText,
+  onLeftButtonPress,
   title,
   rightButtonText,
   onRightButtonPress,
@@ -94,34 +97,39 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const message = t('areYouSure')
 
   const onLeftTitleButtonPress = () => {
-    confirmAlert({
-      title: '',
-      message,
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('cancel'),
-          onPress: () => {},
-        },
-        {
-          text: t('close'),
-          onPress: () => {
-            if (navigationMultiStepCancelScreen) {
-              if (navigationMultiStepCancelScreen === 1) {
-                //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
-                navigation.getParent()?.goBack()
-              } else {
-                navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
-              }
-            } else {
-              navigation.goBack()
-            }
+    if (onLeftButtonPress) {
+      onLeftButtonPress()
+      return
+    } else {
+      confirmAlert({
+        title: '',
+        message,
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('cancel'),
+            onPress: () => {},
           },
-        },
-      ],
-    })
-    return
+          {
+            text: t('close'),
+            onPress: () => {
+              if (navigationMultiStepCancelScreen) {
+                if (navigationMultiStepCancelScreen === 1) {
+                  //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
+                  navigation.getParent()?.goBack()
+                } else {
+                  navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+                }
+              } else {
+                navigation.goBack()
+              }
+            },
+          },
+        ],
+      })
+      return
+    }
   }
 
   const onRightTitleButtonPress = () => {
