@@ -238,11 +238,9 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
   }
 
   const generateForm = (): ReactElement[] => {
-    const fieldsToShow = fieldsList.filter((field) => !field.hideField)
-
-    return _.map(fieldsToShow, (field, index) => {
+    return _.map(fieldsList, (field, index) => {
       return (
-        <Box mt={index === 0 ? 0 : theme.dimensions.formMarginBetween} key={index}>
+        <Box mt={index === 0 ? 0 : theme.dimensions.formMarginBetween} key={index} display={field.hideField ? 'none' : undefined}>
           {getFormComponent(field, index)}
         </Box>
       )
