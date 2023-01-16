@@ -25,6 +25,8 @@ export type FullScreenSubtaskProps = {
   rightButtonText?: string
   /** function called when right button is pressed (defaults to back navigation if omitted) */
   onRightButtonPress?: () => void
+  /** optional boolean that determines whether to diasable the right header button */
+  rightButtonDisabled?: boolean
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
   /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
@@ -48,6 +50,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   title,
   rightButtonText,
   onRightButtonPress,
+  rightButtonDisabled,
   rightVAIconProps,
   menuViewActions,
   primaryContentButtonText,
@@ -172,7 +175,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         </Box>
         <Box mr={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
           {rightButtonText && (
-            <TouchableWithoutFeedback ref={rightFocusRef} onPress={onRightTitleButtonPress} accessibilityRole="button">
+            <TouchableWithoutFeedback ref={rightFocusRef} onPress={onRightTitleButtonPress} accessibilityRole="button" disabled={rightButtonDisabled}>
               <Box {...boxProps}>
                 {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
                 <Box display="flex" flexDirection="row" alignItems="center">
