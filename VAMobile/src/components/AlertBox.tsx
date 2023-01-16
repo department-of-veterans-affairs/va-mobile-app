@@ -32,7 +32,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
     borderLeftWidth: theme.dimensions.alertBorderWidth,
     borderLeftColor: border,
     py: 20,
-    px: 10,
+    px: 20,
   }
 
   const titleAccessibilityRole = titleRole ? titleRole : text || children ? 'header' : undefined

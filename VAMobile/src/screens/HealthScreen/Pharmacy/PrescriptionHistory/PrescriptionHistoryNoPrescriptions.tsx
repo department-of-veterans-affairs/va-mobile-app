@@ -12,7 +12,6 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
   const { standardMarginBetween } = theme.dimensions
 
   const alertWrapperProps: BoxProps = {
-    mx: theme.dimensions.gutter,
     mt: standardMarginBetween,
     mb: theme.dimensions.contentMarginBottom,
   }

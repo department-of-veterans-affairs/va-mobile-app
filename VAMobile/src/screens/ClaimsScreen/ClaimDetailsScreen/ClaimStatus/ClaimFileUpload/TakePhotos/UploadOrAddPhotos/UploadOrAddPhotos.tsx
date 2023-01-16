@@ -215,7 +215,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
-    snackBar.hideAll()
+    snackBar?.hideAll()
     if (response && response.assets && response.assets.length + (imagesList?.length || 0) > MAX_NUM_PHOTOS) {
       setErrorMessage(t('fileUpload.tooManyPhotosError'))
     } else {
@@ -259,7 +259,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     <VAScrollView {...testIdProps('File-upload: Upload-files-or-add-photos-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!errorMessage && (
-          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" />
           </Box>
         )}

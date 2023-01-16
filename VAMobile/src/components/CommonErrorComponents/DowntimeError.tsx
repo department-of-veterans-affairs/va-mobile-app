@@ -25,7 +25,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   }
 
   const containerStyles = {
-    mx: theme.dimensions.gutter,
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
