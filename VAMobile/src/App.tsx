@@ -314,9 +314,9 @@ export const AuthedApp: FC = () => {
         }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
-        <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
-        <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
-        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
+        <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email'), headerShown: false }} />
+        <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} options={{ headerShown: false }} />
+        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ headerShown: false }} />
         <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
         {homeScreens}
         {profileScreens}

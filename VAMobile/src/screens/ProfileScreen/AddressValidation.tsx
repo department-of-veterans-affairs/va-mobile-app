@@ -158,7 +158,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
     suggestedAddressOptions.push({
       value: addressEntered,
-      labelKey: 'profile:editAddress.address',
+      labelKey: 'editAddress.address',
       labelArgs: getSuggestedAddressLabelArgs(addressEntered),
       headerText: t('editAddress.validation.youEntered'),
     })
@@ -168,7 +168,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
         map(confirmedSuggestedAddresses, (address, index) => {
           return {
             value: address,
-            labelKey: 'profile:editAddress.address',
+            labelKey: 'editAddress.address',
             labelArgs: getSuggestedAddressLabelArgs(address),
             addHeader: index === 0 ? true : false,
             headerText: t('editAddress.validation.suggestedAddresses'),
