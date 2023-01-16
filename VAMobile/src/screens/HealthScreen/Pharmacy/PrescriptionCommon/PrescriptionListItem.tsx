@@ -13,14 +13,12 @@ export type PrescriptionListItemProps = {
   prescription: PrescriptionAttributeData
   /** boolean to determine to hide the instructions */
   hideInstructions?: boolean
-  /** whether to hide the fill date */
-  hideFillDate?: boolean
   /** whether to show the refill status tag */
   includeRefillTag?: boolean
 }
 
 /** common component to show the prescription info on a list  */
-const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, hideFillDate, includeRefillTag }) => {
+const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, includeRefillTag }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
@@ -65,11 +63,9 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
       <TextView accessibilityLabel={`${refillDateText}.`} variant={'HelperText'} mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
         {refillDateText}
       </TextView>
-      {!hideFillDate && (
-        <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
-          {`${t('prescriptions.sort.fillDate')}: ${dateMMddyyyy}`}
-        </TextView>
-      )}
+      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
+        {`${t('prescriptions.sort.fillDate')}: ${dateMMddyyyy}`}
+      </TextView>
       <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || noneNoted}.`}>
         {`${t('prescription.vaFacility')} ${facilityName || noneNoted}`}
       </TextView>
