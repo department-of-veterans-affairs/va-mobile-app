@@ -162,7 +162,7 @@ export const AuthGuard: FC = () => {
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
-  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)

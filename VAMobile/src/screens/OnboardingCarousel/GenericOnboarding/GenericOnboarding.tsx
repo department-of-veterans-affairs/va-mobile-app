@@ -58,7 +58,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
           </TextView>
         )}
         {listOfText && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween} ml={theme.dimensions.gutter}>
             <VABulletList listOfText={listOfText} />
           </Box>
         )}

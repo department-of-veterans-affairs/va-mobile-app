@@ -1,7 +1,6 @@
 import * as commonEN from 'translations/en/common.json'
 import * as healthEN from 'translations/en/health.json'
 import * as homeEN from 'translations/en/home.json'
-import * as loginEN from 'translations/en/login.json'
 
 import { NAMESPACE } from 'constants/namespaces'
 
@@ -17,7 +16,6 @@ export const resources = {
     common: commonEN,
     health: healthEN,
     home: homeEN,
-    login: loginEN,
   },
 } as const
 

@@ -15,7 +15,7 @@ import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
-  const { t } = useTranslation([NAMESPACE.LOGIN, NAMESPACE.COMMON, NAMESPACE.HOME])
+  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
