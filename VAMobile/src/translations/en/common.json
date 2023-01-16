@@ -803,6 +803,7 @@
   "personalInformation.emailAddress.not.saved": "Email address could not be saved",
   "personalInformation.emailAddress.removed": "Email address removed",
   "personalInformation.emailAddress.saved": "Email address saved",
+  "personalInformation.email": "Email",
   "personalInformation.headerTitle": "Personal Information",
   "personalInformation.home": "Home",
   "personalInformation.homePhoneNumber": "home phone number",
