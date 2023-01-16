@@ -42,11 +42,21 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t(`${NAMESPACE.COMMON}:debug.title`) }} />,
     <ProfileStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: t('Remote Config') }} />,
     <ProfileStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: t('Sandbox') }} />,
-    <ProfileStack.Screen key={'PersonalInformation'} name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />,
+    <ProfileStack.Screen key={'PersonalInformation'} name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }} />,
     <ProfileStack.Screen key={'MilitaryInformation'} name="MilitaryInformation" component={MilitaryInformationScreen} options={{ headerShown: false }} />,
     <ProfileStack.Screen key={'NotificationsSettings'} name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ headerShown: false }} />,
-    <ProfileStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} />,
-    <ProfileStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} />,
+    <ProfileStack.Screen
+      key={'HowDoIUpdate'}
+      name="HowDoIUpdate"
+      component={HowDoIUpdateScreen}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
+    <ProfileStack.Screen
+      key={'HowWillYou'}
+      name="HowWillYou"
+      component={HowWillYouScreen}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
     <ProfileStack.Screen
       key={'IncorrectServiceInfo'}
       name="IncorrectServiceInfo"

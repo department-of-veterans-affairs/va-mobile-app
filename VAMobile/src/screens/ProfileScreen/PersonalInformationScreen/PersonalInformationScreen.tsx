@@ -5,7 +5,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
+import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
@@ -88,7 +88,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
 
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
+const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -171,7 +171,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Personal-information-page')}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.headerTitle')}>
       <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}
       </TextView>
@@ -194,7 +194,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
         {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 
