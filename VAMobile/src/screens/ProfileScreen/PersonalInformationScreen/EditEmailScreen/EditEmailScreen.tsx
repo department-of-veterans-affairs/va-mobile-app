@@ -151,7 +151,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   return (
     <FullScreenSubtask
-      title={t('personalInformation.email')}
+      title={t('personalInformation.emailAddress')}
       leftButtonText={t('cancel')}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}
