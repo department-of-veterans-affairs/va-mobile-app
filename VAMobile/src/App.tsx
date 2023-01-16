@@ -42,7 +42,6 @@ import { useColorScheme } from 'styles/themes/colorScheme'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
-import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import LoaGate from './screens/auth/LoaGate'
 import NotificationManager from './components/NotificationManager'
 import OnboardingCarousel from './screens/OnboardingCarousel'
@@ -80,7 +79,6 @@ const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
-  EditEmail: undefined
   EditAddress: { displayTitle: string; addressType: profileAddressType }
   EditDirectDeposit: undefined
   Tabs: undefined
@@ -310,7 +308,6 @@ export const AuthedApp: FC = () => {
         }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
-        <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email'), headerShown: false }} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ headerShown: false }} />
         <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
         {homeScreens}

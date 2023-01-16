@@ -12,24 +12,23 @@ import {
   FocusedNavHeaderText,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   SaveButton,
   VAButton,
-  VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices'
-import { RootNavStackParamList } from 'App'
+import { ProfileStackParamList } from 'screens/ProfileScreen/ProfileStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
-type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
+type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
 
 /**
  * Screen for editing a users email in the personal info section
@@ -115,7 +114,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'email',
-        labelKey: 'profile:personalInformation.email',
+        labelKey: 'personalInformation.email',
         onChange: setEmail,
         value: email,
         isRequiredField: true,
@@ -151,7 +150,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Email: Edit-email-page')}>
+    <FullScreenSubtask title={t('personalInformation.email')} leftButtonText={t('cancel')} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -170,7 +169,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

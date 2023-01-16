@@ -5,6 +5,7 @@ import React, { ReactNode } from 'react'
 import { NAMESPACE } from 'constants/namespaces'
 import { PhoneData, PhoneType } from 'store/api/types'
 import DebugScreen from './SettingsScreen/DebugScreen'
+import EditEmailScreen from './PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
@@ -20,6 +21,7 @@ import SettingsScreen from './SettingsScreen'
 
 export type ProfileStackParamList = {
   Debug: undefined
+  EditEmail: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
   HowDoIUpdate: undefined
   HowWillYou: undefined
@@ -45,7 +47,8 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
     <ProfileStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: t('Remote Config') }} />,
     <ProfileStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: t('Sandbox') }} />,
     <ProfileStack.Screen key={'PersonalInformation'} name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }} />,
-    <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} options={{ headerShown: false }} />,
+    <ProfileStack.Screen key={'EditPhoneNumber'} name="EditPhoneNumber" component={EditPhoneNumberScreen} options={{ headerShown: false }} />,
+    <ProfileStack.Screen key={'EditEmail'} name="EditEmail" component={EditEmailScreen} options={{ headerShown: false }} />,
     <ProfileStack.Screen key={'MilitaryInformation'} name="MilitaryInformation" component={MilitaryInformationScreen} options={{ headerShown: false }} />,
     <ProfileStack.Screen key={'NotificationsSettings'} name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ headerShown: false }} />,
     <ProfileStack.Screen
