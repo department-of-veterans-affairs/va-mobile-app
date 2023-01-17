@@ -1,0 +1,26 @@
+import CodeBlock from '@theme/CodeBlock'
+import NotificationManagerString from '!!raw-loader!@componentsDocs/NotificationManager/NotificationManager'
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString =`return (
+    <ActionSheetProvider>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18n}>
+            <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
+              <NotificationManager>
+                <SafeAreaProvider>
+                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                  <AuthGuard />
+                </SafeAreaProvider>
+              </NotificationManager>
+            </NavigationContainer>
+          </I18nextProvider>
+        </Provider>
+      </ThemeProvider>
+    </ActionSheetProvider>
+  )`
+
+
+
+<ComponentTopInfo componentName="NotificationManager" example={exampleString} codeString={NotificationManagerString}/>
