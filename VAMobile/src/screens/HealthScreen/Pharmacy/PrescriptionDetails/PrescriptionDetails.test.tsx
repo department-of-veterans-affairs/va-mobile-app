@@ -7,7 +7,7 @@ import PrescriptionDetails from './PrescriptionDetails'
 import { ReactTestInstance } from 'react-test-renderer'
 import { initialAuthState } from 'store/slices'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
-import { ClickForActionLink, FooterButton, TextView, VAButton} from 'components'
+import { ClickForActionLink, FooterButton, TextView, VAButton } from 'components'
 import { PrescriptionAttributeData, RefillStatusConstants } from 'store/api/types'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
@@ -15,7 +15,7 @@ context('PrescriptionDetails', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {} ) => {
+  const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}) => {
     const props = mockNavProps(undefined, undefined, { params: { prescriptionId: '13650544' } })
 
     component = render(<PrescriptionDetails {...props} />, {
@@ -28,7 +28,7 @@ context('PrescriptionDetails', () => {
               type: 'Prescription',
               id: '13650544',
               attributes: {
-                refillStatus: RefillStatusConstants.ACTIVE ,
+                refillStatus: RefillStatusConstants.ACTIVE,
                 refillSubmitDate: '2022-10-28T04:00:00.000Z',
                 refillDate: '2022-10-28T04:00:00.000Z',
                 refillRemaining: 5,
@@ -66,7 +66,7 @@ context('PrescriptionDetails', () => {
       initializeTestInstance()
       expect(findByTypeWithText(testInstance, TextView, 'Instructions')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Refills left')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Last fill date')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Fill date')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Quantity')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Expires on')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Ordered on')).toBeTruthy()
@@ -95,7 +95,7 @@ context('PrescriptionDetails', () => {
       expect(texts[7].props.children).toEqual('None noted')
       expect(texts[8].props.children).toEqual('Refills left')
       expect(texts[9].props.children).toEqual('None noted')
-      expect(texts[10].props.children).toEqual('Last fill date')
+      expect(texts[10].props.children).toEqual('Fill date')
       expect(texts[11].props.children).toEqual('None noted')
       expect(texts[12].props.children).toEqual('Quantity')
       expect(texts[13].props.children).toEqual('None noted')
@@ -112,7 +112,7 @@ context('PrescriptionDetails', () => {
     describe('when status is RefillStatusConstants.TRANSFERRED', () => {
       it('should display FooterButton', async () => {
         initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED
+          refillStatus: RefillStatusConstants.TRANSFERRED,
         })
 
         const button = testInstance.findAllByType(VAButton)
@@ -135,7 +135,7 @@ context('PrescriptionDetails', () => {
     describe('when isRefillable is true', () => {
       it('should display FooterButton', async () => {
         initializeTestInstance({
-          isRefillable: true
+          isRefillable: true,
         })
 
         const button = testInstance.findAllByType(VAButton)
@@ -158,7 +158,7 @@ context('PrescriptionDetails', () => {
     describe('when status is RefillStatusConstants.TRANSFERRED', () => {
       it('should display the PrescriptionsDetailsBanner', async () => {
         initializeTestInstance({
-          refillStatus: RefillStatusConstants.TRANSFERRED
+          refillStatus: RefillStatusConstants.TRANSFERRED,
         })
 
         const prescriptionsDetailsBanner = testInstance.findAllByType(PrescriptionsDetailsBanner)
@@ -167,11 +167,11 @@ context('PrescriptionDetails', () => {
     })
 
     describe('when status is not RefillStatusConstants.TRANSFERRED', () => {})
-      it('should not display the PrescriptionsDetailsBanner', async () => {
-        initializeTestInstance()
+    it('should not display the PrescriptionsDetailsBanner', async () => {
+      initializeTestInstance()
 
-        const prescriptionsDetailsBanner = testInstance.findAllByType(PrescriptionsDetailsBanner)
-        expect(prescriptionsDetailsBanner.length).toBe(0)
-      })
+      const prescriptionsDetailsBanner = testInstance.findAllByType(PrescriptionsDetailsBanner)
+      expect(prescriptionsDetailsBanner.length).toBe(0)
+    })
   })
 })

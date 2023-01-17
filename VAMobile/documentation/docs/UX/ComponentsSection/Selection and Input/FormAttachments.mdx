@@ -1,0 +1,12 @@
+import CodeBlock from '@theme/CodeBlock'
+import FormAttachmentsString from '!!raw-loader!@componentsDocs/FormWrapper/FormFields/FormAttachments'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<FormAttachments 
+attachmentsList={[ { name: 'file.txt' }, { fileName: 'image.jpeg' } ]} 
+removeOnPress={() => {}} 
+largeButtonProps={{ label: 'add files', onPress: () => {} }} />`
+
+
+<ComponentTopInfo componentName="FormAttachments" example={exampleString} codeString={FormAttachmentsString} />

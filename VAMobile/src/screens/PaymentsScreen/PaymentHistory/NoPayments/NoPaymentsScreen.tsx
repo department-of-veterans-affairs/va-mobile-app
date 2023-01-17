@@ -12,7 +12,7 @@ const NoPaymentsScreen: FC = () => {
 
   return (
     <VAScrollView>
-      <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mt={standardMarginBetween}>
         <AlertBox title={t('payments.noPayments.title')} border="informational" text={t('payments.noPayments.body')}>
           <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
         </AlertBox>
