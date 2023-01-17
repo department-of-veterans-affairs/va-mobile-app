@@ -67,11 +67,11 @@ context('HomeScreen', () => {
   describe('when VA COVID-19 updates is pressed', () => {
     it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
       await waitFor(() => {
-        findByTestID(testInstance, 'V\ufeffA COVID-19 updates').props.onPress()
+        findByTestID(testInstance, 'VA COVID-19 updates').props.onPress()
         const expectNavArgs = {
           url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
           displayTitle: 'va.gov',
-          loadingMessage: 'Loading V\ufeffA COVID-19 updates...',
+          loadingMessage: 'Loading VA COVID-19 updates...',
         }
         expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
       })

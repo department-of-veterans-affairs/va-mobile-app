@@ -37,7 +37,7 @@ context('NoRequestAppointmentAccess', () => {
     navigateToSpy = jest.fn()
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
-      .calledWith('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: 'va.gov', loadingMessage: 'Loading V\ufeffA location finder...' })
+      .calledWith('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: 'va.gov', loadingMessage: 'Loading VA location finder...' })
       .mockReturnValue(navigateToSpy)
 
     component = render(<NoRequestAppointmentAccess {...props} />)
