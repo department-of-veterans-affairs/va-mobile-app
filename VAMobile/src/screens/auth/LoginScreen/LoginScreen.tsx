@@ -84,14 +84,7 @@ const LoginScreen: FC = () => {
           <VAIcon name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={80}>
-          <VAButton
-            onPress={onLoginInit}
-            label={t('signin')}
-            testID={t('signin')}
-            a11yHint={t('signin.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonWhite}
-            hideBorder={true}
-          />
+          <VAButton onPress={onLoginInit} label={t('common:signin')} a11yHint={t('common:signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
           <Pressable
             onPress={onFacilityLocator}
             {...testIdProps(t('home:findLocation.titleA11yLabel'))}
