@@ -37,7 +37,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLo
   }
 
   return (
-    <VAScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle} alwaysBounceVertical={false}>
+    <VAScrollView contentContainerStyle={containerStyle} alwaysBounceVertical={false}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
