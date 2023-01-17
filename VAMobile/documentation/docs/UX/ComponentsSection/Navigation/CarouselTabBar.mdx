@@ -1,0 +1,19 @@
+import CodeBlock from '@theme/CodeBlock'
+import CarouselTabBarString from '!!raw-loader!@componentsDocs/Carousel/CarouselTabBar'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<CarouselTabNav.Navigator 
+tabBar={(props): 
+React.ReactNode => <CarouselTabBar {...props} 
+onCarouselEnd={onCarouselEnd} 
+translation={translation} 
+screenList={screenList} />}>
+    <CarouselTabNav.Screen 
+    name="Main" 
+    children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} 
+    options={{ headerShown: false }} />
+</CarouselTabNav.Navigator>`
+
+
+<ComponentTopInfo componentName="CarouselTabBar" example={exampleString} codeString={CarouselTabBarString} />
