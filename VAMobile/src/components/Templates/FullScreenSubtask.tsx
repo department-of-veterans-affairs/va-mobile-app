@@ -17,12 +17,16 @@ Use 'options={{headerShown: false}}'(preferred method for subtask) in the indivi
 export type FullScreenSubtaskProps = {
   /** text of the title bar left button(no text it doesn't appear) */
   leftButtonText?: string
+  /** function called when left button is pressed (defaults to back navigation if omitted) */
+  onLeftButtonPress?: () => void
   /** text of the title bar title(no text it doesn't appear) */
   title?: string
   /** text of the title bar right button(no text it doesn't appear) */
   rightButtonText?: string
-  /** function called when right button is pressed(defaults to back navigation if omitted) */
+  /** function called when right button is pressed (defaults to back navigation if omitted) */
   onRightButtonPress?: () => void
+  /** optional boolean that determines whether to diasable the right header button */
+  rightButtonDisabled?: boolean
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
   /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
@@ -42,9 +46,11 @@ export type FullScreenSubtaskProps = {
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   children,
   leftButtonText,
+  onLeftButtonPress,
   title,
   rightButtonText,
   onRightButtonPress,
+  rightButtonDisabled,
   rightVAIconProps,
   menuViewActions,
   primaryContentButtonText,
@@ -94,34 +100,39 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const message = t('areYouSure')
 
   const onLeftTitleButtonPress = () => {
-    confirmAlert({
-      title: '',
-      message,
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('cancel'),
-          onPress: () => {},
-        },
-        {
-          text: t('close'),
-          onPress: () => {
-            if (navigationMultiStepCancelScreen) {
-              if (navigationMultiStepCancelScreen === 1) {
-                //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
-                navigation.getParent()?.goBack()
-              } else {
-                navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
-              }
-            } else {
-              navigation.goBack()
-            }
+    if (onLeftButtonPress) {
+      onLeftButtonPress()
+      return
+    } else {
+      confirmAlert({
+        title: '',
+        message,
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('cancel'),
+            onPress: () => {},
           },
-        },
-      ],
-    })
-    return
+          {
+            text: t('close'),
+            onPress: () => {
+              if (navigationMultiStepCancelScreen) {
+                if (navigationMultiStepCancelScreen === 1) {
+                  //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
+                  navigation.getParent()?.goBack()
+                } else {
+                  navigation.dispatch(StackActions.pop(navigationMultiStepCancelScreen))
+                }
+              } else {
+                navigation.goBack()
+              }
+            },
+          },
+        ],
+      })
+      return
+    }
   }
 
   const onRightTitleButtonPress = () => {
@@ -164,7 +175,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         </Box>
         <Box mr={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
           {rightButtonText && (
-            <TouchableWithoutFeedback ref={rightFocusRef} onPress={onRightTitleButtonPress} accessibilityRole="button">
+            <TouchableWithoutFeedback ref={rightFocusRef} onPress={onRightTitleButtonPress} accessibilityRole="button" disabled={rightButtonDisabled}>
               <Box {...boxProps}>
                 {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
                 <Box display="flex" flexDirection="row" alignItems="center">

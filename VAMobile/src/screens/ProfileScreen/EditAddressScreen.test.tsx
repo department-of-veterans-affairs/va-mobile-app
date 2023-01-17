@@ -3,7 +3,6 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
-import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { context, findByTypeWithText, findByTypeWithSubstring, mockNavProps, render, RenderAPI } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
@@ -87,7 +86,8 @@ context('EditAddressScreen', () => {
   let testInstance: ReactTestInstance
   let profileInfo: UserDataProfile
   let goBackSpy: any
-  let navHeaderSpy: any
+
+  const getSaveButton = () => testInstance.findAllByType(TouchableWithoutFeedback)[1]
 
   const initializeTestInstance = (
     profile?: UserDataProfile,
@@ -103,12 +103,6 @@ context('EditAddressScreen', () => {
       {
         goBack: goBackSpy,
         addListener: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined,
-          }
-        },
       },
       {
         params: {
@@ -242,8 +236,7 @@ context('EditAddressScreen', () => {
     it('should update the value of selected', async () => {
       const checkbox = testInstance.findByType(VASelector)
       expect(checkbox.props.selected).toEqual(false)
-
-      const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
+      const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[2]
       act(() => {
         checkboxTouchable.props.onPress()
       })
@@ -254,7 +247,7 @@ context('EditAddressScreen', () => {
       it('should clear the country field', async () => {
         const checkbox = testInstance.findByType(VASelector)
 
-        const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
+        const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[2]
         act(() => {
           checkboxTouchable.props.onPress()
         })
@@ -271,7 +264,7 @@ context('EditAddressScreen', () => {
     })
 
     it('should set state, city, and military post office to empty strings', async () => {
-      const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
+      const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[2]
       act(() => {
         checkboxTouchable.props.onPress()
       })
@@ -562,13 +555,13 @@ context('EditAddressScreen', () => {
 
     it('should render the military post office picker instead of the city text input', async () => {
       const pickers = testInstance.findAllByType(VAModalPicker)
-      expect(pickers[1].props.labelKey).toEqual('profile:editAddress.militaryPostOffices')
+      expect(pickers[1].props.labelKey).toEqual('editAddress.militaryPostOffices')
 
       const textInputs = testInstance.findAllByType(VATextInput)
-      expect(textInputs[0].props.labelKey).toEqual('profile:editAddress.streetAddressLine1')
-      expect(textInputs[1].props.labelKey).toEqual('profile:editAddress.streetAddressLine2')
-      expect(textInputs[2].props.labelKey).toEqual('profile:editAddress.streetAddressLine3')
-      expect(textInputs[3].props.labelKey).toEqual('profile:editAddress.zipCode')
+      expect(textInputs[0].props.labelKey).toEqual('editAddress.streetAddressLine1')
+      expect(textInputs[1].props.labelKey).toEqual('editAddress.streetAddressLine2')
+      expect(textInputs[2].props.labelKey).toEqual('editAddress.streetAddressLine3')
+      expect(textInputs[3].props.labelKey).toEqual('editAddress.zipCode')
     })
   })
 
@@ -585,11 +578,11 @@ context('EditAddressScreen', () => {
 
     it('should render the city text input instead of the military post office picker', async () => {
       const textInputs = testInstance.findAllByType(VATextInput)
-      expect(textInputs[3].props.labelKey).toEqual('profile:editAddress.city')
+      expect(textInputs[3].props.labelKey).toEqual('editAddress.city')
 
       const pickers = testInstance.findAllByType(VAModalPicker)
-      expect(pickers[0].props.labelKey).toEqual('profile:editAddress.country')
-      expect(pickers[1].props.labelKey).toEqual('profile:editAddress.state')
+      expect(pickers[0].props.labelKey).toEqual('editAddress.country')
+      expect(pickers[1].props.labelKey).toEqual('editAddress.state')
     })
   })
 
@@ -614,7 +607,7 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo)
 
       const statePicker = testInstance.findAllByType(VAModalPicker)[1]
-      expect(statePicker.props.labelKey).toEqual('profile:editAddress.state')
+      expect(statePicker.props.labelKey).toEqual('editAddress.state')
     })
   })
 
@@ -639,7 +632,7 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo)
 
       const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
-      expect(stateVATextInput.props.labelKey).toEqual('profile:editAddress.state')
+      expect(stateVATextInput.props.labelKey).toEqual('editAddress.state')
     })
   })
 
@@ -658,8 +651,7 @@ context('EditAddressScreen', () => {
 
     it('when cancel is pressed during address validation', async () => {
       initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
-
-      navHeaderSpy.back.props.onPress()
+      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
       expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
@@ -677,7 +669,7 @@ context('EditAddressScreen', () => {
           textInput.props.onChange('')
         })
 
-        navHeaderSpy.save.props.onSave()
+        getSaveButton().props.onPress()
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
@@ -698,12 +690,12 @@ context('EditAddressScreen', () => {
       })
 
       act(() => {
-        navHeaderSpy.save.props.onSave()
+        getSaveButton().props.onPress()
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(findByTypeWithText(testInstance, TextView, "Street address is required")).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, "Postal code is required")).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
     })
   })
 
@@ -714,7 +706,7 @@ context('EditAddressScreen', () => {
       })
 
       act(() => {
-        navHeaderSpy.save.props.onSave()
+        getSaveButton().props.onPress()
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
@@ -753,7 +745,7 @@ context('EditAddressScreen', () => {
         initializeTestInstance(profileInfo)
 
         act(() => {
-          navHeaderSpy.save.props.onSave()
+          getSaveButton().props.onPress()
         })
 
         expect(validateAddress).toBeCalledWith(
@@ -798,7 +790,7 @@ context('EditAddressScreen', () => {
         initializeTestInstance(profileInfo)
 
         act(() => {
-          navHeaderSpy.save.props.onSave()
+          getSaveButton().props.onPress()
         })
 
         expect(validateAddress).toBeCalledWith(
@@ -840,9 +832,8 @@ context('EditAddressScreen', () => {
         }
 
         initializeTestInstance(profileInfo)
-
         act(() => {
-          navHeaderSpy.save.props.onSave()
+          getSaveButton().props.onPress()
         })
 
         expect(validateAddress).toBeCalledWith(

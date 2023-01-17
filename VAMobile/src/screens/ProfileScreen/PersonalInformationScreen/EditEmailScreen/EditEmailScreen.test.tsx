@@ -4,7 +4,7 @@ import React from 'react'
 import { ReactTestInstance } from 'react-test-renderer'
 import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
 import EditEmailScreen from './EditEmailScreen'
-import { TextInput } from 'react-native'
+import { TextInput, TouchableWithoutFeedback } from 'react-native'
 import Mock = jest.Mock
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -52,6 +52,8 @@ context('EditEmailScreen', () => {
   let props: any
   let navHeaderSpy: any
 
+  const getSaveButton = () => testInstance.findAllByType(TouchableWithoutFeedback)[1]
+
   const prepTestInstanceWithStore = (storeProps?: any, errorsState: ErrorsState = initialErrorsState) => {
     if (!storeProps) {
       storeProps = { emailSaved: false, loading: false }
@@ -59,7 +61,7 @@ context('EditEmailScreen', () => {
 
     onBackSpy = jest.fn(() => {})
 
-    store ={
+    store = {
       ...InitialState,
       personalInformation: { ...InitialState.personalInformation, ...storeProps },
       errors: errorsState,
@@ -109,7 +111,7 @@ context('EditEmailScreen', () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my', id: '0' } } })
 
       await waitFor(() => {
-        navHeaderSpy.save.props.onSave()
+        getSaveButton().props.onPress()
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
@@ -122,7 +124,7 @@ context('EditEmailScreen', () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: '', id: '0' } } })
 
       await waitFor(() => {
-        navHeaderSpy.save.props.onSave()
+        getSaveButton().props.onPress()
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
@@ -135,10 +137,10 @@ context('EditEmailScreen', () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' } } })
 
       await waitFor(() => {
-        navHeaderSpy.save.props.onSave()
+        getSaveButton().props.onPress()
       })
 
-      expect(updateEmail).toHaveBeenCalledWith({"errorMsg": "Email address could not be saved", "successMsg": "Email address saved"}, 'my@email.com', '0', 'EDIT_EMAIL_SCREEN')
+      expect(updateEmail).toHaveBeenCalledWith({ errorMsg: 'Email address could not be saved', successMsg: 'Email address saved' }, 'my@email.com', '0', 'EDIT_EMAIL_SCREEN')
     })
   })
 
