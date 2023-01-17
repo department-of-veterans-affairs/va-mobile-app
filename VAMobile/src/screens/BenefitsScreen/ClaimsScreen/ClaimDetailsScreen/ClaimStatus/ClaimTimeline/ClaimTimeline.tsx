@@ -30,7 +30,7 @@ const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
   return (
     <Box>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
-        <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
+        <Box my={theme.dimensions.standardMarginBetween}>
           <AlertBox border={'warning'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
         </Box>
       )}

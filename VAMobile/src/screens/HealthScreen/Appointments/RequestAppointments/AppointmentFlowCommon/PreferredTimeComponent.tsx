@@ -65,7 +65,7 @@ const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes
         <TextView mx={gutter} mb={errorMessage ? 0 : condensedMarginBetween} variant="MobileBodyBold">
           {selectionTitle}
         </TextView>
-        <AppointmentFlowErrorAlert errorMessage={errorMessage} mx={gutter} mb={standardMarginBetween} mt={standardMarginBetween} />
+        <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={standardMarginBetween} mt={standardMarginBetween} />
         <DefaultList items={listItems} />
       </Box>
     )

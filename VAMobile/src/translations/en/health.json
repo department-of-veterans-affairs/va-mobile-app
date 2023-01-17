@@ -242,7 +242,7 @@
   "prescription.details.title": "Prescription Details",
   "prescription.details.instructionsHeader": "Instructions",
   "prescription.details.refillLeftHeader": "Refills left",
-  "prescription.details.lastFillDateHeader": "Last fill date",
+  "prescription.details.lastFillDateHeader": "Fill date",
   "prescription.details.quantityHeader": "Quantity",
   "prescription.details.expiresOnHeader": "Expires on",
   "prescription.details.orderedOnHeader": "Ordered on",

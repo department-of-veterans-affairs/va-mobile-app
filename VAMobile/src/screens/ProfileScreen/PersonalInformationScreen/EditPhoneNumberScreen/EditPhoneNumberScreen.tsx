@@ -188,9 +188,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <VAButton
               onPress={onDeletePressed}
               label={t('personalInformation.removeData', { pageName: buttonTitle })}
@@ -205,7 +205,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
             <AlertBox title={t('editPhoneNumber.checkPhoneNumber')} border="error" />
           </Box>
         )}
-        <Box mt={theme.dimensions.formMarginBetween}>
+        <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
           <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         </Box>
       </Box>

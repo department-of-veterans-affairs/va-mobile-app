@@ -82,7 +82,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         break
     }
     return (
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <AlertBox {...alertBoxProps}>
           {status !== REQUEST_STATUS.SUCCESS && (
             <Box mt={theme.dimensions.standardMarginBetween}>
