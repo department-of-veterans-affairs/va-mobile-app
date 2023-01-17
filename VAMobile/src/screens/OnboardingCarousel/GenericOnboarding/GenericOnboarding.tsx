@@ -13,12 +13,11 @@ export type GenericOnboardingProps = {
   textA11yLabel?: string
   // optional list of text for using bullet points instead of plain text
   listOfText?: Array<string | VABulletListText>
-  testID?: string
   displayLogo?: boolean
   centerHeader?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
+const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
