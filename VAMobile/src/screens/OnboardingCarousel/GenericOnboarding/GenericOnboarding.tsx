@@ -13,7 +13,7 @@ export type GenericOnboardingProps = {
   textA11yLabel?: string
   // optional list of text for using bullet points instead of plain text
   listOfText?: Array<string | VABulletListText>
-  testID: string
+  testID?: string
   displayLogo?: boolean
   centerHeader?: boolean
 }
