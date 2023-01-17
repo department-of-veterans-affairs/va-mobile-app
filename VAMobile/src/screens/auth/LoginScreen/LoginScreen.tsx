@@ -86,9 +86,9 @@ const LoginScreen: FC = () => {
         <Box mx={theme.dimensions.gutter} mb={80}>
           <VAButton
             onPress={onLoginInit}
-            label={t('login:signin')}
-            testID={t('login:signin')}
-            a11yHint={t('login:signin.a11yHint')}
+            label={t('signin')}
+            testID={t('signin')}
+            a11yHint={t('signin.a11yHint')}
             buttonType={ButtonTypesConstants.buttonWhite}
             hideBorder={true}
           />
