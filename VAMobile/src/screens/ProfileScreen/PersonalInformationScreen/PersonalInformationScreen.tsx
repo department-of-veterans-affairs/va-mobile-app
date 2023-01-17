@@ -137,7 +137,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   })
 
   const onCellPhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.cellPhoneTitle'),
+    displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
     phoneType: PhoneTypeConstants.MOBILE,
     phoneData: profile ? profile.mobilePhoneNumber : ({} as PhoneData),
   })
