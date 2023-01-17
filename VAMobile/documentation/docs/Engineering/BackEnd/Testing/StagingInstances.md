@@ -52,7 +52,8 @@ Loading production environment (Rails 6.1.4.1)
 irb(main):001:0>
 ```
 
-You can then fetch an [api token](ApiTokens.md#fetching-api-tokens) and use that token to create either an IAM user session:
+### User Sign In
+You can then fetch an [api token](ApiTokens.md#fetching-api-tokens) and use that token to create either an IAM user session (deprecated):
 ```
 irb(main):001:0> user = IAMSSOeOAuth::SessionManager.new('EESBp0xiLD6p1g86q4g1').find_or_create_user
 ```

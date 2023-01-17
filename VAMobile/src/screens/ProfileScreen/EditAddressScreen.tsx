@@ -1,27 +1,24 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   AlertBox,
-  BackButton,
   Box,
   ButtonTypesConstants,
   ErrorComponent,
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   PickerItem,
-  SaveButton,
   VAButton,
-  VAScrollView,
   VATextInputTypes,
   ValidationFunctionItems,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
 import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
@@ -33,11 +30,9 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from './AddressSummary'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
-import HeaderTitle from 'components/HeaderTitle'
 
 const MAX_ADDRESS_LENGTH = 35
 const ZIP_CODE_LENGTH = 5
@@ -252,16 +247,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const cancelFn = showValidation ? onConfirmCancel : onCancel
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => <HeaderTitle {...testIdProps(displayTitle)} headerTitle={displayTitle} />,
-      headerLeft: (props): ReactNode => <BackButton onPress={cancelFn} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () => {
-        return !showValidation ? <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} /> : <></>
-      },
-    })
-  })
-
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
   }
@@ -278,7 +263,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       addressId: profile?.[addressType]?.id || 0,
       snackbarMessages: snackbarMessages,
     }
-    return <AddressValidation {...addressValidationProps} />
+    return (
+      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
+        <AddressValidation {...addressValidationProps} />
+      </FullScreenSubtask>
+    )
   }
 
   const clearFieldsAndErrors = (): void => {
@@ -322,7 +311,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           onSelectionChange: setMilitaryPostOffice,
           pickerOptions: MilitaryPostOffices,
           includeBlankPlaceholder: true,
-          labelKey: 'profile:editAddress.militaryPostOffices',
+          labelKey: 'editAddress.militaryPostOffices',
           isRequiredField: true,
         },
         fieldErrorMessage: t('editAddress.validOptionFieldError'),
@@ -333,7 +322,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'profile:editAddress.city',
+        labelKey: 'editAddress.city',
         value: city,
         onChange: setCity,
         inputRef: cityRef,
@@ -353,7 +342,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           selectedValue: state,
           onSelectionChange: setState,
           pickerOptions: pickerOptions,
-          labelKey: 'profile:editAddress.state',
+          labelKey: 'editAddress.state',
           includeBlankPlaceholder: true,
           isRequiredField: true,
         },
@@ -365,7 +354,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'profile:editAddress.state',
+        labelKey: 'editAddress.state',
         value: state,
         onChange: setState,
       },
@@ -386,7 +375,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   } => {
     if (isDomestic(country)) {
       return {
-        zipCodeLabelKey: 'profile:editAddress.zipCode',
+        zipCodeLabelKey: 'editAddress.zipCode',
         zipCodeInputType: 'phone',
         zipCodeFieldError: t('editAddress.zipCodeFieldError'),
         zipCodeValidationList: [
@@ -399,7 +388,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
 
     return {
-      zipCodeLabelKey: 'profile:editAddress.internationalPostCode',
+      zipCodeLabelKey: 'editAddress.internationalPostCode',
       zipCodeInputType: 'none',
       zipCodeFieldError: t('editAddress.internationalPostCodeFieldError'),
     }
@@ -411,7 +400,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     {
       fieldType: FieldType.Selector,
       fieldProps: {
-        labelKey: 'profile:editAddress.liveOnMilitaryBase',
+        labelKey: 'editAddress.liveOnMilitaryBase',
         selected: checkboxSelected,
         onSelectionChange: onCheckboxChange,
         a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
@@ -423,7 +412,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         selectedValue: country,
         onSelectionChange: onCountryChange,
         pickerOptions: Countries,
-        labelKey: 'profile:editAddress.country',
+        labelKey: 'editAddress.country',
         includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: checkboxSelected,
@@ -434,13 +423,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'profile:editAddress.streetAddressLine1',
+        labelKey: 'editAddress.streetAddressLine1',
         value: addressLine1,
         onChange: setAddressLine1,
         maxLength: MAX_ADDRESS_LENGTH,
         inputRef: addressLine1Ref,
         isRequiredField: true,
-        helperTextKey: 'profile:editAddress.streetAddress.helperText',
+        helperTextKey: 'editAddress.streetAddress.helperText',
       },
       fieldErrorMessage: t('editAddress.streetAddressLine1FieldError'),
     },
@@ -448,23 +437,23 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'profile:editAddress.streetAddressLine2',
+        labelKey: 'editAddress.streetAddressLine2',
         value: addressLine2,
         onChange: setAddressLine2,
         maxLength: MAX_ADDRESS_LENGTH,
-        helperTextKey: 'profile:editAddress.streetAddress.helperText',
+        helperTextKey: 'editAddress.streetAddress.helperText',
       },
     },
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'profile:editAddress.streetAddressLine3',
+        labelKey: 'editAddress.streetAddressLine3',
         value: addressLine3,
         onChange: setAddressLine3,
         maxLength: MAX_ADDRESS_LENGTH,
         inputRef: addressLine3Ref,
-        helperTextKey: 'profile:editAddress.streetAddress.helperText',
+        helperTextKey: 'editAddress.streetAddress.helperText',
       },
     },
     getCityOrMilitaryBaseFormFieldType(),
@@ -484,7 +473,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     },
   ]
 
-  const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
   const noAddressData = !profile?.[addressType]
 
   const lowerCaseTitle = displayTitle.toLowerCase()
@@ -508,7 +496,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
+    <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -535,7 +523,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           setOnSaveClicked={setOnSaveClicked}
         />
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

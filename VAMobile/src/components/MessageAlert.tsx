@@ -34,7 +34,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   }
 
   return (
-    <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+    <Box mb={theme.dimensions.standardMarginBetween}>
       <AlertBox border={'error'} title={title} text={text} textA11yLabel={textA11yLabel} titleRole={'header'} />
     </Box>
   )

@@ -1,12 +1,11 @@
-import { Animated, Easing, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, StatusBar, Text, View, ViewStyle } from 'react-native'
+import { Animated, Easing, LayoutChangeEvent, Pressable, StatusBar, Text, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { Box, DescriptiveBackButton, TextView, VAIcon, VAIconProps } from 'components'
-import { VABackgroundColors } from 'styles/theme'
-import { VAScrollViewProps } from 'components/VAScrollView'
+import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
+import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import styled from 'styled-components'
 
 /* To use these templates:
@@ -24,103 +23,64 @@ type headerButton = {
 }
 
 export type ChildTemplateProps = {
+  /** Translated label text for descriptive back button */
   backLabel: string
+  /** Optional a11y label for back button  */
   backLabelA11y?: string
+  /** On press navigation for descriptive back button */
   backLabelOnPress: () => void
+  /** Title for page that transitions to header */
   title: string
+  /** Optional a11y label for title  */
   titleA11y?: string
+  /** Optional header button requiring label, icon, and onPress props */
   headerButton?: headerButton
-  footerContent?: ReactNode // Content pinned below the scrollable space
+  /** Optional footer content pinned below the scrollable space */
+  footerContent?: ReactNode
+  /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
 
-const HEADER_HEIGHT = 91
-const SUBHEADER_HEIGHT = 52
-const TOTAL_HEADER_HEIGHT = HEADER_HEIGHT + SUBHEADER_HEIGHT
-
 export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
-  const [initialScrollY] = useState(new Animated.Value(Platform.OS === 'ios' ? -TOTAL_HEADER_HEIGHT : 0))
-  const scrollY = Animated.add(initialScrollY, Platform.OS === 'ios' ? TOTAL_HEADER_HEIGHT : 0)
-
   const [VaOpacity, setVaOpacity] = useState(1)
-
   const [titleShowing, setTitleShowing] = useState(false)
   const [titleFade] = useState(new Animated.Value(0))
-
-  const subtitleTranslate = scrollY.interpolate({
-    inputRange: [0, SUBHEADER_HEIGHT],
-    outputRange: [0, -SUBHEADER_HEIGHT],
-    extrapolate: 'clamp',
-  })
-
-  const updateOffset = (offsetValue: number) => {
-    setVaOpacity(1 - offsetValue / SUBHEADER_HEIGHT)
-    setTitleShowing(offsetValue > SUBHEADER_HEIGHT)
-    // On fast scroll, pop in fully opaque title
-    if (offsetValue > 4 * SUBHEADER_HEIGHT) {
-      titleFade.setValue(1)
-    }
-  }
-
-  useEffect(() => {
-    titleShowing === false &&
-      Animated.timing(titleFade, {
-        toValue: 0,
-        duration: 10,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start()
-
-    titleShowing === true &&
-      Animated.timing(titleFade, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start()
-  })
+  const [transitionHeaderHeight, setTransitionHeaderHeight] = useState(0)
 
   const fillStyle: ViewStyle = {
+    paddingTop: insets.top,
+    backgroundColor: theme.colors.background.main,
     flex: 1,
   }
 
-  // Copied from VAScrollView to address bug
-  const scrollViewStyle: ViewStyle = {
-    paddingRight: insets.right,
-    paddingLeft: insets.left,
-    backgroundColor: scrollViewProps?.backgroundColor ? theme.colors.background[scrollViewProps.backgroundColor as keyof VABackgroundColors] : theme.colors.background.main,
-  }
-
-  // Offsets content for header for Android
-  const contentContainerStyle: ViewStyle = { paddingTop: Platform.OS === 'ios' ? 0 : TOTAL_HEADER_HEIGHT }
-
   const headerStyle: ViewStyle = {
-    backgroundColor: theme.colors.background.main,
-    paddingTop: Platform.OS === 'ios' ? 28 : 18,
-    height: HEADER_HEIGHT,
+    height: theme.dimensions.navBarHeight,
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 4,
   }
 
-  const subheaderStyle: ViewStyle = {
-    position: 'absolute',
-    top: HEADER_HEIGHT,
-    left: 0,
-    right: 0,
-    backgroundColor: theme.colors.background.main,
-    overflow: 'hidden',
-    height: SUBHEADER_HEIGHT,
-    zIndex: 1,
+  const headerTitleBoxProps: BoxProps = {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+    m: theme.dimensions.headerButtonSpacing,
+    justifyContent: 'center',
+    alignItems: 'center',
+    accessibilityElementsHidden: true,
+    importantForAccessibility: 'no-hide-descendants',
+  }
+
+  const subtitleProps: TextViewProps = {
+    variant: 'BitterBoldHeading',
+    mt: 0,
+    ml: theme.dimensions.condensedMarginBetween,
+    mb: theme.dimensions.standardMarginBetween,
+    mr: theme.dimensions.condensedMarginBetween,
   }
 
   const StyledLabel = styled(Text)`
@@ -131,32 +91,68 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
 	letter-spacing: -0.2px;
 `
 
+  /**
+   * With useEffect below, handles carrying out transitioning header functionality
+   * @param offsetValue - The scroll offset position in pixels
+   */
+  const transitionHeader = (offsetValue: number) => {
+    if (offsetValue <= transitionHeaderHeight || !titleShowing) {
+      setVaOpacity(1 - offsetValue / transitionHeaderHeight)
+      setTitleShowing(offsetValue >= transitionHeaderHeight)
+    }
+  }
+
+  /**
+   * Handles animation effect on the title
+   */
+  useEffect(() => {
+    // Revert title to transparent (out of view)
+    titleShowing === false &&
+      Animated.timing(titleFade, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+
+    // Trigger transition header animation when titleShowing becomes true
+    titleShowing === true &&
+      Animated.timing(titleFade, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+  })
+
+  /**
+   * At (re)render time, gets and sets the height for transitioning header behavior
+   * @param event - Layout change event wrapping the subtitle
+   */
+  const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
+    // Subtract out bottom padding to closely align transition with subtitle fully disappearing
+    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween
+    setTransitionHeaderHeight(height)
+  }
+
   return (
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
-      <Animated.View style={headerStyle}>
+      <View style={headerStyle}>
         <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
           <Box display="flex" width="25%">
             <DescriptiveBackButton label={backLabel} labelA11y={backLabelA11y} onPress={backLabelOnPress} />
           </Box>
 
-          <Box
-            display="flex"
-            flex={1}
-            flexDirection={'row'}
-            m={theme.dimensions.headerButtonSpacing}
-            justifyContent={'center'}
-            alignItems={'center'}
-            accessibilityElementsHidden={true}
-            importantForAccessibility="no-hide-descendants">
+          <Box {...headerTitleBoxProps}>
             {titleShowing ? (
               <Animated.View style={{ opacity: titleFade }}>
-                <TextView variant="MobileBody" selectable={false} accessibilityLabel={titleA11y}>
+                <TextView variant="MobileBody" selectable={false} accessibilityLabel={titleA11y} allowFontScaling={false}>
                   {title}
                 </TextView>
               </Animated.View>
             ) : (
-              <TextView variant="BitterBoldHeading" selectable={false} opacity={VaOpacity}>
+              <TextView variant="BitterBoldHeading" selectable={false} opacity={VaOpacity} allowFontScaling={false}>
                 VA
               </TextView>
             )}
@@ -166,46 +162,27 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
             {headerButton ? (
               <Pressable onPress={headerButton.onPress} accessibilityRole="button" accessible={true}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  <VAIcon name={headerButton.icon.name} fill={'active'} height={22} width={22} />
+                  <VAIcon name={headerButton.icon.name} fill={'active'} height={22} width={22} preventScaling={true} />
                 </Box>
                 <StyledLabel allowFontScaling={false}>{headerButton.label}</StyledLabel>
               </Pressable>
             ) : null}
           </Box>
         </Box>
-      </Animated.View>
-
-      <Animated.View style={[subheaderStyle, { transform: [{ translateY: subtitleTranslate }] }]}>
-        <TextView variant="BitterBoldHeading" m={theme.dimensions.condensedMarginBetween}>
-          {title}
-        </TextView>
-      </Animated.View>
+      </View>
 
       <>
-        <Animated.ScrollView
+        <VAScrollView
           scrollEventThrottle={1}
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: initialScrollY } } }], {
-            listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-              updateOffset(Platform.OS === 'ios' ? event.nativeEvent.contentOffset.y + TOTAL_HEADER_HEIGHT : event.nativeEvent.contentOffset.y)
-            },
-            useNativeDriver: true,
-          })}
-          // contentContainerStyle offsets content for header for Android
-          contentContainerStyle={contentContainerStyle}
-          // contentInset offsets content for header for iOS
-          contentInset={{
-            top: TOTAL_HEADER_HEIGHT,
+          onScroll={(event) => {
+            transitionHeader(event.nativeEvent.contentOffset.y)
           }}
-          contentOffset={{
-            x: 0,
-            y: -TOTAL_HEADER_HEIGHT,
-          }}
-          // ref={scrollViewRef}
-          scrollIndicatorInsets={{ right: 1 }}
-          {...scrollViewProps}
-          style={scrollViewStyle}>
+          {...scrollViewProps}>
+          <View onLayout={getTransitionHeaderHeight}>
+            <TextView {...subtitleProps}>{title}</TextView>
+          </View>
           {children}
-        </Animated.ScrollView>
+        </VAScrollView>
         {footerContent}
       </>
     </View>

@@ -12,7 +12,7 @@ const NoVaccineRecords: FC = () => {
 
   return (
     <VAScrollView>
-      <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mt={standardMarginBetween}>
         <AlertBox title={t('health:noVaccineRecords.alert.title')} border="informational" text={t('health:noVaccineRecords.alert.text')}>
           <ClickToCallPhoneNumber phone={t('common:8006982411')} displayedText={t('common:8006982411.displayText')} />
         </AlertBox>

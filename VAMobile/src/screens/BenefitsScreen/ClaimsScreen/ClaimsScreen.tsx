@@ -102,7 +102,7 @@ const ClaimsScreen: FC<IClaimsScreen> = () => {
       }
 
       return (
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" />
         </Box>
       )

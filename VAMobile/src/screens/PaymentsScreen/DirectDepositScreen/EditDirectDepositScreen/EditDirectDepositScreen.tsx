@@ -177,12 +177,12 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         <VAScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
           <Box mt={contentMarginTop} mb={contentMarginBottom}>
             {formContainsError && (
-              <Box mx={gutter} mb={standardMarginBetween}>
+              <Box mb={standardMarginBetween}>
                 <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" />
               </Box>
             )}
             {invalidRoutingNumberError && (
-              <Box mx={gutter} mb={standardMarginBetween}>
+              <Box mb={standardMarginBetween}>
                 <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" />
               </Box>
             )}

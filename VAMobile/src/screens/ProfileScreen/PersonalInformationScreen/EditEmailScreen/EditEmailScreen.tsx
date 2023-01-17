@@ -1,35 +1,19 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
-import {
-  AlertBox,
-  BackButton,
-  Box,
-  ButtonTypesConstants,
-  ErrorComponent,
-  FieldType,
-  FocusedNavHeaderText,
-  FormFieldType,
-  FormWrapper,
-  LoadingComponent,
-  SaveButton,
-  VAButton,
-  VAScrollView,
-} from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices'
-import { RootNavStackParamList } from 'App'
+import { ProfileStackParamList } from 'screens/ProfileScreen/ProfileStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
-type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
+type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
 
 /**
  * Screen for editing a users email in the personal info section
@@ -47,14 +31,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [saveDisabled, setSaveDisabled] = useState(false)
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={saveDisabled} />,
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  })
 
   useEffect(() => {
     if (emailSaved) {
@@ -115,7 +91,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'email',
-        labelKey: 'profile:personalInformation.email',
+        labelKey: 'personalInformation.email',
         onChange: setEmail,
         value: email,
         isRequiredField: true,
@@ -151,7 +127,12 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Email: Edit-email-page')}>
+    <FullScreenSubtask
+      title={t('personalInformation.emailAddress')}
+      leftButtonText={t('cancel')}
+      rightButtonText={t('save')}
+      onRightButtonPress={() => setOnSaveClicked(true)}
+      rightButtonDisabled={saveDisabled}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -170,7 +151,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

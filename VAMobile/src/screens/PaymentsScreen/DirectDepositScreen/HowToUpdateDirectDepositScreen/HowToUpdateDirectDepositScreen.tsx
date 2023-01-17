@@ -17,7 +17,7 @@ const HowToUpdateDirectDepositScreen: FC = () => {
   return (
     <>
       <VAScrollView {...testIdProps('Direct-deposit: How-to-update-direct-deposit-page')}>
-        <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
+        <Box mt={standardMarginBetween}>
           <AlertBox title={t('howToUpdateDirectDeposit.alert.title')} border="warning" text={t('howToUpdateDirectDeposit.alert.body')} />
         </Box>
         <Box mt={standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>

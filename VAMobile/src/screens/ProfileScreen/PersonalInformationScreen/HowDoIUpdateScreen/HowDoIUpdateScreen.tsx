@@ -2,12 +2,11 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
+import { Box, LargePanel, TextArea, TextView, TextViewProps } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -24,8 +23,8 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <HiddenTitle accessibilityLabel={t('howDoIUpdate.title')} accessibilityRole="header">
-          {t('howDoIUpdate.title')}
+        <HiddenTitle accessibilityLabel={t('profile.help.title')} accessibilityRole="header">
+          {t('profile.help.title')}
         </HiddenTitle>
       ),
     })
@@ -41,7 +40,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps(generateTestID(t('howDoIUpdate.title'), ''))}>
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -61,7 +60,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
           </TextView>
         </TextArea>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 

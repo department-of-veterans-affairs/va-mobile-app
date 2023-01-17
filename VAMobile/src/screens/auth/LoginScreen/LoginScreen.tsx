@@ -74,11 +74,7 @@ const LoginScreen: FC = () => {
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
-      {demoMode && (
-        <Box mx={theme.dimensions.gutter}>
-          <AlertBox border={'informational'} title={'DEMO MODE'} />
-        </Box>
-      )}
+      {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
       <Box flex={1}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon name={'Logo'} />

@@ -42,7 +42,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
       {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {letterType === LetterTypeConstants.serviceVerification && (
-          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox border="informational" text={t('letters.serviceVerificationLetter.informational')} />
           </Box>
         )}
