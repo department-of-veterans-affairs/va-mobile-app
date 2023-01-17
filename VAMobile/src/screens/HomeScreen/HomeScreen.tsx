@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { createStackNavigator } from '@react-navigation/stack'
 import { featureEnabled } from 'utils/remoteConfig'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
@@ -62,12 +63,12 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const buttonDataList: Array<SimpleListItemObj> = [
     {
       text: t('findLocation.title'),
-      a11yHintText: t('findLocation.a11yHint'),
+      a11yHintText: a11yLabelVA(t('findLocation.a11yHint')),
       onPress: onFacilityLocator,
-      testId: t('findLocation.titleA11yLabel'),
+      testId: a11yLabelVA(t('findLocation.title')),
     },
-    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
-    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: t('coronavirusFaqs.title') },
+    { text: t('contactVA.title'), a11yHintText: a11yLabelVA(t('contactVA.a11yHint')), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
+    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: a11yLabelVA(t('coronavirusFaqs.title')) },
   ]
 
   let greeting
@@ -84,6 +85,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     greeting = t('greetings.evening')
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
+  const healthCareTileSubtext = featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')
 
   return (
     <VAScrollView>
@@ -107,7 +109,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('healthCare.title')}
-            subText={featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')}
+            subText={healthCareTileSubtext}
+            subTextA11yLabel={a11yLabelVA(healthCareTileSubtext)}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -117,6 +120,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           <LargeNavButton
             title={t('letters.title')}
             subText={t('letters.subText')}
+            subTextA11yLabel={a11yLabelVA(t('letters.subText'))}
             onPress={onLetters}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -126,6 +130,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           <LargeNavButton
             title={t('payments.title')}
             subText={t('payments.subText')}
+            subTextA11yLabel={a11yLabelVA(t('payments.subText'))}
             onPress={onPayments}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
