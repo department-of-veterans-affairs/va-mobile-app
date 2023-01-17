@@ -25,13 +25,13 @@ type headerButton = {
 export type ChildTemplateProps = {
   /** Translated label text for descriptive back button */
   backLabel: string
+  /** Optional a11y label for back button  */
   backLabelA11y?: string
-
   /** On press navigation for descriptive back button */
   backLabelOnPress: () => void
   /** Title for page that transitions to header */
   title: string
-
+  /** Optional a11y label for title  */
   titleA11y?: string
   /** Optional header button requiring label, icon, and onPress props */
   headerButton?: headerButton
