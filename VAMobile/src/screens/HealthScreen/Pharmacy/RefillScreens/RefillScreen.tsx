@@ -82,7 +82,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const getListItems = () => {
     const listItems: Array<SelectionListItemObj> = refillable.map((prescription) => {
       return {
-        content: <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} hideFillDate={true} />,
+        content: <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} />,
       }
     })
 

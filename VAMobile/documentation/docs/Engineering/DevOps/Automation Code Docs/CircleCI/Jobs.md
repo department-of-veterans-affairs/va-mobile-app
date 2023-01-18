@@ -123,7 +123,7 @@ ios
 
 ---
 
-## `Name`
+## `build_android_feature`
 
 ### Description
 Reusable job that runs the Android build commands and is configured to run off a tag. Release Notes will use the git tag to generate a readable string.
