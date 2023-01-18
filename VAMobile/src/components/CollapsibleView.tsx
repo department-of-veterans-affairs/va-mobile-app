@@ -59,7 +59,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
-    accessibilityRole: 'spinbutton',
+    accessibilityRole: 'tab',
   }
 
   const pressableStyles: ViewStyle = {
@@ -83,10 +83,14 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     </Box>
   )
 
+  const a11yProps: BoxProps = {
+    accessibilityRole: 'tablist',
+  }
+
   // If none of the content is shown in a text area
   if (!showInTextArea) {
     return (
-      <Box>
+      <Box {...a11yProps}>
         {touchableRow}
         {childrenDisplayed}
       </Box>
@@ -95,7 +99,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
 
   // If the pressable row and/or content is in a text area
   return (
-    <Box>
+    <Box {...a11yProps}>
       <TextArea>
         {touchableRow}
         {contentInTextArea && childrenDisplayed}
