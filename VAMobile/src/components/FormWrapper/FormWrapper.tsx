@@ -44,6 +44,8 @@ export type FormFieldType<T> = {
   fieldProps: VASelectorProps | VATextInputProps | VAModalPickerProps | RadioGroupProps<T> | FormAttachmentsProps
   /** optional error message to display if the field is required and it hasn't been filled */
   fieldErrorMessage?: string
+  /** optional boolean that prevents the field from being displayed when set to true */
+  hideField?: boolean
   /** optional list of validation functions to check against */
   validationList?: Array<ValidationFunctionItems>
 }
@@ -238,7 +240,7 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
   const generateForm = (): ReactElement[] => {
     return _.map(fieldsList, (field, index) => {
       return (
-        <Box mt={index === 0 ? 0 : theme.dimensions.formMarginBetween} key={index}>
+        <Box mt={index === 0 ? 0 : theme.dimensions.formMarginBetween} key={index} display={field.hideField ? 'none' : undefined}>
           {getFormComponent(field, index)}
         </Box>
       )
