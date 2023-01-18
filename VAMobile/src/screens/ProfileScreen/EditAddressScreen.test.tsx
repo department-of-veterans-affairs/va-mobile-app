@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, findByTypeWithSubstring, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { UserDataProfile } from 'store/api/types'
 import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
@@ -550,9 +550,10 @@ context('EditAddressScreen', () => {
       })
     })
 
-    it('should disable the country picker', async () => {
+    it('should disable and hide the country picker', async () => {
       const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
       expect(countryPicker.props.disabled).toEqual(true)
+      expect(countryPicker.parent?.props.display).toEqual('none')
     })
 
     it('should set the state picker pickerOptions to MilitaryStates', async () => {
