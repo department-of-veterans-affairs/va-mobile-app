@@ -430,6 +430,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         disabled: checkboxSelected,
       },
       fieldErrorMessage: t('editAddress.countryFieldError'),
+      hideField: checkboxSelected,
     },
     {
       fieldType: FieldType.TextInput,
