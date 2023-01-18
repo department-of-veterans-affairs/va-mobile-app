@@ -218,6 +218,11 @@ context('UpcomingAppointmentDetails', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA appointment')
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Blind Rehabilitation Center')
     })
+
+    it('should display a special instructions section to display the comment field', async () => {
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+    })
   })
 
   describe('when the appointment type is covid vaccine', () => {

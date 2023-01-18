@@ -52,6 +52,8 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
+const SHOW_COMMENTS_FOR_TYPES = [AppointmentTypeConstants.COMMUNITY_CARE, AppointmentTypeConstants.VA]
+
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
@@ -117,8 +119,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
-  const CommunityCare_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
+  const SpecialInstructions = (): ReactElement => {
+    if (SHOW_COMMENTS_FOR_TYPES.includes(appointmentType) && !isAppointmentCanceled && comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -283,7 +285,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <AppointmentAddressAndNumber attributes={attributes} />
 
           <Atlas_AppointmentData />
-          <CommunityCare_AppointmentData />
+          <SpecialInstructions />
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
