@@ -11,7 +11,7 @@ type LoaGateProps = Record<string, unknown>
 
 const LoaGate: FC<LoaGateProps> = ({}) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
   const onConfirm = navigateTo('WebviewLogin')
