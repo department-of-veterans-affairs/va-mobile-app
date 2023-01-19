@@ -5,11 +5,10 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { hasUploadedOrReceived } from 'utils/claims'
-import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
@@ -30,10 +29,6 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
     borderTopWidth: 'default',
     borderTopColor: 'primary',
     mt: contentMarginTop,
-  }
-
-  const mainViewStyle: StyleProp<ViewStyle> = {
-    flexGrow: 1,
   }
 
   const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
