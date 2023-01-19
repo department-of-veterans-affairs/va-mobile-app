@@ -92,12 +92,12 @@ export const getBenefitsScreens = (t: TFunction): Array<ReactNode> => {
     />,
     <BenefitsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />,
     <BenefitsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />,
-    <BenefitsStack.Screen key={'FileRequest'} name="FileRequest" component={FileRequest} options={{ title: t('fileRequest.title') }} />,
+    <BenefitsStack.Screen key={'FileRequest'} name="FileRequest" component={FileRequest} options={{ headerShown: false }} />,
     <BenefitsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} options={{ title: t('askForClaimDecision.pageTitle') }} />,
-    <BenefitsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />,
     <BenefitsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ headerShown: false }} />,
+    <BenefitsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={{ headerShown: false }} />,
     <BenefitsStack.Screen key={'UploadOrAddPhotos'} name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ headerShown: false }} />,
     <BenefitsStack.Screen key={'UploadFile'} name="UploadFile" component={UploadFile} options={{ headerShown: false }} />,
-    <BenefitsStack.Screen key={'FileRequestDetails'} name="FileRequestDetails" component={FileRequestDetails} options={{ title: t('fileRequest.title') }} />,
+    <BenefitsStack.Screen key={'FileRequestDetails'} name="FileRequestDetails" component={FileRequestDetails} options={{ headerShown: false }} />,
   ]
 }
