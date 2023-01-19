@@ -1,5 +1,4 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { StyleProp, ViewStyle } from 'react-native'
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
