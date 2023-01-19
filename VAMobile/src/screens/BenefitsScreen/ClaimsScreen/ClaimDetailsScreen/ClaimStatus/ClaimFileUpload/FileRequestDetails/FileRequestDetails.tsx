@@ -52,7 +52,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
   }
 
   return (
-    <ChildTemplate backLabel={t('cancel')} backLabelOnPress={navigation.goBack} title={displayName}>
+    <ChildTemplate backLabel={t('cancel')} backLabelOnPress={navigation.goBack} title={displayName || ''}>
       <Box mt={contentMarginTop} mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
