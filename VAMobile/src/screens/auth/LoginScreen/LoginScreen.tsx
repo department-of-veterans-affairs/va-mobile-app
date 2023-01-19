@@ -15,7 +15,7 @@ import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
-  const { t } = useTranslation([NAMESPACE.LOGIN, NAMESPACE.COMMON, NAMESPACE.HOME])
+  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
@@ -80,14 +80,7 @@ const LoginScreen: FC = () => {
           <VAIcon name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={80}>
-          <VAButton
-            onPress={onLoginInit}
-            label={t('login:signin')}
-            testID={t('login:signin')}
-            a11yHint={t('login:signin.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonWhite}
-            hideBorder={true}
-          />
+          <VAButton onPress={onLoginInit} label={t('common:signin')} a11yHint={t('common:signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
           <Pressable
             onPress={onFacilityLocator}
             {...testIdProps(t('home:findLocation.titleA11yLabel'))}
