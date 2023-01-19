@@ -1,23 +1,9 @@
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
-import {
-  AlertBox,
-  BackButton,
-  Box,
-  ButtonTypesConstants,
-  ClickForActionLink,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
-  TextArea,
-  TextView,
-  VAButton,
-  VAScrollView,
-} from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -25,32 +11,21 @@ import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import CollapsibleAlert from 'components/CollapsibleAlert'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 
 type TakePhotosProps = StackScreenProps<BenefitsStackParamList, 'TakePhotos'>
 
-const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
+const TakePhotos: FC<TakePhotosProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
-  const { request, focusOnSnackbar } = route.params
+  const { request } = route.params
   const { displayName } = request
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton onPress={onBack} focusOnButton={focusOnSnackbar ? false : true} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-    })
-  })
-
-  const onBack = () => {
-    navigation.goBack()
-  }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
@@ -80,7 +55,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
+    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.selectPhotos')}>
       {!!error && (
         <Box mt={theme.dimensions.contentMarginTop}>
           <AlertBox text={error} border="error" />
@@ -128,7 +103,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
           a11yHint={t('fileUpload.takePhotosWithCameraA11yHint')}
         />
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 
