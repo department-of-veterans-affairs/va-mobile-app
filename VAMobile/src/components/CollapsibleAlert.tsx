@@ -4,6 +4,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { TextView } from 'components'
 import { VABorderColors } from 'styles/theme'
+import { isAndroid } from 'utils/platform'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import TextArea from './TextArea'
 
@@ -22,9 +23,13 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
+
+  // TODO: This is a temporary workaround for a react-native bug that prevents 'expanded' state
+  // changes from being announced in TalkBack: https://github.com/facebook/react-native/issues/30841
+  // This can be removed once the fix makes it into a release and we upgrade react-native
   useEffect(() => {
-    setFocus()
-  }, [expanded, setFocus])
+    isAndroid() && setFocus()
+  }, [expanded]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onPress = (): void => {
     setExpanded(!expanded)
