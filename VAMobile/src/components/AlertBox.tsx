@@ -1,10 +1,11 @@
-import { AccessibilityRole } from 'react-native'
+import { AccessibilityRole, View } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
 import { VABorderColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 export type AlertBoxProps = {
   /** color of the border */
@@ -26,6 +27,8 @@ export type AlertBoxProps = {
  */
 const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  useFocusEffect(border === 'error' ? setFocus : () => {})
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
@@ -38,23 +41,25 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
   const titleAccessibilityRole = titleRole ? titleRole : text || children ? 'header' : undefined
 
   return (
-    <Box {...boxProps}>
-      {!!title && (
-        <Box {...testIdProps(titleA11yLabel || title)} accessibilityRole={titleAccessibilityRole} accessible={true}>
-          <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
-            {title}
-          </TextView>
-        </Box>
-      )}
-      {!!text && (
-        <Box accessible={true}>
-          <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody">
-            {text}
-          </TextView>
-        </Box>
-      )}
-      {children}
-    </Box>
+    <View ref={focusRef}>
+      <Box {...boxProps}>
+        {!!title && (
+          <Box {...testIdProps(titleA11yLabel || title)} accessibilityRole={titleAccessibilityRole} accessible={true}>
+            <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
+              {title}
+            </TextView>
+          </Box>
+        )}
+        {!!text && (
+          <Box accessible={true}>
+            <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody">
+              {text}
+            </TextView>
+          </Box>
+        )}
+        {children}
+      </Box>
+    </View>
   )
 }
 
