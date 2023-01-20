@@ -12,7 +12,7 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
-import { featureEnabled } from 'utils/remoteConfig'
+// import { featureEnabled } from 'utils/remoteConfig'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -107,7 +107,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('healthCare.title')}
-            subText={featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')}
+            subText={t('healthCare.subText.rxRefill.enabled')}
             onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
