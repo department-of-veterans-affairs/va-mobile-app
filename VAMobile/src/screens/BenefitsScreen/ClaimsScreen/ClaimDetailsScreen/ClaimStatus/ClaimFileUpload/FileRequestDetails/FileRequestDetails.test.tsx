@@ -66,9 +66,10 @@ context('FileRequestDetails', () => {
     })
 
     it('should display request title and description', async () => {
+      const textViews = testInstance.findAllByType(TextView)
       await waitFor(() => {
-        expect(findByTypeWithText(testInstance, TextView, 'Request 1')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'Need DD214')).toBeTruthy()
+        expect(textViews[2].props.children).toEqual('Request 1')
+        expect(textViews[4].props.children).toEqual('Need DD214')
       })
     })
   })

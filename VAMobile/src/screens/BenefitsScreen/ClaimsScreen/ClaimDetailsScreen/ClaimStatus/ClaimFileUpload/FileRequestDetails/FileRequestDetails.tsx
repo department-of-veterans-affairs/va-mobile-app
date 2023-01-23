@@ -1,20 +1,18 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { StyleProp, ViewStyle } from 'react-native'
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { hasUploadedOrReceived } from 'utils/claims'
-import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 
-const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
+const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -30,10 +28,6 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
     borderTopWidth: 'default',
     borderTopColor: 'primary',
     mt: contentMarginTop,
-  }
-
-  const mainViewStyle: StyleProp<ViewStyle> = {
-    flexGrow: 1,
   }
 
   const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
@@ -58,7 +52,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('file-request-details-page')} contentContainerStyle={mainViewStyle}>
+    <ChildTemplate backLabel={t('cancel')} backLabelOnPress={navigation.goBack} title={displayName || ''}>
       <Box mt={contentMarginTop} mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
@@ -109,7 +103,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ route }) => {
           </Box>
         </Box>
       )}
-    </VAScrollView>
+    </ChildTemplate>
   )
 }
 
