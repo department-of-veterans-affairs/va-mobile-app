@@ -44,6 +44,11 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     flex: 1,
   }
 
+  const headerProps: HeaderBannerProps = {
+    title: title ? { type: 'Transition', text: title, titleShowing, scrollOffset: 0 } : { type: 'VA' },
+    rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
+  }
+
   const subtitleProps: TextViewProps = {
     variant: 'BitterBoldHeading',
     mt: 0,
@@ -102,24 +107,6 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     // Subtract out bottom padding to closely align transition with subtitle fully disappearing
     const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween
     setTransitionHeaderHeight(height)
-  }
-
-  const leftIconProps: VAIconProps = {
-    name: 'ArrowLeft',
-    fill: theme.colors.icon.link,
-    height: 13,
-    mt: 1,
-  }
-
-  const headerProps: HeaderBannerProps = {
-    title: titleShowing ? title : 'VA',
-    rightButtonText: headerButton ? headerButton.label : undefined,
-    rightButtonA11yLabel: headerButton ? headerButton.labelA11y : undefined,
-    onRightTitleButtonPress: headerButton ? headerButton.onPress : undefined,
-    bannerDivider: false,
-    leftVAIconProps: leftIconProps,
-    rightVAIconProps: headerButton ? headerButton.icon : undefined,
-    titleAccesibilityHidden: true,
   }
 
   return (

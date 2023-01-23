@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { HeaderBannerProps } from './HeaderBanner'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -52,6 +53,11 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
     paddingTop: insets.top,
     backgroundColor: theme.colors.background.main,
     flex: 1,
+  }
+
+  const headerProps: HeaderBannerProps = {
+    title: { type: 'Transition', text: title, titleShowing, scrollOffset: 0 },
+    rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }
 
   const headerStyle: ViewStyle = {
@@ -130,7 +136,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
     const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween
     setTransitionHeaderHeight(height)
   }
-  
+
   return (
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
