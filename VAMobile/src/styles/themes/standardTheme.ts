@@ -149,6 +149,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
     textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.textWithIconButton),
+    webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.webviewTitle),
   }
 }
 
