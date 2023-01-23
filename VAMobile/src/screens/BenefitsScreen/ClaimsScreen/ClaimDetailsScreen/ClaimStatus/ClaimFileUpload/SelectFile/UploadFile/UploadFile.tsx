@@ -1,11 +1,10 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
-import { BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAButton } from 'components'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -14,9 +13,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
-import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useDestructiveAlert, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
 
@@ -32,40 +31,6 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
-  }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-    })
-  })
-
-  useBeforeNavBackListener(navigation, (e) => {
-    if (filesList.length === 0 || filesUploadedSuccess) {
-      return
-    }
-    e.preventDefault()
-    confirmAlert({
-      title: t('fileUpload.discard.confirm.title'),
-      message: t('fileUpload.discard.confirm.message'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('cancel'),
-        },
-        {
-          text: t('fileUpload.discard'),
-          onPress: () => {
-            navigation.dispatch(e.data.action)
-          },
-        },
-      ],
-    })
-  })
-
-  const onCancel = () => {
-    navigation.navigate('FileRequestDetails', { request })
   }
 
   useEffect(() => {
@@ -149,7 +114,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   ]
 
   return (
-    <VAScrollView {...testIdProps('File-upload: Upload-file-page')}>
+    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.confirmUpload')} navigationMultiStepCancelScreen={2}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
@@ -170,7 +135,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
           />
         </Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 
