@@ -92,7 +92,7 @@ export const lightTheme = {
     pagination: colors.white,
     chevronCollapsible: colors.primary,
     chevronListItem: colors.primary,
-    webviewReload: colors.white,
+    webviewReload: colors.primary,
     backButton: colors.white,
     defaultMenuItem: colors.grayDark,
     unreadMessage: colors.primary,
