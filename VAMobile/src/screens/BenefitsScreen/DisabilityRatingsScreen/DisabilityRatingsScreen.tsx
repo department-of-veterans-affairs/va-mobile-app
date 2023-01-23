@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import {
   Box,
+  ChildTemplate,
   ClickForActionLink,
   ClickToCallPhoneNumber,
   DefaultList,
@@ -32,7 +33,7 @@ import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
 
-const DisabilityRatingsScreen: FC = () => {
+const DisabilityRatingsScreen: FC = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -195,14 +196,14 @@ const DisabilityRatingsScreen: FC = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Disability-Ratings-page')}>
+    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
       </Box>
       <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
       <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
-    </VAScrollView>
+    </ChildTemplate>
   )
 }
 

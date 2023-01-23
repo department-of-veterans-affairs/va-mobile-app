@@ -567,7 +567,7 @@
   "disabilityRating.noDisabilityRatings.body": "This tool doesn't include ratings for any disability claims that are still in process. You can check the status of pending claims with the claims status tool.",
   "disabilityRatingDetails.percentage": "{{rate}}%",
   "disabilityRatingDetails.serviceConnected": "Service-connected disability?  {{yesOrNo}}",
-  "disabilityRatingDetails.title": "Disability Ratings",
+  "disabilityRatingDetails.title": "Disability rating",
   "disabilityRatingDetails.combinedTotalSummary": "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
   "lettersAndDocs.a11yHint": "Go to the V-A letters and documents page",
   "lettersAndDocs.title": "VA letters and documents",
