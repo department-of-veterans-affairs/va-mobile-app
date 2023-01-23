@@ -1,41 +1,28 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
 
 type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
 
-const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
+const SelectFile: FC<SelectFilesProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
-  const { request, focusOnSnackbar } = route.params
+  const { request } = route.params
   const showActionSheet = useShowActionSheet()
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton onPress={onBack} focusOnButton={focusOnSnackbar ? false : true} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-    })
-  })
-
-  const onBack = () => {
-    navigation.goBack()
-  }
 
   const onFileFolder = async (): Promise<void> => {
     const {
@@ -98,7 +85,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   return (
-    <VAScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
+    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.selectFiles')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -137,7 +124,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           />
         </Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

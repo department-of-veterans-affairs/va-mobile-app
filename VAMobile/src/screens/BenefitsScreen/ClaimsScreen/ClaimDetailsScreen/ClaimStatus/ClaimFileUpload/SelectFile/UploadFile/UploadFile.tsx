@@ -114,7 +114,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   ]
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.confirmUpload')} navigationMultiStepCancelScreen={2}>
+    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.uploadFiles')} navigationMultiStepCancelScreen={2}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
