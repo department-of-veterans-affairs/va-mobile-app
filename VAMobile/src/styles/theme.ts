@@ -127,6 +127,7 @@ export type VATypographyThemeVariants = {
   LabelTag: string
   LabelTagBold: string
   textWithIconButton: string
+  VAHeader: string
 }
 
 export type VABackgroundColors = {
