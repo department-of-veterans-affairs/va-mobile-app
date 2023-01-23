@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -55,7 +55,7 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('file-request-page')}>
+    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileRequest.title')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" mt={standardMarginBetween} mb={condensedMarginBetween} mx={gutter}>
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
@@ -84,7 +84,7 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
           </TextArea>
         </Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 
