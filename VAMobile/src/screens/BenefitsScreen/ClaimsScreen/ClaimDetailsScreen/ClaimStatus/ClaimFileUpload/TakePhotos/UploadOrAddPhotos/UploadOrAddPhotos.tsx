@@ -3,25 +3,10 @@ import { Dimensions } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 import _ from 'underscore'
 
-import {
-  AlertBox,
-  BackButton,
-  Box,
-  ButtonTypesConstants,
-  FieldType,
-  FormFieldType,
-  FormWrapper,
-  LoadingComponent,
-  PhotoAdd,
-  PhotoPreview,
-  TextView,
-  VAButton,
-  VAScrollView,
-} from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView, VAButton } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
@@ -33,8 +18,8 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
-import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
 
@@ -54,41 +39,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
-  }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-    })
-  })
-
-  useBeforeNavBackListener(navigation, (e) => {
-    if (imagesList?.length === 0 || filesUploadedSuccess) {
-      return
-    }
-    e.preventDefault()
-    confirmAlert({
-      title: t('fileUpload.discard.confirm.title.photos'),
-      message: t('fileUpload.discard.confirm.message.photos'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('cancel'),
-        },
-
-        {
-          text: t('fileUpload.discard.photos'),
-          onPress: () => {
-            navigation.dispatch(e.data.action)
-          },
-        },
-      ],
-    })
-  })
-
-  const onCancel = () => {
-    navigation.navigate('FileRequestDetails', { request })
   }
 
   useEffect(() => {
@@ -255,7 +205,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   return (
-    <VAScrollView {...testIdProps('File-upload: Upload-files-or-add-photos-page')}>
+    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.uploadPhotos')} navigationMultiStepCancelScreen={2}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!errorMessage && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -307,7 +257,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           </Box>
         </Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 
