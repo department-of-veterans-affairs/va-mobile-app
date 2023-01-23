@@ -147,7 +147,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
                 </TextView>
               </Animated.View>
             ) : (
-              <TextView variant="BitterBoldHeading" selectable={false} opacity={VaOpacity} allowFontScaling={false}>
+              <TextView variant="VAHeader" selectable={false} opacity={VaOpacity} allowFontScaling={false}>
                 VA
               </TextView>
             )}
