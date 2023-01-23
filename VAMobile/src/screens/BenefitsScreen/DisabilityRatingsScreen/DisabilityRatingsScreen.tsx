@@ -19,7 +19,6 @@ import {
   TextLine,
   TextView,
   TextViewProps,
-  VAScrollView,
 } from 'components'
 import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -27,7 +26,6 @@ import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
