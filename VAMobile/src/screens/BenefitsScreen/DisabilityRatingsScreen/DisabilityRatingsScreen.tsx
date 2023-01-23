@@ -27,10 +27,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
-import { useNavigation } from '@react-navigation/native'
 
 const DisabilityRatingsScreen: FC = () => {
   const dispatch = useAppDispatch()
