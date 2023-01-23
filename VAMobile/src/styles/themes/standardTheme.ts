@@ -113,6 +113,10 @@ const fontSizes = {
     fontSize: 12,
     lineHeight: 12,
   },
+  webviewTitle: {
+    fontSize: 12,
+    lineHeight: 12,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -149,7 +153,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
     textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.textWithIconButton),
-    webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.webviewTitle),
+    webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
   }
 }
 
