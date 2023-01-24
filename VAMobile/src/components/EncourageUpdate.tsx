@@ -21,7 +21,7 @@ export const EncourageUpdateAlert = () => {
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     async function checkLocalVersion() {
