@@ -82,7 +82,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const getListItems = () => {
     const listItems: Array<SelectionListItemObj> = refillable.map((prescription) => {
       return {
-        content: <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} hideFillDate={true} />,
+        content: <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} />,
       }
     })
 
@@ -109,7 +109,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     <>
       <VAScrollView>
         {showAlert && (
-          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
           </Box>
         )}
