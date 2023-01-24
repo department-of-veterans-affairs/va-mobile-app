@@ -6,8 +6,8 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { Box, ButtonDecoratorType, FeatureLandingTemplate, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj } from 'components'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 
 import { setBiometricsPreference } from 'store/slices/authSlice'
@@ -22,7 +22,7 @@ import getEnv from 'utils/env'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
-type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
+type SettingsScreenProps = StackScreenProps<HomeStackParamList, 'Settings'>
 
 const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()

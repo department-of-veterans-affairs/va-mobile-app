@@ -4,16 +4,16 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
 import { EMAIL_REGEX_EXP } from 'constants/common'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices'
-import { ProfileStackParamList } from 'screens/ProfileScreen/ProfileStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
-type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
+type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
 /**
  * Screen for editing a users email in the personal info section

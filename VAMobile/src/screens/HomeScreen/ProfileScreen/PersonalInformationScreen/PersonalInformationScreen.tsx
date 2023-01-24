@@ -7,10 +7,10 @@ import React, { FC, useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
-import { ProfileStackParamList } from '../ProfileStackScreens'
 import { RootState } from 'store'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
@@ -18,7 +18,7 @@ import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
+import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/AddressSummary'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
@@ -86,7 +86,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
   return [{ textLines: textLines, a11yHintText: t('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress, testId: getA11yLabelText(textLines) }]
 }
 
-type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
+type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'PersonalInformation'>
 
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()

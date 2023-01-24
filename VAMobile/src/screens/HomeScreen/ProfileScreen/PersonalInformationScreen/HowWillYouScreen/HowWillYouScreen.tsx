@@ -4,11 +4,11 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, LargePanel, TextArea, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { useTheme } from 'utils/hooks'
 
-type HowWillYouScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUpdate'>
+type HowWillYouScreenProps = StackScreenProps<HomeStackParamList, 'HowDoIUpdate'>
 
 const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)

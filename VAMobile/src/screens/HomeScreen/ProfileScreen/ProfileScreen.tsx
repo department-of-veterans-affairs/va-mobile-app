@@ -1,21 +1,21 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
 import { Box, CategoryLanding, ErrorComponent, FocusedNavHeaderText, LoadingComponent, NameTag, SimpleList, SimpleListItemObj } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
-import { ProfileStackParamList } from './ProfileStackScreens'
 import { RootState } from 'store'
-import { useAppDispatch, useDowntime, useError, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
-type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'ProfileScreen'>
+type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
-const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
+export const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const { userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
@@ -106,21 +106,4 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   )
 }
 
-type ProfileStackScreenProps = Record<string, unknown>
-
-const ProfileScreenStack = createStackNavigator()
-
-/**
- * Stack screen for the Profile tab. Screens placed within this stack will appear in the context of the app level tab navigator
- */
-const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
-  const headerStyles = useHeaderStyles()
-
-  return (
-    <ProfileScreenStack.Navigator screenOptions={headerStyles}>
-      <ProfileScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-    </ProfileScreenStack.Navigator>
-  )
-}
-
-export default ProfileStackScreen
+export default ProfileScreen

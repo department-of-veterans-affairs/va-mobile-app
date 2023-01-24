@@ -5,11 +5,11 @@ import React, { FC, ReactNode, useEffect } from 'react'
 import { BackButton, Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HiddenTitle } from 'styles/common'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { useTheme } from 'utils/hooks'
 
-type ManageYourAccountProps = StackScreenProps<ProfileStackParamList, 'ManageYourAccount'>
+type ManageYourAccountProps = StackScreenProps<HomeStackParamList, 'ManageYourAccount'>
 
 const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)

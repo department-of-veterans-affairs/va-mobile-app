@@ -5,9 +5,9 @@ import React, { FC, useEffect } from 'react'
 import { AuthorizedServicesState } from 'store/slices'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from 'screens/ProfileScreen/ProfileStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -17,7 +17,7 @@ import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useSelector } from 'react-redux'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
-type MilitaryInformationScreenProps = StackScreenProps<ProfileStackParamList, 'MilitaryInformation'>
+type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
 
 const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()

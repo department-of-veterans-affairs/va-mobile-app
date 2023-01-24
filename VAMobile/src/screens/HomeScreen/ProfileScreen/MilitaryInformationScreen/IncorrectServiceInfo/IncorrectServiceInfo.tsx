@@ -4,12 +4,12 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-type IncorrectServiceInfoScreenProps = StackScreenProps<ProfileStackParamList, 'IncorrectServiceInfo'>
+type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'IncorrectServiceInfo'>
 
 /**
  * View for What If screen

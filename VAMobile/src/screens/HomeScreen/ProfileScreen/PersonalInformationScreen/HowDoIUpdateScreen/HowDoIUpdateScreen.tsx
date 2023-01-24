@@ -4,15 +4,15 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, LargePanel, TextArea, TextView, TextViewProps } from 'components'
 import { HiddenTitle } from 'styles/common'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
-type HowDoIUpdateScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUpdate'>
+type HowDoIUpdateScreenProps = StackScreenProps<HomeStackParamList, 'HowDoIUpdate'>
 
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)

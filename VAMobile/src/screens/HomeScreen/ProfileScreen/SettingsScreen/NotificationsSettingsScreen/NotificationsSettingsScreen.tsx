@@ -3,16 +3,16 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton } from 'components'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices'
-import { ProfileStackParamList } from 'screens/ProfileScreen/ProfileStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-type NotificationsSettingsScreenProps = StackScreenProps<ProfileStackParamList, 'NotificationsSettings'>
+type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
 
 const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
