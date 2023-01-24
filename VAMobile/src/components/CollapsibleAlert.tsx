@@ -57,7 +57,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
     )
 
     return (
-      <Pressable {...pressableProps} ref={focusRef}>
+      <Pressable {...pressableProps} ref={focusRef} accessible={true}>
         {data}
       </Pressable>
     )
