@@ -52,8 +52,6 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
-const SHOW_COMMENTS_FOR_TYPES = [AppointmentTypeConstants.COMMUNITY_CARE, AppointmentTypeConstants.VA]
-
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
@@ -79,10 +77,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }, [dispatch, appointmentID, pendingAppointment])
 
   useEffect(() => {
-    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
+    if (appointment && pendingAppointment && !appointmentMessagesById[appointmentID]) {
       dispatch(getAppointmentMessages(appointmentID))
     }
-  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
+  }, [dispatch, appointment, appointmentID, appointmentMessagesById, pendingAppointment])
 
   useEffect(() => {
     navigation.setOptions({
@@ -120,7 +118,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   // TODO abstract some of these render functions into their own components - too many in one file
   const SpecialInstructions = (): ReactElement => {
-    if (SHOW_COMMENTS_FOR_TYPES.includes(appointmentType) && !isAppointmentCanceled && comment) {
+    if (comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
