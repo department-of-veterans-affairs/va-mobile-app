@@ -21,10 +21,10 @@ export const EncourageUpdateAlert = () => {
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   useEffect(() => {
     async function checkLocalVersion() {
+      const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
       const version = await getEncourageUpdateLocalVersion(demoMode)
       if (componentMounted.current) {
         setVersionName(version)

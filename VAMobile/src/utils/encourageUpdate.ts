@@ -18,7 +18,6 @@ const { APPLE_STORE_LINK } = getEnv()
 export const getEncourageUpdateLocalVersion = async (demoMode: boolean): Promise<string> => {
   const result = await Promise.all([AsyncStorage.getItem(APP_VERSION_Local_Override_VAL)])
   const localOverride = result[0] ? `${result[0]}` : undefined
-  console.debug(result)
   if (demoMode && localOverride) {
     return localOverride
   } else if (isIOS()) {
