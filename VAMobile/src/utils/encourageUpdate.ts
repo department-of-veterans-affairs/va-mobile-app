@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
 import { requestStoreVersion } from 'utils/rnInAppUpdate'
-
 import getEnv from 'utils/env'
 
 const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
@@ -62,9 +61,9 @@ export const setVersionSkipped = async (versionSkipped: string): Promise<void> =
   await Promise.all([AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)])
 }
 
-export const overrideLocalVersion = async (overrideLocalVersion: string | undefined): Promise<void> => {
-  if (overrideLocalVersion) {
-    await Promise.all([AsyncStorage.setItem(APP_VERSION_Local_Override_VAL, overrideLocalVersion)])
+export const overrideLocalVersion = async (overrideVersion: string | undefined): Promise<void> => {
+  if (overrideVersion) {
+    await Promise.all([AsyncStorage.setItem(APP_VERSION_Local_Override_VAL, overrideVersion)])
   } else {
     await Promise.all([AsyncStorage.removeItem(APP_VERSION_Local_Override_VAL)])
   }
