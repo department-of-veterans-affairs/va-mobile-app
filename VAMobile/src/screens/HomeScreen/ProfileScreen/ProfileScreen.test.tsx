@@ -39,6 +39,7 @@ jest.mock('utils/hooks', () => {
 
 context('ProfileScreen', () => {
   let component: RenderAPI
+  let props: any
   let testInstance: ReactTestInstance
   let navigateToDirectDepositSpy: jest.Mock
   let navigateToHowToUpdateDirectDepositSpy: jest.Mock
@@ -61,7 +62,7 @@ context('ProfileScreen', () => {
       .calledWith('HowToUpdateDirectDeposit')
       .mockReturnValue(navigateToHowToUpdateDirectDepositSpy)
 
-    component = render(<ProfileScreen />, {
+    component = render(<ProfileScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         authorizedServices: {
