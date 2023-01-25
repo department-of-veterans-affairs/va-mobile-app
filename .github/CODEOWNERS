@@ -6,9 +6,9 @@
 # Order is important; the last matching pattern takes the most
 # precedence.
 
-.circleci             @lexicalninja
-.github               @lexicalninja
+.circleci             @narin
+.github               @narin
 
-/VAMobile/android/    @lexicalninja
-/VAMobile/ios/        @lexicalninja
-/VAMobile/fastfiles/  @lexicalninja
+/VAMobile/android/    @narin
+/VAMobile/ios/        @narin
+/VAMobile/fastfiles/  @narin

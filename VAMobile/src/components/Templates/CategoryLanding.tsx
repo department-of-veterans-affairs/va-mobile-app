@@ -113,6 +113,37 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
+      <View style={headerStyle}>
+        <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
+          <Box display="flex" width="25%" />
+
+          <Box {...headerTitleBoxProps}>
+            {titleShowing ? (
+              <Animated.View style={{ opacity: titleFade }}>
+                <TextView variant="MobileBody" selectable={false} allowFontScaling={false}>
+                  {title}
+                </TextView>
+              </Animated.View>
+            ) : (
+              <TextView variant="VAHeader" selectable={false} opacity={VaOpacity} allowFontScaling={false}>
+                VA
+              </TextView>
+            )}
+          </Box>
+
+          <Box display="flex" width="25%" alignItems="center">
+            {headerButton ? (
+              <Pressable onPress={headerButton.onPress} accessibilityRole="button" accessible={true}>
+                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
+                  <VAIcon name={headerButton.icon.name} fill={'active'} height={22} width={22} preventScaling={true} />
+                </Box>
+                <StyledLabel allowFontScaling={false}>{headerButton.label}</StyledLabel>
+              </Pressable>
+            ) : null}
+          </Box>
+        </Box>
+      </View>
+
       <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
           <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
