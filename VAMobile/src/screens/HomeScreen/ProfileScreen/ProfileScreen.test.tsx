@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
 import {
@@ -41,6 +41,7 @@ context('ProfileScreen', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
+  let goBackSpy: any
   let navigateToDirectDepositSpy: jest.Mock
   let navigateToHowToUpdateDirectDepositSpy: jest.Mock
 
@@ -54,6 +55,15 @@ context('ProfileScreen', () => {
   ): void => {
     navigateToDirectDepositSpy = jest.fn()
     navigateToHowToUpdateDirectDepositSpy = jest.fn()
+
+    props = mockNavProps(
+      {},
+      {
+        goBack: goBackSpy,
+        addListener: jest.fn(),
+      },
+      {},
+    )
 
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
