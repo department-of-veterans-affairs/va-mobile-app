@@ -28,7 +28,10 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   // changes from being announced in TalkBack: https://github.com/facebook/react-native/issues/30841
   // This can be removed once the fix makes it into a release and we upgrade react-native
   useEffect(() => {
-    isAndroid() && setFocus()
+    if (isAndroid()) {
+      setFocus()
+      setFocus()
+    }
   }, [expanded]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onPress = (): void => {
