@@ -107,7 +107,7 @@ export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
     headerBackTitle: undefined,
     headerTitle: '',
     headerStyle: {
-      backgroundColor: theme?.colors?.background?.navHeader,
+      backgroundColor: theme?.colors?.background?.main,
       shadowColor: 'transparent', // removes bottom border
       height: insets.top,
     },

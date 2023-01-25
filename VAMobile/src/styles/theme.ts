@@ -68,6 +68,7 @@ export type VATextColors = {
   closePanel: string
   labelTag: string
   textWithIconButton: string
+  webviewTitle: string
 }
 
 export type VAIconColors = {
@@ -127,6 +128,7 @@ export type VATypographyThemeVariants = {
   LabelTag: string
   LabelTagBold: string
   textWithIconButton: string
+  webviewTitle: string
 }
 
 export type VABackgroundColors = {
