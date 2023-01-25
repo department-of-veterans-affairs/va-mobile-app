@@ -97,7 +97,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />,
+      headerLeft: (props): ReactNode => <BackButton webview={true} onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />,
       headerTitle: () => <WebviewTitle title={displayTitle} />,
       headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
     })
