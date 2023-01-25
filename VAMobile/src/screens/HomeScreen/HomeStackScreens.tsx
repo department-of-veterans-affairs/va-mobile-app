@@ -1,8 +1,7 @@
+import { TFunction } from 'i18next'
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
-import React, { ReactNode } from 'react'
+import React from 'react'
 
-import { NAMESPACE } from 'constants/namespaces'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import DebugScreen from './ProfileScreen/SettingsScreen/DebugScreen'
@@ -40,8 +39,7 @@ export type HomeStackParamList = WebviewStackParams & {
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
-export const getHomeScreens = (): Array<ReactNode> => {
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+export const getHomeScreens = (t: TFunction) => {
   return [
     <HomeStack.Screen
       key={'VeteransCrisisLine'}
@@ -51,7 +49,7 @@ export const getHomeScreens = (): Array<ReactNode> => {
     />,
     <HomeStack.Screen key={'Settings'} name="Settings" component={SettingsScreen} options={{ headerShown: false }} />,
     <HomeStack.Screen key={'ManageYourAcount'} name="ManageYourAccount" component={ManageYourAccount} options={{ headerShown: false }} />,
-    <HomeStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: tc('debug.title') }} />,
+    <HomeStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t('debug.title') }} />,
     <HomeStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: 'Remote Config' }} />,
     <HomeStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: 'Sandbox' }} />,
     <HomeStack.Screen key={'EditPhoneNumber'} name="EditPhoneNumber" component={EditPhoneNumberScreen} options={{ headerShown: false }} />,

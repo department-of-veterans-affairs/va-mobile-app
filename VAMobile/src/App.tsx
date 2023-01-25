@@ -284,7 +284,7 @@ export const AuthedApp: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
-  const homeScreens = getHomeScreens()
+  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.COMMON).t)
   const benefitsScreens = getBenefitsScreens(useTranslation(NAMESPACE.COMMON).t)
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens(useTranslation(NAMESPACE.COMMON).t)
