@@ -6,7 +6,7 @@ import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
-import { profileAddressOptions } from '../../ProfileScreen/AddressSummary'
+import { profileAddressOptions } from '../../HomeScreen/ProfileScreen/AddressSummary'
 import NoLettersScreen from './NoLettersScreen'
 import { InitialState, initialPersonalInformationState } from 'store/slices'
 import { LoadingComponent } from 'components'
