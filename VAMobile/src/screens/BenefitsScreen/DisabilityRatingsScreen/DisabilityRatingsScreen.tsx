@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import {
   Box,
+  ChildTemplate,
   ClickForActionLink,
   ClickToCallPhoneNumber,
   DefaultList,
@@ -18,7 +19,6 @@ import {
   TextLine,
   TextView,
   TextViewProps,
-  VAScrollView,
 } from 'components'
 import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -26,8 +26,8 @@ import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
@@ -36,6 +36,7 @@ const DisabilityRatingsScreen: FC = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigation = useNavigation()
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
@@ -195,14 +196,14 @@ const DisabilityRatingsScreen: FC = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Disability-Ratings-page')}>
+    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
       </Box>
       <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
       <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
-    </VAScrollView>
+    </ChildTemplate>
   )
 }
 
