@@ -14,7 +14,7 @@ import {
   initialMilitaryServiceState,
   initialPersonalInformationState,
 } from 'store/slices'
-import ProfileScreen from './index'
+import ProfileScreen from './ProfileScreen'
 import { ErrorComponent, LoadingComponent } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants, SigninServiceTypes, SigninServiceTypesConstants } from 'store/api/types'

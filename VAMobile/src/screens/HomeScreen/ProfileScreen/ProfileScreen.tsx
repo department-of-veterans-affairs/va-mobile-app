@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
-export const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
+const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const { userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
