@@ -22,8 +22,8 @@ jest.mock('react-native/Libraries/Share/Share', () => {
 const mockExternalLinkSpy = jest.fn()
 
 jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../utils/hooks')
-  let theme = jest.requireActual('../../../styles/themes/standardTheme').default
+  let original = jest.requireActual('../../../../utils/hooks')
+  let theme = jest.requireActual('../../../../styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {

@@ -14,8 +14,8 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
 
 jest.mock('../../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../utils/hooks')
-  let theme = jest.requireActual('../../../../styles/themes/standardTheme').default
+  let original = jest.requireActual('../../../../../utils/hooks')
+  let theme = jest.requireActual('../../../../../styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {
