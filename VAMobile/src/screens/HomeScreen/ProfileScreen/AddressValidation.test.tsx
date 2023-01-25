@@ -45,7 +45,7 @@ jest.mock('@react-navigation/native', () => {
 })
 
 jest.mock('../../../store/slices', () => {
-  let actual = jest.requireActual('../../store/slices')
+  let actual = jest.requireActual('../../../store/slices')
   return {
     ...actual,
     updateAddress: jest.fn(() => {

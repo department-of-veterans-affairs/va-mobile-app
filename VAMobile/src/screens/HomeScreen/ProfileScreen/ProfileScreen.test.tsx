@@ -25,7 +25,7 @@ import { when } from 'jest-when'
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('../../styles/themes/standardTheme').default
+  const theme = jest.requireActual('../../../styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {
