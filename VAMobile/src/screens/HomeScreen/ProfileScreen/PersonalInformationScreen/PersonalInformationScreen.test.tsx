@@ -22,7 +22,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../utils/hooks', () => {
+jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../utils/hooks')
   let theme = jest.requireActual('../../../styles/themes/standardTheme').default
   return {
