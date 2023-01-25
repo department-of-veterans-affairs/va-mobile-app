@@ -21,6 +21,7 @@ const mockOverrides = {
   SIS: true,
   testFeature: false,
   inAppUpdates: false,
+  preferredNameGender: false,
 }
 
 describe('activate', () => {
