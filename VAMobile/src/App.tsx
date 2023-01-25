@@ -7,8 +7,8 @@ import { Provider, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
+import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createStackNavigator } from '@react-navigation/stack'
 import { enableScreens } from 'react-native-screens'
 import { useTranslation } from 'react-i18next'
 import { utils } from '@react-native-firebase/app'
@@ -306,7 +306,7 @@ export const AuthedApp: FC = () => {
         }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
-        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ headerShown: false }} />
+        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }} />
         <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
         {homeScreens}
         {paymentsScreens}
