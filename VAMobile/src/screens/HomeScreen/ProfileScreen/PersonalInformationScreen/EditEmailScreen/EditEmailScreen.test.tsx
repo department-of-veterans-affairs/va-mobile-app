@@ -13,7 +13,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import { deleteEmail, updateEmail } from 'store/slices'
 
-jest.mock('../../../../utils/hooks', () => {
+jest.mock('../../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
   let theme = jest.requireActual('../../../../styles/themes/standardTheme').default
 
