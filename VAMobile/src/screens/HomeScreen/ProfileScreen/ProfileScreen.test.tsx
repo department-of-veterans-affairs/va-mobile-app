@@ -60,6 +60,8 @@ context('ProfileScreen', () => {
       {},
       {
         goBack: goBackSpy,
+        setOptions: jest.fn(),
+        navigate: jest.fn(),
         addListener: jest.fn(),
       },
       {},
