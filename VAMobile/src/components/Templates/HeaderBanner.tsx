@@ -1,6 +1,6 @@
-import { TouchableWithoutFeedback } from 'react-native'
+import { Animated, Easing, TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
@@ -27,10 +27,10 @@ export type HeaderTransitionTitleProps = {
   type: 'Transition'
   text: string
   a11yLabel?: string
-  /** flag to indicate title visible in header, "VA" text when not shown */
-  titleShowing: boolean
-  /** Scroll offset position to control transition behavior */
+  /** Scroll offset position in pixels to control transition behavior */
   scrollOffset: number
+  /** Height in pixels to determine "VA" opacity/transition animation behavior */
+  transitionHeaderHeight: number
 }
 
 /** Static "VA" title */
@@ -63,6 +63,10 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   useFocusEffect(setFocus)
 
+  const [VaOpacity, setVaOpacity] = useState(1)
+  const [titleShowing, setTitleShowing] = useState(false)
+  const [titleFade] = useState(new Animated.Value(0))
+
   let leftBoxProps: BoxProps = {}
   let leftTextViewProps: TextViewProps = {}
   let titleBoxProps: BoxProps = {}
@@ -74,16 +78,16 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    minHeight: 64,
+    minHeight: theme.dimensions.headerHeight,
     backgroundColor: 'main',
-    borderBottomWidth: bannerDivider ? 1 : 0,
+    borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
   }
 
   const commonBoxProps: BoxProps = {
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
-    minHeight: 64,
+    minHeight: theme.dimensions.headerHeight,
   }
 
   if (leftButton) {
@@ -104,7 +108,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     titleBoxProps = { ...commonBoxProps }
 
     titleTextViewProps = {
-      variant: 'MobileBodyBold',
+      variant: 'BitterBoldHeading',
       allowFontScaling: false,
     }
   } else {
@@ -132,6 +136,84 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     }
   }
 
+  /**
+   * With useEffect below, handles carrying out transitioning header functionality
+   */
+  useEffect(() => {
+    if (title?.type === 'Transition' && (title.scrollOffset <= title.transitionHeaderHeight || !titleShowing)) {
+      setVaOpacity(1 - title.scrollOffset / title.transitionHeaderHeight)
+      setTitleShowing(title.scrollOffset >= title.transitionHeaderHeight)
+    }
+  })
+
+  /**
+   * Handles animation effect on the title
+   */
+  useEffect(() => {
+    // Revert title to transparent (out of view)
+    titleShowing === false &&
+      Animated.timing(titleFade, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+
+    // Trigger transition header animation when titleShowing becomes true
+    titleShowing === true &&
+      Animated.timing(titleFade, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+  })
+
+  const buildTitleDisplay = () => {
+    if (!title) {
+      return null
+    }
+
+    switch (title.type) {
+      case 'Static': {
+        return (
+          <Box {...titleBoxProps}>
+            <Box display="flex" flexDirection="row" alignItems="center">
+              <TextView {...titleTextViewProps}>{title.text}</TextView>
+            </Box>
+          </Box>
+        )
+      }
+
+      case 'Transition': {
+        // TODO: ADD HIDDEN A11Y ELEMENT THAT ALWAYS READS TITLE
+        return (
+          <Box {...titleBoxProps}>
+            {titleShowing ? (
+              <Animated.View style={{ opacity: titleFade }}>
+                <TextView {...titleTextViewProps}>{title.text}</TextView>
+              </Animated.View>
+            ) : (
+              // TODO: Update variant after Theo's branch merged to dev
+              <TextView variant="BitterBoldHeading" opacity={VaOpacity} allowFontScaling={false}>
+                VA
+              </TextView>
+            )}
+          </Box>
+        )
+      }
+
+      case 'VA': {
+        return (
+          // TODO: Update variant after Theo's branch merged to dev
+          <TextView variant="BitterBoldHeading" accessibilityLabel={'V-A'} allowFontScaling={false}>
+            VA
+          </TextView>
+        )
+      }
+    }
+  }
+
   return (
     <>
       <Box {...titleBannerProps}>
@@ -148,15 +230,9 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
           )}
         </Box>
 
-        {title?.type === 'Static' && (
-          <Box mt={theme.dimensions.buttonPadding} flex={2}>
-            <Box {...titleBoxProps}>
-              <Box display="flex" flexDirection="row" alignItems="center">
-                <TextView {...titleTextViewProps}>{title.text}</TextView>
-              </Box>
-            </Box>
-          </Box>
-        )}
+        <Box mt={theme.dimensions.buttonPadding} flex={2}>
+          {buildTitleDisplay()}
+        </Box>
 
         <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
           {rightButton && (

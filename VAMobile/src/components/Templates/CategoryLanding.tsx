@@ -45,7 +45,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   }
 
   const headerProps: HeaderBannerProps = {
-    title: title ? { type: 'Transition', text: title, titleShowing, scrollOffset: 0 } : { type: 'VA' },
+    title: title ? { type: 'Transition', text: title, scrollOffset: 0, transitionHeaderHeight } : { type: 'VA' },
     rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }
 

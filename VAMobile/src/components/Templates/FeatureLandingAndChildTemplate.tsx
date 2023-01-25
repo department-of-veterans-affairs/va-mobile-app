@@ -3,9 +3,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
-import { HeaderBannerProps } from './HeaderBanner'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
+import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import styled from 'styled-components'
 
@@ -44,6 +44,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
+  const [scrollOffset, setScrollOffset] = useState(0)
   const [VaOpacity, setVaOpacity] = useState(1)
   const [titleShowing, setTitleShowing] = useState(false)
   const [titleFade] = useState(new Animated.Value(0))
@@ -56,7 +57,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
   }
 
   const headerProps: HeaderBannerProps = {
-    title: { type: 'Transition', text: title, titleShowing, scrollOffset: 0 },
+    title: { type: 'Transition', text: title, scrollOffset, transitionHeaderHeight },
     rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }
 
@@ -98,8 +99,10 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
    * @param offsetValue - The scroll offset position in pixels
    */
   const transitionHeader = (offsetValue: number) => {
+    // setScrollOffset(offsetValue)
     if (offsetValue <= transitionHeaderHeight || !titleShowing) {
-      setVaOpacity(1 - offsetValue / transitionHeaderHeight)
+      setScrollOffset(offsetValue)
+      // setVaOpacity(1 - offsetValue / transitionHeaderHeight)
       setTitleShowing(offsetValue >= transitionHeaderHeight)
     }
   }
@@ -140,7 +143,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
   return (
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
-      <View style={headerStyle}>
+      <HeaderBanner {...headerProps} />
+      {/* <View style={headerStyle}>
         <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
           <Box display="flex" width="25%">
             <DescriptiveBackButton label={backLabel} onPress={backLabelOnPress} />
@@ -171,7 +175,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
             ) : null}
           </Box>
         </Box>
-      </View>
+      </View> */}
 
       <>
         <VAScrollView

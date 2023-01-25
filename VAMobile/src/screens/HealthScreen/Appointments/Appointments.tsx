@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton, SegmentedControl, VAScrollView } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -113,7 +113,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
 
   return (
     <>
-      <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
+      <FeatureLandingTemplate title="Appointments" backLabel="Health" backLabelOnPress={navigateTo('Health')}>
         <Box flex={1} justifyContent="flex-start">
           <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
             <SegmentedControl
@@ -133,7 +133,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
             {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
           </Box>
         </Box>
-      </VAScrollView>
+      </FeatureLandingTemplate>
       {featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}
     </>
   )

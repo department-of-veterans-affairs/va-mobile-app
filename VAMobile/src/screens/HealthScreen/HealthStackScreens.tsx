@@ -136,7 +136,7 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 
 export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
   return [
-    <HealthStack.Screen key={'Appointments'} name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />,
+    <HealthStack.Screen key={'Appointments'} name="Appointments" component={Appointments} options={{ headerShown: false, title: t('appointments.appointments') }} />,
     <HealthStack.Screen
       key={'UpcomingAppointmentDetails'}
       name="UpcomingAppointmentDetails"
