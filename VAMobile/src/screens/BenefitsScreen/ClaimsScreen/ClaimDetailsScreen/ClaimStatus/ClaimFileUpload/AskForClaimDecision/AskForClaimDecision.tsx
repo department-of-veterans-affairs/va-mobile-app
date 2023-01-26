@@ -11,6 +11,7 @@ import {
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   TextArea,
   TextView,
@@ -101,7 +102,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   return (
-    <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
+    <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
@@ -126,7 +127,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           />
         </Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

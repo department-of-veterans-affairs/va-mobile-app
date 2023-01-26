@@ -76,9 +76,9 @@ const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
   return (
     <BenefitsScreenStack.Navigator screenOptions={headerStyles}>
       <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
-      <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('statusDetails.title') }} />
-      <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
-      <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('statusDetails.title') }} />
+      <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="GenericLetter" component={GenericLetter} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="LettersList" component={LettersListScreen} options={{ headerShown: false }} />

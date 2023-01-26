@@ -126,7 +126,7 @@ context('AppealDetailsScreen', () => {
     it('should display "Higher level review appeal for {{ programArea }}" as the title', async () => {
       mockApiCall('higherLevelReview')
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Higher level review appeal for compensation')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Higher level review appeal for compensation')
       })
     })
 
@@ -139,7 +139,7 @@ context('AppealDetailsScreen', () => {
         initializeTestInstance()
       })
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
       })
     })
   })
@@ -152,7 +152,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Appeal for compensation')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal for compensation')
       })
     })
 
@@ -166,7 +166,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
       })
     })
   })
@@ -179,7 +179,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Appeal for compensation')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal for compensation')
       })
     })
 
@@ -193,7 +193,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
       })
     })
   })
@@ -206,7 +206,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Supplemental claim appeal for compensation')
+        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Supplemental claim appeal for compensation')
       })
     })
 
@@ -220,7 +220,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
       })
     })
   })
