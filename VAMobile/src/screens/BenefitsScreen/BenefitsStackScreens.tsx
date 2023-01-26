@@ -1,5 +1,4 @@
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { TFunction } from 'i18next'
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
@@ -82,7 +81,7 @@ export type BenefitsStackParamList = {
 
 const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
 
-export const getBenefitsScreens = (t: TFunction): Array<ReactNode> => {
+export const getBenefitsScreens = (): Array<ReactNode> => {
   return [
     <BenefitsStack.Screen
       key={'BenefitSummaryServiceVerificationLetter'}

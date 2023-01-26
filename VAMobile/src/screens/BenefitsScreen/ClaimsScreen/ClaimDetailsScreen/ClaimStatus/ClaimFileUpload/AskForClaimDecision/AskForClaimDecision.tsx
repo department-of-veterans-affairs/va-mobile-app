@@ -17,15 +17,12 @@ import {
   TextView,
   VABulletList,
   VAButton,
-  VAScrollView,
 } from 'components'
 import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
