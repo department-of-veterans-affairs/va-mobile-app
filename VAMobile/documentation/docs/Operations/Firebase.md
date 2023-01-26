@@ -50,7 +50,7 @@ Add an event name with optional parameters to the `Events` constant in `constant
 * Prefixed with `vama_`
 * Limited to 24 characters including the `vama_` prefix
 
-See examples below or in our [analytics constants file](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/dbce4aeaac76b2a49d56b9fc46f4be5cd15bce23/VAMobile/src/constants/analytics.ts)``
+See examples below or in our [analytics constants file](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/dbce4aeaac76b2a49d56b9fc46f4be5cd15bce23/VAMobile/src/constants/analytics.ts)
 
 Additionally, if user properties need to be tracked, they can be added to the `UserAnalytics` object:
 ```
