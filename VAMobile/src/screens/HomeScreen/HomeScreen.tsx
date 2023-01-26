@@ -16,7 +16,13 @@ import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
+import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
+import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
 import Nametag from 'components/Nametag'
+import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
+import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
+import ProfileScreen from './ProfileScreen/ProfileScreen'
+import SettingsScreen from './ProfileScreen/SettingsScreen'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -88,7 +94,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const headerButton = {
     label: tc('profile.title'),
     icon: profileIconProps,
-    onPress: navigateTo('ProfileScreen'),
+    onPress: navigateTo('Profile'),
   }
 
   return (
@@ -129,6 +135,12 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
     <HomeScreenStack.Navigator screenOptions={headerStyles}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="ManageYourAccount" component={ManageYourAccount} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }
