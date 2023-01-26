@@ -22,6 +22,7 @@ const mockOverrides = {
   testFeature: false,
   inAppUpdates: false,
   preferredNameGender: false,
+  haptics: false,
 }
 
 describe('activate', () => {
