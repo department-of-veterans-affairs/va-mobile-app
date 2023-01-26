@@ -44,7 +44,15 @@ Analytics provides metrics on discrete events within the app. Most general event
 
 ### To Add a New Analytics Event
 
-Add an event name with optional parameters to the `Events` constant in `constants/analytics.ts`. Additionally, if user properties need to be tracked, they can be added to the `UserAnalytics` object:
+Add an event name with optional parameters to the `Events` constant in `constants/analytics.ts`. 
+### Naming Requirements
+* [Snake case](https://en.wikipedia.org/wiki/Snake_case)
+* Prefixed with `vama_`
+* Limited to 24 characters including the `vama_` prefix
+
+See examples below or in our [analytics constants file](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/dbce4aeaac76b2a49d56b9fc46f4be5cd15bce23/VAMobile/src/constants/analytics.ts)``
+
+Additionally, if user properties need to be tracked, they can be added to the `UserAnalytics` object:
 ```
 export const Events = {
   ... ,
