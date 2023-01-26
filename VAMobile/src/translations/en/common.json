@@ -151,6 +151,7 @@
   "directDeposit.viewAndEditText": "Add, review, or change your direct deposit information for disability compensation and pension benefits. Any updates you make here will also update on VA.gov.",
   "directDeposit.viewAndEditTextA11yLabel": "Add, review, or change your direct deposit information for disability compensation and pension benefits. Any updates you make here will also update on V-A .gov .",
   "payments.title": "Payments",
+  "history.title": "History",
   "vaPaymentHistory": "VA payment history",
   "vaPaymentHistory.a11yLabel": "V-A payment history",
   "editDirectDeposit.accountNumber": "Account number",

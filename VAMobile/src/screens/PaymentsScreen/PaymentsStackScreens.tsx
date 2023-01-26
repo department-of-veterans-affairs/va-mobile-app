@@ -31,6 +31,6 @@ export const getPaymentsScreens = (t: TFunction): Array<ReactNode> => {
     />,
     <PaymentsStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ title: t('profile:paymentDetails.title') }} />,
     <PaymentsStack.Screen key={'PaymentIssue'} name="PaymentIssue" component={PaymentIssue} />,
-    <PaymentsStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} />,
+    <PaymentsStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} options={{ headerShown: false }} />,
   ]
 }
