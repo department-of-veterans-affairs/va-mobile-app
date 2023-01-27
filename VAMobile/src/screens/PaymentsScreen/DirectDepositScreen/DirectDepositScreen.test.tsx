@@ -3,7 +3,7 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
 import { Pressable } from 'react-native'
-import { context, waitFor, render, RenderAPI } from 'testUtils'
+import { context, waitFor, render, RenderAPI, mockNavProps } from 'testUtils'
 
 import {
   DirectDepositState,
@@ -66,7 +66,7 @@ context('DirectDepositScreen', () => {
     mockNavigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
-    component = render(<DirectDepositScreen />, {
+    component = render(<DirectDepositScreen {...mockNavProps()} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         directDeposit,
@@ -100,17 +100,17 @@ context('DirectDepositScreen', () => {
   describe('when there is bank data', () => {
     it('should display the button with the given bank data', async () => {
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Account')
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('BoA')
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('******1234')
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Savings account')
+        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Account')
+        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('BoA')
+        expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('******1234')
+        expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Savings account')
       })
     })
   })
 
   describe('when there is no bank data', () => {
     it('should render the button with the text Add your bank account information', async () => {
-      component = render(<DirectDepositScreen />, {
+      component = render(<DirectDepositScreen {...mockNavProps()} />, {
         preloadedState: {
           auth: { ...initialAuthState },
           personalInformation: {
@@ -124,10 +124,10 @@ context('DirectDepositScreen', () => {
 
       testInstance = component.container
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Add your bank account information')
+        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Add your bank account information')
       })
 
-      component = render(<DirectDepositScreen />, {
+      component = render(<DirectDepositScreen {...mockNavProps()} />, {
         preloadedState: {
           auth: { ...initialAuthState },
           personalInformation: {
@@ -141,7 +141,7 @@ context('DirectDepositScreen', () => {
 
       testInstance = component.container
       await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Add your bank account information')
+        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Add your bank account information')
       })
     })
   })
@@ -150,7 +150,7 @@ context('DirectDepositScreen', () => {
     it('should call navigation navigate', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit')
+        expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' })
         expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })
