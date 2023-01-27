@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
-import { AddressData, AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
+import { AddressData, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
 import { Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
@@ -31,7 +31,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const theme = useTheme()
 
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
-  const { validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
+  const { validationKey, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
   const [selectedSuggestedAddress, setSelectedSuggestedAddress] = useState<AddressData | SuggestedAddress>()
 
   const scrollStyles: ViewStyle = {
@@ -104,45 +104,15 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
 
   const getAlertTitle = (): string => {
-    switch (addressValidationScenario) {
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS:
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE:
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED:
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE:
-        return t('editAddress.validation.confirmAddress.title')
-      case AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE:
-        return t('editAddress.validation.addUnit.title')
-      case AddressValidationScenarioTypesConstants.BAD_UNIT_NUMBER_OVERRIDE:
-        return t('editAddress.validation.badUnit.title')
-      default:
-        return t('editAddress.validation.confirmAddress.title')
-    }
+    return t('editAddress.validation.verifyAddress.title')
   }
 
   const getAlertBody = (): string => {
-    switch (addressValidationScenario) {
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS:
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE:
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE:
-        return t('editAddress.validation.confirmAddress.noSuggestions.body')
-      case AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE:
-        return t('editAddress.validation.addUnit.body')
-      case AddressValidationScenarioTypesConstants.BAD_UNIT_NUMBER_OVERRIDE:
-        return t('editAddress.validation.badUnit.body')
-      default:
-        return t('editAddress.validation.confirmAddress.suggestions.body')
-    }
+    return t('editAddress.validation.verifyAddress.body')
   }
 
   const getAlertBodyA11yLabel = (): string => {
-    switch (addressValidationScenario) {
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS:
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE:
-      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE:
-        return t('editAddress.validation.confirmAddress.noSuggestions.body.a11yLabel')
-      default:
-        return getAlertBody()
-    }
+    return t('editAddress.validation.verifyAddress.body.a11yLabel')
   }
 
   const getAlert = (): ReactNode => {
@@ -162,7 +132,8 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       labelArgs: getSuggestedAddressLabelArgs(addressEntered),
       headerText: t('editAddress.validation.youEntered'),
     })
-
+    console.debug('confirmedAddresses')
+    console.debug(confirmedSuggestedAddresses)
     if (confirmedSuggestedAddresses) {
       suggestedAddressOptions = suggestedAddressOptions.concat(
         map(confirmedSuggestedAddresses, (address, index) => {
