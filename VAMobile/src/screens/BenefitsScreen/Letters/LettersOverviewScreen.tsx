@@ -10,7 +10,7 @@ import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AddressSummary, { addressDataField, profileAddressOptions } from '../../ProfileScreen/AddressSummary'
+import AddressSummary, { addressDataField, profileAddressOptions } from '../../HomeScreen/ProfileScreen/AddressSummary'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>

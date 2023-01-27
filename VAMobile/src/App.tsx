@@ -7,8 +7,8 @@ import { Provider, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
+import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createStackNavigator } from '@react-navigation/stack'
 import { enableScreens } from 'react-native-screens'
 import { useTranslation } from 'react-i18next'
 import { utils } from '@react-native-firebase/app'
@@ -32,15 +32,14 @@ import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { activateRemoteConfig } from 'utils/remoteConfig'
-import { getProfileScreens } from 'screens'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
-import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
+import { profileAddressType } from './screens/HomeScreen/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
-import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
+import EditAddressScreen from './screens/HomeScreen/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
 import LoaGate from './screens/auth/LoaGate'
 import NotificationManager from './components/NotificationManager'
@@ -286,8 +285,7 @@ export const AppTabs: FC = () => {
 export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
 
-  const homeScreens = getHomeScreens()
-  const profileScreens = getProfileScreens(useTranslation(NAMESPACE.COMMON).t)
+  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.COMMON).t)
   const benefitsScreens = getBenefitsScreens(useTranslation(NAMESPACE.COMMON).t)
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens()
@@ -309,10 +307,9 @@ export const AuthedApp: FC = () => {
         }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
-        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ headerShown: false }} />
+        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }} />
         <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ headerShown: false }} />
         {homeScreens}
-        {profileScreens}
         {paymentsScreens}
         {benefitsScreens}
         {healthScreens}
