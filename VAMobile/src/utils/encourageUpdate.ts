@@ -7,7 +7,7 @@ import { requestStoreVersion } from 'utils/rnInAppUpdate'
 import getEnv from 'utils/env'
 
 const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
-const APP_VERSION_Local_Override_VAL = '@store_app_version_local_override'
+const APP_VERSION_LOCAL_OVERRIDE_VAL = '@store_app_version_local_override'
 const { APPLE_STORE_LINK } = getEnv()
 
 /**
