@@ -16,7 +16,7 @@ const { APPLE_STORE_LINK } = getEnv()
  * This is due to how the app store returns the version vs the google play store api
  */
 export const getEncourageUpdateLocalVersion = async (demoMode: boolean): Promise<string> => {
-  const result = await Promise.all([AsyncStorage.getItem(APP_VERSION_Local_Override_VAL)])
+  const result = await Promise.all([AsyncStorage.getItem(APP_VERSION_LOCAL_OVERRIDE_VAL)])
   const localOverride = result[0] ? `${result[0]}` : undefined
   if (demoMode && localOverride) {
     return localOverride
