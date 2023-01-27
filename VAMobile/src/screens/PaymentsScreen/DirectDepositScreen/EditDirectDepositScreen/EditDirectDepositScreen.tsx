@@ -1,14 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 
 import { AccessibilityState, DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
 import {
   AlertBox,
-  BackButton,
   Box,
   CollapsibleView,
   ErrorComponent,
@@ -18,11 +17,9 @@ import {
   FullScreenSubtask,
   LoadingComponent,
   PickerItem,
-  SaveButton,
   TextView,
   VAImage,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
@@ -75,13 +72,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
     dispatch(finishEditBankInfo(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
     navigation.goBack()
   }, [dispatch, navigation])
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
-    })
-  }, [navigation, goBack])
 
   useEffect(() => {
     if (bankInfoUpdated) {
