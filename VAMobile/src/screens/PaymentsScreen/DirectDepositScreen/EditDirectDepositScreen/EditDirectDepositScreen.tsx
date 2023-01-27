@@ -15,12 +15,12 @@ import {
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   PickerItem,
   SaveButton,
   TextView,
   VAImage,
-  VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
@@ -29,7 +29,6 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getTranslation } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
@@ -41,10 +40,11 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
 /**
  * Screen for displaying editing direct deposit information
  */
-const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
+const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation()
+  const { displayTitle } = route.params
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
@@ -149,7 +149,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'profile:editDirectDeposit.accountType',
+        labelKey: 'common:editDirectDeposit.accountType',
         selectedValue: accountType,
         onSelectionChange: setAccountType,
         pickerOptions: accountOptions,
@@ -174,7 +174,12 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   return (
     <>
       {isAccessibilityFocused && (
-        <VAScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
+        <FullScreenSubtask
+          onLeftButtonPress={goBack}
+          leftButtonText={t('cancel')}
+          rightButtonText={t('save')}
+          onRightButtonPress={() => setOnSaveClicked(true)}
+          title={displayTitle}>
           <Box mt={contentMarginTop} mb={contentMarginBottom}>
             {formContainsError && (
               <Box mb={standardMarginBetween}>
@@ -204,7 +209,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
               />
             </Box>
           </Box>
-        </VAScrollView>
+        </FullScreenSubtask>
       )}
     </>
   )

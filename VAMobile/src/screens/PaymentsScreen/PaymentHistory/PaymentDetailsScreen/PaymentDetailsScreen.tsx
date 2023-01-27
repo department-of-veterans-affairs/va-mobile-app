@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
+import { Box, FeatureLandingTemplate, TextArea, TextView, TextViewProps } from 'components'
 import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentState, getPayment } from 'store/slices'
@@ -17,7 +17,7 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 
-const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
+const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route }) => {
   const { paymentID } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -57,7 +57,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
   const hasAcccountInfo = verifyHasAccountNumber(account)
 
   return (
-    <VAScrollView {...testIdProps('payments-details-page')}>
+    <FeatureLandingTemplate backLabel={t('history.title')} backLabelOnPress={navigation.goBack} title={t('paymentDetails.title')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -99,7 +99,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ route }) => {
           </Pressable>
         </Box>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 
