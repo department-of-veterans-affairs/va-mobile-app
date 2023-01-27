@@ -60,7 +60,7 @@ const DebugScreen: FC = ({}) => {
       componentMounted.current = false
     }
   }, [])
-  // helper function for anything saved in AsyncStorag
+  // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
     const asyncVal = (await AsyncStorage.getItem(key)) || ''
     setStateFun(asyncVal)
