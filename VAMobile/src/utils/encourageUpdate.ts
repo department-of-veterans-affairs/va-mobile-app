@@ -64,7 +64,7 @@ export const overrideLocalVersion = async (overrideVersion: string | undefined):
   if (overrideVersion) {
     await Promise.all([AsyncStorage.setItem(APP_VERSION_Local_Override_VAL, overrideVersion)])
   } else {
-    await Promise.all([AsyncStorage.removeItem(APP_VERSION_Local_Override_VAL)])
+    await Promise.all([AsyncStorage.removeItem(APP_VERSION_LOCAL_OVERRIDE_VAL)])
   }
 }
 
