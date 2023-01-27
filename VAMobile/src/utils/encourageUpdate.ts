@@ -62,7 +62,7 @@ export const setVersionSkipped = async (versionSkipped: string): Promise<void> =
 
 export const overrideLocalVersion = async (overrideVersion: string | undefined): Promise<void> => {
   if (overrideVersion) {
-    await Promise.all([AsyncStorage.setItem(APP_VERSION_Local_Override_VAL, overrideVersion)])
+    await Promise.all([AsyncStorage.setItem(APP_VERSION_LOCAL_OVERRIDE_VAL, overrideVersion)])
   } else {
     await Promise.all([AsyncStorage.removeItem(APP_VERSION_LOCAL_OVERRIDE_VAL)])
   }
