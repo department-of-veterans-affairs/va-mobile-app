@@ -113,7 +113,11 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
 
   return (
     <>
-      <FeatureLandingTemplate title="Appointments" backLabel="Health" backLabelOnPress={navigateTo('Health')}>
+      <FeatureLandingTemplate
+        title="Appointments"
+        backLabel="Health Care"
+        backLabelOnPress={navigateTo('Health')}
+        headerButton={{ label: 'Title', icon: { name: 'ProfileSelected', fill: theme.colors.icon.active }, onPress: () => {} }}>
         <Box flex={1} justifyContent="flex-start">
           <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
             <SegmentedControl

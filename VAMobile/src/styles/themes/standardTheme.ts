@@ -115,7 +115,7 @@ const fontSizes = {
   },
   VAHeader: {
     fontSize: 28,
-    lineHeight: 25,
+    lineHeight: 32,
   },
 }
 

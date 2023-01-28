@@ -1,31 +1,29 @@
 import { Animated, Easing, TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useReducer, useState } from 'react'
 
-import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { HiddenA11yElement } from 'styles/common'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
   text: string
   a11yLabel?: string
   onPress: () => void
-  icon?: VAIconProps
-  /** icon position relative to text, default Left */
-  iconPosition?: 'Left' | 'Top'
+  descriptiveBack?: boolean
 }
-// TODO: FIGURE OUT HOW DOING DESC BACK BUTTON, MAYBE DELETE icon(Position)
 
 /** Static header title */
 export type HeaderStaticTitleProps = {
   type: 'Static'
-  text: string
+  title: string
   a11yLabel?: string
 }
 
 /** Transitioning based on scroll header title */
 export type HeaderTransitionTitleProps = {
   type: 'Transition'
-  text: string
+  title: string
   a11yLabel?: string
   /** Scroll offset position in pixels to control transition behavior */
   scrollOffset: number
@@ -63,9 +61,58 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   useFocusEffect(setFocus)
 
-  const [VaOpacity, setVaOpacity] = useState(1)
-  const [titleShowing, setTitleShowing] = useState(false)
+  const transition = title?.type === 'Transition'
+
+  /**
+   * Reducer to update the "VA" header opacity based on scroll
+   */
+  const VaOpacityReducer = (initOffset: number) => {
+    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight : initOffset
+  }
+
+  /**
+   * Reducer to swap between "VA" and title based on scroll
+   */
+  const titleShowingReducer = (initTitleShowing: boolean) => {
+    return transition ? title.scrollOffset >= title.transitionHeaderHeight : initTitleShowing
+  }
+
+  const [VaOpacity, updateVaOpacity] = useReducer(VaOpacityReducer, transition ? title.scrollOffset : 0)
+  const [titleShowing, updateTitleShowing] = useReducer(titleShowingReducer, false)
   const [titleFade] = useState(new Animated.Value(0))
+
+  /**
+   * With reducers above and useEffect below, handles carrying out transitioning header functionality
+   */
+  useEffect(() => {
+    if (transition && (title.scrollOffset <= title.transitionHeaderHeight || !titleShowing)) {
+      updateVaOpacity()
+      updateTitleShowing()
+    }
+  })
+
+  /**
+   * Handles animation effect on the title
+   */
+  useEffect(() => {
+    // Revert title to transparent (out of view)
+    titleShowing === false &&
+      Animated.timing(titleFade, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+
+    // Trigger transition header animation when titleShowing becomes true
+    titleShowing === true &&
+      Animated.timing(titleFade, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+  })
 
   let leftBoxProps: BoxProps = {}
   let leftTextViewProps: TextViewProps = {}
@@ -91,14 +138,11 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   }
 
   if (leftButton) {
-    leftBoxProps = {
-      ...commonBoxProps,
-      flexDirection: leftButton.iconPosition === 'Top' ? 'column' : 'row',
-    }
+    leftBoxProps = { ...commonBoxProps }
 
     leftTextViewProps = {
       color: 'footerButton',
-      variant: leftButton.icon ? 'textWithIconButton' : 'MobileBody',
+      variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
     }
@@ -108,18 +152,19 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     titleBoxProps = { ...commonBoxProps }
 
     titleTextViewProps = {
-      variant: 'BitterBoldHeading',
+      variant: 'VAHeader',
+      accessibilityLabel: 'V-A',
       allowFontScaling: false,
     }
   } else {
     titleBoxProps = {
       ...commonBoxProps,
-      accessibilityElementsHidden: title?.type === 'Transition' ? true : false,
-      importantForAccessibility: title?.type === 'Transition' ? 'no-hide-descendants' : 'yes',
+      accessibilityElementsHidden: transition ? true : false,
+      importantForAccessibility: transition ? 'no-hide-descendants' : 'yes',
     }
 
     titleTextViewProps = {
-      variant: title?.type === 'Transition' ? 'MobileBody' : 'MobileBodyBold',
+      variant: transition ? 'MobileBody' : 'MobileBodyBold',
       accessibilityLabel: title?.a11yLabel,
       allowFontScaling: false,
     }
@@ -136,39 +181,6 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     }
   }
 
-  /**
-   * With useEffect below, handles carrying out transitioning header functionality
-   */
-  useEffect(() => {
-    if (title?.type === 'Transition' && (title.scrollOffset <= title.transitionHeaderHeight || !titleShowing)) {
-      setVaOpacity(1 - title.scrollOffset / title.transitionHeaderHeight)
-      setTitleShowing(title.scrollOffset >= title.transitionHeaderHeight)
-    }
-  })
-
-  /**
-   * Handles animation effect on the title
-   */
-  useEffect(() => {
-    // Revert title to transparent (out of view)
-    titleShowing === false &&
-      Animated.timing(titleFade, {
-        toValue: 0,
-        duration: 1,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start()
-
-    // Trigger transition header animation when titleShowing becomes true
-    titleShowing === true &&
-      Animated.timing(titleFade, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start()
-  })
-
   const buildTitleDisplay = () => {
     if (!title) {
       return null
@@ -179,36 +191,39 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
         return (
           <Box {...titleBoxProps}>
             <Box display="flex" flexDirection="row" alignItems="center">
-              <TextView {...titleTextViewProps}>{title.text}</TextView>
+              <TextView {...titleTextViewProps}>{title.title}</TextView>
             </Box>
           </Box>
         )
       }
 
       case 'Transition': {
-        // TODO: ADD HIDDEN A11Y ELEMENT THAT ALWAYS READS TITLE
+        const a11y = title?.a11yLabel ? title.a11yLabel : title.title
         return (
-          <Box {...titleBoxProps}>
-            {titleShowing ? (
-              <Animated.View style={{ opacity: titleFade }}>
-                <TextView {...titleTextViewProps}>{title.text}</TextView>
-              </Animated.View>
-            ) : (
-              // TODO: Update variant after Theo's branch merged to dev
-              <TextView variant="BitterBoldHeading" opacity={VaOpacity} allowFontScaling={false}>
-                VA
-              </TextView>
-            )}
-          </Box>
+          <>
+            <HiddenA11yElement accessibilityLabel={a11y} accessibilityRole="header">
+              {a11y}
+            </HiddenA11yElement>
+            <Box {...titleBoxProps}>
+              {titleShowing ? (
+                <Animated.View style={{ opacity: titleFade }}>
+                  <TextView {...titleTextViewProps}>{title.title}</TextView>
+                </Animated.View>
+              ) : (
+                <TextView variant="VAHeader" opacity={VaOpacity} allowFontScaling={false}>
+                  VA
+                </TextView>
+              )}
+            </Box>
+          </>
         )
       }
 
       case 'VA': {
         return (
-          // TODO: Update variant after Theo's branch merged to dev
-          <TextView variant="BitterBoldHeading" accessibilityLabel={'V-A'} allowFontScaling={false}>
-            VA
-          </TextView>
+          <Box {...titleBoxProps}>
+            <TextView {...titleTextViewProps}>VA</TextView>
+          </Box>
         )
       }
     }
@@ -217,17 +232,20 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
-          {leftButton && (
-            <TouchableWithoutFeedback ref={focusButton === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
-              <Box {...leftBoxProps}>
-                {leftButton.icon && <VAIcon {...leftButton.icon} preventScaling={true} />}
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
+        <Box flex={1}>
+          {leftButton?.descriptiveBack ? (
+            <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focusButton === 'Left'} />
+          ) : leftButton ? (
+            <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+              <TouchableWithoutFeedback ref={focusButton === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
+                <Box {...leftBoxProps}>
+                  <Box display="flex" flexDirection="row" alignItems="center">
+                    <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
+                  </Box>
                 </Box>
-              </Box>
-            </TouchableWithoutFeedback>
-          )}
+              </TouchableWithoutFeedback>
+            </Box>
+          ) : null}
         </Box>
 
         <Box mt={theme.dimensions.buttonPadding} flex={2}>

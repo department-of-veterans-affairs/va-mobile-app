@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { CategoryLanding } from 'components/Templates/CategoryLanding'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -66,8 +67,8 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   return (
-    <VAScrollView {...testIdProps('Health-care-page')}>
-      <CrisisLineCta onPress={onCrisisLine} />
+    <CategoryLanding title="Health Care" headerButton={{ label: 'Profile', icon: { name: 'ProfileSelected', fill: theme.colors.icon.active }, onPress: () => {} }}>
+      {/* <CrisisLineCta onPress={onCrisisLine} /> */}
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         {featureEnabled('prescriptions') && (
           <LargeNavButton
@@ -128,7 +129,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>
         <CernerAlert />
       </Box>
-    </VAScrollView>
+    </CategoryLanding>
   )
 }
 
@@ -145,7 +146,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
 
   return (
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
-      <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('page.title') }} />
+      <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false, title: t('page.title') }} />
     </HealthScreenStack.Navigator>
   )
 }
