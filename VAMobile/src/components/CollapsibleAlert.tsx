@@ -1,5 +1,5 @@
 import { Pressable, PressableProps, View } from 'react-native'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
 import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { TextView } from 'components'
@@ -24,18 +24,15 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
-  // TODO: This is a temporary workaround for a react-native bug that prevents 'expanded' state
-  // changes from being announced in TalkBack: https://github.com/facebook/react-native/issues/30841
-  // This can be removed once the fix makes it into a release and we upgrade react-native
-  useEffect(() => {
-    if (isAndroid()) {
-      setFocus()
-      setFocus()
-    }
-  }, [expanded]) // eslint-disable-line react-hooks/exhaustive-deps
-
   const onPress = (): void => {
     setExpanded(!expanded)
+
+    // TODO: This is a temporary workaround for a react-native bug that prevents 'expanded' state
+    // changes from being announced in TalkBack: https://github.com/facebook/react-native/issues/30841
+    // This can be removed once the fix makes it into a release and we upgrade react-native
+    if (isAndroid()) {
+      setFocus()
+    }
   }
 
   const pressableProps: PressableProps = {
