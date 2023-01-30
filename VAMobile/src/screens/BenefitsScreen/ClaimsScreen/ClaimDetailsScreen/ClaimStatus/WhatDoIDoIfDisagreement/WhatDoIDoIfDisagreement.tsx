@@ -25,7 +25,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = () => {
   const text = t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')
 
   return (
-    <LargePanel title={t('claimDetails.whatDoIDoIfDisagreement.pageTitle')} rightButtonText={t('close')}>
+    <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

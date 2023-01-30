@@ -14,7 +14,7 @@ const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = () => {
   const theme = useTheme()
 
   return (
-    <LargePanel title={t('claimDetails.consolidatedClaims.pageTitle')} rightButtonText={t('close')}>
+    <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
