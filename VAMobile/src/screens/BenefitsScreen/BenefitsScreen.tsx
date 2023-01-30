@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
-import { Box, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -28,7 +28,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
 
   return (
-    <VAScrollView>
+    <CategoryLanding title={t('benefits.title')}>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('claims.title')}
@@ -58,7 +58,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
           subText=""
         />
       </Box>
-    </VAScrollView>
+    </CategoryLanding>
   )
 }
 
@@ -70,12 +70,11 @@ const BenefitsScreenStack = createStackNavigator()
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
   return (
     <BenefitsScreenStack.Navigator screenOptions={headerStyles}>
-      <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
+      <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ headerShown: false }} />
