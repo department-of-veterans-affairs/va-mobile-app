@@ -1,7 +1,6 @@
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
-import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentIssue from './PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from './PaymentHistory/PaymentMissingSceen/PaymentMissingScreen'
@@ -25,7 +24,6 @@ const PaymentsStack = createStackNavigator<PaymentsStackParamList>()
 
 export const getPaymentsScreens = (): Array<ReactNode> => {
   return [
-    <PaymentsStack.Screen key={'HowToUpdateDirectDeposit'} name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={{ headerShown: false }} />,
     <PaymentsStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ headerShown: false }} />,
     <PaymentsStack.Screen
       key={'PaymentIssue'}
