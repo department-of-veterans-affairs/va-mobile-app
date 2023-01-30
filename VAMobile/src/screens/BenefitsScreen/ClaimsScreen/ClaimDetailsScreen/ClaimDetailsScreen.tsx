@@ -3,7 +3,7 @@ import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { BackButton, Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
+import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
@@ -13,7 +13,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
@@ -82,8 +81,8 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const a11yHints = [t('claimDetails.viewYourClaim', { tabName: t('claimDetails.status') }), t('claimDetails.viewYourClaim', { tabName: t('claimDetails.details') })]
 
   return (
-    <VAScrollView {...testIdProps('Your-claim: Claim-details-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
@@ -104,7 +103,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
           {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}
         </Box>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

@@ -202,7 +202,7 @@ context('ClaimsScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Claims status is unavailable')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Claims status is unavailable')
     })
   })
 
@@ -216,7 +216,7 @@ context('ClaimsScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Appeal status is unavailable')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Appeal status is unavailable')
     })
   })
 
@@ -231,7 +231,7 @@ context('ClaimsScreen', () => {
       expect(testInstance.findAllByType(SegmentedControl).length).toEqual(0)
       expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(0)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Claims and appeal status are unavailable')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Claims and appeal status are unavailable')
     })
   })
 

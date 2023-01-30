@@ -5,14 +5,13 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextView, VAScrollView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
@@ -100,8 +99,8 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   const formattedSubmittedDate = formatDateMMMMDDYYYY(getSubmittedDate())
 
   return (
-    <VAScrollView {...testIdProps('Your-appeal: Appeal-details-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
@@ -134,7 +133,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
           {appeal && selectedTab === t('appealDetails.issuesTab') && <AppealIssues issues={getFilteredIssues()} />}
         </Box>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 
