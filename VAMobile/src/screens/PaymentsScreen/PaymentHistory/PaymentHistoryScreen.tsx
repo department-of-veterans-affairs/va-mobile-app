@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 
-import { Box, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextView, TextViewProps, VAModalPicker, VAModalPickerProps, VAScrollView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextView, TextViewProps, VAModalPicker, VAModalPickerProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentState, getPayments } from 'store/slices'
 import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
@@ -19,7 +19,7 @@ import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
-const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = () => {
+const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -71,7 +71,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = () => {
   }
 
   const pickerProps: VAModalPickerProps = {
-    labelKey: 'profile:payments.pickerLabel',
+    labelKey: 'common:payments.pickerLabel',
     selectedValue: yearPickerOption?.value || '',
     onSelectionChange: setValuesOnPickerSelect,
     pickerOptions,
@@ -145,7 +145,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = () => {
   }
 
   return (
-    <VAScrollView>
+    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
       <Box {...testIdProps('', false, 'payments-page')}>
         <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
           <Pressable onPress={navigateTo('PaymentMissing')} {...testIdProps(t('payments.ifIAmMissingPayemt'))} accessibilityRole="link" accessible={true}>
@@ -158,7 +158,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = () => {
       </Box>
       {getPaymentsData()}
       {renderPagination()}
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

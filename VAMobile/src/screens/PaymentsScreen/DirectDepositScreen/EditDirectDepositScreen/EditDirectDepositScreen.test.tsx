@@ -1,6 +1,6 @@
 import 'react-native'
 import React from 'react'
-import { TextInput } from 'react-native'
+import { TextInput, TouchableWithoutFeedback } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, waitFor, render, RenderAPI, findByTypeWithText } from 'testUtils'
@@ -40,19 +40,16 @@ context('EditDirectDepositScreen', () => {
   let confirmCheckBox: ReactTestInstance
   let navHeaderSpy: any
 
+  const getSaveButton = () => testInstance.findAllByType(TouchableWithoutFeedback)[1]
+
   const initializeTestInstance = (saving = false, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps(
       {},
       {
         goBack: jest.fn(),
         navigate: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined,
-          }
-        },
       },
+      { params: { displayTitle: 'Edit Direct Deposit' } },
     )
 
     component = render(<EditDirectDepositScreen {...props} />, {
@@ -136,7 +133,7 @@ context('EditDirectDepositScreen', () => {
         accountTypeRNPickerSelect.props.onSelectionChange('Checking')
         confirmCheckBox.props.onSelectionChange(true)
 
-        navHeaderSpy.save.props.onSave()
+        getSaveButton().props.onPress()
 
         expect(updateBankInfo).toBeCalledWith(
           '12345678901234567',
@@ -157,7 +154,7 @@ context('EditDirectDepositScreen', () => {
         accountTypeRNPickerSelect.props.onSelectionChange('')
         confirmCheckBox.props.onSelectionChange(false)
 
-        navHeaderSpy.save.props.onSave()
+        getSaveButton().props.onPress()
 
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
         expect(findByTypeWithText(testInstance, TextView, "Enter the bank's 9-digit routing number.")).toBeTruthy()

@@ -1,35 +1,31 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 
 import { AccessibilityState, DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
 import {
   AlertBox,
-  BackButton,
   Box,
   CollapsibleView,
   ErrorComponent,
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   PickerItem,
-  SaveButton,
   TextView,
   VAImage,
-  VAScrollView,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getTranslation } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
@@ -41,10 +37,11 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
 /**
  * Screen for displaying editing direct deposit information
  */
-const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
+const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation()
+  const { displayTitle } = route.params
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
@@ -75,13 +72,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     dispatch(finishEditBankInfo(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
     navigation.goBack()
   }, [dispatch, navigation])
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
-    })
-  }, [navigation, goBack])
 
   useEffect(() => {
     if (bankInfoUpdated) {
@@ -149,7 +139,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'profile:editDirectDeposit.accountType',
+        labelKey: 'common:editDirectDeposit.accountType',
         selectedValue: accountType,
         onSelectionChange: setAccountType,
         pickerOptions: accountOptions,
@@ -174,7 +164,12 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   return (
     <>
       {isAccessibilityFocused && (
-        <VAScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
+        <FullScreenSubtask
+          onLeftButtonPress={goBack}
+          leftButtonText={t('cancel')}
+          rightButtonText={t('save')}
+          onRightButtonPress={() => setOnSaveClicked(true)}
+          title={displayTitle}>
           <Box mt={contentMarginTop} mb={contentMarginBottom}>
             {formContainsError && (
               <Box mb={standardMarginBetween}>
@@ -204,7 +199,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
               />
             </Box>
           </Box>
-        </VAScrollView>
+        </FullScreenSubtask>
       )}
     </>
   )

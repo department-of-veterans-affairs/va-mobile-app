@@ -79,7 +79,9 @@ const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
   EditAddress: { displayTitle: string; addressType: profileAddressType }
-  EditDirectDeposit: undefined
+  EditDirectDeposit: {
+    displayTitle: string
+  }
   Tabs: undefined
 }
 
@@ -281,13 +283,12 @@ export const AppTabs: FC = () => {
 }
 
 export const AuthedApp: FC = () => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
   const homeScreens = getHomeScreens(useTranslation(NAMESPACE.COMMON).t)
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
-  const paymentsScreens = getPaymentsScreens(useTranslation(NAMESPACE.COMMON).t)
+  const paymentsScreens = getPaymentsScreens()
 
   return (
     <>
@@ -307,7 +308,7 @@ export const AuthedApp: FC = () => {
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }} />
-        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ headerShown: false }} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

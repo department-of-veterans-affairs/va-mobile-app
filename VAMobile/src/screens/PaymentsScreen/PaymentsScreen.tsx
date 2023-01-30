@@ -1,27 +1,22 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
 import { RootState } from 'store'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import DirectDepositScreen from './DirectDepositScreen'
+import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
-const PaymentsScreen: FC<PaymentsScreenProps> = ({ navigation }) => {
+const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const { directDepositBenefits, directDepositBenefitsUpdate } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  }, [navigation])
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -31,7 +26,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = ({ navigation }) => {
   const onDirectDeposit = directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
 
   return (
-    <VAScrollView>
+    <CategoryLanding title={t('payments.title')}>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('vaPaymentHistory')}
@@ -52,7 +47,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = ({ navigation }) => {
           />
         )}
       </Box>
-    </VAScrollView>
+    </CategoryLanding>
   )
 }
 
@@ -64,14 +59,14 @@ const PaymentsScreenStack = createStackNavigator()
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
   return (
     <PaymentsScreenStack.Navigator screenOptions={headerStyles}>
-      <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ title: t('payments.title') }} />
-      <PaymentsScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
-      <PaymentsScreenStack.Screen name="PaymentHistory" component={PaymentHistoryScreen} options={{ title: t('payments.title') }} />
+      <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ headerShown: false }} />
+      <PaymentsScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ headerShown: false }} />
+      <PaymentsScreenStack.Screen name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={{ headerShown: false }} />
+      <PaymentsScreenStack.Screen name="PaymentHistory" component={PaymentHistoryScreen} options={{ headerShown: false }} />
     </PaymentsScreenStack.Navigator>
   )
 }

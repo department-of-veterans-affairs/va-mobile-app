@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import HowToUpdateDirectDepositScreen from './HowToUpdateDirectDepositScreen'
 
 const mockExternalLinkSpy = jest.fn()
@@ -25,7 +25,7 @@ context('HowToUpdateDirectDepositScreen', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    component = render(<HowToUpdateDirectDepositScreen />)
+    component = render(<HowToUpdateDirectDepositScreen {...mockNavProps()} />)
 
     testInstance = component.container
   })

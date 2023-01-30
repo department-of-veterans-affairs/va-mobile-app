@@ -1,22 +1,26 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
 import { DirectDepositState, getBankData } from 'store/slices/directDepositSlice'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
+import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 
+type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'DirectDeposit'>
+
 /**
  * Screen for displaying direct deposit information and help numbers
  */
-const DirectDepositScreen: FC = () => {
+const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const { paymentAccount: bankData, loading } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -60,7 +64,7 @@ const DirectDepositScreen: FC = () => {
       {
         textLines: textLines,
         a11yHintText: t('directDeposit.addBankAccountInformationHint'),
-        onPress: navigateTo('EditDirectDeposit'),
+        onPress: navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') }),
         decoratorProps: { accessibilityRole: 'button' },
       },
     ]
@@ -79,7 +83,7 @@ const DirectDepositScreen: FC = () => {
   }
 
   return (
-    <VAScrollView>
+    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
       <Box>
         <Box mx={gutter} mt={contentMarginTop}>
           <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
@@ -99,7 +103,7 @@ const DirectDepositScreen: FC = () => {
       <Box mx={gutter} mb={contentMarginBottom}>
         <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

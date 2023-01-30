@@ -18,7 +18,14 @@ context('PaymentDetailsScreen', () => {
   let formattedDate: string
 
   const initializeTestInstance = (pId: string = '1') => {
-    props = mockNavProps(undefined, undefined, { params: { paymentID: pId } })
+    props = mockNavProps(
+      {},
+      {
+        goBack: jest.fn(),
+        navigate: jest.fn(),
+      },
+      { params: { paymentID: pId } },
+    )
     paymentDate = '2021-02-01T00:00:00.000-07:00'
     formattedDate = getFormattedDate(paymentDate, 'MMMM d, yyyy')
 

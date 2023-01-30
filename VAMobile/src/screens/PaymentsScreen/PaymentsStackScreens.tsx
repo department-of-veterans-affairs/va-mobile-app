@@ -1,8 +1,6 @@
-import { TFunction } from 'i18next'
-import { createStackNavigator } from '@react-navigation/stack'
+import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
-import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentIssue from './PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from './PaymentHistory/PaymentMissingSceen/PaymentMissingScreen'
@@ -10,6 +8,9 @@ import PaymentMissing from './PaymentHistory/PaymentMissingSceen/PaymentMissingS
 export type PaymentsStackParamList = {
   Payments: undefined
   DirectDeposit: undefined
+  EditDirectDeposit: {
+    isEdit: boolean
+  }
   HowToUpdateDirectDeposit: undefined
   PaymentHistory: undefined
   PaymentDetails: {
@@ -21,16 +22,20 @@ export type PaymentsStackParamList = {
 
 const PaymentsStack = createStackNavigator<PaymentsStackParamList>()
 
-export const getPaymentsScreens = (t: TFunction): Array<ReactNode> => {
+export const getPaymentsScreens = (): Array<ReactNode> => {
   return [
+    <PaymentsStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ headerShown: false }} />,
     <PaymentsStack.Screen
-      key={'HowToUpdateDirectDeposit'}
-      name="HowToUpdateDirectDeposit"
-      component={HowToUpdateDirectDepositScreen}
-      options={{ title: t('directDeposit.title') }}
+      key={'PaymentIssue'}
+      name="PaymentIssue"
+      component={PaymentIssue}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
-    <PaymentsStack.Screen key={'PaymentDetails'} name="PaymentDetails" component={PaymentDetailsScreen} options={{ title: t('profile:paymentDetails.title') }} />,
-    <PaymentsStack.Screen key={'PaymentIssue'} name="PaymentIssue" component={PaymentIssue} />,
-    <PaymentsStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} />,
+    <PaymentsStack.Screen
+      key={'PaymentMissing'}
+      name="PaymentMissing"
+      component={PaymentMissing}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
   ]
 }
