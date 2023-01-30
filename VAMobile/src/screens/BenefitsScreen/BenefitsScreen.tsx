@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
-import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton, VAScrollView } from 'components'
+import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -70,7 +70,6 @@ const BenefitsScreenStack = createStackNavigator()
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
 
   return (
