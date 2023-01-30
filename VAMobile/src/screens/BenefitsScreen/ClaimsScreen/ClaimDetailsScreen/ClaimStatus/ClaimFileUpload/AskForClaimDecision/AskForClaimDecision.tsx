@@ -11,20 +11,18 @@ import {
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   TextArea,
   TextView,
   VABulletList,
   VAButton,
-  VAScrollView,
 } from 'components'
 import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
@@ -101,7 +99,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   return (
-    <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
+    <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
@@ -126,7 +124,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           />
         </Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

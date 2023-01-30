@@ -27,10 +27,8 @@ context('WhatDoIDoIfDisagreement', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    const props = mockNavProps(undefined, { setOptions: jest.fn() })
-
+    const props = mockNavProps({}, {}, { params: { display: '', value: 'active' } })
     component = render(<WhatDoIDoIfDisagreement {...props} />)
-
     testInstance = component.container
   })
 
@@ -40,7 +38,7 @@ context('WhatDoIDoIfDisagreement', () => {
 
   describe('on click of the decision review link', () => {
     it('should launch external link', async () => {
-      testInstance.findAllByType(TextView)[2].props.onPress()
+      testInstance.findAllByType(TextView)[4].props.onPress()
       expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })

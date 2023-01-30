@@ -1,33 +1,20 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, TextArea, TextView, VAScrollView } from 'components'
-import { HiddenTitle } from 'styles/common'
+import { Box, LargePanel, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 type ConsolidatedClaimsNoteProps = StackScreenProps<BenefitsStackParamList, 'ConsolidatedClaimsNote'>
 
-const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = ({ navigation }) => {
+const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <HiddenTitle accessibilityLabel={t('claimDetails.consolidatedClaims.pageTitle')} accessibilityRole="header">
-          {t('claimDetails.consolidatedClaims.pageTitle')}
-        </HiddenTitle>
-      ),
-    })
-  })
-
   return (
-    <VAScrollView {...testIdProps(generateTestID(t('claimDetails.consolidatedClaims.pageTitle'), ''))}>
+    <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -36,7 +23,7 @@ const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = ({ navigation })
           <TextView variant="MobileBody">{t('claimDetails.consolidatedClaims.noteContent')}</TextView>
         </TextArea>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 

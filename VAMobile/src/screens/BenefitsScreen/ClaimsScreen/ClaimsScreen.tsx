@@ -1,15 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl } from 'components'
 import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -17,7 +15,7 @@ import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppe
 
 type IClaimsScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
-const ClaimsScreen: FC<IClaimsScreen> = () => {
+const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -51,10 +49,6 @@ const ClaimsScreen: FC<IClaimsScreen> = () => {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
     }
   }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
-
-  const scrollStyles: ViewStyle = {
-    flexGrow: 1,
-  }
 
   const fetchInfoAgain = (): void => {
     if (claimsAndAppealsAccess) {
@@ -112,7 +106,7 @@ const ClaimsScreen: FC<IClaimsScreen> = () => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Claims-page')} contentContainerStyle={scrollStyles}>
+    <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
@@ -132,7 +126,7 @@ const ClaimsScreen: FC<IClaimsScreen> = () => {
           </Box>
         )}
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 
