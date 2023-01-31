@@ -32,7 +32,7 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
             }
 
             return (
-              <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable} mb={mb} importantForAccessibility={'no'}>
+              <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable} mb={mb} accessible={false}>
                 {text}
               </TextView>
             )
