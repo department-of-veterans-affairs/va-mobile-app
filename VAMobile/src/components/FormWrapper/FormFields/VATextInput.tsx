@@ -113,9 +113,10 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     disableFullscreenUI: true,
     placeholderTextColor: theme.colors.text.placeholder,
     onChangeText: (newVal) => {
-      onChange(newVal)
       if ((newVal.length > 0 && keyboardType === 'number-pad') || keyboardType === 'numeric') {
         onChange(newVal.replace(/\D/g, ''))
+      }else{
+        onChange(newVal)
       }
       // if there was an error, remove when the user starts typing
       if (newVal.length > 0 && setError && error !== '') {
