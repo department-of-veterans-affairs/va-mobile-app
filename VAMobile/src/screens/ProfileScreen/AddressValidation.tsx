@@ -173,7 +173,12 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1}>
         <Box mt={contentMarginTop}>
-          <CollapsibleAlert border="warning" headerText={t('editAddress.validation.verifyAddress.title')} body={getAlert()} a11yLabel={t('editAddress.validation.verifyAddress.title')} />
+          <CollapsibleAlert
+            border="warning"
+            headerText={t('editAddress.validation.verifyAddress.title')}
+            body={getAlert()}
+            a11yLabel={t('editAddress.validation.verifyAddress.title')}
+          />
         </Box>
         <Box mt={contentMarginTop}>{getSuggestedAddresses()}</Box>
       </Box>
