@@ -4,6 +4,7 @@ import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 
 
 import { Box, BoxProps, ValidationFunctionItems } from '../../index'
 import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
@@ -84,8 +85,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     }
     case 'phone': {
       textContentType = 'telephoneNumber'
-      // TODO #16792, 'default' to avoid Voice Control crash
-      // keyboardType = 'number-pad'
+      keyboardType = isIOS() ? 'number-pad' : 'numeric'
       break
     }
   }
@@ -114,7 +114,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     placeholderTextColor: theme.colors.text.placeholder,
     onChangeText: (newVal) => {
       onChange(newVal)
-
+      if ((newVal.length > 0 && keyboardType === 'number-pad') || keyboardType === 'numeric') {
+        onChange(newVal.replace(/\D/g, ''))
+      }
       // if there was an error, remove when the user starts typing
       if (newVal.length > 0 && setError && error !== '') {
         setError('')
