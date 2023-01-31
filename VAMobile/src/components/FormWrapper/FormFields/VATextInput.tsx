@@ -115,7 +115,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onChangeText: (newVal) => {
       if ((newVal.length > 0 && keyboardType === 'number-pad') || keyboardType === 'numeric') {
         onChange(newVal.replace(/\D/g, ''))
-      }else{
+      } else {
         onChange(newVal)
       }
       // if there was an error, remove when the user starts typing
