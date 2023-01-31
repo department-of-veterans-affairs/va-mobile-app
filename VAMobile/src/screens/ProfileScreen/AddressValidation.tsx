@@ -103,22 +103,10 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.stateCode || '', postCode: suggestedAddress.zipCode }
   }
 
-  const getAlertTitle = (): string => {
-    return t('editAddress.validation.verifyAddress.title')
-  }
-
-  const getAlertBody = (): string => {
-    return t('editAddress.validation.verifyAddress.body')
-  }
-
-  const getAlertBodyA11yLabel = (): string => {
-    return t('editAddress.validation.verifyAddress.body.a11yLabel')
-  }
-
   const getAlert = (): ReactNode => {
     return (
-      <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
-        {getAlertBody()}
+      <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('editAddress.validation.verifyAddress.body.a11yLabel')}>
+        {t('editAddress.validation.verifyAddress.body')}
       </TextView>
     )
   }
@@ -132,8 +120,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       labelArgs: getSuggestedAddressLabelArgs(addressEntered),
       headerText: t('editAddress.validation.youEntered'),
     })
-    console.debug('confirmedAddresses')
-    console.debug(confirmedSuggestedAddresses)
+
     if (confirmedSuggestedAddresses) {
       suggestedAddressOptions = suggestedAddressOptions.concat(
         map(confirmedSuggestedAddresses, (address, index) => {
@@ -186,7 +173,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1}>
         <Box mt={contentMarginTop}>
-          <CollapsibleAlert border="warning" headerText={getAlertTitle()} body={getAlert()} a11yLabel={getAlertTitle()} />
+          <CollapsibleAlert border="warning" headerText={t('editAddress.validation.verifyAddress.title')} body={getAlert()} a11yLabel={t('editAddress.validation.verifyAddress.title')} />
         </Box>
         <Box mt={contentMarginTop}>{getSuggestedAddresses()}</Box>
       </Box>
