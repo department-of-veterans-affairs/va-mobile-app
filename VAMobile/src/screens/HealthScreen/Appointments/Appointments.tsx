@@ -77,11 +77,19 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   }, [dispatch, apptsNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('appointments')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!appointments) {
-    return <NoMatchInRecords />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('appointments')}>
+        <NoMatchInRecords />
+      </FeatureLandingTemplate>
+    )
   }
 
   const serviceErrorAlert = (): ReactElement => {
