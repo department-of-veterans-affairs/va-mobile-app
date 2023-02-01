@@ -60,15 +60,27 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   }, [dispatch, secureMessaging, navigation, secureMessagingTab, smNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!secureMessaging) {
-    return <NotEnrolledSM />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+        <NotEnrolledSM />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (termsAndConditionError) {
-    return <TermsAndConditions />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+        <TermsAndConditions />
+      </FeatureLandingTemplate>
+    )
   }
 
   const serviceErrorAlert = (): ReactElement => {
