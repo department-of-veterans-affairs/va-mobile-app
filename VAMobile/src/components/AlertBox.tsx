@@ -30,7 +30,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
   const [textFocusRef, setTextFocus] = useAccessibilityFocus<View>()
 
   const focusOnAlert = border === 'error' && (title || text)
-  useFocusEffect(focusOnAlert && title ? setTitleFocus : setTextFocus)
+  useFocusEffect(focusOnAlert ? (title ? setTitleFocus : setTextFocus) : () => {})
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
