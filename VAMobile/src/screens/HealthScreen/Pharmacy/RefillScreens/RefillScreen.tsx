@@ -94,11 +94,19 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (prescriptionInDowntime) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={t('prescriptions.refill.pageHeaderTitle')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (refillable.length === 0) {
-    return <NoRefills />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={t('prescriptions.refill.pageHeaderTitle')}>
+        <NoRefills />
+      </FullScreenSubtask>
+    )
   }
 
   if (loadingHistory) {

@@ -147,9 +147,15 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     })
   })
 
+  const backLabel = tc(currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT ? 'sent' : 'messages')
+
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
+    return (
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
+      </ChildTemplate>
+    )
   }
 
   if (loading || loadingFile || movingMessage) {
@@ -186,8 +192,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
     }
   }
-
-  const backLabel = tc(currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT ? 'sent' : 'messages')
 
   const moveIconProps: VAIconProps = {
     name: 'FolderSolid',

@@ -101,7 +101,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   if (useError(ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={goBack}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (loading || phoneNumberSaved) {

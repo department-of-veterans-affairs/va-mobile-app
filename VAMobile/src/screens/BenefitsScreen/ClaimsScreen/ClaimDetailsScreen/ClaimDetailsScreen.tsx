@@ -70,7 +70,11 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   }, [dispatch, claimID])
 
   if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loadingClaim || !isTransitionComplete) {

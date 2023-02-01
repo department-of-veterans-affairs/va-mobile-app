@@ -108,7 +108,11 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   }, [dispatch, lettersAndDocuments, lettersNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.list.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loading) {
@@ -116,7 +120,11 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   }
 
   if (!lettersAndDocuments || !letters || letters.length === 0) {
-    return <NoLettersScreen />
+    return (
+      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.list.title')}>
+        <NoLettersScreen />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (

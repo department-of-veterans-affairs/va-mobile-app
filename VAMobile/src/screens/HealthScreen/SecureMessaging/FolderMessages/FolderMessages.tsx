@@ -76,7 +76,11 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   })
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
+    return (
+      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={tc(folderName === FolderNameTypeConstants.sent ? 'sent' : 'drafts')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
+      </ChildTemplate>
+    )
   }
 
   if (loading) {

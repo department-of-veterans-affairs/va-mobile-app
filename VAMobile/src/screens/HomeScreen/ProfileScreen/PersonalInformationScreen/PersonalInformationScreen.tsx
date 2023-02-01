@@ -159,7 +159,11 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   ]
 
   if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.headerTitle')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loading) {

@@ -60,7 +60,11 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   }
 
   if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
-    return <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
+        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loadingClaimsAndAppeals || personalInformationLoading) {
@@ -68,7 +72,11 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   }
 
   if (!claimsAndAppealsAccess) {
-    return <NoClaimsAndAppealsAccess />
+    return (
+      <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
+        <NoClaimsAndAppealsAccess />
+      </FeatureLandingTemplate>
+    )
   }
 
   const serviceErrorAlert = (): ReactElement => {
