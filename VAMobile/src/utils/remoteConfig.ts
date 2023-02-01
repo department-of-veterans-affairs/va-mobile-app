@@ -12,7 +12,7 @@ const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
-export type FeatureToggleType = 'appointmentRequests' | 'prescriptions' | 'SIS' | 'testFeature' | 'inAppUpdates'
+export type FeatureToggleType = 'appointmentRequests' | 'prescriptions' | 'SIS' | 'testFeature' | 'inAppUpdates' | 'preferredNameGender' | 'haptics'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -20,6 +20,8 @@ type FeatureToggleValues = {
   SIS: boolean
   testFeature: boolean
   inAppUpdates: boolean
+  preferredNameGender: boolean
+  haptics: boolean
 }
 
 export let devConfig: FeatureToggleValues = {
@@ -28,6 +30,8 @@ export let devConfig: FeatureToggleValues = {
   SIS: true,
   testFeature: true,
   inAppUpdates: true,
+  preferredNameGender: true,
+  haptics: true,
 }
 
 export const productionDefaults: FeatureToggleValues = {
@@ -36,6 +40,8 @@ export const productionDefaults: FeatureToggleValues = {
   SIS: true,
   testFeature: false,
   inAppUpdates: false,
+  preferredNameGender: false,
+  haptics: false,
 }
 
 /**
