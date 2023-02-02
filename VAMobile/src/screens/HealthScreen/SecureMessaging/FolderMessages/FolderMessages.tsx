@@ -92,9 +92,11 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const messages = folderMessages ? folderMessages.data : []
 
   if (messages.length === 0) {
-    <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={tc(folderName === FolderNameTypeConstants.sent ? 'sent' : 'drafts')}>
-      <NoFolderMessages folderName={folderName} />
-    </ChildTemplate>
+    return (
+      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={tc(folderName === FolderNameTypeConstants.sent ? 'sent' : 'drafts')}>
+        <NoFolderMessages folderName={folderName} />
+      </ChildTemplate>
+    )
   }
 
   const requestPage = (requestedPage: number) => {
