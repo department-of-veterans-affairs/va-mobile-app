@@ -180,7 +180,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
         {t('personalInformation.editNote')}
       </TextView>
 
-      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.buttonTitle')} />
+      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.title')} />
 
       <Pressable onPress={navigateTo('HowDoIUpdate')} {...testIdProps(t('personalInformation.howDoIUpdatePersonalInfo'))} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
