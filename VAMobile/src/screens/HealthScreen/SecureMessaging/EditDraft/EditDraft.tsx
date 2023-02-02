@@ -130,7 +130,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     if (formContainsError) {
       scrollToAlert()
     }
-  }, [formContainsError, scrollToAlert])
+  }, [formContainsError, scrollToAlert, setShouldFocus])
 
   useEffect(() => {
     dispatch(resetSaveDraftFailed())
