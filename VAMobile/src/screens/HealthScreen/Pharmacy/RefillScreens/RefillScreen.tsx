@@ -61,7 +61,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     if (showAlert) {
       scrollToAlert()
     }
-  }, [showAlert, scrollToAlert])
+  }, [showAlert, scrollToAlert, setShouldFocus])
 
   const onSubmitPressed = () => {
     submitRefillAlert({
