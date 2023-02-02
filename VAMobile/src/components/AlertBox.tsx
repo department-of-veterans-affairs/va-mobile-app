@@ -1,6 +1,6 @@
 import { AccessibilityRole, View } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-import React, { FC } from 'react'
+import React, { FC, Ref } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
 import { VABorderColors } from 'styles/theme'
@@ -19,12 +19,14 @@ export type AlertBoxProps = {
   titleA11yLabel?: string
   /** optional accessibility role for the title */
   titleRole?: AccessibilityRole
+  /** optional ref for the alert */
+  viewRef?: Ref<View>
 }
 
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
+const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLabel, titleA11yLabel, titleRole, viewRef }) => {
   const theme = useTheme()
   const [titleFocusRef, setTitleFocus] = useAccessibilityFocus<View>()
   const [textFocusRef, setTextFocus] = useAccessibilityFocus<View>()
@@ -43,21 +45,23 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
   const titleAccessibilityRole = titleRole ? titleRole : text || children ? 'header' : undefined
 
   return (
-    <Box {...boxProps}>
-      {!!title && (
-        <View ref={titleFocusRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
-          <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
-            {title}
-          </TextView>
-        </View>
-      )}
-      {!!text && (
-        <View ref={textFocusRef} accessible={true} accessibilityLabel={textA11yLabel || text}>
-          <TextView variant="MobileBody">{text}</TextView>
-        </View>
-      )}
-      {children}
-    </Box>
+    <View ref={viewRef} accessible={true}>
+      <Box {...boxProps}>
+        {!!title && (
+          <View ref={titleFocusRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
+            <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
+              {title}
+            </TextView>
+          </View>
+        )}
+        {!!text && (
+          <View ref={textFocusRef} accessible={true} accessibilityLabel={textA11yLabel || text}>
+            <TextView variant="MobileBody">{text}</TextView>
+          </View>
+        )}
+        {children}
+      </Box>
+    </View>
   )
 }
 
