@@ -34,7 +34,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAutoScrollToElement, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
 import HeaderTitle from 'components/HeaderTitle'
@@ -91,6 +91,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const destructiveAlert = useDestructiveAlert()
+  const [scrollViewRef, alertRef, scrollToAlert, setShouldFocus] = useAutoScrollToElement()
 
   const [deleting, setDeleting] = useState(false)
 
@@ -262,6 +263,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       },
     })
   })
+
+  useEffect(() => {
+    setShouldFocus(false)
+    if (formContainsError) {
+      scrollToAlert()
+    }
+  }, [formContainsError, scrollToAlert])
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
@@ -510,7 +518,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
+    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -524,7 +532,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" />
+            <AlertBox title={t('editAddress.alertError')} border="error" viewRef={alertRef} />
           </Box>
         )}
         <FormWrapper

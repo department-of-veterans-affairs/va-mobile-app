@@ -13,7 +13,7 @@ import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPresc
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAutoScrollToElement, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
@@ -53,6 +53,15 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
       navigation.navigate('RefillRequestSummary')
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
+
+  const [scrollViewRef, alertRef, scrollToAlert, setShouldFocus] = useAutoScrollToElement()
+
+  useEffect(() => {
+    setShouldFocus(false)
+    if (showAlert) {
+      scrollToAlert()
+    }
+  }, [showAlert, scrollToAlert])
 
   const onSubmitPressed = () => {
     submitRefillAlert({
@@ -115,10 +124,10 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   return (
     <>
-      <VAScrollView>
+      <VAScrollView scrollViewRef={scrollViewRef}>
         {showAlert && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
+            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} viewRef={alertRef} />
           </Box>
         )}
         <Box mx={theme.dimensions.gutter}>

@@ -54,6 +54,7 @@ import { testIdProps } from 'utils/accessibility'
 import {
   useAppDispatch,
   useAttachments,
+  useAutoScrollToElement,
   useBeforeNavBackListener,
   useError,
   useMessageWithSignature,
@@ -101,6 +102,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
+  const [scrollViewRef, alertRef, scrollToAlert, setShouldFocus] = useAutoScrollToElement()
+
+  useEffect(() => {
+    setShouldFocus(false)
+    if (formContainsError) {
+      scrollToAlert()
+    }
+  }, [formContainsError, scrollToAlert])
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
@@ -351,7 +360,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
+        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} alertRef={alertRef} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
@@ -392,7 +401,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Compose-message-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Compose-message-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </VAScrollView>

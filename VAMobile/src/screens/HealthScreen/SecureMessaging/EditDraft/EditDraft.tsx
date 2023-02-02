@@ -55,7 +55,7 @@ import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useAutoScrollToElement, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
@@ -119,10 +119,18 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [scrollViewRef, alertRef, scrollToAlert, setShouldFocus] = useAutoScrollToElement()
 
   const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
+
+  useEffect(() => {
+    setShouldFocus(false)
+    if (formContainsError) {
+      scrollToAlert()
+    }
+  }, [formContainsError, scrollToAlert])
 
   useEffect(() => {
     dispatch(resetSaveDraftFailed())
@@ -416,7 +424,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           title={t('secureMessaging.composeMessage.noMatchWithProvider')}
           text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
           textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
-          border="error">
+          border="error"
+          viewRef={alertRef}>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
@@ -510,7 +519,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Compose-message-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Compose-message-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
