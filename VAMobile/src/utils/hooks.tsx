@@ -304,6 +304,8 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
   const scrollRef = useRef<ScrollView>(null)
   const [messageRef, setFocus] = useAccessibilityFocus<View>()
   const [shouldFocus, setShouldFocus] = useState(true)
+  const screenReaderEnabled = useIsScreanReaderEnabled()
+
   const scrollToElement = useCallback(() => {
     const timeOut = setTimeout(() => {
       requestAnimationFrame(() => {
@@ -314,7 +316,7 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
             messageRef.current.measureLayout(
               scrollPoint,
               (_, y) => {
-                currentObject.scrollTo({ y: y, animated: true })
+                currentObject.scrollTo({ y: y, animated: !screenReaderEnabled })
               },
               () => {
                 currentObject.scrollTo({ y: 0 })
@@ -328,7 +330,7 @@ export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableR
       }
     }, 400)
     return () => clearTimeout(timeOut)
-  }, [messageRef, setFocus, shouldFocus])
+  }, [messageRef, setFocus, shouldFocus, screenReaderEnabled])
 
   return [scrollRef, messageRef, scrollToElement, setShouldFocus]
 }
