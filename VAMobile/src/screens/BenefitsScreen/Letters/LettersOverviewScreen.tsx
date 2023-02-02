@@ -34,7 +34,11 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const addressData: Array<addressDataField> = [{ addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onAddressPress }]
 
   if (error) {
-    return <NoLettersScreen />
+    return (
+      <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.title')}>
+        <NoLettersScreen />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loading) {
