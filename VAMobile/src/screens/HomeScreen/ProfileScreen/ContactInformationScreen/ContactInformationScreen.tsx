@@ -13,26 +13,12 @@ import { PersonalInformationState, getProfileInfo } from 'store/slices/personalI
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
 import { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-
-const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
-  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
-
-  if (profile && profile.birthDate) {
-    const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
-    dateOfBirthTextIDs.push({ text: t('dynamicField', { field: formattedBirthDate }) })
-  } else {
-    dateOfBirthTextIDs.push({ text: t('personalInformation.informationNotAvailable') })
-  }
-
-  return [{ textLines: dateOfBirthTextIDs, a11yHintText: '', testId: getA11yLabelText(dateOfBirthTextIDs) }]
-}
 
 type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'
 
@@ -87,15 +73,15 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
   return [{ textLines: textLines, a11yHintText: t('contactInformation.editOrAddEmailAddress'), onPress: onEmailAddress, testId: getA11yLabelText(textLines) }]
 }
 
-type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'PersonalInformation'>
+type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'ContactInformation'>
 
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
+const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
-  const { contentMarginTop, contentMarginBottom, gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const navigateTo = useRouteNavigation()
@@ -146,12 +132,12 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const onEmailAddress = navigateTo('EditEmail')
 
   const linkProps: TextViewProps = {
-    variant: 'MobileBody',
+    variant: 'HelperText',
     color: 'link',
     textDecoration: 'underline',
     textDecorationColor: 'link',
     mx: gutter,
-    mt: standardMarginBetween,
+    mt: condensedMarginBetween,
   }
 
   const addressData: Array<addressDataField> = [
@@ -161,7 +147,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
+      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -170,31 +156,21 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   if (loading) {
     return (
       <React.Fragment>
-        <LoadingComponent text={t('personalInformation.loading')} />
+        <LoadingComponent text={t('contactInformation.loading')} />
       </React.Fragment>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
+      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
         {t('contactInformation.editNote')}
       </TextView>
-
-      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.title')} />
-
-      <Pressable onPress={navigateTo('HowDoIUpdate')} {...testIdProps(t('personalInformation.howDoIUpdatePersonalInfo'))} accessibilityRole="link" accessible={true}>
-        <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
-      </Pressable>
-
-      <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
-
-      <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
-
       <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('contactInformation.howWillYouUseContactInfo')}</TextView>
       </Pressable>
-
+      <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
+      <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
       <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
       <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
         {t('contactInformation.thisIsEmailWeUseToContactNote')}
@@ -203,4 +179,4 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   )
 }
 
-export default PersonalInformationScreen
+export default ContactInformationScreen
