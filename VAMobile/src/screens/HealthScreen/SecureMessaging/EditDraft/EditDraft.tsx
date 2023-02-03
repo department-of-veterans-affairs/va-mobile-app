@@ -119,18 +119,17 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [scrollViewRef, alertRef, scrollToAlert, setShouldFocus] = useAutoScrollToElement()
+  const [scrollViewRef, alertRef, scrollToAlert] = useAutoScrollToElement()
 
   const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
-    setShouldFocus(false)
     if (formContainsError) {
       scrollToAlert()
     }
-  }, [formContainsError, scrollToAlert, setShouldFocus])
+  }, [formContainsError, scrollToAlert])
 
   useEffect(() => {
     dispatch(resetSaveDraftFailed())

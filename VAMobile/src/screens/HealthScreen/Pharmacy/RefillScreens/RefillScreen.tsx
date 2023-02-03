@@ -54,14 +54,13 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
 
-  const [scrollViewRef, alertRef, scrollToAlert, setShouldFocus] = useAutoScrollToElement()
+  const [scrollViewRef, alertRef, scrollToAlert] = useAutoScrollToElement()
 
   useEffect(() => {
-    setShouldFocus(false)
     if (showAlert) {
       scrollToAlert()
     }
-  }, [showAlert, scrollToAlert, setShouldFocus])
+  }, [showAlert, scrollToAlert])
 
   const onSubmitPressed = () => {
     submitRefillAlert({

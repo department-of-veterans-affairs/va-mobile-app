@@ -91,7 +91,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const destructiveAlert = useDestructiveAlert()
-  const [scrollViewRef, alertRef, scrollToAlert, setShouldFocus] = useAutoScrollToElement()
+  const [scrollViewRef, alertRef, scrollToAlert] = useAutoScrollToElement()
 
   const [deleting, setDeleting] = useState(false)
 
@@ -265,11 +265,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
-    setShouldFocus(false)
     if (formContainsError) {
       scrollToAlert()
     }
-  }, [formContainsError, scrollToAlert, setShouldFocus])
+  }, [formContainsError, scrollToAlert])
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />

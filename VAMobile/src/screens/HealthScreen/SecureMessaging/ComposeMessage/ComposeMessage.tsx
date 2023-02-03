@@ -102,14 +102,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
-  const [scrollViewRef, alertRef, scrollToAlert, setShouldFocus] = useAutoScrollToElement()
+  const [scrollViewRef, alertRef, scrollToAlert] = useAutoScrollToElement()
 
   useEffect(() => {
-    setShouldFocus(false)
     if (formContainsError) {
       scrollToAlert()
     }
-  }, [formContainsError, scrollToAlert, setShouldFocus])
+  }, [formContainsError, scrollToAlert])
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
