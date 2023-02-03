@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
 import { RootState } from 'store'
@@ -62,7 +63,18 @@ const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
   const headerStyles = useHeaderStyles()
 
   return (
-    <PaymentsScreenStack.Navigator screenOptions={headerStyles}>
+    <PaymentsScreenStack.Navigator
+      screenOptions={headerStyles}
+      screenListeners={{
+        transitionStart: (e) => {
+          if (e.data.closing) {
+            CloseSnackbarOnNavigation(e.target)
+          }
+        },
+        blur: (e) => {
+          CloseSnackbarOnNavigation(e.target)
+        },
+      }}>
       <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ headerShown: false }} />
       <PaymentsScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ headerShown: false }} />
       <PaymentsScreenStack.Screen name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={{ headerShown: false }} />
