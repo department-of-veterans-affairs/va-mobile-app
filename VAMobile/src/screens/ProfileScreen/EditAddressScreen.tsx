@@ -268,7 +268,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     if (formContainsError) {
       scrollToAlert()
     }
-  }, [formContainsError, scrollToAlert])
+  }, [formContainsError, scrollToAlert, onSaveClicked])
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />

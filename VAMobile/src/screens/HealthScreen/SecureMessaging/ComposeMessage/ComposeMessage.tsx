@@ -108,7 +108,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     if (formContainsError) {
       scrollToAlert()
     }
-  }, [formContainsError, scrollToAlert])
+  }, [formContainsError, scrollToAlert, onSendClicked, onSaveDraftClicked])
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
