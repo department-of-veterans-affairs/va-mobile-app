@@ -31,7 +31,9 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
   const [titleFocusRef, setTitleFocus] = useAccessibilityFocus<View>()
   const [textFocusRef, setTextFocus] = useAccessibilityFocus<View>()
 
-  const focusOnAlert = border === 'error' && (title || text)
+  // When 'viewRef' is defined, it's implied that focus on the alert is being handled elsewhere,
+  // so no need to focus here. Otherwise, focus on error alerts that contain a title or text
+  const focusOnAlert = !viewRef && border === 'error' && (title || text)
   useFocusEffect(focusOnAlert ? (title ? setTitleFocus : setTextFocus) : () => {})
 
   const boxProps: BoxProps = {
@@ -45,23 +47,21 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
   const titleAccessibilityRole = titleRole ? titleRole : text || children ? 'header' : undefined
 
   return (
-    <View ref={viewRef} accessible={true}>
-      <Box {...boxProps}>
-        {!!title && (
-          <View ref={titleFocusRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
-            <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
-              {title}
-            </TextView>
-          </View>
-        )}
-        {!!text && (
-          <View ref={textFocusRef} accessible={true} accessibilityLabel={textA11yLabel || text}>
-            <TextView variant="MobileBody">{text}</TextView>
-          </View>
-        )}
-        {children}
-      </Box>
-    </View>
+    <Box {...boxProps}>
+      {!!title && (
+        <View ref={viewRef || titleFocusRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
+          <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
+            {title}
+          </TextView>
+        </View>
+      )}
+      {!!text && (
+        <View ref={viewRef && !title ? viewRef : textFocusRef} accessible={true} accessibilityLabel={textA11yLabel || text}>
+          <TextView variant="MobileBody">{text}</TextView>
+        </View>
+      )}
+      {children}
+    </Box>
   )
 }
 
