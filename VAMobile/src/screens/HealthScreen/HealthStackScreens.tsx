@@ -140,12 +140,7 @@ export const getHealthScreens = (t: TFunction) => {
       options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
     />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
-    <HealthStack.Screen
-      key={'NoRequestAppointmentAccess'}
-      name="NoRequestAppointmentAccess"
-      component={NoRequestAppointmentAccess}
-      options={{ title: t('appointments.appointments') }}
-    />,
+    <HealthStack.Screen key={'NoRequestAppointmentAccess'} name="NoRequestAppointmentAccess" component={NoRequestAppointmentAccess} options={{ headerShown: false }} />,
     <HealthStack.Group
       key={'ModalsScreens'}
       screenOptions={{

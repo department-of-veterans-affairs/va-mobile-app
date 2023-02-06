@@ -51,7 +51,11 @@ const FileRequest: FC<FileRequestProps> = ({ route }) => {
   }
 
   if (useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileRequest.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   return (

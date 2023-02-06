@@ -49,7 +49,11 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }, [navigateToClaimsDetailsPage, navigation, claimID, claimType])
 
   if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (loadingSubmitClaimDecision) {

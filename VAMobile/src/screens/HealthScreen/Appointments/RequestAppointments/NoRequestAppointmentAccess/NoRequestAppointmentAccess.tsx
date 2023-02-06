@@ -2,9 +2,10 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, VABulletList, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ChildTemplate, VABulletList, VAButton } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -20,6 +21,7 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   const theme = useTheme()
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.valocation.loading') })
+  const navigation = useNavigation()
 
   const containerStyles = {
     mt: 30,
@@ -38,7 +40,7 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   }
 
   return (
-    <VAScrollView>
+    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox title={t('noRequestAppointmentAccess.title')} border="warning" text={t('noRequestAppointmentAccess.text')}>
           <Box my={standardMarginBetween}>
@@ -58,7 +60,7 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
           </Box>
         </AlertBox>
       </Box>
-    </VAScrollView>
+    </ChildTemplate>
   )
 }
 

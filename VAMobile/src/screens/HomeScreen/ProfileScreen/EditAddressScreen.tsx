@@ -248,7 +248,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const cancelFn = showValidation ? onConfirmCancel : onCancel
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (savingAddress || addressSaved) {

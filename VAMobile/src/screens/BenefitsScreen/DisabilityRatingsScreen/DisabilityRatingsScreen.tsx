@@ -163,7 +163,11 @@ const DisabilityRatingsScreen: FC = () => {
   }
 
   if (useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
+    return (
+      <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
+      </ChildTemplate>
+    )
   }
 
   if (loading) {
@@ -175,7 +179,11 @@ const DisabilityRatingsScreen: FC = () => {
   }
 
   if (individualRatingsList.length === 0) {
-    return <NoDisabilityRatings />
+    return (
+      <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
+        <NoDisabilityRatings />
+      </ChildTemplate>
+    )
   }
 
   const clickToCallProps: LinkButtonProps = {

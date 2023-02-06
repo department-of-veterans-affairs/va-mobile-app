@@ -194,7 +194,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }, [sendMessageComplete, dispatch, navigation])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={tc('compose')} leftButtonText={tc('cancel')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
