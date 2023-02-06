@@ -1,7 +1,7 @@
 import { Pressable, ViewStyle } from 'react-native'
 import React, { FC, useState } from 'react'
 
-import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, VAIcon } from 'components'
+import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, TextViewProps, VAIcon } from 'components'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
