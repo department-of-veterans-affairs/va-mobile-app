@@ -5,87 +5,47 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
-import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
-import { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
+import { UserDataProfile } from 'store/api/types'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getA11yLabelText } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AddressSummary from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
-const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
-  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
-
+const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
   if (profile && profile.birthDate) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
-    dateOfBirthTextIDs.push({ text: t('dynamicField', { field: formattedBirthDate }) })
+    return t('dynamicField', { field: formattedBirthDate })
   } else {
-    dateOfBirthTextIDs.push({ text: t('personalInformation.informationNotAvailable') })
+    return t('personalInformation.informationNotAvailable')
   }
-
-  return [{ textLines: dateOfBirthTextIDs, a11yHintText: '', testId: getA11yLabelText(dateOfBirthTextIDs) }]
 }
 
-type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'
+// const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): string => {
+//   if (profile && profile.birthDate) {
+//     // to do, change this to profile.preferredName in the if and pass that to the field
+//     // return t('dynamicField', { field: preferredName })
+//     return t('personalInformation.preferredName.genericBody')
+//   } else {
+//     return t('personalInformation.preferredName.genericBody')
+//   }
+// }
 
-const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField: ProfileFormattedFieldType, phoneType: phoneType, t: TFunction): Array<TextLine> => {
-  const textIDs: Array<TextLine> = []
-
-  if (profile && profile[profileField]) {
-    const extension = profile[phoneType].extension
-    if (extension) {
-      textIDs.push({ text: t('contactInformation.phoneWithExtension', { number: profile[profileField] as string, extension }) })
-    } else {
-      textIDs.push({ text: t('dynamicField', { field: profile[profileField] as string }) })
-    }
-  } else {
-    textIDs.push({ text: t('contactInformation.addYour', { field: t(`contactInformation.${phoneType}`) }) })
-  }
-
-  return textIDs
-}
-
-const getPhoneNumberData = (
-  profile: UserDataProfile | undefined,
-  t: TFunction,
-  onHomePhone: () => void,
-  onWorkPhone: () => void,
-  onCellPhone: () => void,
-): Array<DefaultListItemObj> => {
-  let homeText: Array<TextLine> = [{ text: t('contactInformation.home'), variant: 'MobileBodyBold' }]
-  let workText: Array<TextLine> = [{ text: t('contactInformation.work'), variant: 'MobileBodyBold' }]
-  let cellText: Array<TextLine> = [{ text: t('contactInformation.mobile'), variant: 'MobileBodyBold' }]
-
-  homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homePhoneNumber', t))
-  workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workPhoneNumber', t))
-  cellText = cellText.concat(getTextForPhoneData(profile, 'formattedMobilePhone', 'mobilePhoneNumber', t))
-
-  return [
-    { textLines: homeText, a11yHintText: t('contactInformation.editOrAddHomeNumber'), onPress: onHomePhone, testId: getA11yLabelText(homeText) },
-    { textLines: workText, a11yHintText: t('contactInformation.editOrAddWorkNumber'), onPress: onWorkPhone, testId: getA11yLabelText(workText) },
-    { textLines: cellText, a11yHintText: t('contactInformation.editOrAddCellNumber'), onPress: onCellPhone, testId: getA11yLabelText(cellText) },
-  ]
-}
-
-const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
-  const textLines: Array<TextLine> = [{ text: t('contactInformation.emailAddress'), variant: 'MobileBodyBold' }]
-
-  if (profile?.contactEmail?.emailAddress) {
-    textLines.push({ text: t('dynamicField', { field: profile.contactEmail.emailAddress }) })
-  } else {
-    textLines.push({ text: t('contactInformation.addYour', { field: t('contactInformation.emailAddress').toLowerCase() }) })
-  }
-
-  return [{ textLines: textLines, a11yHintText: t('contactInformation.editOrAddEmailAddress'), onPress: onEmailAddress, testId: getA11yLabelText(textLines) }]
-}
+// const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction): string => {
+//   if (profile && profile.birthDate) {
+//     // to do, change this to profile.genderIdentity in the if and pass that to the field
+//     // return t('dynamicField', { field: genderIdentity })
+//     return t('personalInformation.preferredName.genericBody')
+//   } else {
+//     return t('personalInformation.preferredName.genericBody')
+//   }
+// }
 
 type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'PersonalInformation'>
 
@@ -94,10 +54,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-
-  const { contentMarginTop, contentMarginBottom, gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { gutter, condensedMarginBetween } = theme.dimensions
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
-
   const navigateTo = useRouteNavigation()
 
   useFocusEffect(
@@ -111,53 +69,18 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
   if (!reviewEventRegistered) {
-    console.debug('REVIEW EVENT REGISTERED')
     registerReviewEvent()
     setReviewEventRegistered(true)
   }
-  const onMailingAddress = navigateTo('EditAddress', {
-    displayTitle: t('contactInformation.mailingAddress'),
-    addressType: profileAddressOptions.MAILING_ADDRESS,
-  })
-
-  const onResidentialAddress = navigateTo('EditAddress', {
-    displayTitle: t('contactInformation.residentialAddress'),
-    addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-  })
-
-  const onHomePhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.homePhoneTitle'),
-    phoneType: PhoneTypeConstants.HOME,
-    phoneData: profile ? profile.homePhoneNumber : ({} as PhoneData),
-  })
-
-  const onWorkPhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.workPhoneTitle'),
-    phoneType: PhoneTypeConstants.WORK,
-    phoneData: profile ? profile.workPhoneNumber : ({} as PhoneData),
-  })
-
-  const onCellPhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
-    phoneType: PhoneTypeConstants.MOBILE,
-    phoneData: profile ? profile.mobilePhoneNumber : ({} as PhoneData),
-  })
-
-  const onEmailAddress = navigateTo('EditEmail')
 
   const linkProps: TextViewProps = {
-    variant: 'MobileBody',
+    variant: 'HelperText',
     color: 'link',
     textDecoration: 'underline',
     textDecorationColor: 'link',
     mx: gutter,
-    mt: standardMarginBetween,
+    mt: condensedMarginBetween,
   }
-
-  const addressData: Array<addressDataField> = [
-    { addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onMailingAddress },
-    { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
-  ]
 
   if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
     return (
@@ -175,30 +98,47 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     )
   }
 
+  //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
+
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
+      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
         {t('contactInformation.editNote')}
       </TextView>
-
-      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.title')} />
-
-      <Pressable onPress={navigateTo('HowDoIUpdate')} {...testIdProps(t('personalInformation.howDoIUpdatePersonalInfo'))} accessibilityRole="link" accessible={true}>
-        <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
+      <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
+        <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
       </Pressable>
-
-      <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
-
-      <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
-
-      <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>
-        <TextView {...linkProps}>{t('contactInformation.howWillYouUseContactInfo')}</TextView>
-      </Pressable>
-
-      <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
-      <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
-        {t('contactInformation.thisIsEmailWeUseToContactNote')}
-      </TextView>
+      <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+        <LargeNavButton
+          title={t('personalInformation.dateOfBirth')}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+          subText={getBirthDate(profile, t)}
+          hideArrow={true}
+          linkText={t('personalInformation.howToFixDateOfBirth')}
+          linkTextOnPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })}
+        />
+        {/* <LargeNavButton
+          title={t('personalInformation.preferredName.title')}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+          subText={getPreferredName(profile, t)}
+          onPress={navigateTo('HowDoIUpdate')}
+        />
+        <LargeNavButton
+          title={t('personalInformation.genderIdentity.title')}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+          subText={getGenderIdentity(profile, t)}
+          onPress={navigateTo('HowDoIUpdate')}
+        /> */}
+      </Box>
     </FeatureLandingTemplate>
   )
 }

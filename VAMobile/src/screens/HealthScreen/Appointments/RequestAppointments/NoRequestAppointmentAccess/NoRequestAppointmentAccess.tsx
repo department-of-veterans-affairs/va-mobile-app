@@ -16,11 +16,10 @@ type NoRequestAppointmentAccessProps = StackScreenProps<HealthStackParamList, 'N
 const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.valocation.loading') })
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
   const navigation = useNavigation()
 
   const containerStyles = {

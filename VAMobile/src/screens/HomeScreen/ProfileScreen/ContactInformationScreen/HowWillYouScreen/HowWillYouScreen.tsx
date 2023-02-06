@@ -8,7 +8,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-type HowWillYouScreenProps = StackScreenProps<HomeStackParamList, 'HowDoIUpdate'>
+type HowWillYouScreenProps = StackScreenProps<HomeStackParamList, 'HowWillYou'>
 
 const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)

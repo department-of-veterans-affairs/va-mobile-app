@@ -328,7 +328,7 @@ useEffect(() => {
 }, [dispatch, needsDataLoad, militaryInfoAuthorization, mhNotInDowntime])
 
 const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
-    const branch = t('personalInformation.branch', { branch: service.branchOfService })
+    const branch = t('militaryInformation.branch', { branch: service.branchOfService })
 
     const textLines: Array<TextLine> = [
     {
