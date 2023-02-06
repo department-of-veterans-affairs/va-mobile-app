@@ -67,7 +67,7 @@ context('HowDoIUpdateScreen', () => {
 
   describe('when the find VA location link is clicked', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(TextView)[6].props.onPress()
+      testInstance.findAllByType(TextView)[5].props.onPress()
       expect(mockNavigationSpy).toBeCalledWith('Webview', { displayTitle: 'va.gov', url: 'https://www.va.gov/find-locations/', loadingMessage: 'Loading VA location finder...' })
       expect(mockNavigationToSpy).toBeCalled()
     })
