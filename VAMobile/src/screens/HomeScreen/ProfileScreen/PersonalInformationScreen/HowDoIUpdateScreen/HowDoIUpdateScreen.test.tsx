@@ -36,7 +36,11 @@ context('HowDoIUpdateScreen', () => {
   let mockNavigationToSpy: jest.Mock
 
   beforeEach(async () => {
-    const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
+    const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() }, {
+      params: {
+        screenType: 'DOB',
+      },
+    },)
     mockNavigationToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(mockNavigationToSpy)
 
