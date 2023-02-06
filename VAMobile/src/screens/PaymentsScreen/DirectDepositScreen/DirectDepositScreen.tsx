@@ -71,7 +71,11 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   }
 
   if (useError(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loading) {

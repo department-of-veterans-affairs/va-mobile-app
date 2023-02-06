@@ -80,7 +80,11 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   }, [dispatch, requestPage])
 
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loading) {
@@ -88,7 +92,11 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   }
 
   if (vaccines.length === 0) {
-    return <NoVaccineRecords />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+        <NoVaccineRecords />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (

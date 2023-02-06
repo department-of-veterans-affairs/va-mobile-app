@@ -267,7 +267,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={tc('editDraft')} leftButtonText={tc('cancel')} menuViewActions={MenViewActions}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft || isDiscarded) {

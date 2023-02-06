@@ -133,7 +133,11 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }, [pickerOptions])
 
   if (useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loading) {
@@ -141,7 +145,11 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }
 
   if (noPayments) {
-    return <NoPaymentsScreen />
+    return (
+      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+        <NoPaymentsScreen />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (

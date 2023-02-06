@@ -80,7 +80,11 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   })
 
   if (useError(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID} />
+    return (
+      <FullScreenSubtask onLeftButtonPress={goBack} leftButtonText={t('cancel')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (saving) {

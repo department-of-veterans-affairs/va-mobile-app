@@ -45,7 +45,11 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   }
 
   if (hasError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
+    return (
+      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loadingPreferences) {

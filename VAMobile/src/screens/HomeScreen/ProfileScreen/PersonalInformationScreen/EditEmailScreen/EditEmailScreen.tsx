@@ -71,7 +71,11 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={t('personalInformation.emailAddress')} leftButtonText={t('cancel')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (loading || emailSaved) {

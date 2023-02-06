@@ -70,7 +70,11 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   }
 
   if (useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (

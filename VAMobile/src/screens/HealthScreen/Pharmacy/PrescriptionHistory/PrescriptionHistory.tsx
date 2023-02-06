@@ -228,15 +228,27 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support multiple screen IDs
   if (prescriptionInDowntime) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (hasError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!prescriptionsAuthorized) {
-    return <PrescriptionHistoryNotAuthorized />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <PrescriptionHistoryNotAuthorized />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loadingHistory) {
@@ -244,7 +256,11 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   }
 
   if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
-    return <PrescriptionHistoryNoPrescriptions />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <PrescriptionHistoryNoPrescriptions />
+      </FeatureLandingTemplate>
+    )
   }
 
   const tabs: TabsValuesType = [

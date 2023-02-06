@@ -75,11 +75,19 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   // 1. Generic 'rx_refill' downtime message that can be seen in multiple Pharmacy screens
   // 2. Error message specific to this page
   if (prescriptionInDowntime) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (hasError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (loadingTrackingInfo) {

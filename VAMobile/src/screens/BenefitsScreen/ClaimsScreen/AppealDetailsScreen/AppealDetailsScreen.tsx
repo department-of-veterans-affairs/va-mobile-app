@@ -87,7 +87,11 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   }
 
   if (useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loadingAppeal || !isTransitionComplete) {
