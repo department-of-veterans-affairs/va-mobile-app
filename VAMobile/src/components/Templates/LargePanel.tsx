@@ -85,10 +85,6 @@ const LargePanel: FC<LargePanelProps> = ({
     title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
     rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress } : undefined,
     divider: true,
-    focusButton: leftButtonText ? 'Left' : !title && rightButtonText ? 'Right' : undefined,
-    // @Dylan TODO: Why is the right button focus dependent on no title? Should the focus be on the title if there is one and no left button?
-    // Isn't there a bug in iOS if we aren't hard setting a focus to something in modals?
-    //
   }
 
   return (

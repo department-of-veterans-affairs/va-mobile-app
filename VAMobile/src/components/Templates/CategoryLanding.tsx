@@ -55,6 +55,8 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     ml: theme.dimensions.condensedMarginBetween,
     mb: theme.dimensions.standardMarginBetween,
     mr: theme.dimensions.condensedMarginBetween,
+    accessible: false,
+    importantForAccessibility: 'no-hide-descendants',
   }
 
   /**

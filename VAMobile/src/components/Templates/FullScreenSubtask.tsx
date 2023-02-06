@@ -101,10 +101,6 @@ const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const headerProps: HeaderBannerProps = {
     leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: leftTitleButtonPress } : undefined,
     rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress, icon: rightVAIconProps } : undefined,
-    focusButton: leftButtonText ? 'Left' : !title && rightButtonText ? 'Right' : undefined,
-    // @Dylan TODO: Why is the focus for the right button dependent on no title?
-    //
-    //
   }
 
   return (

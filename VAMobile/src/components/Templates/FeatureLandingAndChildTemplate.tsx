@@ -64,6 +64,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
     ml: theme.dimensions.condensedMarginBetween,
     mb: theme.dimensions.standardMarginBetween,
     mr: theme.dimensions.condensedMarginBetween,
+    accessible: false,
+    importantForAccessibility: 'no-hide-descendants',
   }
 
   /**
