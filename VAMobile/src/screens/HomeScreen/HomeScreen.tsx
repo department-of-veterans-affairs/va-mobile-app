@@ -139,7 +139,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 
   return (
     <HomeScreenStack.Navigator
-    screenOptions={screenOptions}
+      screenOptions={screenOptions}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
