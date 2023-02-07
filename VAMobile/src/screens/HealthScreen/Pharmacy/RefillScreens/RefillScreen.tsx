@@ -1,7 +1,8 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ClosePanelButton, ErrorComponent, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
@@ -13,7 +14,7 @@ import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPresc
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useAutoScrollToElement, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import NoRefills from './NoRefills'
 import RefillRequestSummary from './RefillRequestSummary'
@@ -54,13 +55,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
 
-  const [scrollViewRef, alertRef, scrollToAlert] = useAutoScrollToElement()
-
-  useEffect(() => {
-    if (showAlert) {
-      scrollToAlert()
-    }
-  }, [showAlert, scrollToAlert])
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const onSubmitPressed = () => {
     submitRefillAlert({
@@ -126,7 +121,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
       <VAScrollView scrollViewRef={scrollViewRef}>
         {showAlert && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} viewRef={alertRef} />
+            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <Box mx={theme.dimensions.gutter}>

@@ -1,7 +1,7 @@
-import { InteractionManager } from 'react-native'
+import { InteractionManager, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
@@ -54,7 +54,6 @@ import { testIdProps } from 'utils/accessibility'
 import {
   useAppDispatch,
   useAttachments,
-  useAutoScrollToElement,
   useBeforeNavBackListener,
   useError,
   useMessageWithSignature,
@@ -100,15 +99,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
-  const [scrollViewRef, alertRef, scrollToAlert] = useAutoScrollToElement()
-
-  useEffect(() => {
-    if (formContainsError) {
-      scrollToAlert()
-    }
-  }, [formContainsError, scrollToAlert, onSendClicked, onSaveDraftClicked])
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
@@ -359,7 +352,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} viewRef={alertRef} />
+        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} scrollViewRef={scrollViewRef} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>

@@ -1,5 +1,5 @@
+import { ScrollView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -34,7 +34,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAutoScrollToElement, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressValidation from './AddressValidation'
 import HeaderTitle from 'components/HeaderTitle'
@@ -91,7 +91,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const destructiveAlert = useDestructiveAlert()
-  const [scrollViewRef, alertRef, scrollToAlert] = useAutoScrollToElement()
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const [deleting, setDeleting] = useState(false)
 
@@ -263,12 +263,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       },
     })
   })
-
-  useEffect(() => {
-    if (formContainsError) {
-      scrollToAlert()
-    }
-  }, [formContainsError, scrollToAlert, onSaveClicked])
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
@@ -531,7 +525,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" viewRef={alertRef} />
+            <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <FormWrapper

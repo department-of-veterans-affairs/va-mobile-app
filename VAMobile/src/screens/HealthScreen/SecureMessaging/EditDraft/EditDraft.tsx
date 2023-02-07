@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
@@ -33,7 +33,7 @@ import {
 } from 'store/api/types'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { InteractionManager } from 'react-native'
+import { InteractionManager, ScrollView } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import {
@@ -55,7 +55,7 @@ import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useAutoScrollToElement, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
@@ -119,17 +119,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [scrollViewRef, alertRef, scrollToAlert] = useAutoScrollToElement()
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
-
-  useEffect(() => {
-    if (formContainsError) {
-      scrollToAlert()
-    }
-  }, [formContainsError, scrollToAlert, onSendClicked, onSaveDraftClicked])
 
   useEffect(() => {
     dispatch(resetSaveDraftFailed())
@@ -424,7 +418,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
           textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
           border="error"
-          viewRef={alertRef}>
+          scrollViewRef={scrollViewRef}>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
@@ -434,7 +428,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
+        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} scrollViewRef={scrollViewRef} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
