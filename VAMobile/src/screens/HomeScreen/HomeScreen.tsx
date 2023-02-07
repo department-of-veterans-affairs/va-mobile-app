@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, CategoryLanding, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
 import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -137,7 +138,18 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
   }
 
   return (
-    <HomeScreenStack.Navigator screenOptions={screenOptions}>
+    <HomeScreenStack.Navigator
+      screenOptions={screenOptions}
+      screenListeners={{
+        transitionStart: (e) => {
+          if (e.data.closing) {
+            CloseSnackbarOnNavigation(e.target)
+          }
+        },
+        blur: (e) => {
+          CloseSnackbarOnNavigation(e.target)
+        },
+      }}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
