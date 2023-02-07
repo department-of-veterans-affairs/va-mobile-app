@@ -1,8 +1,8 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import {
   ErrorsState,
@@ -15,7 +15,7 @@ import {
   initialPersonalInformationState,
 } from 'store/slices'
 import ProfileScreen from './ProfileScreen'
-import { ErrorComponent, LoadingComponent } from 'components'
+import { ErrorComponent, LargeNavButton, LoadingComponent } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants, SigninServiceTypes, SigninServiceTypesConstants } from 'store/api/types'
 import { defaultProfile } from 'utils/tests/profile'
@@ -128,8 +128,10 @@ context('ProfileScreen', () => {
         await waitFor(() => {
           initializeTestInstance(false, false, true)
         })
-
-        expect(findByTestID(testInstance, 'personal-and-contact-information')).toBeTruthy()
+        expect(testInstance.findAllByType(LargeNavButton)[0]).toBeTruthy()
+        expect(testInstance.findAllByType(LargeNavButton)[1]).toBeTruthy()
+        expect(testInstance.findAllByType(LargeNavButton)[2]).toBeTruthy()
+        expect(testInstance.findAllByType(LargeNavButton)[3]).toBeTruthy()
       })
     })
   })
