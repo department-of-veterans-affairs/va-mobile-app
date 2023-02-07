@@ -294,15 +294,12 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
 
 /**
  * Hook to autoscroll to an element
- * @returns ref to the scrollView and the elemnt to scroll to and the function to call the manual scroll
  *
- * notes on how to implement in the future, retired from ViewMessageScreen.tsx:
- * const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
- *
+ * @returns ref to the scrollView and the element to scroll to and the function to call the manual scroll
  */
 export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, MutableRefObject<View>, (offset?: number) => void, React.Dispatch<React.SetStateAction<boolean>>] {
   const scrollRef = useRef() as MutableRefObject<ScrollView>
-  const [messageRef, setFocus] = useAccessibilityFocus<View>()
+  const [viewRef, setFocus] = useAccessibilityFocus<View>()
   const [shouldFocus, setShouldFocus] = useState(true)
   const screenReaderEnabled = useIsScreanReaderEnabled()
 
@@ -310,12 +307,12 @@ export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, Mutable
     (offset?: number) => {
       const timeOut = setTimeout(() => {
         requestAnimationFrame(() => {
-          if (messageRef.current && scrollRef.current) {
+          if (viewRef.current && scrollRef.current) {
             const currentObject = scrollRef.current
             const scrollPoint = findNodeHandle(currentObject)
             if (scrollPoint) {
               const offsetValue = offset || 0
-              messageRef.current.measureLayout(
+              viewRef.current.measureLayout(
                 scrollPoint,
                 (_, y) => {
                   currentObject.scrollTo({ y: y + offsetValue, animated: !screenReaderEnabled })
@@ -333,10 +330,10 @@ export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, Mutable
       }, 400)
       return () => clearTimeout(timeOut)
     },
-    [messageRef, setFocus, shouldFocus, screenReaderEnabled],
+    [viewRef, setFocus, shouldFocus, screenReaderEnabled],
   )
 
-  return [scrollRef, messageRef, scrollToElement, setShouldFocus]
+  return [scrollRef, viewRef, scrollToElement, setShouldFocus]
 }
 
 /**
