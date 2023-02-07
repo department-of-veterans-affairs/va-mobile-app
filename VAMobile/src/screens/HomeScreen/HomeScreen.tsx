@@ -1,3 +1,4 @@
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
@@ -10,7 +11,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
-import { createStackNavigator } from '@react-navigation/stack'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -129,10 +129,14 @@ const HomeScreenStack = createStackNavigator()
  */
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.HOME)
-  const headerStyles = { headerShown: false }
+  const screenOptions = {
+    headerShown: false,
+    // Use horizontal slide transition on Android instead of default crossfade
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
 
   return (
-    <HomeScreenStack.Navigator screenOptions={headerStyles}>
+    <HomeScreenStack.Navigator screenOptions={screenOptions}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
