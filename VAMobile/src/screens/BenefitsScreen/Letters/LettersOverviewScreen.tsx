@@ -7,11 +7,10 @@ import { Box, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, Te
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
-import { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AddressSummary from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
