@@ -300,37 +300,41 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
  * const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
  *
  */
-export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, MutableRefObject<View>, () => void, React.Dispatch<React.SetStateAction<boolean>>] {
+export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, MutableRefObject<View>, (offset?: number) => void, React.Dispatch<React.SetStateAction<boolean>>] {
   const scrollRef = useRef() as MutableRefObject<ScrollView>
   const [messageRef, setFocus] = useAccessibilityFocus<View>()
   const [shouldFocus, setShouldFocus] = useState(true)
   const screenReaderEnabled = useIsScreanReaderEnabled()
 
-  const scrollToElement = useCallback(() => {
-    const timeOut = setTimeout(() => {
-      requestAnimationFrame(() => {
-        if (messageRef.current && scrollRef.current) {
-          const currentObject = scrollRef.current
-          const scrollPoint = findNodeHandle(currentObject)
-          if (scrollPoint) {
-            messageRef.current.measureLayout(
-              scrollPoint,
-              (_, y) => {
-                currentObject.scrollTo({ y: y, animated: !screenReaderEnabled })
-              },
-              () => {
-                currentObject.scrollTo({ y: 0 })
-              },
-            )
+  const scrollToElement = useCallback(
+    (offset?: number) => {
+      const timeOut = setTimeout(() => {
+        requestAnimationFrame(() => {
+          if (messageRef.current && scrollRef.current) {
+            const currentObject = scrollRef.current
+            const scrollPoint = findNodeHandle(currentObject)
+            if (scrollPoint) {
+              const offsetValue = offset || 0
+              messageRef.current.measureLayout(
+                scrollPoint,
+                (_, y) => {
+                  currentObject.scrollTo({ y: y + offsetValue, animated: !screenReaderEnabled })
+                },
+                () => {
+                  currentObject.scrollTo({ y: 0 })
+                },
+              )
+            }
           }
+        })
+        if (shouldFocus) {
+          setFocus()
         }
-      })
-      if (shouldFocus) {
-        setFocus()
-      }
-    }, 400)
-    return () => clearTimeout(timeOut)
-  }, [messageRef, setFocus, shouldFocus, screenReaderEnabled])
+      }, 400)
+      return () => clearTimeout(timeOut)
+    },
+    [messageRef, setFocus, shouldFocus, screenReaderEnabled],
+  )
 
   return [scrollRef, messageRef, scrollToElement, setShouldFocus]
 }
