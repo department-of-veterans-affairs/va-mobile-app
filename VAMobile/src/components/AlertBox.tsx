@@ -29,10 +29,12 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, t
   const theme = useTheme()
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
 
+  const boxPadding = 20
+
   useEffect(() => {
     if (border === 'error' && scrollViewRef?.current && (title || text)) {
       scrollRef.current = scrollViewRef.current
-      scrollToAlert()
+      scrollToAlert(-boxPadding)
     }
   })
 
@@ -40,8 +42,8 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, t
     backgroundColor: 'alertBox',
     borderLeftWidth: theme.dimensions.alertBorderWidth,
     borderLeftColor: border,
-    py: 20,
-    px: 20,
+    py: boxPadding,
+    px: boxPadding,
   }
 
   const titleAccessibilityRole = titleRole ? titleRole : text || children ? 'header' : undefined
