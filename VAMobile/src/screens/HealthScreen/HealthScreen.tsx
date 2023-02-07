@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -144,7 +145,18 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
   const headerStyles = useHeaderStyles()
 
   return (
-    <HealthScreenStack.Navigator screenOptions={headerStyles}>
+    <HealthScreenStack.Navigator
+      screenOptions={headerStyles}
+      screenListeners={{
+        transitionStart: (e) => {
+          if (e.data.closing) {
+            CloseSnackbarOnNavigation(e.target)
+          }
+        },
+        blur: (e) => {
+          CloseSnackbarOnNavigation(e.target)
+        },
+      }}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
