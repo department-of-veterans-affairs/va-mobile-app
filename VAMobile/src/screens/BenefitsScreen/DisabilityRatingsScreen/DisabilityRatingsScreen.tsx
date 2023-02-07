@@ -204,7 +204,7 @@ const DisabilityRatingsScreen: FC = () => {
   }
 
   return (
-    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
+    <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
