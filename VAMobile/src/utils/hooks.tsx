@@ -300,8 +300,8 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
  * const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
  *
  */
-export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void, React.Dispatch<React.SetStateAction<boolean>>] {
-  const scrollRef = useRef<ScrollView>(null)
+export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, MutableRefObject<View>, () => void, React.Dispatch<React.SetStateAction<boolean>>] {
+  const scrollRef = useRef() as MutableRefObject<ScrollView>
   const [messageRef, setFocus] = useAccessibilityFocus<View>()
   const [shouldFocus, setShouldFocus] = useState(true)
   const screenReaderEnabled = useIsScreanReaderEnabled()
