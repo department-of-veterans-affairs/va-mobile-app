@@ -2,7 +2,7 @@ import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } fro
 import { SnackbarMessages } from 'components/SnackBar'
 import { TFunction } from 'i18next'
 import { getfolderName } from 'utils/secureMessaging'
-import { profileAddressOptions, profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
+import { profileAddressOptions, profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 export const GenerateFolderMessage = (t: TFunction, folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean): string => {
   const folderName = getfolderName(folderID.toString(), folders)
