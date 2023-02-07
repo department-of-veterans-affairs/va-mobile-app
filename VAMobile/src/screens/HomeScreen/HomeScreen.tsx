@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { Box, CategoryLanding, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
 import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -55,7 +56,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   const onContactVA = navigateTo('ContactVA')
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.valocation.loading') })
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
@@ -137,7 +138,18 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
   }
 
   return (
-    <HomeScreenStack.Navigator screenOptions={screenOptions}>
+    <HomeScreenStack.Navigator
+      screenOptions={screenOptions}
+      screenListeners={{
+        transitionStart: (e) => {
+          if (e.data.closing) {
+            CloseSnackbarOnNavigation(e.target)
+          }
+        },
+        blur: (e) => {
+          CloseSnackbarOnNavigation(e.target)
+        },
+      }}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />

@@ -22,7 +22,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Debug: undefined
   EditEmail: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
-  HowDoIUpdate: undefined
+  HowDoIUpdate: { screenType: string }
   HowWillYou: undefined
   IncorrectServiceInfo: undefined
   ManageYourAccount: undefined

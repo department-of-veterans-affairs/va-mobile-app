@@ -8,6 +8,7 @@ import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen
 import { NAMESPACE } from 'constants/namespaces'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
@@ -73,7 +74,18 @@ const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
   const headerStyles = useHeaderStyles()
 
   return (
-    <BenefitsScreenStack.Navigator screenOptions={headerStyles}>
+    <BenefitsScreenStack.Navigator
+      screenOptions={headerStyles}
+      screenListeners={{
+        transitionStart: (e) => {
+          if (e.data.closing) {
+            CloseSnackbarOnNavigation(e.target)
+          }
+        },
+        blur: (e) => {
+          CloseSnackbarOnNavigation(e.target)
+        },
+      }}>
       <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ headerShown: false }} />
