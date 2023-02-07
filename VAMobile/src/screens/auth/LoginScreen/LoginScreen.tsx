@@ -35,7 +35,7 @@ const LoginScreen: FC = () => {
   const onFacilityLocator = navigateTo('Webview', {
     url: WEBVIEW_URL_FACILITY_LOCATOR,
     displayTitle: t('common:webview.vagov'),
-    loadingMessage: t('home:webview.valocation.loading'),
+    loadingMessage: t('common:webview.valocation.loading'),
   })
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
