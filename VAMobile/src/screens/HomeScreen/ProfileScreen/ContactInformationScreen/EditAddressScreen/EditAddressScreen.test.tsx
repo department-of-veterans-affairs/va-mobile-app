@@ -13,7 +13,7 @@ import { States } from 'constants/states'
 import { validateAddress, ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import AddressValidation from './AddressValidation'
+import AddressValidation from '../AddressValidation'
 import { SnackbarMessages } from 'components/SnackBar'
 
 const snackbarMessages: SnackbarMessages = {
