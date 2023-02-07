@@ -28,8 +28,8 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('personalInformation.howWillYouUseContactInfo.a11yLabel')}>
-            {t('personalInformation.howWillYouUseContactInfo')}
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('contactInformation.howWillYouUseContactInfo')}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('howWillYou.useInfo')}

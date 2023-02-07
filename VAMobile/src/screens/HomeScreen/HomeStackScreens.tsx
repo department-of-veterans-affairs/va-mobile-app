@@ -5,10 +5,10 @@ import React from 'react'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import DebugScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
-import EditEmailScreen from './ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
-import EditPhoneNumberScreen from './ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
+import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'
+import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
 import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
-import HowWillYouScreen from './ProfileScreen/PersonalInformationScreen/HowWillYouScreen'
+import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
@@ -29,6 +29,7 @@ export type HomeStackParamList = WebviewStackParams & {
   MilitaryInformation: undefined
   NotificationsSettings: undefined
   PersonalInformation: undefined
+  ContactInformation: undefined
   RemoteConfig: undefined
   Sandbox: undefined
   Settings: undefined

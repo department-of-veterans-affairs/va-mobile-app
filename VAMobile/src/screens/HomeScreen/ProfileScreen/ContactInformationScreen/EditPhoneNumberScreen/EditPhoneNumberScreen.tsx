@@ -42,8 +42,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }, [phoneNumberSaved, navigation, dispatch])
 
   const saveSnackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.phoneNumber.saved', { type: displayTitle }),
-    errorMsg: t('personalInformation.phoneNumber.not.saved', { type: displayTitle }),
+    successMsg: t('contactInformation.phoneNumber.saved', { type: displayTitle }),
+    errorMsg: t('contactInformation.phoneNumber.not.saved', { type: displayTitle }),
   }
 
   const onSave = (): void => {
@@ -54,8 +54,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   const removeSnackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.phoneNumber.removed', { type: displayTitle }),
-    errorMsg: t('personalInformation.phoneNumber.not.removed', { type: displayTitle }),
+    successMsg: t('contactInformation.phoneNumber.removed', { type: displayTitle }),
+    errorMsg: t('contactInformation.phoneNumber.not.removed', { type: displayTitle }),
   }
 
   const onDelete = (): void => {
@@ -109,7 +109,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   if (loading || phoneNumberSaved) {
-    const loadingText = deleting ? t('personalInformation.delete.phone') : t('personalInformation.savingPhoneNumber')
+    const loadingText = deleting ? t('contactInformation.delete.phone') : t('contactInformation.savingPhoneNumber')
 
     return <LoadingComponent text={loadingText} />
   }
@@ -172,9 +172,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: buttonTitle })}
+              label={t('contactInformation.removeData', { pageName: buttonTitle })}
               buttonType={ButtonTypesConstants.buttonDestructive}
-              a11yHint={t('personalInformation.removeData.a11yHint', { pageName: buttonTitle })}
+              a11yHint={t('contactInformation.removeData.a11yHint', { pageName: buttonTitle })}
             />
           </Box>
         )}

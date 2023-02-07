@@ -45,8 +45,8 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }, [formContainsError])
 
   const saveSnackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.emailAddress.saved'),
-    errorMsg: t('personalInformation.emailAddress.not.saved'),
+    successMsg: t('contactInformation.emailAddress.saved'),
+    errorMsg: t('contactInformation.emailAddress.not.saved'),
   }
 
   const saveEmail = (): void => {
@@ -54,8 +54,8 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   const removeSnackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.emailAddress.removed'),
-    errorMsg: t('personalInformation.emailAddress.not.removed'),
+    successMsg: t('contactInformation.emailAddress.removed'),
+    errorMsg: t('contactInformation.emailAddress.not.removed'),
   }
 
   const onDelete = (): void => {
@@ -72,14 +72,14 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={t('personalInformation.emailAddress')} leftButtonText={t('cancel')}>
+      <FullScreenSubtask title={t('contactInformation.emailAddress')} leftButtonText={t('cancel')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID} />
       </FullScreenSubtask>
     )
   }
 
   if (loading || emailSaved) {
-    const loadingText = deleting ? t('personalInformation.delete.emailAddress') : t('personalInformation.savingEmailAddress')
+    const loadingText = deleting ? t('contactInformation.delete.emailAddress') : t('contactInformation.savingEmailAddress')
 
     return <LoadingComponent text={loadingText} />
   }
@@ -95,7 +95,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'email',
-        labelKey: 'personalInformation.email',
+        labelKey: 'contactInformation.email',
         onChange: setEmail,
         value: email,
         isRequiredField: true,
@@ -110,12 +110,12 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     },
   ]
 
-  const emailTitle = t('personalInformation.emailAddress').toLowerCase()
+  const emailTitle = t('contactInformation.emailAddress').toLowerCase()
 
   const onDeletePressed = (): void => {
     deleteEmailAlert({
-      title: t('personalInformation.areYouSureYouWantToDelete', { alertText: emailTitle }),
-      message: t('personalInformation.deleteDataInfo', { alertText: emailTitle }),
+      title: t('contactInformation.areYouSureYouWantToDelete', { alertText: emailTitle }),
+      message: t('contactInformation.deleteDataInfo', { alertText: emailTitle }),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
@@ -132,7 +132,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   return (
     <FullScreenSubtask
-      title={t('personalInformation.emailAddress')}
+      title={t('contactInformation.emailAddress')}
       leftButtonText={t('cancel')}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}
@@ -142,9 +142,9 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: emailTitle })}
+              label={t('contactInformation.removeData', { pageName: emailTitle })}
               buttonType={ButtonTypesConstants.buttonDestructive}
-              a11yHint={t('personalInformation.removeData.a11yHint', { pageName: emailTitle })}
+              a11yHint={t('contactInformation.removeData.a11yHint', { pageName: emailTitle })}
             />
           </Box>
         )}

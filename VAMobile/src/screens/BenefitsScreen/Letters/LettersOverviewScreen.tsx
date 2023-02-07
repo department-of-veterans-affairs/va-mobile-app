@@ -10,7 +10,7 @@ import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AddressSummary, { addressDataField, profileAddressOptions } from '../../HomeScreen/ProfileScreen/AddressSummary'
+import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
@@ -27,7 +27,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const onViewPressed = navigateTo('LettersList')
 
   const onAddressPress = navigateTo('EditAddress', {
-    displayTitle: t('personalInformation.mailingAddress'),
+    displayTitle: t('contactInformation.mailingAddress'),
     addressType: profileAddressOptions.MAILING_ADDRESS,
   })
 
