@@ -450,7 +450,7 @@ export const validateAddress =
       const validationKey = getValidationKey(suggestedAddresses)
 
       if (suggestedAddresses && confirmedSuggestedAddresses && showValidationScreen(addressData, suggestedAddresses)) {
-        const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses, confirmedSuggestedAddresses, validationKey)
+        const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses)
         dispatch(dispatchFinishValidateAddress({ suggestedAddresses, confirmedSuggestedAddresses, addressData, addressValidationScenario, validationKey }))
       } else {
         dispatch(dispatchFinishValidateAddress(undefined))

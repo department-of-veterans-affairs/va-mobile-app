@@ -36,7 +36,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
 
   const alert = (): ReactNode => {
     return (
-      <AlertBox border={'secondary'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
+      <AlertBox border={'informational'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
         <Box mt={standardMarginBetween}>
           <VAButton onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} buttonType={'buttonPrimary'} />
         </Box>

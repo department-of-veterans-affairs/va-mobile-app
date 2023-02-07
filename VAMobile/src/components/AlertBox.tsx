@@ -1,10 +1,10 @@
-import { AccessibilityRole } from 'react-native'
+import { AccessibilityRole, View } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
 import { VABorderColors } from 'styles/theme'
-import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 export type AlertBoxProps = {
   /** color of the border */
@@ -26,6 +26,11 @@ export type AlertBoxProps = {
  */
 const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
+  const [titleFocusRef, setTitleFocus] = useAccessibilityFocus<View>()
+  const [textFocusRef, setTextFocus] = useAccessibilityFocus<View>()
+
+  const focusOnAlert = border === 'error' && (title || text)
+  useFocusEffect(focusOnAlert && title ? setTitleFocus : setTextFocus)
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
@@ -40,18 +45,16 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
   return (
     <Box {...boxProps}>
       {!!title && (
-        <Box {...testIdProps(titleA11yLabel || title)} accessibilityRole={titleAccessibilityRole} accessible={true}>
+        <View ref={titleFocusRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
           <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
             {title}
           </TextView>
-        </Box>
+        </View>
       )}
       {!!text && (
-        <Box accessible={true}>
-          <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody">
-            {text}
-          </TextView>
-        </Box>
+        <View ref={textFocusRef} accessible={true} accessibilityLabel={textA11yLabel || text}>
+          <TextView variant="MobileBody">{text}</TextView>
+        </View>
       )}
       {children}
     </Box>

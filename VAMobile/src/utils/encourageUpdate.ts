@@ -7,6 +7,7 @@ import { requestStoreVersion } from 'utils/rnInAppUpdate'
 import getEnv from 'utils/env'
 
 const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
+const APP_VERSION_LOCAL_OVERRIDE_VAL = '@store_app_version_local_override'
 const { APPLE_STORE_LINK } = getEnv()
 
 /**
@@ -14,8 +15,12 @@ const { APPLE_STORE_LINK } = getEnv()
  * returns local version, version name for iOS and buildnumber for Android.
  * This is due to how the app store returns the version vs the google play store api
  */
-export const getEncourageUpdateLocalVersion = async (): Promise<string> => {
-  if (isIOS()) {
+export const getEncourageUpdateLocalVersion = async (demoMode: boolean): Promise<string> => {
+  const result = await Promise.all([AsyncStorage.getItem(APP_VERSION_LOCAL_OVERRIDE_VAL)])
+  const localOverride = result[0] ? `${result[0]}` : undefined
+  if (demoMode && localOverride) {
+    return localOverride
+  } else if (isIOS()) {
     return await getVersionName()
   } else {
     const version = await getBuildNumber()
@@ -53,6 +58,14 @@ export const getVersionSkipped = async (): Promise<string> => {
  */
 export const setVersionSkipped = async (versionSkipped: string): Promise<void> => {
   await Promise.all([AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)])
+}
+
+export const overrideLocalVersion = async (overrideVersion: string | undefined): Promise<void> => {
+  if (overrideVersion) {
+    await Promise.all([AsyncStorage.setItem(APP_VERSION_LOCAL_OVERRIDE_VAL, overrideVersion)])
+  } else {
+    await Promise.all([AsyncStorage.removeItem(APP_VERSION_LOCAL_OVERRIDE_VAL)])
+  }
 }
 
 /**

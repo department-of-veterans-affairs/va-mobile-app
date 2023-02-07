@@ -3,6 +3,59 @@ import ClickForActionLinkString from '!!raw-loader!@componentsDocs/ClickForActio
 
 import ComponentTopInfo from '../../../../src/components/ComponentInfo'
 
+
+A ClickForActionLink is a type of link that appears with an icon. It is used for opening a native calling app, texting app, or opening a url in the browser when tapped. It can appear alone, or in a group with other ClickForActionLinks.
+
+<iframe width="800" height="450" alt="Click for action link example" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2FVAMobile-DesignLibrary1.0-%25F0%259F%2593%2590%3Fnode-id%3D565%253A897%26t%3DZDrejgQLeRRckbXL-1" allowfullscreen></iframe>
+
+
+### Usage
+Use a ClickForActionLink when you want to:
+- Open an external web page in users default browser
+- Trigger a download such as a PDF?
+- Trigger a phone call
+- Open calendar
+
+Do not use a ClickForActionLink to:
+- Open a web view in the app (use a link without an icon)
+- Access some kind of instructional or helper text (use a link without an icon).
+
+
+### Example in practice
+<iframe width="800" height="450" alt="Click for action link example within an error message" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FeU2yVZysbNVanrPivuZDLV%2FVAMobile-Profile1.0-Shipped-%25F0%259F%259A%25A2%3Fnode-id%3D21%253A1214%26t%3D3Nzexf9ZfYgID3ef-1" allowfullscreen></iframe>
+
+
+### Best practices
+Needs description: When to use a link vs a ClickForActionLink
+
+
+### Content guidelines
+- Links should tell people what action to take, where to go next, or what information to expect when they select the link.
+- Use natural and descriptive language.
+- Hyperlink the most relevant word or phrase that describes the purpose and target (destination) of the link.
+- Avoid “Click here” as the CTA text.
+- Avoid generic CTA links like “Learn more,” “See more,” and “Read more” by themselves.
+- Don’t punctuate standalone CTA links. Exception: When the link text is a question.
+- If the embedded link text comes at the end of a sentence, don’t hyperlink the ending punctuation.
+- When a link opens a PDF, YouTube video, XLS or other file format, use the appropriate link variation.
+
+
+### Accessibility
+- Links must be underlined.
+- Keyboard navigation: The user must be able to navigate to links using the Tab key and activate links using the Enter key.
+- Purpose and target: Without a purpose and target, everyone– but especially screen reader users– will struggle to understand where they may be routed off to.
+
+
+### Related components
+- [Design.va.gov: Links](https://design.va.gov/components/link/)
+- [CLicktoCallPhoneNUmber](/docs/UX/ComponentsSection/Buttons%20and%20Links/ClickToCallPhoneNumber)
+- [AttachmentLink](/docs/UX/ComponentsSection/Buttons%20and%20Links/AttachmentLink)
+- [Buttons]
+
+
+## Engineering resources
+
+
 export const exampleString = `<ClickForActionLink 
 displayedText={'text displayed'}
 a11yLabel={'for the voiceover'}
