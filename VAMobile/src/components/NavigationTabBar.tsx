@@ -24,7 +24,7 @@ const StyledLabel = styled(Text)<StyledLabelProps>`
 	align-self: center;
 	margin-top: 24px;
 	font-size: 12px;
-  font-weight: normal;
+	font-weight: normal;
 	letter-spacing: -0.2px;
 `
 
