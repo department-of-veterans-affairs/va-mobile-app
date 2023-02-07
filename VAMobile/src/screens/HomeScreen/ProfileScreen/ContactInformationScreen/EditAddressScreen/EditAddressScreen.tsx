@@ -29,10 +29,10 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
-import { profileAddressOptions } from './AddressSummary'
+import { profileAddressOptions } from '../AddressSummary'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import AddressValidation from './AddressValidation'
+import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35
 const ZIP_CODE_LENGTH = 5
@@ -96,8 +96,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const snackbarMessages: SnackbarMessages = GenerateAddressMessages(t, addressType)
 
   const removalSnackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.residentialAddress.removed'),
-    errorMsg: t('personalInformation.residentialAddress.removed.error'),
+    successMsg: t('contactInformation.residentialAddress.removed'),
+    errorMsg: t('contactInformation.residentialAddress.removed.error'),
   }
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
@@ -256,7 +256,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   if (savingAddress || addressSaved) {
-    const loadingText = deleting ? t('personalInformation.delete.address') : t('personalInformation.savingAddress')
+    const loadingText = deleting ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')
 
     return <LoadingComponent text={loadingText} />
   }
@@ -483,8 +483,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const onDeletePressed = (): void => {
     destructiveAlert({
-      title: t('personalInformation.areYouSureYouWantToDelete', { alertText: lowerCaseTitle }),
-      message: t('personalInformation.deleteDataInfo', { alertText: lowerCaseTitle }),
+      title: t('contactInformation.areYouSureYouWantToDelete', { alertText: lowerCaseTitle }),
+      message: t('contactInformation.deleteDataInfo', { alertText: lowerCaseTitle }),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
@@ -506,9 +506,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
-              label={t('personalInformation.removeData', { pageName: lowerCaseTitle })}
+              label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
               buttonType={ButtonTypesConstants.buttonDestructive}
-              a11yHint={t('personalInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
+              a11yHint={t('contactInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
             />
           </Box>
         )}

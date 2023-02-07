@@ -71,7 +71,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           />
           <LargeNavButton
             title={t('contactInformation.title')}
-            onPress={navigateTo('PersonalInformation')}
+            onPress={navigateTo('ContactInformation')}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}

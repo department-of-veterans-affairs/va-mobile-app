@@ -42,11 +42,11 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
-        textLines.push({ text: t('directDeposit.dynamicField', { field: bankData.financialInstitutionName }) })
+        textLines.push({ text: t('dynamicField', { field: bankData.financialInstitutionName }) })
       }
 
       if (bankData.accountNumber) {
-        textLines.push({ text: t('directDeposit.dynamicField', { field: `${bankData.accountNumber}` }) })
+        textLines.push({ text: t('dynamicField', { field: `${bankData.accountNumber}` }) })
       }
 
       if (bankData.accountType) {
