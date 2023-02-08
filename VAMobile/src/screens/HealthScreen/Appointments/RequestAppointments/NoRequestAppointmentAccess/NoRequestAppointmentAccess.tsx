@@ -39,7 +39,7 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   }
 
   return (
-    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
+    <ChildTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={t('requestAppointments.launchModalBtnTitle')}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox title={t('noRequestAppointmentAccess.title')} border="warning" text={t('noRequestAppointmentAccess.text')}>
           <Box my={standardMarginBetween}>
