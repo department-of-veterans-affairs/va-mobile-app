@@ -19,6 +19,7 @@ import { initialPersonalInformationState } from 'store/slices/personalInformatio
 import { initialPrescriptionState } from './prescriptionSlice'
 import { initialRequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
+import { initialSettingsState } from 'store/slices/settingsSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
 import { initialVaccineState } from 'store/slices/vaccineSlice'
 
@@ -42,6 +43,7 @@ export * from './vaccineSlice'
 export * from './paymentsSlice'
 export * from './requestAppointmentSlice'
 export * from './prescriptionSlice'
+export * from './settingsSlice'
 
 export const InitialState: RootState = {
   auth: initialAuthState,
@@ -65,4 +67,5 @@ export const InitialState: RootState = {
   payments: initialPaymentsState,
   requestAppointment: initialRequestAppointmentState,
   prescriptions: initialPrescriptionState,
+  settings: initialSettingsState,
 }
