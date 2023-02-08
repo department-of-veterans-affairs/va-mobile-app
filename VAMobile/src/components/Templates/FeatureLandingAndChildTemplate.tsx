@@ -42,7 +42,7 @@ export type ChildTemplateProps = {
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
 
-export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPress, title, headerButton, children, footerContent, scrollViewProps }) => {
+export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
@@ -57,8 +57,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: { text: backLabel, onPress: backLabelOnPress, descriptiveBack: true },
-    title: { type: 'Transition', title, scrollOffset, transitionHeaderHeight },
+    leftButton: { text: backLabel, a11yLabel: backLabelA11y, onPress: backLabelOnPress, descriptiveBack: true },
+    title: { type: 'Transition', title, a11yLabel: titleA11y, scrollOffset, transitionHeaderHeight },
     rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }
 
