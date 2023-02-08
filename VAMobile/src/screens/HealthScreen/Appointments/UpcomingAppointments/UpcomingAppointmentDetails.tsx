@@ -78,10 +78,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }, [dispatch, appointmentID, pendingAppointment])
 
   useEffect(() => {
-    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
+    if (appointment && pendingAppointment && !appointmentMessagesById[appointmentID]) {
       dispatch(getAppointmentMessages(appointmentID))
     }
-  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
+  }, [dispatch, appointment, appointmentID, appointmentMessagesById, pendingAppointment])
 
   useEffect(() => {
     navigation.setOptions({
@@ -118,8 +118,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
-  const CommunityCare_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
+  const SpecialInstructions = (): ReactElement => {
+    if (comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -284,7 +284,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <AppointmentAddressAndNumber attributes={attributes} />
 
           <Atlas_AppointmentData />
-          <CommunityCare_AppointmentData />
+          <SpecialInstructions />
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />

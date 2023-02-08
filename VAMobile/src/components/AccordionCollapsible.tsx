@@ -62,7 +62,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     onPress,
     accessibilityState: { expanded },
     accessibilityHint: a11yHint || t('viewMoreDetails'),
-    accessibilityRole: 'spinbutton',
+    accessibilityRole: 'tab',
   }
 
   const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
@@ -103,6 +103,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   const boxProps: BoxProps = {
     borderBottomColor: 'primary',
     borderBottomWidth: theme.dimensions.borderWidth,
+    accessibilityRole: 'tablist',
   }
 
   return (

@@ -85,48 +85,8 @@ context('AddressValidation', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the address validation scenario type is BAD_UNIT', () => {
-    it('should display the BAD_UNIT alert texts', async () => {
-      prepInstanceWithStore(AddressValidationScenarioTypesConstants.BAD_UNIT_NUMBER_OVERRIDE)
-
-      act(() => {
-        testInstance.findByType(CollapsibleAlert).findByType(Pressable).props.onPress()
-      })
-
-      const textViews = testInstance.findAllByType(TextView)
-      const alertTitle = textViews[0]
-      const alertBody = textViews[1]
-      expect(alertTitle).toBeTruthy()
-      expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual('Update or confirm your unit number')
-      expect(alertBody.props.children).toEqual(
-        "We couldn't verify your address with the U.S. Postal Service because there may be a problem with the unit number. Edit your address to update the unit number. If your unit number is already correct, continue with the address you entered below.",
-      )
-    })
-  })
-
-  describe('when the address validation scenario type is MISSING_UNIT_OVERRIDE', () => {
-    it('should display the BAD_UNIT alert texts', async () => {
-      prepInstanceWithStore(AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE)
-
-      act(() => {
-        testInstance.findByType(CollapsibleAlert).findByType(Pressable).props.onPress()
-      })
-
-      const textViews = testInstance.findAllByType(TextView)
-      const alertTitle = textViews[0]
-      const alertBody = textViews[1]
-      expect(alertTitle).toBeTruthy()
-      expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual('Add a unit number')
-      expect(alertBody.props.children).toEqual(
-        "It looks like your address is missing a unit number. Edit your address to add a unit number. If you don't have a unit number and the address you entered below is correct, select it.",
-      )
-    })
-  })
-
   describe('when the address validation scenario type is SHOW_SUGGESTIONS_OVERRIDE', () => {
-    it('should display the BAD_UNIT alert texts', async () => {
+    it('should display the alert texts', async () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
 
       act(() => {
@@ -138,29 +98,9 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual('Confirm your address')
+      expect(alertTitle.props.children).toEqual('Verify your address')
       expect(alertBody.props.children).toEqual(
-        "We couldn't confirm your address with the U.S. Postal Service. Verify your address so we can save it to your VA profile. If the address you entered isn't correct, edit it. If the address listed below is correct, select it.",
-      )
-    })
-  })
-
-  describe('when the address validation scenario type is SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE', () => {
-    it('should display the BAD_UNIT alert texts', async () => {
-      prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE)
-
-      act(() => {
-        testInstance.findByType(CollapsibleAlert).findByType(Pressable).props.onPress()
-      })
-
-      const textViews = testInstance.findAllByType(TextView)
-      const alertTitle = textViews[0]
-      const alertBody = textViews[1]
-      expect(alertTitle).toBeTruthy()
-      expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual('Confirm your address')
-      expect(alertBody.props.children).toEqual(
-        "We couldn't confirm your address with the U.S. Postal Service. Verify your address so we can save it to your VA profile. If the address you entered isn't correct, edit it. If the address listed below is correct, select it.",
+        "We can't confirm the address you entered with the U.S. Postal Service.\n\nSelect which address you'd like us to use.",
       )
     })
   })

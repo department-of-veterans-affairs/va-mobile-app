@@ -6,6 +6,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
+import { HiddenA11yElement } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
@@ -84,9 +85,16 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   const getListItems = () => {
-    const listItems: Array<SelectionListItemObj> = refillable.map((prescription) => {
+    const total = refillablePrescriptions?.length
+    const listItems: Array<SelectionListItemObj> = refillable.map((prescription, idx) => {
+      const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total })
       return {
-        content: <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} />,
+        content: (
+          <>
+            <HiddenA11yElement accessibilityLabel={orderIdentifier}>{orderIdentifier}</HiddenA11yElement>
+            <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} />
+          </>
+        ),
       }
     })
 
