@@ -9,20 +9,38 @@ import Mock = jest.Mock
 import { context, render, RenderAPI } from 'testUtils'
 import { TextView } from 'components'
 import VAIcon, { VAIconProps } from 'components/VAIcon'
-import HeaderBanner from './HeaderBanner'
+import HeaderBanner, { HeaderLeftButtonProps, HeaderRightButtonProps, HeaderStaticTitleProps } from './HeaderBanner'
 
 context('HeaderBanner', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
-  const initializeTestInstance = (titleText?:string ,leftButtonText?:string, onLeftTitleButtonPress?:() => void, leftVAIconProps?:VAIconProps, rightButtonText?:string, onRightTitleButtonPress?:() => void, rightVAIconProps?:VAIconProps): void => {
+  const initializeTestInstance = (
+    titleText?: string,
+    leftButtonText?: string,
+    onLeftTitleButtonPress?: () => void,
+    rightButtonText?: string,
+    onRightTitleButtonPress?: () => void,
+    rightVAIconProps?: VAIconProps,
+  ): void => {
     onPressSpy = jest.fn(() => {})
 
-    component = render(
-      <HeaderBanner title={titleText} leftButtonText={leftButtonText} onLeftTitleButtonPress={onLeftTitleButtonPress} leftVAIconProps={leftVAIconProps} rightButtonText={rightButtonText} onRightTitleButtonPress={onRightTitleButtonPress} rightVAIconProps={rightVAIconProps}
-      />,
-    )
+    let leftButton: HeaderLeftButtonProps | undefined = undefined
+    if (leftButtonText && onLeftTitleButtonPress) {
+      leftButton = { text: leftButtonText, onPress: onLeftTitleButtonPress }
+    }
+    const title: HeaderStaticTitleProps | undefined = titleText ? { type: 'Static', title: titleText } : undefined
+    let rightButton: HeaderRightButtonProps | undefined = undefined
+    if (rightButtonText && onRightTitleButtonPress) {
+      if (rightVAIconProps) {
+        rightButton = { text: rightButtonText, onPress: onRightTitleButtonPress, icon: rightVAIconProps }
+      } else {
+        rightButton = { text: rightButtonText, onPress: onRightTitleButtonPress }
+      }
+    }
+
+    component = render(<HeaderBanner leftButton={leftButton} title={title} rightButton={rightButton} />)
 
     testInstance = component.container
   }
@@ -37,95 +55,59 @@ context('HeaderBanner', () => {
 
   describe('title', () => {
     it('should not be there', async () => {
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews.length).toEqual(0) 
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews.length).toEqual(0)
     })
     it('should be there when title added', async () => {
-        initializeTestInstance('test')
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews.length).toEqual(1) 
-        expect(textViews[0].props.children).toEqual('test')
+      initializeTestInstance('test')
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews.length).toEqual(1)
+      expect(textViews[0].props.children).toEqual('test')
     })
   })
   describe('left banner button', () => {
     it('should not be there', async () => {
-        const leftButton = testInstance.findAllByType(TouchableWithoutFeedback)
-        expect(leftButton.length).toEqual(0) 
-    })
-    it('should not be there when text only is added', async () => {
-        initializeTestInstance(undefined, 'cancel')
-        const leftButton = testInstance.findAllByType(TouchableWithoutFeedback)
-        expect(leftButton.length).toEqual(0) 
-    })
-    it('should not be there when on press only is added', async () => {
-        initializeTestInstance(undefined, undefined, onPressSpy)
-        const leftButton = testInstance.findAllByType(TouchableWithoutFeedback)
-        expect(leftButton.length).toEqual(0) 
+      const leftButton = testInstance.findAllByType(TouchableWithoutFeedback)
+      expect(leftButton.length).toEqual(0)
     })
     it('should be there when text and on press is added', async () => {
-        initializeTestInstance(undefined, 'cancel', onPressSpy)
-        const leftButton = testInstance.findAllByType(TouchableWithoutFeedback)
-        expect(leftButton.length).toEqual(1)
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews.length).toEqual(1) 
-        expect(textViews[0].props.children).toEqual('cancel') 
-    })
-    it('should not have an icon when only text and on press is added', async () => {
-        initializeTestInstance(undefined, 'done', onPressSpy)
-        const icon = testInstance.findAllByType(VAIcon)
-        expect(icon.length).toEqual(0) 
-    })
-    it('should have an icon w/ text button when text, onpress, and icon props are supplied', async () => {
-        const leftIconProps: VAIconProps = {
-            name: 'ProfileSelected',
-            fill: 'largeNav',
-            height: 22,
-            width: 22,
-        }
-        initializeTestInstance(undefined, 'done', onPressSpy, leftIconProps)
-        const icon = testInstance.findAllByType(VAIcon)
-        expect(icon.length).toEqual(1) 
+      initializeTestInstance(undefined, 'cancel', onPressSpy)
+      const leftButton = testInstance.findAllByType(TouchableWithoutFeedback)
+      expect(leftButton.length).toEqual(1)
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews.length).toEqual(1)
+      expect(textViews[0].props.children).toEqual('cancel')
     })
   })
 
   describe('right banner button', () => {
     it('should not be there', async () => {
-        const rightButton = testInstance.findAllByType(TouchableWithoutFeedback)
-        expect(rightButton.length).toEqual(0) 
-    })
-    it('should not be there when text only is added', async () => {
-        initializeTestInstance(undefined, undefined, undefined, undefined, 'done')
-        const rightButton = testInstance.findAllByType(TouchableWithoutFeedback)
-        expect(rightButton.length).toEqual(0) 
-    })
-    it('should not be there when onpress only is added', async () => {
-        initializeTestInstance(undefined, undefined, undefined, undefined, undefined, onPressSpy)
-        const rightButton = testInstance.findAllByType(TouchableWithoutFeedback)
-        expect(rightButton.length).toEqual(0) 
+      const rightButton = testInstance.findAllByType(TouchableWithoutFeedback)
+      expect(rightButton.length).toEqual(0)
     })
     it('should be there when text and onpress is added', async () => {
-        initializeTestInstance(undefined, undefined, undefined, undefined, 'done', onPressSpy)
-        const rightButton = testInstance.findAllByType(TouchableWithoutFeedback)
-        expect(rightButton.length).toEqual(1) 
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews.length).toEqual(1) 
-        expect(textViews[0].props.children).toEqual('done')
+      initializeTestInstance(undefined, undefined, undefined, 'done', onPressSpy)
+      const rightButton = testInstance.findAllByType(TouchableWithoutFeedback)
+      expect(rightButton.length).toEqual(1)
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews.length).toEqual(1)
+      expect(textViews[0].props.children).toEqual('done')
     })
     it('should not have an icon when only text and on press is supplied', async () => {
-        initializeTestInstance(undefined, undefined, undefined, undefined, 'done', onPressSpy)
-        const icon = testInstance.findAllByType(VAIcon)
-        expect(icon.length).toEqual(0) 
+      initializeTestInstance(undefined, undefined, undefined, 'done', onPressSpy)
+      const icon = testInstance.findAllByType(VAIcon)
+      expect(icon.length).toEqual(0)
     })
     it('should have an icon w/ text button when text, onpress, and icon props are supplied', async () => {
-        const rightIconProps: VAIconProps = {
-            name: 'ProfileSelected',
-            fill: 'largeNav',
-            height: 22,
-            width: 22,
-        }
-        initializeTestInstance(undefined, undefined, undefined, undefined, 'done', onPressSpy, rightIconProps)
-        const icon = testInstance.findAllByType(VAIcon)
-        expect(icon.length).toEqual(1) 
+      const rightIconProps: VAIconProps = {
+        name: 'ProfileSelected',
+        fill: 'largeNav',
+        height: 22,
+        width: 22,
+      }
+      initializeTestInstance(undefined, undefined, undefined, 'done', onPressSpy, rightIconProps)
+      const icon = testInstance.findAllByType(VAIcon)
+      expect(icon.length).toEqual(1)
     })
   })
 })
