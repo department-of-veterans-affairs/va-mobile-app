@@ -17,6 +17,9 @@ assignees:
 ### Image or Figma embed
 <!-- [component image or Figma embed link goes here] -->
 
+### Description
+<!-- Overview of the component attributes and functionality.-->
+
 ### Usage
 <!-- Overview of when the component should (or should not) be used. -->
 
@@ -30,7 +33,23 @@ assignees:
 <!-- Guidelines to follow for content. Example: Use a single word to describe the status of an object.-->
 
 ### Accessibility
-<!-- Are there accessibility requirements you want to point out? How should the component behave to be accessible to all? -->
+<!-- Please fill out the screen reader a11y field info, below (it's OK/expected to leave some fields blank). A document that helps give some definitions for a11y fields and a couple of usage FYIs: https://docs.google.com/document/d/1CrqMA8J3KoQkzHwc5bPSHuKfppoPTjy8OjUYWd1lw4Q/edit?usp=sharing -->
+
+Label: 
+
+Role: 
+
+State(s): 
+
+Hint: 
+
+Value: 
+
+<!-- Are there accessibility requirements or gotchas you want to point out? How should the component behave to be accessible to all? 
+
+Some questions to start you off: Is there any part of this component that could have a small touch target/do we need padding? How would this component fare on a device in landscape mode, or on a device with a very large font size? Does this component introduce any new colors, and do those colors have sufficient contrast in light and dark mode? Is there anything about how this component will fit into a larger workflow that would be helpful to call out (e.g. on a pagination component, screen reader focus should move to the top of the list after changing pages)? -->
+
+
 
 ### Related Components/Resources
 <!-- Link to live design in Figma for inspection. -->

@@ -1,10 +1,11 @@
-import { Pressable, PressableProps } from 'react-native'
+import { Pressable, PressableProps, View } from 'react-native'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { TextView } from 'components'
 import { VABorderColors } from 'styles/theme'
-import { useTheme } from 'utils/hooks'
+import { isAndroid } from 'utils/platform'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import TextArea from './TextArea'
 
 export type CollapsibleAlertProps = {
@@ -21,9 +22,17 @@ export type CollapsibleAlertProps = {
 const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   const onPress = (): void => {
     setExpanded(!expanded)
+
+    // TODO: This is a temporary workaround for a react-native bug that prevents 'expanded' state
+    // changes from being announced in TalkBack: https://github.com/facebook/react-native/issues/30841
+    // This can be removed once the fix makes it into a release and we upgrade react-native
+    if (isAndroid()) {
+      setFocus()
+    }
   }
 
   const pressableProps: PressableProps = {
@@ -47,7 +56,11 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
       </Box>
     )
 
-    return <Pressable {...pressableProps}>{data}</Pressable>
+    return (
+      <Pressable {...pressableProps} ref={focusRef} accessible={true}>
+        {data}
+      </Pressable>
+    )
   }
 
   const leftBorderProps = {

@@ -2,13 +2,16 @@ import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
+import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/encourageUpdate'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { requestStorePopup } from 'utils/rnInAppUpdate'
+import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 
 export const EncourageUpdateAlert = () => {
@@ -18,10 +21,11 @@ export const EncourageUpdateAlert = () => {
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   useEffect(() => {
     async function checkLocalVersion() {
-      const version = await getEncourageUpdateLocalVersion()
+      const version = await getEncourageUpdateLocalVersion(demoMode)
       if (componentMounted.current) {
         setVersionName(version)
       }
@@ -46,7 +50,7 @@ export const EncourageUpdateAlert = () => {
     return () => {
       componentMounted.current = false
     }
-  }, [])
+  }, [demoMode])
 
   const callRequestStorePopup = async () => {
     const result = await requestStorePopup()
@@ -70,7 +74,7 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
   }
 
-  if (featureEnabled('inAppUpdates') && skippedVersion !== storeVersion && localVersionName !== storeVersion && storeVersion && localVersionName && skippedVersion) {
+  if (featureEnabled('inAppUpdates') && storeVersion && localVersionName && skippedVersion && skippedVersion !== storeVersion && storeVersion > localVersionName) {
     logAnalyticsEvent(Events.vama_eu_shown())
     return (
       <Box mb={theme.dimensions.buttonPadding}>
