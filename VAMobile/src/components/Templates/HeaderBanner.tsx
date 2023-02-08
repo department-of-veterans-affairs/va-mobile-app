@@ -52,7 +52,7 @@ export type HeaderBannerProps = {
   rightButton?: HeaderRightButtonProps
   /** 1px banner border dividing the header from page content, default no divider */
   divider?: boolean
-  /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
+  /** shows the menu icon with the specified action types (won't be shown if rightButton is set) */
   menuViewActions?: MenuViewActionsType
 }
 
