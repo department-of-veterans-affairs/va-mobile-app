@@ -14,7 +14,7 @@ let _demoMode = false
 let _store: ReduxToolkitStore | undefined
 
 const DEMO_MODE_DELAY = 300
-const METHODS_THAT_ALLOW_PARAMS = ['GET', 'PUT']
+const METHODS_THAT_ALLOW_PARAMS = ['GET']
 
 export const setAccessToken = (token?: string): void => {
   _token = token
