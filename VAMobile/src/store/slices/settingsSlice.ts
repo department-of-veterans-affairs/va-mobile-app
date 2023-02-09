@@ -1,5 +1,7 @@
 import { AppThunk } from 'store'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { UserAnalytics } from 'constants/analytics'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export type SettingsState = {
@@ -28,6 +30,7 @@ export const loadHapticsSetting = (): AppThunk => async (dispatch) => {
 export const updateHapticsSetting =
   (value: boolean): AppThunk =>
   async (dispatch) => {
+    value ? await setAnalyticsUserProperty(UserAnalytics.vama_haptic_setting_user_on()) : await setAnalyticsUserProperty(UserAnalytics.vama_haptic_setting_user_off())
     await AsyncStorage.setItem(STORAGE_HAPTICS_KEY, JSON.stringify(value))
     dispatch(dispatchUpdateHaptics(value))
   }

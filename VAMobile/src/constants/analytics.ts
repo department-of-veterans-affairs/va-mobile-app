@@ -281,6 +281,18 @@ export const UserAnalytics = {
       value: value,
     }
   },
+  vama_haptic_setting_user_on: (): UserAnalytic => {
+    return {
+      name: 'vama_haptic_setting_user_on',
+      value: 'true',
+    }
+  },
+  vama_haptic_setting_user_off: (): UserAnalytic => {
+    return {
+      name: 'vama_haptic_setting_user_off',
+      value: 'true',
+    }
+  },
   vama_uses_letters: (): UserAnalytic => {
     return {
       name: 'vama_uses_letters',
