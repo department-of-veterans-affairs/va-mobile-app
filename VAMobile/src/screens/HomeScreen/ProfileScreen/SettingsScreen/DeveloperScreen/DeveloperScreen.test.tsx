@@ -10,7 +10,7 @@ import DebugScreen from './index'
 import { initialAuthState, initialAnalyticsState } from 'store/slices'
 import { Pressable } from 'react-native'
 
-const authTokensIdxStart = 5
+const authTokensIdxStart = 6
 context('DebugScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
