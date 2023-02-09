@@ -3,10 +3,10 @@ import ReactNativeHapticFeedback, { HapticFeedbackTypes } from 'react-native-hap
 
 import { Box, ChildTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../../../HomeStackScreens'
-import { StackScreenProps } from '@react-navigation/stack'
-import { useTheme } from 'utils/hooks'
-import { useNavigation } from '@react-navigation/native'
 import { NAMESPACE } from 'constants/namespaces'
+import { StackScreenProps } from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
+import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 type HapticsDemoScreenProps = StackScreenProps<HomeStackParamList, 'HapticsDemoScreen'>
@@ -82,7 +82,7 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
   })
 
   return (
-    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
+    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={'Haptics Demo'}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
