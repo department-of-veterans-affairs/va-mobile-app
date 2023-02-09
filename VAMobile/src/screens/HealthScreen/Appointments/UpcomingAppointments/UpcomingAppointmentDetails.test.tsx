@@ -120,11 +120,6 @@ context('UpcomingAppointmentDetails', () => {
       expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Special instructions')
       expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
-    })
   })
 
   describe('when the appointment type is at home', () => {
@@ -191,11 +186,6 @@ context('UpcomingAppointmentDetails', () => {
       expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Special instructions')
       expect(testInstance.findAllByType(TextView)[21].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[17].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
-    })
   })
 
   describe('when the appointment type is gfe', () => {
@@ -215,11 +205,6 @@ context('UpcomingAppointmentDetails', () => {
     it('should display a special instructions section to display the comment field', async () => {
       expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Special instructions')
       expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
@@ -250,11 +235,6 @@ context('UpcomingAppointmentDetails', () => {
       expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('Special instructions')
       expect(testInstance.findAllByType(TextView)[17].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
-    })
   })
 
   describe('when the appointment type is covid vaccine', () => {
@@ -274,11 +254,6 @@ context('UpcomingAppointmentDetails', () => {
     it('should display a special instructions section to display the comment field', async () => {
       expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('Special instructions')
       expect(testInstance.findAllByType(TextView)[17].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
