@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import ReactNativeHapticFeedback, { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
 import { Box, TextArea, TextView, VAScrollView } from 'components'
-import { HomeStackParamList } from '../HomeStackScreens'
+import { HomeStackParamList } from '../../../HomeStackScreens'
 import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'

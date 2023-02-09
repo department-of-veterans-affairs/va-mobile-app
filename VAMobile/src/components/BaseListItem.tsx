@@ -1,7 +1,12 @@
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement, useState } from 'react'
 
+import { RootState } from 'store'
+import { SettingsState } from 'store/slices'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
+import { featureEnabled } from 'utils/remoteConfig'
+import { triggerHaptic } from 'utils/haptics'
+import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
@@ -196,7 +201,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const _onPressOut = (): void => {
     setIsPressed(false)
   }
-
+  const { haptics } = useSelector<RootState, SettingsState>((state) => state.settings)
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
   const showDecorator = onPress && decorator !== ButtonDecoratorType.None
 
@@ -206,6 +211,9 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const onOuterPress = (): void => {
     // nooop for switch types, need to press on the switch specifically
     if (onPress) {
+      if (featureEnabled('haptics') && haptics && isSwitchRow) {
+        triggerHaptic('impactHeavy')
+      }
       onPress()
     }
   }
@@ -213,6 +221,9 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const onDecoratorPress = (): void => {
     // if we're a switch type, need to handle the press on the decorator specifically
     if (isSwitchRow && onPress) {
+      if (featureEnabled('haptics') && haptics) {
+        triggerHaptic('impactHeavy')
+      }
       onPress()
     }
   }

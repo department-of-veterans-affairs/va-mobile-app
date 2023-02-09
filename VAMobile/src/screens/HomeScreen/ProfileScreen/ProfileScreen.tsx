@@ -137,15 +137,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           borderStyle={'solid'}
           subText=""
         />
-        <LargeNavButton
-          title={'haptics demo'}
-          onPress={navigateTo('HapticsDemoScreen')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-          subText=""
-        />
       </Box>
     </ChildTemplate>
   )
