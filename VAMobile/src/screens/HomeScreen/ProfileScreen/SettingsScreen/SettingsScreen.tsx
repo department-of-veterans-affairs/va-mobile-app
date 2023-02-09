@@ -18,10 +18,10 @@ import { DemoState } from 'store/slices/demoSlice'
 import { RootState } from 'store'
 import { SettingsState, updateHapticsSetting } from 'store/slices/settingsSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { triggerHaptic } from 'utils/haptics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
-import { triggerHaptic } from 'utils/haptics'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
@@ -40,7 +40,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
     const newPrefValue = !shouldStoreWithBiometric
-    
+
     if (featureEnabled('haptics') && haptics) {
       triggerHaptic('impactHeavy')
     }
