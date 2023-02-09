@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveAlert } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
-/*To use this template to rap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
+/* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
 Use 'options={{headerShown: false}}' in the individual screen if only an individual screen is supposed to do it.
 */
