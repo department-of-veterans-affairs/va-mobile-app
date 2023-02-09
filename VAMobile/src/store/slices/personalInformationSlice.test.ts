@@ -13,6 +13,7 @@ import {
   getProfileInfo,
   updateAddress,
   updateEmail,
+  updatePreferredName,
   validateAddress,
 } from './personalInformationSlice'
 import { SnackbarMessages } from 'components/SnackBar'
