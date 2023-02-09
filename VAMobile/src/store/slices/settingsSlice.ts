@@ -30,7 +30,7 @@ export const loadHapticsSetting = (): AppThunk => async (dispatch) => {
 export const updateHapticsSetting =
   (value: boolean): AppThunk =>
   async (dispatch) => {
-    value ? await setAnalyticsUserProperty(UserAnalytics.vama_haptic_setting_user_on()) : await setAnalyticsUserProperty(UserAnalytics.vama_haptic_setting_user_off())
+    value ? await setAnalyticsUserProperty(UserAnalytics.vama_haptic_setting_on()) : await setAnalyticsUserProperty(UserAnalytics.vama_haptic_setting_off())
     await AsyncStorage.setItem(STORAGE_HAPTICS_KEY, JSON.stringify(value))
     dispatch(dispatchUpdateHaptics(value))
   }

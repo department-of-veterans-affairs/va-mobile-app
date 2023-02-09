@@ -281,15 +281,15 @@ export const UserAnalytics = {
       value: value,
     }
   },
-  vama_haptic_setting_user_on: (): UserAnalytic => {
+  vama_haptic_setting_on: (): UserAnalytic => {
     return {
-      name: 'vama_haptic_setting_user_on',
+      name: 'vama_haptic_setting_on',
       value: 'true',
     }
   },
-  vama_haptic_setting_user_off: (): UserAnalytic => {
+  vama_haptic_setting_off: (): UserAnalytic => {
     return {
-      name: 'vama_haptic_setting_user_off',
+      name: 'vama_haptic_setting_off',
       value: 'true',
     }
   },
