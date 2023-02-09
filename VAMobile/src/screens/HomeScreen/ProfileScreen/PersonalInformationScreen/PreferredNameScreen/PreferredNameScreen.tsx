@@ -43,10 +43,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   }
 
   const onSave = (): void => {
-    console.debug('save pressed')
-    console.debug(preferreName)
     dispatch(updatePreferredName(preferreName, snackbarMessages, ScreenIDTypesConstants.PREFERRED_NAME_SCREEN))
-    //dispatch
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
