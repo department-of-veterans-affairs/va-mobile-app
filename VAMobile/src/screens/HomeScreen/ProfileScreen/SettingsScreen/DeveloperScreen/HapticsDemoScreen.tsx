@@ -1,16 +1,20 @@
 import React, { FC } from 'react'
 import ReactNativeHapticFeedback, { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
-import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ChildTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../../../HomeStackScreens'
 import { StackScreenProps } from '@react-navigation/stack'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+import { useNavigation } from '@react-navigation/native'
+import { NAMESPACE } from 'constants/namespaces'
+import { useTranslation } from 'react-i18next'
 
 type HapticsDemoScreenProps = StackScreenProps<HomeStackParamList, 'HapticsDemoScreen'>
 
 const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigation = useNavigation()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   const triggerHaptic = (impact: HapticFeedbackTypes) => {
@@ -78,7 +82,7 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
   })
 
   return (
-    <VAScrollView {...testIdProps('Haptics-demo')}>
+    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -101,7 +105,7 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
           <Box mt={standardMarginBetween}>{androidButtons}</Box>
         </TextArea>
       </Box>
-    </VAScrollView>
+    </ChildTemplate>
   )
 }
 
