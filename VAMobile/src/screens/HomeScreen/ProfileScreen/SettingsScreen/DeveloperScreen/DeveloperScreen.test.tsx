@@ -68,7 +68,7 @@ context('DebugScreen', () => {
 
     it('pressing the button should toggle the debug mode', async () => {
       const debugModePressable = testInstance.findAllByType(Pressable)
-      debugModePressable[3].props.onPress()
+      debugModePressable[4].props.onPress()
       expect(findByTypeWithText(testInstance, TextView, 'Disable Firebase debug mode')).toBeTruthy()
     })
   })
