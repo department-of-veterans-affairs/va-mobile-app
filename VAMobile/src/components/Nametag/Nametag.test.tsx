@@ -20,6 +20,7 @@ context('Nametag', () => {
         personalInformation: {
           ...InitialState.personalInformation,
           profile: {
+            preferredName: 'Benny',
             firstName: 'Ben',
             middleName: 'J',
             lastName: 'Morgan',
