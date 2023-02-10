@@ -70,3 +70,4 @@ index 41b795e..c91981f 100644
    }
  
    export = ReactNativeHapticFeedback;
+}
