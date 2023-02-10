@@ -212,14 +212,15 @@ context('ViewMessageScreen', () => {
 
   it('should render the correct text content of thread, and all accordions except the first should be closed', async () => {
     await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[5].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe('First accordion collapsible should be open, so the body text of this message should display')
+      console.log(component.debug())
+      expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('First accordion collapsible should be open, so the body text of this message should display')
       // Have to use Invalid DateTime values otherwise will fail git tests if in different time zone
-      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('mock sender 2')
-      expect(testInstance.findAllByType(TextView)[9].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[10].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[11].props.children).toBe('Invalid DateTime')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toBe('mock sender 2')
+      expect(testInstance.findAllByType(TextView)[10].props.children).toBe('Invalid DateTime')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toBe('mock sender 1')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toBe('Invalid DateTime')
       
     })
   })
