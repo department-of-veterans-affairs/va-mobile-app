@@ -23,7 +23,7 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
       ignoreAndroidSystemSettings: false,
     }
 
-    ReactNativeHapticFeedback.ReactNativeHapticFeedback.trigger(impact, options)
+    ReactNativeHapticFeedback.trigger(impact, options)
   }
 
   const hapticButton = (impact: HapticFeedbackTypes, display: string) => {

@@ -6,5 +6,5 @@ export const triggerHaptic = (impact: HapticFeedbackTypes) => {
     ignoreAndroidSystemSettings: false,
   }
 
-  ReactNativeHapticFeedback.ReactNativeHapticFeedback.trigger(impact, options)
+  ReactNativeHapticFeedback.trigger(impact, options)
 }
