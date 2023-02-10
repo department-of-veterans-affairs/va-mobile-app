@@ -306,6 +306,7 @@ context('ComposeMessage', () => {
       beforeEach(async () => {
         await waitFor(() => {
           navHeaderSpy.save.props.onSave()
+          testInstance.findByType(FormWrapper).props.onSave(true)
         })
       })
 
