@@ -86,7 +86,14 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
       <Box mx={theme.dimensions.gutter}>
-        <FormWrapper fieldsList={formFieldsList} onSave={onSave} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} resetErrors={resetErrors} setResetErrors={setResetErrors}/>
+      <FormWrapper
+          fieldsList={formFieldsList}
+          onSave={onSave}
+          resetErrors={resetErrors}
+          setResetErrors={setResetErrors}
+          onSaveClicked={onSaveClicked}
+          setOnSaveClicked={setOnSaveClicked}
+        />
       </Box>
     </FullScreenSubtask>
   )
