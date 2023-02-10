@@ -44,9 +44,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   }
 
   const onSave = (): void => {
-    if (preferreName === '') {
-
-    } else {
+    if (preferreName !== '') {
       dispatch(updatePreferredName(preferreName, snackbarMessages, ScreenIDTypesConstants.PREFERRED_NAME_SCREEN))
     }
   }
