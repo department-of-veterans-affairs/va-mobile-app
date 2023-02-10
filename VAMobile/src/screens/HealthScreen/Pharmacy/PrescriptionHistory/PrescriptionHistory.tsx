@@ -618,12 +618,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   }
 
   const helpIconProps: VAIconProps = {
-    mr: 5,
-    preventScaling: true,
     name: 'QuestionMark',
-    width: 16,
-    height: 16,
-    fill: 'prescriptionHelper',
   }
 
   const headerButton = {

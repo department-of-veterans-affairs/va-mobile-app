@@ -1,13 +1,15 @@
-import { StackActions, useFocusEffect, useNavigation } from '@react-navigation/native'
-import { StatusBar, TouchableWithoutFeedback, View, ViewStyle } from 'react-native'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, BoxProps, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
+import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
-import { useAccessibilityFocus, useDestructiveAlert, useTheme } from 'utils/hooks'
-import MenuView, { MenuViewActionsType } from 'components/Menu'
-import VAIcon, { VAIconProps } from 'components/VAIcon'
+import { VAIconProps } from 'components/VAIcon'
+import { View, ViewStyle } from 'react-native'
+import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -19,14 +21,20 @@ export type FullScreenSubtaskProps = {
   leftButtonText?: string
   /** function called when left button is pressed (defaults to back navigation if omitted) */
   onLeftButtonPress?: () => void
+  /** a11y label for left button text */
+  leftButtonA11yLabel?: string
   /** text of the title bar title(no text it doesn't appear) */
   title?: string
+  /** a11y label for title text */
+  titleA11yLabel?: string
   /** text of the title bar right button(no text it doesn't appear) */
   rightButtonText?: string
   /** function called when right button is pressed (defaults to back navigation if omitted) */
   onRightButtonPress?: () => void
   /** optional boolean that determines whether to diasable the right header button */
   rightButtonDisabled?: boolean
+  /** a11y label for right button text */
+  rightButtonA11yLabel?: string
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
   /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
@@ -47,10 +55,12 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   children,
   leftButtonText,
   onLeftButtonPress,
+  leftButtonA11yLabel,
   title,
+  titleA11yLabel,
   rightButtonText,
   onRightButtonPress,
-  rightButtonDisabled,
+  rightButtonA11yLabel,
   rightVAIconProps,
   menuViewActions,
   primaryContentButtonText,
@@ -61,40 +71,13 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
+  const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
-  const [leftFocusRef, setLeftFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-  const [rightFocusRef, setRightFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-  useFocusEffect(setLeftFocus)
-  useFocusEffect(setRightFocus)
-
-  const titleBannerProps: BoxProps = {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: 'main',
-    mt: theme.dimensions.fullScreenNavigationBarOffset,
-    minHeight: theme.dimensions.touchableMinHeight,
-  }
-
-  const boxProps: BoxProps = {
-    alignItems: 'center',
-    p: theme.dimensions.buttonPadding,
-    minHeight: theme.dimensions.touchableMinHeight,
-  }
-
-  const textNoIconViewProps: TextViewProps = {
-    color: 'footerButton',
-    variant: 'MobileBody',
-  }
-
-  const textWithIconViewProps: TextViewProps = {
-    color: 'footerButton',
-    variant: rightVAIconProps ? 'textWithIconButton' : 'MobileBody',
-  }
 
   const titleTextProps: TextViewProps = {
     variant: 'BitterBoldHeading',
+    accessibilityLabel: titleA11yLabel,
   }
 
   const message = t('areYouSure')
@@ -153,40 +136,20 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     return
   }
 
+  const headerProps: HeaderBannerProps = {
+    leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: onLeftTitleButtonPress } : undefined,
+    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: onRightTitleButtonPress, icon: rightVAIconProps } : undefined,
+    menuViewActions,
+  }
   const fillStyle: ViewStyle = {
+    paddingTop: insets.top,
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
 
   return (
-    <View style={fillStyle}>
-      <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
-      <Box {...titleBannerProps}>
-        <Box ml={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
-          {leftButtonText && (
-            <TouchableWithoutFeedback ref={leftFocusRef} onPress={onLeftTitleButtonPress} accessibilityRole="button">
-              <Box {...boxProps}>
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...textNoIconViewProps}>{leftButtonText}</TextView>
-                </Box>
-              </Box>
-            </TouchableWithoutFeedback>
-          )}
-        </Box>
-        <Box mr={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
-          {rightButtonText && (
-            <TouchableWithoutFeedback ref={rightFocusRef} onPress={onRightTitleButtonPress} accessibilityRole="button" disabled={rightButtonDisabled}>
-              <Box {...boxProps}>
-                {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...textWithIconViewProps}>{rightButtonText}</TextView>
-                </Box>
-              </Box>
-            </TouchableWithoutFeedback>
-          )}
-          {!rightButtonText && menuViewActions && <MenuView actions={menuViewActions} />}
-        </Box>
-      </Box>
+    <View {...fillStyle}>
+      <HeaderBanner {...headerProps} />
       <VAScrollView>
         {title && (
           <Box my={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>

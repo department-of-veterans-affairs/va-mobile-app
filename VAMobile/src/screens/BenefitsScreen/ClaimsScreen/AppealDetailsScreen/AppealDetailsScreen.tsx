@@ -7,7 +7,6 @@ import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealType
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
-import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -35,7 +34,6 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   const { appeal, loadingAppeal, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
   useBeforeNavBackListener(navigation, () => {
     // if appeals is still loading cancel it
@@ -46,10 +44,6 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
 
   useEffect(() => {
     dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
-    const interaction = InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
-    return () => interaction.cancel()
   }, [dispatch, appealID])
 
   const getFilteredIssues = (): Array<string> => {
@@ -94,7 +88,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
     )
   }
 
-  if (loadingAppeal || !isTransitionComplete) {
+  if (loadingAppeal) {
     return <LoadingComponent text={t('appealDetails.loading')} />
   }
 
