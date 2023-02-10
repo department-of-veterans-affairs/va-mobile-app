@@ -212,7 +212,6 @@ context('ViewMessageScreen', () => {
 
   it('should render the correct text content of thread, and all accordions except the first should be closed', async () => {
     await waitFor(() => {
-      console.log(component.debug())
       expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
       expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
       expect(testInstance.findAllByType(TextView)[8].props.children).toBe('First accordion collapsible should be open, so the body text of this message should display')
