@@ -6,7 +6,9 @@ import { Box, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollV
 import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIconProps } from 'components/VAIcon'
+import { View, ViewStyle } from 'react-native'
 import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
@@ -69,6 +71,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
+  const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
 
@@ -138,9 +141,14 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: onRightTitleButtonPress, icon: rightVAIconProps } : undefined,
     menuViewActions,
   }
+  const fillStyle: ViewStyle = {
+    paddingTop: insets.top,
+    backgroundColor: theme.colors.background.main,
+    flex: 1,
+  }
 
   return (
-    <>
+    <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
       <VAScrollView>
         {title && (
@@ -170,7 +178,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           </Box>
         </Box>
       )}
-    </>
+    </View>
   )
 }
 
