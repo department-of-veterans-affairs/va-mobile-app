@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native-haptic-feedback/index.d.ts b/node_modules/react-native-haptic-feedback/index.d.ts
-index 41b795e..cfa58a1 100644
+index 41b795e..4fe68ed 100644
 --- a/node_modules/react-native-haptic-feedback/index.d.ts
 +++ b/node_modules/react-native-haptic-feedback/index.d.ts
-@@ -1,36 +1,40 @@
+@@ -1,35 +1,40 @@
  declare module "react-native-haptic-feedback" {
 -  export type HapticFeedbackTypes =
 -    | "selection"
@@ -70,5 +70,3 @@ index 41b795e..cfa58a1 100644
    }
  
    export = ReactNativeHapticFeedback;
-\ No newline at end of file
--}
