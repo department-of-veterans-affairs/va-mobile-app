@@ -23,6 +23,7 @@ export type UserDataProfile = {
   contactEmail: EmailData
   signinEmail: string
   birthDate: string
+  genderIdentity: string
   addresses: string
   residentialAddress?: AddressData
   mailingAddress?: AddressData
