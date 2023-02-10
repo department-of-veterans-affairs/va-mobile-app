@@ -51,9 +51,9 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
 
   const onSetName = (name: string): void => {
     setName(name.replace(/\d/g, ''))
-    if (name === ''){
+    if (name === '') {
       setResetErrors(true)
-    }else{
+    } else {
       setResetErrors(false)
     }
   }
