@@ -852,6 +852,7 @@
   "personalInformation.howToFixDateOfBirth": "How to fix an error in your date of birth",
   "personalInformation.informationNotAvailable": "This information is not available right now",
   "personalInformation.loading": "Loading your personal information...",
+  "personalInformation.preferredName.fieldEmpty": "Provide a preferred name",
   "personalInformation.preferredName.genericBody": "Sharing your preferred name is optional.",
   "personalInformation.preferredName.title": "Preferred name",
   "personalInformation.preferredName.nameTag": "{{preferredName}} {{middleName}} {{lastName}}",

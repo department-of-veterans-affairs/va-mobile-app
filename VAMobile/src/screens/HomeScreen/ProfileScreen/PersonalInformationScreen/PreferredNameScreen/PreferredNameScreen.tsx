@@ -29,6 +29,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
 
   const [preferreName, setName] = useState(getInitialState())
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [resetErrors, setResetErrors] = useState(false)
 
   useEffect(() => {
     if (preferredNameSaved) {
@@ -43,7 +44,20 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   }
 
   const onSave = (): void => {
-    dispatch(updatePreferredName(preferreName, snackbarMessages, ScreenIDTypesConstants.PREFERRED_NAME_SCREEN))
+    if (preferreName === '') {
+
+    } else {
+      dispatch(updatePreferredName(preferreName, snackbarMessages, ScreenIDTypesConstants.PREFERRED_NAME_SCREEN))
+    }
+  }
+
+  const onSetName = (name: string): void => {
+    setName(name.replace(/\d/g, ''))
+    if (name === ''){
+      setResetErrors(true)
+    }else{
+      setResetErrors(false)
+    }
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -53,11 +67,13 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         inputType: 'none',
         labelKey: 'personalInformation.preferredNameScreen.body',
         value: preferreName,
-        onChange: setName,
+        onChange: onSetName,
         maxLength: MAX_NAME_LENGTH,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
         a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
+        isRequiredField: true,
       },
+      fieldErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
     },
   ]
 
@@ -72,7 +88,8 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
       <Box mx={theme.dimensions.gutter}>
-        <FormWrapper fieldsList={formFieldsList} onSave={onSave} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+        <FormWrapper fieldsList={formFieldsList} onSave={onSave} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} resetErrors={resetErrors}
+            setResetErrors={setResetErrors}/>
       </Box>
     </FullScreenSubtask>
   )
