@@ -228,15 +228,15 @@ context('ViewMessageScreen', () => {
   describe('when first message and last message is clicked', () => {
     it('should close first accordion and expand last accordion', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[2].props.onPress()
-        testInstance.findAllByType(Pressable)[4].props.onPress()
-        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('mock sender 2')
+        testInstance.findAllByType(Pressable)[1].props.onPress()
+        testInstance.findAllByType(Pressable)[3].props.onPress()
+        expect(testInstance.findAllByType(TextView)[8].props.children).toBe('mock sender 2')
         // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
-        expect(testInstance.findAllByType(TextView)[9].props.children).toBe('mock sender 1')
-        expect(testInstance.findAllByType(TextView)[10].props.children).toBe('Invalid DateTime')
-        expect(testInstance.findAllByType(TextView)[11].props.children).toBe('message 1 body text')
+        expect(testInstance.findAllByType(TextView)[10].props.children).toBe('mock sender 1')
+        expect(testInstance.findAllByType(TextView)[11].props.children).toBe('Invalid DateTime')
+        expect(testInstance.findAllByType(TextView)[12].props.children).toBe('message 1 body text')
         // Reply button displays properly if latest message in thread is not over 45 days old
-        expect(testInstance.findAllByType(TextView)[3].props.children).toBe('Reply')
+        expect(testInstance.findAllByType(TextView)[4].props.children).toBe('Reply')
       })
     })
   })
