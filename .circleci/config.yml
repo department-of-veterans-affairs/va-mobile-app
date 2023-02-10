@@ -18,8 +18,8 @@ commands:
         type: string
         default: staging
     steps:
-      - restore_cache:
-          key: yarn-v1-{{ checksum "VAMobile/yarn.lock" }}-{{ arch }}
+      # - restore_cache:
+      #     key: yarn-v1-{{ checksum "VAMobile/yarn.lock" }}-{{ arch }}
       - run:
           command: |
             echo INSTALLING YARN
@@ -29,10 +29,10 @@ commands:
             yarn install --frozen-lockfile --non-interactive
             echo CREATING ENV FILE FOR env:<<parameters.environment>>
             yarn env:<<parameters.environment>>
-      - save_cache:
-          key: yarn-v1-{{ checksum "VAMobile/yarn.lock" }}-{{ arch }}
-          paths:
-            - VAMobile/node_modules
+      # - save_cache:
+      #     key: yarn-v1-{{ checksum "VAMobile/yarn.lock" }}-{{ arch }}
+      #     paths:
+      #       - VAMobile/node_modules
       - run:
           command: |
             echo INSTALLING BUNDLER
