@@ -3,7 +3,7 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 import Mock = jest.Mock
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
@@ -50,13 +50,13 @@ context('LargePanel', () => {
 
   describe('left banner button', () => {
     it('should not be there', async () => {
-        const pressable = testInstance.findAllByType(Pressable)
-        expect(pressable.length).toEqual(0) 
+        const button = testInstance.findAllByType(TouchableWithoutFeedback)
+        expect(button.length).toEqual(0) 
     })
     it('should be there when text is added', async () => {
         initializeTestInstance(undefined, 'cancel')
-        const pressable = testInstance.findAllByType(Pressable)
-        expect(pressable.length).toEqual(1)
+        const button = testInstance.findAllByType(TouchableWithoutFeedback)
+        expect(button.length).toEqual(1)
         const textViews = testInstance.findAllByType(TextView)
         expect(textViews.length).toEqual(1) 
         expect(textViews[0].props.children).toEqual('cancel') 
@@ -65,13 +65,13 @@ context('LargePanel', () => {
 
   describe('right banner button', () => {
     it('should not be there', async () => {
-        const pressable = testInstance.findAllByType(Pressable)
-        expect(pressable.length).toEqual(0) 
+        const button = testInstance.findAllByType(TouchableWithoutFeedback)
+        expect(button.length).toEqual(0) 
     })
     it('should be there when text is added', async () => {
         initializeTestInstance(undefined, undefined, 'done')
-        const pressable = testInstance.findAllByType(Pressable)
-        expect(pressable.length).toEqual(1) 
+        const button = testInstance.findAllByType(TouchableWithoutFeedback)
+        expect(button.length).toEqual(1) 
         const textViews = testInstance.findAllByType(TextView)
         expect(textViews.length).toEqual(1) 
         expect(textViews[0].props.children).toEqual('done')
