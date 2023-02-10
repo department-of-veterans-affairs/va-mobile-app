@@ -854,6 +854,7 @@
   "personalInformation.loading": "Loading your personal information...",
   "personalInformation.preferredName.genericBody": "Sharing your preferred name is optional.",
   "personalInformation.preferredName.title": "Preferred name",
+  "personalInformation.preferredName.nameTag": "{{preferredName}} {{middleName}} {{lastName}}",
   "personalInformation.preferredNameScreen.body": "Share the name you'd like us to use when you come in to VA.",
   "personalInformation.preferredNameScreen.body.a11yLabel": "Share the name you'd like us to use when you come in to V-A.",
   "personalInformation.preferredName.editHelperText": "25 characters maximum",

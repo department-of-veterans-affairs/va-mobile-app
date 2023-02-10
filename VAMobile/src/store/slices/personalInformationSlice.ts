@@ -506,9 +506,10 @@ export const updatePreferredName =
       dispatch(dispatchFinishSaveUpdatePreferredName())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
+      console.debug('error updating name')
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishUpdatePreferredName())
+        dispatch(dispatchFinishSaveUpdatePreferredName(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
       }
     }
