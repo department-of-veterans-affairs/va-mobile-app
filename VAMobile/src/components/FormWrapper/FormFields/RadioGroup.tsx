@@ -7,6 +7,7 @@ import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SelectorType
 import { NAMESPACE } from 'constants/namespaces'
 import { getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
+import { renderInputError } from './formFieldUtils'
 import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
@@ -38,6 +39,8 @@ export type RadioGroupProps<T> = {
   onChange: (val: T) => void
   /** optional boolean that disables the radio group when set to true */
   disabled?: boolean
+  /** optional error to display */
+  error?: string
   /** optional boolean to indicate to use the radio buttons in a list */
   isRadioList?: boolean
   /** optional text to show as the radio list title */
@@ -45,7 +48,7 @@ export type RadioGroupProps<T> = {
 }
 
 /**A common component to display radio button selectors for a list of selectable items*/
-const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
+const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasSingleOption = options.length === 1
@@ -155,7 +158,16 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, isRadioLis
   }
 
   const getRadios = (): ReactElement => {
-    return <Box>{isRadioList ? getRadioGroupList() : getStandardRadioGroup()}</Box>
+    return (
+      <Box>
+        {!!error && (
+          <Box mb={theme.dimensions.condensedMarginBetween} mt={0}>
+            {renderInputError(error)}
+          </Box>
+        )}
+        {isRadioList ? getRadioGroupList() : getStandardRadioGroup()}
+      </Box>
+    )
   }
 
   return getRadios()
