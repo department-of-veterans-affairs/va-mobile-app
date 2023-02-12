@@ -13,6 +13,7 @@ import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/Inco
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import WhatToKnowScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen/WhatToKnowScreen'
 
 export type HomeStackParamList = WebviewStackParams & {
   Home: undefined
@@ -33,6 +34,7 @@ export type HomeStackParamList = WebviewStackParams & {
   RemoteConfig: undefined
   Sandbox: undefined
   Settings: undefined
+  WhatToKnow: undefined
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
@@ -76,6 +78,12 @@ export const getHomeScreens = (t: TFunction) => {
       key={'IncorrectServiceInfo'}
       name="IncorrectServiceInfo"
       component={IncorrectServiceInfo}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
+    <HomeStack.Screen
+      key={'WhatToKnow'}
+      name="WhatToKnow"
+      component={WhatToKnowScreen}
       options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
   ]
