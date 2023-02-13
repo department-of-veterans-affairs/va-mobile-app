@@ -7,6 +7,7 @@ import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import DebugScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
+import GenderIdentityScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen'
 import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
@@ -23,6 +24,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Debug: undefined
   EditEmail: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
+  GenderIdentity: undefined
   HowDoIUpdate: { screenType: string }
   HowWillYou: undefined
   IncorrectServiceInfo: undefined
@@ -60,6 +62,12 @@ export const getHomeScreens = (t: TFunction) => {
       key={'EditEmail'}
       name="EditEmail"
       component={EditEmailScreen}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
+    <HomeStack.Screen
+      key={'GenderIdentity'}
+      name="GenderIdentity"
+      component={GenderIdentityScreen}
       options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
     <HomeStack.Screen
