@@ -131,7 +131,7 @@ export type GenderIdentityKey = 'M' | 'B' | 'TM' | 'TF' | 'F' | 'N' | 'O'
 export const GenderIdentityOptions: {
   [key in GenderIdentityKey]: string
 } = {
-  M: 'Male',
+  M: 'Man',
   B: 'Non-binary',
   TM: 'Transgender man',
   TF: 'Transgender woman',
