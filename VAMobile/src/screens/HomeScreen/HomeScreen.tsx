@@ -40,7 +40,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const name = profile?.firstName || ''
+  const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
 
   useEffect(() => {
     // Fetch the profile information
