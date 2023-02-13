@@ -32,7 +32,7 @@ const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): s
   if (profile && profile.preferredName) {
     return t('dynamicField', { field: profile.preferredName })
   } else {
-    return t('personalInformation.preferredName.genericBody')
+    return t('personalInformation.genericBody', { informationType: t('personalInformation.preferredName.title').toLowerCase() })
   }
 }
 
@@ -136,7 +136,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
               borderColorActive={'primaryDarkest'}
               borderStyle={'solid'}
               subText={getGenderIdentity(profile, t)}
-              onPress={navigateTo('HowDoIUpdate')}
+              onPress={navigateTo('GenderIdentity')}
             />
           </>
         )}

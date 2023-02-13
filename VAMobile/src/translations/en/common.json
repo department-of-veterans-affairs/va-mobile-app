@@ -864,7 +864,6 @@
   "personalInformation.informationNotAvailable": "This information is not available right now",
   "personalInformation.loading": "Loading your personal information...",
   "personalInformation.preferredName.fieldEmpty": "Provide a preferred name",
-  "personalInformation.preferredName.genericBody": "Sharing your preferred name is optional.",
   "personalInformation.preferredName.title": "Preferred name",
   "personalInformation.preferredName.nameTag": "{{preferredName}} {{middleName}} {{lastName}}",
   "personalInformation.preferredNameScreen.body": "Share the name you'd like us to use when you come in to VA.",
