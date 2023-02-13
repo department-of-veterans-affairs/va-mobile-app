@@ -525,8 +525,6 @@ export const finishUpdatePreferredName = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishUpdatePreferredName())
 }
 
-
-
 /**
  * Makes an API call to update a user's gender identity
  */
