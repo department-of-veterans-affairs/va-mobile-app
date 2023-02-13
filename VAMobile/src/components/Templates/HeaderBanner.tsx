@@ -1,136 +1,248 @@
-import { TouchableWithoutFeedback } from 'react-native'
+import { Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useReducer, useState } from 'react'
 
-import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import MenuView, { MenuViewActionsType } from 'components/Menu'
 
-export type HeaderBannerProps = {
-  /** text of the title bar left button(no text or on press it doesn't appear) */
-  leftButtonText?: string
-  /** a11y label for left button text */
-  leftButtonA11yLabel?: string
-  /** text of the title bar title(no text it doesn't appear) */
-  title?: string
-  /** a11y label for title text */
-  titleA11yLabel?: string
-  /** text of the title bar right button(no text or on press it doesn't appear) */
-  rightButtonText?: string
-  /** a11y label for right button text */
-  rightButtonA11yLabel?: string
-  /** function called when left button is pressed(no text or on press it doesn't appear) */
-  onLeftTitleButtonPress?: () => void
-  /** function called when right button is pressed(no text or on press it doesn't appear) */
-  onRightTitleButtonPress?: () => void
-  /** sets the banner border */
-  bannerDivider?: boolean
-  /** icon for title bar left button(must have left button text to display) */
-  leftVAIconProps?: VAIconProps
-  /** icon for title bar right button(must have right button text to display) */
-  rightVAIconProps?: VAIconProps
-  /** left icon placement, default is left, true is top, false is left */
-  leftIconOnTop?: boolean
-  /** focus on left Button */
-  focusLeftButton?: boolean
-  /** focus on right Button */
-  focusRightButton?: boolean
+export type HeaderLeftButtonProps = {
+  text: string
+  a11yLabel?: string
+  onPress: () => void
+  descriptiveBack?: boolean
 }
 
-const HeaderBanner: FC<HeaderBannerProps> = ({
-  leftButtonText,
-  title,
-  rightButtonText,
-  onLeftTitleButtonPress,
-  onRightTitleButtonPress,
-  bannerDivider,
-  leftVAIconProps,
-  rightVAIconProps,
-  leftIconOnTop,
-  leftButtonA11yLabel,
-  rightButtonA11yLabel,
-  titleA11yLabel,
-  focusLeftButton,
-  focusRightButton,
-}) => {
+/** Static header title */
+export type HeaderStaticTitleProps = {
+  type: 'Static'
+  title: string
+  a11yLabel?: string
+}
+
+/** Transitioning based on scroll header title */
+export type HeaderTransitionTitleProps = {
+  type: 'Transition'
+  title: string
+  a11yLabel?: string
+  /** Scroll offset position in pixels to control transition behavior */
+  scrollOffset: number
+  /** Height in pixels to determine "VA" opacity/transition animation behavior */
+  transitionHeaderHeight: number
+}
+
+/** Static "VA" title */
+export type HeaderVATitleProps = {
+  type: 'VA'
+}
+
+export type HeaderRightButtonProps = {
+  text: string
+  a11yLabel?: string
+  onPress: () => void
+  icon?: VAIconProps
+}
+
+export type HeaderBannerProps = {
+  /** left header button */
+  leftButton?: HeaderLeftButtonProps
+  /** header title in 3 forms: Static, Transition, VA */
+  title?: HeaderStaticTitleProps | HeaderTransitionTitleProps | HeaderVATitleProps
+  /** right header button */
+  rightButton?: HeaderRightButtonProps
+  /** 1px banner border dividing the header from page content, default no divider */
+  divider?: boolean
+  /** shows the menu icon with the specified action types (won't be shown if rightButton is set) */
+  menuViewActions?: MenuViewActionsType
+}
+
+const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
-  useFocusEffect(setFocus)
+  const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
+  // focus sets initial screen reader focus on screen entry in iOS; Android does not respect focus and has an RN crash if set to non-interacting element (e.g. Title)
+  const focus = Platform.OS === 'android' ? undefined : leftButton ? 'Left' : title ? 'Title' : 'Right'
+  useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
+
+  const transition = title?.type === 'Transition'
+
+  /**
+   * Reducer to update the "VA" header opacity based on scroll
+   */
+  const VaOpacityReducer = (initOffset: number) => {
+    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight : initOffset
+  }
+
+  /**
+   * Reducer to swap between "VA" and title based on scroll
+   */
+  const titleShowingReducer = (initTitleShowing: boolean) => {
+    return transition ? title.scrollOffset >= title.transitionHeaderHeight : initTitleShowing
+  }
+
+  const [VaOpacity, updateVaOpacity] = useReducer(VaOpacityReducer, transition ? title.scrollOffset : 0)
+  const [titleShowing, updateTitleShowing] = useReducer(titleShowingReducer, false)
+  const [titleFade] = useState(new Animated.Value(0))
+
+  /**
+   * With reducers above and useEffect below, handles carrying out transitioning header functionality
+   */
+  useEffect(() => {
+    if (transition && (title.scrollOffset <= title.transitionHeaderHeight || !titleShowing)) {
+      updateVaOpacity()
+      updateTitleShowing()
+    }
+  })
+
+  /**
+   * Handles animation effect on the title
+   */
+  useEffect(() => {
+    // Revert title to transparent (out of view)
+    titleShowing === false &&
+      Animated.timing(titleFade, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+
+    // Trigger transition header animation when titleShowing becomes true
+    titleShowing === true &&
+      Animated.timing(titleFade, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start()
+  })
 
   const titleBannerProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    minHeight: 64,
+    minHeight: theme.dimensions.headerHeight,
     backgroundColor: 'main',
-    borderBottomWidth: bannerDivider ? 1 : 0,
+    borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
   }
 
-  const boxProps: BoxProps = {
+  const commonBoxProps: BoxProps = {
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
-    minHeight: 64,
+    minHeight: theme.dimensions.headerHeight,
   }
 
-  const leftBoxProps: BoxProps = {
-    alignItems: 'center',
-    p: theme.dimensions.buttonPadding,
-    minHeight: 64,
-    flexDirection: leftIconOnTop ? 'column' : 'row',
+  let leftTextViewProps: TextViewProps = {}
+  let titleTextViewProps: TextViewProps = {}
+  let rightTextViewProps: TextViewProps = {}
+
+  if (leftButton) {
+    leftTextViewProps = {
+      color: 'footerButton',
+      variant: 'MobileBody',
+      accessibilityLabel: leftButton.a11yLabel,
+      allowFontScaling: false,
+    }
   }
 
-  const rightTextViewProps: TextViewProps = {
-    color: 'footerButton',
-    variant: rightVAIconProps ? 'textWithIconButton' : 'MobileBody',
-    accessibilityLabel: rightButtonA11yLabel,
+  const titleA11y = title?.type === 'VA' ? 'V-A' : title?.a11yLabel ? title.a11yLabel : title?.title
+  const titleViewRef = { ref: focus === 'Title' ? focusTitle : () => {} } // Sets screen reader focus to title when appropriate
+  const titleViewProps: ViewProps = {
+    accessibilityLabel: titleA11y,
+    accessibilityRole: 'header',
+    accessible: true,
+  }
+  const titleBoxProps: BoxProps = {
+    ...commonBoxProps,
+    accessibilityElementsHidden: true,
+    importantForAccessibility: 'no-hide-descendants',
+  }
+  if (title) {
+    titleTextViewProps = {
+      variant: transition ? 'MobileBody' : title.type === 'VA' ? 'VAHeader' : 'MobileBodyBold',
+      allowFontScaling: false,
+    }
   }
 
-  const leftTextViewProps: TextViewProps = {
-    color: 'footerButton',
-    variant: leftVAIconProps ? 'textWithIconButton' : 'MobileBody',
-    accessibilityLabel: leftButtonA11yLabel,
+  if (rightButton) {
+    rightTextViewProps = {
+      color: 'footerButton',
+      variant: rightButton.icon ? 'textWithIconButton' : 'MobileBody',
+      accessibilityLabel: rightButton.a11yLabel,
+      allowFontScaling: false,
+    }
   }
 
-  const titleTextProps: TextViewProps = {
-    variant: 'MobileBodyBold',
-    accessibilityLabel: titleA11yLabel,
+  const buildTitleDisplay = () => {
+    if (!title) {
+      return null
+    }
+
+    switch (title.type) {
+      case 'Static':
+      case 'VA': {
+        const titleText = title?.type === 'VA' ? 'VA' : title.title
+        return <TextView {...titleTextViewProps}>{titleText}</TextView>
+      }
+
+      case 'Transition': {
+        if (titleShowing) {
+          return (
+            <Animated.View style={{ opacity: titleFade }}>
+              <TextView {...titleTextViewProps}>{title.title}</TextView>
+            </Animated.View>
+          )
+        } else {
+          return (
+            <TextView variant="VAHeader" opacity={VaOpacity} allowFontScaling={false}>
+              VA
+            </TextView>
+          )
+        }
+      }
+    }
   }
 
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-start'}>
-          {leftButtonText && onLeftTitleButtonPress && (
-            <TouchableWithoutFeedback ref={focusLeftButton ? focusRef : () => {}} onPress={onLeftTitleButtonPress} accessibilityRole="button">
-              <Box {...leftBoxProps}>
-                {leftVAIconProps && <VAIcon name={leftVAIconProps.name} width={leftVAIconProps.width} height={leftVAIconProps.height} fill={leftVAIconProps.fill} />}
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...leftTextViewProps}>{leftButtonText}</TextView>
+        <Box flex={1}>
+          {leftButton?.descriptiveBack ? (
+            <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
+          ) : leftButton ? (
+            <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+              <TouchableWithoutFeedback ref={focus === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
+                <Box {...commonBoxProps}>
+                  <Box display="flex" flexDirection="row" alignItems="center">
+                    <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
+                  </Box>
                 </Box>
-              </Box>
-            </TouchableWithoutFeedback>
-          )}
-        </Box>
-        {title && (
-          <Box mt={theme.dimensions.buttonPadding} flex={3}>
-            <Box {...boxProps}>
-              <Box display="flex" flexDirection="row" alignItems="center">
-                <TextView {...titleTextProps}>{title}</TextView>
-              </Box>
+              </TouchableWithoutFeedback>
             </Box>
-          </Box>
-        )}
+          ) : null}
+        </Box>
+
+        <Box mt={theme.dimensions.buttonPadding} flex={2}>
+          <View {...titleViewRef}>
+            <View {...titleViewProps}>
+              <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
+            </View>
+          </View>
+        </Box>
+
         <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
-          {rightButtonText && onRightTitleButtonPress && (
-            <TouchableWithoutFeedback ref={focusRightButton ? focusRef : () => {}} onPress={onRightTitleButtonPress} accessibilityRole="button">
-              <Box {...boxProps}>
-                {rightVAIconProps && <VAIcon name={rightVAIconProps.name} width={rightVAIconProps.width} height={rightVAIconProps.height} fill={rightVAIconProps.fill} />}
+          {rightButton && (
+            <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
+              <Box {...commonBoxProps}>
+                {rightButton.icon && <VAIcon fill="link" height={22} width={22} preventScaling={true} {...rightButton.icon} />}
                 <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...rightTextViewProps}>{rightButtonText}</TextView>
+                  <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
                 </Box>
               </Box>
             </TouchableWithoutFeedback>
           )}
+          {!rightButton && menuViewActions && <MenuView actions={menuViewActions} />}
         </Box>
       </Box>
     </>
