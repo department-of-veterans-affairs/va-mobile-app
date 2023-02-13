@@ -1,0 +1,73 @@
+diff --git a/node_modules/react-native-haptic-feedback/index.d.ts b/node_modules/react-native-haptic-feedback/index.d.ts
+index 41b795e..c91981f 100644
+--- a/node_modules/react-native-haptic-feedback/index.d.ts
++++ b/node_modules/react-native-haptic-feedback/index.d.ts
+@@ -1,35 +1,40 @@
+ declare module "react-native-haptic-feedback" {
+-  export type HapticFeedbackTypes =
+-    | "selection"
+-    | "impactLight"
+-    | "impactMedium"
+-    | "impactHeavy"
+-    | "rigid"
+-    | "soft"
+-    | "notificationSuccess"
+-    | "notificationWarning"
+-    | "notificationError"
+-    | "clockTick"
+-    | "contextClick"
+-    | "keyboardPress"
+-    | "keyboardRelease"
+-    | "keyboardTap"
+-    | "longPress"
+-    | "textHandleMove"
+-    | "virtualKey"
+-    | "virtualKeyRelease"
+-    | "effectClick"
+-    | "effectDoubleClick"
+-    | "effectHeavyClick"
+-    | "effectTick";
++  namespace ReactNativeHapticFeedback {
++    export type HapticFeedbackTypes =
++      | "selection"
++      | "impactLight"
++      | "impactMedium"
++      | "impactHeavy"
++      | "rigid"
++      | "soft"
++      | "notificationSuccess"
++      | "notificationWarning"
++      | "notificationError"
++      | "clockTick"
++      | "contextClick"
++      | "keyboardPress"
++      | "keyboardRelease"
++      | "keyboardTap"
++      | "longPress"
++      | "textHandleMove"
++      | "virtualKey"
++      | "virtualKeyRelease"
++      | "effectClick"
++      | "effectDoubleClick"
++      | "effectHeavyClick"
++      | "effectTick";
+ 
+-  export interface HapticOptions {
+-    enableVibrateFallback?: boolean;
+-    ignoreAndroidSystemSettings?: boolean;
++    export interface HapticOptions {
++      enableVibrateFallback?: boolean;
++      ignoreAndroidSystemSettings?: boolean;
++    }
+   }
+ 
+   class ReactNativeHapticFeedback {
+-    static trigger(type: HapticFeedbackTypes, options?: HapticOptions): void;
++    static trigger(
++      type: ReactNativeHapticFeedback.HapticFeedbackTypes,
++      options?: ReactNativeHapticFeedback.HapticOptions
++    ): void;
+   }
+ 
+   export = ReactNativeHapticFeedback;
+}

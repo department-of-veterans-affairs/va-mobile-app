@@ -18,6 +18,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { RootState } from 'store'
 import { SettingsState, updateHapticsSetting } from 'store/slices/settingsSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { triggerHaptic } from 'utils/haptics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
@@ -39,10 +40,17 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
     const newPrefValue = !shouldStoreWithBiometric
+
+    if (featureEnabled('haptics') && haptics) {
+      triggerHaptic('impactHeavy')
+    }
     dispatch(setBiometricsPreference(newPrefValue))
   }
 
   const onToggleHaptics = () => {
+    if (featureEnabled('haptics') && !haptics) {
+      triggerHaptic('impactHeavy')
+    }
     dispatch(updateHapticsSetting(!haptics))
   }
 

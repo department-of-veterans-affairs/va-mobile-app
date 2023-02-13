@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices'
+import { NotificationsState, SettingsState, loadPushPreferences, setPushPref } from 'store/slices'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
+import { featureEnabled } from 'utils/remoteConfig'
+import { triggerHaptic } from 'utils/haptics'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -18,6 +20,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
+  const { haptics } = useSelector<RootState, SettingsState>((state) => state.settings)
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const { preferences, loadingPreferences, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>((state) => state.notifications)
   const goToSettings = () => {
@@ -74,6 +77,9 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
           on: pref.value,
         },
         onPress: () => {
+          if (featureEnabled('haptics') && haptics) {
+            triggerHaptic('impactHeavy')
+          }
           dispatch(setPushPref(pref))
         },
       }

@@ -112,6 +112,11 @@ const DebugScreen: FC = ({}) => {
         </Box>
         <Box>
           <TextArea>
+            <VAButton onPress={navigateTo('HapticsDemoScreen')} label={'haptics demo'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
+        <Box>
+          <TextArea>
             <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
