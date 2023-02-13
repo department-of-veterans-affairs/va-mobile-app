@@ -160,11 +160,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
   const getRadios = (): ReactElement => {
     return (
       <Box>
-        {!!error && (
-          <Box mb={theme.dimensions.condensedMarginBetween} mt={0}>
-            {renderInputError(error)}
-          </Box>
-        )}
+        {!!error && <Box mb={theme.dimensions.condensedMarginBetween}>{renderInputError(error)}</Box>}
         {isRadioList ? getRadioGroupList() : getStandardRadioGroup()}
       </Box>
     )
