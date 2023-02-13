@@ -1,7 +1,8 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ClosePanelButton, ErrorComponent, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
@@ -53,6 +54,8 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
       navigation.navigate('RefillRequestSummary')
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
+
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const onSubmitPressed = () => {
     submitRefillAlert({
@@ -115,10 +118,10 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   return (
     <>
-      <VAScrollView>
+      <VAScrollView scrollViewRef={scrollViewRef}>
         {showAlert && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
+            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <Box mx={theme.dimensions.gutter}>
