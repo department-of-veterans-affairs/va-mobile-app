@@ -12,6 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { UserDataProfile } from 'store/api/types'
+import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
@@ -27,15 +28,13 @@ const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): strin
   }
 }
 
-// const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): string => {
-//   if (profile && profile.birthDate) {
-//     // to do, change this to profile.preferredName in the if and pass that to the field
-//     // return t('dynamicField', { field: preferredName })
-//     return t('personalInformation.preferredName.genericBody')
-//   } else {
-//     return t('personalInformation.preferredName.genericBody')
-//   }
-// }
+const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): string => {
+  if (profile && profile.preferredName) {
+    return t('dynamicField', { field: profile.preferredName })
+  } else {
+    return t('personalInformation.preferredName.genericBody')
+  }
+}
 
 // const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction): string => {
 //   if (profile && profile.birthDate) {
@@ -120,15 +119,17 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           linkText={t('personalInformation.howToFixDateOfBirth')}
           linkTextOnPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })}
         />
-        {/* <LargeNavButton
-          title={t('personalInformation.preferredName.title')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-          subText={getPreferredName(profile, t)}
-          onPress={navigateTo('HowDoIUpdate')}
-        />
+        {featureEnabled('preferredNameGender') && (
+          <LargeNavButton
+            title={t('personalInformation.preferredName.title')}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+            subText={getPreferredName(profile, t)}
+            onPress={navigateTo('PreferredName')}
+          />
+          /*
         <LargeNavButton
           title={t('personalInformation.genderIdentity.title')}
           borderWidth={theme.dimensions.buttonBorderWidth}
@@ -137,7 +138,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           borderStyle={'solid'}
           subText={getGenderIdentity(profile, t)}
           onPress={navigateTo('HowDoIUpdate')}
-        /> */}
+        /> */
+        )}
       </Box>
     </FeatureLandingTemplate>
   )

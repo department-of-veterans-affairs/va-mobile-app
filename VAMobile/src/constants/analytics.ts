@@ -329,6 +329,12 @@ export const UserAnalytics = {
       value: 'true',
     }
   },
+  vama_uses_preferred_name: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_preferred_name',
+      value: 'true',
+    }
+  },
   vama_uses_vcl: (): UserAnalytic => {
     return {
       name: 'vama_uses_vcl',

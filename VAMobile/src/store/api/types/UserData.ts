@@ -17,6 +17,7 @@ export const SigninServiceTypesConstants: {
 
 export type UserDataProfile = {
   firstName: string
+  preferredName: string
   middleName: string
   lastName: string
   fullName: string

@@ -11,6 +11,7 @@ import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/Ha
 import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
+import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
@@ -30,6 +31,7 @@ export type HomeStackParamList = WebviewStackParams & {
   MilitaryInformation: undefined
   NotificationsSettings: undefined
   PersonalInformation: undefined
+  PreferredName: undefined
   ContactInformation: undefined
   RemoteConfig: undefined
   Sandbox: undefined
@@ -50,6 +52,7 @@ export const getHomeScreens = (t: TFunction) => {
     <HomeStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t('debug.title') }} />,
     <HomeStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: 'Remote Config' }} />,
     <HomeStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: 'Sandbox' }} />,
+    <HomeStack.Screen key={'PreferredName'} name="PreferredName" component={PreferredNameScreen} options={{ headerShown: false }} />,
     <HomeStack.Screen key={'HapticsDemoScreen'} name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />,
     <HomeStack.Screen
       key={'EditPhoneNumber'}

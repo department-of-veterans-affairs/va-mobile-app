@@ -134,6 +134,7 @@ context('EditAddressScreen', () => {
 
   beforeEach(() => {
     profileInfo = {
+      preferredName: 'Benny',
       firstName: 'Ben',
       middleName: 'J',
       lastName: 'Morgan',
