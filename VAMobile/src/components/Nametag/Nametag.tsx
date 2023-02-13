@@ -12,6 +12,7 @@ export const Nametag: FC = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
+  
   const theme = useTheme()
 
   const name = profile?.fullName || ''
@@ -43,7 +44,7 @@ export const Nametag: FC = () => {
         {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
         <Box ml={20} flex={1}>
           <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
-            {name()}
+            {name}
           </TextView>
           {accessToMilitaryInfo && (
             <TextView textTransform="capitalize" variant="MobileBodyBold" color="primaryContrast">
