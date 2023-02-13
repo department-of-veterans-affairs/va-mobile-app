@@ -548,7 +548,7 @@ export const updateGenderIdentity =
       await registerReviewEvent()
 
       dispatch(dispatchFinishUpdateGenderIdentity())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
