@@ -115,13 +115,21 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const onRequestAppointmentPress = () => {
     scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
   }
+  const requestAppointmentsFooter = featureEnabled('appointmentRequests') ? (
+    <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />
+  ) : undefined
 
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('appointments')} scrollViewProps={scrollViewProps}>
+    <FeatureLandingTemplate
+      backLabel={tc('health')}
+      backLabelOnPress={navigation.goBack}
+      title={tc('appointments')}
+      scrollViewProps={scrollViewProps}
+      footerContent={requestAppointmentsFooter}>
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
@@ -135,7 +143,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
         </Box>
       </Box>
-      {featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}
     </FeatureLandingTemplate>
   )
 }

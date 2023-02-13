@@ -8,7 +8,6 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
-import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -36,7 +35,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -63,10 +61,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
 
   useEffect(() => {
     dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
-    const interaction = InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
-    return () => interaction.cancel()
   }, [dispatch, claimID])
 
   if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
@@ -77,7 +71,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     )
   }
 
-  if (loadingClaim || !isTransitionComplete) {
+  if (loadingClaim) {
     return <LoadingComponent text={t('cliamInformation.loading')} />
   }
 
