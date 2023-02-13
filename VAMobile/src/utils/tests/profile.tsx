@@ -2,6 +2,7 @@ import { UserDataProfile } from 'store/api/types'
 
 export const defaultProfile: UserDataProfile = {
   firstName: 'Ben',
+  preferredName: 'Benny',
   middleName: 'J',
   lastName: 'Morgan',
   fullName: 'Ben J Morgan',

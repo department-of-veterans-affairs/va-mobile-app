@@ -58,6 +58,7 @@ export type PersonalInformationState = {
   showValidation: boolean
   preloadComplete: boolean
   validateAddressAbortController?: AbortController
+  preferredNameSaved: boolean
   genderIdentitySaved: boolean
 }
 
@@ -71,6 +72,7 @@ export const initialPersonalInformationState: PersonalInformationState = {
   preloadComplete: false,
   phoneNumberSaved: false,
   validateAddressAbortController: undefined,
+  preferredNameSaved: false,
   genderIdentitySaved: false,
 }
 
@@ -487,6 +489,44 @@ export const finishEditAddress = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishEditAddress())
 }
 
+export const updatePreferredName =
+  (preferredName: string, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+  async (dispatch) => {
+    const retryFunction = () => dispatch(updatePreferredName(preferredName, messages, screenID))
+
+    try {
+      dispatch(dispatchClearErrors(screenID))
+      dispatch(dispatchSetTryAgainFunction(retryFunction))
+      dispatch(dispatchStartUpdatePreferredName())
+
+      const preferredNameUpdateData = {
+        text: preferredName,
+      }
+      await api.put<api.EditResponseData>('/v0/user/preferred_name', preferredNameUpdateData as unknown as api.Params)
+
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
+
+      dispatch(dispatchFinishSaveUpdatePreferredName())
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
+    } catch (err) {
+      console.debug('error updating name')
+      if (isErrorObject(err)) {
+        logNonFatalErrorToFirebase(err, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
+        dispatch(dispatchFinishSaveUpdatePreferredName(err))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+      }
+    }
+  }
+
+/**
+ * Redux action for finishing validating address
+ */
+export const finishUpdatePreferredName = (): AppThunk => async (dispatch) => {
+  dispatch(dispatchFinishUpdatePreferredName())
+}
+
+
+
 /**
  * Makes an API call to update a user's gender identity
  */
@@ -628,6 +668,20 @@ const peronalInformationSlice = createSlice({
       state.showValidation = !!addressData
       state.validateAddressAbortController = undefined
     },
+    dispatchStartUpdatePreferredName: (state) => {
+      state.loading = true
+    },
+    dispatchFinishUpdatePreferredName: (state) => {
+      state.loading = false
+      state.preferredNameSaved = false
+    },
+    dispatchFinishSaveUpdatePreferredName: (state, action: PayloadAction<Error | undefined>) => {
+      const preferredNameSaved = !action.payload
+      state.error = action.payload
+      state.loading = false
+      state.needsDataLoad = preferredNameSaved
+      state.preferredNameSaved = preferredNameSaved
+    },
     dispatchStartUpdateGenderIdentity: (state) => {
       state.loading = true
     },
@@ -660,6 +714,9 @@ export const {
   dispatchStartSaveAddress,
   dispatchFinishValidateAddress,
   dispatchStartValidateAddress,
+  dispatchStartUpdatePreferredName,
+  dispatchFinishUpdatePreferredName,
+  dispatchFinishSaveUpdatePreferredName,
   dispatchStartUpdateGenderIdentity,
   dispatchFinishUpdateGenderIdentity,
   dispatchFinishEditGenderIdentity,

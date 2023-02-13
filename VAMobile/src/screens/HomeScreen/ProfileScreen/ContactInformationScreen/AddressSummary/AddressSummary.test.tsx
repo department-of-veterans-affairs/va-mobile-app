@@ -32,6 +32,7 @@ context('AddressSummary', () => {
 
   beforeEach(() => {
     profile = {
+      preferredName: 'Benny',
       firstName: 'Ben',
       middleName: 'J',
       lastName: 'Morgan',

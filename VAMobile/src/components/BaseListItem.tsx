@@ -196,7 +196,6 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const _onPressOut = (): void => {
     setIsPressed(false)
   }
-
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
   const showDecorator = onPress && decorator !== ButtonDecoratorType.None
 
