@@ -1,14 +1,15 @@
-import { AccessibilityRole, View } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native'
-import React, { FC } from 'react'
+import { AccessibilityRole, ScrollView, View } from 'react-native'
+import React, { FC, RefObject, useEffect } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
 import { VABorderColors } from 'styles/theme'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 
 export type AlertBoxProps = {
   /** color of the border */
   border: keyof VABorderColors
+  /** Optional ref for the parent scroll view. Used for scrolling to error alert boxes. */
+  scrollViewRef?: RefObject<ScrollView>
   /** body of the alert */
   text?: string
   /** optional bolded title text */
@@ -24,20 +25,25 @@ export type AlertBoxProps = {
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
+const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
-  const [titleFocusRef, setTitleFocus] = useAccessibilityFocus<View>()
-  const [textFocusRef, setTextFocus] = useAccessibilityFocus<View>()
+  const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
 
-  const focusOnAlert = border === 'error' && (title || text)
-  useFocusEffect(focusOnAlert && title ? setTitleFocus : setTextFocus)
+  const boxPadding = 20
+
+  useEffect(() => {
+    if (border === 'error' && scrollViewRef?.current && (title || text)) {
+      scrollRef.current = scrollViewRef.current
+      scrollToAlert(-boxPadding)
+    }
+  })
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
     borderLeftWidth: theme.dimensions.alertBorderWidth,
     borderLeftColor: border,
-    py: 20,
-    px: 20,
+    py: boxPadding,
+    px: boxPadding,
   }
 
   const titleAccessibilityRole = titleRole ? titleRole : text || children ? 'header' : undefined
@@ -45,14 +51,14 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
   return (
     <Box {...boxProps}>
       {!!title && (
-        <View ref={titleFocusRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
+        <View ref={viewRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
           <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
             {title}
           </TextView>
         </View>
       )}
       {!!text && (
-        <View ref={textFocusRef} accessible={true} accessibilityLabel={textA11yLabel || text}>
+        <View ref={!title ? viewRef : undefined} accessible={true} accessibilityLabel={textA11yLabel || text}>
           <TextView variant="MobileBody">{text}</TextView>
         </View>
       )}
