@@ -6,15 +6,15 @@ import React, { FC } from 'react'
 
 import { Box, TextViewProps } from 'components'
 import { BoxProps } from './Box'
+import { RootState } from 'store'
+import { SettingsState } from 'store/slices'
+import { featureEnabled } from 'utils/remoteConfig'
+import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 import colors from '../styles/themes/VAColors'
-import { featureEnabled } from 'utils/remoteConfig'
-import { triggerHaptic } from 'utils/haptics'
-import { useSelector } from 'react-redux'
-import { RootState } from 'store'
-import { SettingsState } from 'store/slices'
 
 export type SnackbarMessages = {
   successMsg: string
