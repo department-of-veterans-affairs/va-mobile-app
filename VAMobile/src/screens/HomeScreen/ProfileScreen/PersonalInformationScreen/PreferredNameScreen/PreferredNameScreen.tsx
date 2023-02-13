@@ -27,7 +27,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     return item ? item : ''
   }
 
-  const [preferreName, setName] = useState(getInitialState())
+  const [preferredName, setName] = useState(getInitialState())
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
 
@@ -44,8 +44,8 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   }
 
   const onSave = (): void => {
-    if (preferreName !== '') {
-      dispatch(updatePreferredName(preferreName, snackbarMessages, ScreenIDTypesConstants.PREFERRED_NAME_SCREEN))
+    if (preferredName !== '') {
+      dispatch(updatePreferredName(preferredName, snackbarMessages, ScreenIDTypesConstants.PREFERRED_NAME_SCREEN))
     }
   }
 
@@ -64,7 +64,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       fieldProps: {
         inputType: 'none',
         labelKey: 'personalInformation.preferredNameScreen.body',
-        value: preferreName,
+        value: preferredName,
         onChange: onSetName,
         maxLength: MAX_NAME_LENGTH,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
