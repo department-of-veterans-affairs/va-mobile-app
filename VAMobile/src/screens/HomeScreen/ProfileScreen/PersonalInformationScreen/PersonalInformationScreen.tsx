@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { Box, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, GenderIdentityKey, GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
@@ -37,15 +37,14 @@ const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): strin
 //   }
 // }
 
-// const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction): string => {
-//   if (profile && profile.birthDate) {
-//     // to do, change this to profile.genderIdentity in the if and pass that to the field
-//     // return t('dynamicField', { field: genderIdentity })
-//     return t('personalInformation.preferredName.genericBody')
-//   } else {
-//     return t('personalInformation.preferredName.genericBody')
-//   }
-// }
+const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction): string => {
+  const genderIdentity = GenderIdentityOptions[profile?.genderIdentity as GenderIdentityKey]
+  if (genderIdentity) {
+    return t('dynamicField', { field: genderIdentity })
+  } else {
+    return t('personalInformation.genericBody', { informationType: t('personalInformation.genderIdentity.title').toLowerCase() })
+  }
+}
 
 type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'PersonalInformation'>
 
@@ -128,7 +127,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           borderStyle={'solid'}
           subText={getPreferredName(profile, t)}
           onPress={navigateTo('HowDoIUpdate')}
-        />
+        /> */}
         <LargeNavButton
           title={t('personalInformation.genderIdentity.title')}
           borderWidth={theme.dimensions.buttonBorderWidth}
@@ -136,8 +135,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
           subText={getGenderIdentity(profile, t)}
-          onPress={navigateTo('HowDoIUpdate')}
-        /> */}
+          onPress={navigateTo('GenderIdentity')}
+        />
       </Box>
     </FeatureLandingTemplate>
   )
