@@ -18,11 +18,11 @@ export const Nametag: FC = () => {
   const theme = useTheme()
 
   const name = (): string => {
-    if (profile && profile.preferredName) {
-      return t('personalInformation.preferredName.nameTag', { preferredName: profile.preferredName, middleName: profile.middleName, lastName: profile.lastName })
-    } else {
+    // if (profile && profile.preferredName) {
+    //   return t('personalInformation.preferredName.nameTag', { preferredName: profile.preferredName, middleName: profile.middleName, lastName: profile.lastName })
+    // } else {
       return profile?.fullName || ''
-    }
+    // }
   }
   const branch = mostRecentBranch || ''
 
