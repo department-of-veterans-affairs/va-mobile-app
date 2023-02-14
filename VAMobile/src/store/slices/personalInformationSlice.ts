@@ -173,14 +173,14 @@ export const editUsersNumber =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSavePhoneNumber())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
     }
   }
@@ -235,14 +235,14 @@ export const deleteUsersNumber =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
     }
   }
@@ -286,7 +286,7 @@ export const updateEmail =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveEmail())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
@@ -326,7 +326,7 @@ export const deleteEmail =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
-      showSnackBar(messages.successMsg, dispatch, undefined, true)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
@@ -387,7 +387,7 @@ export const updateAddress =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveAddress())
-      showSnackBar(messages.successMsg, dispatch, undefined, true)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
@@ -417,7 +417,7 @@ export const deleteAddress =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
-      showSnackBar(messages.successMsg, dispatch, undefined, true)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `deleteAddress: ${personalInformationNonFatalErrorString}`)
