@@ -53,6 +53,7 @@ context('AppealStatus', () => {
             firstName: '',
             middleName: '',
             lastName: '',
+            genderIdentity: null,
             contactEmail: {} as EmailData,
             signinEmail: '',
             birthDate: '',

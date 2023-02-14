@@ -5,6 +5,7 @@ import * as api from 'store/api'
 import {
   AddressData,
   AddressValidationScenarioTypes,
+  GenderIdentityKey,
   PhoneData,
   PhoneType,
   ProfileFormattedFieldType,
@@ -58,6 +59,7 @@ export type PersonalInformationState = {
   preloadComplete: boolean
   validateAddressAbortController?: AbortController
   preferredNameSaved: boolean
+  genderIdentitySaved: boolean
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
@@ -71,6 +73,7 @@ export const initialPersonalInformationState: PersonalInformationState = {
   phoneNumberSaved: false,
   validateAddressAbortController: undefined,
   preferredNameSaved: false,
+  genderIdentitySaved: false,
 }
 
 const personalInformationNonFatalErrorString = 'Personal Information Service Error'
@@ -523,6 +526,40 @@ export const finishUpdatePreferredName = (): AppThunk => async (dispatch) => {
 }
 
 /**
+ * Makes an API call to update a user's gender identity
+ */
+export const updateGenderIdentity =
+  (genderIdentity: GenderIdentityKey, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+  async (dispatch, getState) => {
+    const retryFunction = () => dispatch(updateGenderIdentity(genderIdentity, messages, screenID))
+
+    try {
+      dispatch(dispatchClearErrors(screenID))
+      dispatch(dispatchSetTryAgainFunction(retryFunction))
+      dispatch(dispatchStartUpdateGenderIdentity())
+
+      await api.put<api.EditResponseData>('/v0/user/gender_identity', { code: genderIdentity })
+
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_prof_update_gender(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
+      await registerReviewEvent()
+
+      dispatch(dispatchFinishUpdateGenderIdentity())
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
+        dispatch(dispatchFinishUpdateGenderIdentity(error))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+      }
+    }
+  }
+
+/**
  * Redux slice that will create the actions and reducers
  */
 const peronalInformationSlice = createSlice({
@@ -643,6 +680,20 @@ const peronalInformationSlice = createSlice({
       state.needsDataLoad = preferredNameSaved
       state.preferredNameSaved = preferredNameSaved
     },
+    dispatchStartUpdateGenderIdentity: (state) => {
+      state.loading = true
+    },
+    dispatchFinishUpdateGenderIdentity: (state, action: PayloadAction<Error | undefined>) => {
+      const error = action.payload
+      state.error = error
+      state.loading = false
+      state.needsDataLoad = !error
+      state.genderIdentitySaved = !error
+    },
+    dispatchFinishEditGenderIdentity: (state) => {
+      state.loading = true
+      state.genderIdentitySaved = false
+    },
   },
 })
 
@@ -664,5 +715,8 @@ export const {
   dispatchStartUpdatePreferredName,
   dispatchFinishUpdatePreferredName,
   dispatchFinishSaveUpdatePreferredName,
+  dispatchStartUpdateGenderIdentity,
+  dispatchFinishUpdateGenderIdentity,
+  dispatchFinishEditGenderIdentity,
 } = peronalInformationSlice.actions
 export default peronalInformationSlice.reducer

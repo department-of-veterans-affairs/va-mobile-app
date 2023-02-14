@@ -24,6 +24,7 @@ export type UserDataProfile = {
   contactEmail: EmailData
   signinEmail: string
   birthDate: string
+  genderIdentity: string
   addresses: string
   residentialAddress?: AddressData
   mailingAddress?: AddressData
@@ -124,6 +125,20 @@ export type EditResponseData = {
       }
     }
   }
+}
+
+export type GenderIdentityKey = 'M' | 'B' | 'TM' | 'TF' | 'F' | 'N' | 'O'
+
+export const GenderIdentityOptions: {
+  [key in GenderIdentityKey]: string
+} = {
+  M: 'Man',
+  B: 'Non-binary',
+  TM: 'Transgender man',
+  TF: 'Transgender woman',
+  F: 'Woman',
+  N: 'Prefer not to answer',
+  O: 'A gender not listed here',
 }
 
 export const UserGreetingTimeConstants: {
