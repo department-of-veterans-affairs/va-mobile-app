@@ -117,6 +117,15 @@ export const Events = {
       },
     }
   },
+  vama_prof_update_gender: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_prof_update_gender',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
   vama_prof_update_dir_dep: (totalTime: number, actionTime: number): Event => {
     return {
       name: 'vama_prof_update_dir_dep',

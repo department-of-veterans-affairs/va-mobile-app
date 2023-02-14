@@ -15,6 +15,7 @@ import {
   updateEmail,
   updatePreferredName,
   validateAddress,
+  updateGenderIdentity,
 } from './personalInformationSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 
@@ -35,6 +36,8 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_UPDATE_PREFERRED_NAME: string
   PERSONAL_INFORMATION_FINISH_UPDATE_PREFERRED_NAME: string
   PERSONAL_INFORMATION_FINISH_SAVE_UPDATE_PREFERRED_NAME: string
+  PERSONAL_INFORMATION_START_UPDATE_GENDER_IDENTITY: string
+  PERSONAL_INFORMATION_FINISH_UPDATE_GENDER_IDENTITY: string
 } = {
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: 'personalInformation/dispatchStartSavePhoneNumber',
   PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER: 'personalInformation/dispatchFinishSavePhoneNumber',
@@ -51,7 +54,9 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: 'personalInformation/dispatchFinishEditAddress',
   PERSONAL_INFORMATION_UPDATE_PREFERRED_NAME: 'personalInformation/dispatchStartUpdatePreferredName',
   PERSONAL_INFORMATION_FINISH_UPDATE_PREFERRED_NAME: 'personalInformation/dispatchFinishUpdatePreferredName',
-  PERSONAL_INFORMATION_FINISH_SAVE_UPDATE_PREFERRED_NAME: 'personalInformation/dispatchFinishSaveUpdatePreferredName'
+  PERSONAL_INFORMATION_FINISH_SAVE_UPDATE_PREFERRED_NAME: 'personalInformation/dispatchFinishSaveUpdatePreferredName',
+  PERSONAL_INFORMATION_START_UPDATE_GENDER_IDENTITY: 'personalInformation/dispatchStartUpdateGenderIdentity',
+  PERSONAL_INFORMATION_FINISH_UPDATE_GENDER_IDENTITY: 'personalInformation/dispatchFinishUpdateGenderIdentity'
 }
 
 const snackbarMessages: SnackbarMessages = {
@@ -71,6 +76,7 @@ context('personalInformation', () => {
         middleName: 'J',
         lastName: 'Morgan',
         fullName: 'Ben J Morgan',
+        genderIdentity: 'M',
         contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
         signinEmail: 'ben@gmail.com',
         birthDate: '1990-05-08',
@@ -135,6 +141,7 @@ context('personalInformation', () => {
       showValidation: false,
       preloadComplete: false,
       phoneNumberSaved: false,
+      genderIdentitySaved: false,
     },
   }
 
@@ -332,6 +339,7 @@ context('personalInformation', () => {
               firstName: 'Test',
               middleName: 'NOT_FOUND',
               lastName: 'ing',
+              genderIdentity: null,
               contactEmail: { emailAddress: 'user123@id.me', id: '0' },
               signinEmail: 'user123@id.me',
               birthDate: '04/01/1970',
@@ -862,6 +870,62 @@ context('personalInformation', () => {
 
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS })
       expect(endAction?.state.personalInformation.addressSaved).toBeFalsy()
+    })
+  })
+
+  describe('updateGenderIdentity', () => {
+    it('should update the users gender identity', async () => {
+      const genderIdentityEndpoint = '/v0/user/gender_identity'
+      const genderIdentityKey = 'O'
+      const genderIdentityUpdateData = { code: genderIdentityKey }
+
+      when(api.put as jest.Mock)
+        .calledWith(genderIdentityEndpoint, genderIdentityUpdateData)
+        .mockResolvedValue({})
+
+      const store = realStore(mockStorePersonalInformation)
+      await store.dispatch(updateGenderIdentity(genderIdentityKey, snackbarMessages))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_UPDATE_GENDER_IDENTITY })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+
+      const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_UPDATE_GENDER_IDENTITY })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.personalInformation.genderIdentitySaved).toBe(true)
+
+      expect(api.put as jest.Mock).toBeCalledWith(genderIdentityEndpoint, genderIdentityUpdateData)
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.error).toBeFalsy()
+    })
+    it('should get an error if the API call fails', async () => {
+      const error = new Error('Failed to update gender identity.')
+      const genderIdentityEndpoint = '/v0/user/gender_identity'
+      const genderIdentityKey = 'O'
+      const genderIdentityUpdateData = { code: genderIdentityKey }
+
+      when(api.put as jest.Mock)
+        .calledWith(genderIdentityEndpoint, genderIdentityUpdateData)
+        .mockRejectedValue(error)
+
+      const store = realStore(mockStorePersonalInformation)
+      await store.dispatch(updateGenderIdentity(genderIdentityKey, snackbarMessages))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_UPDATE_GENDER_IDENTITY })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+
+      const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_UPDATE_GENDER_IDENTITY })
+      expect(endAction).toBeTruthy()
+
+      expect(api.put as jest.Mock).toBeCalledWith(genderIdentityEndpoint, genderIdentityUpdateData)
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.genderIdentitySaved).toBe(false)
+      expect(personalInformation.error).toBe(error)
     })
   })
 })
