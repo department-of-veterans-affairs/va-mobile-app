@@ -117,6 +117,15 @@ export const Events = {
       },
     }
   },
+  vama_prof_update_gender: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_prof_update_gender',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
   vama_prof_update_dir_dep: (totalTime: number, actionTime: number): Event => {
     return {
       name: 'vama_prof_update_dir_dep',
@@ -326,6 +335,12 @@ export const UserAnalytics = {
   vama_uses_profile: (): UserAnalytic => {
     return {
       name: 'vama_uses_profile',
+      value: 'true',
+    }
+  },
+  vama_uses_preferred_name: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_preferred_name',
       value: 'true',
     }
   },

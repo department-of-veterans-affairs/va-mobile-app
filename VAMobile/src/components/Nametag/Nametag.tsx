@@ -4,18 +4,26 @@ import React, { FC } from 'react'
 import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
+import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
+import { useTranslation } from 'react-i18next'
 
 export const Nametag: FC = () => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
-
   const theme = useTheme()
 
-  const name = profile?.fullName || ''
+  const name = (): string => {
+    if (profile && profile.preferredName) {
+      return t('personalInformation.preferredName.nameTag', { preferredName: profile.preferredName, middleName: profile.middleName, lastName: profile.lastName })
+    } else {
+      return profile?.fullName || ''
+    }
+  }
   const branch = mostRecentBranch || ''
 
   const getBranchSeal = (): React.ReactNode => {
@@ -44,7 +52,7 @@ export const Nametag: FC = () => {
         {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
         <Box ml={20} flex={1}>
           <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
-            {name}
+            {name()}
           </TextView>
           {accessToMilitaryInfo && (
             <TextView textTransform="capitalize" variant="MobileBodyBold" color="primaryContrast">

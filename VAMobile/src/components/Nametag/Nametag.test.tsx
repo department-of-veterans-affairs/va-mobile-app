@@ -3,7 +3,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance} from 'react-test-renderer'
 
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import Nametag from './Nametag'
 import { initialAuthorizedServicesState, InitialState } from 'store/slices'
 import { TextView, VAIcon } from 'components'
@@ -20,10 +20,12 @@ context('Nametag', () => {
         personalInformation: {
           ...InitialState.personalInformation,
           profile: {
+            preferredName: 'Benny',
             firstName: 'Ben',
             middleName: 'J',
             lastName: 'Morgan',
             fullName: 'Jerry Mills',
+            genderIdentity: 'M',
             contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
             signinEmail: 'ben@gmail.com',
             birthDate: '1990-05-08',
