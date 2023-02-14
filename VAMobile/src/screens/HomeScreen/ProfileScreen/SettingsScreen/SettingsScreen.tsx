@@ -11,10 +11,10 @@ import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'u
 import { RootState } from 'store'
 import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { triggerHaptic } from 'utils/haptics'
 import { setBiometricsPreference } from 'store/slices'
-import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
+import { triggerHaptic } from 'utils/haptics'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
