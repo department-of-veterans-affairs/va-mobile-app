@@ -16,7 +16,7 @@ Nearly 40% of all traffic to VA.gov comes from users on their mobile devices. Th
 ### VA Product Owners
 - Chris Johnston
 - Rachel Han
-- Ryan Thurwell
+- Ryan Thurlwell
 - Martha Wilkes (part time design and accessibility)
 
 
@@ -59,7 +59,7 @@ Nearly 40% of all traffic to VA.gov comes from users on their mobile devices. Th
 - Tim Roettger - Engineering
 - Tom Gammons - Engineering, QA
 - Therese Dickson - Engineering, QA
-- Rachael Bontrager - Engineer, QA
+- Rachael Bontrager - Engineering, QA
 
 ## Communications
 - Slack: #va-mobile-app
