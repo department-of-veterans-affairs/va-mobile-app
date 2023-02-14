@@ -6,7 +6,12 @@ import React, { FC } from 'react'
 
 import { Box, TextViewProps } from 'components'
 import { BoxProps } from './Box'
+import { RootState } from 'store'
+import { SettingsState } from 'store/slices'
+import { featureEnabled } from 'utils/remoteConfig'
+import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 import colors from '../styles/themes/VAColors'
@@ -26,6 +31,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const { onActionPressed, isError, actionBtnText, isUndo } = data || {}
   const { colors: themeColor } = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  const { haptics } = useSelector<RootState, SettingsState>((state) => state.settings)
 
   useFocusEffect(setFocus)
 
@@ -99,8 +105,18 @@ const SnackBar: FC<ToastProps> = (toast) => {
   }
 
   const onActionPress = () => {
+    if (featureEnabled('haptics') && haptics) {
+      triggerHaptic('notificationError')
+    }
     if (onActionPressed && typeof onActionPressed === 'function') {
       onActionPressed()
+    }
+    toast.onHide()
+  }
+
+  const onDismissPress = () => {
+    if (featureEnabled('haptics') && haptics) {
+      triggerHaptic('notificationSuccess')
     }
     toast.onHide()
   }
@@ -137,7 +153,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
               </TextView>
             </TouchableOpacity>
           )}
-          <TouchableOpacity onPress={() => toast.onHide()} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
+          <TouchableOpacity onPress={onDismissPress} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
             <TextView variant={'SnackBarBtnText'}>{'Dismiss'}</TextView>
           </TouchableOpacity>
         </Box>
