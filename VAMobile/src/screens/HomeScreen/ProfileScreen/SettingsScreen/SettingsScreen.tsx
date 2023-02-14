@@ -6,8 +6,6 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { Box, ButtonDecoratorType, FeatureLandingTemplate, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj } from 'components'
-import AppVersionAndBuild from 'components/AppVersionAndBuild'
-import getEnv from 'utils/env'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -17,6 +15,8 @@ import { triggerHaptic } from 'utils/haptics'
 import { setBiometricsPreference } from 'store/slices'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import AppVersionAndBuild from 'components/AppVersionAndBuild'
+import getEnv from 'utils/env'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
