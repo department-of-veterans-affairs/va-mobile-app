@@ -1,4 +1,4 @@
-import { Animated, Easing, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, StatusBar, Text, View, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, StatusBar, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 

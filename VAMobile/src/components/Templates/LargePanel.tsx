@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { FooterButton, VAScrollView } from 'components'
-import { FooterButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveAlert } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
@@ -18,18 +17,12 @@ export type LargePanelProps = {
   leftButtonText?: string
   /** a11y label for left button text */
   leftButtonA11yLabel?: string
-  /** a11y label for left button text */
-  leftButtonA11yLabel?: string
   /** text of the title bar title(no text it doesn't appear) */
   title?: string
   /** a11y label for title text */
   titleA11yLabel?: string
-  /** a11y label for title text */
-  titleA11yLabel?: string
   /** text of the title bar right button(no text it doesn't appear) */
   rightButtonText?: string
-  /** a11y label for right button text */
-  rightButtonA11yLabel?: string
   /** a11y label for right button text */
   rightButtonA11yLabel?: string
   /** text of the footer button(no text it doesn't appear) */
@@ -59,7 +52,6 @@ export const LargePanel: FC<LargePanelProps> = ({
   const message = t('areYouSure')
 
   const leftTitleButtonPress = () => {
-  const leftTitleButtonPress = () => {
     confirmAlert({
       title: '',
       message,
@@ -82,7 +74,6 @@ export const LargePanel: FC<LargePanelProps> = ({
   }
 
   const rightTitleButtonPress = () => {
-  const rightTitleButtonPress = () => {
     if (onRightButtonPress) {
       onRightButtonPress
     }
@@ -97,16 +88,8 @@ export const LargePanel: FC<LargePanelProps> = ({
     divider: true,
   }
 
-  const headerProps: HeaderBannerProps = {
-    leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: leftTitleButtonPress } : undefined,
-    title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
-    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress } : undefined,
-    divider: true,
-  }
-
   return (
     <>
-      <HeaderBanner {...headerProps} />
       <HeaderBanner {...headerProps} />
       <VAScrollView>
         {children}
