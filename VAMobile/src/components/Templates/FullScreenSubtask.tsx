@@ -6,7 +6,7 @@ import { Box, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollV
 import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIconProps } from 'components/VAIcon'
-import { View, ViewStyle, ScrollView } from 'react-native'
+import { ScrollView, View, ViewStyle } from 'react-native'
 import { useDestructiveAlert, useTheme } from 'utils/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
