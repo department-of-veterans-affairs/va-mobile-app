@@ -9,18 +9,13 @@ import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
-  // const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const theme = useTheme()
 
   const name = (): string => {
-    // if (profile && profile.preferredName) {
-    //   return t('personalInformation.preferredName.nameTag', { preferredName: profile.preferredName, middleName: profile.middleName, lastName: profile.lastName })
-    // } else {
     return profile?.fullName || ''
-    // }
   }
   const branch = mostRecentBranch || ''
 
