@@ -46,6 +46,9 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
     px: 20,
   }
   const vibrate = (): void => {
+    if (!featureEnabled('haptics') || !haptics) {
+      return
+    }
     if (featureEnabled('haptics') && haptics && border === 'error') {
       triggerHaptic('notificationError')
     } else if (featureEnabled('haptics') && haptics && border === 'warning') {
