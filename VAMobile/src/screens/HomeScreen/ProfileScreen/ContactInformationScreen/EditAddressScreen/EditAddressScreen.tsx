@@ -1,5 +1,5 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { ScrollView, TextInput } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
@@ -502,7 +502,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      title={displayTitle}
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={cancelFn}
+      rightButtonText={t('save')}
+      onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mb={theme.dimensions.standardMarginBetween}>
