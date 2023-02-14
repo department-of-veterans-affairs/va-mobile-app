@@ -51,7 +51,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
     }
     if (border === 'error') {
       triggerHaptic('notificationError')
-    } else if (featureEnabled('haptics') && haptics && border === 'warning') {
+    } else if (border === 'warning') {
       triggerHaptic('notificationWarning')
     }
   }
