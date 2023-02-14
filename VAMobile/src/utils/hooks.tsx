@@ -294,43 +294,46 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
 
 /**
  * Hook to autoscroll to an element
- * @returns ref to the scrollView and the elemnt to scroll to and the function to call the manual scroll
  *
- * notes on how to implement in the future, retired from ViewMessageScreen.tsx:
- * const [scrollRef, messageRef, scrollToSelectedMessage, setShouldFocus] = useAutoScrollToElement()
- *
+ * @returns ref to the scrollView and the element to scroll to and the function to call the manual scroll
  */
-export function useAutoScrollToElement(): [React.RefObject<ScrollView>, MutableRefObject<View>, () => void, React.Dispatch<React.SetStateAction<boolean>>] {
-  const scrollRef = useRef<ScrollView>(null)
-  const [messageRef, setFocus] = useAccessibilityFocus<View>()
+export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, MutableRefObject<View>, (offset?: number) => void, React.Dispatch<React.SetStateAction<boolean>>] {
+  const scrollRef = useRef() as MutableRefObject<ScrollView>
+  const [viewRef, setFocus] = useAccessibilityFocus<View>()
   const [shouldFocus, setShouldFocus] = useState(true)
-  const scrollToElement = useCallback(() => {
-    const timeOut = setTimeout(() => {
-      requestAnimationFrame(() => {
-        if (messageRef.current && scrollRef.current) {
-          const currentObject = scrollRef.current
-          const scrollPoint = findNodeHandle(currentObject)
-          if (scrollPoint) {
-            messageRef.current.measureLayout(
-              scrollPoint,
-              (_, y) => {
-                currentObject.scrollTo({ y: y, animated: true })
-              },
-              () => {
-                currentObject.scrollTo({ y: 0 })
-              },
-            )
-          }
-        }
-      })
-      if (shouldFocus) {
-        setFocus()
-      }
-    }, 400)
-    return () => clearTimeout(timeOut)
-  }, [messageRef, setFocus, shouldFocus])
+  const screenReaderEnabled = useIsScreanReaderEnabled()
 
-  return [scrollRef, messageRef, scrollToElement, setShouldFocus]
+  const scrollToElement = useCallback(
+    (offset?: number) => {
+      const timeOut = setTimeout(() => {
+        requestAnimationFrame(() => {
+          if (viewRef.current && scrollRef.current) {
+            const currentObject = scrollRef.current
+            const scrollPoint = findNodeHandle(currentObject)
+            if (scrollPoint) {
+              const offsetValue = offset || 0
+              viewRef.current.measureLayout(
+                scrollPoint,
+                (_, y) => {
+                  currentObject.scrollTo({ y: y + offsetValue, animated: !screenReaderEnabled })
+                },
+                () => {
+                  currentObject.scrollTo({ y: 0 })
+                },
+              )
+            }
+          }
+        })
+        if (shouldFocus) {
+          setFocus()
+        }
+      }, 400)
+      return () => clearTimeout(timeOut)
+    },
+    [viewRef, setFocus, shouldFocus, screenReaderEnabled],
+  )
+
+  return [scrollRef, viewRef, scrollToElement, setShouldFocus]
 }
 
 /**

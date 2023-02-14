@@ -67,6 +67,7 @@ context('PrescriptionDetails', () => {
       expect(findByTypeWithText(testInstance, TextView, 'Instructions')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Refills left')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Fill date')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Fill date')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Quantity')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Expires on')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Ordered on')).toBeTruthy()

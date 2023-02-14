@@ -125,7 +125,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           }}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.back}
-          focusOnButton={false}
           showCarat={true}
         />
       ),

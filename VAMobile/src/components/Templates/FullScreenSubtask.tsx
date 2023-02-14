@@ -1,12 +1,12 @@
 import { StackActions, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, Ref } from 'react'
 
 import { Box, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIconProps } from 'components/VAIcon'
-import { View, ViewStyle } from 'react-native'
+import { View, ViewStyle, ScrollView } from 'react-native'
 import { useDestructiveAlert, useTheme } from 'utils/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
@@ -31,12 +31,14 @@ export type FullScreenSubtaskProps = {
   rightButtonText?: string
   /** function called when right button is pressed (defaults to back navigation if omitted) */
   onRightButtonPress?: () => void
-  /** optional boolean that determines whether to diasable the right header button */
+  /** optional boolean that determines whether to disable the right header button */
   rightButtonDisabled?: boolean
   /** a11y label for right button text */
   rightButtonA11yLabel?: string
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
+  /** ref for the VAScrollView component that contains the content */
+  scrollViewRef?: Ref<ScrollView>
   /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
   menuViewActions?: MenuViewActionsType
   /** text of the primary content button(no text it doesn't appear) */
@@ -62,6 +64,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   onRightButtonPress,
   rightButtonA11yLabel,
   rightVAIconProps,
+  scrollViewRef,
   menuViewActions,
   primaryContentButtonText,
   onPrimaryContentButtonPress,
@@ -150,7 +153,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      <VAScrollView>
+      <VAScrollView scrollViewRef={scrollViewRef}>
         {title && (
           <Box my={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
             <Box>
