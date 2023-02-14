@@ -3,13 +3,9 @@ import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
-import { RootState } from 'store'
-import { SettingsState } from 'store/slices'
 import { VABorderColors } from 'styles/theme'
-import { featureEnabled } from 'utils/remoteConfig'
 import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 
 export type AlertBoxProps = {
   /** color of the border */
@@ -36,7 +32,6 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
 
   const focusOnAlert = border === 'error' && (title || text)
   useFocusEffect(focusOnAlert && title ? setTitleFocus : setTextFocus)
-  const { haptics } = useSelector<RootState, SettingsState>((state) => state.settings)
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
@@ -46,9 +41,6 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, title, text, textA11yLa
     px: 20,
   }
   const vibrate = (): void => {
-    if (!featureEnabled('haptics') || !haptics) {
-      return
-    }
     if (border === 'error') {
       triggerHaptic('notificationError')
     } else if (border === 'warning') {

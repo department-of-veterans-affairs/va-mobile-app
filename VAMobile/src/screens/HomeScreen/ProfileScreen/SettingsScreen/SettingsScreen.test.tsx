@@ -37,7 +37,6 @@ jest.mock('../../../../utils/hooks', () => {
 })
 
 jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('haptics').mockReturnValue(true)
 
 const envMock = getEnv as jest.Mock
 
