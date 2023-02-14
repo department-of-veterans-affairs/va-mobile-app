@@ -85,7 +85,7 @@ export const updateBankInfo =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveBankInfo({ paymentAccount: bankInfo?.data.attributes.paymentAccount }))
-      showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false)
+      showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `updateBankInfo: ${directDepositNonFatalErrorString}`)

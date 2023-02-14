@@ -36,6 +36,7 @@ context('OnboardingCarousel', () => {
           profile: {
             middleName: '',
             lastName: '',
+            genderIdentity: null,
             contactEmail: {} as EmailData,
             signinEmail: '',
             birthDate: '',

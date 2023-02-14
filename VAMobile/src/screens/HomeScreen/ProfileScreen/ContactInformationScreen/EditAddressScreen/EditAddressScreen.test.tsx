@@ -139,6 +139,7 @@ context('EditAddressScreen', () => {
       middleName: 'J',
       lastName: 'Morgan',
       fullName: 'Ben J Morgan',
+      genderIdentity: 'M',
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',

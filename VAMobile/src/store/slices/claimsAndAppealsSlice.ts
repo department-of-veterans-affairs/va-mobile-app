@@ -306,7 +306,7 @@ export const submitClaimDecision =
       await api.post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 
       dispatch(dispatchFinishSubmitClaimDecision())
-      showSnackBar('Request sent', dispatch, undefined, true)
+      showSnackBar('Request sent', dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `submitClaimDecision: ${claimsAndAppealsNonFatalErrorString}`)

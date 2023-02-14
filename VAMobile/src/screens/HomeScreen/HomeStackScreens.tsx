@@ -7,6 +7,7 @@ import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import DebugScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
+import GenderIdentityScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen'
 import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYouScreen'
@@ -15,6 +16,7 @@ import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/Prefe
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import WhatToKnowScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen/WhatToKnowScreen'
 
 export type HomeStackParamList = WebviewStackParams & {
   Home: undefined
@@ -24,6 +26,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Debug: undefined
   EditEmail: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
+  GenderIdentity: undefined
   HowDoIUpdate: { screenType: string }
   HowWillYou: undefined
   IncorrectServiceInfo: undefined
@@ -37,6 +40,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Sandbox: undefined
   Settings: undefined
   HapticsDemoScreen: undefined
+  WhatToKnow: undefined
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
@@ -67,6 +71,12 @@ export const getHomeScreens = (t: TFunction) => {
       options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
     <HomeStack.Screen
+      key={'GenderIdentity'}
+      name="GenderIdentity"
+      component={GenderIdentityScreen}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
+    <HomeStack.Screen
       key={'HowDoIUpdate'}
       name="HowDoIUpdate"
       component={HowDoIUpdateScreen}
@@ -82,6 +92,12 @@ export const getHomeScreens = (t: TFunction) => {
       key={'IncorrectServiceInfo'}
       name="IncorrectServiceInfo"
       component={IncorrectServiceInfo}
+      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
+    />,
+    <HomeStack.Screen
+      key={'WhatToKnow'}
+      name="WhatToKnow"
+      component={WhatToKnowScreen}
       options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
   ]

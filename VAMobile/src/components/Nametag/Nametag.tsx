@@ -4,25 +4,18 @@ import React, { FC } from 'react'
 import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
-import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
 
 export const Nametag: FC = () => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const theme = useTheme()
 
   const name = (): string => {
-    if (profile && profile.preferredName) {
-      return t('personalInformation.preferredName.nameTag', { preferredName: profile.preferredName, middleName: profile.middleName, lastName: profile.lastName })
-    } else {
-      return profile?.fullName || ''
-    }
+    return profile?.fullName || ''
   }
   const branch = mostRecentBranch || ''
 

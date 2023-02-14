@@ -178,7 +178,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     const currentFolder = Number(folderWhereMessageIs.current)
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
-    const withNavBar = replyExpired ? false : true
     const snackbarMessages: SnackbarMessages = {
       successMsg: GenerateFolderMessage(t, newFolder, folders, false, false),
       errorMsg: GenerateFolderMessage(t, newFolder, folders, false, true),
@@ -188,7 +187,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
-      dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
+      dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders))
     }
   }
 
