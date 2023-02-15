@@ -1,5 +1,5 @@
+import { ScrollView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
@@ -85,6 +85,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const destructiveAlert = useDestructiveAlert()
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const [deleting, setDeleting] = useState(false)
 
@@ -501,7 +502,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      title={displayTitle}
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={cancelFn}
+      rightButtonText={t('save')}
+      onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -515,7 +522,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" />
+            <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <FormWrapper

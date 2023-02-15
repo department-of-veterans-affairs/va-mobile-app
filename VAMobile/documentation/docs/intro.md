@@ -16,6 +16,7 @@ Nearly 40% of all traffic to VA.gov comes from users on their mobile devices. Th
 ### VA Product Owners
 - Chris Johnston
 - Rachel Han
+- Ryan Thurwell
 - Martha Wilkes (part time design and accessibility)
 
 
@@ -33,7 +34,7 @@ Nearly 40% of all traffic to VA.gov comes from users on their mobile devices. Th
 
 
 ### UX
-- Jennifer Ecker - UX Leadership
+- Jen Ecker - UX Leadership
 - Holly Collier - Design
 - Melissa Lefevre - Design
 - Lauren Russell - Design
@@ -41,11 +42,10 @@ Nearly 40% of all traffic to VA.gov comes from users on their mobile devices. Th
 - Brea Blackwelder - Accessibility Design
 - Liz Straghalis - Research
 - Misty Milliron-Grant - Content Strategist
-- Alex Taylor - Principal UX Designer
 
 
 ### Engineering
-- Patrick Saxton - Engineering Leadership
+- Tim Wright - Engineering Leadership
 - Chika Adibemma - Engineering
 - Chris Alexander - Engineering
 - Theo Bentum - Engineering
@@ -59,8 +59,7 @@ Nearly 40% of all traffic to VA.gov comes from users on their mobile devices. Th
 - Tim Roettger - Engineering
 - Tom Gammons - Engineering, QA
 - Therese Dickson - Engineering, QA
-- Rachael Bontrager - Engineer/div>
-, QA
+- Rachael Bontrager - Engineer, QA
 
 ## Communications
 - Slack: #va-mobile-app
