@@ -121,7 +121,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText}`.trim()
+  const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim()
 
   const linkProps: TextViewProps = {
     variant: 'HelperText',
