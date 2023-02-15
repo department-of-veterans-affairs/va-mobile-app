@@ -1,6 +1,7 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import {
   AlertBox,
@@ -47,6 +48,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const { phoneNumberSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
@@ -188,7 +190,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   return (
-    <VAScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
+    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -203,7 +205,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
         {formContainsError && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editPhoneNumber.checkPhoneNumber')} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} title={t('editPhoneNumber.checkPhoneNumber')} border="error" />
           </Box>
         )}
         <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>

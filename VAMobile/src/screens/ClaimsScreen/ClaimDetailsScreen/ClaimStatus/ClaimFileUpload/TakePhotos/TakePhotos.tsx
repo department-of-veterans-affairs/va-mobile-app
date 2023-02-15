@@ -1,7 +1,8 @@
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import {
   AlertBox,
@@ -39,6 +40,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const { request, focusOnSnackbar } = route.params
   const { displayName } = request
   const [error, setError] = useState('')
+  const scrollViewRef = useRef<ScrollView>(null)
 
   useEffect(() => {
     navigation.setOptions({
@@ -80,10 +82,10 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
+    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
       {!!error && (
         <Box mt={theme.dimensions.contentMarginTop}>
-          <AlertBox text={error} border="error" />
+          <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
         </Box>
       )}
       <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>

@@ -1,5 +1,5 @@
+import { ScrollView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { TextInput } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -47,6 +47,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const { t: tc } = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
+  const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
   const { isFocus: isAccessibilityFocused } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
@@ -174,16 +175,16 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   return (
     <>
       {isAccessibilityFocused && (
-        <VAScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
+        <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
           <Box mt={contentMarginTop} mb={contentMarginBottom}>
             {formContainsError && (
               <Box mb={standardMarginBetween}>
-                <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" />
+                <AlertBox scrollViewRef={scrollViewRef} title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" />
               </Box>
             )}
             {invalidRoutingNumberError && (
               <Box mb={standardMarginBetween}>
-                <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" />
+                <AlertBox scrollViewRef={scrollViewRef} title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" />
               </Box>
             )}
             <Box mx={gutter} accessible={true}>
