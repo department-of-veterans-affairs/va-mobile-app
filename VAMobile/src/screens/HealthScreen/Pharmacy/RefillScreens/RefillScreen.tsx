@@ -1,7 +1,8 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
@@ -52,6 +53,8 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
       navigation.navigate('RefillRequestSummary')
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
+
+  const scrollViewRef = useRef<ScrollView>(null)
 
   useBeforeNavBackListener(navigation, () => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
@@ -131,6 +134,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
         leftButtonText={tc('cancel')}
         title={t('prescriptions.refill.pageHeaderTitle')}
         primaryContentButtonText={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
+        scrollViewRef={scrollViewRef}
         onPrimaryContentButtonPress={() => {
           if (selectedPrescriptionsCount === 0) {
             setAlert(true)
@@ -140,7 +144,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
         }}>
         {showAlert && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} />
+            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <Box mx={theme.dimensions.gutter}>
