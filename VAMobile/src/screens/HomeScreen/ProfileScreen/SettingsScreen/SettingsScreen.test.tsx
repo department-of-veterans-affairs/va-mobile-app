@@ -33,8 +33,6 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
-jest.mock('utils/remoteConfig')
-
 const envMock = getEnv as jest.Mock
 
 const defaultEnvVars = {
