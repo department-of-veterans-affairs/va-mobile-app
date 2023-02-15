@@ -5,7 +5,6 @@ import { Box, BoxProps, TextView } from './index'
 import { VABorderColors } from 'styles/theme'
 import { triggerHaptic } from 'utils/haptics'
 import { useAutoScrollToElement, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 
 export type AlertBoxProps = {
   /** color of the border */
