@@ -44,5 +44,4 @@ See [Issue Tracking](https://github.com/department-of-veterans-affairs/va.gov-te
 - [ ] Steps to reproduce are defined
 - [ ] Desired behavior is added
 - [ ] Labels added (front-end, back-end, feature, bug)
-- [ ] Linked to an Epic (General Tech/Design Debt & Maintenance) 
-
+- [ ] Estimate of 1 added
