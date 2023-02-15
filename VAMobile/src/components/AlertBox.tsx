@@ -2,13 +2,9 @@ import { AccessibilityRole, ScrollView, View } from 'react-native'
 import React, { FC, RefObject, useEffect } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
-import { RootState } from 'store'
-import { SettingsState } from 'store/slices'
 import { VABorderColors } from 'styles/theme'
-import { featureEnabled } from 'utils/remoteConfig'
 import { triggerHaptic } from 'utils/haptics'
 import { useAutoScrollToElement, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 
 export type AlertBoxProps = {
   /** color of the border */
@@ -32,7 +28,6 @@ export type AlertBoxProps = {
  */
 const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
-  const { haptics } = useSelector<RootState, SettingsState>((state) => state.settings)
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
 
   const boxPadding = 20
@@ -53,9 +48,6 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, t
   }
 
   const vibrate = (): void => {
-    if (!featureEnabled('haptics') || !haptics) {
-      return
-    }
     if (border === 'error') {
       triggerHaptic('notificationError')
     } else if (border === 'warning') {
