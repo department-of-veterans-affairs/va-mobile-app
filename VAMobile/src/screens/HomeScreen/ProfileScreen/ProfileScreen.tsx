@@ -67,7 +67,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
-            subText=""
           />
           <LargeNavButton
             title={t('contactInformation.title')}
@@ -76,7 +75,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
-            subText=""
           />
         </Box>
       )
@@ -98,7 +96,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
-            subText=""
           />
         </Box>
       </ChildTemplate>
@@ -126,7 +123,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          subText=""
         />
         <LargeNavButton
           title={t('settings.title')}
@@ -135,7 +131,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          subText=""
         />
       </Box>
     </ChildTemplate>
