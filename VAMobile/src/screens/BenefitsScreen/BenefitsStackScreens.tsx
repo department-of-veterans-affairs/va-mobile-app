@@ -6,6 +6,7 @@ import { ClaimEventData } from 'store/api/types'
 import { LetterTypes, ScreenIDTypes } from 'store/api/types'
 
 import { ClaimType } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
@@ -102,11 +103,11 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
     />,
     <BenefitsStack.Screen key={'FileRequest'} name="FileRequest" component={FileRequest} options={{ headerShown: false }} />,
-    <BenefitsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} options={{ headerShown: false }} />,
-    <BenefitsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={{ headerShown: false }} />,
-    <BenefitsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={{ headerShown: false }} />,
-    <BenefitsStack.Screen key={'UploadOrAddPhotos'} name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ headerShown: false }} />,
-    <BenefitsStack.Screen key={'UploadFile'} name="UploadFile" component={UploadFile} options={{ headerShown: false }} />,
+    <BenefitsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <BenefitsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <BenefitsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <BenefitsStack.Screen key={'UploadOrAddPhotos'} name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <BenefitsStack.Screen key={'UploadFile'} name="UploadFile" component={UploadFile} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <BenefitsStack.Screen key={'FileRequestDetails'} name="FileRequestDetails" component={FileRequestDetails} options={{ headerShown: false }} />,
   ]
 }

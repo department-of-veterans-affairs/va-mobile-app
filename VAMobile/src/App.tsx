@@ -25,6 +25,7 @@ import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAna
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
+import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { SnackBarConstants } from 'constants/common'
@@ -308,7 +309,7 @@ export const AuthedApp: FC = () => {
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }} />
-        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ headerShown: false }} />
+        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

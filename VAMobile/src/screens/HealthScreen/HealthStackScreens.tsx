@@ -4,6 +4,7 @@ import { TransitionPresets, createStackNavigator } from '@react-navigation/stack
 import React from 'react'
 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
@@ -129,10 +130,10 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 export const getHealthScreens = (t: TFunction) => {
   return [
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
-    <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ headerShown: false }} />,
-    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ headerShown: false }} />,
-    <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={{ headerShown: false }} />,
-    <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ headerShown: false }} />,
+    <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen
       key={'AttachmentsFAQ'}
       name="AttachmentsFAQ"
@@ -179,19 +180,9 @@ export const getHealthScreens = (t: TFunction) => {
         options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </HealthStack.Group>,
-    <HealthStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} options={{ headerShown: false, presentation: 'card' }} />,
-    <HealthStack.Screen
-      key={'RefillScreenModal'}
-      name="RefillScreenModal"
-      component={RefillScreenModal}
-      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
-    />,
-    <HealthStack.Screen
-      key={'RefillTrackingModal'}
-      name="RefillTrackingModal"
-      component={RefillTrackingModal}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
-    />,
+    <HealthStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'RefillTrackingModal'} name="RefillTrackingModal" component={RefillTrackingModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen
       key={'PrescriptionHelp'}
       name="PrescriptionHelp"
