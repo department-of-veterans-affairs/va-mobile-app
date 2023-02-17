@@ -1,4 +1,4 @@
-import { Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
