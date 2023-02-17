@@ -55,7 +55,6 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          subText=""
         />
         <LargeNavButton
           title={t('lettersAndDocs.title')}
@@ -64,7 +63,6 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          subText=""
         />
       </Box>
     </CategoryLanding>

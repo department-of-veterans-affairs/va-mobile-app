@@ -144,7 +144,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         accessibilityLabel={accessibilityLabel}
         {...a11yHintProp(a11yHint || '')}>
         <Box flex={1}>
-          <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>
+          <Box flexDirection={'row'} flexWrap={'wrap'} mb={subText ? theme.dimensions.condensedMarginBetween : undefined}>
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
               {title}
             </TextView>
