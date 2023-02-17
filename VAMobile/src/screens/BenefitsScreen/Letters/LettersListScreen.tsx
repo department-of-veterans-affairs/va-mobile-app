@@ -109,7 +109,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.list.title')}>
+      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -121,14 +121,18 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
 
   if (!lettersAndDocuments || !letters || letters.length === 0) {
     return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.list.title')}>
+      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
         <NoLettersScreen />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.list.title')} {...testIdProps('Letters-list-page')}>
+    <FeatureLandingTemplate
+      backLabel={t('letters.overview.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('letters.overview.viewLetters')}
+      {...testIdProps('Letters-list-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <SimpleList items={letterButtons} />
       </Box>
