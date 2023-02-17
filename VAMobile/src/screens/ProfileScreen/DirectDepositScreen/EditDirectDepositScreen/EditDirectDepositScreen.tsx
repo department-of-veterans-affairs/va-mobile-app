@@ -175,7 +175,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   return (
     <>
       {isAccessibilityFocused && (
-        <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
+        <VAScrollView scrollViewRef={scrollViewRef}>
           <Box mt={contentMarginTop} mb={contentMarginBottom}>
             {formContainsError && (
               <Box mb={standardMarginBetween}>
