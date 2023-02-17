@@ -257,7 +257,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('File-upload: Upload-files-or-add-photos-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!errorMessage && (
           <Box mb={theme.dimensions.standardMarginBetween}>

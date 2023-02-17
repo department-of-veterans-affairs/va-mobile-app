@@ -82,7 +82,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       {!!error && (
         <Box mt={theme.dimensions.contentMarginTop}>
           <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />

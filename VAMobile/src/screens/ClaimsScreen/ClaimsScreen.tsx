@@ -119,7 +119,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Claims-page')} contentContainerStyle={scrollStyles}>
+    <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>

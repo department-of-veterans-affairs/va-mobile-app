@@ -101,7 +101,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>

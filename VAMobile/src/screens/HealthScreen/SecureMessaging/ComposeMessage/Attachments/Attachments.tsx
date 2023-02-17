@@ -136,7 +136,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Attachments-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
