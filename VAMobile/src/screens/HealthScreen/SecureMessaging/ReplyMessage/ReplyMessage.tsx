@@ -303,7 +303,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   }
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Reply-message-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
