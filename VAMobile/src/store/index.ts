@@ -19,7 +19,6 @@ import personalInformationReducer from 'store/slices/personalInformationSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import requestAppointmentReducer from 'store/slices/requestAppointmentSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
-import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 import vaccineReducer from 'store/slices/vaccineSlice'
 
@@ -47,7 +46,6 @@ const store = configureStore({
     payments: paymentsReducer,
     requestAppointment: requestAppointmentReducer,
     prescriptions: prescriptionsReducer,
-    settings: settingsReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }).concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
