@@ -36,7 +36,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('letters.list.title')}
+      backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
