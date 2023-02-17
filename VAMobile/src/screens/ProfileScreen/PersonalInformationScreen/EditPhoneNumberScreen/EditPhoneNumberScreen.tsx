@@ -190,7 +190,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
