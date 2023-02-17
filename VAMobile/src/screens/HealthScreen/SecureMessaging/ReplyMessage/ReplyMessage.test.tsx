@@ -210,6 +210,8 @@ context('ReplyMessage', () => {
     beforeEach(async () => {
       await waitFor(() => {
         navHeaderSpy.save.props.onSave()
+
+        testInstance.findByType(FormWrapper).props.onSave(true)
       })
     })
     describe('when a required field is not filled', () => {

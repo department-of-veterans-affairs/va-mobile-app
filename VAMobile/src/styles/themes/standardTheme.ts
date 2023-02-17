@@ -197,6 +197,7 @@ let theme: VATheme = {
     headerLeftButtonFromTextPadding: 14,
     fullScreenNavigationBarOffset: isIOS() ? 30 : 0, // this is done due to how the top of the screens differ between the two systems
     fullScreenContentButtonHeight: 60,
+    largePanelHeaderOffset: isIOS() ? 0 : 50,
   },
 
   fontFace: {
