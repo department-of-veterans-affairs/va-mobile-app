@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, Platform, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useSelector } from 'react-redux'
@@ -290,6 +290,8 @@ export const AuthedApp: FC = () => {
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens()
 
+  const slideFromBottom = Platform.OS === 'ios' ? TransitionPresets.ModalSlideFromBottomIOS : TransitionPresets.BottomSheetAndroid
+
   return (
     <>
       <RootNavStack.Navigator
@@ -307,7 +309,7 @@ export const AuthedApp: FC = () => {
         }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
-        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }} />
+        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ ...slideFromBottom, headerShown: false }} />
         <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ headerShown: false }} />
         {homeScreens}
         {paymentsScreens}
