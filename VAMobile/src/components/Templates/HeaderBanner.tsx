@@ -60,8 +60,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
-  // focus sets initial screen reader focus on screen entry in iOS; Android does not respect focus and has an RN crash if set to non-interacting element (e.g. Title)
-  const focus = Platform.OS === 'android' ? undefined : leftButton ? 'Left' : title ? 'Title' : 'Right'
+  const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
 
   const transition = title?.type === 'Transition'
@@ -224,7 +223,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
         </Box>
 
         <Box mt={theme.dimensions.buttonPadding} flex={2}>
-          <View {...titleViewRef}>
+          <View {...titleViewRef} accessible={true}>
             <View {...titleViewProps}>
               <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
             </View>
