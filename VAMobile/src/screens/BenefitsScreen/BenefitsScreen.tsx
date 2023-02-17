@@ -1,11 +1,14 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
+import { DisabilityRatingState } from 'store/slices'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { CloseSnackbarOnNavigation } from 'constants/common'
@@ -18,30 +21,36 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
 const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
+  const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   }, [navigation])
 
-  const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
+  const ratingPercent = ratingData?.combinedDisabilityRating
+  const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
+  const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
   return (
     <CategoryLanding title={t('benefits.title')}>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
-          title={t('claims.title')}
-          onPress={navigateTo('Claims')}
+          title={t('disabilityRating.title')}
+          onPress={navigateTo('DisabilityRatings')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
+          subText={combinedPercentText}
         />
         <LargeNavButton
-          title={t('disabilityRating.title')}
-          onPress={navigateTo('DisabilityRatings')}
+          title={t('claims.title')}
+          onPress={navigateTo('Claims')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
