@@ -10,7 +10,6 @@ import { ClaimsStackParamList, DocumentPickerResponse } from '../../../../Claims
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 

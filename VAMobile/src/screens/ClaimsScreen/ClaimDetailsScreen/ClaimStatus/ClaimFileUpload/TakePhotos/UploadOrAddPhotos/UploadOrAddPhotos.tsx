@@ -33,7 +33,6 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAddPhotos'>

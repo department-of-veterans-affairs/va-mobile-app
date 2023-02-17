@@ -168,7 +168,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     },
   ]
 
-  const testIdPrefix = `${phoneType.toLowerCase()}-phone: `
   const buttonTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
