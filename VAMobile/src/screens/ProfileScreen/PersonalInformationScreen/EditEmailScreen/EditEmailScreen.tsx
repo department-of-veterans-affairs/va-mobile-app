@@ -154,7 +154,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Email: Edit-email-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
           <Box mb={theme.dimensions.standardMarginBetween}>
