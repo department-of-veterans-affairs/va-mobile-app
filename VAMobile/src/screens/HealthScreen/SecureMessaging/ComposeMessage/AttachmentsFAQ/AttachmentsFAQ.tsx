@@ -30,7 +30,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
   })
 
   return (
-    <LargePanel title={tc('common:messagesHelp.title')} rightButtonText={tc('common:cancel')}>
+    <LargePanel title={tc('common:messagesHelp.title')} rightButtonText={tc('common:close')}>
       <Box backgroundColor={'alertBox'} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <Box accessible={true} accessibilityRole={'header'}>
