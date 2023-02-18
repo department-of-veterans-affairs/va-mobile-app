@@ -235,7 +235,11 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               </Box>
             </TouchableWithoutFeedback>
           )}
-          {!rightButton && menuViewActions && <MenuView actions={menuViewActions} />}
+          {!rightButton && menuViewActions && (
+            <Box {...commonBoxProps}>
+              <MenuView actions={menuViewActions} />
+            </Box>
+          )}
         </Box>
       </Box>
     </>
