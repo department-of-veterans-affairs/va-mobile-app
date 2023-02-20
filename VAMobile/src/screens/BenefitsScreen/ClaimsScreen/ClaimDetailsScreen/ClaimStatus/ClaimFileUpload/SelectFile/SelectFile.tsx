@@ -1,7 +1,8 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
-import React, { FC, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -21,6 +22,7 @@ const SelectFile: FC<SelectFilesProps> = ({ route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
+  const scrollViewRef = useRef<ScrollView>(null)
   const { request } = route.params
   const showActionSheet = useShowActionSheet()
 
@@ -85,11 +87,11 @@ const SelectFile: FC<SelectFilesProps> = ({ route }) => {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.selectFiles')}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} title={t('fileUpload.selectFiles')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox text={error} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
           </Box>
         )}
         <TextArea>

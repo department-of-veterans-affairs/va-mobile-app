@@ -1,7 +1,8 @@
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -26,6 +27,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ route }) => {
   const { request } = route.params
   const { displayName } = request
   const [error, setError] = useState('')
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
@@ -55,10 +57,10 @@ const TakePhotos: FC<TakePhotosProps> = ({ route }) => {
   }
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.selectPhotos')}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} title={t('fileUpload.selectPhotos')}>
       {!!error && (
         <Box mt={theme.dimensions.contentMarginTop}>
-          <AlertBox text={error} border="error" />
+          <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
         </Box>
       )}
       <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
