@@ -106,7 +106,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (prescriptionInDowntime) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} title={t('prescriptions.refill.pageHeaderTitle')}>
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -114,7 +114,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (refillable.length === 0) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} title={t('prescriptions.refill.pageHeaderTitle')}>
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')}>
         <NoRefills />
       </FullScreenSubtask>
     )
@@ -132,7 +132,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     <>
       <FullScreenSubtask
         leftButtonText={tc('cancel')}
-        title={t('prescriptions.refill.pageHeaderTitle')}
+        title={tc('refillRequest')}
         primaryContentButtonText={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
         scrollViewRef={scrollViewRef}
         onPrimaryContentButtonPress={() => {

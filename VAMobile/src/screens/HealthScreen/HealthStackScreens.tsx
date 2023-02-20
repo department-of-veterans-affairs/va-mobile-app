@@ -180,18 +180,8 @@ export const getHealthScreens = (t: TFunction) => {
       />
     </HealthStack.Group>,
     <HealthStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} options={{ headerShown: false, presentation: 'card' }} />,
-    <HealthStack.Screen
-      key={'RefillScreenModal'}
-      name="RefillScreenModal"
-      component={RefillScreenModal}
-      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
-    />,
-    <HealthStack.Screen
-      key={'RefillTrackingModal'}
-      name="RefillTrackingModal"
-      component={RefillTrackingModal}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
-    />,
+    <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={{ headerShown: false }} />,
+    <HealthStack.Screen key={'RefillTrackingModal'} name="RefillTrackingModal" component={RefillTrackingModal} options={{ headerShown: false }} />,
     <HealthStack.Screen
       key={'PrescriptionHelp'}
       name="PrescriptionHelp"
