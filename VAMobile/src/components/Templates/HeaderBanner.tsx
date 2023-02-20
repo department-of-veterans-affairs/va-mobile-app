@@ -1,4 +1,4 @@
-import { Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
@@ -60,8 +60,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
-  // focus sets initial screen reader focus on screen entry in iOS; Android does not respect focus and has an RN crash if set to non-interacting element (e.g. Title)
-  const focus = Platform.OS === 'android' ? undefined : leftButton ? 'Left' : title ? 'Title' : 'Right'
+  const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
 
   const transition = title?.type === 'Transition'
@@ -147,12 +146,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   }
 
   const titleA11y = title?.type === 'VA' ? 'V-A' : title?.a11yLabel ? title.a11yLabel : title?.title
-  const titleViewRef = { ref: focus === 'Title' ? focusTitle : () => {} } // Sets screen reader focus to title when appropriate
-  const titleViewProps: ViewProps = {
-    accessibilityLabel: titleA11y,
-    accessibilityRole: 'header',
-    accessible: true,
-  }
+  const titleViewProps: ViewProps = { accessibilityLabel: titleA11y, accessibilityRole: 'header', accessible: true }
   const titleBoxProps: BoxProps = {
     ...commonBoxProps,
     accessibilityElementsHidden: true,
@@ -224,10 +218,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
         </Box>
 
         <Box mt={theme.dimensions.buttonPadding} flex={2}>
-          <View {...titleViewRef}>
-            <View {...titleViewProps}>
-              <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
-            </View>
+          <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
+            <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
           </View>
         </Box>
 
@@ -242,7 +234,11 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               </Box>
             </TouchableWithoutFeedback>
           )}
-          {!rightButton && menuViewActions && <MenuView actions={menuViewActions} />}
+          {!rightButton && menuViewActions && (
+            <Box {...commonBoxProps}>
+              <MenuView actions={menuViewActions} />
+            </Box>
+          )}
         </Box>
       </Box>
     </>

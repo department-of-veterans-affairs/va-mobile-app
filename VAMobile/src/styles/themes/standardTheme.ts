@@ -42,8 +42,8 @@ const fontSizes = {
     lineHeight: 32,
   },
   DescriptiveBackButton: {
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 22,
   },
   MobileBody: {
     fontSize: 20,
