@@ -13,6 +13,7 @@ import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
+import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
@@ -93,6 +94,7 @@ const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
         },
       }}>
       <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="BenefitSummaryServiceVerificationLetter" component={BenefitSummaryServiceVerification} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ headerShown: false }} />
