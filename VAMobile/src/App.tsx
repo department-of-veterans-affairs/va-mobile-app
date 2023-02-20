@@ -309,7 +309,7 @@ export const AuthedApp: FC = () => {
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
-        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ headerShown: false }} />
+        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}
