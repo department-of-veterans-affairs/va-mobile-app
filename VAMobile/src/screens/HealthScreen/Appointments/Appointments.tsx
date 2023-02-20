@@ -90,6 +90,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox
+            scrollViewRef={scrollViewRef}
             title={t('appointments.appointmentsStatusSomeUnavailable')}
             text={t('appointments.troubleLoadingSomeAppointments')}
             border="error"
