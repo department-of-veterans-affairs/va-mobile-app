@@ -196,7 +196,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
 
   return (
     <>
-      <FullScreenSubtask leftButtonText={tc('close')} title={t('prescriptions.refill.pageHeaderTitle')} navigationMultiStepCancelScreen={2}>
+      <FullScreenSubtask leftButtonText={tc('close')} title={tc('refillRequest')} navigationMultiStepCancelScreen={2}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>
