@@ -74,7 +74,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   })
 
   const elementToStickStyle: StyleProp<ViewStyle> = {
-    padding: 22,
+    padding: currentTheme.dimensions.buttonPadding,
     justifyContent: 'center',
     alignItems: 'center',
   }
@@ -97,6 +97,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   const textViewProps: TextViewProps = {
     color: 'link',
     variant: 'textWithIconButton',
+    allowFontScaling: false,
   }
 
   // gets the action passed down to the menu and creates the menu actions
@@ -135,7 +136,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     <>
       <ElementToStick ref={elementRef} style={elementToStickStyle} />
       <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
-        <VAIcon name="EllipsisSolid" fill={'link'} height={22} width={22} />
+        <VAIcon name="EllipsisSolid" fill={'link'} height={22} width={22} preventScaling={true} />
         <TextView {...textViewProps}>{t('more')}</TextView>
       </Pressable>
 
