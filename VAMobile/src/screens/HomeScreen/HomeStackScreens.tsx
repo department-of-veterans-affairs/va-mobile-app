@@ -1,8 +1,8 @@
-import { Platform } from 'react-native'
 import { StackNavigationOptions, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import React from 'react'
 
+import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import DebugScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -48,17 +48,16 @@ const HomeStack = createStackNavigator<HomeStackParamList>()
 
 export const getHomeScreens = (t: TFunction) => {
   const modal: StackNavigationOptions = { presentation: 'modal', ...TransitionPresets.ModalTransition }
-  const slideFromBottom = Platform.OS === 'ios' ? TransitionPresets.ModalSlideFromBottomIOS : TransitionPresets.BottomSheetAndroid
   return [
     <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ headerShown: false, ...modal }} />,
     <HomeStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t('debug.title') }} />,
     <HomeStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: 'Remote Config' }} />,
     <HomeStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: 'Sandbox' }} />,
-    <HomeStack.Screen key={'PreferredName'} name="PreferredName" component={PreferredNameScreen} options={{ headerShown: false }} />,
+    <HomeStack.Screen key={'PreferredName'} name="PreferredName" component={PreferredNameScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'HapticsDemoScreen'} name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />,
-    <HomeStack.Screen key={'EditPhoneNumber'} name="EditPhoneNumber" component={EditPhoneNumberScreen} options={{ ...slideFromBottom, headerShown: false }} />,
-    <HomeStack.Screen key={'EditEmail'} name="EditEmail" component={EditEmailScreen} options={{ ...slideFromBottom, headerShown: false }} />,
-    <HomeStack.Screen key={'GenderIdentity'} name="GenderIdentity" component={GenderIdentityScreen} options={{ ...modal, headerShown: false }} />,
+    <HomeStack.Screen key={'EditPhoneNumber'} name="EditPhoneNumber" component={EditPhoneNumberScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HomeStack.Screen key={'EditEmail'} name="EditEmail" component={EditEmailScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HomeStack.Screen key={'GenderIdentity'} name="GenderIdentity" component={GenderIdentityScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} options={{ ...modal, headerShown: false }} />,
     <HomeStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} options={{ ...modal, headerShown: false }} />,
     <HomeStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} options={{ ...modal, headerShown: false }} />,
