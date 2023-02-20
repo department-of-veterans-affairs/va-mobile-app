@@ -1,4 +1,4 @@
-import { Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
@@ -60,8 +60,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
-  // focus sets initial screen reader focus on screen entry in iOS; Android does not respect focus and has an RN crash if set to non-interacting element (e.g. Title)
-  const focus = Platform.OS === 'android' ? undefined : leftButton ? 'Left' : title ? 'Title' : 'Right'
+  const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
 
   const transition = title?.type === 'Transition'
