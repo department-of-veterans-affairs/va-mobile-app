@@ -9,7 +9,6 @@ import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slic
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
-import { triggerHaptic } from 'utils/haptics'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -75,7 +74,6 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
           on: pref.value,
         },
         onPress: () => {
-          triggerHaptic('impactHeavy')
           dispatch(setPushPref(pref))
         },
       }
