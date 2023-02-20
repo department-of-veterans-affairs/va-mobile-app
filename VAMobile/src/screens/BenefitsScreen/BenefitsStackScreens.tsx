@@ -8,7 +8,6 @@ import { LetterTypes, ScreenIDTypes } from 'store/api/types'
 import { ClaimType } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
-import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
 import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
@@ -84,12 +83,6 @@ const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
 
 export const getBenefitsScreens = (): Array<ReactNode> => {
   return [
-    <BenefitsStack.Screen
-      key={'BenefitSummaryServiceVerificationLetter'}
-      name="BenefitSummaryServiceVerificationLetter"
-      component={BenefitSummaryServiceVerification}
-      options={{ headerShown: false }}
-    />,
     <BenefitsStack.Screen
       key={'ConsolidatedClaimsNote'}
       name="ConsolidatedClaimsNote"
