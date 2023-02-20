@@ -216,7 +216,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('letters.list.title')}
+      backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>

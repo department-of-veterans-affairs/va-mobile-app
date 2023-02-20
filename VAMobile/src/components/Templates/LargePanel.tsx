@@ -4,7 +4,8 @@ import React, { FC } from 'react'
 
 import { FooterButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useDestructiveAlert } from 'utils/hooks'
+import { View, ViewStyle } from 'react-native'
+import { useDestructiveAlert, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
@@ -48,7 +49,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
-
+  const theme = useTheme()
   const message = t('areYouSure')
 
   const leftTitleButtonPress = () => {
@@ -88,13 +89,21 @@ export const LargePanel: FC<LargePanelProps> = ({
     divider: true,
   }
 
+  const fillStyle: ViewStyle = {
+    paddingTop: theme.dimensions.largePanelHeaderOffset,
+    backgroundColor: theme.colors.background.main,
+    flex: 1,
+  }
+
   return (
     <>
-      <HeaderBanner {...headerProps} />
-      <VAScrollView>
-        {children}
-        {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
-      </VAScrollView>
+      <View {...fillStyle}>
+        <HeaderBanner {...headerProps} />
+        <VAScrollView>
+          {children}
+          {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+        </VAScrollView>
+      </View>
     </>
   )
 }
