@@ -1,14 +1,14 @@
 import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, Platform, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useSelector } from 'react-redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
-import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack'
 import { enableScreens } from 'react-native-screens'
 import { useTranslation } from 'react-i18next'
 import { utils } from '@react-native-firebase/app'
@@ -25,6 +25,7 @@ import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAna
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
+import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { SnackBarConstants } from 'constants/common'
@@ -290,8 +291,6 @@ export const AuthedApp: FC = () => {
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens()
 
-  const slideFromBottom = Platform.OS === 'ios' ? TransitionPresets.ModalSlideFromBottomIOS : TransitionPresets.BottomSheetAndroid
-
   return (
     <>
       <RootNavStack.Navigator
@@ -309,8 +308,8 @@ export const AuthedApp: FC = () => {
         }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
-        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={{ ...slideFromBottom, headerShown: false }} />
-        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ headerShown: false }} />
+        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
+        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

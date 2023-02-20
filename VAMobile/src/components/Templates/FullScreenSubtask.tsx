@@ -13,7 +13,7 @@ import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
-Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
+Use 'options={FULLSCREEN_SUBTASK_OPTIONS}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
 */
 
 export type FullScreenSubtaskProps = {
