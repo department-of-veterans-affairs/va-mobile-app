@@ -1,5 +1,5 @@
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { Dimensions ScrollView } from 'react-native'
+import { Dimensions, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
