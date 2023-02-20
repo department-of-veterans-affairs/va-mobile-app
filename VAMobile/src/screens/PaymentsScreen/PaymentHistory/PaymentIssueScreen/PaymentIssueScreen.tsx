@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, LargePaneL, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { useTheme } from 'utils/hooks'
@@ -12,7 +12,6 @@ type PaymentIssueScreenProps = StackScreenProps<PaymentsStackParamList, 'Payment
 const PaymentIssue: FC<PaymentIssueScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { contentMarginTop } = theme.dimensions
 
   return (
     <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>

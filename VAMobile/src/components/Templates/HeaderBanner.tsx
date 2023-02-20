@@ -122,7 +122,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     display: 'flex',
     flexDirection: 'row',
     minHeight: theme.dimensions.headerHeight,
-    backgroundColor: 'main',
+    backgroundColor: bannerDivider ? 'largePanelHeader' : 'main',
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
   }
