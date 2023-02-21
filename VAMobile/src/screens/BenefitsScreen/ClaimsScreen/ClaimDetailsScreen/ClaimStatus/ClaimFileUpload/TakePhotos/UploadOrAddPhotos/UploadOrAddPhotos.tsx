@@ -1,9 +1,9 @@
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { Dimensions } from 'react-native'
+import { Dimensions, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView, VAButton } from 'components'
@@ -36,6 +36,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
   const confirmAlert = useDestructiveAlert()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
+  const scrollViewRef = useRef<ScrollView>(null)
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
@@ -205,11 +206,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.uploadPhotos')} navigationMultiStepCancelScreen={2}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} title={t('fileUpload.uploadPhotos')} navigationMultiStepCancelScreen={2}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!errorMessage && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>

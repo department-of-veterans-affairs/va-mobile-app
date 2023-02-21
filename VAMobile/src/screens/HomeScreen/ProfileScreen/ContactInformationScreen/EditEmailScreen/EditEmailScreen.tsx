@@ -1,6 +1,7 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
 import { EMAIL_REGEX_EXP } from 'constants/common'
@@ -31,6 +32,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [saveDisabled, setSaveDisabled] = useState(false)
+  const scrollViewRef = useRef<ScrollView>(null)
 
   useEffect(() => {
     if (emailSaved) {
@@ -132,6 +134,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   return (
     <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
       title={t('contactInformation.emailAddress')}
       leftButtonText={t('cancel')}
       rightButtonText={t('save')}
@@ -150,7 +153,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editEmail.alertError')} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" />
           </Box>
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
