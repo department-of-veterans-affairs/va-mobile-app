@@ -124,7 +124,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim()
 
   const linkProps: TextViewProps = {
-    variant: 'HelperText',
+    variant: 'MobileBodyLink',
     color: 'link',
     textDecoration: 'underline',
     textDecorationColor: 'link',

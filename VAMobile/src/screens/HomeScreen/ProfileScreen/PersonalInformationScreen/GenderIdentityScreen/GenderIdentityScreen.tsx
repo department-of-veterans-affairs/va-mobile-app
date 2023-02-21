@@ -70,7 +70,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   }
 
   const linkProps: TextViewProps = {
-    variant: 'HelperText',
+    variant: 'MobileBodyLink',
     color: 'link',
     textDecoration: 'underline',
     textDecorationColor: 'link',
