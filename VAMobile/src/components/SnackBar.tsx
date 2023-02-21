@@ -100,7 +100,6 @@ const SnackBar: FC<ToastProps> = (toast) => {
   }
 
   const onActionPress = () => {
-    triggerHaptic('notificationError')
     if (onActionPressed && typeof onActionPressed === 'function') {
       onActionPressed()
     }
@@ -108,7 +107,6 @@ const SnackBar: FC<ToastProps> = (toast) => {
   }
 
   const onDismissPress = () => {
-    triggerHaptic('notificationSuccess')
     toast.onHide()
   }
 
@@ -123,6 +121,14 @@ const SnackBar: FC<ToastProps> = (toast) => {
     mr: 8,
     alignSelf: 'flex-start',
     mt: 2,
+  }
+
+  const vibrate = (): void => {
+    if (!isUndo) {
+      triggerHaptic('notificationError')
+    } else {
+      triggerHaptic('notificationSuccess')
+    }
   }
 
   return (
@@ -149,6 +155,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
           </TouchableOpacity>
         </Box>
       </Box>
+      {vibrate()}
     </SafeAreaView>
   )
 }
