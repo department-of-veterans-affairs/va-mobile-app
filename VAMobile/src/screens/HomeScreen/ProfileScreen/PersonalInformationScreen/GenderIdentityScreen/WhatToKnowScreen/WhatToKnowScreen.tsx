@@ -2,8 +2,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
+import { Box, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { LargePanel, TextArea, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -20,14 +20,14 @@ const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
-      <TextArea>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}
         </TextView>
         <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare')}</TextView>
         <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.whoCanAccess')}</TextView>
         <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.privacy')}</TextView>
-      </TextArea>
+      </Box>
     </LargePanel>
   )
 }

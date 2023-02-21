@@ -4,6 +4,7 @@ export const primaryTextColor = colors.grayDark
 export const lightTheme = {
   background: {
     main: colors.grayLightest,
+    largePanelHeader: colors.white,
     footerButtonActive: colors.primaryDarkest,
     textBox: colors.white,
     textBoxInactive: colors.white,
@@ -199,6 +200,7 @@ export const lightTheme = {
 export const darkTheme = {
   background: {
     main: colors.darkmodeGrayDark,
+    largePanelHeader: colors.darkmodeGrayDark,
     footerButtonActive: colors.primaryDarkest,
     textBox: colors.base,
     textBoxInactive: colors.base,

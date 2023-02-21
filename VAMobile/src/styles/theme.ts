@@ -134,6 +134,7 @@ export type VATypographyThemeVariants = {
 
 export type VABackgroundColors = {
   main: string
+  largePanelHeader: string
   footerButtonActive: string
   textBox: string
   textBoxInactive: string
@@ -268,7 +269,6 @@ export type VATheme = {
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number
     fullScreenContentButtonHeight: number
-    largePanelHeaderOffset: number
   }
   fontFace: {
     regular: string
