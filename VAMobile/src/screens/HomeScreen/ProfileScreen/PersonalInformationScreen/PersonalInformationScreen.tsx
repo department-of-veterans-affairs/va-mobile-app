@@ -72,10 +72,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   }
 
   const linkProps: TextViewProps = {
-    variant: 'HelperText',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
+    variant: 'MobileBodyLink',
     mx: gutter,
     mt: condensedMarginBetween,
   }
