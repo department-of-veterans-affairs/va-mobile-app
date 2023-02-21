@@ -227,7 +227,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
           {rightButton && (
             <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
               <Box {...commonBoxProps}>
-                {rightButton.icon && <VAIcon fill="link" height={22} width={22} preventScaling={true} {...rightButton.icon} />}
+                {rightButton.icon && <VAIcon fill="link" height={24} width={24} preventScaling={true} {...rightButton.icon} />}
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
                 </Box>
