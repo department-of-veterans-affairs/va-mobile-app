@@ -17,6 +17,8 @@ import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/Be
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
+import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
+import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
@@ -99,6 +101,8 @@ const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="FileRequestDetails" component={FileRequestDetails} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="GenericLetter" component={GenericLetter} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="LettersList" component={LettersListScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ headerShown: false }} />
