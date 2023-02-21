@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -33,22 +33,20 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('militaryInformation.incorrectServiceInfo')}
-          </TextView>
-          <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} variant="MobileBody" my={standardMarginBetween}>
-            {t('militaryInformation.incorrectServiceInfo.body')}
-          </TextView>
-          <ClickForActionLink
-            displayedText={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
-            a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
-            numberOrUrlLink={t('militaryInformation.incorrectServiceInfo.DMDCNumber')}
-            linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('militaryInformation.incorrectServiceInfo.DMDCNumber.a11yHint'))}
-          />
-        </TextArea>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('militaryInformation.incorrectServiceInfo')}
+        </TextView>
+        <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} variant="MobileBody" my={standardMarginBetween}>
+          {t('militaryInformation.incorrectServiceInfo.body')}
+        </TextView>
+        <ClickForActionLink
+          displayedText={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
+          a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
+          numberOrUrlLink={t('militaryInformation.incorrectServiceInfo.DMDCNumber')}
+          linkType={LinkTypeOptionsConstants.call}
+          {...a11yHintProp(t('militaryInformation.incorrectServiceInfo.DMDCNumber.a11yHint'))}
+        />
       </Box>
     </LargePanel>
   )
