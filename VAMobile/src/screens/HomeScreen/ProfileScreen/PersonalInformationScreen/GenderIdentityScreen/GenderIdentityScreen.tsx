@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, TextViewProps, radioOption } from 'components'
+import { Box, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, radioOption } from 'components'
 import { GenderIdentityKey, GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
