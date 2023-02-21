@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
-import { Box, ClickToCallPhoneNumber, LargePanel, TextArea, TextView, TextViewProps } from 'components'
+import { Box, ClickToCallPhoneNumber, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -68,36 +68,32 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
 
   const nameUpdateScreen = (): ReactElement => {
     return (
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('howDoIUpdate.name.title')}
-          </TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-            {t('howDoIUpdate.name.legalName')}
-          </TextView>
-          <TextView {...linkNameProps}>{t('howDoIUpdate.learnToChangeLegalName')}</TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-            {t('howDoIUpdate.name.incorrectRecords')}
-          </TextView>
-          {renderVAMedicalCenterSection()}
-        </TextArea>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('howDoIUpdate.name.title')}
+        </TextView>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+          {t('howDoIUpdate.name.legalName')}
+        </TextView>
+        <TextView {...linkNameProps}>{t('howDoIUpdate.learnToChangeLegalName')}</TextView>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+          {t('howDoIUpdate.name.incorrectRecords')}
+        </TextView>
+        {renderVAMedicalCenterSection()}
       </Box>
     )
   }
 
   const dateOfBirthUpdateScreen = (): ReactElement => {
     return (
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('howDoIUpdate.dateOfBirth.title')}
-          </TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-            {t('howDoIUpdate.dateOfBirth.body')}
-          </TextView>
-          {renderVAMedicalCenterSection()}
-        </TextArea>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('howDoIUpdate.dateOfBirth.title')}
+        </TextView>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+          {t('howDoIUpdate.dateOfBirth.body')}
+        </TextView>
+        {renderVAMedicalCenterSection()}
       </Box>
     )
   }
