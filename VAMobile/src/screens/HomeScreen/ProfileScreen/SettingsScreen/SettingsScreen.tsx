@@ -13,7 +13,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { triggerHaptic } from 'utils/haptics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
@@ -34,7 +33,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
     const newPrefValue = !shouldStoreWithBiometric
-    triggerHaptic('impactHeavy')
     dispatch(setBiometricsPreference(newPrefValue))
   }
 

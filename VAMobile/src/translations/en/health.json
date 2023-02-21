@@ -352,7 +352,6 @@
   "prescriptions.refill.pleaseSelect": "Please select a prescription",
   "prescriptions.refill.prescriptionsCount": "Prescriptions for refill ({{ count }})",
   "prescriptions.refill.weWillMailText": "We'll mail your refills to the address on file at your local VA Pharmacy.",
-  "prescriptions.refill.pageHeaderTitle": "Refill Request",
   "prescriptions.refill.submit": "Submitting refill request...",
   "prescriptions.refill.submit_plural": "Submitting refill requests...",
   "prescriptions.refillRequestSummary": "Refill request summary",
