@@ -111,7 +111,7 @@ const fontSizes = {
   },
   textWithIconButton: {
     fontSize: 12,
-    lineHeight: 12,
+    lineHeight: 15,
   },
   webviewTitle: {
     fontSize: 12,
