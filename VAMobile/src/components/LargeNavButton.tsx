@@ -125,9 +125,6 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
 
   const linkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
     mt: theme.dimensions.condensedMarginBetween,
   }
 

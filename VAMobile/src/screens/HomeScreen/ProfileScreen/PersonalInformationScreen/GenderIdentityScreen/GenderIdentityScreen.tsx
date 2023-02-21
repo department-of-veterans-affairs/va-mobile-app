@@ -69,13 +69,6 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     value: genderIdentity as GenderIdentityKey,
   }
 
-  const linkProps: TextViewProps = {
-    variant: 'MobileBodyLink',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-  }
-
   if (loading || genderIdentitySaved) {
     return <LoadingComponent text={t('personalInformation.genderIdentity.saving')} />
   }
@@ -89,7 +82,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
         </TextView>
         <RadioGroup {...radioGroupProps} />
         <Pressable onPress={navigateTo('WhatToKnow')} accessibilityRole="link" accessible={true}>
-          <TextView {...linkProps}>{t('personalInformation.genderIdentity.whatToKnow')}</TextView>
+          <TextView variant="MobileBodyLink">{t('personalInformation.genderIdentity.whatToKnow')}</TextView>
         </Pressable>
       </Box>
     </FullScreenSubtask>

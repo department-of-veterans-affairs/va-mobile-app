@@ -132,9 +132,6 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   const linkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
     mx: gutter,
     mt: condensedMarginBetween,
   }
