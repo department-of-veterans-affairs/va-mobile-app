@@ -1,5 +1,5 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { ScrollView, TextInput } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 

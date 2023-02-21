@@ -168,7 +168,13 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={goBack} rightButtonText={t('save')} onRightButtonPress={() => setOnSaveClicked(true)}>
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      title={displayTitle}
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={goBack}
+      rightButtonText={t('save')}
+      onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
