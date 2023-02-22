@@ -126,9 +126,9 @@ export const Events = {
       },
     }
   },
-  vama_prof_update_dir_dep: (totalTime: number, actionTime: number): Event => {
+  vama_update_dir_dep: (totalTime: number, actionTime: number): Event => {
     return {
-      name: 'vama_prof_update_dir_dep',
+      name: 'vama_update_dir_dep',
       params: {
         totalTime,
         actionTime,
