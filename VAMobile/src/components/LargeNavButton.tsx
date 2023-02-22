@@ -1,7 +1,7 @@
 import { Pressable, ViewStyle } from 'react-native'
 import React, { FC, useState } from 'react'
 
-import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, TextViewProps, VAIcon } from 'components'
+import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, VAIcon } from 'components'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -14,16 +14,10 @@ interface HomeNavButtonProps {
   subText?: string
   /**a11y string secondary text that seats on the second row */
   subTextA11yLabel?: string
-  /**string link text that seats on the third row */
-  linkText?: string
-  /**function to be called when press on link occurs */
-  linkTextOnPress?: () => void
-  /**hide arrow */
-  hideArrow?: boolean
   /**string for accessibility hint */
   a11yHint?: string
   /**function to be called when press occurs */
-  onPress?: () => void
+  onPress: () => void
   /**BackgroundVariant color for background */
   backgroundColor?: BackgroundVariant
   /**BackgroundVariant color for active state */
@@ -54,9 +48,6 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   title,
   subText,
   subTextA11yLabel,
-  linkText,
-  linkTextOnPress,
-  hideArrow,
   a11yHint,
   onPress,
   backgroundColor,
@@ -82,9 +73,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   }
 
   const _onPress = (): void => {
-    if (onPress) {
-      onPress()
-    }
+    onPress()
   }
 
   const getBorderColor = (): BorderColorVariant | undefined => {
@@ -123,14 +112,6 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   }
   const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim()
 
-  const linkProps: TextViewProps = {
-    variant: 'HelperText',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-    mt: theme.dimensions.condensedMarginBetween,
-  }
-
   return (
     <Box {...boxProps}>
       <Pressable
@@ -155,13 +136,8 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
               {subText}
             </TextView>
           )}
-          {linkText && linkTextOnPress && (
-            <Pressable onPress={linkTextOnPress} accessibilityRole="link" accessible={true}>
-              <TextView {...linkProps}>{linkText}</TextView>
-            </Pressable>
-          )}
         </Box>
-        {!hideArrow && <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />}
+        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>
     </Box>
   )

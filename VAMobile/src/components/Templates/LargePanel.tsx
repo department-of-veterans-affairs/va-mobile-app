@@ -90,7 +90,6 @@ export const LargePanel: FC<LargePanelProps> = ({
   }
 
   const fillStyle: ViewStyle = {
-    paddingTop: theme.dimensions.largePanelHeaderOffset,
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }

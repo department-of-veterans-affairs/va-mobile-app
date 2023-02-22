@@ -5,7 +5,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { Box, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
+import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, GenderIdentityKey, GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -72,12 +72,25 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   }
 
   const linkProps: TextViewProps = {
-    variant: 'HelperText',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
+    variant: 'MobileBodyLink',
     mx: gutter,
     mt: condensedMarginBetween,
+  }
+
+  const dobLinkProps: TextViewProps = {
+    variant: 'MobileBodyLink',
+    mb: condensedMarginBetween,
+  }
+
+  const boxProps: BoxProps = {
+    minHeight: 81,
+    borderRadius: 6,
+    p: theme.dimensions.cardPadding,
+    mb: theme.dimensions.condensedMarginBetween,
+    backgroundColor: 'textBox',
+    borderWidth: theme.dimensions.buttonBorderWidth,
+    borderColor: 'secondary',
+    borderStyle: 'solid',
   }
 
   if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
@@ -96,6 +109,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     )
   }
 
+  const birthdate = getBirthDate(profile, t)
+
   //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
 
   return (
@@ -107,17 +122,17 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
         <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
       </Pressable>
       <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <LargeNavButton
-          title={t('personalInformation.dateOfBirth')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-          subText={getBirthDate(profile, t)}
-          hideArrow={true}
-          linkText={t('personalInformation.howToFixDateOfBirth')}
-          linkTextOnPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })}
-        />
+        <Box {...boxProps}>
+          <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
+            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
+              {t('personalInformation.dateOfBirth')}
+            </TextView>
+          </Box>
+          <TextView variant={'MobileBody'}>{birthdate}</TextView>
+        </Box>
+        <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
+          <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
+        </Pressable>
         {featureEnabled('preferredNameGender') && (
           <>
             <LargeNavButton

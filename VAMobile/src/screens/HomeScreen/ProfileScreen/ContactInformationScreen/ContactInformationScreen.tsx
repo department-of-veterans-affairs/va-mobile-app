@@ -131,10 +131,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   const onEmailAddress = navigateTo('EditEmail')
 
   const linkProps: TextViewProps = {
-    variant: 'HelperText',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
+    variant: 'MobileBodyLink',
     mx: gutter,
     mt: condensedMarginBetween,
   }

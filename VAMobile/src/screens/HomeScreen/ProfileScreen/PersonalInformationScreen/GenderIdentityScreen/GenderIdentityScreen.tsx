@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, TextViewProps, radioOption } from 'components'
+import { Box, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, radioOption } from 'components'
 import { GenderIdentityKey, GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -69,13 +69,6 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     value: genderIdentity as GenderIdentityKey,
   }
 
-  const linkProps: TextViewProps = {
-    variant: 'HelperText',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-  }
-
   if (loading || genderIdentitySaved) {
     return <LoadingComponent text={t('personalInformation.genderIdentity.saving')} />
   }
@@ -89,7 +82,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
         </TextView>
         <RadioGroup {...radioGroupProps} />
         <Pressable onPress={navigateTo('WhatToKnow')} accessibilityRole="link" accessible={true}>
-          <TextView {...linkProps}>{t('personalInformation.genderIdentity.whatToKnow')}</TextView>
+          <TextView variant="MobileBodyLink">{t('personalInformation.genderIdentity.whatToKnow')}</TextView>
         </Pressable>
       </Box>
     </FullScreenSubtask>
