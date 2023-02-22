@@ -113,7 +113,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (showLoadingScreenRequestRefills) {
-    return <LoadingComponent text={tc('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+    return <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
   }
 
   return (
