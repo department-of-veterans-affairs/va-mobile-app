@@ -1,5 +1,6 @@
+import { ScrollView } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, RefObject } from 'react'
 
 import { AlertBox, Box } from './index'
 import { LoadingComponent } from 'components'
@@ -13,10 +14,12 @@ export type MessageAlertProps = {
   saveDraftAttempted?: boolean
   /**sets that the draft is being saved*/
   savingDraft?: boolean
+  /** optional ref for parent scroll view */
+  scrollViewRef?: RefObject<ScrollView>
 }
 
 /**Common component to show a message alert when saving or sending a secure message */
-const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, savingDraft }) => {
+const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, savingDraft, scrollViewRef }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
@@ -35,7 +38,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
 
   return (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox border={'error'} title={title} text={text} textA11yLabel={textA11yLabel} titleRole={'header'} />
+      <AlertBox border={'error'} title={title} text={text} textA11yLabel={textA11yLabel} titleRole={'header'} scrollViewRef={scrollViewRef} />
     </Box>
   )
 }

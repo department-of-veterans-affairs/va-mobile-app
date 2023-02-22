@@ -1,14 +1,3 @@
-# These owners will be the default owners for everything in
-# the repo.
+# These owners will be the default owners for everything in the repo. Unless a later match takes precedence
 
-@narin
-
-# Order is important; the last matching pattern takes the most
-# precedence.
-
-.circleci             @narin
-.github               @narin
-
-/VAMobile/android/    @narin
-/VAMobile/ios/        @narin
-/VAMobile/fastfiles/  @narin
+* @department-of-veterans-affairs/flagship-mobile-reviewers

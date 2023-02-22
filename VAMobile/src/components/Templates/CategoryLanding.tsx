@@ -1,12 +1,11 @@
-import { Animated, Easing, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, Pressable, StatusBar, Text, View, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, CrisisLineCta, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
-import { themeFn } from 'utils/theme'
+import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
-import styled from 'styled-components'
 
 /* To use these templates:
 1. Wrap the screen content you want in <CategoryLanding> </CategoryLanding> and supply the appropriate props for desired functionality
@@ -35,9 +34,8 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const [VaOpacity, setVaOpacity] = useState(1)
-  const [titleShowing, setTitleShowing] = useState(false)
-  const [titleFade] = useState(new Animated.Value(0))
+  const [scrollOffset, setScrollOffset] = useState(0)
+  const [trackScrollOffset, setTrackScrollOffset] = useState(true)
   const [transitionHeaderHeight, setTransitionHeaderHeight] = useState(0)
 
   const fillStyle: ViewStyle = {
@@ -46,21 +44,9 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     flex: 1,
   }
 
-  const headerStyle: ViewStyle = {
-    height: theme.dimensions.navBarHeight,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-
-  const headerTitleBoxProps: BoxProps = {
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'row',
-    m: theme.dimensions.headerButtonSpacing,
-    justifyContent: 'center',
-    alignItems: 'center',
-    accessibilityElementsHidden: true,
-    importantForAccessibility: 'no-hide-descendants',
+  const headerProps: HeaderBannerProps = {
+    title: title ? { type: 'Transition', title, scrollOffset, transitionHeaderHeight } : { type: 'VA' },
+    rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }
 
   const subtitleProps: TextViewProps = {
@@ -69,58 +55,30 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     ml: theme.dimensions.condensedMarginBetween,
     mb: theme.dimensions.standardMarginBetween,
     mr: theme.dimensions.condensedMarginBetween,
+    accessible: false,
+    importantForAccessibility: 'no-hide-descendants',
   }
-
-  const StyledLabel = styled(Text)`
-	color: ${themeFn((styleTheme) => styleTheme.colors.icon.active)}
-	align-self: center;
-	margin-top: 24px;
-	font-size: 12px;
-	letter-spacing: -0.2px;
-`
 
   /**
    * Handles which onScroll behavior is used
    * @param event - Native scroll event
-   * @returns A logic for transitioning the header or a function that does nothing (no title)
+   * @returns Logic for transitioning the header or a function that does nothing (no title)
    */
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     return title ? transitionHeader(event.nativeEvent.contentOffset.y) : () => {}
   }
 
   /**
-   * With useEffect below, handles carrying out transitioning header functionality
+   * Handles controlling transitioning header functionality
    * @param offsetValue - The scroll offset position in pixels
    */
   const transitionHeader = (offsetValue: number) => {
-    if (offsetValue <= transitionHeaderHeight || !titleShowing) {
-      setVaOpacity(1 - offsetValue / transitionHeaderHeight)
-      setTitleShowing(offsetValue >= transitionHeaderHeight)
+    if (offsetValue <= transitionHeaderHeight || trackScrollOffset) {
+      setScrollOffset(offsetValue)
+      // Stops tracking scroll offset outside the relevant range so more scrolling doesn't prevent animation rendering
+      setTrackScrollOffset(offsetValue < transitionHeaderHeight)
     }
   }
-
-  /**
-   * Handles animation effect on the title
-   */
-  useEffect(() => {
-    // Revert title to transparent (out of view)
-    titleShowing === false &&
-      Animated.timing(titleFade, {
-        toValue: 0,
-        duration: 1,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start()
-
-    // Trigger transition header animation when titleShowing becomes true
-    titleShowing === true &&
-      Animated.timing(titleFade, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start()
-  })
 
   /**
    * At (re)render time, gets and sets the height for transitioning header behavior
@@ -135,36 +93,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   return (
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
-      <View style={headerStyle}>
-        <Box display="flex" flex={1} flexDirection={'row'} width="100%" height={theme.dimensions.headerHeight} alignItems={'center'}>
-          <Box display="flex" width="25%" />
-
-          <Box {...headerTitleBoxProps}>
-            {titleShowing ? (
-              <Animated.View style={{ opacity: titleFade }}>
-                <TextView variant="MobileBody" selectable={false} allowFontScaling={false}>
-                  {title}
-                </TextView>
-              </Animated.View>
-            ) : (
-              <TextView variant="VAHeader" selectable={false} opacity={VaOpacity} allowFontScaling={false}>
-                VA
-              </TextView>
-            )}
-          </Box>
-
-          <Box display="flex" width="25%" alignItems="center">
-            {headerButton ? (
-              <Pressable onPress={headerButton.onPress} accessibilityRole="button" accessible={true}>
-                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  <VAIcon name={headerButton.icon.name} fill={'active'} height={22} width={22} preventScaling={true} />
-                </Box>
-                <StyledLabel allowFontScaling={false}>{headerButton.label}</StyledLabel>
-              </Pressable>
-            ) : null}
-          </Box>
-        </Box>
-      </View>
+      <HeaderBanner {...headerProps} />
 
       <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
