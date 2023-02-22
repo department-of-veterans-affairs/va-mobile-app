@@ -201,7 +201,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box flex={1}>
+        <Box flex={2}>
           {leftButton?.descriptiveBack ? (
             <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
           ) : leftButton ? (
@@ -217,13 +217,13 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
           ) : null}
         </Box>
 
-        <Box mt={theme.dimensions.buttonPadding} flex={2}>
+        <Box mt={theme.dimensions.buttonPadding} flex={5}>
           <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
             <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
           </View>
         </Box>
 
-        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
+        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={2} alignItems={'flex-end'}>
           {rightButton && (
             <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
               <Box {...commonBoxProps}>
