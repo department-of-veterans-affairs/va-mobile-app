@@ -1,6 +1,7 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
@@ -14,7 +15,6 @@ import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -39,6 +39,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const [errorA11y, setErrorA11y] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
+  const scrollViewRef = useRef<ScrollView>(null)
   const { origin, attachmentsList, messageID } = route.params
 
   useEffect(() => {
@@ -134,11 +135,11 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   return (
-    <VAScrollView {...testIdProps('Attachments-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox text={error} textA11yLabel={errorA11y} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} text={error} textA11yLabel={errorA11y} border="error" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">

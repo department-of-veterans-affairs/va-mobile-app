@@ -1,6 +1,7 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import {
   AlertBox,
@@ -25,7 +26,6 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
@@ -48,6 +48,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [saveDisabled, setSaveDisabled] = useState(false)
+  const scrollViewRef = useRef<ScrollView>(null)
 
   useEffect(() => {
     navigation.setOptions({
@@ -152,7 +153,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Email: Edit-email-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -166,7 +167,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editEmail.alertError')} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" />
           </Box>
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
