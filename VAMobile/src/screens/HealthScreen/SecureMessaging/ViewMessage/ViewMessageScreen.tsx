@@ -6,6 +6,7 @@ import _ from 'underscore'
 import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
+import { DemoState } from 'store/slices/demoSlice'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -16,6 +17,7 @@ import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMess
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
+import { getMockMessageSentDate } from 'store/api/demo/utils'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -61,6 +63,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
   const subject = message ? message.subject : ''
   const category = message ? message.category : 'OTHER'
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
   useLayoutEffect(() => {
@@ -171,7 +174,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     return <></>
   }
 
-  const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
+  const replyExpired = (demoMode && message.messageId === 2092809) ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
   const onMove = (value: string) => {
     setShowModalPicker(false)
