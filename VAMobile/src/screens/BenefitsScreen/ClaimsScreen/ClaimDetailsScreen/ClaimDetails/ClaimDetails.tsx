@@ -60,8 +60,8 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
             {t('claimDetails.yourRepresentative')}
           </TextView>
         </Box>
-        <Box {...testIdProps(attributes?.vaRepresentative || '')} accessible={true}>
-          <TextView variant="MobileBody">{attributes?.vaRepresentative || ''}</TextView>
+        <Box {...testIdProps(attributes?.vaRepresentative || t('claimDetails.yourRepresentative.notAvailable'))} accessible={true}>
+          <TextView variant="MobileBody">{attributes?.vaRepresentative || t('claimDetails.yourRepresentative.notAvailable')}</TextView>
         </Box>
       </TextArea>
     </Box>
