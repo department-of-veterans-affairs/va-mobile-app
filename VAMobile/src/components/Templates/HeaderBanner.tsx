@@ -201,7 +201,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box flex={1}>
+        <Box flex={1} alignItems="flex-start">
           {leftButton?.descriptiveBack ? (
             <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
           ) : leftButton ? (
@@ -217,7 +217,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
           ) : null}
         </Box>
 
-        <Box mt={theme.dimensions.buttonPadding} flex={2}>
+        <Box mt={theme.dimensions.buttonPadding}>
           <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
             <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
           </View>
