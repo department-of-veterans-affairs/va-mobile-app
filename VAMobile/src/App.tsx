@@ -25,7 +25,7 @@ import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAna
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
-import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { SnackBarConstants } from 'constants/common'
@@ -160,7 +160,6 @@ export const AuthGuard: FC = () => {
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
@@ -257,7 +256,7 @@ export const AuthGuard: FC = () => {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
-        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: th('veteransCrisisLine.title') }} />
+        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
         <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin'), animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
