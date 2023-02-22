@@ -43,5 +43,8 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_TYPESCRIPT_ES: true
+          VALIDATE_TSX: true
+          LINTER_RULES_PATH: VAMobile/
+          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.js
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
