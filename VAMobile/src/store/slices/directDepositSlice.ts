@@ -81,7 +81,7 @@ export const updateBankInfo =
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_dir_dep(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_update_dir_dep(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveBankInfo({ paymentAccount: bankInfo?.data.attributes.paymentAccount }))
