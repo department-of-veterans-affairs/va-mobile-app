@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, ChildTemplate, CollapsibleView, CrisisLineCta, TextView, TextViewProps, VABulletList, VAButton } from 'components'
+import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, FullScreenSubtask, TextView, TextViewProps, VABulletList, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation } from 'utils/hooks'
@@ -32,7 +32,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   }
 
   return (
-    <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('signin')}>
+    <FullScreenSubtask leftButtonText={t('back')} onLeftButtonPress={navigation.goBack}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView {...bodyTextProps}>{t('loaGate.p1')}</TextView>
@@ -74,7 +74,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           />
         </Box>
       </Box>
-    </ChildTemplate>
+    </FullScreenSubtask>
   )
 }
 
