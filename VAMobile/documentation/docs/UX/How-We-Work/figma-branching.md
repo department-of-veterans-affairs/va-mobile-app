@@ -81,6 +81,11 @@ In the modal, you’ll see a list of available reviewers. Add the current design
 
 ![Screenshot of request reviewer modal](/img/figma/figma-branching-request-review-modal.png)
 
+Before sending a branch for review, be sure to include:
+- Description of what changes were made
+- Justification for why changes were made (ticket number, Slack message, etc)
+- In the future, we may ask for documentation to be included
+
 
 ## How do I review and merge changes from a branch in Figma?
 
