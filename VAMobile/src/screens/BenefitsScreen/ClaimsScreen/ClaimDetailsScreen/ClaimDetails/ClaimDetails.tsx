@@ -5,7 +5,6 @@ import { Box, TextArea, TextView, VABulletList } from 'components'
 import { ClaimData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 type ClaimDetailsProps = {
@@ -26,43 +25,26 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
   const formattedDateFiled = formatDateMMMMDDYYYY(attributes?.dateFiled || '')
 
   return (
-    <Box {...testIdProps('Your-claim: Details-tab-claim-details-page')}>
+    <Box>
       <TextArea>
-        <Box {...testIdProps(t('claimDetails.claimType'))} accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold">{t('claimDetails.claimType')}</TextView>
-        </Box>
-        <Box {...testIdProps(attributes?.claimType || '')} accessible={true}>
-          <TextView variant="MobileBody">{attributes?.claimType || ''}</TextView>
-        </Box>
-
+        <TextView variant="MobileBodyBold">{t('claimDetails.claimType')}</TextView>
+        <TextView variant="MobileBody">{attributes?.claimType || ''}</TextView>
         {attributes?.contentionList && attributes.contentionList.length > 0 && (
           <Box>
-            <Box {...testIdProps(t('claimDetails.whatYouHaveClaimed'))} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-                {t('claimDetails.whatYouHaveClaimed')}
-              </TextView>
-            </Box>
+            <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+              {t('claimDetails.whatYouHaveClaimed')}
+            </TextView>
             <VABulletList listOfText={attributes.contentionList} />
           </Box>
         )}
-
-        <Box {...testIdProps(t('claimDetails.dateReceived'))} accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-            {t('claimDetails.dateReceived')}
-          </TextView>
-        </Box>
-        <Box {...testIdProps(formattedDateFiled)} accessible={true}>
-          <TextView variant="MobileBody">{formattedDateFiled}</TextView>
-        </Box>
-
-        <Box {...testIdProps(t('claimDetails.yourRepresentative.a11yLabel'))} accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-            {t('claimDetails.yourRepresentative')}
-          </TextView>
-        </Box>
-        <Box {...testIdProps(attributes?.vaRepresentative || t('claimDetails.yourRepresentative.notAvailable'))} accessible={true}>
-          <TextView variant="MobileBody">{attributes?.vaRepresentative || t('claimDetails.yourRepresentative.notAvailable')}</TextView>
-        </Box>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+          {t('claimDetails.dateReceived')}
+        </TextView>
+        <TextView variant="MobileBody">{formattedDateFiled}</TextView>
+        <TextView accessibilityLabel={t('claimDetails.yourRepresentative.a11yLabel')} variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+          {t('claimDetails.yourRepresentative')}
+        </TextView>
+        <TextView variant="MobileBody">{attributes?.vaRepresentative || t('claimDetails.yourRepresentative.notAvailable')}</TextView>
       </TextArea>
     </Box>
   )
