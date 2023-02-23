@@ -1,7 +1,8 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
@@ -9,7 +10,6 @@ import { ClaimsStackParamList, DocumentPickerResponse } from '../../../../Claims
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -23,6 +23,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
+  const scrollViewRef = useRef<ScrollView>(null)
   const { request, focusOnSnackbar } = route.params
   const showActionSheet = useShowActionSheet()
 
@@ -99,11 +100,11 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   return (
-    <VAScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox text={error} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
           </Box>
         )}
         <TextArea>
