@@ -1,8 +1,8 @@
-import { StackNavigationOptions, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
+import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
-import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import DebugScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -47,9 +47,8 @@ export type HomeStackParamList = WebviewStackParams & {
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
 export const getHomeScreens = (t: TFunction) => {
-  const modal: StackNavigationOptions = { presentation: 'modal', ...TransitionPresets.ModalTransition }
   return [
-    <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ headerShown: false, ...modal }} />,
+    <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'Debug'} name="Debug" component={DebugScreen} options={{ title: t('debug.title') }} />,
     <HomeStack.Screen key={'RemoteConfig'} name="RemoteConfig" component={RemoteConfigScreen} options={{ title: 'Remote Config' }} />,
     <HomeStack.Screen key={'Sandbox'} name="Sandbox" component={SandboxScreen} options={{ title: 'Sandbox' }} />,
@@ -58,9 +57,9 @@ export const getHomeScreens = (t: TFunction) => {
     <HomeStack.Screen key={'EditPhoneNumber'} name="EditPhoneNumber" component={EditPhoneNumberScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'EditEmail'} name="EditEmail" component={EditEmailScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'GenderIdentity'} name="GenderIdentity" component={GenderIdentityScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HomeStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} options={{ ...modal, headerShown: false }} />,
-    <HomeStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} options={{ ...modal, headerShown: false }} />,
-    <HomeStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} options={{ ...modal, headerShown: false }} />,
-    <HomeStack.Screen key={'WhatToKnow'} name="WhatToKnow" component={WhatToKnowScreen} options={{ ...modal, headerShown: false }} />,
+    <HomeStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} options={LARGE_PANEL_OPTIONS} />,
+    <HomeStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} options={LARGE_PANEL_OPTIONS} />,
+    <HomeStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} options={LARGE_PANEL_OPTIONS} />,
+    <HomeStack.Screen key={'WhatToKnow'} name="WhatToKnow" component={WhatToKnowScreen} options={LARGE_PANEL_OPTIONS} />,
   ]
 }

@@ -4,7 +4,7 @@ import { TransitionPresets, createStackNavigator } from '@react-navigation/stack
 import React from 'react'
 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
@@ -134,12 +134,7 @@ export const getHealthScreens = (t: TFunction) => {
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HealthStack.Screen
-      key={'AttachmentsFAQ'}
-      name="AttachmentsFAQ"
-      component={AttachmentsFAQ}
-      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
-    />,
+    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'NoRequestAppointmentAccess'} name="NoRequestAppointmentAccess" component={NoRequestAppointmentAccess} options={{ headerShown: false }} />,
     <HealthStack.Group
@@ -183,21 +178,7 @@ export const getHealthScreens = (t: TFunction) => {
     <HealthStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillTrackingModal'} name="RefillTrackingModal" component={RefillTrackingModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HealthStack.Screen
-      key={'PrescriptionHelp'}
-      name="PrescriptionHelp"
-      component={PrescriptionHelp}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
-    />,
-    <HealthStack.Screen
-      key={'StatusGlossary'}
-      name="StatusGlossary"
-      component={StatusGlossary}
-      options={{
-        headerShown: false,
-        presentation: 'modal',
-        ...TransitionPresets.ModalTransition,
-      }}
-    />,
+    <HealthStack.Screen key={'PrescriptionHelp'} name="PrescriptionHelp" component={PrescriptionHelp} options={LARGE_PANEL_OPTIONS} />,
+    <HealthStack.Screen key={'StatusGlossary'} name="StatusGlossary" component={StatusGlossary} options={LARGE_PANEL_OPTIONS} />,
   ]
 }
