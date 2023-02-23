@@ -10,7 +10,6 @@ import {
   Box,
   ButtonTypesConstants,
   CollapsibleView,
-  CrisisLineCta,
   FieldType,
   FormFieldType,
   FormWrapper,
@@ -161,8 +160,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       navigation.navigate('SecureMessaging')
     }
   }, [sendMessageComplete, dispatch, navigation])
-
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
     const text = savingDraft
@@ -322,8 +319,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
-      }}>
-      <CrisisLineCta onPress={onCrisisLine} />
+      }}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{renderMessageThread()}</Box>
