@@ -1,12 +1,12 @@
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import { ClaimEventData } from 'store/api/types'
 import { LetterTypes, ScreenIDTypes } from 'store/api/types'
 
 import { ClaimType } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
@@ -81,18 +81,8 @@ const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
 
 export const getBenefitsScreens = (): Array<ReactNode> => {
   return [
-    <BenefitsStack.Screen
-      key={'ConsolidatedClaimsNote'}
-      name="ConsolidatedClaimsNote"
-      component={ConsolidatedClaimsNote}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
-    />,
-    <BenefitsStack.Screen
-      key={'WhatDoIDoIfDisagreement'}
-      name="WhatDoIDoIfDisagreement"
-      component={WhatDoIDoIfDisagreement}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, headerShown: false }}
-    />,
+    <BenefitsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} options={LARGE_PANEL_OPTIONS} />,
+    <BenefitsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} options={LARGE_PANEL_OPTIONS} />,
     <BenefitsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <BenefitsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <BenefitsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={FULLSCREEN_SUBTASK_OPTIONS} />,
