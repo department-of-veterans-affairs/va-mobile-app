@@ -74,7 +74,7 @@ export const WhatsNew = () => {
     closeAnalyticsEvent: closeCollapse,
   }
 
-  if (featureEnabled('whatsNewUI') && localVersion != skippedVersion) {
+  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <CollapsibleAlert {...props} />
