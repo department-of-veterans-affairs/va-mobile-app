@@ -17,7 +17,7 @@ const { IS_TEST } = getEnv()
 
 type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
 
-const SelectFile: FC<SelectFilesProps> = ({ route }) => {
+const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -87,7 +87,7 @@ const SelectFile: FC<SelectFilesProps> = ({ route }) => {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} title={t('fileUpload.selectFiles')}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('fileUpload.selectFiles')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>

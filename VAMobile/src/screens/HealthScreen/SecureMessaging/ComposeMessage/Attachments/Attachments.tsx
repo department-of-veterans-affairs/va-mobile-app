@@ -135,7 +135,11 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} title={tc('secureMessaging.composeMessage.attachments.title')} leftButtonText={tc('cancel')}>
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      title={tc('secureMessaging.composeMessage.attachments.title')}
+      leftButtonText={tc('cancel')}
+      onLeftButtonPress={displaySelectFile ? navigation.goBack : undefined}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
