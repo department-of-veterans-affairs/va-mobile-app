@@ -29,13 +29,13 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
       <TextArea>
         <TextView variant="MobileBodyBold">{t('claimDetails.claimType')}</TextView>
         <TextView variant="MobileBody">{attributes?.claimType || t('noneNoted')}</TextView>
-        {attributes?.contentionList && attributes.contentionList.length > 0 && (
-          <Box>
-            <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-              {t('claimDetails.whatYouHaveClaimed')}
-            </TextView>
-            <VABulletList listOfText={attributes.contentionList} />
-          </Box>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+          {t('claimDetails.whatYouHaveClaimed')}
+        </TextView>
+        {attributes?.contentionList && attributes.contentionList.length > 0 ? (
+          <VABulletList listOfText={attributes.contentionList} />
+        ) : (
+          <TextView variant="MobileBody">{t('noneNoted')}</TextView>
         )}
         <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('claimDetails.dateReceived')}
