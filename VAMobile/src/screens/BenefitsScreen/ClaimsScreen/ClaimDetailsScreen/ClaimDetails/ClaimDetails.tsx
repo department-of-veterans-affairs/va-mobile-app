@@ -28,7 +28,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
     <Box>
       <TextArea>
         <TextView variant="MobileBodyBold">{t('claimDetails.claimType')}</TextView>
-        <TextView variant="MobileBody">{attributes?.claimType || ''}</TextView>
+        <TextView variant="MobileBody">{attributes?.claimType || t('noneNoted')}</TextView>
         {attributes?.contentionList && attributes.contentionList.length > 0 && (
           <Box>
             <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
@@ -44,7 +44,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         <TextView accessibilityLabel={t('claimDetails.yourRepresentative.a11yLabel')} variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('claimDetails.yourRepresentative')}
         </TextView>
-        <TextView variant="MobileBody">{attributes?.vaRepresentative || t('claimDetails.yourRepresentative.notAvailable')}</TextView>
+        <TextView variant="MobileBody">{attributes?.vaRepresentative || t('noneNoted')}</TextView>
       </TextArea>
     </Box>
   )
