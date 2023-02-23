@@ -7,6 +7,7 @@ import { requestStoreVersion } from 'utils/rnInAppUpdate'
 import getEnv from 'utils/env'
 
 const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
+const APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL = '@store_app_whats_new_version_skipped'
 const APP_VERSION_LOCAL_OVERRIDE_VAL = '@store_app_version_local_override'
 const { APPLE_STORE_LINK } = getEnv()
 
@@ -58,6 +59,22 @@ export const getVersionSkipped = async (): Promise<string> => {
  */
 export const setVersionSkipped = async (versionSkipped: string): Promise<void> => {
   await Promise.all([AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)])
+}
+
+/**
+ * returns version skipped for what's new
+ */
+export const getWhatsNewVersionSkipped = async (): Promise<string> => {
+  const result = await Promise.all([AsyncStorage.getItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL)])
+  const reconstructedToken = result[0] ? `${result[0]}` : '0.0.0'
+  return reconstructedToken
+}
+
+/**
+ * stores version skipped for what's new
+ */
+export const setWhatsNewVersionSkipped = async (versionSkipped: string): Promise<void> => {
+  await Promise.all([AsyncStorage.setItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL, versionSkipped)])
 }
 
 export const overrideLocalVersion = async (overrideVersion: string | undefined): Promise<void> => {

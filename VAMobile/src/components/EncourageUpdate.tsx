@@ -6,6 +6,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { WhatsNew } from './WhatsNew'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/encourageUpdate'
 import { isIOS } from 'utils/platform'
@@ -91,6 +92,6 @@ export const EncourageUpdateAlert = () => {
       </Box>
     )
   } else {
-    return null
+    return <WhatsNew />
   }
 }
