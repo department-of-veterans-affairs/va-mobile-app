@@ -259,7 +259,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
         <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin'), animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
-        <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
+        <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
       </Stack.Navigator>
     )
   }
