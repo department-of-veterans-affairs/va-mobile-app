@@ -2,7 +2,7 @@
 # Lint job that run with each push and PR
 #
 
-name: Lint and Test
+name: Lint
 
 on:
   pull_request:

@@ -4,30 +4,21 @@
 
 name: Unit Tests
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+      - 'release/v**'
 
 defaults:
   run:
     working-directory: VAMobile
 
 jobs:
-  skip_check:
-    # continue-on-error: true # Uncomment once integration is finished
+  jest:
     runs-on: ubuntu-latest
-    # Map a step output to a job output
-    outputs:
-      should_skip: ${{ steps.skip_check.outputs.should_skip }}
-    steps:
-      - id: skip_check
-        uses: fkirc/skip-duplicate-actions@v5
-        with:
-          concurrent_skipping: 'true'
-          do_not_skip: '["workflow_dispatch", "schedule"]'
-  test:
-    needs: skip_check
-    if: needs.skip_check.outputs.should_skip != 'true'
-    runs-on: ubuntu-latest
-    name: yarn test
     strategy:
       matrix:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
