@@ -103,7 +103,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
+    <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>

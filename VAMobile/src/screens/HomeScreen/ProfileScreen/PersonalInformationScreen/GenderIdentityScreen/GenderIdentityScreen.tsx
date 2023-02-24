@@ -74,7 +74,12 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   }
 
   return (
-    <FullScreenSubtask title={t('personalInformation.genderIdentity.title')} leftButtonText={t('cancel')} primaryContentButtonText={t('save')} onPrimaryContentButtonPress={onSave}>
+    <FullScreenSubtask
+      title={t('personalInformation.genderIdentity.title')}
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={genderIdentity === profile?.genderIdentity ? navigation.goBack : undefined}
+      primaryContentButtonText={t('save')}
+      onPrimaryContentButtonPress={onSave}>
       <Box mx={theme.dimensions.gutter}>
         <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : theme.dimensions.standardMarginBetween}>
           {t('personalInformation.genderIdentity.changeSelection')}
