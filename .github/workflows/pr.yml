@@ -19,8 +19,7 @@ jobs:
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
-      - name: Run Linter
-        run: yarn lint:ci
+      - run: yarn lint:ci
   setup:
     name: Setup Tests
     runs-on: ubuntu-latest
@@ -46,7 +45,7 @@ jobs:
           CHUNKS: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
   test:
     runs-on: ubuntu-latest
-    name: Test (chunk ${{ matrix.chunk }})
+    name: Test Chunk ${{ matrix.chunk }}
     needs:
       - setup
     strategy:
@@ -61,7 +60,7 @@ jobs:
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
-      - name: jest
-        run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test
+      - name: yarn test
+        run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test -- --maxWorkers=2
         env:
           CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
