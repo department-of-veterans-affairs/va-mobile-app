@@ -70,6 +70,16 @@ export const getWhatsNewVersionSkipped = async (): Promise<string> => {
   return reconstructedToken
 }
 
+export const getWhatsNewLocalVersion = async (demoMode: boolean): Promise<string> => {
+  const result = await Promise.all([AsyncStorage.getItem(APP_VERSION_LOCAL_OVERRIDE_VAL)])
+  const localOverride = result[0] ? `${result[0]}` : undefined
+  if (demoMode && localOverride) {
+    return localOverride
+  } else {
+    return await getVersionName()
+  }
+}
+
 /**
  * stores version skipped for what's new
  */

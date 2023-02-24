@@ -7,7 +7,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getEncourageUpdateLocalVersion, getWhatsNewVersionSkipped, setWhatsNewVersionSkipped } from 'utils/encourageUpdate'
+import { getWhatsNewLocalVersion, getWhatsNewVersionSkipped, setWhatsNewVersionSkipped } from 'utils/encourageUpdate'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
@@ -22,7 +22,7 @@ export const WhatsNew = () => {
 
   useEffect(() => {
     async function checkLocalVersion() {
-      const version = await getEncourageUpdateLocalVersion(demoMode)
+      const version = await getWhatsNewLocalVersion(demoMode)
       if (componentMounted.current) {
         setVersionName(version)
       }
