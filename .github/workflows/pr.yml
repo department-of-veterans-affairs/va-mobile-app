@@ -2,6 +2,10 @@ name: Lint and Test
 
 on: [push, pull_request]
 
+defaults:
+  run:
+    working-directory: VAMobile
+
 jobs:
   lint:
     name: Lint
@@ -14,14 +18,9 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
-        run: |
-          cd VAMobile
-          yarn install
-
+        run: yarn install
       - name: Run Linter
-        run: |
-          cd VAMobile
-          yarn lint:ci
+        run: yarn lint:ci
   setup:
     name: Setup Tests
     runs-on: ubuntu-latest
@@ -36,19 +35,13 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
-        run: |
-          cd VAMobile
-          yarn install
+        run: yarn install
       - id: set-test-chunks
         name: Set Chunks
-        run: |
-          cd VAMobile
-          echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 10 | ceil)]')" >> $GITHUB_OUTPUT
+        run: echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 10 | ceil)]')" >> $GITHUB_OUTPUT
       - id: set-test-chunk-ids
         name: Set Chunk IDs
-        run: |
-          cd VAMobile
-          echo "test-chunk-ids=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')">> $GITHUB_OUTPUT
+        run: echo "test-chunk-ids=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')">> $GITHUB_OUTPUT
         env:
           CHUNKS: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
   test:
@@ -67,12 +60,8 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
-        run: |
-          cd VAMobile
-          yarn install
+        run: yarn install
       - name: jest
-        run: |
-          cd VAMobile
-          echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test
+        run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test
         env:
           CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
