@@ -92,6 +92,11 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     return !validEmailCondition.test(email)
   }
 
+  const emailChanged = (): boolean => {
+    const originalEmail = profile?.contactEmail?.emailAddress || ''
+    return email !== originalEmail
+  }
+
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
@@ -137,6 +142,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       scrollViewRef={scrollViewRef}
       title={t('contactInformation.emailAddress')}
       leftButtonText={t('cancel')}
+      onLeftButtonPress={!emailChanged() ? navigation.goBack : undefined}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}
       rightButtonDisabled={saveDisabled}>
