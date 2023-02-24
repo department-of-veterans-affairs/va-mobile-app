@@ -13,7 +13,7 @@ defaults:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Chunk
+    name: chunk
     strategy:
       matrix:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
