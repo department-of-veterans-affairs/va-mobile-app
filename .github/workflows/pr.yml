@@ -24,6 +24,7 @@ jobs:
           cd VAMobile
           yarn lint:ci
   setup:
+    name: Setup Tests
     runs-on: ubuntu-latest
     outputs:
       test-chunks: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
@@ -31,6 +32,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: |
           cd VAMobile
           yarn install
