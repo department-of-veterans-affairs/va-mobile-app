@@ -1,0 +1,27 @@
+#
+# Lint job that run with each push and PR
+#
+
+name: Lint and Test
+
+on: [push, pull_request]
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+jobs:
+  lint:
+    name: eslint && tsc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+      - run: yarn lint:ci

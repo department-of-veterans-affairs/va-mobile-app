@@ -1,5 +1,5 @@
 #
-# Lint and unit test jobs that run with each push and PR
+# Unit test jobs that run with each push and PR
 #
 
 name: Lint and Test
@@ -11,23 +11,9 @@ defaults:
     working-directory: VAMobile
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-      - run: yarn lint:ci
   test:
     runs-on: ubuntu-latest
-    name: Test
+    name: Chunk
     strategy:
       matrix:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
