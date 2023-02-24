@@ -38,19 +38,20 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - run: |
+      - name: Install dependencies
+        run: |
           cd VAMobile
           yarn install
       - id: set-test-chunks
         name: Set Chunks
         run: |
           cd VAMobile
-          echo "::set-output name=test-chunks::$(npx jest --listTests --json | jq -cM '[_nwise(length / 5 | ceil)]')"
+          echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 5 | ceil)]')" >> $GITHUB_OUTPUT
       - id: set-test-chunk-ids
         name: Set Chunk IDs
         run: |
           cd VAMobile
-          echo "::set-output name=test-chunk-ids::$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')"
+          echo "test-chunk-ids=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')">> $GITHUB_OUTPUT
         env:
           CHUNKS: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
   test:
@@ -70,7 +71,8 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - run: |
+      - name: Install dependencies
+        run: |
           cd VAMobile
           yarn install
       - name: jest
