@@ -14,13 +14,17 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install packages
-        run: yarn install
+      - name: Install dependencies
+        run: |
+          cd VAMobile
+          yarn install
 
       - name: Run Linter
-        run: yarn lint
+        run: |
+          cd VAMobile
+          yarn lint
   test:
-    name: Unit Tests
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -30,8 +34,12 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install packages
-        run: yarn install
+      - name: Install dependencies
+        run: |
+          cd VAMobile
+          yarn install
 
       - name: Run Unit Tests
-        run: yarn test:ci
+        run: |
+          cd VAMobile
+          yarn test:ci
