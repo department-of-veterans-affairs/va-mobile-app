@@ -1,3 +1,7 @@
+#
+# Lint and unit test jobs that run with each push and PR
+#
+
 name: Lint and Test
 
 on: [push, pull_request]
@@ -12,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -25,7 +30,7 @@ jobs:
     name: Test
     strategy:
       matrix:
-        chunk: [1, 2, 3, 4, 5]
+        chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -36,4 +41,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: yarn test
+        # GHA does not have test splitting built in, so we run this script to split our tests into chunks and run
+        # jest with the specified files.  The number at the end is the # of chunks we're splitting the tests into.
+        # This should match the numbers of items in the matrix chunk array above
         run: bash ${GITHUB_WORKSPACE}/.github/scripts/setupTestMatrix.sh ${{ matrix.chunk }} 5
