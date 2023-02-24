@@ -61,6 +61,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: yarn test
-        run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test -- --maxWorkers=2
+        run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test --maxWorkers=2
         env:
           CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
