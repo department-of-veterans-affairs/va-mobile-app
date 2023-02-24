@@ -30,6 +30,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   )
 
   const paginationMetaData = paginationMetaByFolderId?.[folderID]
+  const title = tc('text.raw', { text: folderName })
 
   useEffect(() => {
     // Load first page messages
@@ -77,7 +78,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
     return (
-      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={tc(folderName === FolderNameTypeConstants.sent ? 'sent' : 'drafts')}>
+      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
       </ChildTemplate>
     )
@@ -93,7 +94,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   if (messages.length === 0) {
     return (
-      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={tc(folderName === FolderNameTypeConstants.sent ? 'sent' : 'drafts')}>
+      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
         <NoFolderMessages folderName={folderName} />
       </ChildTemplate>
     )
@@ -126,7 +127,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }
 
   return (
-    <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={tc(folderName === FolderNameTypeConstants.sent ? 'sent' : 'drafts')}>
+    <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
       <ComposeMessageButton />
       <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName} />
       {renderPagination()}
