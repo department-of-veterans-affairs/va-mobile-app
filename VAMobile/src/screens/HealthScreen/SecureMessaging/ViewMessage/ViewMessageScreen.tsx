@@ -16,7 +16,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject } from 'utils/secureMessaging'
+import { formatSubject, getfolderName } from 'utils/secureMessaging'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -148,7 +148,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     })
   })
 
-  const backLabel = tc(currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT ? 'sent' : 'messages')
+  const backLabel = getfolderName(folderWhereMessagePreviousewas.current, folders)
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
