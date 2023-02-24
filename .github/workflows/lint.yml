@@ -11,7 +11,21 @@ defaults:
     working-directory: VAMobile
 
 jobs:
+  skip_check:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'true'
+          do_not_skip: '["workflow_dispatch", "schedule"]'
   lint:
+    needs: skip_check
+    if: needs.skip_check.outputs.should_skip != 'true'
     name: eslint && tsc
     runs-on: ubuntu-latest
     steps:
