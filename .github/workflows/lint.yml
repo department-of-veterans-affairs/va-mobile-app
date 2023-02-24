@@ -1,5 +1,5 @@
 #
-# Lint job that run with each push and PR
+# Lint job that runs our yarn lint:ci npm script
 #
 
 name: Lint

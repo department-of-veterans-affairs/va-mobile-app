@@ -1,5 +1,5 @@
 #
-# Unit test jobs that run with each push and PR
+# Unit test jobs that runs our yarn test npm script
 #
 
 name: Unit Tests
