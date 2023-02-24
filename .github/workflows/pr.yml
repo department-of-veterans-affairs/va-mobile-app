@@ -23,23 +23,45 @@ jobs:
         run: |
           cd VAMobile
           yarn lint:ci
-  test:
-    name: Test
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      test-chunks: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
+      test-chunk-ids: ${{ steps['set-test-chunk-ids'].outputs['test-chunk-ids'] }}
     steps:
       - uses: actions/checkout@v3
-
+      - uses: actions/cache@v3
+      - run: |
+          cd VAMobile
+          yarn install
+      - id: set-test-chunks
+        name: Set Chunks
+        run: echo "::set-output name=test-chunks::$(npx jest --listTests --json | jq -cM '[_nwise(length / 5 | ceil)]')"
+      - id: set-test-chunk-ids
+        name: Set Chunk IDs
+        run: echo "::set-output name=test-chunk-ids::$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')"
+        env:
+          CHUNKS: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
+  test:
+    runs-on: ubuntu-latest
+    name: test (chunk ${{ matrix.chunk }})
+    needs:
+      - setup
+    strategy:
+      matrix:
+        chunk: ${{ fromJson(needs.setup.outputs['test-chunk-ids']) }}
+    steps:
+      - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install dependencies
-        run: |
+      - run: |
           cd VAMobile
           yarn install
-
-      - name: Run Unit Tests
+      - name: jest
         run: |
           cd VAMobile
-          yarn test
+          echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test
+        env:
+          CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
