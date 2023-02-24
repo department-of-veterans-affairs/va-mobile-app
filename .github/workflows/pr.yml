@@ -61,7 +61,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: yarn test
-        run: ./.github/scripts/setupTestMatrix.sh ${{ matrix.chunk }} 10
+        run: bash ${GITHUB_WORKSPACE}/scripts/setupTestMatrix.sh ${{ matrix.chunk }} 10
         # run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test --maxWorkers=2
         # env:
         #   CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
