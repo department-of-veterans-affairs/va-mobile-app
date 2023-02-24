@@ -82,6 +82,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   return (
     <FullScreenSubtask
       leftButtonText={t('cancel')}
+      onLeftButtonPress={preferredName === getInitialState() ? navigation.goBack : undefined}
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
