@@ -1,4 +1,4 @@
-name: Lint and
+name: Lint and Test
 
 on: [push, pull_request]
 
@@ -8,12 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - uses: actions/cache@v3
+      - uses: actions/setup-node@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
+          node-version: '16'
+          cache: 'yarn'
       - name: Install dependencies
         run: |
           cd VAMobile
@@ -33,11 +31,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          node-version: '16'
+          cache: 'yarn'
       - name: Install dependencies
         run: |
           cd VAMobile
@@ -66,11 +61,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          node-version: '16'
+          cache: 'yarn'
       - name: Install dependencies
         run: |
           cd VAMobile
