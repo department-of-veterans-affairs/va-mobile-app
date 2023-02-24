@@ -1,4 +1,4 @@
-name: Automated Tests and Linting
+name: Lint and
 
 on: [push, pull_request]
 
@@ -46,7 +46,7 @@ jobs:
         name: Set Chunks
         run: |
           cd VAMobile
-          echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 5 | ceil)]')" >> $GITHUB_OUTPUT
+          echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 8 | ceil)]')" >> $GITHUB_OUTPUT
       - id: set-test-chunk-ids
         name: Set Chunk IDs
         run: |
