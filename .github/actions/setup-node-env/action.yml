@@ -1,17 +1,14 @@
-name: 'Setup node and install depenencies'
+name: 'Setup node and install dependencies'
 description: 'Checks out VA Mobile codebase and installs dependencies'
-defaults:
-  run:
-    working-directory: VAMobile
 
-jobs:
-  jest:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'yarn'
+        cache-dependency-path: 'VAMobile/yarn.lock'
+    - run: yarn install --frozen-lockfile --non-interactive
+      shell: bash
