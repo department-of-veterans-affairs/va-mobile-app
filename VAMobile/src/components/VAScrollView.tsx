@@ -11,6 +11,8 @@ export type VAScrollViewProps = {
   scrollViewRef?: Ref<ScrollView>
   /** optional background color to override the main background */
   backgroundColor?: keyof VABackgroundColors
+  /** remove insets */
+  removeInsets?: boolean
 } & ScrollViewProps
 
 /**A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix */
@@ -19,8 +21,8 @@ const VAScrollView: FC<VAScrollViewProps> = (props) => {
   const theme = useTheme()
 
   const style = {
-    paddingRight: insets.right,
-    paddingLeft: insets.left,
+    paddingRight: props.removeInsets ? undefined : insets.right,
+    paddingLeft: props.removeInsets ? undefined : insets.right,
     backgroundColor: props.backgroundColor ? theme.colors.background[props.backgroundColor as keyof VABackgroundColors] : theme.colors.background.main,
   }
 
