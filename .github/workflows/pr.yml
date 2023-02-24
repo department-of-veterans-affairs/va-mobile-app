@@ -18,7 +18,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile --non-interactive
       - name: Run Linter
         run: yarn lint:ci
   setup:
@@ -35,10 +35,10 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile --non-interactive
       - id: set-test-chunks
         name: Set Chunks
-        run: echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 10 | ceil)]')" >> $GITHUB_OUTPUT
+        run: echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 5 | ceil)]')" >> $GITHUB_OUTPUT
       - id: set-test-chunk-ids
         name: Set Chunk IDs
         run: echo "test-chunk-ids=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')">> $GITHUB_OUTPUT
@@ -60,7 +60,7 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile --non-interactive
       - name: jest
         run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test
         env:
