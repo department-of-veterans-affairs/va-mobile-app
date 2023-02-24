@@ -1,10 +1,9 @@
-name: 'Setup node and install dependencies'
-description: 'Checks out VA Mobile codebase and installs dependencies'
+name: 'Setup Node Env'
+description: 'Sets up node environment and installs dependencies'
 
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
         node-version: '16'
