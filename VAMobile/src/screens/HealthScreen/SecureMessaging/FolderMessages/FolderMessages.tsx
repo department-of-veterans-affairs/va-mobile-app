@@ -4,7 +4,6 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -129,7 +128,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
       <ComposeMessageButton />
-      <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName} />
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
+      </Box>
       {renderPagination()}
     </ChildTemplate>
   )
