@@ -15,42 +15,42 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
+          # cache: 'yarn'
+          # cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - run: yarn lint:ci
-  setup:
-    name: Setup Tests
-    runs-on: ubuntu-latest
-    outputs:
-      test-chunks: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
-      test-chunk-ids: ${{ steps['set-test-chunk-ids'].outputs['test-chunk-ids'] }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-      - id: set-test-chunks
-        name: Set Chunks
-        run: echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 5 | ceil)]')" >> $GITHUB_OUTPUT
-      - id: set-test-chunk-ids
-        name: Set Chunk IDs
-        run: echo "test-chunk-ids=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')">> $GITHUB_OUTPUT
-        env:
-          CHUNKS: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
+  # setup:
+  #   name: Setup Tests
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     test-chunks: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
+  #     test-chunk-ids: ${{ steps['set-test-chunk-ids'].outputs['test-chunk-ids'] }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16'
+  #         cache: 'yarn'
+  #         cache-dependency-path: 'VAMobile/yarn.lock'
+  #     - name: Install dependencies
+  #       run: yarn install --frozen-lockfile --non-interactive
+  #     - id: set-test-chunks
+  #       name: Set Chunks
+  #       run: echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 5 | ceil)]')" >> $GITHUB_OUTPUT
+  #     - id: set-test-chunk-ids
+  #       name: Set Chunk IDs
+  #       run: echo "test-chunk-ids=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')">> $GITHUB_OUTPUT
+  #       env:
+  #         CHUNKS: ${{ steps['set-test-chunks'].outputs['test-chunks'] }}
   test:
     runs-on: ubuntu-latest
-    name: Test Chunk ${{ matrix.chunk }}
-    needs:
-      - setup
+    name: Testing # Chunk ${{ matrix.chunk }}
+    # needs:
+    #   - setup
     strategy:
       matrix:
-        chunk: ${{ fromJson(needs.setup.outputs['test-chunk-ids']) }}
+        chunk: [1, 2, 3, 4, 5] # ${{ fromJson(needs.setup.outputs['test-chunk-ids']) }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -61,6 +61,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: yarn test
-        run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test --maxWorkers=2
-        env:
-          CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
+        run: ./scripts/setupTestMatrix.sh ${{ matrix.chunk }} 10
+        # run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test --maxWorkers=2
+        # env:
+        #   CHUNKS: ${{ needs.setup.outputs['test-chunks'] }}
