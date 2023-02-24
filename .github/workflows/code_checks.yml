@@ -1,5 +1,5 @@
 #
-# Lint and Unit Test jobs that runs our yarn lint:ci npm script
+# Lint and Unit Test jobs that runs our lint:ci and test npm scripts
 #
 
 name: Code Checks
@@ -18,7 +18,6 @@ defaults:
 
 jobs:
   lint:
-    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -32,7 +31,6 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
       - run: yarn lint:ci
   test:
-    name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
