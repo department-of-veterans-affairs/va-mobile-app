@@ -12,6 +12,7 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: |
           cd VAMobile
@@ -33,6 +34,7 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: |
           cd VAMobile
@@ -63,6 +65,7 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: |
           cd VAMobile
