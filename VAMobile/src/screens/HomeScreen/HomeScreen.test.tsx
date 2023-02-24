@@ -43,7 +43,6 @@ context('HomeScreen', () => {
 
   const initializeTestInstance = (inAppUpdatesEnabled: boolean = true, skippedVersion: string = '1.0.0.', localVersion: string = '0.0.0', storeVersion: string = '2.0.0') => {
     when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(inAppUpdatesEnabled)
-    when(mocked(featureEnabled)).calledWith('whatsNewUI').mockReturnValue(false)
     mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve(skippedVersion))
     mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve(localVersion))
     mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve(storeVersion))
@@ -56,6 +55,10 @@ context('HomeScreen', () => {
   }
 
   beforeEach(() => {
+    when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(true)
+    mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve('1.0.0.'))
+    mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve('0.0.0'))
+    mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve('2.0.0.'))
     initializeTestInstance()
   })
 
