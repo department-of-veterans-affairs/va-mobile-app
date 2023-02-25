@@ -39,7 +39,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
       scrollRef.current = scrollViewRef.current
       scrollToAlert(-boxPadding)
     }
-  }, [focusOnError])
+  }, [border, focusOnError, scrollRef, scrollToAlert, scrollViewRef, text, title])
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
