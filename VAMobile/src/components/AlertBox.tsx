@@ -9,6 +9,8 @@ import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 export type AlertBoxProps = {
   /** color of the border */
   border: keyof VABorderColors
+  /** Optional boolean for determining when to focus on error alert boxes. */
+  focusOnError?: boolean
   /** Optional ref for the parent scroll view. Used for scrolling to error alert boxes. */
   scrollViewRef?: RefObject<ScrollView>
   /** body of the alert */
@@ -26,7 +28,7 @@ export type AlertBoxProps = {
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
+const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
 
@@ -37,7 +39,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, t
       scrollRef.current = scrollViewRef.current
       scrollToAlert(-boxPadding)
     }
-  })
+  }, [focusOnError])
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
