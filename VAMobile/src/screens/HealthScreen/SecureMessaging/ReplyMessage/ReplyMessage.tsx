@@ -228,7 +228,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const renderForm = (): ReactNode => (
     <Box>
-      <MessageAlert scrollViewRef={scrollViewRef} hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
+      <MessageAlert
+        scrollViewRef={scrollViewRef}
+        hasValidationError={formContainsError}
+        saveDraftAttempted={onSaveDraftClicked}
+        savingDraft={savingDraft}
+        focusOnError={onSendClicked}
+      />
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <CollapsibleView
           text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
