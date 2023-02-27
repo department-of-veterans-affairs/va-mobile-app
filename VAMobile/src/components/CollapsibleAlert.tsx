@@ -23,16 +23,16 @@ export type CollapsibleAlertProps = {
   collapseEvent?: () => void
 }
 
-const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, openAnalyticsEvent, closeAnalyticsEvent }) => {
+const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, expandEvent, collapseEvent }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   const onPress = (): void => {
-    if (expanded && closeAnalyticsEvent) {
-      closeAnalyticsEvent()
-    } else if (openAnalyticsEvent) {
-      openAnalyticsEvent()
+    if (expanded && collapseEvent) {
+      collapseEvent()
+    } else if (expandEvent) {
+      expandEvent()
     }
     setExpanded(!expanded)
 
