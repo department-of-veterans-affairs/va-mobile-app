@@ -60,16 +60,13 @@ export const WhatsNew = () => {
     setSkippedVersionHomeScreen(localVersion ? localVersion : '')
   }
 
-  const bodyA11yLabel = 'whatsNew.bodyCopy.a11yLabel.' + localVersion
-  const body = 'whatsNew.bodyCopy.' + localVersion
-
   const props: CollapsibleAlertProps = {
     border: 'informational',
     headerText: t('whatsNew.title'),
     body: (
       <>
-        <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={t(bodyA11yLabel)}>
-          {t(body)}
+        <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={t('whatsNew.bodyCopy.a11yLabel' + localVersion)}>
+          {t('whatsNew.bodyCopy.' + localVersion)}
         </TextView>
         <VAButton onPress={onPress} label={t('whatsNew.dontShowAgain')} buttonType={ButtonTypesConstants.buttonSecondary} />
       </>
