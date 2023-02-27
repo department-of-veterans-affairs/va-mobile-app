@@ -20,7 +20,7 @@ export type CollapsibleAlertProps = {
   /** handles any analytics needed when opening the alert*/
   expandEvent?: () => void
   /** handles any analytics needed when closing the alert*/
-  closeAnalyticsEvent?: () => void
+  collapseEvent?: () => void
 }
 
 const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, openAnalyticsEvent, closeAnalyticsEvent }) => {
