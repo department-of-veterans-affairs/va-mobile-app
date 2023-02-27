@@ -18,7 +18,7 @@ export type CollapsibleAlertProps = {
   /** acccessibilityLabel needs to be provided due to accessibilityState being neccessary */
   a11yLabel: string
   /** handles any analytics needed when opening the alert*/
-  openAnalyticsEvent?: () => void
+  expandEvent?: () => void
   /** handles any analytics needed when closing the alert*/
   closeAnalyticsEvent?: () => void
 }
