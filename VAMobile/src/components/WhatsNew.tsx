@@ -65,8 +65,8 @@ export const WhatsNew = () => {
     headerText: t('whatsNew.title'),
     body: (
       <>
-        <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={t('whatsNew.bodyCopy.a11yLabel')}>
-          {t('whatsNew.bodyCopy')}
+        <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={t('whatsNew.bodyCopy.a11yLabel' + localVersion)}>
+          {t('whatsNew.bodyCopy.' + localVersion)}
         </TextView>
         <VAButton onPress={onPress} label={t('whatsNew.dontShowAgain')} buttonType={ButtonTypesConstants.buttonSecondary} />
       </>
