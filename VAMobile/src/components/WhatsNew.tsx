@@ -42,11 +42,11 @@ export const WhatsNew = () => {
     }
   }, [demoMode])
 
-  const openCollapse = (): void => {
+  const expandCollapsible = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_more())
   }
 
-  const closeCollapse = (): void => {
+  const closeCollapsible = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_close())
   }
 
@@ -72,8 +72,8 @@ export const WhatsNew = () => {
       </>
     ),
     a11yLabel: t('whatsNew.title'),
-    openAnalyticsEvent: openCollapse,
-    closeAnalyticsEvent: closeCollapse,
+    expandEvent: expandCollapsible,
+    collapseEvent: closeCollapsible,
   }
 
   if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion) {
