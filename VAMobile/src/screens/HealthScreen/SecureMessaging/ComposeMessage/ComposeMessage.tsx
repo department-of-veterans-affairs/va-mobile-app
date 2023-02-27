@@ -10,7 +10,6 @@ import {
   Box,
   ButtonTypesConstants,
   CollapsibleView,
-  CrisisLineCta,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -320,8 +319,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     navigation.navigate('SecureMessaging')
   }
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
     const messageData = {
@@ -417,8 +414,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
-      }}>
-      <CrisisLineCta onPress={onCrisisLine} />
+      }}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
   )
