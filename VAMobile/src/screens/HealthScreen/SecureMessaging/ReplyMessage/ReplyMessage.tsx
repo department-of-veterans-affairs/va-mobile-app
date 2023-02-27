@@ -314,6 +314,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       scrollViewRef={scrollViewRef}
       title={tc('reply')}
       leftButtonText={tc('cancel')}
+      onLeftButtonPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
       rightButtonText={tc('save')}
       rightVAIconProps={saveIconProps}
       onRightButtonPress={() => {

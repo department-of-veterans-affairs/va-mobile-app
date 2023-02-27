@@ -405,11 +405,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   return (
     <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
       title={tc('compose')}
       leftButtonText={tc('cancel')}
+      onLeftButtonPress={navigation.goBack}
       rightButtonText={tc('save')}
       rightVAIconProps={saveIconProps}
-      scrollViewRef={scrollViewRef}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)

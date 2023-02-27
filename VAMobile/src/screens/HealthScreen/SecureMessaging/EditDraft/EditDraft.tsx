@@ -513,7 +513,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} title={tc('editDraft')} leftButtonText={tc('cancel')} menuViewActions={MenViewActions} showCrisisLineCta={true}>
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      title={tc('editDraft')}
+      leftButtonText={tc('cancel')}
+      onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
+      menuViewActions={MenViewActions}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>
