@@ -2,12 +2,12 @@ import { StackActions, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, Ref } from 'react'
 
-import { Box, ButtonTypesConstants, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, CrisisLineCta, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScrollView, View, ViewStyle } from 'react-native'
 import { VAIconProps } from 'components/VAIcon'
-import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useDestructiveAlert, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -51,6 +51,8 @@ export type FullScreenSubtaskProps = {
   onSecondaryContentButtonPress?: () => void
   /** how many screens to pop after multiStep Cancel  */
   navigationMultiStepCancelScreen?: number
+  /** whether to show the crisis line CTA (defaults to false) */
+  showCrisisLineCta?: boolean
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -71,9 +73,11 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   secondaryContentButtonText,
   onSecondaryContentButtonPress,
   navigationMultiStepCancelScreen,
+  showCrisisLineCta = false,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
+  const navigateTo = useRouteNavigation()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
@@ -149,13 +153,15 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
+  const titleMarginTop = showCrisisLineCta ? 0 : theme.dimensions.buttonPadding
 
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
       <VAScrollView scrollViewRef={scrollViewRef}>
+        {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
         {title && (
-          <Box my={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
+          <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
             <Box>
               <Box display="flex" flexDirection="row" alignItems="center">
                 <TextView {...titleTextProps}>{title}</TextView>
