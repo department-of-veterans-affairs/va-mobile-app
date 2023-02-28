@@ -940,10 +940,6 @@ export const Countries = [
     label: 'British Virgin Islands',
   },
   {
-    value: 'WLF',
-    label: 'Wallis and Futuna',
-  },
-  {
     value: 'ESH',
     label: 'Western Sahara',
   },
