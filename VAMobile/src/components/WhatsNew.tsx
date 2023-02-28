@@ -63,7 +63,7 @@ export const WhatsNew = () => {
   const props: CollapsibleAlertProps = {
     border: 'informational',
     headerText: t('whatsNew.title'),
-
+    // @ts-ignore
     body: (
       <>
         <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={t('whatsNew.bodyCopy.a11yLabel' + localVersion)}>
