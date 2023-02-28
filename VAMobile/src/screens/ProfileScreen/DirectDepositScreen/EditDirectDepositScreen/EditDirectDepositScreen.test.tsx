@@ -98,7 +98,7 @@ context('EditDirectDepositScreen', () => {
   describe('when user enters a routing number', () => {
     it('should update the value of routingNumber', async () => {
       await waitFor(() => {
-        routingNumberTextInput.props.onChangeText('123456789')
+        routingNumberTextInput.props.onChangeText('123456789120398')
 
         const routingNumberVATextInput = testInstance.findAllByType(VATextInput)[0]
         expect(routingNumberVATextInput.props.value).toEqual('123456789')
