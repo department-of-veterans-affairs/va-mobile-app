@@ -63,7 +63,8 @@ export const WhatsNew = () => {
   const props: CollapsibleAlertProps = {
     border: 'informational',
     headerText: t('whatsNew.title'),
-    body: ( // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+    body: (
       <>
         <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={t('whatsNew.bodyCopy.a11yLabel' + localVersion)}>
           {t('whatsNew.bodyCopy.' + localVersion)}
