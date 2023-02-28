@@ -60,14 +60,18 @@ export const WhatsNew = () => {
     setSkippedVersionHomeScreen(localVersion ? localVersion : '')
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  const bodyA11yLabel = t('whatsNew.bodyCopy.a11yLabel.' + localVersion)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  const body = t('whatsNew.bodyCopy.' + localVersion)
+
   const props: CollapsibleAlertProps = {
     border: 'informational',
     headerText: t('whatsNew.title'),
-    // @ts-ignore
     body: (
       <>
-        <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={t('whatsNew.bodyCopy.a11yLabel' + localVersion)}>
-          {t('whatsNew.bodyCopy.' + localVersion)}
+        <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={bodyA11yLabel}>
+          {body}
         </TextView>
         <VAButton onPress={onPress} label={t('whatsNew.dontShowAgain')} buttonType={ButtonTypesConstants.buttonSecondary} />
       </>
