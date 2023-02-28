@@ -82,7 +82,7 @@ export const WhatsNew = () => {
     collapseEvent: closeCollapsible,
   }
 
-  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion) {
+  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== 'whatsNew.bodyCopy.' + localVersion) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <CollapsibleAlert {...props} />
