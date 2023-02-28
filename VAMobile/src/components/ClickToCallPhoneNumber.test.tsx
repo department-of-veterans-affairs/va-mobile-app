@@ -42,7 +42,7 @@ context('ClickToCallPhoneNumber', () => {
   it('should render all text views', async () => {
     expect(testInstance.findAllByType(TextView).length).toEqual(2)
     expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('123-456-7890')
-    expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('711')
+    expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('TTY: 711')
   })
 
   describe('when the phone prop does not exist', () => {
