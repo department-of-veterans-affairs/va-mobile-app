@@ -63,6 +63,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
 
+  const TEXT_CONSTRAINT_THRESHOLD = 30
+
   const transition = title?.type === 'Transition'
 
   /**
@@ -137,17 +139,17 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   let titleTextViewProps: TextViewProps = {}
   let rightTextViewProps: TextViewProps = {}
 
-  let constrainTitle = false
+  // Calculate total length of header text. If too long, force title to wrap
+  const titleLength = title?.type === 'VA' ? 2 : title?.title.length || 0
+  const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text.length || 0)
+  const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
+
   if (leftButton) {
     leftTextViewProps = {
       color: 'footerButton',
       variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
-    }
-
-    if (leftButton.text.length > 10) {
-      constrainTitle = true
     }
   }
 
