@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, VAButton, WhatsNew } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -91,6 +91,8 @@ export const EncourageUpdateAlert = () => {
       </Box>
     )
   } else {
-    return null
+    return <WhatsNew />
   }
 }
+
+export default EncourageUpdateAlert

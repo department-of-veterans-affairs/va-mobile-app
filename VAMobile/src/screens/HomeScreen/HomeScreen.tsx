@@ -3,16 +3,14 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
-import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
-import { WhatsNew } from 'components/WhatsNew'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -107,7 +105,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             {heading}
           </TextView>
         </Box>
-        {<EncourageUpdateAlert /> ? <EncourageUpdateAlert /> : <WhatsNew />}
+        {<EncourageUpdateAlert />}
         <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={tc('aboutVA.a11yLabel')}>

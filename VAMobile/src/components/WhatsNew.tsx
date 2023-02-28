@@ -93,3 +93,5 @@ export const WhatsNew = () => {
     return null
   }
 }
+
+export default WhatsNew

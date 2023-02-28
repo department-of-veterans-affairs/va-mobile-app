@@ -17,9 +17,9 @@ export type CollapsibleAlertProps = {
   body: ReactNode
   /** acccessibilityLabel needs to be provided due to accessibilityState being neccessary */
   a11yLabel: string
-  /** handles any analytics needed when opening the alert*/
+  /** handles any analytics needed when expanding the alert*/
   expandEvent?: () => void
-  /** handles any analytics needed when closing the alert*/
+  /** handles any analytics needed when collapsing the alert*/
   collapseEvent?: () => void
 }
 
