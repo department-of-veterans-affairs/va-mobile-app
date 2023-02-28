@@ -61,8 +61,10 @@ export const WhatsNew = () => {
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
   const bodyA11yLabel = t('whatsNew.bodyCopy.a11yLabel.' + localVersion)
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
   const body = t('whatsNew.bodyCopy.' + localVersion)
 
   const props: CollapsibleAlertProps = {
