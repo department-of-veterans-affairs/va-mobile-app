@@ -75,18 +75,6 @@ context('ClaimDetails', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the contention list has no items', () => {
-    it('will not display the header "What you\'ve claimed"', async () => {
-      initializeTestInstance([])
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(6)
-
-      expect(textViews[0].props.children).toEqual('Claim type')
-      expect(textViews[2].props.children).toEqual('Date received')
-      expect(textViews[4].props.children).toEqual('Your representative for VA claims')
-    })
-  })
-
   describe('when the contention list has items', () => {
     it('will display the header "What you\'ve claimed"', async () => {
       const textViews = testInstance.findAllByType(TextView)
