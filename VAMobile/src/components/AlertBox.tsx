@@ -9,7 +9,7 @@ import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 export type AlertBoxProps = {
   /** color of the border */
   border: keyof VABorderColors
-  /** Optional boolean for determining when to focus on error alert boxes. */
+  /** Optional boolean for determining when to focus on error alert boxes (e.g. onSaveClicked). */
   focusOnError?: boolean
   /** Optional ref for the parent scroll view. Used for scrolling to error alert boxes. */
   scrollViewRef?: RefObject<ScrollView>
