@@ -1,5 +1,5 @@
 import { AccessibilityRole, ScrollView, View } from 'react-native'
-import React, { FC, RefObject, useEffect } from 'react'
+import React, { FC, RefObject, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
 import { VABorderColors } from 'styles/theme'
@@ -31,6 +31,7 @@ export type AlertBoxProps = {
 const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
+  const [shouldFocus, setShouldFocus] = useState(true)
 
   const boxPadding = 20
 
@@ -39,6 +40,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
       scrollRef.current = scrollViewRef.current
       scrollToAlert(-boxPadding)
     }
+    setShouldFocus(focusOnError)
   }, [border, focusOnError, scrollRef, scrollToAlert, scrollViewRef, text, title])
 
   const boxProps: BoxProps = {
@@ -74,7 +76,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
         </View>
       )}
       {children}
-      {vibrate()}
+      {shouldFocus && vibrate()}
     </Box>
   )
 }
