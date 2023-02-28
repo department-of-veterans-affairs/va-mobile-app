@@ -9,7 +9,6 @@ import {
   Box,
   ButtonTypesConstants,
   CollapsibleView,
-  CrisisLineCta,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -400,8 +399,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     navigation.navigate('SecureMessaging')
   }
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
     const messageData = getMessageData()
@@ -521,8 +518,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       title={tc('editDraft')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
-      menuViewActions={MenViewActions}>
-      <CrisisLineCta onPress={onCrisisLine} />
+      menuViewActions={MenViewActions}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>
