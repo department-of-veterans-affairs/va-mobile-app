@@ -25,5 +25,5 @@ export const getWhatsNewLocalVersion = async (demoMode: boolean): Promise<string
  * stores version skipped for what's new
  */
 export const setWhatsNewVersionSkipped = async (versionSkipped: string): Promise<void> => {
-  await Promise.all([AsyncStorage.setItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL, versionSkipped)])
+  await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL, versionSkipped)
 }

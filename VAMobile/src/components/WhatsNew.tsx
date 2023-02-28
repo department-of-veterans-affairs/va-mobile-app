@@ -56,8 +56,8 @@ export const WhatsNew = () => {
 
   const onPress = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_dont_show())
-    setWhatsNewVersionSkipped(localVersion ? localVersion : '')
-    setSkippedVersionHomeScreen(localVersion ? localVersion : '')
+    setWhatsNewVersionSkipped(localVersion || '')
+    setSkippedVersionHomeScreen(localVersion || '')
   }
 
   //@ts-ignore
@@ -83,10 +83,10 @@ export const WhatsNew = () => {
   }
 
   if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== 'whatsNew.bodyCopy.' + localVersion) {
+    whatsNewAppeared()
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <CollapsibleAlert {...props} />
-        {whatsNewAppeared()}
       </Box>
     )
   } else {
