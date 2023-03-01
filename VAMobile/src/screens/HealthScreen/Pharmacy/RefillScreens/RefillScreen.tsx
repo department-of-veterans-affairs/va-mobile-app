@@ -59,7 +59,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const onSubmitPressed = () => {
     submitRefillAlert({
-      title: t("prescriptions.refill.confirmationTitle", { count: selectedPrescriptionsCount }),
+      title: t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
       cancelButtonIndex: 0,
       buttons: [
         {
