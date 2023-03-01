@@ -31,7 +31,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   const onPress = (): void => {
     if (expanded && onCollapse) {
       onCollapse()
-    } else if (onExpand) {
+    } else if (!expanded && onExpand) {
       onExpand()
     }
     setExpanded(!expanded)
