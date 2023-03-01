@@ -7,11 +7,13 @@ on:
         required: true
         type: string
         default: 'staging'
-      # os:
-      #   required: true
-      #   type: string
+      ios:
+        required: true
+        type: boolean
+        default: false
 jobs:
   setup_env:
+    runs-on: ${{ ios && 'macos-latest' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
