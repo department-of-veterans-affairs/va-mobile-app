@@ -1,11 +1,12 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
+import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
@@ -40,6 +41,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const [collapsibleToDisplay, setCollapsible] = useState<number>(0)
 
   useEffect(() => {
     // Fetch the profile information
@@ -47,6 +50,17 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
   }, [dispatch, name])
+
+  useEffect(() => {
+    async function checkCollapisbleToDisplay() {
+      const version = await getEncourageUpdateLocalVersion(demoMode)
+      if (componentMounted.current) {
+        setVersionName(version)
+      }
+    }
+
+    checkCollapisbleToDisplay()
+  }, [demoMode])
 
   useEffect(() => {
     navigation.setOptions({

@@ -11,7 +11,7 @@ import { HomeScreen } from './HomeScreen'
 import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/encourageUpdate'
+import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/homeScreenAlerts'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
