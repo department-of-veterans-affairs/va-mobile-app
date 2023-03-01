@@ -189,7 +189,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
         {formContainsError && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox scrollViewRef={scrollViewRef} title={t('editPhoneNumber.checkPhoneNumber')} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} title={t('editPhoneNumber.checkPhoneNumber')} border="error" focusOnError={onSaveClicked} />
           </Box>
         )}
         <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
