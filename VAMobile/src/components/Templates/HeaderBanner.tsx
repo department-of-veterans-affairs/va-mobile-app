@@ -63,6 +63,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
 
+  const TEXT_CONSTRAINT_THRESHOLD = 30
+
   const transition = title?.type === 'Transition'
 
   /**
@@ -128,6 +130,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
 
   const commonBoxProps: BoxProps = {
     alignItems: 'center',
+    justifyContent: 'center',
     p: theme.dimensions.buttonPadding,
     minHeight: theme.dimensions.headerHeight,
   }
@@ -135,6 +138,11 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   let leftTextViewProps: TextViewProps = {}
   let titleTextViewProps: TextViewProps = {}
   let rightTextViewProps: TextViewProps = {}
+
+  // Calculate total length of header text. If too long, force title to wrap
+  const titleLength = title?.type === 'VA' ? 2 : title?.title.length || 0
+  const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text.length || 0)
+  const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
 
   if (leftButton) {
     leftTextViewProps = {
@@ -154,7 +162,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   }
   if (title) {
     titleTextViewProps = {
-      variant: transition ? 'MobileBody' : title.type === 'VA' ? 'VAHeader' : 'MobileBodyBold',
+      variant: transition ? 'MobileBodyTight' : title.type === 'VA' ? 'VAHeader' : 'MobileBodyBold',
+      textAlign: 'center',
       allowFontScaling: false,
     }
   }
@@ -201,7 +210,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   return (
     <>
       <Box {...titleBannerProps}>
-        <Box flex={1} alignItems="flex-start">
+        <Box flex={4} alignItems="flex-start">
           {leftButton?.descriptiveBack ? (
             <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
           ) : leftButton ? (
@@ -217,13 +226,13 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
           ) : null}
         </Box>
 
-        <Box mt={theme.dimensions.buttonPadding}>
+        <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
           <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
             <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
           </View>
         </Box>
 
-        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
+        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
           {rightButton && (
             <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
               <Box {...commonBoxProps}>
