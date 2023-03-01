@@ -49,6 +49,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 30,
   },
+  MobileBodyTight: {
+    fontSize: 20,
+    lineHeight: 24,
+  },
   MobileBodyBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -141,6 +145,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
+    MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
@@ -208,6 +213,7 @@ let theme: VATheme = {
   fontSizes: {
     BitterBoldHeading: fontSizes.BitterBoldHeading,
     MobileBody: fontSizes.MobileBody,
+    MobileBodyTight: fontSizes.MobileBodyTight,
     MobileBodyBold: fontSizes.MobileBodyBold,
     TableHeaderBold: fontSizes.TableHeaderBold,
     TableHeaderLabel: fontSizes.TableHeaderLabel,

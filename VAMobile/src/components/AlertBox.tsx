@@ -1,5 +1,5 @@
 import { AccessibilityRole, ScrollView, View } from 'react-native'
-import React, { FC, RefObject, useEffect } from 'react'
+import React, { FC, RefObject, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
 import { VABorderColors } from 'styles/theme'
@@ -9,6 +9,8 @@ import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 export type AlertBoxProps = {
   /** color of the border */
   border: keyof VABorderColors
+  /** Optional boolean for determining when to focus on error alert boxes (e.g. onSaveClicked). */
+  focusOnError?: boolean
   /** Optional ref for the parent scroll view. Used for scrolling to error alert boxes. */
   scrollViewRef?: RefObject<ScrollView>
   /** body of the alert */
@@ -26,9 +28,10 @@ export type AlertBoxProps = {
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
+const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
   const theme = useTheme()
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
+  const [shouldFocus, setShouldFocus] = useState(true)
 
   const boxPadding = 20
 
@@ -37,7 +40,8 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, t
       scrollRef.current = scrollViewRef.current
       scrollToAlert(-boxPadding)
     }
-  })
+    setShouldFocus(focusOnError)
+  }, [border, focusOnError, scrollRef, scrollToAlert, scrollViewRef, text, title])
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
@@ -72,7 +76,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, scrollViewRef, title, t
         </View>
       )}
       {children}
-      {vibrate()}
+      {shouldFocus && vibrate()}
     </Box>
   )
 }
