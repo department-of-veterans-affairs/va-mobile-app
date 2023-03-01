@@ -1,0 +1,21 @@
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: true
+        type: string
+        default: 'staging'
+      # os:
+      #   required: true
+      #   type: string
+jobs:
+  setup_env:
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
