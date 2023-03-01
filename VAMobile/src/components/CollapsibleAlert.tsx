@@ -17,22 +17,22 @@ export type CollapsibleAlertProps = {
   body: ReactNode
   /** acccessibilityLabel needs to be provided due to accessibilityState being neccessary */
   a11yLabel: string
-  /** handles any analytics needed when expanding the alert*/
-  expandEvent?: () => void
-  /** handles any analytics needed when collapsing the alert*/
-  collapseEvent?: () => void
+  /** handles anything needed when expanding the alert*/
+  onExpand?: () => void
+  /** handles anything needed when collapsing the alert*/
+  onCollapse?: () => void
 }
 
-const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, expandEvent, collapseEvent }) => {
+const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, onExpand, onCollapse }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   const onPress = (): void => {
-    if (expanded && collapseEvent) {
-      collapseEvent()
-    } else if (expandEvent) {
-      expandEvent()
+    if (expanded && onCollapse) {
+      onCollapse()
+    } else if (onExpand) {
+      onExpand()
     }
     setExpanded(!expanded)
 

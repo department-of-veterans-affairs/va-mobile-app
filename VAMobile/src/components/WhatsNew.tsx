@@ -78,8 +78,8 @@ export const WhatsNew = () => {
       </>
     ),
     a11yLabel: t('whatsNew.title'),
-    expandEvent: expandCollapsible,
-    collapseEvent: closeCollapsible,
+    onExpand: expandCollapsible,
+    onCollapse: closeCollapsible,
   }
 
   if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== 'whatsNew.bodyCopy.' + localVersion) {
