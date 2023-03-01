@@ -35,6 +35,7 @@ jobs:
     strategy:
       matrix:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
+      fail-fast: false
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
