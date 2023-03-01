@@ -90,8 +90,10 @@ export const EncourageUpdateAlert = () => {
         </AlertBox>
       </Box>
     )
-  } else {
+  } else if (localVersionName && storeVersion && localVersionName === storeVersion) {
     return <WhatsNew />
+  } else {
+    return null
   }
 }
 
