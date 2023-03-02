@@ -132,6 +132,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     <>
       <FullScreenSubtask
         leftButtonText={tc('cancel')}
+        onLeftButtonPress={selectedPrescriptionsCount === 0 ? navigation.goBack : undefined}
         title={tc('refillRequest')}
         primaryContentButtonText={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
         scrollViewRef={scrollViewRef}

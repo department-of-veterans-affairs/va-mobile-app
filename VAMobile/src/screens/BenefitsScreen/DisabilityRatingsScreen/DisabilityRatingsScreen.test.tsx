@@ -106,7 +106,7 @@ context('DisabilityRatingsScreen', () => {
     const links = testInstance.findAllByProps({ accessibilityRole: 'link' })
     expect(links[0].findByType(TextView).props.children).toBe('About VA disability ratings')
     expect(links[5].findByType(TextView).props.children).toBe('800-827-1000')
-    expect(links[10].findByType(TextView).props.children).toBe('711')
+    expect(links[10].findByType(TextView).props.children).toBe('TTY: 711')
   })
 
   describe('when loading is set to true', () => {

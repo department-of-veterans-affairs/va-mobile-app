@@ -10,7 +10,6 @@ import {
   Box,
   ButtonTypesConstants,
   CollapsibleView,
-  CrisisLineCta,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -320,8 +319,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     navigation.navigate('SecureMessaging')
   }
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
     const messageData = {
@@ -358,7 +355,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} scrollViewRef={scrollViewRef} />
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          savingDraft={savingDraft}
+          scrollViewRef={scrollViewRef}
+          focusOnError={onSendClicked}
+        />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
@@ -408,16 +411,17 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   return (
     <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
       title={tc('compose')}
       leftButtonText={tc('cancel')}
+      onLeftButtonPress={navigation.goBack}
       rightButtonText={tc('save')}
       rightVAIconProps={saveIconProps}
-      scrollViewRef={scrollViewRef}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
-      }}>
-      <CrisisLineCta onPress={onCrisisLine} />
+      }}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
   )

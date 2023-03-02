@@ -92,6 +92,11 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     return !validEmailCondition.test(email)
   }
 
+  const emailChanged = (): boolean => {
+    const originalEmail = profile?.contactEmail?.emailAddress || ''
+    return email !== originalEmail
+  }
+
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
@@ -137,6 +142,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       scrollViewRef={scrollViewRef}
       title={t('contactInformation.emailAddress')}
       leftButtonText={t('cancel')}
+      onLeftButtonPress={!emailChanged() ? navigation.goBack : undefined}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}
       rightButtonDisabled={saveDisabled}>
@@ -153,7 +159,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" />
+            <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" focusOnError={onSaveClicked} />
           </Box>
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />

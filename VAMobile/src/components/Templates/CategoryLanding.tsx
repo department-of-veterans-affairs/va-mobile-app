@@ -1,4 +1,4 @@
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, View, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
@@ -31,6 +31,7 @@ export type CategoryLandingProps = {
 
 export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
+  const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
@@ -85,8 +86,9 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
    * @param event - Layout change event wrapping the Veteran's Crisis Line and subtitle
    */
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
-    // Subtract out bottom padding to closely align transition with subtitle fully disappearing
-    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween
+    // Subtract out bottom padding and 1/3 scaled font line height to closely align transition before subtitle fully disappearing
+    const partialFontHeight = (theme.fontSizes.BitterBoldHeading.lineHeight * fontScale) / 3
+    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween - partialFontHeight
     setTransitionHeaderHeight(height)
   }
 

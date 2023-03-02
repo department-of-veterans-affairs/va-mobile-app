@@ -345,7 +345,7 @@ export const onAddFileAttachments = (
 export const getfolderName = (id: string, folders: SecureMessagingFolderList): string => {
   const folderName = _.filter(folders, (folder) => {
     return folder.id === id
-  })[0].attributes.name
+  })[0]?.attributes.name
 
   return folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName
 }

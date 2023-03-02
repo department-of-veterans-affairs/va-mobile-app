@@ -10,7 +10,6 @@ import {
   Box,
   ButtonTypesConstants,
   CollapsibleView,
-  CrisisLineCta,
   FieldType,
   FormFieldType,
   FormWrapper,
@@ -162,8 +161,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
   }, [sendMessageComplete, dispatch, navigation])
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
   if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -228,7 +225,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const renderForm = (): ReactNode => (
     <Box>
-      <MessageAlert scrollViewRef={scrollViewRef} hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
+      <MessageAlert
+        scrollViewRef={scrollViewRef}
+        hasValidationError={formContainsError}
+        saveDraftAttempted={onSaveDraftClicked}
+        savingDraft={savingDraft}
+        focusOnError={onSendClicked}
+      />
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <CollapsibleView
           text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
@@ -317,13 +320,14 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       scrollViewRef={scrollViewRef}
       title={tc('reply')}
       leftButtonText={tc('cancel')}
+      onLeftButtonPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
       rightButtonText={tc('save')}
       rightVAIconProps={saveIconProps}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
-      }}>
-      <CrisisLineCta onPress={onCrisisLine} />
+      }}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{renderMessageThread()}</Box>

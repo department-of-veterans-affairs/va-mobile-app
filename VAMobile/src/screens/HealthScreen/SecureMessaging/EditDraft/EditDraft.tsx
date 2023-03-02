@@ -9,7 +9,6 @@ import {
   Box,
   ButtonTypesConstants,
   CollapsibleView,
-  CrisisLineCta,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -400,8 +399,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     navigation.navigate('SecureMessaging')
   }
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
     const messageData = getMessageData()
@@ -432,7 +429,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} scrollViewRef={scrollViewRef} />
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          savingDraft={savingDraft}
+          scrollViewRef={scrollViewRef}
+          focusOnError={onSendClicked}
+        />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
@@ -516,8 +519,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} title={tc('editDraft')} leftButtonText={tc('cancel')} menuViewActions={MenViewActions}>
-      <CrisisLineCta onPress={onCrisisLine} />
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      title={tc('editDraft')}
+      leftButtonText={tc('cancel')}
+      onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
+      menuViewActions={MenViewActions}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>

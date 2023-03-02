@@ -8,6 +8,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 export type MessageAlertProps = {
+  /** Optional boolean for determining when to focus on error alert boxes. */
+  focusOnError?: boolean
   /**sets if there is validation errors */
   hasValidationError?: boolean
   /**sets if attempted to save a draft */
@@ -19,7 +21,7 @@ export type MessageAlertProps = {
 }
 
 /**Common component to show a message alert when saving or sending a secure message */
-const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, savingDraft, scrollViewRef }) => {
+const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, savingDraft, scrollViewRef, focusOnError }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
@@ -38,7 +40,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
 
   return (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox border={'error'} title={title} text={text} textA11yLabel={textA11yLabel} titleRole={'header'} scrollViewRef={scrollViewRef} />
+      <AlertBox border={'error'} title={title} text={text} textA11yLabel={textA11yLabel} titleRole={'header'} scrollViewRef={scrollViewRef} focusOnError={focusOnError} />
     </Box>
   )
 }

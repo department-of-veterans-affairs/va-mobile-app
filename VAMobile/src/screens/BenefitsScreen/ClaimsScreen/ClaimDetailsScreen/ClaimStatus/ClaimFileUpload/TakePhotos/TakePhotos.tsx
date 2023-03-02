@@ -19,7 +19,7 @@ const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 
 type TakePhotosProps = StackScreenProps<BenefitsStackParamList, 'TakePhotos'>
 
-const TakePhotos: FC<TakePhotosProps> = ({ route }) => {
+const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -57,7 +57,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ route }) => {
   }
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} title={t('fileUpload.selectPhotos')}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('fileUpload.selectPhotos')}>
       {!!error && (
         <Box mt={theme.dimensions.contentMarginTop}>
           <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />

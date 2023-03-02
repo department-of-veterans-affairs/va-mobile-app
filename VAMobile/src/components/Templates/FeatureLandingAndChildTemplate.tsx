@@ -1,4 +1,4 @@
-import { LayoutChangeEvent, StatusBar, View, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
@@ -44,6 +44,7 @@ export type FeatureLandingProps = ChildTemplateProps // Passthrough to same prop
 
 export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
+  const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
 
   const [scrollOffset, setScrollOffset] = useState(0)
@@ -89,8 +90,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
    * @param event - Layout change event wrapping the subtitle
    */
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
-    // Subtract out bottom padding to closely align transition with subtitle fully disappearing
-    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween
+    // Subtract out bottom padding and 1/3 scaled font line height to closely align transition before subtitle fully disappearing
+    const partialFontHeight = (theme.fontSizes.BitterBoldHeading.lineHeight * fontScale) / 3
+    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween - partialFontHeight
     setTransitionHeaderHeight(height)
   }
 
