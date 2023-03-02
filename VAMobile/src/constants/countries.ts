@@ -200,10 +200,6 @@ export const Countries = [
     label: 'Comoros',
   },
   {
-    value: 'COG',
-    label: 'Congo',
-  },
-  {
     value: 'COD',
     label: 'Democratic Republic of the Congo',
   },
