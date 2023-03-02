@@ -11,7 +11,7 @@ import { HomeScreen } from './HomeScreen'
 import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/encourageUpdate'
+import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/homeScreenAlerts'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -55,6 +55,10 @@ context('HomeScreen', () => {
   }
 
   beforeEach(() => {
+    when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(true)
+    mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve('1.0.0.'))
+    mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve('0.0.0'))
+    mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve('2.0.0.'))
     initializeTestInstance()
   })
 
