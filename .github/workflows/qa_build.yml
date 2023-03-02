@@ -17,6 +17,9 @@ jobs:
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - name: Decode files
         env:
+          ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
+          ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
+          ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
           GOOGLE_VAMOBILE_KEYSTORE_BASE64: ${{ secrets.GOOGLE_VAMOBILE_KEYSTORE_BASE64 }}
           GOOGLE_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 }}
           GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
