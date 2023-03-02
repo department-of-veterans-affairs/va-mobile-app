@@ -15,15 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0'
-          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Decode files
         env:
           GOOGLE_VAMOBILE_KEYSTORE_BASE64: ${{ secrets.GOOGLE_VAMOBILE_KEYSTORE_BASE64 }}
@@ -33,11 +24,20 @@ jobs:
         run: |
           mkdir android/keys
           cd android/keys
-          echo "$GOOGLE_VAMOBILE_KEYSTORE_BASE64" | base64 --decode | tee ${{ vars.GOOGLE_VAMOBILE_KEYSTORE_PATH }} >/dev/null
-          echo "$GOOGLE_SERVICE_ACCOUNT_JSON_BASE64" | base64 --decode | tee ${{ vars.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }} >/dev/null
-          echo "$FIREBASE_DIST_FILE_BASE64" | base64 --decode | tee ${{ vars.FIREBASE_DIST_FILE_PATH }} >/dev/null
+          echo $GOOGLE_VAMOBILE_KEYSTORE_BASE64 | base64 --decode > ${{ vars.GOOGLE_VAMOBILE_KEYSTORE_PATH }}
+          echo $GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 | base64 --decode > ${{ vars.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }}
+          echo $FIREBASE_DIST_FILE_BASE64 | base64 --decode > ${{ vars.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }}
           cd ../app
-          echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode | tee ${{ vars.GOOGLE_SERVICES_JSON_PATH }} >/dev/null
+          echo $GOOGLE_SERVICES_JSON_BASE64 | base64 --decode > ${{ vars.GOOGLE_SERVICES_JSON_PATH }}
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: |
           yarn install --frozen-lockfile --non-interactive
