@@ -100,7 +100,7 @@ context('AppointmentAddressAndNumber', () => {
   })
 
   describe('when the address does not exist', () => {
-    it('should not display the address TextViews', async () => {
+    it('should not display the address TextViews or directions link', async () => {
       await initializeTestInstance({
         appointmentType: AppointmentTypeConstants.VA,
         location: {
@@ -113,7 +113,7 @@ context('AppointmentAddressAndNumber', () => {
           },
         },
       })
-      expect(testInstance.findAllByType(TextView).length).toEqual(7)
+      expect(testInstance.findAllByType(TextView).length).toEqual(6)
     })
   })
 
