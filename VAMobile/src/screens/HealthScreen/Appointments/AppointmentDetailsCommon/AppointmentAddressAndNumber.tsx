@@ -95,13 +95,15 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
           )}
         </Box>
         <Box>
-          <ClickForActionLink
-            displayedText={`${t('common:directions')}`}
-            a11yLabel={`${t('common:directions')}`}
-            linkType={'directions'}
-            numberOrUrlLink={getDirectionsUrl(location)}
-            {...a11yHintProp(t('common:directions.a11yHint'))}
-          />
+          {((!!address?.street && address?.city && address?.state && address?.zipCode) || (location.lat && location.long)) && (
+            <ClickForActionLink
+              displayedText={`${t('common:directions')}`}
+              a11yLabel={`${t('common:directions')}`}
+              linkType={'directions'}
+              numberOrUrlLink={getDirectionsUrl(location)}
+              {...a11yHintProp(t('common:directions.a11yHint'))}
+            />
+          )}
         </Box>
         {!appointmentIsAtlas && phone?.number && <ClickToCallPhoneNumber phone={phone} />}
       </>
