@@ -24,10 +24,6 @@ export const Countries = [
     label: 'Andorra',
   },
   {
-    value: 'ARG',
-    label: 'Argentina',
-  },
-  {
     value: 'AGO',
     label: 'Angola',
   },
@@ -42,6 +38,10 @@ export const Countries = [
   {
     value: 'ATG',
     label: 'Antigua and Barbuda',
+  },
+  {
+    value: 'ARG',
+    label: 'Argentina',
   },
   {
     value: 'ARM',
@@ -456,12 +456,12 @@ export const Countries = [
     label: 'Kyrgyzstan',
   },
   {
-    value: 'LVA',
-    label: 'Latvia',
-  },
-  {
     value: 'LAO',
     label: 'Laos',
+  },
+  {
+    value: 'LVA',
+    label: 'Latvia',
   },
   {
     value: 'LBN',
