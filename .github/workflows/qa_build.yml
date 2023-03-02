@@ -1,0 +1,45 @@
+name: Daily QA Build
+
+on:
+  push:
+    branches:
+      - nr-4731-qa-workflow
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
+      - name: Decode files
+        run: |
+          mkdir android/keys
+          cd android/keys
+          base64 -d "$GOOGLE_VAMOBILE_KEYSTORE_BASE64" -o ${{ vars.GOOGLE_VAMOBILE_KEYSTORE_PATH }}
+          base64 -d "$GOOGLE_SERVICE_ACCOUNT_JSON_BASE64" -o ${{ vars.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }}
+          base64 -d "$FIREBASE_DIST_FILE_BASE64" -o ${{ vars.FIREBASE_DIST_FILE_PATH }}
+          cd ../app
+          base64 -d "$GOOGLE_SERVICES_JSON_BASE64" -o ${{ vars.GOOGLE_SERVICES_JSON_PATH }}
+        env:
+          GOOGLE_VAMOBILE_KEYSTORE_BASE64: ${{ secrets.GOOGLE_VAMOBILE_KEYSTORE_BASE64 }}
+          GOOGLE_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 }}
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+          FIREBASE_DIST_FILE_BASE64: ${{ secrets.FIREBASE_DIST_FILE_BASE64 }}
+      - name: Install dependencies
+        run: |
+          yarn install --frozen-lockfile --non-interactive
+          yarn env:staging
+          yarn bundle:android
+          cd android
+          bundle check || bundle config set --local path 'vendor/bundle' && bundle install
+          bundle update fastlane
+          bundle exec fastlane qa --verbose version:qa notes:"Narin GHA test" psTrack:""
