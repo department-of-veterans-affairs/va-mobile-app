@@ -1,4 +1,5 @@
 import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Shadow, ShadowProps } from 'react-native-shadow-2'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
@@ -118,6 +119,18 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       }).start()
   })
 
+  const zIndex = {
+    zIndex: 1,
+  }
+
+  const headerDropShadow: ShadowProps = titleShowing
+    ? {
+        startColor: theme.colors.background.headerDropShadow,
+        distance: 4,
+        sides: { start: false, top: false, bottom: true, end: false },
+      }
+    : { disabled: true }
+
   const titleBannerProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
@@ -208,49 +221,53 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   }
 
   return (
-    <>
-      <Box {...titleBannerProps}>
-        <Box flex={4} alignItems="flex-start">
-          {leftButton?.descriptiveBack ? (
-            <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
-          ) : leftButton ? (
-            <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-              <TouchableWithoutFeedback ref={focus === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
-                <Box {...commonBoxProps}>
-                  <Box display="flex" flexDirection="row" alignItems="center">
-                    <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
+    <View {...zIndex}>
+      <Shadow {...headerDropShadow}>
+        <View {...titleBannerProps}>
+          <Box {...titleBannerProps}>
+            <Box flex={4} alignItems="flex-start">
+              {leftButton?.descriptiveBack ? (
+                <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
+              ) : leftButton ? (
+                <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+                  <TouchableWithoutFeedback ref={focus === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
+                    <Box {...commonBoxProps}>
+                      <Box display="flex" flexDirection="row" alignItems="center">
+                        <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
+                      </Box>
+                    </Box>
+                  </TouchableWithoutFeedback>
+                </Box>
+              ) : null}
+            </Box>
+
+            <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
+              <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
+                <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
+              </View>
+            </Box>
+
+            <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
+              {rightButton && (
+                <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
+                  <Box {...commonBoxProps}>
+                    {rightButton.icon && <VAIcon fill="link" height={24} width={24} preventScaling={true} {...rightButton.icon} />}
+                    <Box display="flex" flexDirection="row" alignItems="center">
+                      <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
+                    </Box>
                   </Box>
+                </TouchableWithoutFeedback>
+              )}
+              {!rightButton && menuViewActions && (
+                <Box {...commonBoxProps}>
+                  <MenuView actions={menuViewActions} />
                 </Box>
-              </TouchableWithoutFeedback>
+              )}
             </Box>
-          ) : null}
-        </Box>
-
-        <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
-          <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
-            <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
-          </View>
-        </Box>
-
-        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
-          {rightButton && (
-            <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
-              <Box {...commonBoxProps}>
-                {rightButton.icon && <VAIcon fill="link" height={24} width={24} preventScaling={true} {...rightButton.icon} />}
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
-                </Box>
-              </Box>
-            </TouchableWithoutFeedback>
-          )}
-          {!rightButton && menuViewActions && (
-            <Box {...commonBoxProps}>
-              <MenuView actions={menuViewActions} />
-            </Box>
-          )}
-        </Box>
-      </Box>
-    </>
+          </Box>
+        </View>
+      </Shadow>
+    </View>
   )
 }
 
