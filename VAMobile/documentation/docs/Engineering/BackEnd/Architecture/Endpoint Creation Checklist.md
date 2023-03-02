@@ -50,6 +50,6 @@ Adding a new service will require the following steps:
   * ansible/deployment/config/vets-api/prod-settings.local.yml.j2
   * ansible/deployment/config/vets-api/staging-settings.local.yml.j2
   <br/><br/>*Note: Immunizations was also added to dev ansible config but we don't use dev so that should be unnecessary. Text search for `immunization` as reference to formatting.*
-  <br/><br/>*Note: If you have any questions or need approvals for devops or manifests PRs, your best point of contact is Rachal Cassity *
+  <br/><br/>*Note: If you have any questions or need approvals for devops or manifests PRs, your best point of contact is Rachal Cassity*
 
   6. Once sandbox is working, you must request production access separately though the same onboarding link above. 
