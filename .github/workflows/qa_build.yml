@@ -33,11 +33,11 @@ jobs:
         run: |
           mkdir android/keys
           cd android/keys
-          base64 --decode"$GOOGLE_VAMOBILE_KEYSTORE_BASE64" > ${{ vars.GOOGLE_VAMOBILE_KEYSTORE_PATH }}
-          base64 --decode"$GOOGLE_SERVICE_ACCOUNT_JSON_BASE64" > ${{ vars.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }}
-          base64 --decode"$FIREBASE_DIST_FILE_BASE64" > ${{ vars.FIREBASE_DIST_FILE_PATH }}
+          base64 --decode "$GOOGLE_VAMOBILE_KEYSTORE_BASE64" > ${{ vars.GOOGLE_VAMOBILE_KEYSTORE_PATH }}
+          base64 --decode "$GOOGLE_SERVICE_ACCOUNT_JSON_BASE64" > ${{ vars.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }}
+          base64 --decode "$FIREBASE_DIST_FILE_BASE64" > ${{ vars.FIREBASE_DIST_FILE_PATH }}
           cd ../app
-          base64 --decode"$GOOGLE_SERVICES_JSON_BASE64" > ${{ vars.GOOGLE_SERVICES_JSON_PATH }}
+          base64 --decode "$GOOGLE_SERVICES_JSON_BASE64" > ${{ vars.GOOGLE_SERVICES_JSON_PATH }}
       - name: Install dependencies
         run: |
           yarn install --frozen-lockfile --non-interactive
