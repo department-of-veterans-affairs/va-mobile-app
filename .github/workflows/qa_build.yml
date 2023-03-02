@@ -15,25 +15,29 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '3.0.2' # Not needed with a .ruby-version file
+          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Decode files
-        run: |
-          mkdir android/keys
-          cd android/keys
-          base64 -d "$GOOGLE_VAMOBILE_KEYSTORE_BASE64" -o ${{ vars.GOOGLE_VAMOBILE_KEYSTORE_PATH }}
-          base64 -d "$GOOGLE_SERVICE_ACCOUNT_JSON_BASE64" -o ${{ vars.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }}
-          base64 -d "$FIREBASE_DIST_FILE_BASE64" -o ${{ vars.FIREBASE_DIST_FILE_PATH }}
-          cd ../app
-          base64 -d "$GOOGLE_SERVICES_JSON_BASE64" -o ${{ vars.GOOGLE_SERVICES_JSON_PATH }}
         env:
           GOOGLE_VAMOBILE_KEYSTORE_BASE64: ${{ secrets.GOOGLE_VAMOBILE_KEYSTORE_BASE64 }}
           GOOGLE_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64 }}
           GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
           FIREBASE_DIST_FILE_BASE64: ${{ secrets.FIREBASE_DIST_FILE_BASE64 }}
+        run: |
+          mkdir android/keys
+          cd android/keys
+          base64 --decode"$GOOGLE_VAMOBILE_KEYSTORE_BASE64" > ${{ vars.GOOGLE_VAMOBILE_KEYSTORE_PATH }}
+          base64 --decode"$GOOGLE_SERVICE_ACCOUNT_JSON_BASE64" > ${{ vars.GOOGLE_SERVICE_ACCOUNT_JSON_PATH }}
+          base64 --decode"$FIREBASE_DIST_FILE_BASE64" > ${{ vars.FIREBASE_DIST_FILE_PATH }}
+          cd ../app
+          base64 --decode"$GOOGLE_SERVICES_JSON_BASE64" > ${{ vars.GOOGLE_SERVICES_JSON_PATH }}
       - name: Install dependencies
         run: |
           yarn install --frozen-lockfile --non-interactive
