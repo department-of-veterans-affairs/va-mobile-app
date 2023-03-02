@@ -29,9 +29,9 @@ platform :android do
     update_version_and_build(options[:version ])
     bundle("Release")
     upload("Development Team")
-    bundle("Debug")
-    notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
-    distribute_to_firebase(notes, "qa")
+    # bundle("Debug")
+    # notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
+    # distribute_to_firebase(notes, "qa")
     tag_build
     message = "New QA build successfully uploaded to Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android", ENV['SLACK_THREAD_TS'])
