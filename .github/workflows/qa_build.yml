@@ -33,6 +33,9 @@ jobs:
           echo "$GOOGLE_VAMOBILE_KEYSTORE_BASE64" >> GOOGLE_VAMOBILE_KEYSTORE_BASE64.txt
           echo "$GOOGLE_SERVICE_ACCOUNT_JSON_BASE64" >> GOOGLE_SERVICE_ACCOUNT_JSON_BASE64.txt
           echo "$FIREBASE_DIST_FILE_BASE64" >> FIREBASE_DIST_FILE_BASE64.txt
+          echo $ANDROID_KS_KEY_ALIAS >> secrets.txt
+          echo $ANDROID_KS_KEY_PW >> secrets.txt
+          echo $ANDROID_KS_PW >> secrets.txt
           cd ..
           cd app
           echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > ${{ vars.GOOGLE_SERVICES_JSON_PATH }}
