@@ -680,12 +680,12 @@ export const Countries = [
     label: 'Qatar',
   },
   {
-    value: 'REU',
-    label: 'Reunion',
-  },
-  {
     value: 'COG',
     label: 'Republic of the Congo',
+  },
+  {
+    value: 'REU',
+    label: 'Reunion',
   },
   {
     value: 'ROU',
