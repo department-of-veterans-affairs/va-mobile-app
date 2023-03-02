@@ -40,6 +40,7 @@ We’ll be updating permissions for the design library as follows:
 ## How do I create a branch in Figma?
 Open the file you want to branch. Next to the file name, there is a dropdown where you can select **_Create branch_**.
 
+<img src={require('/img/figma/figma-create-a-branch-menu.png').default} alt="alt text for image goes here" width="100" />
 
 ![Screenshot of the create a branch menu item](/img/figma/figma-create-a-branch-menu.png)
 
