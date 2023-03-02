@@ -121,10 +121,10 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     zIndex: 1,
   }
 
-  const hmmm: ShadowProps = titleShowing
+  const headerDropShadow: ShadowProps = titleShowing
     ? {
-        startColor: theme.mode === 'light' ? '#D6D7D9' : '#121212',
-        distance: 8,
+        startColor: theme.colors.background.headerDropShadow,
+        distance: 4,
         sides: { start: false, top: false, bottom: true, end: false },
       }
     : { disabled: true }
@@ -213,7 +213,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
 
   return (
     <View {...zIndex}>
-      <Shadow {...hmmm}>
+      <Shadow {...headerDropShadow}>
         <View {...titleBannerProps}>
           <Box {...titleBannerProps}>
             <Box flex={1} alignItems="flex-start">

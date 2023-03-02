@@ -141,6 +141,7 @@ export type VABackgroundColors = {
   list: string
   listActive: string
   segmentedController: string
+  headerDropShadow: string
   shadow: string
   profileBanner: string
   ctaButton: string
