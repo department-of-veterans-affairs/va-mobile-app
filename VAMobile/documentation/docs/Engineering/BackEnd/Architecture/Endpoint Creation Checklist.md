@@ -29,9 +29,9 @@ Adding a new service will require the following steps:
   * In terminal, execute `openssl genrsa -out private.pem 2048`
   * `openssl rsa -in private.pem -out public.pem -outform PEM -pubout`
   * `cat public.pem | pem-jwk > public.jwk`
-  * Use the generated public.jwk file as your Oauth submission to Lighthouse 
-  3. Add client id (or new permissions to existing) to `config/settings.yml`. See entry `lighthouse_health_immunization` as reference. client_id should be provided by the lighthouse onboarding form. Other urls were provided by a lighthouse contact, Derek Brown. Unclear if best practice is to create single client id with all scopes Mobile will need or if we want a client id for each service, I'm leaning towards the former.
-  4. Add key path, private RSA key and other relevant urls, to [AWS](https://dsvagovcloud.signin.amazonaws-us-gov.com/console) with the following steps:
+  * Use the generated public.jwk file as your Oauth submission to Lighthouse and save the `private.pem` file for a later step. 
+  2. Add client id (or new permissions to existing) to `config/settings.yml`. See entry `lighthouse_health_immunization` as reference. client_id should be provided by the lighthouse onboarding form. Other urls were provided by a lighthouse contact, Derek Brown. Unclear if best practice is to create single client id with all scopes Mobile will need or if we want a client id for each service, I'm leaning towards the former.
+  3. Add key path, private RSA key and other relevant urls, to [AWS](https://dsvagovcloud.signin.amazonaws-us-gov.com/console) with the following steps:
   * Login and find service `Systems Manager`
   * Goto `Parameter Store` in left column
   * In search bar, type in `mobile` and use other mobile keys and urls as reference to how to format new ones. The names of these parameters need to match what is referenced in manifests repo changes listed below. 
