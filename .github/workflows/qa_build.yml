@@ -36,7 +36,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
-          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -48,6 +48,7 @@ jobs:
           yarn env:staging
           yarn bundle:android
           cd android
-          bundle check || bundle config set --local path 'vendor/bundle' && bundle install
           bundle update fastlane
           bundle exec fastlane qa --verbose version:qa notes:"Narin GHA test" psTrack:""
+
+        # (ABOVE BUNDLE UPDATE) bundle check || bundle config set --local path 'vendor/bundle' && bundle install
