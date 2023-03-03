@@ -3,7 +3,6 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 
-import { AccessibilityState, DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
 import {
@@ -20,6 +19,7 @@ import {
   TextView,
   VAImage,
 } from 'components'
+import { DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
@@ -46,7 +46,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
-  const { isFocus: isAccessibilityFocused } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')
@@ -168,51 +167,49 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
 
   return (
     <>
-      {isAccessibilityFocused && (
-        <FullScreenSubtask
-          scrollViewRef={scrollViewRef}
-          onLeftButtonPress={goBack}
-          leftButtonText={t('cancel')}
-          rightButtonText={t('save')}
-          onRightButtonPress={() => setOnSaveClicked(true)}
-          title={displayTitle}>
-          <Box mt={contentMarginTop} mb={contentMarginBottom}>
-            {formContainsError && (
-              <Box mb={standardMarginBetween}>
-                <AlertBox scrollViewRef={scrollViewRef} title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" focusOnError={onSaveClicked} />
-              </Box>
-            )}
-            {invalidRoutingNumberError && (
-              <Box mb={standardMarginBetween}>
-                <AlertBox
-                  scrollViewRef={scrollViewRef}
-                  title={t('editDirectDeposit.error')}
-                  text={t('editDirectDeposit.errorInvalidRoutingNumber')}
-                  border="error"
-                  focusOnError={onSaveClicked}
-                />
-              </Box>
-            )}
-            <Box mx={gutter} accessible={true}>
-              <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
+      <FullScreenSubtask
+        scrollViewRef={scrollViewRef}
+        onLeftButtonPress={goBack}
+        leftButtonText={t('cancel')}
+        rightButtonText={t('save')}
+        onRightButtonPress={() => setOnSaveClicked(true)}
+        title={displayTitle}>
+        <Box mt={contentMarginTop} mb={contentMarginBottom}>
+          {formContainsError && (
+            <Box mb={standardMarginBetween}>
+              <AlertBox scrollViewRef={scrollViewRef} title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" focusOnError={onSaveClicked} />
             </Box>
-            <Box mt={condensedMarginBetween}>
-              <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-                <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
-              </CollapsibleView>
-            </Box>
-            <Box mt={standardMarginBetween} mx={gutter}>
-              <FormWrapper
-                fieldsList={formFieldsList}
-                onSave={onSave}
-                setFormContainsError={setFormContainsError}
-                onSaveClicked={onSaveClicked}
-                setOnSaveClicked={setOnSaveClicked}
+          )}
+          {invalidRoutingNumberError && (
+            <Box mb={standardMarginBetween}>
+              <AlertBox
+                scrollViewRef={scrollViewRef}
+                title={t('editDirectDeposit.error')}
+                text={t('editDirectDeposit.errorInvalidRoutingNumber')}
+                border="error"
+                focusOnError={onSaveClicked}
               />
             </Box>
+          )}
+          <Box mx={gutter} accessible={true}>
+            <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
           </Box>
-        </FullScreenSubtask>
-      )}
+          <Box mt={condensedMarginBetween}>
+            <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
+              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
+            </CollapsibleView>
+          </Box>
+          <Box mt={standardMarginBetween} mx={gutter}>
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={onSave}
+              setFormContainsError={setFormContainsError}
+              onSaveClicked={onSaveClicked}
+              setOnSaveClicked={setOnSaveClicked}
+            />
+          </Box>
+        </Box>
+      </FullScreenSubtask>
     </>
   )
 }
