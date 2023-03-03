@@ -86,7 +86,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const getListItems = () => {
     const total = refillablePrescriptions?.length
     const listItems: Array<SelectionListItemObj> = refillable.map((prescription, idx) => {
-      const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total })
+      const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total }) + '.' // Period to ensure pause w/ screen reader
       return {
         content: (
           <>
