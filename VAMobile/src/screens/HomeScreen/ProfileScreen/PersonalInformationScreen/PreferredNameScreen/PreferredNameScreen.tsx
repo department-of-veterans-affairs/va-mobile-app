@@ -68,12 +68,19 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     return !/[\S]/.test(preferredName)
   }
 
-  const getPreferredNameFormWrapperFields = (): {
-    fieldError: string
-    validationList?: Array<ValidationFunctionItems>
-  } => {
-    return {
-      fieldError: t('personalInformation.preferredName.fieldEmpty'),
+  const formFieldsList: Array<FormFieldType<unknown>> = [
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        labelKey: 'personalInformation.preferredNameScreen.body',
+        value: preferredName,
+        onChange: onSetName,
+        helperTextKey: 'personalInformation.preferredName.editHelperText',
+        a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
+        isRequiredField: true,
+      },
+      fieldErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
       validationList: [
         {
           validationFunction: nameLengthValidation,
@@ -88,25 +95,6 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
           validationFunctionErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
         },
       ],
-    }
-  }
-
-  const { fieldError, validationList } = getPreferredNameFormWrapperFields()
-
-  const formFieldsList: Array<FormFieldType<unknown>> = [
-    {
-      fieldType: FieldType.TextInput,
-      fieldProps: {
-        inputType: 'none',
-        labelKey: 'personalInformation.preferredNameScreen.body',
-        value: preferredName,
-        onChange: onSetName,
-        helperTextKey: 'personalInformation.preferredName.editHelperText',
-        a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
-        isRequiredField: true,
-      },
-      fieldErrorMessage: fieldError,
-      validationList: validationList,
     },
   ]
 
