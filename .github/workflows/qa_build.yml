@@ -43,8 +43,7 @@ jobs:
           echo "$FIREBASE_DIST_FILE_BASE64" >> secrets.txt
           echo "===" >> secrets.txt
 
-          cd ..
-          cd app
+          cd ../app
           echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > google-services.json
 
           echo "GOOGLE_SERVICES_JSON_BASE64" >> secrets.txt
