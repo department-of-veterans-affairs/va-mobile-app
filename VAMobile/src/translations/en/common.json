@@ -859,6 +859,8 @@
   "personalInformation.informationNotAvailable": "This information is not available right now",
   "personalInformation.loading": "Loading your personal information...",
   "personalInformation.preferredName.fieldEmpty": "Provide a preferred name",
+  "personalInformation.preferredName.lettersOnly": "Enter letters only",
+  "personalInformation.preferredName.toManyCharacters": "Enter 25 characters or less for preferred name",
   "personalInformation.preferredName.title": "Preferred name",
   "personalInformation.preferredName.nameTag": "{{preferredName}} {{middleName}} {{lastName}}",
   "personalInformation.preferredNameScreen.body": "Share the name you'd like us to use when you come in to VA.",
