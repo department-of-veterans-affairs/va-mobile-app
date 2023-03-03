@@ -77,7 +77,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       validationList: [
         {
           validationFunction: nameLengthValidation,
-          validationFunctionErrorMessage: t('personalInformation.preferredName.toManyCharacters'),
+          validationFunctionErrorMessage: t('personalInformation.preferredName.tooManyCharacters'),
         },
         {
           validationFunction: lettersOnlyValidation,
