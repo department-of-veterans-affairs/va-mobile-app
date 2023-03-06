@@ -61,47 +61,47 @@ jobs:
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v2
 
-  build_android:
-    runs-on: ubuntu-latest
-    env:
-      ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
-      ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
-      ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
-      GOOGLE_KS: ${{ secrets.GOOGLE_KS }} # vamobile keystore base64 encoded
-      GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
-      GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-      FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
-      FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
-    steps:
-      - uses: actions/checkout@v3
-      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
-      - name: Decode files
-        run: |
-          mkdir android/keys
-          cd android/keys
-          echo "$GOOGLE_KS" | base64 --decode > vamobile
-          echo "$GOOGLE_SA_JSON" | base64 --decode > service-account.json
-          echo "$FIREBASE_DIST_FILE_BASE64" | base64 --decode > firebase-dist.json
-          cd ../app
-          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > google-services.json
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0.2'
-          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
-      - name: Install dependencies
-        run: |
-          yarn install --frozen-lockfile --non-interactive
-          yarn env:staging
-          yarn bundle:android
-          cd android
-          bundle check || bundle config set --local path 'vendor/bundle' && bundle install
-          bundle update fastlane
-          bundle exec fastlane qa --verbose version:qa notes:"Narin GHA test" psTrack:""
-      - name: Run tmate
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v2
+  # build_android:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
+  #     ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
+  #     ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
+  #     GOOGLE_KS: ${{ secrets.GOOGLE_KS }} # vamobile keystore base64 encoded
+  #     GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
+  #     GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+  #     FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+  #     FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
+  #     - name: Decode files
+  #       run: |
+  #         mkdir android/keys
+  #         cd android/keys
+  #         echo "$GOOGLE_KS" | base64 --decode > vamobile
+  #         echo "$GOOGLE_SA_JSON" | base64 --decode > service-account.json
+  #         echo "$FIREBASE_DIST_FILE_BASE64" | base64 --decode > firebase-dist.json
+  #         cd ../app
+  #         echo "$GOOGLE_SERVICES_JSON" | base64 --decode > google-services.json
+  #     - uses: ruby/setup-ruby@v1
+  #       with:
+  #         ruby-version: '3.0.2'
+  #         # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16'
+  #         cache: 'yarn'
+  #         cache-dependency-path: 'VAMobile/yarn.lock'
+  #     - name: Install dependencies
+  #       run: |
+  #         yarn install --frozen-lockfile --non-interactive
+  #         yarn env:staging
+  #         yarn bundle:android
+  #         cd android
+  #         bundle check || bundle config set --local path 'vendor/bundle' && bundle install
+  #         bundle update fastlane
+  #         bundle exec fastlane qa --verbose version:qa notes:"Narin GHA test" psTrack:""
+  #     - name: Run tmate
+  #       if: ${{ failure() }}
+  #       uses: mxschmitt/action-tmate@v2
