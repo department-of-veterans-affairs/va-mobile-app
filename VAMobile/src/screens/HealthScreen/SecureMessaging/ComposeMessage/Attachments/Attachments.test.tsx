@@ -248,7 +248,7 @@ context('Attachments', () => {
           })
 
           expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The file you are trying to upload exceeds the 3 MB limit. Please reduce the file size and try again.',
+            'The file you are trying to upload exceeds the 6 MB limit. Please reduce the file size and try again.',
           )
         })
       })
@@ -278,7 +278,7 @@ context('Attachments', () => {
           })
 
           expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The sum of the file(s) you are trying to upload exceeds the 6 MB limit. Please reduce the file(s) size and try again.',
+            'The sum of the file(s) you are trying to upload exceeds the 10 MB limit. Please reduce the file(s) size and try again.',
           )
         })
       })
