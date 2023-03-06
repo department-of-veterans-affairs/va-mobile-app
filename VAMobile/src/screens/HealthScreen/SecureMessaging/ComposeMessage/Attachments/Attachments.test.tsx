@@ -255,7 +255,7 @@ context('Attachments', () => {
 
       describe('when the error is a sum of files size error', () => {
         it('should display the sum of file size error message', async () => {
-          initializeTestInstance([{ size: 6291456 } as DocumentPickerResponse])
+          initializeTestInstance([{ size: 10485760 } as DocumentPickerResponse])
 
           const failCasePromise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 1000 } as DocumentPickerResponse)
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
