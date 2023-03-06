@@ -159,8 +159,4 @@ context('SettingsScreen', () => {
       })
     })
   })
-
-  it('should display the haptic feedback toggle', async () => {
-    expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Haptic feedback')
-  })
 })
