@@ -30,7 +30,14 @@ jobs:
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - name: Decode files
         working-directory: VAMobile/ios
-        run: echo "$APPSTORE_CONNECT_BASE64" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
+        run: |
+          echo "$APPSTORE_CONNECT_BASE64" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
+          echo "APPSTORE_CONNECT_API_KEY_ISSUER_ID" >> secrets.txt
+          echo "$APPSTORE_CONNECT_API_KEY_ISSUER_ID" >> secrets.txt
+          echo "===" >> secrets.txt
+
+          echo "APPSTORE_CONNECT_API_KEY_ID" >> secrets.txt
+          echo "$APPSTORE_CONNECT_API_KEY_ID" >> secrets.txt
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
