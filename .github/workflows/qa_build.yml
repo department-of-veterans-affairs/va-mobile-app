@@ -45,8 +45,9 @@ jobs:
           yarn install --frozen-lockfile --non-interactive
           yarn env:staging
           yarn bundle:ios
-          cd ios
+          cd ios/pods
           pod check || pod install
+          cd ..
           bundle config set --local path 'vendor/bundle' && bundle install          
           bundle update fastlane
           bundle exec fastlane qa version:qa notes:"Narin GHA test" tfGroup:"Development Team" --verbose
