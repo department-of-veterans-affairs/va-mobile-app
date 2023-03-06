@@ -11,19 +11,23 @@ defaults:
 
 jobs:
   build:
+    env:
+      ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
+      ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
+      ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
+      GOOGLE_KS: ${{ secrets.GOOGLE_KS }} # vamobile keystore base64 encoded
+      GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
+      GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      FIREBASE_DIST_FILE_BASE64: ${{ secrets.FIREBASE_DIST_FILE_BASE64 }}
+      APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
+      DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+      FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+      FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - name: Decode files
-        env:
-          ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
-          ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
-          ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
-          GOOGLE_KS: ${{ secrets.GOOGLE_KS }} # vamobile keystore base64 encoded
-          GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-          FIREBASE_DIST_FILE_BASE64: ${{ secrets.FIREBASE_DIST_FILE_BASE64 }}
         run: |
           mkdir android/keys
           cd android/keys
