@@ -13,7 +13,7 @@ import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
-import NavigationIcon from './NavigationIcon'
+import VAIconWithText from './VAIcon/VAIconWithText'
 
 type TabBarRoute = {
   key: string
@@ -107,7 +107,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={7}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  <NavigationIcon {...iconProps} />
+                  <VAIconWithText {...iconProps} />
                 </Box>
               </Box>
             </TouchableWithoutFeedback>

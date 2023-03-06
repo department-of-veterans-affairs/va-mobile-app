@@ -10,7 +10,7 @@ import Mock = jest.Mock
 
 import { context, render, waitFor } from 'testUtils'
 import NavigationTabBar from './NavigationTabBar'
-import NavigationIcon from './NavigationIcon'
+import VAIconWithText from './VAIcon/VAIconWithText'
 
 context('NavigationTabBar', () => {
   let component: any
@@ -80,7 +80,7 @@ context('NavigationTabBar', () => {
 
   describe('when the focused tab is Home', () => {
     it('should activate the Home icon', async () => {
-      const homeIcon = testInstance.findAllByType(NavigationIcon)[0]
+      const homeIcon = testInstance.findAllByType(VAIconWithText)[0]
       expect(homeIcon.props.isActive).toBeTruthy()
     })
   })
@@ -88,7 +88,7 @@ context('NavigationTabBar', () => {
   describe('when the focused tab is Benefits', () => {
     it('should activate the Benefits icon', async () => {
       initializeTestInstance(1)
-      const benefitsIcon = testInstance.findAllByType(NavigationIcon)[1]
+      const benefitsIcon = testInstance.findAllByType(VAIconWithText)[1]
       expect(benefitsIcon.props.isActive).toBeTruthy()
     })
   })
@@ -96,7 +96,7 @@ context('NavigationTabBar', () => {
   describe('when the focused tab is Health', () => {
     it('should activate the Health icon', async () => {
       initializeTestInstance(2)
-      const healthIcon = testInstance.findAllByType(NavigationIcon)[2]
+      const healthIcon = testInstance.findAllByType(VAIconWithText)[2]
       expect(healthIcon.props.isActive).toBeTruthy()
     })
   })
@@ -104,7 +104,7 @@ context('NavigationTabBar', () => {
   describe('when the focused tab is Payments', () => {
     it('should activate the Payments icon', async () => {
       initializeTestInstance(3)
-      const paymentsIcon = testInstance.findAllByType(NavigationIcon)[3]
+      const paymentsIcon = testInstance.findAllByType(VAIconWithText)[3]
       expect(paymentsIcon.props.isActive).toBeTruthy()
     })
   })

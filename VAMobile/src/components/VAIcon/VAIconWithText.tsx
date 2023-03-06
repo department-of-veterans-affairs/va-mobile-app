@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, TextViewProps, VAIcon, VAIconProps, VA_ICON_MAP } from 'components'
 
-export type NavigationIconProps = {
+export type VAIconWithTextProps = {
   /** name of icon to use **/
   name: keyof typeof VA_ICON_MAP
   /** true if icon is active. defaults to false  */
@@ -10,11 +10,11 @@ export type NavigationIconProps = {
 }
 
 /**
- * Display navigation icon with text label underneath
+ * Display icon with text label underneath
  *
- * @returns NavigationIcon component
+ * @returns VAIconWithText component
  */
-const NavigationIcon: FC<NavigationIconProps> = ({ name, isActive = false }) => {
+const VAIconWithText: FC<VAIconWithTextProps> = ({ name, isActive = false }) => {
   const iconProps: VAIconProps = {
     name: `${name}${isActive ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
     fill: `${isActive ? 'active' : 'inactive'}`,
@@ -35,4 +35,4 @@ const NavigationIcon: FC<NavigationIconProps> = ({ name, isActive = false }) => 
   )
 }
 
-export default NavigationIcon
+export default VAIconWithText
