@@ -1,5 +1,5 @@
-import { StackScreenProps } from '@react-navigation/stack'
 import { ScrollView } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 

@@ -47,7 +47,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     decoratorProps: { on: shouldStoreWithBiometric, a11yHint: t('biometric.a11yHint', { biometricType: supportedBiometricText }) },
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
-  
+
   const onManage = () => {
     navigation.navigate('ManageYourAccount')
   }
