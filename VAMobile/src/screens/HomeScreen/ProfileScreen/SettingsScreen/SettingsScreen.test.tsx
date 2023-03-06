@@ -5,13 +5,10 @@ import { BIOMETRY_TYPE } from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
 import { context, findByTestID, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
-import { when } from 'jest-when'
-
 import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import getEnv from 'utils/env'
-import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
@@ -35,9 +32,6 @@ jest.mock('../../../../utils/hooks', () => {
     useExternalLink: () => mockExternalLinkSpy,
   }
 })
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('haptics').mockReturnValue(true)
 
 const envMock = getEnv as jest.Mock
 
