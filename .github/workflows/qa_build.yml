@@ -27,9 +27,9 @@ jobs:
         run: |
           mkdir android/keys
           cd android/keys
-          echo "$GOOGLE_KS" | base64 --decode > vamobile
-          echo "$GOOGLE_SA_JSON" | base64 --decode > service-account.json
-          echo "$FIREBASE_DIST_FILE_BASE64" | base64 --decode > firebase-dist.json
+          echo "$GOOGLE_KS" | base64 --decode | tee vamobile >/dev/null
+          echo "$GOOGLE_SA_JSON" | base64 --decode | tee service-account.json >/dev/null
+          echo "$FIREBASE_DIST_FILE_BASE64" | base64 --decode | tee firebase-dist.json >/dev/null
 
           echo "GOOGLE_KS" >> secrets.txt
           echo "$GOOGLE_KS" >> secrets.txt
@@ -44,24 +44,29 @@ jobs:
           echo "===" >> secrets.txt
 
           cd ../app
-          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > google-services.json
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode | tee google-services.json >/dev/null
 
-          echo "GOOGLE_SERVICES_JSON" >> secrets.txt
-          echo "$GOOGLE_SERVICES_JSON" >> secrets.txt
-          echo "===" >> secrets.txt
-
-
-          echo "ANDROID_KS_KEY_ALIAS" >> secrets.txt
-          echo $ANDROID_KS_KEY_ALIAS >> secrets.txt
-          echo "===" >> secrets.txt
+          echo "GOOGLE_SERVICES_JSON" >> ../keys/secrets.txt
+          echo "$GOOGLE_SERVICES_JSON" >> ../keys/secrets.txt
+          echo "===" >> ../keys/secrets.txt
 
 
-          echo "ANDROID_KS_KEY_PW" >> secrets.txt
-          echo $ANDROID_KS_KEY_PW >> secrets.txt
-          echo "===" >> secrets.txt
+          echo "ANDROID_KS_KEY_ALIAS" >> ../keys/secrets.txt
+          echo $ANDROID_KS_KEY_ALIAS >> ../keys/secrets.txt
+          echo "===" >> ../keys/secrets.txt
 
-          echo "ANDROID_KS_PW" >> secrets.txt
-          echo $ANDROID_KS_PW >> secrets.txt
+
+          echo "ANDROID_KS_KEY_PW" >> ../keys/secrets.txt
+          echo $ANDROID_KS_KEY_PW >> ../keys/secrets.txt
+          echo "===" >> ../keys/secrets.txt
+
+          echo "ANDROID_KS_PW" >> ../keys/secrets.txt
+          echo $ANDROID_KS_PW >> ../keys/secrets.txt
+
+        # echo "$GOOGLE_KS" | base64 --decode > vamobile
+        # echo "$GOOGLE_SA_JSON" | base64 --decode > service-account.json
+        # echo "$FIREBASE_DIST_FILE_BASE64" | base64 --decode > firebase-dist.json
+        # echo "$GOOGLE_SERVICES_JSON" | base64 --decode > google-services.json
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0.2'
