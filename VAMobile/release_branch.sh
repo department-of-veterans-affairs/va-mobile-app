@@ -70,7 +70,7 @@ then
 
   echo "Creating and pushing new release branch 'release/$next' to origin"
   git checkout -b release/"$next" &&
-  git push -u origin elease/"$next"
+  git push -u origin release/"$next"
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
 
