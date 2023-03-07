@@ -510,7 +510,7 @@
   "secureMessaging.goToInbox": "Go to inbox",
   "secureMessaging.goToInbox.a11yHint": "Return to your inbox",
   "secureMessaging.messages.loading": "Loading your messages...",
-  "secureMessaging.myFolders": "My Folders",
+  "secureMessaging.myFolders": "My folders",
   "secureMessaging.movingMessage": "Moving your message...",
   "prescriptions.noRefill.header": "You have no prescriptions for refill",
   "prescriptions.noRefill.text": "This list only includes prescriptions that have 1 or more refills available. If you think this is an error,  please contact your local VA pharmacy.",
