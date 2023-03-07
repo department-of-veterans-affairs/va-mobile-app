@@ -63,17 +63,22 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const onSubmitPressed = () => {
     submitRefillAlert({
-      title: t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
+      title:
+        selectedPrescriptionsCount === refillablePrescriptions?.length
+          ? t('prescriptions.refill.confirmationTitle.all')
+          : t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
       cancelButtonIndex: 0,
       buttons: [
         {
           text: tc('cancel'),
         },
         {
-          text: t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
+          text:
+            selectedPrescriptionsCount === refillablePrescriptions?.length
+              ? t('prescriptions.refill.RequestRefillButtonTitle.all')
+              : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
           onPress: () => {
             const prescriptionsToRefill: PrescriptionsList = []
-            // todo add params
             Object.values(selectedValues).forEach((isSelected, index) => {
               if (isSelected) {
                 prescriptionsToRefill.push(refillable[index])
@@ -134,7 +139,11 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
         leftButtonText={tc('cancel')}
         onLeftButtonPress={selectedPrescriptionsCount === 0 ? navigation.goBack : undefined}
         title={tc('refillRequest')}
-        primaryContentButtonText={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
+        primaryContentButtonText={
+          selectedPrescriptionsCount === refillablePrescriptions?.length
+            ? t('prescriptions.refill.RequestRefillButtonTitle.all')
+            : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
+        }
         scrollViewRef={scrollViewRef}
         onPrimaryContentButtonPress={() => {
           if (selectedPrescriptionsCount === 0) {
