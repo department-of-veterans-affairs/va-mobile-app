@@ -79,7 +79,6 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
               : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
           onPress: () => {
             const prescriptionsToRefill: PrescriptionsList = []
-            // todo add params
             Object.values(selectedValues).forEach((isSelected, index) => {
               if (isSelected) {
                 prescriptionsToRefill.push(refillable[index])
