@@ -1,0 +1,24 @@
+name: Create New Release Branch
+
+on:
+  # schedule:
+  #   - cron: "30 6 * * 3"
+  push:
+    branches:
+      - feature/4732-Theo-NewReleaseBranchGHA
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+jobs:
+  cut_release_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cut release branch
+        run: release_branch.sh
