@@ -5,12 +5,12 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import ReplyMessage from './ReplyMessage'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState, saveDraft } from 'store/slices'
 import { AccordionCollapsible, AlertBox, FormWrapper, LoadingComponent, TextView } from 'components'
-import { InteractionManager, Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
+import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { isIOS } from '../../../../utils/platform'
 import { when } from 'jest-when'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
@@ -181,7 +181,7 @@ context('ReplyMessage', () => {
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
         expect(navigateToVeteranCrisisLineSpy).toHaveBeenCalled()
       })
     })
@@ -202,7 +202,7 @@ context('ReplyMessage', () => {
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[12].props.children).toEqual(['Message', ' ','(Required)'])
+      expect(textViews[19].props.children).toEqual(['Message', ' ','(Required)'])
     })
   })
 
@@ -210,6 +210,8 @@ context('ReplyMessage', () => {
     beforeEach(async () => {
       await waitFor(() => {
         navHeaderSpy.save.props.onSave()
+
+        testInstance.findByType(FormWrapper).props.onSave(true)
       })
     })
     describe('when a required field is not filled', () => {
@@ -271,13 +273,13 @@ context('ReplyMessage', () => {
   it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[16].props.children).toEqual('mock sender 3')
-      expect(textViews[17].props.children).toEqual('Invalid DateTime')
-      expect(textViews[18].props.children).toEqual('Last accordion collapsible should be open, so the body text of this message should display')
-      expect(textViews[19].props.children).toEqual('mock sender 2')
+      expect(textViews[19].props.children).toEqual('mock sender 3')
       expect(textViews[20].props.children).toEqual('Invalid DateTime')
-      expect(textViews[21].props.children).toEqual('mock sender 1')
-      expect(textViews[22].props.children).toEqual('Invalid DateTime')
+      expect(textViews[21].props.children).toEqual('Last accordion collapsible should be open, so the body text of this message should display')
+      expect(textViews[22].props.children).toEqual('mock sender 2')
+      expect(textViews[23].props.children).toEqual('Invalid DateTime')
+      expect(textViews[24].props.children).toEqual('mock sender 1')
+      expect(textViews[25].props.children).toEqual('Invalid DateTime')
     })
   })
 
@@ -290,11 +292,11 @@ context('ReplyMessage', () => {
       testInstance.findAllByType(Pressable)[6].props.onPress()
       })
 
-      expect(testInstance.findAllByType(TextView)[18].props.children).toBe('mock sender 2')
+      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 2')
       // Used to display last message's contents, but now there is no textview after the date
-      expect(testInstance.findAllByType(TextView)[20].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView).length).toBe(23)
+      expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 1')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
+      expect(testInstance.findAllByType(TextView).length).toBe(26)
     })
   })
 

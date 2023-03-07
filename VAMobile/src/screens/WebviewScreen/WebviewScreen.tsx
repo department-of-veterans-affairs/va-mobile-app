@@ -1,4 +1,4 @@
-import { Linking, ViewStyle } from 'react-native'
+import { Linking, StatusBar, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import { useTranslation } from 'react-i18next'
@@ -83,6 +83,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
+  const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
 
   const [canGoBack, setCanGoBack] = useState(false)
@@ -97,7 +98,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />,
+      headerLeft: (props): ReactNode => <BackButton webview={true} onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />,
       headerTitle: () => <WebviewTitle title={displayTitle} />,
       headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
     })
@@ -145,6 +146,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   return (
     <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
+      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <WebView
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}

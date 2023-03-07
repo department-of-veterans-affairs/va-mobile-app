@@ -8,6 +8,10 @@ export const Countries = [
     label: 'Afghanistan',
   },
   {
+    value: 'ALA',
+    label: 'Aland Islands',
+  },
+  {
     value: 'ALB',
     label: 'Albania',
   },
@@ -33,7 +37,7 @@ export const Countries = [
   },
   {
     value: 'ATG',
-    label: 'Antigua',
+    label: 'Antigua and Barbuda',
   },
   {
     value: 'ARG',
@@ -104,8 +108,12 @@ export const Countries = [
     label: 'Bolivia',
   },
   {
+    value: 'BES',
+    label: 'Bonaire, Saint Eustatius and Saba',
+  },
+  {
     value: 'BIH',
-    label: 'Bosnia',
+    label: 'Bosnia and Herzegovina',
   },
   {
     value: 'BWA',
@@ -122,6 +130,10 @@ export const Countries = [
   {
     value: 'IOT',
     label: 'British Indian Ocean Territories',
+  },
+  {
+    value: 'VGB',
+    label: 'British Virgin Islands',
   },
   {
     value: 'BRN',
@@ -157,7 +169,7 @@ export const Countries = [
   },
   {
     value: 'CYM',
-    label: 'Cayman',
+    label: 'Cayman Islands',
   },
   {
     value: 'CAF',
@@ -192,24 +204,12 @@ export const Countries = [
     label: 'Comoros',
   },
   {
-    value: 'COG',
-    label: 'Congo',
-  },
-  {
-    value: 'COD',
-    label: 'Democratic Republic of the Congo',
-  },
-  {
     value: 'COK',
     label: 'Cook Islands',
   },
   {
     value: 'CRI',
     label: 'Costa Rica',
-  },
-  {
-    value: 'CIV',
-    label: 'Ivory Coast',
   },
   {
     value: 'HRV',
@@ -230,6 +230,10 @@ export const Countries = [
   {
     value: 'DNK',
     label: 'Denmark',
+  },
+  {
+    value: 'COD',
+    label: 'Democratic Republic of the Congo',
   },
   {
     value: 'DJI',
@@ -365,7 +369,7 @@ export const Countries = [
   },
   {
     value: 'HMD',
-    label: 'Heard Island',
+    label: 'Heard Island and McDonald Islands',
   },
   {
     value: 'HND',
@@ -412,12 +416,20 @@ export const Countries = [
     label: 'Italy',
   },
   {
+    value: 'CIV',
+    label: 'Ivory Coast',
+  },
+  {
     value: 'JAM',
     label: 'Jamaica',
   },
   {
     value: 'JPN',
     label: 'Japan',
+  },
+  {
+    value: 'JEY',
+    label: 'Jersey',
   },
   {
     value: 'JOR',
@@ -434,14 +446,6 @@ export const Countries = [
   {
     value: 'KIR',
     label: 'Kiribati',
-  },
-  {
-    value: 'PRK',
-    label: 'North Korea',
-  },
-  {
-    value: 'KOR',
-    label: 'South Korea',
   },
   {
     value: 'KWT',
@@ -584,12 +588,12 @@ export const Countries = [
     label: 'Nepal',
   },
   {
-    value: 'ANT',
-    label: 'Netherlands Antilles',
-  },
-  {
     value: 'NLD',
     label: 'Netherlands',
+  },
+  {
+    value: 'ANT',
+    label: 'Netherlands Antilles',
   },
   {
     value: 'NCL',
@@ -617,7 +621,11 @@ export const Countries = [
   },
   {
     value: 'NFK',
-    label: 'Norfolk',
+    label: 'Norfolk Island',
+  },
+  {
+    value: 'PRK',
+    label: 'North Korea',
   },
   {
     value: 'NOR',
@@ -630,6 +638,10 @@ export const Countries = [
   {
     value: 'PAK',
     label: 'Pakistan',
+  },
+  {
+    value: 'PSE',
+    label: 'Palestinian Territory',
   },
   {
     value: 'PAN',
@@ -668,6 +680,10 @@ export const Countries = [
     label: 'Qatar',
   },
   {
+    value: 'COG',
+    label: 'Republic of the Congo',
+  },
+  {
     value: 'REU',
     label: 'Reunion',
   },
@@ -684,6 +700,10 @@ export const Countries = [
     label: 'Rwanda',
   },
   {
+    value: 'BLM',
+    label: 'Saint Barthelemy',
+  },
+  {
     value: 'SHN',
     label: 'Saint Helena',
   },
@@ -696,12 +716,20 @@ export const Countries = [
     label: 'Saint Lucia',
   },
   {
+    value: 'MAF',
+    label: 'Saint Martin',
+  },
+  {
     value: 'SPM',
     label: 'Saint Pierre and Miquelon',
   },
   {
     value: 'VCT',
     label: 'Saint Vincent and the Grenadines',
+  },
+  {
+    value: 'WSM',
+    label: 'Samoa',
   },
   {
     value: 'SMR',
@@ -736,6 +764,10 @@ export const Countries = [
     label: 'Singapore',
   },
   {
+    value: 'SXM',
+    label: 'Sint Maarten',
+  },
+  {
     value: 'SVK',
     label: 'Slovakia',
   },
@@ -760,6 +792,14 @@ export const Countries = [
     label: 'South Georgia and the South Sandwich Islands',
   },
   {
+    value: 'KOR',
+    label: 'South Korea',
+  },
+  {
+    value: 'SSD',
+    label: 'South Sudan',
+  },
+  {
     value: 'ESP',
     label: 'Spain',
   },
@@ -774,6 +814,10 @@ export const Countries = [
   {
     value: 'SUR',
     label: 'Suriname',
+  },
+  {
+    value: 'SJM',
+    label: 'Svalbard and Jan Mayen',
   },
   {
     value: 'SWZ',
@@ -886,10 +930,6 @@ export const Countries = [
   {
     value: 'VNM',
     label: 'Vietnam',
-  },
-  {
-    value: 'VGB',
-    label: 'British Virgin Islands',
   },
   {
     value: 'WLF',
