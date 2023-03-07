@@ -113,7 +113,7 @@ context('AppointmentAddressAndNumber', () => {
           },
         },
       })
-      expect(testInstance.findAllByType(TextView).length).toEqual(6
+      expect(testInstance.findAllByType(TextView).length).toEqual(6)
     })
   })
 
