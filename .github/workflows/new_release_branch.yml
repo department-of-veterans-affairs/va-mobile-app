@@ -21,4 +21,4 @@ jobs:
           fetch-depth: 0
 
       - name: Cut release branch
-        run: release_branch.sh
+        run: ./release_branch.sh
