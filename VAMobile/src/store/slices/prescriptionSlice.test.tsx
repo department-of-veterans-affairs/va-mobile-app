@@ -36,7 +36,7 @@ context('Prescription', () => {
     describe('when all refills are successful', () => {
       it('should update refillRequestSummaryItems with all submitted items', async () => {
         when(api.put as jest.Mock)
-          .calledWith('/v0/health/rx/prescriptions/refill', {'ids': [mockData[0].id, mockData[1].id]})
+          .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
           .mockResolvedValue({
             "data": {
               "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
@@ -77,7 +77,7 @@ context('Prescription', () => {
     describe('when all refills are unsuccessful', () => {
       it('should update refillRequestSummaryItems with all non-submitted items', async () => {
         when(api.put as jest.Mock)
-          .calledWith('/v0/health/rx/prescriptions/refill', {'ids': [mockData[0].id, mockData[1].id]})
+          .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
           .mockResolvedValue({
             "data": {
               "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
@@ -129,7 +129,7 @@ context('Prescription', () => {
     describe('when some refills are successful', () => {
       it('should update refillRequestSummaryItems with submitted and non-submitted items', async () => {
         when(api.put as jest.Mock)
-          .calledWith('/v0/health/rx/prescriptions/refill', {'ids': [mockData[0].id, mockData[1].id]})
+          .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
           .mockResolvedValue({
             "data": {
               "id": "3097e489-ad75-5746-ab1a-e0aabc1b426a",
@@ -176,7 +176,7 @@ context('Prescription', () => {
     describe('on RefillScreen', () => {
       it('should continue to show loading spinner after completing', async () => {
         when(api.put as jest.Mock)
-          .calledWith('/v0/health/rx/prescriptions/refill', {'ids': [mockData[0].id, mockData[1].id]})
+          .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
           .mockResolvedValue({})
 
         const store = realStore()
@@ -198,7 +198,7 @@ context('Prescription', () => {
     describe('on RefillRequestSummary', () => {
       it('should stop showing loading spinner after completing', async () => {
         when(api.put as jest.Mock)
-          .calledWith('/v0/health/rx/prescriptions/refill', {'ids': [mockData[0].id, mockData[1].id]})
+          .calledWith('/v0/health/rx/prescriptions/refill', {'ids[]': [mockData[0].id, mockData[1].id]})
           .mockResolvedValue({})
 
         const store = realStore()

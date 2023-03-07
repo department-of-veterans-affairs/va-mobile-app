@@ -1,12 +1,12 @@
 ---
 title: Branching in Figma
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 ## What is branching?
 Branching is a form of version control commonly used in software development in which you make a copy of something, make changes, and then merge those changes back into the main file/codebase.
 
-## Why are we branching?
+## Why do we branching?
 Branching allows you to create a separate space to experiment without impacting your main file. It also allows you to submit changes to a reviewer (ie Design Librarian) before merging your changes to the main file.
 
 ## When should we create a branch?
@@ -80,11 +80,6 @@ In the modal, you’ll see a list of available reviewers. Add the current design
 
 
 ![Screenshot of request reviewer modal](/img/figma/figma-branching-request-review-modal.png)
-
-Before sending a branch for review, be sure to include:
-- Description of what changes were made
-- Justification for why changes were made (ticket number, Slack message, etc)
-- In the future, we may ask for documentation to be included
 
 
 ## How do I review and merge changes from a branch in Figma?

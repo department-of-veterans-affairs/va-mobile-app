@@ -248,14 +248,14 @@ context('Attachments', () => {
           })
 
           expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The file you are trying to upload exceeds the 6 MB limit. Please reduce the file size and try again.',
+            'The file you are trying to upload exceeds the 3 MB limit. Please reduce the file size and try again.',
           )
         })
       })
 
       describe('when the error is a sum of files size error', () => {
         it('should display the sum of file size error message', async () => {
-          initializeTestInstance([{ size: 10485760 } as DocumentPickerResponse])
+          initializeTestInstance([{ size: 6291456 } as DocumentPickerResponse])
 
           const failCasePromise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 1000 } as DocumentPickerResponse)
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
@@ -278,7 +278,7 @@ context('Attachments', () => {
           })
 
           expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The sum of the file(s) you are trying to upload exceeds the 10 MB limit. Please reduce the file(s) size and try again.',
+            'The sum of the file(s) you are trying to upload exceeds the 6 MB limit. Please reduce the file(s) size and try again.',
           )
         })
       })

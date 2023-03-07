@@ -484,6 +484,10 @@ jobs:
       - ios_fastlane:
           lane: 'rc'
 workflows:
+  pr:
+    jobs:
+      - lint
+      - test
   qa_build:
     triggers:
       - schedule:

@@ -47,18 +47,11 @@ irb(main):001:0>
 To generate a user session, see section [User Token](#User-Token) below then follow [User Sign-in](StagingInstances.md#User-Sign-in) instructions.
 
 ## User Token
-Currently, there are two authentication options, IAM and SIS. IAM authentication isn't working for RIs or staging right now for unknown reasons that may not be fixed because IAM is being deprecated for SIS, which is why the instructions in the next section (User Sessions) don't work right now on RIs.
+Currently, there are two authentication options, IAM and SIS. IAM authentication isn't working for RIs or staging right now for unknown reasons that may not be fixed because IAM is being deprecated for SIS, which is why the instructions in the next section (User Sessions) don't work right now on RIs. 
 We lack the ability to log in via SIS on RIs due to limitations the SIS team is working on. We expect this to be fixed at some point, but in the meantime it means we have to use staging to help us spoof the sign-in process with the instructions below:
 1. Open a browser and start the authorization process for your review instance (remember your `-api`)
 ```
 http://dc02d94d6648a008950cc9c84056a860-api.review.vetsgov-internal/v0/sign_in/authorize?type=idme&code_challenge_method=S256&acr=loa3&client_id=mobile&code_challenge=1BUpxy37SoIPmKw96wbd6MDcvayOYm3ptT-zbe6L_zM=
-```
-2. Open network tab on browser Inspector then complete sign in. After sign in, you will be redirected to staging and there will be a failed callback request in the Inspector network tab.
-3. With your network tab still open, replace `https://staging-api.va.gov` in your browswer url bar with your review instance (remember your `-api`) and go to that url
-4. In the network tab, you should see another request to `/callback`. In the request headers, there will be a `location` with a value starting with `vamobile:` that will contain a code that can be used to exchange tokens. The code should look something like `7ca6321-ca3e-4b51-8a4f-4b8ecf2f1597`
-5. To get a token with that code, ensure that your socks proxy is running and send the following Curl using your review instance and code:
-```
-curl --proxy socks5h://127.0.0.1:2001 -X POST http://dbded860eb589f4ccfef2b1470e8472d-api.review.vetsgov-internal/v0/sign_in/token -H 'Content-Type: application/json' -d '{"grant_type": "authorization_code", "code_verifier": "5787d673fb784c90f0e309883241803d", "code": "69a8cdea-6251-413f-8773-0ff7c5c82877"}'
 ```
 2. Open network tab on browser Inspector then complete sign in
 3. After sign in, you should notice a failed request that looks similar to:
