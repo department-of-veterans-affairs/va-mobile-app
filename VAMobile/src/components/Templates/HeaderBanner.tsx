@@ -3,7 +3,7 @@ import { Shadow, ShadowProps } from 'react-native-shadow-2'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
-import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconWithText, VAIconWithTextProps } from 'components'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
@@ -38,10 +38,10 @@ export type HeaderVATitleProps = {
 }
 
 export type HeaderRightButtonProps = {
-  text: string
+  text?: string
   a11yLabel?: string
   onPress: () => void
-  icon?: VAIconProps
+  icon?: VAIconWithTextProps
 }
 
 export type HeaderBannerProps = {
@@ -154,7 +154,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
 
   // Calculate total length of header text. If too long, force title to wrap
   const titleLength = title?.type === 'VA' ? 2 : title?.title.length || 0
-  const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text.length || 0)
+  const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text?.length || 0)
   const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
 
   if (leftButton) {
@@ -184,7 +184,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   if (rightButton) {
     rightTextViewProps = {
       color: 'footerButton',
-      variant: rightButton.icon ? 'textWithIconButton' : 'MobileBody',
+      variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,
     }
@@ -251,10 +251,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               {rightButton && (
                 <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
                   <Box {...commonBoxProps}>
-                    {rightButton.icon && <VAIcon fill="link" height={24} width={24} preventScaling={true} {...rightButton.icon} />}
-                    <Box display="flex" flexDirection="row" alignItems="center">
-                      <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
-                    </Box>
+                    {rightButton.icon && <VAIconWithText {...rightButton.icon} />}
+                    {rightButton.text && <TextView {...rightTextViewProps}>{rightButton.text}</TextView>}
                   </Box>
                 </TouchableWithoutFeedback>
               )}

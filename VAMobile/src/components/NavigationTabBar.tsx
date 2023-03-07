@@ -13,7 +13,7 @@ import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
-import VAIconWithText from './VAIcon/VAIconWithText'
+import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 
 type TabBarRoute = {
   key: string
@@ -95,9 +95,11 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             accessible: true,
           }
 
-          const iconProps = {
-            name: routeName as keyof typeof VA_ICON_MAP,
-            isActive: isFocused,
+          const iconProps: VAIconWithTextProps = {
+            name: `${routeName}${isFocused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
+            fill: isFocused ? 'active' : 'inactive',
+            label: routeName,
+            labelColor: isFocused ? 'textWithIconButton' : 'textWithIconButtonInactive',
           }
 
           return (

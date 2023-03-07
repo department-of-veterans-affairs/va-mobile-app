@@ -10,7 +10,7 @@ import Mock = jest.Mock
 
 import { context, render, waitFor } from 'testUtils'
 import NavigationTabBar from './NavigationTabBar'
-import VAIconWithText from './VAIcon/VAIconWithText'
+import VAIconWithText from './VAIconWithText/VAIconWithText'
 
 context('NavigationTabBar', () => {
   let component: any
@@ -81,7 +81,7 @@ context('NavigationTabBar', () => {
   describe('when the focused tab is Home', () => {
     it('should activate the Home icon', async () => {
       const homeIcon = testInstance.findAllByType(VAIconWithText)[0]
-      expect(homeIcon.props.isActive).toBeTruthy()
+      expect(homeIcon.props.fill).toBe('active')
     })
   })
 
@@ -89,7 +89,7 @@ context('NavigationTabBar', () => {
     it('should activate the Benefits icon', async () => {
       initializeTestInstance(1)
       const benefitsIcon = testInstance.findAllByType(VAIconWithText)[1]
-      expect(benefitsIcon.props.isActive).toBeTruthy()
+      expect(benefitsIcon.props.fill).toBe('active')
     })
   })
 
@@ -97,7 +97,7 @@ context('NavigationTabBar', () => {
     it('should activate the Health icon', async () => {
       initializeTestInstance(2)
       const healthIcon = testInstance.findAllByType(VAIconWithText)[2]
-      expect(healthIcon.props.isActive).toBeTruthy()
+      expect(healthIcon.props.fill).toBe('active')
     })
   })
 
@@ -105,7 +105,7 @@ context('NavigationTabBar', () => {
     it('should activate the Payments icon', async () => {
       initializeTestInstance(3)
       const paymentsIcon = testInstance.findAllByType(VAIconWithText)[3]
-      expect(paymentsIcon.props.isActive).toBeTruthy()
+      expect(paymentsIcon.props.fill).toBe('active')
     })
   })
 })

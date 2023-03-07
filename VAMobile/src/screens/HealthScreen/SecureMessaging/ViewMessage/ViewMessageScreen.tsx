@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
+import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAIconWithTextProps, VAModalPicker } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
@@ -196,19 +196,15 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     }
   }
 
-  const moveIconProps: VAIconProps = {
+  const moveIconProps: VAIconWithTextProps = {
     name: 'FolderSolid',
-    width: 22,
-    height: 22,
-    preventScaling: true,
-    fill: 'link',
+    label: tc('pickerLaunchBtn'),
   }
 
   const headerButton =
     currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
       ? undefined
       : {
-          label: tc('pickerLaunchBtn'),
           icon: moveIconProps,
           onPress: () => setShowModalPicker(true),
         }

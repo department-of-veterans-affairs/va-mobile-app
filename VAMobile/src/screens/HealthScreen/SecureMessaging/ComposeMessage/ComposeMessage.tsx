@@ -22,7 +22,7 @@ import {
   TextArea,
   TextView,
   VAButton,
-  VAIconProps,
+  VAIconWithTextProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -401,12 +401,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const saveIconProps: VAIconProps = {
+  const saveIconProps: VAIconWithTextProps = {
     name: 'Save',
-    fill: 'link',
-    width: 22,
-    height: 22,
-    preventScaling: true,
+    label: tc('save'),
   }
 
   return (
@@ -415,7 +412,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       title={tc('compose')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
-      rightButtonText={tc('save')}
       rightVAIconProps={saveIconProps}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)

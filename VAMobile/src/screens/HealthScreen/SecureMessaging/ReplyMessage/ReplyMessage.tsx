@@ -20,7 +20,7 @@ import {
   TextArea,
   TextView,
   VAButton,
-  VAIconProps,
+  VAIconWithTextProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -307,12 +307,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const saveIconProps: VAIconProps = {
+  const saveIconProps: VAIconWithTextProps = {
     name: 'Save',
-    fill: 'link',
-    width: 22,
-    height: 22,
-    preventScaling: true,
+    label: tc('save'),
   }
 
   return (
@@ -321,7 +318,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       title={tc('reply')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
-      rightButtonText={tc('save')}
       rightVAIconProps={saveIconProps}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)

@@ -2,7 +2,7 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
-import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
+import { CrisisLineCta, TextView, TextViewProps, VAIconWithTextProps } from 'components'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -14,16 +14,15 @@ import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 */
 
 type headerButton = {
-  label: string
   labelA11y?: string
-  icon: VAIconProps
+  icon: VAIconWithTextProps
   onPress: () => void
 }
 
 export type CategoryLandingProps = {
   /** Optional title for page that transitions to header */
   title?: string
-  /** Optional header button requiring label, icon, and onPress props */
+  /** Optional header button requiring icon and onPress props */
   headerButton?: headerButton
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
@@ -47,7 +46,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
 
   const headerProps: HeaderBannerProps = {
     title: title ? { type: 'Transition', title, scrollOffset, transitionHeaderHeight } : { type: 'VA' },
-    rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
+    rightButton: headerButton ? { a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }
 
   const subtitleProps: TextViewProps = {

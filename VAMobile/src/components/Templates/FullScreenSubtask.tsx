@@ -2,11 +2,10 @@ import { StackActions, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, Ref } from 'react'
 
-import { Box, ButtonTypesConstants, CrisisLineCta, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, CrisisLineCta, TextView, TextViewProps, VAButton, VAIconWithTextProps, VAScrollView } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScrollView, View, ViewStyle } from 'react-native'
-import { VAIconProps } from 'components/VAIcon'
 import { useDestructiveAlert, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
@@ -35,8 +34,8 @@ export type FullScreenSubtaskProps = {
   rightButtonDisabled?: boolean
   /** a11y label for right button text */
   rightButtonA11yLabel?: string
-  /** icon for title bar right button(must have right button text to display) */
-  rightVAIconProps?: VAIconProps
+  /** icon for title bar right button (must include label) */
+  rightVAIconProps?: VAIconWithTextProps
   /** ref for the VAScrollView component that contains the content */
   scrollViewRef?: Ref<ScrollView>
   /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
@@ -145,7 +144,8 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
 
   const headerProps: HeaderBannerProps = {
     leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: onLeftTitleButtonPress } : undefined,
-    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: onRightTitleButtonPress, icon: rightVAIconProps } : undefined,
+    rightButton:
+      rightButtonText || rightVAIconProps ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: onRightTitleButtonPress, icon: rightVAIconProps } : undefined,
     menuViewActions,
   }
   const fillStyle: ViewStyle = {
