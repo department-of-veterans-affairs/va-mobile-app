@@ -20,5 +20,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set username and email
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+
       - name: Cut release branch
         run: ./release_branch.sh
