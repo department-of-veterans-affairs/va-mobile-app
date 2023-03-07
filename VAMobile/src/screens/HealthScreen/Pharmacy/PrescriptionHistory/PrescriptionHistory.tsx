@@ -541,14 +541,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView mt={theme.dimensions.standardMarginBetween}>{t('prescription.history.transferred.ourRecords')}</TextView>
-          {transferredPrescriptions.map((prescription, idx) => {
-            return (
-              <TextView mt={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'} key={idx}>
-                {prescription.attributes.facilityName}
-              </TextView>
-            )
-          })}
           <TextView my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
             {t('prescription.history.transferred.youCan')}
           </TextView>

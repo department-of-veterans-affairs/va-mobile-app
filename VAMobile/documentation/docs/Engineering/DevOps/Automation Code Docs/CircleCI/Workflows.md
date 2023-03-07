@@ -40,7 +40,7 @@ Runs every Weekday at 0500 UTC on only the develop branch
 
 ## `release_build`
 ### Description
-This workflow runs every time a tag with v`int.int.int` pattern is pushed to the orgin. It builds production versions for both Android and iOS.
+This workflow runs every time a tag with v`int.int.int` pattern is pushed to the origin. It builds production versions for both Android and iOS.
 
 Creates a Slack thread in the channel and updates the thread with the results of each build job.
 
@@ -76,7 +76,7 @@ tags matching the regular expression `/^vd+.d+.d+/`
 
 ## `feature_build`
 ### Description
-This workflow runs every time a tag with feature-build- pattern is pushed to the orgin. It builds staging versions for both Android and iOS.
+This workflow runs every time a tag with feature-build- pattern is pushed to the origin. It builds staging versions for both Android and iOS.
 
 Creates a Slack thread in the channel and updates the thread with the results of each build job.
 
@@ -112,7 +112,7 @@ tags matching the regular expression `/^feature-build-+/`
 
 ## `release_candidate_build`
 ### Description
-This workflow runs every time a tag with RC-v`int.int.int` pattern is pushed to the orgin. It builds staging versions for both Android and iOS.
+This workflow runs every time a tag with RC-v`int.int.int` pattern is pushed to the origin. It builds staging versions for both Android and iOS.
 
 Creates a Slack thread in the channel and updates the thread with the results of each build job.
 
