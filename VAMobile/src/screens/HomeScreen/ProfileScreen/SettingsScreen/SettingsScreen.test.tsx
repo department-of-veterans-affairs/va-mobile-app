@@ -9,7 +9,6 @@ import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import getEnv from 'utils/env'
-import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
@@ -33,8 +32,6 @@ jest.mock('../../../../utils/hooks', () => {
     useExternalLink: () => mockExternalLinkSpy,
   }
 })
-
-jest.mock('utils/remoteConfig')
 
 const envMock = getEnv as jest.Mock
 
