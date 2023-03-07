@@ -69,13 +69,13 @@ then
   git pull origin develop &&
 
   echo "Creating and pushing new release branch 'release/$next' to origin"
-  git checkout -b release/"$next" &&
-  git push -u origin release/"$next"
+  git checkout -b test-release/"$next" &&
+  git push -u origin test-release/"$next"
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
 
   echo "Tag branch for Release Candidate build"
-  TAG="RC-$next-$(date +%m%d%y-%H%M)"
+  TAG="test-RC-$next-$(date +%m%d%y-%H%M)"
   git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
   git push origin "$TAG"
 
