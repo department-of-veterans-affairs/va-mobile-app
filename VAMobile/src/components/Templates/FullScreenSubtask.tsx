@@ -174,15 +174,11 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       {primaryContentButtonText && onPrimaryContentButtonPress && (
         <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
           {secondaryContentButtonText && onSecondaryContentButtonPress && (
-            <Box ml={theme.dimensions.gutter} flex={1} height={theme.dimensions.fullScreenContentButtonHeight}>
+            <Box ml={theme.dimensions.gutter} flex={1}>
               <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
             </Box>
           )}
-          <Box
-            ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
-            mr={theme.dimensions.gutter}
-            flex={1}
-            height={theme.dimensions.fullScreenContentButtonHeight}>
+          <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
             <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         </Box>
