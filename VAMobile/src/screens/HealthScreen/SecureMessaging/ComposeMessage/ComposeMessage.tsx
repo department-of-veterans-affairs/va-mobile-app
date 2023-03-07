@@ -10,11 +10,11 @@ import {
   Box,
   ButtonTypesConstants,
   CollapsibleView,
-  CrisisLineCta,
   ErrorComponent,
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   MessageAlert,
   PickerItem,
@@ -22,7 +22,7 @@ import {
   TextArea,
   TextView,
   VAButton,
-  VAScrollView,
+  VAIconProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -68,6 +68,7 @@ type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessag
 
 const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -193,7 +194,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }, [sendMessageComplete, dispatch, navigation])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={tc('compose')} leftButtonText={tc('cancel')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
@@ -314,8 +319,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     navigation.navigate('SecureMessaging')
   }
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
     const messageData = {
@@ -352,7 +355,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} scrollViewRef={scrollViewRef} />
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          savingDraft={savingDraft}
+          scrollViewRef={scrollViewRef}
+          focusOnError={onSendClicked}
+        />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
@@ -392,11 +401,29 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const saveIconProps: VAIconProps = {
+    name: 'Save',
+    fill: 'link',
+    width: 22,
+    height: 22,
+    preventScaling: true,
+  }
+
   return (
-    <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Compose-message-page')}>
-      <CrisisLineCta onPress={onCrisisLine} />
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      title={tc('compose')}
+      leftButtonText={tc('cancel')}
+      onLeftButtonPress={navigation.goBack}
+      rightButtonText={tc('save')}
+      rightVAIconProps={saveIconProps}
+      onRightButtonPress={() => {
+        setOnSaveDraftClicked(true)
+        setOnSendClicked(true)
+      }}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

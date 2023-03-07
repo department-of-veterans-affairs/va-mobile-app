@@ -79,7 +79,7 @@ export const getLoadedPayments = (payments: LoadedPayments, paginationData: Paym
 export const getGroupedPayments = (
   paymentsGroupedByDate: PaymentsByDate,
   theme: VATheme,
-  translations: { t: TFunction; tc: TFunction },
+  translations: { t: TFunction },
   onPaymentPress: (paymentsId: string) => void,
   isReverseSort: boolean,
   paymentsPageMetaData: PaymentsMetaPagination,
@@ -121,23 +121,23 @@ export const getGroupedPayments = (
  */
 const getListItemsForPayments = (
   listOfPayments: PaymentsList,
-  translations: { t: TFunction; tc: TFunction },
+  translations: { t: TFunction },
   onPaymentPress: (payementId: string) => void,
   paymentsPagination: PaymentsMetaPagination,
   groupIdx: number,
 ): Array<DefaultListItemObj> => {
   const listItems: Array<DefaultListItemObj> = []
-  const { t, tc } = translations
+  const { t } = translations
   const { currentPage, perPage, totalEntries } = paymentsPagination
 
   forEach(listOfPayments, (payment, index) => {
     const { paymentType, amount } = payment.attributes
     const textLines: Array<TextLineWithIconProps> = []
 
-    textLines.push({ text: tc('text.raw', { text: paymentType }), variant: 'MobileBodyBold' }, { text: tc('text.raw', { text: amount }), variant: 'MobileBody' })
+    textLines.push({ text: t('text.raw', { text: paymentType }), variant: 'MobileBodyBold' }, { text: t('text.raw', { text: amount }), variant: 'MobileBody' })
 
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
-    const a11yValue = tc('listPosition', { position, total: totalEntries })
+    const a11yValue = t('listPosition', { position, total: totalEntries })
 
     listItems.push({
       textLines,

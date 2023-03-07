@@ -32,7 +32,7 @@ import {
   SecureMessagingThreads,
 } from 'store/api/types'
 import { AppDispatch, AppThunk } from 'store'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Params, contentTypes } from 'store/api/api'
@@ -438,7 +438,7 @@ export const saveDraft =
         dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       }
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
-      showSnackBar(messages.successMsg, dispatch, undefined, true)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `saveDraft: ${secureMessagingNonFatalErrorString}`)
@@ -512,7 +512,7 @@ export const sendMessage =
       await registerReviewEvent()
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage(undefined))
-      showSnackBar(messages.successMsg, dispatch, undefined, true)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `sendMessage: ${secureMessagingNonFatalErrorString}`)
@@ -533,7 +533,6 @@ const refreshFoldersAfterMove = (
   messagesLeft: number,
   isUndo: boolean,
   folders: SecureMessagingFolderList,
-  withNavBar: boolean,
 ) => {
   const page = currentPage === 1 ? currentPage : messagesLeft === 1 && isUndo === false ? currentPage - 1 : currentPage
   const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
@@ -552,11 +551,11 @@ const refreshFoldersAfterMove = (
     isUndo && messages.undoMsg ? messages.undoMsg : messages.successMsg,
     dispatch,
     () => {
-      dispatch(moveMessage(messages, messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders, withNavBar))
+      dispatch(moveMessage(messages, messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders))
     },
     isUndo,
     false,
-    withNavBar,
+    true,
   )
 }
 
@@ -574,10 +573,9 @@ export const moveMessage =
     messagesLeft: number,
     isUndo: boolean,
     folders: SecureMessagingFolderList,
-    withNavBar: boolean,
   ): AppThunk =>
   async (dispatch) => {
-    const retryFunction = () => dispatch(moveMessage(messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar))
+    const retryFunction = () => dispatch(moveMessage(messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
 
@@ -587,12 +585,12 @@ export const moveMessage =
       } else {
         await callMoveMessageApi(messageID, newFolderID)
       }
-      refreshFoldersAfterMove(dispatch, messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders, withNavBar)
+      refreshFoldersAfterMove(dispatch, messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `moveMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishMoveMessage({ error }))
-        showSnackBar(isUndo && messages.undoErrorMsg ? messages.undoErrorMsg : messages.errorMsg, dispatch, retryFunction, false, true, withNavBar)
+        showSnackBar(isUndo && messages.undoErrorMsg ? messages.undoErrorMsg : messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
     }
   }

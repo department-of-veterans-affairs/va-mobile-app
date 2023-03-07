@@ -16,7 +16,7 @@ import { AppDispatch, RootState } from 'store'
 import { BackButton, ClosePanelButton, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
@@ -107,7 +107,7 @@ export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
     headerBackTitle: undefined,
     headerTitle: '',
     headerStyle: {
-      backgroundColor: theme?.colors?.background?.navHeader,
+      backgroundColor: theme?.colors?.background?.main,
       shadowColor: 'transparent', // removes bottom border
       height: insets.top,
     },
