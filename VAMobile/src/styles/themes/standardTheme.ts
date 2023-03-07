@@ -42,12 +42,16 @@ const fontSizes = {
     lineHeight: 32,
   },
   DescriptiveBackButton: {
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 22,
   },
   MobileBody: {
     fontSize: 20,
     lineHeight: 30,
+  },
+  MobileBodyTight: {
+    fontSize: 20,
+    lineHeight: 24,
   },
   MobileBodyBold: {
     fontSize: 20,
@@ -111,6 +115,10 @@ const fontSizes = {
   },
   textWithIconButton: {
     fontSize: 12,
+    lineHeight: 15,
+  },
+  webviewTitle: {
+    fontSize: 12,
     lineHeight: 12,
   },
   VAHeader: {
@@ -137,6 +145,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
+    MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
@@ -153,6 +162,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
     textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.textWithIconButton),
+    webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
     VAHeader: buildFont('SourceSansPro-Bold', fontSizes.VAHeader, scheme.text.primary),
   }
 }
@@ -203,6 +213,7 @@ let theme: VATheme = {
   fontSizes: {
     BitterBoldHeading: fontSizes.BitterBoldHeading,
     MobileBody: fontSizes.MobileBody,
+    MobileBodyTight: fontSizes.MobileBodyTight,
     MobileBodyBold: fontSizes.MobileBodyBold,
     TableHeaderBold: fontSizes.TableHeaderBold,
     TableHeaderLabel: fontSizes.TableHeaderLabel,

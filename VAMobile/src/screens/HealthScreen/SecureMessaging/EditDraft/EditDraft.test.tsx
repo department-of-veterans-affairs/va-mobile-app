@@ -7,7 +7,7 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 
 import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import EditDraft from './EditDraft'
-import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
+import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, LoadingComponent, TextView, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
@@ -70,7 +70,6 @@ let mockUseComposeCancelConfirmationSpy = jest.fn()
 let mockUseGoToDraftSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
@@ -290,7 +289,7 @@ context('EditDraft', () => {
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
         expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
       })
     })
@@ -299,7 +298,7 @@ context('EditDraft', () => {
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        testInstance.findAllByType(Pressable)[1].props.onPress()
       })
 
       expect(

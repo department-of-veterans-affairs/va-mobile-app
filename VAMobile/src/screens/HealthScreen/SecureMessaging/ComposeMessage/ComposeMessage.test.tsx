@@ -233,7 +233,7 @@ context('ComposeMessage', () => {
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
         expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
       })
     })
@@ -275,7 +275,7 @@ context('ComposeMessage', () => {
 
       const textViews = testInstance.findAllByType(TextView)
 
-      expect(textViews[9].props.children).toEqual(['Subject Line', ' ', '(Required)'])
+      expect(textViews[12].props.children).toEqual(['Subject Line', ' ', '(Required)'])
     })
   })
 
@@ -306,6 +306,7 @@ context('ComposeMessage', () => {
       beforeEach(async () => {
         await waitFor(() => {
           navHeaderSpy.save.props.onSave()
+          testInstance.findByType(FormWrapper).props.onSave(true)
         })
       })
 

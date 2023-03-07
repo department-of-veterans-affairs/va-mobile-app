@@ -23,19 +23,19 @@ context('FormWrapper', () => {
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
-        labelKey: 'profile:editDirectDeposit.routingNumber',
+        labelKey: 'editDirectDeposit.routingNumber',
         inputType: 'phone',
         onChange: () => {},
         value: '12345',
         isRequiredField: true,
-        helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
+        helperTextKey: 'editDirectDeposit.routingNumberHelperText',
       },
       fieldErrorMessage: 'first error message',
     },
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'profile:editDirectDeposit.accountType',
+        labelKey: 'editDirectDeposit.accountType',
         selectedValue: 'one',
         onSelectionChange: () => {},
         pickerOptions: [],
@@ -46,7 +46,7 @@ context('FormWrapper', () => {
     {
       fieldType: FieldType.Selector,
       fieldProps: {
-        labelKey: 'profile:editDirectDeposit.confirm',
+        labelKey: 'editDirectDeposit.confirm',
         selected: false,
         onSelectionChange: () => {},
         disabled: false,
