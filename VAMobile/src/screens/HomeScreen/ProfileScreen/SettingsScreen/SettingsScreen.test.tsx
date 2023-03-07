@@ -35,7 +35,6 @@ jest.mock('../../../../utils/hooks', () => {
 })
 
 jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('haptics').mockReturnValue(true)
 
 const envMock = getEnv as jest.Mock
 
@@ -162,9 +161,5 @@ context('SettingsScreen', () => {
         expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
       })
     })
-  })
-
-  it('should display the haptic feedback toggle', async () => {
-    expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Haptic feedback')
   })
 })

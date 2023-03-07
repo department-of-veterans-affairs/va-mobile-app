@@ -29,16 +29,11 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { haptics } = useSelector<RootState, SettingsState>((state) => state.settings)
 
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
     const newPrefValue = !shouldStoreWithBiometric
     dispatch(setBiometricsPreference(newPrefValue))
-  }
-
-  const onToggleHaptics = () => {
-    dispatch(updateHapticsSetting(!haptics))
   }
 
   const supportedBiometricText = getSupportedBiometricText(supportedBiometric || '', t)
@@ -51,14 +46,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     decorator: ButtonDecoratorType.Switch,
     decoratorProps: { on: shouldStoreWithBiometric, a11yHint: t('biometric.a11yHint', { biometricType: supportedBiometricText }) },
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
-  }
-
-  const hapticsRow: SimpleListItemObj = {
-    text: t('haptics.title'),
-    a11yHintText: t('haptics.a11yHint'),
-    onPress: onToggleHaptics,
-    decorator: ButtonDecoratorType.Switch,
-    decoratorProps: { on: haptics, a11yHint: t('haptics.a11yHint') },
   }
 
   const onManage = () => {
@@ -92,7 +79,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onManage },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
-    featureEnabled('haptics') ? hapticsRow : [],
     notificationsRow,
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },

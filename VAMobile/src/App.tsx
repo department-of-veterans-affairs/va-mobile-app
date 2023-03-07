@@ -192,7 +192,6 @@ export const AuthGuard: FC = () => {
     dispatch(sendUsesLargeTextAnalytics())
     dispatch(sendUsesScreenReaderAnalytics())
     activateRemoteConfig()
-    dispatch(loadHapticsSetting())
   }, [dispatch])
 
   useEffect(() => {
