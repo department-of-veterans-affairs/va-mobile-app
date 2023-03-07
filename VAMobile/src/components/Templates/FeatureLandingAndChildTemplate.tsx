@@ -31,7 +31,7 @@ export type ChildTemplateProps = {
   title: string
   /** Optional a11y label for title  */
   titleA11y?: string
-  /** Optional header button requiring label with icon, and onPress props */
+  /** Optional header button requiring icon and onPress props */
   headerButton?: headerButton
   /** Optional footer content pinned below the scrollable space */
   footerContent?: ReactNode
