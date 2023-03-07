@@ -10,17 +10,17 @@ import {
   Box,
   ButtonTypesConstants,
   CollapsibleView,
-  CrisisLineCta,
   FieldType,
   FormFieldType,
   FormWrapper,
+  FullScreenSubtask,
   LoadingComponent,
   MessageAlert,
   SaveButton,
   TextArea,
   TextView,
   VAButton,
-  VAScrollView,
+  VAIconProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -50,6 +50,7 @@ type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -160,8 +161,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
   }, [sendMessageComplete, dispatch, navigation])
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
   if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -226,7 +225,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const renderForm = (): ReactNode => (
     <Box>
-      <MessageAlert scrollViewRef={scrollViewRef} hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} savingDraft={savingDraft} />
+      <MessageAlert
+        scrollViewRef={scrollViewRef}
+        hasValidationError={formContainsError}
+        saveDraftAttempted={onSaveDraftClicked}
+        savingDraft={savingDraft}
+        focusOnError={onSendClicked}
+      />
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <CollapsibleView
           text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
@@ -302,14 +307,32 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const saveIconProps: VAIconProps = {
+    name: 'Save',
+    fill: 'link',
+    width: 22,
+    height: 22,
+    preventScaling: true,
+  }
+
   return (
-    <VAScrollView scrollViewRef={scrollViewRef}>
-      <CrisisLineCta onPress={onCrisisLine} />
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      title={tc('reply')}
+      leftButtonText={tc('cancel')}
+      onLeftButtonPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
+      rightButtonText={tc('save')}
+      rightVAIconProps={saveIconProps}
+      onRightButtonPress={() => {
+        setOnSaveDraftClicked(true)
+        setOnSendClicked(true)
+      }}
+      showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{renderMessageThread()}</Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 
