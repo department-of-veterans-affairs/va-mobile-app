@@ -48,8 +48,8 @@ while getopts h option
 done
 
 # First release branch was 08-04-2021. check and see that we are at TWO WEEK interval (14 days)
-# if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
-# then
+if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
+then
 
   echo "Checking out and pulling latest from main branch"
   git checkout main &&
@@ -69,19 +69,19 @@ done
   git pull origin develop &&
 
   echo "Creating and pushing new release branch 'release/$next' to origin"
-  git checkout -b test-release/"$next" &&
-  git push -u origin test-release/"$next"
+  git checkout -b release/"$next" &&
+  git push -u origin elease/"$next"
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
 
   echo "Tag branch for Release Candidate build"
-  TAG="test-RC-$next-$(date +%m%d%y-%H%M)"
+  TAG="RC-$next-$(date +%m%d%y-%H%M)"
   git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
   git push origin "$TAG"
 
   echo "Successfully tagged for Release Candidate builds"
   echo "Exit"
-# else
-#   echo "Not scheduled for new release branch this week. Exiting."
-#   exit 0
-# fi
+else
+  echo "Not scheduled for new release branch this week. Exiting."
+  exit 0
+fi
