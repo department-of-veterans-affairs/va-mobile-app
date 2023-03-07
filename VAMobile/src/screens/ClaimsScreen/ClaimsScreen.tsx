@@ -1,7 +1,7 @@
+import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
 import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
@@ -9,7 +9,6 @@ import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHeaderStyles, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -21,6 +20,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const scrollViewRef = useRef<ScrollView>(null)
   const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
@@ -109,7 +109,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
 
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" />
+          <AlertBox scrollViewRef={scrollViewRef} title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" />
         </Box>
       )
     }
@@ -118,7 +118,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Claims-page')} contentContainerStyle={scrollStyles}>
+    <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
