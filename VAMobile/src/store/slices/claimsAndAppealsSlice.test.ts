@@ -1,12 +1,12 @@
 import _ from 'underscore'
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
-import { appeal as AppealPayload } from 'screens/ClaimsScreen/appealData'
-import { claim as Claim } from 'screens/ClaimsScreen/claimData'
+import { appeal as AppealPayload } from 'screens/BenefitsScreen/ClaimsScreen/appealData'
+import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { ClaimEventData, ClaimsAndAppealsGetDataMeta } from 'store/api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { DocumentPickerResponse } from '../../screens/BenefitsScreen/BenefitsStackScreens'
 import { contentTypes } from 'store/api/api'
 import { Asset } from 'react-native-image-picker'
 import {
@@ -53,9 +53,9 @@ export const ActionTypes: {
   CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: 'claimsAndAppeals/dispatchFileUploadSuccess',
 }
 
-const snackbarMessages : SnackbarMessages = {
-    successMsg: 'success',
-    errorMsg: 'failure'
+const snackbarMessages: SnackbarMessages = {
+  successMsg: 'success',
+  errorMsg: 'failure',
 }
 
 context('claimsAndAppeals', () => {
@@ -81,10 +81,16 @@ context('claimsAndAppeals', () => {
 
   const multiFiles: Array<Asset> = [
     {
-      base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile'
+      base64: 'imgstring',
+      uri: 'path/to/file',
+      fileSize: 100,
+      fileName: 'myfile',
     },
     {
-      base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile'
+      base64: 'imgstring',
+      uri: 'path/to/file',
+      fileSize: 100,
+      fileName: 'myfile',
     },
   ]
 

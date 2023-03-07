@@ -20,9 +20,9 @@ context('NavigationTabBar', () => {
 
   let routes = [
     { name: 'Home', key: 'Home-1' },
-    { name: 'Claims', key: 'Claims-1' },
+    { name: 'Benefits', key: 'Benefits-1' },
     { name: 'Health', key: 'Health-1' },
-    { name: 'Profile', key: 'Profile-1' },
+    { name: 'Payments', key: 'Payments-1' },
   ]
 
   const initializeTestInstance = (index = 0, routesList = routes) => {
@@ -84,11 +84,11 @@ context('NavigationTabBar', () => {
     })
   })
 
-  describe('when the focused tab name is Claims', () => {
-    it('should return the Claims Selected component', async () => {
+  describe('when the focused tab name is Benefits', () => {
+    it('should return the Benefits Selected component', async () => {
       initializeTestInstance(1)
-      const claimsSelected = testInstance.findByProps({ id: 'claimsSelected' })
-      expect(claimsSelected).toBeTruthy()
+      const benefitsSelected = testInstance.findByProps({ id: 'benefitsSelected' })
+      expect(benefitsSelected).toBeTruthy()
     })
   })
 
@@ -100,11 +100,11 @@ context('NavigationTabBar', () => {
     })
   })
 
-  describe('when the focused tab name is Profile', () => {
-    it('should return the Profile Selected component', async () => {
+  describe('when the focused tab name is Payments', () => {
+    it('should return the Payments Selected component', async () => {
       initializeTestInstance(3)
-      const profileSelected = testInstance.findByProps({ id: 'profileSelected' })
-      expect(profileSelected).toBeTruthy()
+      const paymentsSelected = testInstance.findByProps({ id: 'paymentsSelected' })
+      expect(paymentsSelected).toBeTruthy()
     })
   })
 })
