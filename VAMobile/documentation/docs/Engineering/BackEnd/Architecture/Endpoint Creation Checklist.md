@@ -24,7 +24,7 @@
 Some Lighthouse APIs use an authorization flow called, client credentials grant (CCG). See [Lighthouse documentation](https://dev-developer.va.gov/explore/authorization/docs/client-credentials?api=va_letter_generator) for more information. Mobile has already implemented this authorization flow with at least the immunizations endpoints so generating the JWT token logic can be borrowed from that. 
 
 Adding a new service will require the following steps: 
-  1. Request sandbox access [here](https://dev-developer.va.gov/onboarding/request-sandbox-access) or ask Lighthouse to expand the permissions of an existing client id we have with them to include the new API. If requesting a new client id, follow these steps:
+  1. Request sandbox access [here](https://developer.va.gov/onboarding/request-sandbox-access) or ask Lighthouse to expand the permissions of an existing client id we have with them to include the new API. If requesting a new client id, follow these steps:
   * install pem-jwk tool: https://www.npmjs.com/package/pem-jwk
   * In terminal, execute `openssl genrsa -out private.pem 2048`
   * `openssl rsa -in private.pem -out public.pem -outform PEM -pubout`
