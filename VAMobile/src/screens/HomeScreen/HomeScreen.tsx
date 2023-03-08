@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconWithTextProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -87,12 +87,12 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
-  const profileIconProps: VAIconWithTextProps = {
+  const profileIconProps: VAIconProps = {
     name: 'ProfileSelected',
-    label: tc('profile.title'),
   }
 
   const headerButton = {
+    label: tc('profile.title'),
     icon: profileIconProps,
     onPress: navigateTo('Profile'),
   }

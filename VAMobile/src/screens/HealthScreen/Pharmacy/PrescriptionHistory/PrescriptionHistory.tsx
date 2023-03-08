@@ -32,7 +32,7 @@ import {
   VAButton,
   VAButtonProps,
   VAIcon,
-  VAIconWithTextProps,
+  VAIconProps,
 } from 'components'
 import {
   DowntimeFeatureTypeConstants,
@@ -609,12 +609,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   }
 
-  const helpIconProps: VAIconWithTextProps = {
+  const helpIconProps: VAIconProps = {
     name: 'QuestionMark',
-    label: tc('help'),
   }
 
   const headerButton = {
+    label: tc('help'),
     icon: helpIconProps,
     onPress: navigateTo('PrescriptionHelp'),
   }

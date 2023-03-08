@@ -22,7 +22,6 @@ import {
   TextArea,
   TextView,
   VAButton,
-  VAIconWithTextProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -401,18 +400,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const saveIconProps: VAIconWithTextProps = {
-    name: 'Save',
-    label: tc('save'),
-  }
-
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
       title={tc('compose')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
-      rightVAIconProps={saveIconProps}
+      rightButtonText={tc('save')}
+      rightVAIconProps={{ name: 'Save' }}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)

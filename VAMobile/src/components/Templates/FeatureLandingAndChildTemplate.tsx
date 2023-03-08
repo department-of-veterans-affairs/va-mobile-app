@@ -2,7 +2,7 @@ import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } fr
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
-import { TextView, TextViewProps, VAIconWithTextProps } from 'components'
+import { TextView, TextViewProps, VAIconProps } from 'components'
 import { useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -15,8 +15,9 @@ import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 */
 
 type headerButton = {
+  label: string
   labelA11y?: string
-  icon: VAIconWithTextProps
+  icon: VAIconProps
   onPress: () => void
 }
 
@@ -31,7 +32,7 @@ export type ChildTemplateProps = {
   title: string
   /** Optional a11y label for title  */
   titleA11y?: string
-  /** Optional header button requiring icon and onPress props */
+  /** Optional header button requiring label, icon, and onPress props */
   headerButton?: headerButton
   /** Optional footer content pinned below the scrollable space */
   footerContent?: ReactNode
@@ -59,7 +60,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   const headerProps: HeaderBannerProps = {
     leftButton: { text: backLabel, a11yLabel: backLabelA11y, onPress: backLabelOnPress, descriptiveBack: true },
     title: { type: 'Transition', title, a11yLabel: titleA11y, scrollOffset, transitionHeaderHeight },
-    rightButton: headerButton ? { a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
+    rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }
 
   const subtitleProps: TextViewProps = {

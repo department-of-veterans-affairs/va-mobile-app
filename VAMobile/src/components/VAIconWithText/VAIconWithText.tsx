@@ -7,6 +7,8 @@ export type VAIconWithTextProps = VAIconProps & {
   label: string
   /** label color variant. default is textWithIconButton  */
   labelColor?: ColorVariant
+  /** optional a11y label  */
+  labelA11y?: string
 }
 
 /**
@@ -14,7 +16,7 @@ export type VAIconWithTextProps = VAIconProps & {
  *
  * @returns VAIconWithText component
  */
-const VAIconWithText: FC<VAIconWithTextProps> = ({ label, labelColor, ...vaIconProps }) => {
+const VAIconWithText: FC<VAIconWithTextProps> = ({ label, labelColor, labelA11y, ...vaIconProps }) => {
   const iconProps: VAIconProps = {
     ...vaIconProps,
     fill: vaIconProps.fill || 'link',
@@ -27,6 +29,7 @@ const VAIconWithText: FC<VAIconWithTextProps> = ({ label, labelColor, ...vaIconP
     variant: 'textWithIconButton',
     mt: 3, // 6px total combined with line height
     color: labelColor || 'textWithIconButton',
+    accessibilityLabel: labelA11y,
     allowFontScaling: false,
   }
 

@@ -3,7 +3,7 @@ import { Shadow, ShadowProps } from 'react-native-shadow-2'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
-import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconWithText, VAIconWithTextProps } from 'components'
+import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
@@ -38,10 +38,10 @@ export type HeaderVATitleProps = {
 }
 
 export type HeaderRightButtonProps = {
-  text?: string
+  text: string
   a11yLabel?: string
   onPress: () => void
-  icon?: VAIconWithTextProps
+  icon?: VAIconProps
 }
 
 export type HeaderBannerProps = {
@@ -154,7 +154,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
 
   // Calculate total length of header text. If too long, force title to wrap
   const titleLength = title?.type === 'VA' ? 2 : title?.title.length || 0
-  const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text?.length || 0)
+  const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text.length || 0)
   const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
 
   if (leftButton) {
@@ -251,8 +251,11 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               {rightButton && (
                 <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
                   <Box {...commonBoxProps}>
-                    {rightButton.icon && <VAIconWithText {...rightButton.icon} />}
-                    {rightButton.text && <TextView {...rightTextViewProps}>{rightButton.text}</TextView>}
+                    {rightButton.icon ? (
+                      <VAIconWithText label={rightButton.text} labelA11y={rightButton.a11yLabel} {...rightButton.icon} />
+                    ) : (
+                      <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
+                    )}
                   </Box>
                 </TouchableWithoutFeedback>
               )}

@@ -7,7 +7,8 @@ import { TouchableWithoutFeedback } from 'react-native'
 import Mock = jest.Mock
 
 import { context, render, RenderAPI } from 'testUtils'
-import { TextView, VAIconWithText, VAIconWithTextProps } from 'components'
+import { TextView } from 'components'
+import VAIcon, { VAIconProps } from 'components/VAIcon'
 import HeaderBanner, { HeaderLeftButtonProps, HeaderRightButtonProps, HeaderStaticTitleProps } from './HeaderBanner'
 
 context('HeaderBanner', () => {
@@ -21,7 +22,7 @@ context('HeaderBanner', () => {
     onLeftTitleButtonPress?: () => void,
     rightButtonText?: string,
     onRightTitleButtonPress?: () => void,
-    rightVAIconProps?: VAIconWithTextProps,
+    rightVAIconProps?: VAIconProps,
   ): void => {
     onPressSpy = jest.fn(() => {})
 
@@ -31,9 +32,9 @@ context('HeaderBanner', () => {
     }
     const title: HeaderStaticTitleProps | undefined = titleText ? { type: 'Static', title: titleText } : undefined
     let rightButton: HeaderRightButtonProps | undefined = undefined
-    if (onRightTitleButtonPress) {
+    if (rightButtonText && onRightTitleButtonPress) {
       if (rightVAIconProps) {
-        rightButton = { onPress: onRightTitleButtonPress, icon: rightVAIconProps }
+        rightButton = { text: rightButtonText, onPress: onRightTitleButtonPress, icon: rightVAIconProps }
       } else {
         rightButton = { text: rightButtonText, onPress: onRightTitleButtonPress }
       }
@@ -94,16 +95,18 @@ context('HeaderBanner', () => {
     })
     it('should not have an icon when only text and on press is supplied', async () => {
       initializeTestInstance(undefined, undefined, undefined, 'done', onPressSpy)
-      const icon = testInstance.findAllByType(VAIconWithText)
+      const icon = testInstance.findAllByType(VAIcon)
       expect(icon.length).toEqual(0)
     })
-    it('should have an icon w/ text button when onpress and icon props are supplied', async () => {
-      const rightIconProps: VAIconWithTextProps = {
+    it('should have an icon w/ text button when text, onpress, and icon props are supplied', async () => {
+      const rightIconProps: VAIconProps = {
         name: 'ProfileSelected',
-        label: 'Profile',
+        fill: 'largeNav',
+        height: 22,
+        width: 22,
       }
-      initializeTestInstance(undefined, undefined, undefined, undefined, onPressSpy, rightIconProps)
-      const icon = testInstance.findAllByType(VAIconWithText)
+      initializeTestInstance(undefined, undefined, undefined, 'done', onPressSpy, rightIconProps)
+      const icon = testInstance.findAllByType(VAIcon)
       expect(icon.length).toEqual(1)
     })
   })

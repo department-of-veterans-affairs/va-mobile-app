@@ -20,7 +20,6 @@ import {
   TextArea,
   TextView,
   VAButton,
-  VAIconWithTextProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -307,18 +306,14 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const saveIconProps: VAIconWithTextProps = {
-    name: 'Save',
-    label: tc('save'),
-  }
-
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
       title={tc('reply')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
-      rightVAIconProps={saveIconProps}
+      rightButtonText={tc('save')}
+      rightVAIconProps={{ name: 'Save' }}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
