@@ -1,6 +1,7 @@
 name: Create New Release Branch
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "30 6 * * 3" # 06:30 AM UTC every Wednesday
 
