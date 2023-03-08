@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { Box, LargePanel, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../../HealthStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -14,6 +14,7 @@ type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'Prepare
 
 const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
   })
 
   return (
-    <VAScrollView {...testIdProps(generateTestID(t('prepareForVideoVisit.title'), ''))}>
+    <LargePanel title={tc('appointmentsHelp')} rightButtonText={tc('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -67,7 +68,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
           </TextView>
         </TextArea>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 
