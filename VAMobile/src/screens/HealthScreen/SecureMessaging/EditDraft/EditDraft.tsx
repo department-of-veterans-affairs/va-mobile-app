@@ -54,7 +54,7 @@ import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
@@ -123,6 +123,17 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (isDiscarded || saveDraftComplete || sendMessageComplete) {
+      return
+    } else if (!noProviderError && !isFormBlank) {
+      e.preventDefault()
+      goToCancel()
+    } else {
+      navigation.goBack
+    }
+  })
 
   useEffect(() => {
     dispatch(resetSaveDraftFailed())

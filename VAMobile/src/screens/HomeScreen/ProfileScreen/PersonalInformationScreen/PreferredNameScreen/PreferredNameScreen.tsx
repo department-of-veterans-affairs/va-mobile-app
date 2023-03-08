@@ -9,7 +9,7 @@ import { PersonalInformationState, finishUpdatePreferredName, updatePreferredNam
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
@@ -20,7 +20,32 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const { profile, preferredNameSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const confirmAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (preferredName === getInitialState()) {
+      return
+    } else {
+      e.preventDefault()
+      confirmAlert({
+        title: t('personalInformation.preferredName.discard.confirm.title'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('cancel'),
+          },
+          {
+            text: t('discard.changes'),
+            onPress: () => {
+              navigation.dispatch(e.data.action)
+            },
+          },
+        ],
+      })
+    }
+  })
 
   const getInitialState = (): string => {
     const item = profile?.preferredName
@@ -105,7 +130,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   return (
     <FullScreenSubtask
       leftButtonText={t('cancel')}
-      onLeftButtonPress={preferredName === getInitialState() ? navigation.goBack : undefined}
+      onLeftButtonPress={navigation.goBack}
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>

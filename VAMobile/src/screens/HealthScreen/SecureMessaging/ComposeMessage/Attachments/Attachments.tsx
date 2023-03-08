@@ -16,7 +16,7 @@ import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, bytesToFinalSizeDispla
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
-import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -37,10 +37,35 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const showActionSheetWithOptions = useShowActionSheet()
   const [error, setError] = useState('')
   const [errorA11y, setErrorA11y] = useState('')
+  const confirmAlert = useDestructiveAlert()
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
   const scrollViewRef = useRef<ScrollView>(null)
   const { origin, attachmentsList, messageID } = route.params
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (displaySelectFile) {
+      return
+    } else {
+      e.preventDefault()
+      confirmAlert({
+        title: tc('secureMessaging.composeMessage.attachments.discard.confirm.title'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: tc('cancel'),
+          },
+          {
+            text: tc('secureMessaging.composeMessage.attachments.discard.confirm.title.button'),
+            onPress: () => {
+              navigation.dispatch(e.data.action)
+            },
+          },
+        ],
+      })
+    }
+  })
 
   useEffect(() => {
     navigation.setOptions({
@@ -139,7 +164,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       scrollViewRef={scrollViewRef}
       title={tc('secureMessaging.composeMessage.attachments.title')}
       leftButtonText={tc('cancel')}
-      onLeftButtonPress={displaySelectFile ? navigation.goBack : undefined}>
+      onLeftButtonPress={navigation.goBack}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
