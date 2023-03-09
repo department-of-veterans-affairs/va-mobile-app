@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, dispatchFinishEditGenderIdentity, updateGenderIdentity } from 'store/slices'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -23,35 +23,10 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveAlert()
   const navigateTo = useRouteNavigation()
 
   const [error, setError] = useState('')
   const [genderIdentity, setGenderIdentity] = useState(profile?.genderIdentity)
-
-  useBeforeNavBackListener(navigation, (e) => {
-    if (genderIdentity === profile?.genderIdentity) {
-      return
-    } else {
-      e.preventDefault()
-      confirmAlert({
-        title: t('personalInformation.genderIdentity.discard.confirm.title'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('cancel'),
-          },
-          {
-            text: t('discard.changes'),
-            onPress: () => {
-              navigation.dispatch(e.data.action)
-            },
-          },
-        ],
-      })
-    }
-  })
 
   useEffect(() => {
     if (genderIdentitySaved) {

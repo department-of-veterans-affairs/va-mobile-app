@@ -23,7 +23,7 @@ import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
@@ -31,7 +31,6 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const confirmAlert = useDestructiveAlert()
   const { claimID } = route.params
   const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
@@ -42,30 +41,6 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
-
-  useBeforeNavBackListener(navigation, (e) => {
-    if (haveSubmittedEvidence === false) {
-      return
-    } else {
-      e.preventDefault()
-      confirmAlert({
-        title: t('askForClaimDecision.discard.confirm.title'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('cancel'),
-          },
-          {
-            text: t('discard.changes'),
-            onPress: () => {
-              navigation.dispatch(e.data.action)
-            },
-          },
-        ],
-      })
-    }
-  })
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {

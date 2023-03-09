@@ -11,7 +11,7 @@ import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } f
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
@@ -25,7 +25,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
-  const confirmAlert = useDestructiveAlert()
+
   const deleteEmailAlert = useDestructiveAlert()
 
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
@@ -34,30 +34,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [deleting, setDeleting] = useState(false)
   const [saveDisabled, setSaveDisabled] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
-
-  useBeforeNavBackListener(navigation, (e) => {
-    if (!emailChanged()) {
-      return
-    } else {
-      e.preventDefault()
-      confirmAlert({
-        title: t('contactInformation.emailAddress.discard.confirm.title'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('cancel'),
-          },
-          {
-            text: t('discard.changes'),
-            onPress: () => {
-              navigation.dispatch(e.data.action)
-            },
-          },
-        ],
-      })
-    }
-  })
 
   useEffect(() => {
     if (emailSaved) {
