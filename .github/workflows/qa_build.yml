@@ -44,7 +44,7 @@ jobs:
           echo "$APPSTORE_CONNECT_API_KEY_ID" >> secrets.txt
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: '13.0'
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
