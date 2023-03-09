@@ -25,7 +25,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
-
   const deleteEmailAlert = useDestructiveAlert()
 
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
