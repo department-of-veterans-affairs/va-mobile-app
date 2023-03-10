@@ -57,7 +57,11 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }
 
   if (loadingSubmitClaimDecision) {
-    return <LoadingComponent text={t('askForClaimDecision.loading')} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
+        <LoadingComponent text={t('askForClaimDecision.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   const bulletedListOfText = [
