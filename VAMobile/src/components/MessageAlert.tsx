@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, RefObject } from 'react'
 
 import { AlertBox, Box } from './index'
-import { LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
