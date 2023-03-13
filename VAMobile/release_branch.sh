@@ -61,6 +61,11 @@ then
 
   echo "Incrementing latest tag $latest by minor version"
   next=$(increment_version "$latest" 1) &&
+  
+  if [[ $(date +%F) == "2023-03-13" ]]
+  then
+    next="2.0.0"
+  fi
 
   echo "Next version: $next"
   echo
