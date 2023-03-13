@@ -576,14 +576,17 @@ workflows:
             branches:
               ignore: /.*/
   new_release_branch:
-    triggers:
-      - schedule:
-          cron: '30 6 * * 3'
-          filters:
-            branches:
-              only: develop
+    # triggers:
+    # - schedule:
+    #     cron: '30 6 * * 3'
+    #     filters:
+    #       branches:
+    #         only: develop
     jobs:
       - cut_release_branch
+      - filters:
+          branches:
+            only: nr-bump-v2
   go_live:
     triggers:
       - schedule:
