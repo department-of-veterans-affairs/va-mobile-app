@@ -60,12 +60,11 @@ then
   latest=$(git describe --match "v[0-9]*.[0-9]*.[0-9]*" --abbrev=0) &&
 
   echo "Incrementing latest tag $latest by minor version"
+  next=$(increment_version "$latest" 1) &&
   
   if [[ $(date +%F) == "2023-03-13" ]]
   then
-    next=$(increment_version "$latest" 0)
-  else
-    next=$(increment_version "$latest" 1)
+    next="v2.0.0"
   fi
 
   echo "Next version: $next"
