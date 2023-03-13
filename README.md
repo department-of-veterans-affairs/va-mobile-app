@@ -158,11 +158,11 @@ Examples:
      </TextView>
    </AlertBox>`
 
-#### `<ProfileBanner>`
+#### `<Nametag>`
 A common component to display a user's most recent service.
 
 Examples: 
-- `<ProfileBanner />`
+- `<Nametag />`
 
 #### `<BackButton>`
 A common component for the back button located at the header.

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { ButtonDecoratorType } from 'components/BaseListItem'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextLine } from 'components/types'
 import { getA11yLabelText, getFileDisplay } from 'utils/common'
@@ -18,8 +18,7 @@ export type FileListProps = {
 }
 
 const FileList: FC<FileListProps> = ({ files, onDelete }) => {
-  const { t } = useTranslation(NAMESPACE.CLAIMS)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const deleteFileAlert = useDestructiveAlert()
 
   const listObjs: Array<DefaultListItemObj> = files.map((file) => {
@@ -35,15 +34,15 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
       decorator: ButtonDecoratorType.Delete,
       onPress: () => {
         deleteFileAlert({
-          title: tc('file.removeConfirm'),
+          title: t('file.removeConfirm'),
           destructiveButtonIndex: 1,
           cancelButtonIndex: 0,
           buttons: [
             {
-              text: tc('cancel'),
+              text: t('cancel'),
             },
             {
-              text: tc('delete'),
+              text: t('delete'),
               onPress: () => {
                 onDelete(file)
               },

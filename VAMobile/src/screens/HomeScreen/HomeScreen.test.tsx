@@ -11,7 +11,7 @@ import { HomeScreen } from './HomeScreen'
 import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/encourageUpdate'
+import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/homeScreenAlerts'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -55,6 +55,10 @@ context('HomeScreen', () => {
   }
 
   beforeEach(() => {
+    when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(true)
+    mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve('1.0.0.'))
+    mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve('0.0.0'))
+    mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve('2.0.0.'))
     initializeTestInstance()
   })
 
@@ -137,30 +141,6 @@ context('HomeScreen', () => {
       await waitFor(() => {
         initializeTestInstance(false, '1.0.0.', '2.0.0')
         expect(() => component.getByText('Update available')).toThrow()
-      })
-    })
-  })
-
-  describe('when rendering the home nav buttons', () => {
-    it('should render the claims button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[0].props.title).toEqual('Claims and appeals')
-      })
-    })
-    it('should render the health button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Health care')
-      })
-    })
-    it('should render the letters button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Letters')
-      })
-    })
-
-    it('should render the payments button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Payments')
       })
     })
   })
