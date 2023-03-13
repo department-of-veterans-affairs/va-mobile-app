@@ -70,7 +70,11 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   }
 
   if (loading || genderIdentitySaved) {
-    return <LoadingComponent text={t('personalInformation.genderIdentity.saving')} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('personalInformation.genderIdentity.saving')} />
+      </FullScreenSubtask>
+    )
   }
 
   return (

@@ -93,7 +93,15 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }, [documentType])
 
   if (loadingFileUpload) {
-    return <LoadingComponent text={t('fileUpload.loading')} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={t('cancel')}
+        onLeftButtonPress={() => {
+          navigation.dispatch(StackActions.pop(2))
+        }}>
+        <LoadingComponent text={t('fileUpload.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   const onUploadConfirmed = () => {

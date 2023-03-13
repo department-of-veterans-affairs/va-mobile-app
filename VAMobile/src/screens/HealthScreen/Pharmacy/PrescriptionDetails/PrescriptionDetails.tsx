@@ -143,7 +143,11 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const [dateOrderedFormatted, dateOrderedFormattedA11yLabel] = getDateTextAndLabel(t, orderedDate)
 
   if (loadingHistory) {
-    return <LoadingComponent text={t('prescription.details.loading')} />
+    return (
+      <ChildTemplate backLabel={tc('prescriptions')} backLabelOnPress={navigation.goBack} title={tc('prescriptionDetails')}>
+        <LoadingComponent text={t('prescription.details.loading')} />
+      </ChildTemplate>
+    )
   }
 
   return (

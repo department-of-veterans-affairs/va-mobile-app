@@ -72,7 +72,11 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   }
 
   if (loadingClaim) {
-    return <LoadingComponent text={t('cliamInformation.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
+        <LoadingComponent text={t('cliamInformation.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')
