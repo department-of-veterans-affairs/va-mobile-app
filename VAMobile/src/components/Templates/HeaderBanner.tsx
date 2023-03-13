@@ -245,11 +245,13 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               ) : null}
             </Box>
 
-            <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
-              <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
-                <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
-              </View>
-            </Box>
+            {title && (
+              <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
+                <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
+                  <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
+                </View>
+              </Box>
+            )}
 
             <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
               {rightButton && (
