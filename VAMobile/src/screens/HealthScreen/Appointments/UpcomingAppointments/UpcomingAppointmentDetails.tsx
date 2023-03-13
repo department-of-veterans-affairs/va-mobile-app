@@ -269,7 +269,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   if (loadingAppointmentCancellation) {
-    return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
+        <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (
