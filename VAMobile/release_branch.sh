@@ -48,7 +48,7 @@ while getopts h option
 done
 
 # First release branch was 08-04-2021. check and see that we are at TWO WEEK interval (14 days)
-if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-02"))/(3600*24)))%14] == 0 ]]
+if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
 then
 
   echo "Checking out and pulling latest from main branch"
@@ -62,7 +62,7 @@ then
   echo "Incrementing latest tag $latest by minor version"
   next=$(increment_version "$latest" 1) &&
   
-  if [[ $(date +%F) == "2023-03-13" ]]
+  if [[ $(date +%F) == "2023-03-15" ]]
   then
     next="2.0.0"
   fi
@@ -74,16 +74,16 @@ then
   git pull origin develop &&
 
   echo "Creating and pushing new release branch 'release/$next' to origin"
-  # git checkout -b release/"$next" &&
-  # git push -u origin release/"$next"
+  git checkout -b release/"$next" &&
+  git push -u origin release/"$next"
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
 
   echo "Tag branch for Release Candidate build"
   TAG="RC-$next-$(date +%m%d%y-%H%M)"
   echo "Tag: $TAG"
-  # git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
-  # git push origin "$TAG"
+  git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
+  git push origin "$TAG"
 
   echo "Successfully tagged for Release Candidate builds"
   echo "Exit"
