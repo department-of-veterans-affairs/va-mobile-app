@@ -81,11 +81,10 @@ then
 
   echo "Tag branch for Release Candidate build"
   TAG="RC-$next-$(date +%m%d%y-%H%M)"
-  echo "Tag: $TAG"
   git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
   git push origin "$TAG"
 
-  echo "Successfully tagged for Release Candidate builds"
+  echo "Successfully tagged for Release Candidate builds: $TAG"
   echo "Exit"
 else
   echo "Not scheduled for new release branch this week. Exiting."
