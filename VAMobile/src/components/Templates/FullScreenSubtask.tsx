@@ -85,6 +85,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const titleTextProps: TextViewProps = {
     variant: 'BitterBoldHeading',
     accessibilityLabel: titleA11yLabel,
+    accessibilityRole: 'header',
   }
 
   const message = t('areYouSure')
