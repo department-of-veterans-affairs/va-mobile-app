@@ -583,10 +583,10 @@ workflows:
     #       branches:
     #         only: develop
     jobs:
-      - cut_release_branch
-      - filters:
-          branches:
-            only: nr-bump-v2
+      - cut_release_branch:
+          filters:
+            branches:
+              only: nr-bump-v2
   go_live:
     triggers:
       - schedule:
