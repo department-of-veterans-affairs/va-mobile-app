@@ -694,6 +694,8 @@
   "health": "Health",
   "appointments": "Appointments",
   "appointmentsHelp": "Appointments help",
+  "appointments.sessionNotStarted.title": "You can't join this session yet",
+  "appointments.joinVideoConnect": "You can join VA Video Connect up to 30 minutes prior to the start time.",
   "details": "Details",
   "vaVaccines": "VA vaccines",
   "vaVaccines.a11y": "V-A vaccines",
