@@ -164,9 +164,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   if (loading || loadingFile || movingMessage) {
     return (
-      <LoadingComponent
-        text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
-      />
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+        <LoadingComponent
+          text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
+        />
+      </ChildTemplate>
     )
   }
 
