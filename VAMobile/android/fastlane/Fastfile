@@ -131,6 +131,10 @@ platform :android do
       puts('latest version is ' + latestVersion.to_s)
       props = { latestBuild: latestBuild, latestVersion: latestVersion }
       gradle(task: 'doNewQaVersion', properties: props)
+
+      if (ENV["FASTLANE_LANE_NAME"] == "rc" && Date.today.strftime("%F") == '2023-03-15')
+        gradle(task: 'doNewMajorVersion', properties: props)
+      end
     else
       versionNumber = /\d+\.\d+\.\d+/.match(version)
       puts('latest build is ' + latestBuild.to_s)
