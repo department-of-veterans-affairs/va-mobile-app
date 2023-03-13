@@ -175,7 +175,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       const joinSessionOnPress = (): void => {
         dispatch(clearAppointmentCancellation())
-        launchExternalLink(url || '')
+
+        if (url) {
+          launchExternalLink(url)
+        } else {
+          navigateTo('SessionNotStarted')()
+        }
       }
 
       const joinSessionButtonProps: VAButtonProps = {
