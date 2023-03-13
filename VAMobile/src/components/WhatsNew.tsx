@@ -20,7 +20,7 @@ export const WhatsNew = () => {
   const [localVersion, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
 
-  const BODY_PREFIX = 'whatsNew.bodyCopy'
+  const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}`
 
   useEffect(() => {
     async function checkLocalVersion() {
@@ -63,17 +63,17 @@ export const WhatsNew = () => {
   }
 
   //@ts-ignore
-  const bodyA11yLabel = t(`${BODY_PREFIX}.a11yLabel.${localVersion}`)
+  const bodyA11yLabel = t(`${BODY_PREFIX}.a11yLabel`)
 
   //@ts-ignore
-  const body = t(`${BODY_PREFIX}.${localVersion}`)
+  const body = t(BODY_PREFIX)
 
   const getBullets = () => {
     const bullets: string[] = []
 
     while (1) {
       //@ts-ignore
-      const bullet = t(`${BODY_PREFIX}.${localVersion}bullet.${bullets.length + 1}`)
+      const bullet = t(`${BODY_PREFIX}bullet.${bullets.length + 1}`)
       if (bullet.startsWith(BODY_PREFIX) || !bullet || bullets.length > 10) {
         return bullets
       } else {
@@ -105,7 +105,7 @@ export const WhatsNew = () => {
     onCollapse: closeCollapsible,
   }
 
-  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== `${BODY_PREFIX}.${localVersion}`) {
+  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX) {
     whatsNewAppeared()
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>

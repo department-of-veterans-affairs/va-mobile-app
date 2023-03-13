@@ -974,10 +974,10 @@
   "whatsNew.title": "What's new",
   "whatsNew.dismissMessage": "Dismiss this message",
   "whatsNew.bodyCopy.1.41.0.": "Copy specific to release",
-  "whatsNew.bodyCopy.a11yLabel.1.41.0.": "Copy specific to release",
+  "whatsNew.bodyCopy.1.41.0.a11yLabel": "Copy specific to release",
   "whatsNew.bodyCopy.2.0.0.": "We updated sections to Home, Benefits, Health, and Payments.",
+  "whatsNew.bodyCopy.2.0.0.a11yLabel": "We updated sections to Home, Benefits, Health, and Payments.",
   "whatsNew.bodyCopy.2.0.0.bullet.1": "Profile is now on Home screen.",
   "whatsNew.bodyCopy.2.0.0.bullet.2": "Disability rating and VA letters are now in Benefits.",
-  "whatsNew.bodyCopy.2.0.0.bullet.3": "Direct deposit is now in Payments.",
-  "whatsNew.bodyCopy.a11yLabel.2.0.0.": "We updated sections to Home, Benefits, Health, and Payments."
+  "whatsNew.bodyCopy.2.0.0.bullet.3": "Direct deposit is now in Payments."
 }
