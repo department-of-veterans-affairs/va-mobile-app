@@ -149,7 +149,6 @@ platform :ios do
       max = [liveVersion, latestVersion].max
       tfVersion = Gem::Version.new(lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION])
       if (ENV["FASTLANE_LANE_NAME"] == "rc" && Date.today.strftime("%F") == '2023-03-15')
-        puts('RC LANE BUMPING MAJOR VERSION')
         increment_version_number(bump_type: "major")
       elsif max == tfVersion
         increment_version_number(bump_type: "patch")
