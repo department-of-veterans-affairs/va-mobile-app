@@ -63,7 +63,7 @@ export const WhatsNew = () => {
   }
 
   //@ts-ignore
-  const bodyA11yLabel = t(`${BODY_PREFIX}.a11yLabel`)
+  const bodyA11yLabel = t(`${BODY_PREFIX}a11yLabel`)
 
   //@ts-ignore
   const body = t(BODY_PREFIX)
@@ -74,7 +74,7 @@ export const WhatsNew = () => {
     while (1) {
       //@ts-ignore
       const bullet = t(`${BODY_PREFIX}bullet.${bullets.length + 1}`)
-      if (bullet.startsWith(BODY_PREFIX) || !bullet || bullets.length > 10) {
+      if (bullet.startsWith(BODY_PREFIX) || !bullet || bullets.length > 20) {
         return bullets
       } else {
         bullets.push(bullet)
