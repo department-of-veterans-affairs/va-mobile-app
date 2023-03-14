@@ -1,10 +1,10 @@
 import 'react-native'
 import React from 'react'
-import { InteractionManager, Linking, Pressable } from 'react-native'
+import { Alert, Pressable } from 'react-native'
 
 // Note: test renderer must be required after react-native.
-import { context, mockNavProps, mockStore, render, findByTypeWithSubstring, findByTypeWithText, RenderAPI, waitFor } from 'testUtils'
-import { act } from 'react-test-renderer'
+import { context, mockNavProps, render, findByTypeWithSubstring, findByTypeWithText, RenderAPI, waitFor } from 'testUtils'
+import { when } from 'jest-when'
 
 import { forEach } from 'underscore'
 
@@ -21,8 +21,22 @@ import {
   AppointmentStatusDetailTypeConsts,
 } from 'store/api/types'
 import { ClickForActionLink, TextView, VAButton } from 'components'
-import { isAndroid } from 'utils/platform'
 import { bookedAppointmentsList, canceledAppointmentList } from 'store/slices/appointmentsSlice.test'
+
+let mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  let theme = jest.requireActual('styles/themes/standardTheme').default
+  return {
+    ...original,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+    useRouteNavigation: () => {
+      return mockNavigationSpy
+    },
+  }
+})
 
 context('UpcomingAppointmentDetails', () => {
   let component: RenderAPI
@@ -30,6 +44,7 @@ context('UpcomingAppointmentDetails', () => {
   let props: any
   let goBackSpy = jest.fn()
   let navigateSpy = jest.fn()
+  let navigateToSessionNotStartedSpy = jest.fn()
 
   let apptPhoneData = {
     areaCode: '123',
@@ -44,8 +59,14 @@ context('UpcomingAppointmentDetails', () => {
     isCovid: boolean = false,
     appointmentCancellationStatus?: AppointmentCancellationStatusTypes,
     statusDetail: AppointmentStatusDetailType | null = null,
+    hasUrl: boolean = false,
   ): void => {
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy }, { params: { appointmentID: '1' } })
+
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('SessionNotStarted')
+      .mockReturnValue(navigateToSessionNotStartedSpy)
 
     component = render(<UpcomingAppointmentDetails {...props} />, {
       preloadedState: {
@@ -62,7 +83,7 @@ context('UpcomingAppointmentDetails', () => {
             status === 'BOOKED'
               ? phoneData === null
                 ? { '1': bookedAppointmentsList[8] }
-                : {
+                : hasUrl ? { '1': bookedAppointmentsList[9] } : {
                     '1': bookedAppointmentsList.filter((obj) => {
                       return obj.attributes.appointmentType === appointmentType && obj.attributes.isCovidVaccine === isCovid ? true : false
                     })[0],
@@ -143,9 +164,12 @@ context('UpcomingAppointmentDetails', () => {
       expect(buttons[0].props.testID).toEqual('Join session')
     })
 
-    it('should call Linking openURL on Android', async () => {
-      const isAndroidMock = isAndroid as jest.Mock
-      isAndroidMock.mockReturnValue(true)
+    it('should prompt an alert for leaving the app when the URL is present', async () => {
+      await waitFor(() => {
+        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME, undefined, undefined, undefined, undefined, undefined, true)
+      })
+
+      jest.spyOn(Alert, 'alert');
       const buttons = testInstance.findAllByType(Pressable)
 
       await waitFor(() => {
@@ -153,7 +177,19 @@ context('UpcomingAppointmentDetails', () => {
       })
 
       await waitFor(() => {
-        expect(Linking.openURL).toHaveBeenCalled()
+        expect(Alert.alert).toHaveBeenCalled()
+      })
+    })
+
+    it('should navigate to the SessionNotStarted screen when the URL is empty', async () => {
+      const buttons = testInstance.findAllByType(Pressable)
+
+      await waitFor(() => {
+        buttons[0].props.onPress()
+      })
+
+      await waitFor(() => {
+        expect(navigateToSessionNotStartedSpy).toHaveBeenCalled()
       })
     })
 

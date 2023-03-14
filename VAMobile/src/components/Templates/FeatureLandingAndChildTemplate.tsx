@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { TextView, TextViewProps, VAIconProps } from 'components'
-import { useTheme } from 'utils/hooks'
+import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
@@ -46,6 +46,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -108,9 +109,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
             transitionHeader(event.nativeEvent.contentOffset.y)
           }}
           {...scrollViewProps}>
-          <View onLayout={getTransitionHeaderHeight}>
-            <TextView {...subtitleProps}>{title}</TextView>
-          </View>
+          <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
           {children}
         </VAScrollView>
         {footerContent}

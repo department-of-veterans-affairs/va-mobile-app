@@ -126,18 +126,26 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (loadingHistory) {
-    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      </FullScreenSubtask>
+    )
   }
 
   if (showLoadingScreenRequestRefills) {
-    return <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
     <>
       <FullScreenSubtask
         leftButtonText={tc('cancel')}
-        onLeftButtonPress={selectedPrescriptionsCount === 0 ? navigation.goBack : undefined}
+        onLeftButtonPress={navigation.goBack}
         title={tc('refillRequest')}
         primaryContentButtonText={
           selectedPrescriptionsCount === refillablePrescriptions?.length

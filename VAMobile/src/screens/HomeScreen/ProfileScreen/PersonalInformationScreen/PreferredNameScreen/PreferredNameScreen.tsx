@@ -99,13 +99,17 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   ]
 
   if (loading || preferredNameSaved) {
-    return <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
     <FullScreenSubtask
       leftButtonText={t('cancel')}
-      onLeftButtonPress={preferredName === getInitialState() ? navigation.goBack : undefined}
+      onLeftButtonPress={navigation.goBack}
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
