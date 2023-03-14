@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VAButton } from 'components'
+import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText, VAButton } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -69,15 +69,22 @@ export const WhatsNew = () => {
   const body = t(BODY_PREFIX)
 
   const getBullets = () => {
-    const bullets: string[] = []
+    const bullets: VABulletListText[] = []
 
     while (1) {
+      const bulletKey = `${BODY_PREFIX}bullet.${bullets.length + 1}`
       //@ts-ignore
-      const bullet = t(`${BODY_PREFIX}bullet.${bullets.length + 1}`)
-      if (bullet.startsWith(BODY_PREFIX) || !bullet || bullets.length > 20) {
+      const text = t(bulletKey)
+      //@ts-ignore
+      const a11yLabel = t(`${bulletKey}.a11yLabel`)
+
+      if (text.startsWith(BODY_PREFIX) || !text || bullets.length > 20) {
         return bullets
       } else {
-        bullets.push(bullet)
+        bullets.push({
+          text,
+          a11yLabel: a11yLabel.startsWith(BODY_PREFIX) ? undefined : a11yLabel,
+        })
       }
     }
   }
