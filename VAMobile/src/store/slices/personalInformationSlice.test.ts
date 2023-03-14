@@ -15,9 +15,7 @@ import {
   updateAddress,
   updateEmail,
   updatePreferredName,
-  updatePreferredName,
   validateAddress,
-  updateGenderIdentity,
   updateGenderIdentity,
 } from './personalInformationSlice'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -75,18 +73,15 @@ context('personalInformation', () => {
   const mockStorePersonalInformation: Partial<RootState> = {
     personalInformation: {
       preferredNameSaved:false,
-      preferredNameSaved:false,
       loading: false,
       loadingGenderIdentityOptions: false,
       savingAddress: false,
       profile: {
         firstName: 'Ben',
         preferredName: '',
-        preferredName: '',
         middleName: 'J',
         lastName: 'Morgan',
         fullName: 'Ben J Morgan',
-        genderIdentity: 'M',
         genderIdentity: 'M',
         contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
         signinEmail: 'ben@gmail.com',
@@ -184,35 +179,6 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
       expect(api.del as jest.Mock).toBeCalledWith('/v0/user/phones', phoneData)
-
-      const { personalInformation } = store.getState()
-      expect(personalInformation.error).toBeFalsy()
-    })
-  })
-
-  describe('updatePreferredName', () => {
-    it('should update users preferred Name', async () => {
-      const preferredNameUpdateData = {
-        text: 'Gary',
-      }
-
-      when(api.put as jest.Mock)
-        .calledWith('/v0/user/preferred_name', preferredNameUpdateData)
-        .mockResolvedValue({})
-
-      const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updatePreferredName('Gary', snackbarMessages))
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_UPDATE_PREFERRED_NAME })
-      expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
-
-      const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_SAVE_UPDATE_PREFERRED_NAME })
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
-      expect(endAction?.state.personalInformation.error).toBeFalsy()
-
-      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/preferred_name', { text: 'Gary' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -380,7 +346,6 @@ context('personalInformation', () => {
               firstName: 'Test',
               middleName: 'NOT_FOUND',
               lastName: 'ing',
-              genderIdentity: null,
               genderIdentity: null,
               contactEmail: { emailAddress: 'user123@id.me', id: '0' },
               signinEmail: 'user123@id.me',

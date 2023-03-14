@@ -36,7 +36,6 @@ import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitize
 import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 import getEnv from 'utils/env'
@@ -185,14 +184,12 @@ export const editUsersNumber =
       await registerReviewEvent()
       dispatch(dispatchFinishSavePhoneNumber())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
     }
@@ -249,14 +246,12 @@ export const deleteUsersNumber =
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
         console.error(err)
         dispatch(dispatchFinishSavePhoneNumber(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
     }
@@ -302,7 +297,6 @@ export const updateEmail =
       await registerReviewEvent()
       dispatch(dispatchFinishSaveEmail())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
@@ -342,7 +336,6 @@ export const deleteEmail =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
@@ -405,7 +398,6 @@ export const updateAddress =
       await registerReviewEvent()
       dispatch(dispatchFinishSaveAddress())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
@@ -435,7 +427,6 @@ export const deleteAddress =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (err) {
       if (isErrorObject(err)) {
@@ -469,7 +460,6 @@ export const validateAddress =
       const validationKey = getValidationKey(suggestedAddresses)
 
       if (suggestedAddresses && confirmedSuggestedAddresses && showValidationScreen(addressData, suggestedAddresses)) {
-        const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses)
         const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses)
         dispatch(dispatchFinishValidateAddress({ suggestedAddresses, confirmedSuggestedAddresses, addressData, addressValidationScenario, validationKey }))
       } else {

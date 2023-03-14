@@ -18,14 +18,12 @@ export const SigninServiceTypesConstants: {
 export type UserDataProfile = {
   firstName: string
   preferredName: string
-  preferredName: string
   middleName: string
   lastName: string
   fullName: string
   contactEmail: EmailData
   signinEmail: string
   birthDate: string
-  genderIdentity: string
   genderIdentity: string
   addresses: string
   residentialAddress?: AddressData
