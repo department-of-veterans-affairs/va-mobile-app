@@ -63,7 +63,8 @@ export const WhatsNew = () => {
   }
 
   //@ts-ignore
-  const bodyA11yLabel = t(`${BODY_PREFIX}a11yLabel`)
+  const labelValue = t(`${BODY_PREFIX}a11yLabel`)
+  const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue
 
   //@ts-ignore
   const body = t(BODY_PREFIX)
