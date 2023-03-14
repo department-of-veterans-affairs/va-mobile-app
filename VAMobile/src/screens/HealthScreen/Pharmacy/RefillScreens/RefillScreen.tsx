@@ -63,17 +63,22 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const onSubmitPressed = () => {
     submitRefillAlert({
-      title: t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
+      title:
+        selectedPrescriptionsCount === refillablePrescriptions?.length
+          ? t('prescriptions.refill.confirmationTitle.all')
+          : t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
       cancelButtonIndex: 0,
       buttons: [
         {
           text: tc('cancel'),
         },
         {
-          text: t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
+          text:
+            selectedPrescriptionsCount === refillablePrescriptions?.length
+              ? t('prescriptions.refill.RequestRefillButtonTitle.all')
+              : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
           onPress: () => {
             const prescriptionsToRefill: PrescriptionsList = []
-            // todo add params
             Object.values(selectedValues).forEach((isSelected, index) => {
               if (isSelected) {
                 prescriptionsToRefill.push(refillable[index])
@@ -90,7 +95,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const getListItems = () => {
     const total = refillablePrescriptions?.length
     const listItems: Array<SelectionListItemObj> = refillable.map((prescription, idx) => {
-      const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total })
+      const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total }) + '.' // Period to ensure pause w/ screen reader
       return {
         content: (
           <>
@@ -121,20 +126,32 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (loadingHistory) {
-    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      </FullScreenSubtask>
+    )
   }
 
   if (showLoadingScreenRequestRefills) {
-    return <LoadingComponent text={t('prescriptions.refill.submit')} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
     <>
       <FullScreenSubtask
         leftButtonText={tc('cancel')}
-        onLeftButtonPress={selectedPrescriptionsCount === 0 ? navigation.goBack : undefined}
+        onLeftButtonPress={navigation.goBack}
         title={tc('refillRequest')}
-        primaryContentButtonText={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
+        primaryContentButtonText={
+          selectedPrescriptionsCount === refillablePrescriptions?.length
+            ? t('prescriptions.refill.RequestRefillButtonTitle.all')
+            : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
+        }
         scrollViewRef={scrollViewRef}
         onPrimaryContentButtonPress={() => {
           if (selectedPrescriptionsCount === 0) {

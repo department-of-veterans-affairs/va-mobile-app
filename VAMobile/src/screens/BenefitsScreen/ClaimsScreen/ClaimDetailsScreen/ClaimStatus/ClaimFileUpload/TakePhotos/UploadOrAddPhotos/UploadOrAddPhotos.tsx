@@ -1,5 +1,6 @@
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { Dimensions, ScrollView } from 'react-native'
+import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +19,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
-import { useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
@@ -41,6 +42,31 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
   }
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (imagesList?.length === 0 || filesUploadedSuccess) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('fileUpload.discard.confirm.title.photos'),
+      message: t('fileUpload.discard.confirm.message.photos'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('cancel'),
+        },
+
+        {
+          text: t('fileUpload.discard.photos'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
+          },
+        },
+      ],
+    })
+  })
 
   useEffect(() => {
     if (fileUploadedFailure || filesUploadedSuccess) {
@@ -67,7 +93,15 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }, [documentType])
 
   if (loadingFileUpload) {
-    return <LoadingComponent text={t('fileUpload.loading')} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={t('cancel')}
+        onLeftButtonPress={() => {
+          navigation.dispatch(StackActions.pop(2))
+        }}>
+        <LoadingComponent text={t('fileUpload.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   const onUploadConfirmed = () => {
@@ -206,7 +240,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} title={t('fileUpload.uploadPhotos')} navigationMultiStepCancelScreen={2}>
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      leftButtonText={t('cancel')}
+      title={t('fileUpload.uploadPhotos')}
+      onLeftButtonPress={() => {
+        navigation.dispatch(StackActions.pop(2))
+      }}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!errorMessage && (
           <Box mb={theme.dimensions.standardMarginBetween}>

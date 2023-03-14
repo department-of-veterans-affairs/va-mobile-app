@@ -1,3 +1,4 @@
+import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +14,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
-import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -32,6 +33,30 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
   }
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (filesList?.length === 0 || filesUploadedSuccess) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('fileUpload.discard.confirm.title'),
+      message: t('fileUpload.discard.confirm.message'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('cancel'),
+        },
+        {
+          text: t('fileUpload.discard'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
+          },
+        },
+      ],
+    })
+  })
 
   useEffect(() => {
     if (fileUploadedFailure || filesUploadedSuccess) {
@@ -58,7 +83,15 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }, [documentType])
 
   if (loadingFileUpload) {
-    return <LoadingComponent text={t('fileUpload.loading')} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={t('cancel')}
+        onLeftButtonPress={() => {
+          navigation.dispatch(StackActions.pop(2))
+        }}>
+        <LoadingComponent text={t('fileUpload.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   const onUploadConfirmed = () => {
@@ -114,7 +147,12 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   ]
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} title={t('fileUpload.uploadFiles')} navigationMultiStepCancelScreen={2}>
+    <FullScreenSubtask
+      leftButtonText={t('cancel')}
+      title={t('fileUpload.uploadFiles')}
+      onLeftButtonPress={() => {
+        navigation.dispatch(StackActions.pop(2))
+      }}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}

@@ -50,12 +50,22 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   }
 
   const onSetName = (name: string): void => {
-    setName(name.replace(/\d/g, ''))
-    if (name === '') {
+    if (preferredName !== name) {
       setResetErrors(true)
-    } else {
-      setResetErrors(false)
     }
+    setName(name)
+  }
+
+  const nameLengthValidation = (): boolean => {
+    return preferredName.length > MAX_NAME_LENGTH
+  }
+
+  const lettersOnlyValidation = (): boolean => {
+    return /[^a-zA-Z]/.test(preferredName)
+  }
+
+  const whiteSpaceOnlyValidation = (): boolean => {
+    return !/[\S]/.test(preferredName)
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -66,23 +76,40 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         labelKey: 'personalInformation.preferredNameScreen.body',
         value: preferredName,
         onChange: onSetName,
-        maxLength: MAX_NAME_LENGTH,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
         a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
         isRequiredField: true,
       },
       fieldErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
+      validationList: [
+        {
+          validationFunction: nameLengthValidation,
+          validationFunctionErrorMessage: t('personalInformation.preferredName.tooManyCharacters'),
+        },
+        {
+          validationFunction: lettersOnlyValidation,
+          validationFunctionErrorMessage: t('personalInformation.preferredName.lettersOnly'),
+        },
+        {
+          validationFunction: whiteSpaceOnlyValidation,
+          validationFunctionErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
+        },
+      ],
     },
   ]
 
   if (loading || preferredNameSaved) {
-    return <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
     <FullScreenSubtask
       leftButtonText={t('cancel')}
-      onLeftButtonPress={preferredName === getInitialState() ? navigation.goBack : undefined}
+      onLeftButtonPress={navigation.goBack}
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>

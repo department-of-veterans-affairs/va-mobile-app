@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { NotificationsState, loadPushPreferences, setPushPref } from 'store/slices'
+import { Notifications } from 'react-native-notifications'
+import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } from 'store/slices'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -19,15 +20,26 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
-  const { preferences, loadingPreferences, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>((state) => state.notifications)
+  const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>(
+    (state) => state.notifications,
+  )
   const goToSettings = () => {
     Linking.openSettings()
   }
-
   const dispatch = useAppDispatch()
 
   useOnResumeForeground(() => {
-    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
+    if (deviceToken) {
+      dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
+    } else {
+      Notifications.events().registerRemoteNotificationsRegistered((event) => {
+        dispatch(registerDevice(event.deviceToken, true))
+      })
+      Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
+        dispatch(registerDevice())
+      })
+      Notifications.registerRemoteNotifications()
+    }
   })
 
   useEffect(() => {
@@ -52,12 +64,20 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
     )
   }
 
-  if (loadingPreferences) {
-    return <LoadingComponent text={t('notifications.loading')} />
+  if (loadingPreferences || registeringDevice) {
+    return (
+      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+        <LoadingComponent text={t('notifications.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (settingPreference) {
-    return <LoadingComponent text={t('notifications.saving')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+        <LoadingComponent text={t('notifications.saving')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   const personalizeText = systemNotificationsOn

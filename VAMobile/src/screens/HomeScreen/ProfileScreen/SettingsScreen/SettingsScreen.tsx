@@ -101,7 +101,11 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   if (settingBiometricPreference) {
-    return <LoadingComponent text={t('biometricsPreference.saving')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
+        <LoadingComponent text={t('biometricsPreference.saving')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (
