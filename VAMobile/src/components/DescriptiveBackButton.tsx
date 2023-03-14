@@ -36,7 +36,13 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
 
   return (
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} accessibilityRole="button" accessibilityLabel={labelA11y ? labelA11y + t('back') : label + t('back')}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonSpacing} mt={theme.dimensions.buttonPadding} alignItems={'center'}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        ml={theme.dimensions.headerButtonSpacing}
+        mt={theme.dimensions.buttonPadding}
+        height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
+        alignItems={'center'}>
         <VAIcon mt={1} name={'ArrowLeft'} fill={theme.colors.icon.link} height={13} />
         <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {label}

@@ -68,7 +68,11 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   }
 
   if (loadingClaimsAndAppeals || personalInformationLoading) {
-    return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
+        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!claimsAndAppealsAccess) {
