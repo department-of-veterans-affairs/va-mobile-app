@@ -172,9 +172,9 @@ const DisabilityRatingsScreen: FC = () => {
 
   if (loading) {
     return (
-      <React.Fragment>
+      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
         <LoadingComponent text={t('disabilityRating.loading')} />
-      </React.Fragment>
+      </ChildTemplate>
     )
   }
 

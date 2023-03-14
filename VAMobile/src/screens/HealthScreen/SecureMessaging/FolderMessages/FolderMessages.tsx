@@ -85,7 +85,11 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   if (loading) {
     const text = t('secureMessaging.messages.loading')
-    return <LoadingComponent text={text} />
+    return (
+      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+        <LoadingComponent text={text} />
+      </ChildTemplate>
+    )
   }
 
   const folderMessages = messagesByFolderId ? messagesByFolderId[folderID] : { data: [], links: {}, meta: {} }

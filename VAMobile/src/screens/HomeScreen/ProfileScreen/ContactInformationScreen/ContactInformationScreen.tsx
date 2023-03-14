@@ -151,9 +151,9 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   if (loading) {
     return (
-      <React.Fragment>
+      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
         <LoadingComponent text={t('contactInformation.loading')} />
-      </React.Fragment>
+      </FeatureLandingTemplate>
     )
   }
 
