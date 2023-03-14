@@ -103,9 +103,9 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   if (loading) {
     return (
-      <React.Fragment>
+      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
         <LoadingComponent text={t('personalInformation.loading')} />
-      </React.Fragment>
+      </FeatureLandingTemplate>
     )
   }
 
