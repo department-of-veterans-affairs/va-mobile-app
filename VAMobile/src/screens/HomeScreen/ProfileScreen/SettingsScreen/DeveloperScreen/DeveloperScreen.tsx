@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { Box, BoxProps, ButtonTypesConstants, FeatureLandingTemplate, TextArea, TextView, VAButton, VAScrollView, VATextInput } from 'components'
+import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextArea, TextView, VAButton, VATextInput } from 'components'
 
 import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
@@ -77,12 +77,6 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
-
-  const props: BoxProps = {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  }
 
   const onCopy = (copy: string): void => {
     Clipboard.setString(copy)

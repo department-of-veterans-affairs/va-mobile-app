@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from 'react'
 
 import * as CommonComponents from 'components'
-import { Box, FeatureLandingTemplate, PickerItem, TextView, VAModalPicker, VAScrollView, VATextInput } from 'components'
+import { Box, FeatureLandingTemplate, PickerItem, TextView, VAModalPicker, VATextInput } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressOptions } from './PickerOptions'

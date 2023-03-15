@@ -285,7 +285,7 @@ export const AppTabs: FC = () => {
 export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
 
-  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.COMMON).t)
+  const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens()

@@ -1,4 +1,3 @@
-import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
@@ -42,7 +41,7 @@ export type HomeStackParamList = WebviewStackParams & {
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
-export const getHomeScreens = (t: TFunction) => {
+export const getHomeScreens = () => {
   return [
     <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'PreferredName'} name="PreferredName" component={PreferredNameScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,

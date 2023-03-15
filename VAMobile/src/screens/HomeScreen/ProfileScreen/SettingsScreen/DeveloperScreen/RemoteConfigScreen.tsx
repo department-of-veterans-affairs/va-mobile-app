@@ -1,4 +1,4 @@
-import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { logout } from 'store/slices/authSlice'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useState } from 'react'
