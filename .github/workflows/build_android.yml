@@ -61,14 +61,14 @@ jobs:
           node-version: '16'
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
-      - name: Install dependencies
-        run: |
+      - run: |
           yarn install --frozen-lockfile --non-interactive
           yarn env:staging
           yarn bundle:android
-      - name: Build
-        run: |
           cd android
           bundle check || bundle config set --local path 'vendor/bundle' && bundle install
           bundle update fastlane
           bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+      - name: Run tmate
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v2
