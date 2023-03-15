@@ -42,6 +42,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
+      - name: Set git config
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
       - name: Decode files
         run: |
           echo bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
@@ -68,6 +72,8 @@ jobs:
           yarn install --frozen-lockfile --non-interactive
           yarn env:staging
           yarn bundle:android
+      - name: Run fastlane
+        run: |
           cd android
           bundle check || bundle config set --local path 'vendor/bundle' && bundle install
           bundle update fastlane
