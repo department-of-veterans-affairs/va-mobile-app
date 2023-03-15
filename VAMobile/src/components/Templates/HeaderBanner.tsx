@@ -1,4 +1,4 @@
-import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Animated, Dimensions, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { Shadow, ShadowProps } from 'react-native-shadow-2'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
@@ -65,7 +65,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
-  const TEXT_CONSTRAINT_THRESHOLD = 30
+  const TEXT_CONSTRAINT_THRESHOLD = Dimensions.get('screen').width > 320 ? 30 : 20
 
   const transition = title?.type === 'Transition'
 
@@ -247,7 +247,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
             </Box>
 
             {title && (
-              <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
+              <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 8 : undefined}>
                 <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
                   <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
                 </View>
