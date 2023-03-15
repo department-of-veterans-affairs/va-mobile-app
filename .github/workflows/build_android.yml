@@ -44,7 +44,7 @@ jobs:
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - name: Decode files
         run: |
-          echo "bundle exec fastlane ${{ inputs.lane }} --verbose version:${{ inputs.version }} notes:${{ inputs.notes }} psTrack:${{ inputs.ps_track }}"
+          echo bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
           mkdir android/keys
           cd android/keys
           echo "$GOOGLE_KS" | base64 --decode > vamobile
