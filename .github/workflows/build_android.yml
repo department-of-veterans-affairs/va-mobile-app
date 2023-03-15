@@ -71,5 +71,4 @@ jobs:
           cd android
           bundle check || bundle config set --local path 'vendor/bundle' && bundle install
           bundle update fastlane
-          echo "bundle exec fastlane ${{ inputs.lane }} --verbose version:${{ inputs.version }} notes:${{ inputs.notes }} psTrack:${{ inputs.ps_track }}"
-          bundle exec fastlane ${{ inputs.lane }} --verbose version:${{ inputs.version }} notes:${{ inputs.notes }} psTrack:${{ inputs.ps_track }}
+          bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
