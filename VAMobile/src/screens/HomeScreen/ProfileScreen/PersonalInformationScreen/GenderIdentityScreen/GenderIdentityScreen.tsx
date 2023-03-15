@@ -9,7 +9,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, dispatchFinishEditGenderIdentity, getGenderIdentityOptions, updateGenderIdentity } from 'store/slices'
 import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
