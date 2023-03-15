@@ -62,9 +62,9 @@ platform :android do
 
     datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
     update_version_and_build(options[:version ])
-    bundle("Release")
-    puts ps_track
-    upload(ps_track)
+    # bundle("Release")
+    # puts ps_track
+    # upload(ps_track)
     bundle("Debug")
 
     if notes.to_s.empty?
