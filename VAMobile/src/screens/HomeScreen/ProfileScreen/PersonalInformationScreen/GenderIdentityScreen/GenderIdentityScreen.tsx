@@ -64,7 +64,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     return Object.keys(genderIdentityOptions).map((key: string) => {
       return {
         labelKey: genderIdentityOptions[key],
-        value: key.toUpperCase(),
+        value: key,
       }
     })
   }

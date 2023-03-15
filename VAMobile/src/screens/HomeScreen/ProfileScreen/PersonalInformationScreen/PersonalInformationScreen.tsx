@@ -38,7 +38,7 @@ const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): s
 
 const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction, genderIdentityOptions: GenderIdentityOptions): string => {
   if (profile?.genderIdentity) {
-    const genderIdentity = genderIdentityOptions[profile.genderIdentity.toLowerCase()]
+    const genderIdentity = genderIdentityOptions[profile.genderIdentity]
     return t('dynamicField', { field: genderIdentity })
   } else {
     return t('personalInformation.genericBody', { informationType: t('personalInformation.genderIdentity.title').toLowerCase() })

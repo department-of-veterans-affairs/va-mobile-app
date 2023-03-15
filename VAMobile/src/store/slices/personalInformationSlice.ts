@@ -578,7 +578,18 @@ export const getGenderIdentityOptions =
       dispatch(dispatchStartGetGenderIdentityOptions())
 
       const response = await api.get<GenderIdentityOptionsData>('/v0/user/gender_identity/edit')
-      const genderIdentityOptions = response?.data.attributes.options
+      const responseOptions = response?.data.attributes.options || {}
+
+      // TODO: Gender identity keys are returned in lowercase format from the API despite being
+      // stored as uppercase in a user's profile. We need to capitalize the keys so that they're
+      // consistent with what the PUT request for updating the genderIdentity field expects. There's
+      // a BE ticket for updating the format of the keys returned by the API to be uppercase. Once that
+      // ticket is complete, this can be removed, and the options from the API can be used as is.
+      const genderIdentityOptions = Object.keys(responseOptions).reduce((options: GenderIdentityOptions, key: string) => {
+        options[key.toUpperCase()] = responseOptions[key]
+        return options
+      }, {})
+
       dispatch(dispatchFinishGetGenderIdentityOptions({ genderIdentityOptions }))
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())

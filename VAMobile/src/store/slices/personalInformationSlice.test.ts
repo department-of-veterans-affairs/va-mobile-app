@@ -942,13 +942,13 @@ context('personalInformation', () => {
         data: {
           attributes: {
             options: {
-              M: 'Man',
-              B: 'Non-Binary',
-              TM: 'Transgender man',
-              TF: 'Transgender woman',
-              F: 'Woman',
-              N: 'Prefer not to answer',
-              O: 'A gender not listed',
+              m: 'Man',
+              b: 'Non-Binary',
+              tm: 'Transgender man',
+              tf: 'Transgender woman',
+              f: 'Woman',
+              n: 'Prefer not to answer',
+              o: 'A gender not listed',
             }
           }
         }
@@ -971,7 +971,15 @@ context('personalInformation', () => {
         expect(endAction?.state.personalInformation.error).toBeFalsy()
 
         const { personalInformation } = store.getState()
-        expect(personalInformation.genderIdentityOptions).toEqual(mockGenderIdentityPayload.data.attributes.options)
+        expect(personalInformation.genderIdentityOptions).toEqual({
+          M: 'Man',
+          B: 'Non-Binary',
+          TM: 'Transgender man',
+          TF: 'Transgender woman',
+          F: 'Woman',
+          N: 'Prefer not to answer',
+          O: 'A gender not listed',
+        })
     })
 
     it('should get an error if the API call fails', async() => {
