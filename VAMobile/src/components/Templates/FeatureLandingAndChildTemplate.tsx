@@ -58,6 +58,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
     flex: 1,
   }
 
+  // Grow container so short children like loading indicators are vertically centered
+  const contentContainerStyle: ViewStyle = { flexGrow: 1 }
+
   const headerProps: HeaderBannerProps = {
     leftButton: { text: backLabel, a11yLabel: backLabelA11y, onPress: backLabelOnPress, descriptiveBack: true },
     title: { type: 'Transition', title, a11yLabel: titleA11y, scrollOffset, transitionHeaderHeight },
@@ -108,6 +111,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
           onScroll={(event) => {
             transitionHeader(event.nativeEvent.contentOffset.y)
           }}
+          contentContainerStyle={contentContainerStyle}
           {...scrollViewProps}>
           <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
           {children}
