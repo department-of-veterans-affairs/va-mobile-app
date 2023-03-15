@@ -62,22 +62,6 @@ jobs:
   #       uses: mxschmitt/action-tmate@v2
 
   build_android_qa:
-    runs-on: ubuntu-latest
-    env:
-      ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
-      ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
-      ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
-      GOOGLE_KS: ${{ secrets.GOOGLE_KS }} # vamobile keystore base64 encoded
-      GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
-      GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-      FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
-      FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
-    steps:
-      - uses: actions/checkout@v3
-      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
-      - uses: ./.github/workflows/build_android.yml
-        with:
-          notes: 'Narin GHA Test'
-      - name: Run tmate
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v2
+    uses: ./.github/workflows/build_android.yml
+    with:
+      notes: 'Narin GHA Test'
