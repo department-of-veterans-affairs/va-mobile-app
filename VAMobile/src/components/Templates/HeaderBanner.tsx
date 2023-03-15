@@ -70,6 +70,13 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const transition = title?.type === 'Transition'
 
   /**
+   * Reducer to update the "VA" header opacity based on scroll
+   */
+  const VaOpacityReducer = (initOffset: number) => {
+    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight : initOffset
+  }
+
+  /**
    * Reducer to swap between "VA" and title based on scroll
    */
   const titleShowingReducer = (initTitleShowing: boolean) => {
@@ -79,6 +86,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     return transition ? title.scrollOffset >= title.transitionHeaderHeight : initTitleShowing
   }
 
+  const [VaOpacity, updateVaOpacity] = useReducer(VaOpacityReducer, transition ? title.scrollOffset : 0)
   const [titleShowing, updateTitleShowing] = useReducer(titleShowingReducer, false)
   const [titleFade] = useState(new Animated.Value(0))
 
@@ -87,6 +95,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
    */
   useEffect(() => {
     if (transition && (title.scrollOffset <= title.transitionHeaderHeight || !titleShowing)) {
+      updateVaOpacity()
       updateTitleShowing()
     }
   })
@@ -207,7 +216,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
           )
         } else {
           return (
-            <TextView variant="VAHeader" allowFontScaling={false}>
+            <TextView variant="VAHeader" opacity={VaOpacity} allowFontScaling={false}>
               VA
             </TextView>
           )
