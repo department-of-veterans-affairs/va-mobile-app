@@ -6,7 +6,6 @@ import { Box, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../../HealthStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
@@ -28,7 +27,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
 
   return (
     <LargePanel title={tc('appointmentsHelp')} rightButtonText={tc('close')}>
-      <Box mb={isIOS() ? theme.dimensions.contentMarginBottom : theme.dimensions.navBarHeight} mx={theme.dimensions.gutter} mt={theme.dimensions.cardPadding}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter} mt={theme.dimensions.cardPadding}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.beforeYourAppointment')}
         </TextView>
