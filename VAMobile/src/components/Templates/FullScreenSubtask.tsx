@@ -154,16 +154,12 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
-
-  // Grow container so short children like loading indicators are vertically centered
-  const contentContainerStyle: ViewStyle = { flexGrow: 1 }
-
   const titleMarginTop = showCrisisLineCta ? 0 : theme.dimensions.buttonPadding
 
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={contentContainerStyle}>
+      <VAScrollView scrollViewRef={scrollViewRef}>
         {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
         {title && (
           <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
