@@ -79,6 +79,13 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '13.4.1'
+      # Setup ruby with specified version
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0.2'
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          working-directory: VAMobile/ios
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - uses: actions/setup-node@v3
         with:

@@ -1,21 +1,23 @@
+# Daily (Weekday) QA Build workflow that runs the build_ios and build_android workflows
 name: Daily QA Build
 
 on:
   push:
     branches:
       - nr-4731-qa-workflow
+  # Run on weekdays 3:30 AM UTC
   # schedule:
-  #   - cron: '30 3 * * 1,2,3,4,5' # Weekdays 3:30 AM UTC
+  #   - cron: '30 3 * * 1,2,3,4,5' 
 
 defaults:
   run:
     working-directory: VAMobile
 
 jobs:
-  # ios:
-  #   name: iOS QA Build
-  #   uses: ./.github/workflows/build_ios.yml
-  #   secrets: inherit
+  ios:
+    name: iOS QA Build
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
   android:
     name: Android QA Build
     uses: ./.github/workflows/build_android.yml
