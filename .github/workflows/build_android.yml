@@ -3,21 +3,24 @@ name: Build Android
 on:
   workflow_call:
     inputs:
+      environment:
+        type: string
+        default: staging
       lane:
         type: string
         default: qa
-      version:
-        type: string
-        default: qa
-      ps_track:
+      notes:
         type: string
         default: ''
-      notes:
+      ps_track:
         type: string
         default: ''
       use_slack_thread:
         type: boolean
         default: true
+      version:
+        type: string
+        default: qa
 
 defaults:
   run:
@@ -45,7 +48,6 @@ jobs:
           git config --global user.email 'va-mobileapp@adhocteam.us'
       - name: Decode files
         run: |
-          echo bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
           mkdir android/keys
           cd android/keys
           echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
@@ -67,7 +69,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --frozen-lockfile --non-interactive
-          yarn env:staging
+          yarn env:${{ inputs.environment }}
           yarn bundle:android
       - name: Run fastlane
         run: |
@@ -75,6 +77,3 @@ jobs:
           bundle check || bundle config set --local path 'vendor/bundle' && bundle install
           bundle update fastlane
           bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
-      - name: Run tmate
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v2
