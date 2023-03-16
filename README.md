@@ -1,4 +1,4 @@
-# The VA: Health and Benefits
+# VA: Health and Benefits Mobile App
 
 This repository hosts the source code for the VA: Health and Benefits mobile app. For more information about the project as a whole, please visit [our documentation site](https://department-of-veterans-affairs.github.io/va-mobile-app/).
 
