@@ -68,11 +68,12 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const TEXT_CONSTRAINT_THRESHOLD = 30
 
   const transition = title?.type === 'Transition'
+
   /**
    * Reducer to update the "VA" header opacity based on scroll
    */
   const VaOpacityReducer = (initOffset: number) => {
-    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight : initOffset
+    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight / 2 : initOffset
   }
 
   /**
