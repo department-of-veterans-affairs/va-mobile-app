@@ -1,13 +1,12 @@
-# Daily (Weekday) QA Build workflow that runs the build_ios and build_android workflows
+# Daily QA Build workflow that runs the reusable build_ios and build_android workflows
+# with default inputs for QA builds
+
 name: Daily QA Build
 
 on:
-  push:
-    branches:
-      - nr-4731-qa-workflow
   # Run on weekdays 3:30 AM UTC
-  # schedule:
-  #   - cron: '30 3 * * 1,2,3,4,5' 
+  schedule:
+    - cron: '30 3 * * 1,2,3,4,5' 
 
 defaults:
   run:
