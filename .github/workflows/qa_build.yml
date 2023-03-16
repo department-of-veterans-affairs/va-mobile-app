@@ -60,12 +60,12 @@ jobs:
   #     - name: Run tmate
   #       if: ${{ failure() }}
   #       uses: mxschmitt/action-tmate@v2
-  build_ios_qa:
+  iOS:
     uses: ./.github/workflows/build_ios.yml
     with:
       notes: 'Narin GHA Test'
     secrets: inherit
-  # build_android_qa:
+  # Android:
   #   uses: ./.github/workflows/build_android.yml
   #   with:
   #     notes: 'Narin GHA Test'
