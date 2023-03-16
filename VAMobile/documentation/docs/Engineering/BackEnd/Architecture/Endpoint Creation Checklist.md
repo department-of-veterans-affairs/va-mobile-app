@@ -21,25 +21,35 @@
   * Added mapping of component section to `nginx_api_server.conf.j2` (`ansible/deployment/config/revproxy-vagov/templates/nginx_api_server.conf.j2`) _(if new component section added in `nginx_components.yml`)_
   * Added mapping of component section to `nginx_new_api_server.conf.j2` (`ansible/deployment/config/revproxy-vagov/templates/nginx_new_api_server.conf.j2`) _(if new component section added in `nginx_components.yml`)_
 ### Lighthouse CCG authorization services
-Some Lighthouse APIs use an authorization flow called, client credentials grant (CCG). See [Lighthouse documentation](https://dev-developer.va.gov/explore/authorization/docs/client-credentials?api=va_letter_generator) for more information. Mobile has already implemented this authorization flow with at least the immunizations endpoints so generating the JWT token logic can be borrowed from that. 
+Some Lighthouse APIs use an authorization flow called, client credentials grant (CCG). See [Lighthouse documentation](https://dev-developer.va.gov/explore/authorization/docs/client-credentials?api=va_letter_generator) for more information. Mobile has already implemented this authorization flow with at least the immunizations endpoints so generating the JWT token logic can be borrowed from that.
 
-Adding a new service will require the following steps: 
+Adding a new service will require the following steps:
+(For questions on the first two steps, contact Derek Brown.)
   1. Request sandbox access [here](https://developer.va.gov/onboarding/request-sandbox-access) or ask Lighthouse to expand the permissions of an existing client id we have with them to include the new API. If requesting a new client id, follow these steps:
   * install pem-jwk tool: https://www.npmjs.com/package/pem-jwk
   * In terminal, execute `openssl genrsa -out private.pem 2048`
   * `openssl rsa -in private.pem -out public.pem -outform PEM -pubout`
   * `cat public.pem | pem-jwk > public.jwk`
-  * Use the generated public.jwk file as your Oauth submission to Lighthouse and save the `private.pem` file for a later step. 
-  2. Add client id (or new permissions to existing) to `config/settings.yml`. See entry `lighthouse_health_immunization` as reference. client_id should be provided by the lighthouse onboarding form. Other urls were provided by a lighthouse contact, Derek Brown. Unclear if best practice is to create single client id with all scopes Mobile will need or if we want a client id for each service, I'm leaning towards the former.
+  * Use the generated public.jwk file as your Oauth submission to Lighthouse and save the `private.pem` file for a later step.
+  * client_id will be provided upon submission of the lighthouse onboarding form
+  2. Add a new section to `config/settings.yml` in the vets-api. See entry `lighthouse_health_immunization` as reference.
+  * each API requires its own section
+  * to find the config values, go [here](https://dev-developer.va.gov/explore/authorization/docs/client-credentials)
+  * select the the desired service from the "Select an API" dropdown menu and click "Update page"
+  * the `aud_claim_url` can be found in the "aud" section of the page
+  * the `access_token_url` can be found in the "Retrieving an access token" section. It will be the url in the example POST.
+  * the `api_scopes` can be found in the "scopes" section. Only include the ones you need.
+  * to get the other values, use the left nav bar to navigate to the documentation for the correct API. For example, if you want information for the Appeals Status API, you would go [here](https://dev-developer.va.gov/explore/appeals/docs/appeals?version=current).
+  * Near the top of the page, there should be a link to that APIs openapi.json. Click this link to reveal the json in a new tab. The `api_url` should be in that page as `url`.
   3. Add key path, private RSA key and other relevant urls, to [AWS](https://dsvagovcloud.signin.amazonaws-us-gov.com/console) with the following steps:
   * Login and find service `Systems Manager`
   * Goto `Parameter Store` in left column
-  * In search bar, type in `mobile` and use other mobile keys and urls as reference to how to format new ones. The names of these parameters need to match what is referenced in manifests repo changes listed below. 
-  <br/><br/>*Note: the formatting of the private RSA key is very particular. There should be no spaces or new lines. New lines should be replaced with /n. At time of writing, there is no checks in place for valid formatting so misformatting AWS values will cause production deployment to fail. May want to have Rachel Cassity double check any new values. Format should look something like this:* 
+  * In search bar, type in `mobile` and use other mobile keys and urls as reference to how to format new ones. The names of these parameters need to match what is referenced in manifests repo changes listed below.
+  <br/><br/>*Note: the formatting of the private RSA key is very particular. There should be no spaces or new lines. New lines should be replaced with /n. At time of writing, there is no checks in place for valid formatting so misformatting AWS values will cause production deployment to fail. May want to have Rachel Cassity double check any new values. Format should look something like this:*
 ```
 -----BEGIN RSA PRIVATE KEY-----\nLOTOFCHARACTERSHERE\n-----END RSA PRIVATE KEY-----
 ```
-  4. Add key path and other relevant urls to [vsp-infra-application-manifests repo](https://github.com/department-of-veterans-affairs/vsp-infra-application-manifests) in the following locations: 
+  4. Add key path and other relevant urls to [vsp-infra-application-manifests repo](https://github.com/department-of-veterans-affairs/vsp-infra-application-manifests) in the following locations:
   * apps/vets-api/staging/values.yaml
   * apps/vets-api/staging/templates/secrets.yaml
   * apps/vets-api/prod/values.yaml
@@ -52,4 +62,4 @@ Adding a new service will require the following steps:
   <br/><br/>*Note: Immunizations was also added to dev ansible config but we don't use dev so that should be unnecessary. Text search for `immunization` as reference to formatting.*
   <br/><br/>*Note: If you have any questions or need approvals for devops or manifests PRs, your best point of contact is Rachal Cassity*
 
-  6. Once sandbox is working, you must request production access separately though the same onboarding link above. 
+  6. Once sandbox is working, you must request production access separately though the same onboarding link above.
