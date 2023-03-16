@@ -71,7 +71,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
       if (profile?.genderIdentity && !Object.keys(genderIdentityOptions).length) {
         dispatch(getGenderIdentityOptions(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
-    }, [dispatch, genderIdentityOptions, profile]),
+    }, [dispatch, genderIdentityOptions, profile?.genderIdentity]),
   )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
@@ -143,7 +143,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
         <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
           <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
         </Pressable>
-        {featureEnabled('preferredNameGender') && (
+        {!featureEnabled('preferredNameGender') && (
           <>
             <LargeNavButton
               title={t('personalInformation.preferredName.title')}
