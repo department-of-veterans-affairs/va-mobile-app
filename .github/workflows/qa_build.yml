@@ -12,9 +12,9 @@ defaults:
     working-directory: VAMobile
 
 jobs:
-  iOS:
-    uses: ./.github/workflows/build_ios.yml
-    secrets: inherit
+  # iOS:
+  #   uses: ./.github/workflows/build_ios.yml
+  #   secrets: inherit
   Android:
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
