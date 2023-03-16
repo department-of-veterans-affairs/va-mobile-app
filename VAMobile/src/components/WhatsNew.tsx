@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText, VAButton } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -19,6 +19,8 @@ export const WhatsNew = () => {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const [localVersion, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
+
+  const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}`
 
   useEffect(() => {
     async function checkLocalVersion() {
@@ -61,20 +63,49 @@ export const WhatsNew = () => {
   }
 
   //@ts-ignore
-  const bodyA11yLabel = t('whatsNew.bodyCopy.a11yLabel.' + localVersion)
+  const labelValue = t(`${BODY_PREFIX}a11yLabel`)
+  const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue
 
   //@ts-ignore
-  const body = t('whatsNew.bodyCopy.' + localVersion)
+  const body = t(BODY_PREFIX)
+
+  const getBullets = () => {
+    const bullets: VABulletListText[] = []
+
+    while (1) {
+      const bulletKey = `${BODY_PREFIX}bullet.${bullets.length + 1}`
+      //@ts-ignore
+      const text = t(bulletKey)
+      //@ts-ignore
+      const a11yLabel = t(`${bulletKey}.a11yLabel`)
+
+      if (text.startsWith(BODY_PREFIX) || !text || bullets.length > 20) {
+        return bullets
+      } else {
+        bullets.push({
+          text,
+          a11yLabel: a11yLabel.startsWith(BODY_PREFIX) ? undefined : a11yLabel,
+        })
+      }
+    }
+  }
+
+  const bullets = getBullets() || []
 
   const props: CollapsibleAlertProps = {
     border: 'informational',
     headerText: t('whatsNew.title'),
     body: (
       <>
-        <TextView mb={theme.dimensions.standardMarginBetween} accessibilityLabel={bodyA11yLabel}>
-          {body}
-        </TextView>
-        <VAButton onPress={onPress} label={t('whatsNew.dontShowAgain')} buttonType={ButtonTypesConstants.buttonSecondary} />
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <TextView accessibilityLabel={bodyA11yLabel}>{body}</TextView>
+          {bullets.length ? (
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <VABulletList listOfText={bullets} />
+            </Box>
+          ) : undefined}
+        </Box>
+        <VAButton onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonTypesConstants.buttonSecondary} />
       </>
     ),
     a11yLabel: t('whatsNew.title'),
@@ -82,7 +113,7 @@ export const WhatsNew = () => {
     onCollapse: closeCollapsible,
   }
 
-  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== 'whatsNew.bodyCopy.' + localVersion) {
+  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX) {
     whatsNewAppeared()
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
