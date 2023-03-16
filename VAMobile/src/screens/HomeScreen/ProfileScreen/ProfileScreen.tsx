@@ -104,10 +104,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   if (militaryInformationLoading || personalInformationLoading) {
     return (
-      <React.Fragment>
+      <ChildTemplate title={t('profile.title')} backLabel={t('home')} backLabelOnPress={navigation.goBack}>
         <NameTag />
         <LoadingComponent text={t('profile.loading')} />
-      </React.Fragment>
+      </ChildTemplate>
     )
   }
 
