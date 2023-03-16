@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
 import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
@@ -34,6 +34,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -99,7 +100,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
       <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
           <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
-          {title ? <TextView {...subtitleProps}>{title}</TextView> : null}
+          {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
         </View>
         {children}
       </VAScrollView>

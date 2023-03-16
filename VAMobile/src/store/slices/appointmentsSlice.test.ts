@@ -137,6 +137,22 @@ export const bookedAppointmentsList: AppointmentsList = [
       },
     },
   },
+  {
+    ...defaultAppoinment,
+    id: '10',
+    attributes: {
+      ...defaultAppointmentAttributes,
+      appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
+      startDateUtc: '2021-08-11T20:15:14.000+00:00',
+      startDateLocal: '2021-08-11T19:15:14.000-01:00',
+      minutesDuration: 150,
+      location: {
+        ...defaultAppointmentLocation,
+        url: 'https://dev.care.va.gov',
+        code: '654321',
+      },
+    },
+  },
 ]
 
 export const canceledAppointmentList: AppointmentsList = [

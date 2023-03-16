@@ -116,7 +116,11 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   }
 
   if (loading) {
-    return <LoadingComponent text={t('letters.list.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
+        <LoadingComponent text={t('letters.list.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!lettersAndDocuments || !letters || letters.length === 0) {
