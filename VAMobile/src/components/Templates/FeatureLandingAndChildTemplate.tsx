@@ -1,9 +1,9 @@
-import { LayoutChangeEvent, StatusBar, View, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { TextView, TextViewProps, VAIconProps } from 'components'
-import { useTheme } from 'utils/hooks'
+import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
@@ -24,10 +24,14 @@ type headerButton = {
 export type ChildTemplateProps = {
   /** Translated label text for descriptive back button */
   backLabel: string
+  /** Optional a11y label for back button  */
+  backLabelA11y?: string
   /** On press navigation for descriptive back button */
   backLabelOnPress: () => void
   /** Title for page that transitions to header */
   title: string
+  /** Optional a11y label for title  */
+  titleA11y?: string
   /** Optional header button requiring label, icon, and onPress props */
   headerButton?: headerButton
   /** Optional footer content pinned below the scrollable space */
@@ -38,9 +42,11 @@ export type ChildTemplateProps = {
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
 
-export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPress, title, headerButton, children, footerContent, scrollViewProps }) => {
+export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
+  const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -53,8 +59,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: { text: backLabel, onPress: backLabelOnPress, descriptiveBack: true },
-    title: { type: 'Transition', title, scrollOffset, transitionHeaderHeight },
+    leftButton: { text: backLabel, a11yLabel: backLabelA11y, onPress: backLabelOnPress, descriptiveBack: true },
+    title: { type: 'Transition', title, a11yLabel: titleA11y, scrollOffset, transitionHeaderHeight },
     rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }
 
@@ -85,8 +91,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
    * @param event - Layout change event wrapping the subtitle
    */
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
-    // Subtract out bottom padding to closely align transition with subtitle fully disappearing
-    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween
+    // Subtract out bottom padding and 1/3 scaled font line height to closely align transition before subtitle fully disappearing
+    const partialFontHeight = (theme.fontSizes.BitterBoldHeading.lineHeight * fontScale) / 3
+    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween - partialFontHeight
     setTransitionHeaderHeight(height)
   }
 
@@ -102,9 +109,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelOnPr
             transitionHeader(event.nativeEvent.contentOffset.y)
           }}
           {...scrollViewProps}>
-          <View onLayout={getTransitionHeaderHeight}>
-            <TextView {...subtitleProps}>{title}</TextView>
-          </View>
+          <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
           {children}
         </VAScrollView>
         {footerContent}

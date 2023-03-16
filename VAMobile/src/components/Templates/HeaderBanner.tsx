@@ -1,9 +1,11 @@
-import { Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Shadow, ShadowProps } from 'react-native-shadow-2'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 export type HeaderLeftButtonProps = {
   text: string
@@ -51,15 +53,19 @@ export type HeaderBannerProps = {
   rightButton?: HeaderRightButtonProps
   /** 1px banner border dividing the header from page content, default no divider */
   divider?: boolean
+  /** shows the menu icon with the specified action types (won't be shown if rightButton is set) */
+  menuViewActions?: MenuViewActionsType
 }
 
-const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider }) => {
+const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
-  // focus sets initial screen reader focus on screen entry in iOS; Android does not respect focus and has an RN crash if set to non-interacting element (e.g. Title)
-  const focus = Platform.OS === 'android' ? undefined : leftButton ? 'Left' : title ? 'Title' : 'Right'
+  const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
+
+  const TEXT_CONSTRAINT_THRESHOLD = 30
 
   const transition = title?.type === 'Transition'
 
@@ -74,6 +80,9 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
    * Reducer to swap between "VA" and title based on scroll
    */
   const titleShowingReducer = (initTitleShowing: boolean) => {
+    if (screenReaderEnabled) {
+      return true
+    }
     return transition ? title.scrollOffset >= title.transitionHeaderHeight : initTitleShowing
   }
 
@@ -114,18 +123,32 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       }).start()
   })
 
+  const zIndex = {
+    zIndex: 1,
+  }
+
+  const headerDropShadow: ShadowProps =
+    titleShowing && !screenReaderEnabled
+      ? {
+          startColor: theme.colors.background.headerDropShadow,
+          distance: 4,
+          sides: { start: false, top: false, bottom: true, end: false },
+        }
+      : { disabled: true }
+
   const titleBannerProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
     minHeight: theme.dimensions.headerHeight,
-    backgroundColor: 'main',
+    backgroundColor: bannerDivider ? 'largePanelHeader' : 'main',
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
   }
 
   const commonBoxProps: BoxProps = {
     alignItems: 'center',
+    justifyContent: 'center',
     p: theme.dimensions.buttonPadding,
     minHeight: theme.dimensions.headerHeight,
   }
@@ -133,6 +156,11 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   let leftTextViewProps: TextViewProps = {}
   let titleTextViewProps: TextViewProps = {}
   let rightTextViewProps: TextViewProps = {}
+
+  // Calculate total length of header text. If too long, force title to wrap
+  const titleLength = title?.type === 'VA' ? 2 : title?.title.length || 0
+  const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text.length || 0)
+  const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
 
   if (leftButton) {
     leftTextViewProps = {
@@ -144,12 +172,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   }
 
   const titleA11y = title?.type === 'VA' ? 'V-A' : title?.a11yLabel ? title.a11yLabel : title?.title
-  const titleViewRef = { ref: focus === 'Title' ? focusTitle : () => {} } // Sets screen reader focus to title when appropriate
-  const titleViewProps: ViewProps = {
-    accessibilityLabel: titleA11y,
-    accessibilityRole: 'header',
-    accessible: true,
-  }
+  const titleViewProps: ViewProps = { accessibilityLabel: titleA11y, accessibilityRole: 'header', accessible: true }
   const titleBoxProps: BoxProps = {
     ...commonBoxProps,
     accessibilityElementsHidden: true,
@@ -157,7 +180,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   }
   if (title) {
     titleTextViewProps = {
-      variant: transition ? 'MobileBody' : title.type === 'VA' ? 'VAHeader' : 'MobileBodyBold',
+      variant: transition ? 'MobileBodyTight' : title.type === 'VA' ? 'VAHeader' : 'MobileBodyBold',
+      textAlign: 'center',
       allowFontScaling: false,
     }
   }
@@ -202,46 +226,55 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   }
 
   return (
-    <>
-      <Box {...titleBannerProps}>
-        <Box flex={1}>
-          {leftButton?.descriptiveBack ? (
-            <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
-          ) : leftButton ? (
-            <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-              <TouchableWithoutFeedback ref={focus === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
-                <Box {...commonBoxProps}>
-                  <Box display="flex" flexDirection="row" alignItems="center">
-                    <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
-                  </Box>
+    <View {...zIndex}>
+      <Shadow {...headerDropShadow}>
+        <View {...titleBannerProps}>
+          <Box {...titleBannerProps}>
+            <Box flex={4} alignItems="flex-start">
+              {leftButton?.descriptiveBack ? (
+                <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
+              ) : leftButton ? (
+                <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+                  <TouchableWithoutFeedback ref={focus === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
+                    <Box {...commonBoxProps}>
+                      <Box display="flex" flexDirection="row" alignItems="center">
+                        <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
+                      </Box>
+                    </Box>
+                  </TouchableWithoutFeedback>
                 </Box>
-              </TouchableWithoutFeedback>
+              ) : null}
             </Box>
-          ) : null}
-        </Box>
 
-        <Box mt={theme.dimensions.buttonPadding} flex={2}>
-          <View {...titleViewRef}>
-            <View {...titleViewProps}>
-              <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
-            </View>
-          </View>
-        </Box>
-
-        <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={1} alignItems={'flex-end'}>
-          {rightButton && (
-            <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
-              <Box {...commonBoxProps}>
-                {rightButton.icon && <VAIcon {...rightButton.icon} preventScaling={true} />}
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
-                </Box>
+            {title && (
+              <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
+                <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
+                  <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
+                </View>
               </Box>
-            </TouchableWithoutFeedback>
-          )}
-        </Box>
-      </Box>
-    </>
+            )}
+
+            <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
+              {rightButton && (
+                <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
+                  <Box {...commonBoxProps}>
+                    {rightButton.icon && <VAIcon fill="link" height={24} width={24} preventScaling={true} {...rightButton.icon} />}
+                    <Box display="flex" flexDirection="row" alignItems="center">
+                      <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
+                    </Box>
+                  </Box>
+                </TouchableWithoutFeedback>
+              )}
+              {!rightButton && menuViewActions && (
+                <Box {...commonBoxProps}>
+                  <MenuView actions={menuViewActions} />
+                </Box>
+              )}
+            </Box>
+          </Box>
+        </View>
+      </Shadow>
+    </View>
   )
 }
 

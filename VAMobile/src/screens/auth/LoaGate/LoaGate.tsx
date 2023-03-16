@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, TextView, TextViewProps, VABulletList, VAButton, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, FullScreenSubtask, TextView, TextViewProps, VABulletList, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
+import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation } from 'utils/hooks'
 import { useTheme } from 'utils/hooks'
 
@@ -11,9 +11,9 @@ type LoaGateProps = Record<string, unknown>
 
 const LoaGate: FC<LoaGateProps> = ({}) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-
+  const navigation = useNavigation()
   const onConfirm = navigateTo('WebviewLogin')
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
@@ -32,7 +32,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Sign-in: L-o-a-gate-page')}>
+    <FullScreenSubtask leftButtonText={t('back')} onLeftButtonPress={navigation.goBack}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView {...bodyTextProps}>{t('loaGate.p1')}</TextView>
@@ -74,7 +74,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           />
         </Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

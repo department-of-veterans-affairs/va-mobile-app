@@ -1,4 +1,4 @@
-import { Pressable, PressableProps, ScrollView, StyleProp, ViewStyle } from 'react-native'
+import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
@@ -16,6 +16,7 @@ import {
   CollapsibleAlert,
   CollapsibleAlertProps,
   ErrorComponent,
+  FeatureLandingTemplate,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -31,7 +32,7 @@ import {
   VAButton,
   VAButtonProps,
   VAIcon,
-  VAScrollView,
+  VAIconProps,
 } from 'components'
 import {
   DowntimeFeatureTypeConstants,
@@ -227,23 +228,43 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support multiple screen IDs
   if (prescriptionInDowntime) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (hasError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!prescriptionsAuthorized) {
-    return <PrescriptionHistoryNotAuthorized />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <PrescriptionHistoryNotAuthorized />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loadingHistory) {
-    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
-    return <PrescriptionHistoryNoPrescriptions />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <PrescriptionHistoryNoPrescriptions />
+      </FeatureLandingTemplate>
+    )
   }
 
   const tabs: TabsValuesType = [
@@ -343,10 +364,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     })
 
     return listItems
-  }
-
-  const mainViewStyle: StyleProp<ViewStyle> = {
-    flexGrow: 1,
   }
 
   const renderPagination = (): ReactNode => {
@@ -596,24 +613,32 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   }
 
+  const helpIconProps: VAIconProps = {
+    name: 'QuestionMark',
+  }
+
+  const headerButton = {
+    label: tc('help'),
+    icon: helpIconProps,
+    onPress: navigateTo('PrescriptionHelp'),
+  }
+
   return (
-    <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
-      <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={mainViewStyle}>
-        {getRequestRefillButton()}
-        <TabBar {...tabProps} />
-        <Box {...filterWrapperProps}>
-          <Box {...filterContainerProps}>
-            <Box mr={8} mb={10}>
-              <RadioGroupModal {...filterProps} />
-            </Box>
-            <Box mb={10}>
-              <RadioGroupModal {...sortProps} />
-            </Box>
+    <FeatureLandingTemplate headerButton={headerButton} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+      {getRequestRefillButton()}
+      <TabBar {...tabProps} />
+      <Box {...filterWrapperProps}>
+        <Box {...filterContainerProps}>
+          <Box mr={8} mb={10}>
+            <RadioGroupModal {...filterProps} />
+          </Box>
+          <Box mb={10}>
+            <RadioGroupModal {...sortProps} />
           </Box>
         </Box>
-        {getContent()}
-      </VAScrollView>
-    </Box>
+      </Box>
+      {getContent()}
+    </FeatureLandingTemplate>
   )
 }
 

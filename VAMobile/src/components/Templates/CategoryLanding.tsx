@@ -1,9 +1,9 @@
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, View, ViewStyle } from 'react-native'
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
 import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
@@ -31,8 +31,10 @@ export type CategoryLandingProps = {
 
 export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
+  const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -85,8 +87,9 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
    * @param event - Layout change event wrapping the Veteran's Crisis Line and subtitle
    */
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
-    // Subtract out bottom padding to closely align transition with subtitle fully disappearing
-    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween
+    // Subtract out bottom padding and 1/3 scaled font line height to closely align transition before subtitle fully disappearing
+    const partialFontHeight = (theme.fontSizes.BitterBoldHeading.lineHeight * fontScale) / 3
+    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween - partialFontHeight
     setTransitionHeaderHeight(height)
   }
 
@@ -94,11 +97,10 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-
       <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
           <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
-          {title ? <TextView {...subtitleProps}>{title}</TextView> : null}
+          {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
         </View>
         {children}
       </VAScrollView>

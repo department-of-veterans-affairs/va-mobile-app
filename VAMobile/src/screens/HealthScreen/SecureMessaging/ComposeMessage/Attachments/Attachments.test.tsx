@@ -10,7 +10,7 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import Attachments from './Attachments'
 import { AlertBox, TextView, VAButton } from 'components'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { when } from 'jest-when'
 
 let mockShowActionSheetWithOptions = jest.fn()
@@ -51,9 +51,9 @@ context('Attachments', () => {
     mockNavigateToEditDraftSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('EditDraft', { attachmentFileToAdd: {name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
-        .mockReturnValue(mockNavigateToEditDraftSpy)
+      .mockReturnValue(() => {})
+      .calledWith('EditDraft', { attachmentFileToAdd: { name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
+      .mockReturnValue(mockNavigateToEditDraftSpy)
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentsList } })
 
@@ -113,7 +113,7 @@ context('Attachments', () => {
       expect(allButtons[0].props.label).toEqual('Attach')
       expect(allButtons[1].props.label).toEqual('Cancel')
 
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('custom-file-name.docx (0.1 MB)')
+      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('custom-file-name.docx (0.1 MB)')
     })
 
     describe('on click of the attach button', () => {
@@ -219,7 +219,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual(
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
             'The file type you are trying to upload is not allowed. Please confirm that your file is one of the following formats: doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.',
           )
         })
@@ -247,15 +247,15 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual(
-            'The file you are trying to upload exceeds the 3 MB limit. Please reduce the file size and try again.',
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
+            'The file you are trying to upload exceeds the 6 MB limit. Please reduce the file size and try again.',
           )
         })
       })
 
       describe('when the error is a sum of files size error', () => {
         it('should display the sum of file size error message', async () => {
-          initializeTestInstance([{ size: 6291456 } as DocumentPickerResponse])
+          initializeTestInstance([{ size: 10485760 } as DocumentPickerResponse])
 
           const failCasePromise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 1000 } as DocumentPickerResponse)
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
@@ -277,8 +277,8 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual(
-            'The sum of the file(s) you are trying to upload exceeds the 6 MB limit. Please reduce the file(s) size and try again.',
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
+            'The sum of the file(s) you are trying to upload exceeds the 10 MB limit. Please reduce the file(s) size and try again.',
           )
         })
       })
@@ -307,7 +307,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('File already uploaded. Please select a different file.')
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('File already uploaded. Please select a different file.')
         })
       })
     })

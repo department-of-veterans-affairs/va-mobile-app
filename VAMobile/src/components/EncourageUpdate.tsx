@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, VAButton, WhatsNew } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/encourageUpdate'
+import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { requestStorePopup } from 'utils/rnInAppUpdate'
@@ -90,7 +90,11 @@ export const EncourageUpdateAlert = () => {
         </AlertBox>
       </Box>
     )
+  } else if (localVersionName && storeVersion && localVersionName === storeVersion) {
+    return <WhatsNew />
   } else {
     return null
   }
 }
+
+export default EncourageUpdateAlert

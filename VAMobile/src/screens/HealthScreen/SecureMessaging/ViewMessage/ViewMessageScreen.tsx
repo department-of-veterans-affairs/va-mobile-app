@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
+import { DemoState } from 'store/slices/demoSlice'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -15,8 +16,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
+import { formatSubject, getfolderName } from 'utils/secureMessaging'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -41,6 +41,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
+  const [showModalPicker, setShowModalPicker] = useState(false)
 
   /* useref is used to persist the folder the message is in Example the message was first in test folder and the user moves it to test2. The user is still under folder
     test but the message is not. So if the user selects move again and move to another folder test3 and clicks undo you want the message to go to test2 not test which
@@ -50,6 +51,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
@@ -60,6 +62,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
   const subject = message ? message.subject : ''
   const category = message ? message.category : 'OTHER'
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
   useLayoutEffect(() => {
@@ -145,16 +148,27 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     })
   })
 
+  const backLabel =
+    Number(folderWhereMessagePreviousewas.current) === SecureMessagingSystemFolderIdConstants.INBOX
+      ? tc('messages')
+      : tc('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
+
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
+    return (
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
+      </ChildTemplate>
+    )
   }
 
   if (loading || loadingFile || movingMessage) {
     return (
-      <LoadingComponent
-        text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
-      />
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+        <LoadingComponent
+          text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
+        />
+      </ChildTemplate>
     )
   }
 
@@ -164,13 +178,13 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     return <></>
   }
 
-  const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
+  const replyExpired = demoMode && message.messageId === 2092809 ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
   const onMove = (value: string) => {
+    setShowModalPicker(false)
     const currentFolder = Number(folderWhereMessageIs.current)
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
-    const withNavBar = replyExpired ? false : true
     const snackbarMessages: SnackbarMessages = {
       successMsg: GenerateFolderMessage(t, newFolder, folders, false, false),
       errorMsg: GenerateFolderMessage(t, newFolder, folders, false, true),
@@ -180,33 +194,61 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
-      dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders, withNavBar))
+      dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders))
     }
   }
 
+  const moveIconProps: VAIconProps = {
+    name: 'FolderSolid',
+    width: 22,
+    height: 22,
+    preventScaling: true,
+    fill: 'link',
+  }
+
+  const headerButton =
+    currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
+      ? undefined
+      : {
+          label: tc('pickerLaunchBtn'),
+          icon: moveIconProps,
+          onPress: () => setShowModalPicker(true),
+        }
+
   return (
-    <>
-      <VAScrollView {...testIdProps('ViewMessage-page')}>
-        {!replyExpired ? (
-          <ReplyMessageButton messageID={messageID} />
-        ) : (
-          <Box>
-            <ComposeMessageButton />
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
-            </Box>
+    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton}>
+      {headerButton && showModalPicker && (
+        <VAModalPicker
+          selectedValue={newCurrentFolderID}
+          onSelectionChange={onMove}
+          onClose={() => setShowModalPicker(false)}
+          pickerOptions={getFolders()}
+          labelKey={'common:pickerMoveMessageToFolder'}
+          buttonText={'common:pickerLaunchBtn'}
+          confirmBtnText={'common:pickerLaunchBtn'}
+          key={newCurrentFolderID}
+          showModalByDefault={true}
+        />
+      )}
+      {!replyExpired ? (
+        <ReplyMessageButton messageID={messageID} />
+      ) : (
+        <Box>
+          <ComposeMessageButton />
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
           </Box>
-        )}
-        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-          <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-            <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
-              {formatSubject(category, subject, t)}
-            </TextView>
-          </Box>
-          {renderMessages(message, messagesById, thread)}
         </Box>
-      </VAScrollView>
-    </>
+      )}
+      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+          <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
+            {formatSubject(category, subject, t)}
+          </TextView>
+        </Box>
+        {renderMessages(message, messagesById, thread)}
+      </Box>
+    </ChildTemplate>
   )
 }
 

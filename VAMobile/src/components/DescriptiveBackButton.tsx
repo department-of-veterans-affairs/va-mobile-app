@@ -17,6 +17,8 @@ export type DescBackButtonProps = {
   onPress: () => void
   /** already translated display text */
   label: string
+  /** already translated a11y text */
+  labelA11y?: string
   /** boolean to specify if we want accessibility to focus on the back button */
   focusOnButton?: boolean
 }
@@ -24,7 +26,7 @@ export type DescBackButtonProps = {
 /**
  * Descriptive button used by the stack navigation to go back to the previous screen
  */
-export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label, focusOnButton = true }) => {
+export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label, labelA11y, focusOnButton = true }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -33,8 +35,14 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
   useFocusEffect(focusOnButton ? setFocus : () => {})
 
   return (
-    <TouchableWithoutFeedback ref={focusRef} onPress={onPress} accessibilityRole="button" accessibilityLabel={label + t('back')}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} alignItems={'center'}>
+    <TouchableWithoutFeedback ref={focusRef} onPress={onPress} accessibilityRole="button" accessibilityLabel={labelA11y ? labelA11y + t('back') : label + t('back')}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        ml={theme.dimensions.headerButtonSpacing}
+        mt={theme.dimensions.buttonPadding}
+        height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
+        alignItems={'center'}>
         <VAIcon mt={1} name={'ArrowLeft'} fill={theme.colors.icon.link} height={13} />
         <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {label}
