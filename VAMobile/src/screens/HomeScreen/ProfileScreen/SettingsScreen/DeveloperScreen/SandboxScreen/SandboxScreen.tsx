@@ -1,14 +1,18 @@
 import React, { FC, useMemo, useState } from 'react'
 
 import * as CommonComponents from 'components'
-import { Box, PickerItem, TextView, VAModalPicker, VAScrollView, VATextInput } from 'components'
+import { Box, FeatureLandingTemplate, PickerItem, TextView, VAModalPicker, VATextInput } from 'components'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressOptions } from './PickerOptions'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhiteList'
 
-const SandboxScreen: FC = () => {
+type SandboxScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Sandbox'>
+
+const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
@@ -122,7 +126,7 @@ const SandboxScreen: FC = () => {
   }
 
   return (
-    <VAScrollView>
+    <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('sandbox.title')}>
       <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
         {componentPicker()}
         <Box my={theme.dimensions.standardMarginBetween}>{renderOptions()}</Box>
@@ -130,7 +134,7 @@ const SandboxScreen: FC = () => {
           {renderSandboxComponent()}
         </Box>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 
