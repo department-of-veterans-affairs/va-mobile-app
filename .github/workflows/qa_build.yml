@@ -12,9 +12,13 @@ defaults:
     working-directory: VAMobile
 
 jobs:
-  # iOS:
+  # ios:
+  #   name: iOS QA Build
   #   uses: ./.github/workflows/build_ios.yml
   #   secrets: inherit
-  Android:
+  android:
+    name: Android QA Build
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
+    with:
+      notes: 'Narin GHA Test'
