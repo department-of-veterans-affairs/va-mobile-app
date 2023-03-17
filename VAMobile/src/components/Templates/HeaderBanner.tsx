@@ -55,14 +55,16 @@ export type HeaderBannerProps = {
   divider?: boolean
   /** shows the menu icon with the specified action types (won't be shown if rightButton is set) */
   menuViewActions?: MenuViewActionsType
+  /** prevents accessibility focus for scenarios where focus is managed elsewhere */
+  preventFocus?: boolean
 }
 
-const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions }) => {
+const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions, preventFocus }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
-  useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
+  useFocusEffect(preventFocus ? () => {} : focus === 'Title' ? setFocusTitle : setFocus)
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const TEXT_CONSTRAINT_THRESHOLD = 30
