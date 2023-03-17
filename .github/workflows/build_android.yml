@@ -37,7 +37,7 @@ on:
 
 defaults:
   run:
-    working-directory: VAMobile
+    working-directory: VAMobile/android
 
 env:
   # IAM staging app client secret
@@ -70,8 +70,8 @@ jobs:
       # Firebase distribution key, and Firebase analytics/crashlytics json
       - name: Decode files
         run: |
-          mkdir android/keys
-          cd android/keys
+          mkdir keys
+          cd keys
           echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
           echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
           echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
@@ -84,7 +84,7 @@ jobs:
           ruby-version: '3.0.2'
           # Runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
-          working-directory: VAMobile/android
+          # working-directory: VAMobile/android
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - name: Setup node
         uses: actions/setup-node@v3
@@ -101,8 +101,6 @@ jobs:
         run: yarn bundle:android
       # Run fastlane using provided inputs
       - name: Update fastlane
-        run: |
-          cd android
-          bundle update fastlane
+        run: bundle update fastlane
       - name: Run fastlane
         run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
