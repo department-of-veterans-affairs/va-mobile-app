@@ -88,7 +88,7 @@ export const LargePanel: FC<LargePanelProps> = ({
     title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
     rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress } : undefined,
     divider: true,
-    preventFocus: isIOS(),
+    preventFocus: isIOS(), // Prevents double focus in iOS since VoiceOver already focuses on the first element of a screen by default
   }
 
   const fillStyle: ViewStyle = {
