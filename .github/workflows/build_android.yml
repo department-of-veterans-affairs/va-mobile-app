@@ -58,7 +58,7 @@ env:
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
 
 jobs:
-  Build:
+  build_android:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

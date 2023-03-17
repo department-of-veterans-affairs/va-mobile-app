@@ -47,7 +47,7 @@ env:
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
 
 jobs:
-  Build:
+  build_ios:
     runs-on: macos-latest
     env:
       # App Store Connect Issuer ID
