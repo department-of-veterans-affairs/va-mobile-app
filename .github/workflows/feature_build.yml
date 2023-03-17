@@ -1,0 +1,28 @@
+name: Feature Build
+
+on:
+  push:
+    tags:
+      - 'feature-build-*'
+    branches:
+      - nr-4736-feature-build-workflow
+
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+jobs:
+  ios:
+    name: iOS Feature Build
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: on_demand
+  android:
+    name: Android Feature Build
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: on_demand
+
