@@ -86,17 +86,18 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       # Install node dependencies and bundle app
-      - name: Install dependencies
-        working-directory: VAMobile
-        run: |
-          yarn install --frozen-lockfile --non-interactive
-          yarn env:${{ inputs.environment }}
-          yarn bundle:ios
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set app environment variables
+        run: yarn env:${{ inputs.environment }}
+      - name: Bundle app
+        run: yarn bundle:ios
       # Install pods and run fastlane using provided inputs
-      - name: Run fastlane
+      - name: Install pods
         run: |
           cd ios
           pod install
-          bundle install          
-          bundle update fastlane
-          bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+      - name: Update fastlane      
+        run: bundle update fastlane
+      - name: Run fastlane  
+        run: bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose

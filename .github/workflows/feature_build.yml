@@ -1,3 +1,7 @@
+# Feature builds that can be run on-demand by tagging a branch with the
+# feature-build- prefix.  Will use the subsequent words in the tag as 
+# release notes
+
 name: Feature Build
 
 on:
@@ -6,7 +10,6 @@ on:
       - 'feature-build-*'
     branches:
       - nr-4736-feature-build-workflow
-
 
 defaults:
   run:

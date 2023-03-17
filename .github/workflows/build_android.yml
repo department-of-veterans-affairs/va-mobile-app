@@ -93,14 +93,16 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       # Install node dependencies and bundle app
-      - name: Install dependencies
-        run: |
-          yarn install --frozen-lockfile --non-interactive
-          yarn env:${{ inputs.environment }}
-          yarn bundle:android
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set app environment variables
+        run: yarn env:${{ inputs.environment }}
+      - name: Bundle app
+        run: yarn bundle:android
       # Run fastlane using provided inputs
-      - name: Run fastlane
+      - name: Update fastlane
         run: |
           cd android
           bundle update fastlane
-          bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+      - name: Run fastlane
+        run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
