@@ -185,7 +185,7 @@ Outline work to be done next quarter in order to accomplish the team's goals.
 - Team assigned (_mobile-blue-team_, etc)
 - Discipline(s) (_ux_, _content_, _front-end_, _back-end_, _qa_)
 - Feature area(s) if applicable (_direct-deposit_, _payments_, etc.)
-- For bugs, add the _bug_ tag and [applicable severity tag](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/testing/VA%20Mobile%20App%20Test%20Plan.md)
+- For bugs, add the _bug_ tag and [applicable severity tag](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/testing/VA%20Mobile%20App%20Test%20Plan.md#issue-severity)
 
 
 #### Epics should include:
