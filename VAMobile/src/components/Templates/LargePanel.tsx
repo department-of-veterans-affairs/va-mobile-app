@@ -5,6 +5,7 @@ import React, { FC } from 'react'
 import { FooterButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { View, ViewStyle } from 'react-native'
+import { isIOS } from 'utils/platform'
 import { useDestructiveAlert, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -87,6 +88,7 @@ export const LargePanel: FC<LargePanelProps> = ({
     title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
     rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress } : undefined,
     divider: true,
+    preventFocus: isIOS(),
   }
 
   const fillStyle: ViewStyle = {
