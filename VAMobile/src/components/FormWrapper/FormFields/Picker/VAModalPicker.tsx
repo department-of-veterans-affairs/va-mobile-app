@@ -248,6 +248,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
       <Modal
         animationType="slide"
         transparent={true}
+        statusBarTranslucent={true}
         visible={modalVisible}
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={() => {
