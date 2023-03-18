@@ -149,13 +149,14 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
       <Modal
         animationType="slide"
         transparent={true}
+        statusBarTranslucent={true}
         visible={modalVisible}
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={() => {
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
-          <Box pt={insets.top} />
+          <Box backgroundColor="modalOverlay" pt={insets.top} />
           <Box backgroundColor="list" pb={insets.bottom} flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancelPressed} {...cancelButtonProps}>
