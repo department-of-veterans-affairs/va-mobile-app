@@ -64,7 +64,7 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
 
   return (
     <View>
-      <Modal animationType="fade" transparent={true} visible={visible} supportedOrientations={['portrait', 'landscape']} onRequestClose={onCancel}>
+      <Modal animationType="fade" transparent={true} statusBarTranslucent={true} visible={visible} supportedOrientations={['portrait', 'landscape']} onRequestClose={onCancel}>
         <Box flex={1} width={'100%'} flexDirection="column" accessibilityViewIsModal={true} justifyContent={'center'}>
           <Box width={'100%'} height={'100%'} backgroundColor="modalOverlay" opacity={0.8} position={'absolute'} />
           <Box backgroundColor={'alertBox'} borderRadius={3} p={20} ml={insets.left} mr={insets.right} mx={theme.dimensions.gutter}>
