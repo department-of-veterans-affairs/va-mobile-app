@@ -4,14 +4,10 @@ import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
-import { mocked } from 'ts-jest/utils'
 
 import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
-import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
-import { when } from 'jest-when'
-import { featureEnabled } from 'utils/remoteConfig'
-import { getStoreVersion, getVersionSkipped, getLocalVersion } from 'utils/homeScreenAlerts'
+import { TextView } from 'components'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
