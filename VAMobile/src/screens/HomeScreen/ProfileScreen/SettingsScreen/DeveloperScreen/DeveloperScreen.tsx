@@ -266,16 +266,18 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
               }
             }}
           />
-          <VAButton
-            onPress={() => {
-              setSkippedVersionHomeScreen('0.0.0.')
-              setWhatsNewSkippedVersionHomeScreen('0.0.0.')
-              setWhatsNewVersionSkipped('0.0.0.')
-              setVersionSkipped('0.0.0.')
-            }}
-            label={'Reset Skipped Versions'}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-          />
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <VAButton
+              onPress={() => {
+                setSkippedVersionHomeScreen('0.0.0.')
+                setWhatsNewSkippedVersionHomeScreen('0.0.0.')
+                setWhatsNewVersionSkipped('0.0.0.')
+                setVersionSkipped('0.0.0.')
+              }}
+              label={'Reset Skipped Versions'}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+            />
+          </Box>
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
