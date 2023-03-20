@@ -1,4 +1,4 @@
-# Release candidate that are triggered by the RC-v*.*.* tag. The new_release_branch.yml
+# Release candidate builds that are triggered by the RC-v*.*.* tag. The new_release_branch.yml
 # branches off of develop at the end of every sprint and tags the newly created release
 # branch, which should trigger this build
 
@@ -6,6 +6,8 @@ name: Release Candidate Build
 
 on:
   push:
+    branches:
+      - nr-4733-rc-build-workflow
     tags:
       - 'RC-v[0-9]+.[0-9]+.[0-9]+'
 
