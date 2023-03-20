@@ -16,8 +16,7 @@ const { APPLE_STORE_LINK } = getEnv()
  * returns version skipped for what's new
  */
 export const getWhatsNewVersionSkipped = async (): Promise<string> => {
-  const reconstructedToken = (await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL)) || '0.0.0'
-  return reconstructedToken
+  return (await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL)) || '0.0.0'
 }
 
 export const getWhatsNewLocalVersion = async (demoMode: boolean): Promise<string> => {
@@ -77,31 +76,29 @@ export const getStoreVersion = async (): Promise<string> => {
  * returns version skipped for encouraged update
  */
 export const getVersionSkipped = async (): Promise<string> => {
-  const result = await Promise.all([AsyncStorage.getItem(APP_VERSION_SKIPPED_UPDATE_VAL)])
-  const reconstructedToken = result[0] ? `${result[0]}` : '0.0.0'
-  return reconstructedToken
+  return (await AsyncStorage.getItem(APP_VERSION_SKIPPED_UPDATE_VAL)) || '0.0.0'
 }
 
 /**
  * stores version skipped for encouraged update
  */
 export const setVersionSkipped = async (versionSkipped: string): Promise<void> => {
-  await Promise.all([AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)])
+  await AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)
 }
 
 export const overrideEncourageUpdateLocalVersion = async (overrideVersion: string | undefined): Promise<void> => {
   if (overrideVersion) {
-    await Promise.all([AsyncStorage.setItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL, overrideVersion)])
+    await AsyncStorage.setItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL, overrideVersion)
   } else {
-    await Promise.all([AsyncStorage.removeItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL)])
+    await AsyncStorage.removeItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL)
   }
 }
 
 export const overrideWhatsNewLocalVersion = async (overrideVersion: string | undefined): Promise<void> => {
   if (overrideVersion) {
-    await Promise.all([AsyncStorage.setItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL, overrideVersion)])
+    await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL, overrideVersion)
   } else {
-    await Promise.all([AsyncStorage.removeItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)])
+    await AsyncStorage.removeItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)
   }
 }
 
