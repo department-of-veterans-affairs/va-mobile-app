@@ -65,14 +65,12 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
         setWhatsNewSkippedVersionHomeScreen(version)
       }
     }
-  
     async function checkStoreVersion() {
       const result = await getStoreVersion()
       if (componentMounted.current) {
         setStoreVersionScreen(result)
       }
     }
-    
     checkStoreVersion()
     checkSkippedVersion()
     checkWhatsNewSkippedVersion()
