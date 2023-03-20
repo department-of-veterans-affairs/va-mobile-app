@@ -10,15 +10,7 @@ import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
-import {
-  FeatureConstants,
-  getEncourageUpdateLocalVersion,
-  getStoreVersion,
-  getVersionSkipped,
-  getWhatsNewLocalVersion,
-  overrideLocalVersion,
-  setVersionSkipped,
-} from 'utils/homeScreenAlerts'
+import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, overrideLocalVersion, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -50,7 +42,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
 
   useEffect(() => {
     async function checkEncourageUpdateLocalVersion() {
-      const version = await getEncourageUpdateLocalVersion(true)
+      const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, true)
       if (componentMounted.current) {
         setVersionName(version)
         setEncourageUpdateSavedLocalVersion(version)
@@ -58,7 +50,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
     }
 
     async function checkWhatsNewLocalVersion() {
-      const version = await getWhatsNewLocalVersion(true)
+      const version = await getLocalVersion(FeatureConstants.WHATSNEW, true)
       if (componentMounted.current) {
         setWhatsNewVersion(version)
         setWhatsNewSavedLocalVersion(version)

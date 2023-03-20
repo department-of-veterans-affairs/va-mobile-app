@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText, VAButton } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
-import { FeatureConstants, getVersionSkipped, getWhatsNewLocalVersion, setVersionSkipped } from 'utils/homeScreenAlerts'
+import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -24,7 +24,7 @@ export const WhatsNew = () => {
 
   useEffect(() => {
     async function checkLocalVersion() {
-      const version = await getWhatsNewLocalVersion(demoMode)
+      const version = await getLocalVersion(FeatureConstants.WHATSNEW, demoMode)
       if (componentMounted.current) {
         setVersionName(version)
       }

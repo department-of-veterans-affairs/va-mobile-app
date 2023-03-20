@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, VAButton, WhatsNew } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
-import { FeatureConstants, getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
+import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -25,7 +25,7 @@ export const EncourageUpdateAlert = () => {
 
   useEffect(() => {
     async function checkLocalVersion() {
-      const version = await getEncourageUpdateLocalVersion(demoMode)
+      const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, demoMode)
       if (componentMounted.current) {
         setVersionName(version)
       }

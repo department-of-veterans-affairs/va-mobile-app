@@ -65,35 +65,40 @@ export const overrideLocalVersion = async (feature: number, overrideVersion: str
   }
 }
 
-export const getWhatsNewLocalVersion = async (demoMode: boolean): Promise<string> => {
-  const localOverride = await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)
-  if (demoMode && localOverride) {
-    return localOverride
-  } else {
-    const version = await getVersionName()
-    if (isIOS()) {
-      return version
-    } else {
-      return version + '.'
-    }
-  }
-}
 /**
  *
- * returns local version, version name for iOS and buildnumber for Android.
+ * returns local version for particular feature, version name for iOS and buildnumber for Android.
  * This is due to how the app store returns the version vs the google play store api
  */
-export const getEncourageUpdateLocalVersion = async (demoMode: boolean): Promise<string> => {
-  const localOverride = await AsyncStorage.getItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL)
-  if (demoMode && localOverride) {
-    return localOverride
-  } else if (isIOS()) {
-    return await getVersionName()
-  } else {
-    const version = await getBuildNumber()
-    return version.toString()
+export const getLocalVersion = async (feature: number, demoMode: boolean): Promise<string> => {
+  const whatsNewOverride = await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)
+  const encourageUpdateOverride = await AsyncStorage.getItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL)
+  switch (feature) {
+    case FeatureConstants.WHATSNEW:
+      if (demoMode && whatsNewOverride) {
+        return whatsNewOverride
+      } else {
+        const version = await getVersionName()
+        if (isIOS()) {
+          return version
+        } else {
+          return version + '.'
+        }
+      }
+    case FeatureConstants.ENCOURAGEUPDATE:
+      if (demoMode && encourageUpdateOverride) {
+        return encourageUpdateOverride
+      } else if (isIOS()) {
+        return await getVersionName()
+      } else {
+        const version = await getBuildNumber()
+        return version.toString()
+      }
   }
+
+  return '0.0.0'
 }
+
 /**
  *
  * Returns the store version, minimumOsVersion and Supported Devices in the same string for iOS. For Android it returns the build number.
