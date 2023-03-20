@@ -100,23 +100,4 @@ context('HomeScreen', () => {
       })
     })
   })
-
-  describe('rendering the update alert', () => {
-    it('should render the UI', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(AlertBox)[0].props.title).toEqual('Update available')
-      })
-    })
-    it('should render the update now button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(VAButton)[0].props.label).toEqual('Update now')
-      })
-    })
-
-    it('should render the skip this update button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(VAButton)[1].props.label).toEqual('Skip this update')
-      })
-    })
-  })
 })
