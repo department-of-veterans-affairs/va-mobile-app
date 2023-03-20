@@ -43,8 +43,8 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   const navigateTo = useRouteNavigation()
   const [localVersionName, setVersionName] = useState<string>()
   const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
-  const [saveEncourageUpdateLocalVersion, setEncourageUpdateSavedLocalVersion] = useState<string>()
-  const [saveWhatsNewLocalVersion, setWhatsNewSavedLocalVersion] = useState<string>()
+  const [savedEncourageUpdateLocalVersion, setEncourageUpdateSavedLocalVersion] = useState<string>()
+  const [savedWhatsNewLocalVersion, setWhatsNewSavedLocalVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
@@ -249,7 +249,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
                 setVersionName(val)
               } else {
                 overrideEncourageUpdateLocalVersion(undefined)
-                setVersionName(saveEncourageUpdateLocalVersion)
+                setVersionName(savedEncourageUpdateLocalVersion)
               }
             }}
           />
@@ -262,7 +262,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
                 setWhatsNewVersion(val)
               } else {
                 overrideWhatsNewLocalVersion(undefined)
-                setWhatsNewVersion(saveWhatsNewLocalVersion)
+                setWhatsNewVersion(savedWhatsNewLocalVersion)
               }
             }}
           />
