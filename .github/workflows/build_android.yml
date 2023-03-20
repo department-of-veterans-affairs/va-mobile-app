@@ -20,7 +20,7 @@ on:
       notes:
         type: string
         default: ''
-      # Google Play Console track to distribute to. Fastlane defaults to 
+      # Google Play Console track to distribute to. Fastlane defaults to
       # "Development Team"
       ps_track:
         type: string
@@ -59,7 +59,7 @@ env:
 
 jobs:
   build_android:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-4-cores-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set git config
