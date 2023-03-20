@@ -33,30 +33,26 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   const navigateTo = useRouteNavigation()
   const [localVersionName, setVersionName] = useState<string>()
   const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
-  const [savedEncourageUpdateLocalVersion, setEncourageUpdateSavedLocalVersion] = useState<string>()
-  const [savedWhatsNewLocalVersion, setWhatsNewSavedLocalVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
 
+  async function checkEncourageUpdateLocalVersion() {
+    const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, true)
+    if (componentMounted.current) {
+      setVersionName(version)
+    }
+  }
+
+  async function checkWhatsNewLocalVersion() {
+    const version = await getLocalVersion(FeatureConstants.WHATSNEW, true)
+    if (componentMounted.current) {
+      setWhatsNewVersion(version)
+    }
+  }
+
   useEffect(() => {
-    async function checkEncourageUpdateLocalVersion() {
-      const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, true)
-      if (componentMounted.current) {
-        setVersionName(version)
-        setEncourageUpdateSavedLocalVersion(version)
-      }
-    }
-
-    async function checkWhatsNewLocalVersion() {
-      const version = await getLocalVersion(FeatureConstants.WHATSNEW, true)
-      if (componentMounted.current) {
-        setWhatsNewVersion(version)
-        setWhatsNewSavedLocalVersion(version)
-      }
-    }
-
     async function checkSkippedVersion() {
       const version = await getVersionSkipped(FeatureConstants.ENCOURAGEUPDATE)
       if (componentMounted.current) {
@@ -69,13 +65,14 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
         setWhatsNewSkippedVersionHomeScreen(version)
       }
     }
-
+  
     async function checkStoreVersion() {
       const result = await getStoreVersion()
       if (componentMounted.current) {
         setStoreVersionScreen(result)
       }
     }
+    
     checkStoreVersion()
     checkSkippedVersion()
     checkWhatsNewSkippedVersion()
@@ -239,7 +236,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
                 setVersionName(val)
               } else {
                 overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, undefined)
-                setVersionName(savedEncourageUpdateLocalVersion)
+                checkEncourageUpdateLocalVersion()
               }
             }}
           />
@@ -252,7 +249,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
                 setWhatsNewVersion(val)
               } else {
                 overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
-                setWhatsNewVersion(savedWhatsNewLocalVersion)
+                checkWhatsNewLocalVersion()
               }
             }}
           />
@@ -263,8 +260,12 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
                 setWhatsNewSkippedVersionHomeScreen('0.0.0.')
                 setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, '0.0.0.')
                 setVersionSkipped(FeatureConstants.WHATSNEW, '0.0.0.')
+                overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
+                overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, undefined)
+                checkEncourageUpdateLocalVersion()
+                checkWhatsNewLocalVersion()
               }}
-              label={'Reset Skipped Versions'}
+              label={'Reset Versions'}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
