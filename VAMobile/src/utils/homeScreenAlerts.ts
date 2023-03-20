@@ -40,8 +40,10 @@ export const setVersionSkipped = async (feature: number, versionSkipped: string)
   switch (feature) {
     case FeatureConstants.WHATSNEW:
       await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL, versionSkipped)
+      break
     case FeatureConstants.ENCOURAGEUPDATE:
       await AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)
+      break
   }
 }
 
@@ -56,12 +58,14 @@ export const overrideLocalVersion = async (feature: number, overrideVersion: str
       } else {
         await AsyncStorage.removeItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)
       }
+      break
     case FeatureConstants.ENCOURAGEUPDATE:
       if (overrideVersion) {
         await AsyncStorage.setItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL, overrideVersion)
       } else {
         await AsyncStorage.removeItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL)
       }
+      break
   }
 }
 
