@@ -6,8 +6,6 @@ name: Release Candidate Build
 
 on:
   push:
-    branches:
-      - nr-4733-rc-build-workflow
     tags:
       - 'RC-v[0-9]+.[0-9]+.[0-9]+'
 
