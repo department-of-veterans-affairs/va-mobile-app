@@ -58,7 +58,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     onPress: navigateTo('NotificationsSettings'),
   }
 
-  const onDebug = navigateTo('Debug')
+  const onDebug = navigateTo('Developer')
 
   const onShare = async (): Promise<void> => {
     try {
