@@ -12,11 +12,57 @@ const APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL = '@store_app_version_enco
 const APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL = '@store_app_version_whats_new_local_override'
 const { APPLE_STORE_LINK } = getEnv()
 
+export const FeatureConstants: {
+  ENCOURAGEUPDATE: number
+  WHATSNEW: number
+} = {
+  ENCOURAGEUPDATE: 0,
+  WHATSNEW: 1,
+}
+
 /**
- * returns version skipped for what's new
+ * returns version skipped for particular feature
  */
-export const getWhatsNewVersionSkipped = async (): Promise<string> => {
-  return (await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL)) || '0.0.0'
+export const getVersionSkipped = async (feature: number): Promise<string> => {
+  switch (feature) {
+    case FeatureConstants.WHATSNEW:
+      return (await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL)) || '0.0.0'
+    case FeatureConstants.ENCOURAGEUPDATE:
+      return (await AsyncStorage.getItem(APP_VERSION_SKIPPED_UPDATE_VAL)) || '0.0.0'
+  }
+  return '0.0.0'
+}
+
+/**
+ * stores version skipped for particular feature
+ */
+export const setVersionSkipped = async (feature: number, versionSkipped: string): Promise<void> => {
+  switch (feature) {
+    case FeatureConstants.WHATSNEW:
+      await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL, versionSkipped)
+    case FeatureConstants.ENCOURAGEUPDATE:
+      await AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)
+  }
+}
+
+/**
+ * override local version for particular feature
+ */
+export const overrideLocalVersion = async (feature: number, overrideVersion: string | undefined): Promise<void> => {
+  switch (feature) {
+    case FeatureConstants.WHATSNEW:
+      if (overrideVersion) {
+        await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL, overrideVersion)
+      } else {
+        await AsyncStorage.removeItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)
+      }
+    case FeatureConstants.ENCOURAGEUPDATE:
+      if (overrideVersion) {
+        await AsyncStorage.setItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL, overrideVersion)
+      } else {
+        await AsyncStorage.removeItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL)
+      }
+  }
 }
 
 export const getWhatsNewLocalVersion = async (demoMode: boolean): Promise<string> => {
@@ -31,13 +77,6 @@ export const getWhatsNewLocalVersion = async (demoMode: boolean): Promise<string
       return version + '.'
     }
   }
-}
-
-/**
- * stores version skipped for what's new
- */
-export const setWhatsNewVersionSkipped = async (versionSkipped: string): Promise<void> => {
-  await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL, versionSkipped)
 }
 /**
  *
@@ -70,35 +109,6 @@ export const getStoreVersion = async (): Promise<string> => {
     return version
   } else {
     return result.toString()
-  }
-}
-/**
- * returns version skipped for encouraged update
- */
-export const getVersionSkipped = async (): Promise<string> => {
-  return (await AsyncStorage.getItem(APP_VERSION_SKIPPED_UPDATE_VAL)) || '0.0.0'
-}
-
-/**
- * stores version skipped for encouraged update
- */
-export const setVersionSkipped = async (versionSkipped: string): Promise<void> => {
-  await AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)
-}
-
-export const overrideEncourageUpdateLocalVersion = async (overrideVersion: string | undefined): Promise<void> => {
-  if (overrideVersion) {
-    await AsyncStorage.setItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL, overrideVersion)
-  } else {
-    await AsyncStorage.removeItem(APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL)
-  }
-}
-
-export const overrideWhatsNewLocalVersion = async (overrideVersion: string | undefined): Promise<void> => {
-  if (overrideVersion) {
-    await AsyncStorage.setItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL, overrideVersion)
-  } else {
-    await AsyncStorage.removeItem(APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL)
   }
 }
 

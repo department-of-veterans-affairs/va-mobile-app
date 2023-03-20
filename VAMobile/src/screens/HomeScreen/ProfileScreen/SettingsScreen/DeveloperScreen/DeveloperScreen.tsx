@@ -10,21 +10,19 @@ import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { StackScreenProps } from '@react-navigation/stack'
 import {
+  FeatureConstants,
   getEncourageUpdateLocalVersion,
   getStoreVersion,
   getVersionSkipped,
   getWhatsNewLocalVersion,
-  getWhatsNewVersionSkipped,
-  overrideEncourageUpdateLocalVersion,
-  overrideWhatsNewLocalVersion,
+  overrideLocalVersion,
   setVersionSkipped,
-  setWhatsNewVersionSkipped,
 } from 'utils/homeScreenAlerts'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { StackScreenProps } from '@react-navigation/stack'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -68,13 +66,13 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
     }
 
     async function checkSkippedVersion() {
-      const version = await getVersionSkipped()
+      const version = await getVersionSkipped(FeatureConstants.ENCOURAGEUPDATE)
       if (componentMounted.current) {
         setSkippedVersionHomeScreen(version)
       }
     }
     async function checkWhatsNewSkippedVersion() {
-      const version = await getWhatsNewVersionSkipped()
+      const version = await getVersionSkipped(FeatureConstants.WHATSNEW)
       if (componentMounted.current) {
         setWhatsNewSkippedVersionHomeScreen(version)
       }
@@ -245,10 +243,10 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
             inputType={'none'}
             onChange={(val) => {
               if (val.length >= 1) {
-                overrideEncourageUpdateLocalVersion(val)
+                overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, val)
                 setVersionName(val)
               } else {
-                overrideEncourageUpdateLocalVersion(undefined)
+                overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, undefined)
                 setVersionName(savedEncourageUpdateLocalVersion)
               }
             }}
@@ -258,10 +256,10 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
             inputType={'none'}
             onChange={(val) => {
               if (val.length >= 1) {
-                overrideWhatsNewLocalVersion(val)
+                overrideLocalVersion(FeatureConstants.WHATSNEW, val)
                 setWhatsNewVersion(val)
               } else {
-                overrideWhatsNewLocalVersion(undefined)
+                overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
                 setWhatsNewVersion(savedWhatsNewLocalVersion)
               }
             }}
@@ -271,8 +269,8 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
               onPress={() => {
                 setSkippedVersionHomeScreen('0.0.0.')
                 setWhatsNewSkippedVersionHomeScreen('0.0.0.')
-                setWhatsNewVersionSkipped('0.0.0.')
-                setVersionSkipped('0.0.0.')
+                setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, '0.0.0.')
+                setVersionSkipped(FeatureConstants.WHATSNEW, '0.0.0.')
               }}
               label={'Reset Skipped Versions'}
               buttonType={ButtonTypesConstants.buttonPrimary}

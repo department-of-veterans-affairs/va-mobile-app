@@ -4,10 +4,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, VAButton, WhatsNew } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
+import { FeatureConstants, getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { requestStorePopup } from 'utils/rnInAppUpdate'
@@ -32,7 +32,7 @@ export const EncourageUpdateAlert = () => {
     }
 
     async function checkSkippedVersion() {
-      const version = await getVersionSkipped()
+      const version = await getVersionSkipped(FeatureConstants.ENCOURAGEUPDATE)
       if (componentMounted.current) {
         setSkippedVersionHomeScreen(version)
       }
@@ -70,7 +70,7 @@ export const EncourageUpdateAlert = () => {
 
   const onSkipPressed = (): void => {
     logAnalyticsEvent(Events.vama_eu_skipped())
-    setVersionSkipped(storeVersion ? storeVersion : '0.0.0.')
+    setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, storeVersion ? storeVersion : '0.0.0.')
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
   }
 
