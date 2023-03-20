@@ -11,7 +11,7 @@ import { HomeScreen } from './HomeScreen'
 import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/homeScreenAlerts'
+import { getStoreVersion, getVersionSkipped, getLocalVersion } from 'utils/homeScreenAlerts'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -44,7 +44,7 @@ context('HomeScreen', () => {
   const initializeTestInstance = (inAppUpdatesEnabled: boolean = true, skippedVersion: string = '1.0.0.', localVersion: string = '0.0.0', storeVersion: string = '2.0.0') => {
     when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(inAppUpdatesEnabled)
     mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve(skippedVersion))
-    mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve(localVersion))
+    mocked(getLocalVersion).mockReturnValueOnce(Promise.resolve(localVersion))
     mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve(storeVersion))
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
@@ -57,7 +57,7 @@ context('HomeScreen', () => {
   beforeEach(() => {
     when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(true)
     mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve('1.0.0.'))
-    mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve('0.0.0'))
+    mocked(getLocalVersion).mockReturnValueOnce(Promise.resolve('0.0.0'))
     mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve('2.0.0.'))
     initializeTestInstance()
   })
