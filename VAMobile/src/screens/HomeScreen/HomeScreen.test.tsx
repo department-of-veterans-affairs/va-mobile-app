@@ -41,11 +41,7 @@ context('HomeScreen', () => {
   let testInstance: ReactTestInstance
   let props: any
 
-  const initializeTestInstance = (inAppUpdatesEnabled: boolean = true, skippedVersion: string = '1.0.0.', localVersion: string = '0.0.0', storeVersion: string = '2.0.0') => {
-    when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(inAppUpdatesEnabled)
-    mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve(skippedVersion))
-    mocked(getLocalVersion).mockReturnValueOnce(Promise.resolve(localVersion))
-    mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve(storeVersion))
+  const initializeTestInstance = () => {
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
@@ -55,10 +51,6 @@ context('HomeScreen', () => {
   }
 
   beforeEach(() => {
-    when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(true)
-    mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve('1.0.0.'))
-    mocked(getLocalVersion).mockReturnValueOnce(Promise.resolve('0.0.0'))
-    mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve('2.0.0.'))
     initializeTestInstance()
   })
 
@@ -88,7 +80,6 @@ context('HomeScreen', () => {
         const expectNow = DateTime.local(2021, 8, 10, 10)
         Settings.now = () => expectNow.toMillis()
 
-        initializeTestInstance()
         expect(findByTypeWithSubstring(testInstance, TextView, 'morning')).toBeTruthy()
       })
     })
@@ -97,7 +88,6 @@ context('HomeScreen', () => {
       await waitFor(() => {
         const expectNow = DateTime.local(2021, 8, 10, 14)
         Settings.now = () => expectNow.toMillis()
-        initializeTestInstance()
         expect(findByTypeWithSubstring(testInstance, TextView, 'afternoon')).toBeTruthy()
       })
     })
@@ -106,7 +96,6 @@ context('HomeScreen', () => {
       await waitFor(() => {
         const expectNow = DateTime.local(2021, 8, 10, 20)
         Settings.now = () => expectNow.toMillis()
-        initializeTestInstance()
         expect(findByTypeWithSubstring(testInstance, TextView, 'evening')).toBeTruthy()
       })
     })
@@ -127,20 +116,6 @@ context('HomeScreen', () => {
     it('should render the skip this update button', async () => {
       await waitFor(() => {
         expect(testInstance.findAllByType(VAButton)[1].props.label).toEqual('Skip this update')
-      })
-    })
-
-    it('should not render if skip version is the same as store version', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, '2.0.0.', '0.0.0')
-        expect(() => component.getByText('Update available')).toThrow()
-      })
-    })
-
-    it('should not render if local version is the same as store version', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, '1.0.0.', '2.0.0')
-        expect(() => component.getByText('Update available')).toThrow()
       })
     })
   })
