@@ -25,11 +25,11 @@ export const getWhatsNewLocalVersion = async (demoMode: boolean): Promise<string
   if (demoMode && localOverride) {
     return localOverride
   } else {
-    const version = getVersionName()
+    const version = await getVersionName()
     if (isIOS()) {
       return version
     } else {
-      return (await version).toString() + '.'
+      return version + '.'
     }
   }
 }
