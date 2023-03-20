@@ -22,6 +22,8 @@ import {
   getWhatsNewVersionSkipped,
   overrideEncourageUpdateLocalVersion,
   overrideWhatsNewLocalVersion,
+  setWhatsNewVersionSkipped,
+  setVersionSkipped
 } from 'utils/homeScreenAlerts'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
@@ -264,6 +266,12 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
               }
             }}
           />
+          <VAButton onPress={() => {
+            setSkippedVersionHomeScreen('0.0.0.')
+            setWhatsNewSkippedVersionHomeScreen('0.0.0.')
+            setWhatsNewVersionSkipped('0.0.0.')
+            setVersionSkipped('0.0.0.')
+          }} label={'Reset Skipped Versions'} buttonType={ButtonTypesConstants.buttonPrimary} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
