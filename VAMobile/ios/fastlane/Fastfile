@@ -27,7 +27,6 @@ platform :ios do
               key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
               in_house: false
             )
-    ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true'
   end
 
   desc "Push a new internal QA build to TestFlight"
