@@ -5,6 +5,9 @@ name: Daily QA Build
 
 on:
   # Run on weekdays 4:00 AM UTC
+  push:
+    branches: 
+      - nr-fix-version-trailing-dot-ios
   schedule:
     - cron: '0 4 * * 1,2,3,4,5' 
 
