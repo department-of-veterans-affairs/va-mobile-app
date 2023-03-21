@@ -107,17 +107,17 @@ export const VA_ICON_MAP = {
   BenefitsUnselected,
   ProfileSelected,
   ProfileUnselected,
-  PaymentsSelected,
-  PaymentsUnselected,
-  Add,
-  ArrowDown,
+  PaymentsSelected, // Missing from docs
+  PaymentsUnselected, // Missing from docs
+  Add, // Unused?
+  ArrowDown, // Missing from docs
   ArrowUp,
-  ArrowLeft,
+  ArrowLeft, // Missing from docs (technically under webview, should be common too)
   ArrowRight,
   Airforce,
   Army,
   Bullet,
-  Calendar,
+  Calendar, // Unused?
   Compose,
   CircleCheckMark,
   CoastGuard,
@@ -149,21 +149,21 @@ export const VA_ICON_MAP = {
   DatePickerArrows,
   CheckMark,
   Logo,
-  ErrorCheckBox,
+  ErrorCheckBox, // Used by VASelector?
   QuestionMark,
   Remove,
   UnreadIcon,
   VideoCamera,
   PhoneSolid,
-  ExclamationTriangleSolid,
+  ExclamationTriangleSolid, // Missing from docs
   TrashSolid,
   InboxSolid,
   BuildingSolid,
   InfoIcon,
-  CommentSolid,
-  ListSolid,
-  WhiteCheckCircle,
-  WhiteCloseCircle,
+  CommentSolid, // Unused besides unit test
+  ListSolid, // Unused
+  WhiteCheckCircle, // Why does this exist? Just white version of another icon?
+  WhiteCloseCircle, // Why does this exist? Just white version of another icon?
   Truck,
   ExternalLink,
   Save,

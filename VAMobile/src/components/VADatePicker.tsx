@@ -7,6 +7,7 @@ import RNDateTimePicker, { AndroidEvent, Event } from '@react-native-community/d
 import React, { FC, useState } from 'react'
 import theme from 'styles/themes/standardTheme'
 
+// Unused?
 /**
  * Props type for the VADatePicker
  */
