@@ -80,15 +80,17 @@ export const getLocalVersion = async (feature: number, demoMode: boolean): Promi
   switch (feature) {
     case FeatureConstants.WHATSNEW:
       if (demoMode && whatsNewOverride) {
-        return whatsNewOverride
+        return whatsNewOverride.replace(/[^0-9.]/g, '').replace(/[.]$/, '')
       } else {
-        return await getVersionName()
+        const version = await getVersionName()
+        return version.replace(/[^0-9.]/g, '').replace(/[.]$/, '')
       }
     case FeatureConstants.ENCOURAGEUPDATE:
       if (demoMode && encourageUpdateOverride) {
-        return encourageUpdateOverride
+        return encourageUpdateOverride.replace(/[^0-9.]/g, '').replace(/[.]$/, '')
       } else if (isIOS()) {
-        return await getVersionName()
+        const version = await getVersionName()
+        return version.replace(/[^0-9.]/g, '').replace(/[.]$/, '')
       } else {
         const version = await getBuildNumber()
         return version.toString()
