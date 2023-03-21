@@ -6,6 +6,8 @@ name: Feature Build
 
 on:
   push:
+    branches:
+      - 'nr-update-xcode-ios-sdk'
     tags:
       - 'feature-build-*'
 
