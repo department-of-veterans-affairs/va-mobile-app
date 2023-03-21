@@ -1,0 +1,28 @@
+# Daily QA Build workflow that runs the reusable build_ios and build_android workflows
+# with default inputs for QA builds
+
+name: Go live in app stores
+
+on:
+  # 14:00 UTC on Tuesday
+  schedule:
+    - cron: '0 14 * * 2' 
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+jobs:
+  ios:
+    name: iOS Go Live
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: release
+
+  android:
+    name: Android Go Live
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: release
