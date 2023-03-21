@@ -483,23 +483,23 @@ jobs:
       - queue_ios_jobs
       - ios_fastlane:
           lane: 'rc'
-workflows:
-  qa_build:
-    triggers:
-      - schedule:
-          cron: '0 5 * * 1,2,3,4,5'
-          filters:
-            branches:
-              only: develop
-    jobs:
-      - start_slack_thread:
-          message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
-      - build_android_qa:
-          requires:
-            - start_slack_thread
-      - build_ios_qa:
-          requires:
-            - start_slack_thread
+# workflows:
+  # qa_build:
+  #   triggers:
+  #     - schedule:
+  #         cron: '0 5 * * 1,2,3,4,5'
+  #         filters:
+  #           branches:
+  #             only: develop
+  #   jobs:
+  #     - start_slack_thread:
+  #         message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
+  #     - build_android_qa:
+  #         requires:
+  #           - start_slack_thread
+  #     - build_ios_qa:
+  #         requires:
+  #           - start_slack_thread
   # release_build:
   #   jobs:
   #     - start_slack_thread:
@@ -525,31 +525,31 @@ workflows:
   #             only: /^v\d+\.\d+\.\d+/
   #           branches:
   #             ignore: /.*/
-  feature_build:
-    jobs:
-      - start_slack_thread:
-          message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
-          filters:
-            tags:
-              only: /^feature-build-.+/
-            branches:
-              ignore: /.*/
-      - build_android_feature:
-          requires:
-            - start_slack_thread
-          filters:
-            tags:
-              only: /^feature-build-.+/
-            branches:
-              ignore: /.*/
-      - build_ios_feature:
-          requires:
-            - start_slack_thread
-          filters:
-            tags:
-              only: /^feature-build-.+/
-            branches:
-              ignore: /.*/
+  # feature_build:
+  #   jobs:
+  #     - start_slack_thread:
+  #         message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
+  #         filters:
+  #           tags:
+  #             only: /^feature-build-.+/
+  #           branches:
+  #             ignore: /.*/
+  #     - build_android_feature:
+  #         requires:
+  #           - start_slack_thread
+  #         filters:
+  #           tags:
+  #             only: /^feature-build-.+/
+  #           branches:
+  #             ignore: /.*/
+  #     - build_ios_feature:
+  #         requires:
+  #           - start_slack_thread
+  #         filters:
+  #           tags:
+  #             only: /^feature-build-.+/
+  #           branches:
+  #             ignore: /.*/
   # release_candidate_build:
   #   jobs:
   #     - start_slack_thread:

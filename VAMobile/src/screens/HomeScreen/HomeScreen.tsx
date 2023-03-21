@@ -17,12 +17,16 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
+import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
+import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
 import Nametag from 'components/Nametag'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
 import ProfileScreen from './ProfileScreen/ProfileScreen'
+import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
 import getEnv from 'utils/env'
 
@@ -157,6 +161,10 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="ManageYourAccount" component={ManageYourAccount} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }
