@@ -82,12 +82,7 @@ export const getLocalVersion = async (feature: number, demoMode: boolean): Promi
       if (demoMode && whatsNewOverride) {
         return whatsNewOverride
       } else {
-        const version = await getVersionName()
-        if (isIOS()) {
-          return version
-        } else {
-          return version + '.'
-        }
+        return await getVersionName()
       }
     case FeatureConstants.ENCOURAGEUPDATE:
       if (demoMode && encourageUpdateOverride) {
@@ -114,8 +109,7 @@ export const getStoreVersion = async (): Promise<string> => {
   if (isIOS()) {
     // includes minimumOsVersion and supported devices
     const parsedString = result.split(', ')
-    const version = parsedString[0] + '.'
-    return version
+    return parsedString[0]
   } else {
     return result.toString()
   }

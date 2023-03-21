@@ -20,7 +20,7 @@ export const WhatsNew = () => {
   const [localVersion, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
 
-  const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}`
+  const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}.`
 
   useEffect(() => {
     async function checkLocalVersion() {

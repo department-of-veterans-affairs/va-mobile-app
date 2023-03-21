@@ -70,8 +70,8 @@ export const EncourageUpdateAlert = () => {
 
   const onSkipPressed = (): void => {
     logAnalyticsEvent(Events.vama_eu_skipped())
-    setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, storeVersion ? storeVersion : '0.0.0.')
-    setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0.')
+    setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, storeVersion ? storeVersion : '0.0.0')
+    setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0')
   }
 
   if (featureEnabled('inAppUpdates') && storeVersion && localVersionName && skippedVersion && skippedVersion !== storeVersion && storeVersion > localVersionName) {
