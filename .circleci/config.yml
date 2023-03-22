@@ -410,14 +410,6 @@ jobs:
           lane: on_demand
           notes: ${CIRCLE_TAG}
           ps_track: Development Team
-  cut_release_branch:
-    executor: default
-    steps:
-      - checkout
-      - run_script:
-          script_name: 'release_branch.sh'
-          script_options: ''
-          workingDir: '~/project/VAMobile'
   build_ios_release:
     executor: ios
     steps:
@@ -484,112 +476,112 @@ jobs:
       - ios_fastlane:
           lane: 'rc'
 # workflows:
-  # qa_build:
-  #   triggers:
-  #     - schedule:
-  #         cron: '0 5 * * 1,2,3,4,5'
-  #         filters:
-  #           branches:
-  #             only: develop
-  #   jobs:
-  #     - start_slack_thread:
-  #         message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
-  #     - build_android_qa:
-  #         requires:
-  #           - start_slack_thread
-  #     - build_ios_qa:
-  #         requires:
-  #           - start_slack_thread
-  # release_build:
-  #   jobs:
-  #     - start_slack_thread:
-  #         message: 'Automation starting release build for the app. This build will be sent to the app stores for review upon completion. Please see :thread: for results. This process may take a while.'
-  #         filters:
-  #           tags:
-  #             only: /^v\d+\.\d+\.\d+/
-  #           branches:
-  #             ignore: /.*/
-  #     - build_android_release:
-  #         requires:
-  #           - start_slack_thread
-  #         filters:
-  #           tags:
-  #             only: /^v\d+\.\d+\.\d+/
-  #           branches:
-  #             ignore: /.*/
-  #     - build_ios_release:
-  #         requires:
-  #           - start_slack_thread
-  #         filters:
-  #           tags:
-  #             only: /^v\d+\.\d+\.\d+/
-  #           branches:
-  #             ignore: /.*/
-  # feature_build:
-  #   jobs:
-  #     - start_slack_thread:
-  #         message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
-  #         filters:
-  #           tags:
-  #             only: /^feature-build-.+/
-  #           branches:
-  #             ignore: /.*/
-  #     - build_android_feature:
-  #         requires:
-  #           - start_slack_thread
-  #         filters:
-  #           tags:
-  #             only: /^feature-build-.+/
-  #           branches:
-  #             ignore: /.*/
-  #     - build_ios_feature:
-  #         requires:
-  #           - start_slack_thread
-  #         filters:
-  #           tags:
-  #             only: /^feature-build-.+/
-  #           branches:
-  #             ignore: /.*/
-  # release_candidate_build:
-  #   jobs:
-  #     - start_slack_thread:
-  #         message: 'Release Candidate build process starting. This build is a staging build for QA to validate and do regression testing on. Please see :thread: for results. This process may take a while.'
-  #         filters:
-  #           tags:
-  #             only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
-  #           branches:
-  #             ignore: /.*/
-  #     - build_android_release_candidate:
-  #         requires:
-  #           - start_slack_thread
-  #         filters:
-  #           tags:
-  #             only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
-  #           branches:
-  #             ignore: /.*/
-  #     - build_ios_release_candidate:
-  #         requires:
-  #           - start_slack_thread
-  #         filters:
-  #           tags:
-  #             only: /^^RC-v\d+\.\d+\.\d+-\d+-\d+$/
-  #           branches:
-  #             ignore: /.*/
-  # new_release_branch:
-  #   triggers:
-  #     - schedule:
-  #         cron: '30 6 * * 3'
-  #         filters:
-  #           branches:
-  #             only: develop
-  #   jobs:
-  #     - cut_release_branch
-  # go_live:
-  #   triggers:
-  #     - schedule:
-  #         cron: '0 14 * * 2'
-  #         filters:
-  #           branches:
-  #             only: main
-  #   jobs:
-  #     - run_release_lanes
+# qa_build:
+#   triggers:
+#     - schedule:
+#         cron: '0 5 * * 1,2,3,4,5'
+#         filters:
+#           branches:
+#             only: develop
+#   jobs:
+#     - start_slack_thread:
+#         message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
+#     - build_android_qa:
+#         requires:
+#           - start_slack_thread
+#     - build_ios_qa:
+#         requires:
+#           - start_slack_thread
+# release_build:
+#   jobs:
+#     - start_slack_thread:
+#         message: 'Automation starting release build for the app. This build will be sent to the app stores for review upon completion. Please see :thread: for results. This process may take a while.'
+#         filters:
+#           tags:
+#             only: /^v\d+\.\d+\.\d+/
+#           branches:
+#             ignore: /.*/
+#     - build_android_release:
+#         requires:
+#           - start_slack_thread
+#         filters:
+#           tags:
+#             only: /^v\d+\.\d+\.\d+/
+#           branches:
+#             ignore: /.*/
+#     - build_ios_release:
+#         requires:
+#           - start_slack_thread
+#         filters:
+#           tags:
+#             only: /^v\d+\.\d+\.\d+/
+#           branches:
+#             ignore: /.*/
+# feature_build:
+#   jobs:
+#     - start_slack_thread:
+#         message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
+#         filters:
+#           tags:
+#             only: /^feature-build-.+/
+#           branches:
+#             ignore: /.*/
+#     - build_android_feature:
+#         requires:
+#           - start_slack_thread
+#         filters:
+#           tags:
+#             only: /^feature-build-.+/
+#           branches:
+#             ignore: /.*/
+#     - build_ios_feature:
+#         requires:
+#           - start_slack_thread
+#         filters:
+#           tags:
+#             only: /^feature-build-.+/
+#           branches:
+#             ignore: /.*/
+# release_candidate_build:
+#   jobs:
+#     - start_slack_thread:
+#         message: 'Release Candidate build process starting. This build is a staging build for QA to validate and do regression testing on. Please see :thread: for results. This process may take a while.'
+#         filters:
+#           tags:
+#             only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
+#           branches:
+#             ignore: /.*/
+#     - build_android_release_candidate:
+#         requires:
+#           - start_slack_thread
+#         filters:
+#           tags:
+#             only: /^RC-v\d+\.\d+\.\d+-\d+-\d+$/
+#           branches:
+#             ignore: /.*/
+#     - build_ios_release_candidate:
+#         requires:
+#           - start_slack_thread
+#         filters:
+#           tags:
+#             only: /^^RC-v\d+\.\d+\.\d+-\d+-\d+$/
+#           branches:
+#             ignore: /.*/
+# new_release_branch:
+#   triggers:
+#     - schedule:
+#         cron: '30 6 * * 3'
+#         filters:
+#           branches:
+#             only: develop
+#   jobs:
+#     - cut_release_branch
+# go_live:
+#   triggers:
+#     - schedule:
+#         cron: '0 14 * * 2'
+#         filters:
+#           branches:
+#             only: main
+#   jobs:
+#     - run_release_lanes
