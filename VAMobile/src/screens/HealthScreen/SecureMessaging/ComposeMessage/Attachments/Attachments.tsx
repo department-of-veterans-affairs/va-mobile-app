@@ -139,7 +139,9 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       scrollViewRef={scrollViewRef}
       title={tc('secureMessaging.composeMessage.attachments.title')}
       leftButtonText={tc('cancel')}
-      onLeftButtonPress={navigation.goBack}>
+      onLeftButtonPress={navigation.goBack}
+      primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.composeMessage.attach')}
+      onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -165,24 +167,6 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
           </Box>
         )}
         {file?.name && file?.size && renderFileDisplay(file.name, file.size)}
-        {displaySelectFile && (
-          <VAButton
-            label={t('secureMessaging.attachments.selectAFile')}
-            onPress={onSelectAFile}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('secureMessaging.attachments.selectAFile.a11yHint')}
-          />
-        )}
-        {!displaySelectFile && (
-          <Box>
-            <VAButton
-              label={t('secureMessaging.composeMessage.attach')}
-              onPress={onAttach}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-              a11yHint={t('secureMessaging.composeMessage.attach.a11yHint')}
-            />
-          </Box>
-        )}
       </Box>
     </FullScreenSubtask>
   )
