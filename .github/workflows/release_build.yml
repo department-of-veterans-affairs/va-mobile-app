@@ -1,5 +1,5 @@
-# Release builds that are triggered by the v*.*.* tag. This is triggered by the
-# someone commenting /approve on the associated release ticket
+# Release builds that are triggered by the v*.*.* tag. RC tags occur when
+# someone comments /approve on the associated release ticket
 
 name: Release Build
 

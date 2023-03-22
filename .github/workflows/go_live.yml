@@ -1,12 +1,11 @@
-# Daily QA Build workflow that runs the reusable build_ios and build_android workflows
-# with default inputs for QA builds
+# Promotes builds in App Store and Google Play to production
 
 name: Go live in app stores
 
 on:
-  # 14:00 UTC on Tuesday
+  # Tuesdays 14:00 UTC, 10AM ET, 1PM PT
   schedule:
-    - cron: '0 14 * * 2' 
+    - cron: '0 14 * * 2'
 
 defaults:
   run:

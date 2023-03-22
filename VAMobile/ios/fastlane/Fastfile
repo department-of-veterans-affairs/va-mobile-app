@@ -46,39 +46,6 @@ platform :ios do
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
-  desc "Push new demo version to TestFlight"
-  lane :demo do
-    puts('Begin Demo lane')
-  end
-
-  desc "Build new Production build and upload to App Store for review"
-  lane :review do |options|
-    puts("Begin Review Lane")
-    ensure_xcode_version(version: "13", strict: false)
-    update_version(options[:version])
-    sign
-    build
-    upload_app_store
-    tag_build(lane_context[SharedValues::BUILD_NUMBER])
-    message = "New Production build successfully uploaded to App Store for review"
-    slack_sent_for_review(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], message, "iOS", ENV['SLACK_THREAD_TS'])
-  end
-
-  desc "Promote the release Awaiting Developer Release to App Store"
-  lane :release do
-    begin
-      app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
-      version = app.get_pending_release_app_store_version
-      unless version.nil?
-        Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
-        upload_deobfuscation_file(version.version_string)
-        slack_release_success(version.version_string, "iOS")
-      end
-    rescue => e
-      slack_release_error(version, e)
-    end
-  end
-
   desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
   lane :on_demand do |options|
     puts "on demand run"
@@ -117,6 +84,39 @@ platform :ios do
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New RC for #{rcVersion} successfully uploaded to TestFlight Group - Development Team"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Release Candidate", message, "iOS", ENV['SLACK_THREAD_TS'])
+  end
+
+  desc "Build new Production build and upload to App Store for review"
+  lane :review do |options|
+    puts("Begin Review Lane")
+    ensure_xcode_version(version: "13", strict: false)
+    update_version(options[:version])
+    sign
+    build
+    upload_app_store
+    tag_build(lane_context[SharedValues::BUILD_NUMBER])
+    message = "New Production build successfully uploaded to App Store for review"
+    slack_sent_for_review(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], message, "iOS", ENV['SLACK_THREAD_TS'])
+  end
+
+  desc "Promote the release Awaiting Developer Release to App Store"
+  lane :release do
+    begin
+      app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
+      version = app.get_pending_release_app_store_version
+      unless version.nil?
+        Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
+        upload_deobfuscation_file(version.version_string)
+        slack_release_success(version.version_string, "iOS")
+      end
+    rescue => e
+      slack_release_error(version, e)
+    end
+  end
+
+  desc "Push new demo version to TestFlight"
+  lane :demo do
+    puts('Begin Demo lane')
   end
 
   after_all do |lane, options|
