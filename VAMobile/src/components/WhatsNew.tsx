@@ -20,7 +20,7 @@ export const WhatsNew = () => {
   const [localVersion, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
 
-  const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}.`
+  const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}`
 
   useEffect(() => {
     async function checkLocalVersion() {
@@ -63,7 +63,7 @@ export const WhatsNew = () => {
   }
 
   //@ts-ignore
-  const labelValue = t(`${BODY_PREFIX}a11yLabel`)
+  const labelValue = t(`${BODY_PREFIX}.a11yLabel`)
   const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue
 
   //@ts-ignore
@@ -73,7 +73,7 @@ export const WhatsNew = () => {
     const bullets: VABulletListText[] = []
 
     while (1) {
-      const bulletKey = `${BODY_PREFIX}bullet.${bullets.length + 1}`
+      const bulletKey = `${BODY_PREFIX}.bullet.${bullets.length + 1}`
       //@ts-ignore
       const text = t(bulletKey)
       //@ts-ignore
