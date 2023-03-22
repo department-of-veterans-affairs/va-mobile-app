@@ -9,8 +9,6 @@ We take a proactive, accessibility-first approach to everything we build. Access
 
 We also believe in accessibility beyond compliance. We don’t just meet the bare minimum of accessibility recommendations. We go above and beyond these recommendations to ensure we’re creating a product that is truly accessible to all of our users.
 
-Making more changes
-
 ## Accessibility principles
 
 ### Based on VA standards
