@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, FullScreenSubtask, TextView, VAButton } from 'components'
+import { AlertBox, BackButton, Box, FullScreenSubtask, TextView } from 'components'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
