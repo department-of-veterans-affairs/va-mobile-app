@@ -1,5 +1,5 @@
 # Feature builds that can be run on-demand by tagging a branch with the
-# feature-build-* prefix.  Will use the subsequent words in the tag as 
+# feature-build-* prefix.  Will use the subsequent words in the tag as
 # release notes in TestFlight and Firebase App Distribution
 
 name: Feature Build
@@ -26,4 +26,3 @@ jobs:
     secrets: inherit
     with:
       lane: on_demand
-
