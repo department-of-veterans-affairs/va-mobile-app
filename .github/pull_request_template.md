@@ -5,7 +5,12 @@ introduced, changes in behavior, pointers to more detailed documentation. The de
 than a link to an issue.  -->
 
 ## Screenshots/Video
-<!-- Add screenshots or video as needed. Before/after if changes are to be compared by reviewers. -->
+<!-- Add screenshots or video as needed. Before/after if changes are to be compared by reviewers. Template:
+<details>
+  <summary></summary>
+  <img src="" width="400px">
+</details>
+-->
 
 ## Testing
 <!-- What testing was done to verify the changes (local/unit)? What testing remains? Note edge cases, or special
