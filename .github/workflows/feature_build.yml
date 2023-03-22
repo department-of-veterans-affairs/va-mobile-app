@@ -9,10 +9,6 @@ on:
     tags:
       - 'feature-build-*'
 
-defaults:
-  run:
-    working-directory: VAMobile
-
 jobs:
   ios:
     name: iOS Feature Build
