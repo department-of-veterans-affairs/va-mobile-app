@@ -13,7 +13,7 @@ on:
       # Specifies which fastlane lane to run
       # Options: qa, rc, review, release, on_demand
       lane:
-        type: string 
+        type: string
         default: qa
       # Release notes that will show next to the version in TestFlight
       # Fastlane will default to "New QA version for {{DATE_TIME}}"
@@ -48,7 +48,7 @@ env:
 
 jobs:
   build_ios:
-    runs-on: macos-latest
+    runs-on: macos-latest-xl
     env:
       # App Store Connect Issuer ID
       APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
@@ -90,7 +90,7 @@ jobs:
         run: yarn bundle:ios
       - name: Install pods
         run: pod install
-      - name: Update fastlane      
+      - name: Update fastlane
         run: bundle update fastlane
-      - name: Run fastlane  
+      - name: Run fastlane
         run: bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
