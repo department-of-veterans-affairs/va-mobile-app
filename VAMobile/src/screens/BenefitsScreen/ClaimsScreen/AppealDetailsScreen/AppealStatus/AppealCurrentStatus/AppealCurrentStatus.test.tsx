@@ -385,7 +385,7 @@ context('AppealStatus', () => {
     it('should display the hlr_received data', async () => {
       status.type = 'hlr_received'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A senior reviewer is taking a new look at your case')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A higher-level reviewer is taking a new look at your case')
     })
   })
 
