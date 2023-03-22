@@ -181,14 +181,6 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
               buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('secureMessaging.composeMessage.attach.a11yHint')}
             />
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <VAButton
-                label={tc('cancel')}
-                onPress={() => navigation.goBack()}
-                buttonType={ButtonTypesConstants.buttonSecondary}
-                a11yHint={t('secureMessaging.composeMessage.attach.cancel.a11yHint')}
-              />
-            </Box>
           </Box>
         )}
       </Box>
