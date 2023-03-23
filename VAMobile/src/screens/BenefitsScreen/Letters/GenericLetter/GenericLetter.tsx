@@ -31,7 +31,11 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
   }
 
   if (downloading) {
-    return <LoadingComponent text={t('letters.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
+        <LoadingComponent text={t('letters.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (

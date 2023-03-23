@@ -113,7 +113,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   if (loading || phoneNumberSaved) {
     const loadingText = deleting ? t('contactInformation.delete.phone') : t('contactInformation.savingPhoneNumber')
 
-    return <LoadingComponent text={loadingText} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={goBack}>
+        <LoadingComponent text={loadingText} />
+      </FullScreenSubtask>
+    )
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [

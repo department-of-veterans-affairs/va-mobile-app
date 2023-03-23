@@ -67,8 +67,7 @@ const defaultEnvParams = {
   AUTH_IAM_REVOKE_URL: 'https://test.gov/oauth/revoke',
 }
 
-const sampleIdToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDAwMDEyMzQ1IiwiYXVkIjoidmFtb2JpbGUiLCJpYXQiOjE2MDMxMjY3MzEsImV4cCI6MjUyNDYwODAwMCwiaXNzIjoiSUFNIFNTT2Ugc2VydmljZSIsIm5vbmNlIjoiRmltYlhLa3M5b3ZOcnI3STl0TEkifQ.DJCdQ45WP3ZUHTb2nqNzlHBxEAUl7dpPhoLm1TKtogs'
+const sampleIdToken = 'TEST_TOKEN';
 
 context('authAction IAM', () => {
   let testAccessToken: string

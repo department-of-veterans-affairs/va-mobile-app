@@ -58,7 +58,7 @@ export const lightTheme = {
     focusedPickerAndInput: colors.primaryDarker,
     confirmation: colors.goldLight,
     footerButton: colors.grayLight,
-    menuDivider: colors.grayLight,
+    menuDivider: colors.grayDark,
     tabSelectorInactive: colors.grayLight,
     tabSelectorActive: colors.primary,
     trackingCard: colors.grayDark,

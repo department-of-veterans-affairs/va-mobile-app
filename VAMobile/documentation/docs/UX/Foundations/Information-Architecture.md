@@ -61,7 +61,7 @@ A sitemap is a planning tool that visually shows how information will be grouped
 * Post redesign: VA Mobile App: Detailed Sitemap/flow diagram (June 2022)[png](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-research/usability-testing/new%20navigation%20usability/Detailed%20sitemap%20(future%20state%206-23-22).png) | [mural](https://app.mural.co/t/adhoccorporateworkspace2583/m/adhoccorporateworkspace2583/1655989910332/d0f78565904f80b730fb70285eef9f4002279aef?sender=u28718b63c8993f515e0b2240)  
 
 
-## Adding new itemsto the app’s Information Architecture
+## Adding new items to the app’s Information Architecture
 1. **A feature’s placement within the app’s navigation and taxonomy should take user mental models, business goals, and the feature type into account.** [Determining Navigation and Information Architecture Placement for New VA Mobile App Features](https://docs.google.com/document/d/1XQcYxnCifloaBFNKL2C9JNS7KIj6wEhb4VokPGxBZU8/edit#) is a guide intended to help teams decide where a new feature belongs in this app’s sitemap and navigation model. 
 1. **Always try to find a placement in an existing category first** before proposing a new top-level category for a feature. Confirm new category names and contents with card sort research before adding to the app.
 1. **Within a category, keep the hierarchy as flat as possible** in terms of screens (limit the levels it’s possible to drill down through in order to get to child screens), but without inlcuding too many options on a single screen. 

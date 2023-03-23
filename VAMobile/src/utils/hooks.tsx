@@ -1,4 +1,18 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AlertButton, AppState, Dimensions, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import {
+  AccessibilityInfo,
+  ActionSheetIOS,
+  Alert,
+  AlertButton,
+  AppState,
+  Dimensions,
+  EmitterSubscription,
+  Linking,
+  PixelRatio,
+  ScrollView,
+  UIManager,
+  View,
+  findNodeHandle,
+} from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
@@ -147,10 +161,10 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref: MutableRefObject<any> = useRef<T>(null)
   const dispatch = useAppDispatch()
-  const screanReaderEnabled = useIsScreanReaderEnabled()
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const setFocus = useCallback(() => {
-    if (ref.current && screanReaderEnabled) {
+    if (ref.current && screenReaderEnabled) {
       /**
        * There is a race condition during transition that causes the accessibility focus
        * to intermittently fail to be set https://github.com/facebook/react-native/issues/30097
@@ -181,32 +195,46 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
 
       return () => clearTimeout(timeOutPageFocus)
     }
-  }, [ref, dispatch, screanReaderEnabled])
+  }, [ref, dispatch, screenReaderEnabled])
 
   return [ref, setFocus]
 }
 
 /**
- * Hook to check if the screan reader is enabled
+ * Hook to check if the screen reader is enabled
  *
+ * withListener - True to add a listener to live update screen reader status, default false
  * @returns boolean if the screen reader is on
  */
-export function useIsScreanReaderEnabled(): boolean {
-  const [screanReaderEnabled, setScreanReaderEnabled] = useState(false)
+export function useIsScreenReaderEnabled(withListener = false): boolean {
+  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false)
 
   useEffect(() => {
     let isMounted = true
+    let screenReaderChangedSubscription: EmitterSubscription
+
+    if (withListener) {
+      screenReaderChangedSubscription = AccessibilityInfo.addEventListener('screenReaderChanged', (isScreenReaderEnabled) => {
+        if (isMounted) {
+          setScreenReaderEnabled(isScreenReaderEnabled)
+        }
+      })
+    }
     AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
       if (isMounted) {
-        setScreanReaderEnabled(isScreenReaderEnabled)
+        setScreenReaderEnabled(isScreenReaderEnabled)
       }
     })
+
     return () => {
       isMounted = false
+      if (withListener) {
+        screenReaderChangedSubscription.remove()
+      }
     }
-  }, [screanReaderEnabled])
+  }, [screenReaderEnabled, withListener])
 
-  return screanReaderEnabled
+  return screenReaderEnabled
 }
 
 /**
@@ -301,7 +329,7 @@ export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, Mutable
   const scrollRef = useRef() as MutableRefObject<ScrollView>
   const [viewRef, setFocus] = useAccessibilityFocus<View>()
   const [shouldFocus, setShouldFocus] = useState(true)
-  const screenReaderEnabled = useIsScreanReaderEnabled()
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const scrollToElement = useCallback(
     (offset?: number) => {

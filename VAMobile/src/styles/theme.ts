@@ -206,6 +206,7 @@ export type VABorderColors = {
 export type VAFontSizes = {
   fontSize: number
   lineHeight: number
+  letterSpacing?: number
 }
 
 export type VAListTagColors = {

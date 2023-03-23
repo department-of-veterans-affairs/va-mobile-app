@@ -524,7 +524,7 @@
   "secureMessaging.reply.testID": "Reply to this message",
   "secureMessaging.reply.a11yHint": "navigate to the reply message page",
   "secureMessaging.reply.messageThread": "Message thread",
-  "secureMessaging.reply.youCanNoLonger": "You can no longer reply to this message",
+  "secureMessaging.reply.youCanNoLonger": "This conversation is too old for new replies",
   "secureMessaging.reply.olderThan45Days": "You can't reply to a message that is older than 45 days. If you would like to contact the sender, compose a new message.",
   "secureMessaging.sendError.title": "Message failed to send",
   "secureMessaging.sendError.ifTheAppStill": "If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.",

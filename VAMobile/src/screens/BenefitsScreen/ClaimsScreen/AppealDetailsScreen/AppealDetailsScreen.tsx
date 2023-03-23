@@ -89,7 +89,11 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   }
 
   if (loadingAppeal) {
-    return <LoadingComponent text={t('appealDetails.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
+        <LoadingComponent text={t('appealDetails.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   const formattedUpdatedDate = formatDateMMMMDDYYYY(updated || '')
