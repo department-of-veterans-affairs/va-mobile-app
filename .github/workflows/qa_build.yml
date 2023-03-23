@@ -28,5 +28,6 @@ jobs:
   #   secrets: inherit
   android:
     name: Android QA Build
+    needs: start_slack_thread
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
