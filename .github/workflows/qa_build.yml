@@ -5,19 +5,28 @@ name: Daily QA Build
 
 on:
   # Run on weekdays 4:00 AM UTC
-  schedule:
-    - cron: '0 4 * * 1,2,3,4,5' 
+  # schedule:
+  #   - cron: '0 4 * * 1,2,3,4,5'
+  push:
+    branches:
+      - feature/4737-Theo-SlackNotificationsGHA
 
 defaults:
   run:
     working-directory: VAMobile
 
 jobs:
-  ios:
-    name: iOS QA Build
-    uses: ./.github/workflows/build_ios.yml
+  start_slack_thread:
+    name: Start Slack thread
+    uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
-  android:
-    name: Android QA Build
-    uses: ./.github/workflows/build_android.yml
-    secrets: inherit
+    with:
+      message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
+  # ios:
+  #   name: iOS QA Build
+  #   uses: ./.github/workflows/build_ios.yml
+  #   secrets: inherit
+  # android:
+  #   name: Android QA Build
+  #   uses: ./.github/workflows/build_android.yml
+  #   secrets: inherit
