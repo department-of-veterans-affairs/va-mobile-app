@@ -37,7 +37,7 @@ platform :ios do
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
     sign
-    build
+    build("QA")
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
     upload_tf(notes, "Development Team")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
@@ -86,7 +86,7 @@ platform :ios do
     datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
     update_version(options[:version])
     sign
-    build
+    build("QA")
 
     tf_group = options[:tfGroup].empty? ? "Development Team" : options[:tfGroup]
 
