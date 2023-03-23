@@ -73,7 +73,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
    * Reducer to update the "VA" header opacity based on scroll
    */
   const VaOpacityReducer = (initOffset: number) => {
-    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight : initOffset
+    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight / 2 : initOffset
   }
 
   /**
@@ -174,7 +174,9 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const titleA11y = title?.type === 'VA' ? 'V-A' : title?.a11yLabel ? title.a11yLabel : title?.title
   const titleViewProps: ViewProps = { accessibilityLabel: titleA11y, accessibilityRole: 'header', accessible: true }
   const titleBoxProps: BoxProps = {
-    ...commonBoxProps,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: theme.dimensions.headerHeight,
     accessibilityElementsHidden: true,
     importantForAccessibility: 'no-hide-descendants',
   }
