@@ -11,9 +11,9 @@ on:
     branches:
       - feature/4737-Theo-SlackNotificationsGHA
 
-# defaults:
-#   run:
-#     working-directory: VAMobile
+defaults:
+  run:
+    working-directory: VAMobile
 
 jobs:
   start_slack_thread:
@@ -24,8 +24,11 @@ jobs:
       message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
   # ios:
   #   name: iOS QA Build
+  #   needs: start_slack_thread
   #   uses: ./.github/workflows/build_ios.yml
   #   secrets: inherit
+  #   with:
+  #     slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
   android:
     name: Android QA Build
     needs: start_slack_thread
