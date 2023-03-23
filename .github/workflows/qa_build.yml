@@ -22,12 +22,6 @@ jobs:
     secrets: inherit
     with:
       message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
-  set_slack_thread_ts:
-    name: Set SLACK_THREAD_TS environment variable
-    needs: start_slack_thread
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "SLACK_THREAD_TS=${{needs.start_slack_thread.outputs.thread_ts}}" >> $GITHUB_ENV
   # ios:
   #   name: iOS QA Build
   #   uses: ./.github/workflows/build_ios.yml
@@ -37,3 +31,6 @@ jobs:
     needs: start_slack_thread
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
+    with:
+      slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
+
