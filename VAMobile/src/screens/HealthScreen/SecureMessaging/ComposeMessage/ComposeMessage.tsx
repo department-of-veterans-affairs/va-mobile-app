@@ -201,21 +201,29 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
+  const isFormValid = !!(to && subject && validateMessage(message) && (subject !== CategoryTypeFields.other || subjectLine))
+
   if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : isDiscarded
       ? t('secureMessaging.deleteDraft.loading')
       : t('secureMessaging.formMessage.composeMessage.loading')
-    return <LoadingComponent text={text} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={text} />
+      </FullScreenSubtask>
+    )
   }
 
   if (sendingMessage) {
-    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
+      </FullScreenSubtask>
+    )
   }
-
-  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
-  const isFormValid = !!(to && subject && validateMessage(message) && (subject !== CategoryTypeFields.other || subjectLine))
 
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'

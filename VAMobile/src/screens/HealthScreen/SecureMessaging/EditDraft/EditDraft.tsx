@@ -282,11 +282,27 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       : isDiscarded
       ? t('secureMessaging.deletingChanges.loading')
       : t('secureMessaging.draft.loading')
-    return <LoadingComponent text={text} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={tc('cancel')}
+        onLeftButtonPress={() => {
+          goToDrafts(false)
+        }}>
+        <LoadingComponent text={text} />
+      </FullScreenSubtask>
+    )
   }
 
   if (sendingMessage) {
-    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={tc('cancel')}
+        onLeftButtonPress={() => {
+          goToDrafts(false)
+        }}>
+        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)

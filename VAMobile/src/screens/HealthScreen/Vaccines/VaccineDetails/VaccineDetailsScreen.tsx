@@ -47,7 +47,11 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
   }
 
   if (detailsLoading) {
-    return <LoadingComponent text={t('vaccines.details.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('vaVaccines')} backLabelA11y={tc('vaVaccines.a11y')} backLabelOnPress={navigation.goBack} title={tc('details')}>
+        <LoadingComponent text={t('vaccines.details.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   const displayDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes.date) : placeHolder

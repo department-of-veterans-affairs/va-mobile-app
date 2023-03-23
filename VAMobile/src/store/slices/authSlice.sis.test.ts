@@ -58,8 +58,7 @@ const defaultEnvParams = {
   AUTH_SIS_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
 }
 
-const sampleIdToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDAwMDEyMzQ1IiwiYXVkIjoidmFtb2JpbGUiLCJpYXQiOjE2MDMxMjY3MzEsImV4cCI6MjUyNDYwODAwMCwiaXNzIjoiSUFNIFNTT2Ugc2VydmljZSIsIm5vbmNlIjoiRmltYlhLa3M5b3ZOcnI3STl0TEkifQ.DJCdQ45WP3ZUHTb2nqNzlHBxEAUl7dpPhoLm1TKtogs'
+const sampleIdToken = 'TEST_TOKEN';
 
 let mockFeatureEnabled = featureEnabled as jest.Mock
 const getItemMock = AsyncStorage.getItem as jest.Mock

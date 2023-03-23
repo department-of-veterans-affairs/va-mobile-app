@@ -83,7 +83,11 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   if (loading || emailSaved) {
     const loadingText = deleting ? t('contactInformation.delete.emailAddress') : t('contactInformation.savingEmailAddress')
 
-    return <LoadingComponent text={loadingText} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={loadingText} />
+      </FullScreenSubtask>
+    )
   }
 
   const isEmailInvalid = (): boolean => {

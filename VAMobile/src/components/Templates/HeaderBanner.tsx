@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 export type HeaderLeftButtonProps = {
@@ -63,6 +63,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const TEXT_CONSTRAINT_THRESHOLD = 30
 
@@ -72,13 +73,16 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
    * Reducer to update the "VA" header opacity based on scroll
    */
   const VaOpacityReducer = (initOffset: number) => {
-    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight : initOffset
+    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight / 2 : initOffset
   }
 
   /**
    * Reducer to swap between "VA" and title based on scroll
    */
   const titleShowingReducer = (initTitleShowing: boolean) => {
+    if (screenReaderEnabled) {
+      return true
+    }
     return transition ? title.scrollOffset >= title.transitionHeaderHeight : initTitleShowing
   }
 
@@ -123,13 +127,14 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     zIndex: 1,
   }
 
-  const headerDropShadow: ShadowProps = titleShowing
-    ? {
-        startColor: theme.colors.background.headerDropShadow,
-        distance: 4,
-        sides: { start: false, top: false, bottom: true, end: false },
-      }
-    : { disabled: true }
+  const headerDropShadow: ShadowProps =
+    titleShowing && !screenReaderEnabled
+      ? {
+          startColor: theme.colors.background.headerDropShadow,
+          distance: 4,
+          sides: { start: false, top: false, bottom: true, end: false },
+        }
+      : { disabled: true }
 
   const titleBannerViewProps: BoxProps = {
     alignItems: 'center',
@@ -173,7 +178,9 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const titleA11y = title?.type === 'VA' ? 'V-A' : title?.a11yLabel ? title.a11yLabel : title?.title
   const titleViewProps: ViewProps = { accessibilityLabel: titleA11y, accessibilityRole: 'header', accessible: true }
   const titleBoxProps: BoxProps = {
-    ...commonBoxProps,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: theme.dimensions.headerHeight,
     accessibilityElementsHidden: true,
     importantForAccessibility: 'no-hide-descendants',
   }

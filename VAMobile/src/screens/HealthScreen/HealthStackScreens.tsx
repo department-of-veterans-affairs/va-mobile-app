@@ -131,7 +131,7 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 
 export const getHealthScreens = (t: TFunction) => {
   return [
-    <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
+    <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,

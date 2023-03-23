@@ -192,7 +192,15 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   }
 
   if (showLoadingScreenRequestRefillsRetry) {
-    return <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={tc('close')}
+        onLeftButtonPress={() => {
+          navigation.dispatch(StackActions.pop(2))
+        }}>
+        <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
