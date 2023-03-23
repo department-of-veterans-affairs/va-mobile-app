@@ -56,6 +56,8 @@ env:
   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  # Slack thread to add messages to that are related to the build
+  # SLACK_THREAD_TS: ${{  }}
 
 jobs:
   build_android:
@@ -69,34 +71,34 @@ jobs:
           git config --global user.email 'va-mobileapp@adhocteam.us'
       # Decodes base64 encoded keystore, Play Store service distribution key,
       # Firebase distribution key, and Firebase analytics/crashlytics json
-      - name: Decode base64 encoded keys
-        run: |
-          mkdir keys
-          cd keys
-          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
-          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
-          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
-          cd ../app
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
-      - name: Setup ruby and restore bundler cache
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0.2'
-          bundler-cache: true
-          working-directory: VAMobile/android
-      - name: Setup node and restore yarn cache
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
-      - name: Install npm dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-      - name: Set app environment variables
-        run: yarn env:${{ inputs.environment }}
-      - name: Bundle app
-        run: yarn bundle:android
-      - name: Update fastlane
-        run: bundle update fastlane
-      - name: Run fastlane
-        run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+      # - name: Decode base64 encoded keys
+      #   run: |
+      #     mkdir keys
+      #     cd keys
+      #     echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
+      #     echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
+      #     echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+      #     cd ../app
+      #     echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+      # - name: Setup ruby and restore bundler cache
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     ruby-version: '3.0.2'
+      #     bundler-cache: true
+      #     working-directory: VAMobile/android
+      # - name: Setup node and restore yarn cache
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '16'
+      #     cache: 'yarn'
+      #     cache-dependency-path: 'VAMobile/yarn.lock'
+      # - name: Install npm dependencies
+      #   run: yarn install --frozen-lockfile --non-interactive
+      # - name: Set app environment variables
+      #   run: yarn env:${{ inputs.environment }}
+      # - name: Bundle app
+      #   run: yarn bundle:android
+      # - name: Update fastlane
+      #   run: bundle update fastlane
+      # - name: Run fastlane
+      #   run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"

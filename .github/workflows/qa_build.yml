@@ -26,7 +26,7 @@ jobs:
   #   name: iOS QA Build
   #   uses: ./.github/workflows/build_ios.yml
   #   secrets: inherit
-  # android:
-  #   name: Android QA Build
-  #   uses: ./.github/workflows/build_android.yml
-  #   secrets: inherit
+  android:
+    name: Android QA Build
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
