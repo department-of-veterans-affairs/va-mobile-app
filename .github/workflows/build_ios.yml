@@ -1,0 +1,97 @@
+# Reusable workflow that sets up environment, installs depdendencies, and
+# runs iOS fastlane using provided inputs
+name: Build iOS
+
+on:
+  workflow_call:
+    inputs:
+      # Used to determine the environment variables to build the app with
+      # Options: test, staging, production
+      environment:
+        type: string
+        default: staging
+      # Specifies which fastlane lane to run
+      # Options: qa, rc, review, release, on_demand
+      lane:
+        type: string
+        default: qa
+      # Release notes that will show next to the version in TestFlight
+      # Fastlane will default to "New QA version for {{DATE_TIME}}"
+      notes:
+        type: string
+        default: ''
+      # TestFlight group to distribute to. Fastlane defaults to "Development Team"
+      tf_group:
+        type: string
+        default: ''
+      # Determines whether or not to send slack messages related to the build
+      use_slack_thread:
+        type: boolean
+        default: true
+      # Version to use for production release. QA/On-demand builds will increment
+      # upon the latest version in TestFlight
+      version:
+        type: string
+        default: qa
+
+defaults:
+  run:
+    working-directory: VAMobile/ios
+
+env:
+  # IAM staging app client secret
+  APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
+  # IAM production app client secret
+  APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
+  # Password to enter demo mode from login screen
+  DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+
+jobs:
+  build_ios:
+    runs-on: macos-latest-xl
+    env:
+      # App Store Connect Issuer ID
+      APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
+      # App Store Connect Key Id
+      APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+      # Path to write secret key to. Also used by fastlane
+      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
+      # Xcode project file name
+      IOS_PROJ_FILE: 'VAMobile.xcodeproj'
+      # Xcode scheme to build
+      IOS_SCHEME: 'VAMobileRelease'
+      # Fast lane patch password
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup ssh-agent with VA Mobile Automation ssh key for fastlane match
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
+      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
+        run: |
+          echo Notes: ${{ inputs.notes }}
+          echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
+          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set app environment variables
+        run: yarn env:${{ inputs.environment }}
+      - name: Bundle app
+        run: yarn bundle:ios
+      - name: Install pods
+        run: pod install
+      - name: Update fastlane
+        run: bundle update fastlane
+      - name: Run fastlane
+        run: bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose

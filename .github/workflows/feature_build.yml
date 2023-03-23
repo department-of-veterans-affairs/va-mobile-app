@@ -1,0 +1,30 @@
+# Feature builds that can be run on-demand by tagging a branch with the
+# feature-build-* prefix.  Will use the subsequent words in the tag as
+# release notes in TestFlight and Firebase App Distribution
+
+name: Feature Build
+
+on:
+  push:
+    tags:
+      - 'feature-build-*'
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+jobs:
+  ios:
+    name: iOS Feature Build
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: on_demand
+      notes: ${{ github.ref_name }}
+  android:
+    name: Android Feature Build
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: on_demand
+      notes: ${{ github.ref_name }}
