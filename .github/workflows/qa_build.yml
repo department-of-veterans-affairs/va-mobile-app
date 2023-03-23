@@ -11,9 +11,9 @@ on:
     branches:
       - feature/4737-Theo-SlackNotificationsGHA
 
-defaults:
-  run:
-    working-directory: VAMobile
+# defaults:
+#   run:
+#     working-directory: VAMobile
 
 jobs:
   start_slack_thread:
