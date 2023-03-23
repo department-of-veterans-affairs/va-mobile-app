@@ -20,6 +20,11 @@ on:
       notes:
         type: string
         default: ''
+      # Slack thread_ts where messages related to the build should be sent.
+      # Gets assigned to the SLACK_THREAD_TS environment variable
+      slack_thread_ts:
+        type: string
+        default: ''
       # TestFlight group to distribute to. Fastlane defaults to "Development Team"
       tf_group:
         type: string
@@ -45,6 +50,8 @@ env:
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
   # Password to enter demo mode from login screen
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+  # Slack thread_ts where messages related to the build should be sent
+  SLACK_THREAD_TS: ${{ inputs.slack_thread_ts }}
 
 jobs:
   build_ios:
