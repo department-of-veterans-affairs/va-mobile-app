@@ -163,11 +163,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
         {title && (
           <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
-            <Box>
-              <Box display="flex" flexDirection="row" alignItems="center">
-                <TextView {...titleTextProps}>{title}</TextView>
-              </Box>
-            </Box>
+            <TextView {...titleTextProps}>{title}</TextView>
           </Box>
         )}
         {children}
