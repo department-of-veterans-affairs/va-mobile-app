@@ -25,8 +25,8 @@ on:
       ps_track:
         type: string
         default: ''
-      # Slack thread_ts where messages related to the build should be sent.
-      # Gets assigned to the SLACK_THREAD_TS environment variable
+      # Time stamp of the Slack thread where build related messages should be sent.
+      # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
       slack_thread_ts:
         type: string
         default: ''
@@ -62,13 +62,16 @@ env:
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
   # Slack thread_ts where messages related to the build should be sent
-  SLACK_THREAD_TS: ${{ inputs.slack_thread_ts }}
+  # SLACK_THREAD_TS: ${{ inputs.slack_thread_ts }}
 
 jobs:
   build_android:
     runs-on: ubuntu-4-cores-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set SLACK_THREAD_TS environment variable
+        if: inputs.slack_thread_ts
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
       - name: Set git config
         run: |
           echo Notes: ${{ inputs.notes }}

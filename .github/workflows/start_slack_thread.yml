@@ -22,7 +22,7 @@ jobs:
     outputs:
       channel_id: ${{ steps.get_channel_id.outputs.SLACK_CHANNEL_ID }}
     steps:
-      - name: Search DSVA Slack to find the channel ID
+      - name: Search Slack for channel ID
         id: get_channel_id
         run: |
           id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
