@@ -3,6 +3,9 @@ name: Start Slack Thread
 on:
   workflow_call:
     inputs:
+      channel_name:
+        type: string
+        default: 'va-mobile-build-alerts' # 'va-mobile-app'
       message:
         type: string
         required: true
@@ -10,11 +13,26 @@ on:
       thread_ts:
         value: ${{ jobs.start_thread.outputs.thread_ts }}
 
+env:
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
 jobs:
+  get_channel_id:
+    runs-on: ubuntu-latest
+    outputs:
+      channel_id: ${{ steps.get_channel_id.outputs.SLACK_CHANNEL_ID }}
+    steps:
+      - name: Search DSVA Slack to find the channel ID
+        id: get_channel_id
+        run: |
+          id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/x-www-form-urlencoded' \
+            https://slack.com/api/conversations.list\?limit=1000 |
+            jq '.channels[] | .name as $data | select($data == "<<parameters.channelName>>").id' )
+          echo "export SLACK_CHANNEL_ID=${id}" >> $GITHUB_OUTPUT
   start_thread:
     runs-on: ubuntu-latest
-    env:
-      SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+    needs: get_channel_id
     outputs:
       thread_ts: ${{ steps.start_thread.outputs.SLACK_THREAD_TS }}
     steps:
@@ -22,8 +40,8 @@ jobs:
         id: start_thread
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-              -H 'Content-type: application/json' \
-              --data '{"channel":"'C022SV53ASZ'","text":"${{inputs.message}}"}' \
-              https://slack.com/api/chat.postMessage|
-              jq -r '.ts')
-            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.get_channel_id.outputs.channel_id}}'","text":"${{inputs.message}}"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
