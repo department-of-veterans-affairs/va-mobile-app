@@ -27,7 +27,7 @@ jobs:
     needs: start_slack_thread
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'SLACK_THREAD_TS=${{needs.start_slack_thread.outputs.thread_ts}}" >> $GITHUB_ENV
+      - run: echo "SLACK_THREAD_TS=${{needs.start_slack_thread.outputs.thread_ts}}" >> $GITHUB_ENV
   # ios:
   #   name: iOS QA Build
   #   uses: ./.github/workflows/build_ios.yml
