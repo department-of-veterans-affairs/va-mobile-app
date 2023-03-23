@@ -136,11 +136,15 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
         }
       : { disabled: true }
 
-  const titleBannerProps: BoxProps = {
+  const titleBannerViewProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
     minHeight: theme.dimensions.headerHeight,
+  }
+
+  const titleBannerBoxProps: BoxProps = {
+    ...titleBannerViewProps,
     backgroundColor: bannerDivider ? 'largePanelHeader' : 'main',
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
@@ -230,8 +234,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   return (
     <View {...zIndex}>
       <Shadow {...headerDropShadow}>
-        <View {...titleBannerProps}>
-          <Box {...titleBannerProps}>
+        <View {...titleBannerViewProps}>
+          <Box {...titleBannerBoxProps}>
             <Box flex={4} alignItems="flex-start">
               {leftButton?.descriptiveBack ? (
                 <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
