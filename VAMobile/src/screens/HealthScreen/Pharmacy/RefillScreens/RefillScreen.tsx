@@ -111,7 +111,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (prescriptionInDowntime) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')}>
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')} onLeftButtonPress={navigation.goBack}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -119,7 +119,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (refillable.length === 0) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')}>
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')} onLeftButtonPress={navigation.goBack}>
         <NoRefills />
       </FullScreenSubtask>
     )
