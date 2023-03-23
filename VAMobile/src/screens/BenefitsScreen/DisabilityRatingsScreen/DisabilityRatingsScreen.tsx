@@ -164,7 +164,7 @@ const DisabilityRatingsScreen: FC = () => {
 
   if (useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)) {
     return (
-      <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
+      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
       </ChildTemplate>
     )
@@ -172,15 +172,15 @@ const DisabilityRatingsScreen: FC = () => {
 
   if (loading) {
     return (
-      <React.Fragment>
+      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
         <LoadingComponent text={t('disabilityRating.loading')} />
-      </React.Fragment>
+      </ChildTemplate>
     )
   }
 
   if (individualRatingsList.length === 0) {
     return (
-      <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
+      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
         <NoDisabilityRatings />
       </ChildTemplate>
     )

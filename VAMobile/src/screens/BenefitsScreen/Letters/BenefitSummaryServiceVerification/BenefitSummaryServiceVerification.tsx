@@ -211,7 +211,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   }
 
   if (downloading || !letterBeneficiaryData) {
-    return <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
+        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (

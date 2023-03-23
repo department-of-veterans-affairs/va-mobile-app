@@ -139,7 +139,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       scrollViewRef={scrollViewRef}
       title={tc('secureMessaging.composeMessage.attachments.title')}
       leftButtonText={tc('cancel')}
-      onLeftButtonPress={displaySelectFile ? navigation.goBack : undefined}>
+      onLeftButtonPress={navigation.goBack}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>

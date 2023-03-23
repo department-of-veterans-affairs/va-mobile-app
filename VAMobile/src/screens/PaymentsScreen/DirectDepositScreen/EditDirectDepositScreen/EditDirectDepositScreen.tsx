@@ -88,7 +88,11 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   }
 
   if (saving) {
-    return <LoadingComponent text={t('directDeposit.savingInformation')} />
+    return (
+      <FullScreenSubtask onLeftButtonPress={goBack} leftButtonText={t('cancel')}>
+        <LoadingComponent text={t('directDeposit.savingInformation')} />
+      </FullScreenSubtask>
+    )
   }
 
   const onSave = (): void => {

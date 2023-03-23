@@ -42,7 +42,11 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return (
+      <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.title')}>
+        <LoadingComponent />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (

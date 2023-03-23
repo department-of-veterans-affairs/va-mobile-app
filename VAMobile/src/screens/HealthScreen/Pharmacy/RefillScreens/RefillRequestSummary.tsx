@@ -1,3 +1,4 @@
+import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
@@ -191,12 +192,25 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   }
 
   if (showLoadingScreenRequestRefillsRetry) {
-    return <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={tc('close')}
+        onLeftButtonPress={() => {
+          navigation.dispatch(StackActions.pop(2))
+        }}>
+        <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
     <>
-      <FullScreenSubtask leftButtonText={tc('close')} title={tc('refillRequest')} navigationMultiStepCancelScreen={2}>
+      <FullScreenSubtask
+        leftButtonText={tc('close')}
+        onLeftButtonPress={() => {
+          navigation.dispatch(StackActions.pop(2))
+        }}
+        title={tc('refillRequest')}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>

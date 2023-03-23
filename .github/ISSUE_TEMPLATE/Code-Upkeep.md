@@ -20,4 +20,11 @@ PTS#	Size	    Rough Timing
 8	    large   	< a week
 13	  x-large 	A Sprint
 	TOO BIG, Split	 -->
+	
+## Testing Considerations
+<!-- Please indicate to the best of your ability areas QA should test for this ticket, this sometimes means X area functions the same -->
 
+## Checklist
+[ ] Add the front-end label tag
+
+[ ] Attach to the Frontend epic for engineering initiatives

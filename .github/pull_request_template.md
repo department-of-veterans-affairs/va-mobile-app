@@ -11,6 +11,9 @@ than a link to an issue.  -->
 <!-- What testing was done to verify the changes (local/unit)? What testing remains? Note edge cases, or special
 situations that could not be tested during development. -->
 
+- [ ] Tested on iOS <!-- simulator is fine -->
+- [ ] Tested on Android <!-- simulator is fine -->
+
 ## Reviewer Validations
 <!-- What should reviewers look for? Copy/paste Acceptance Criteria from ticket -->
 

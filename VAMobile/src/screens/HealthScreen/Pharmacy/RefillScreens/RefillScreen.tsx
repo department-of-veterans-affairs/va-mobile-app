@@ -111,7 +111,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (prescriptionInDowntime) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')}>
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')} onLeftButtonPress={navigation.goBack}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -119,25 +119,33 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (refillable.length === 0) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')}>
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')} onLeftButtonPress={navigation.goBack}>
         <NoRefills />
       </FullScreenSubtask>
     )
   }
 
   if (loadingHistory) {
-    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      </FullScreenSubtask>
+    )
   }
 
   if (showLoadingScreenRequestRefills) {
-    return <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
     <>
       <FullScreenSubtask
         leftButtonText={tc('cancel')}
-        onLeftButtonPress={selectedPrescriptionsCount === 0 ? navigation.goBack : undefined}
+        onLeftButtonPress={navigation.goBack}
         title={tc('refillRequest')}
         primaryContentButtonText={
           selectedPrescriptionsCount === refillablePrescriptions?.length

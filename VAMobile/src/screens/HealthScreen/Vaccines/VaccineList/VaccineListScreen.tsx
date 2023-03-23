@@ -88,7 +88,11 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   }
 
   if (loading) {
-    return <LoadingComponent text={t('vaccines.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+        <LoadingComponent text={t('vaccines.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (vaccines.length === 0) {

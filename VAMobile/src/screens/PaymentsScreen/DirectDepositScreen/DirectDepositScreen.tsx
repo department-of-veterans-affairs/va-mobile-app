@@ -80,9 +80,9 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
 
   if (loading) {
     return (
-      <React.Fragment>
+      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
         <LoadingComponent text={t('directDeposit.loading')} />
-      </React.Fragment>
+      </FeatureLandingTemplate>
     )
   }
 

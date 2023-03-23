@@ -1,12 +1,19 @@
-import { Box, ButtonDecoratorType, ButtonTypesConstants, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { logout } from 'store/slices/authSlice'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
 import { FeatureToggleType, featureEnabled, getFeatureToggles, overrideRemote, setDebugConfig } from 'utils/remoteConfig'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
+import { StackScreenProps } from '@react-navigation/stack'
+import { useTranslation } from 'react-i18next'
 
-const RemoteConfigScreen: FC = () => {
+type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'RemoteConfig'>
+
+const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigation }) => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
@@ -39,7 +46,7 @@ const RemoteConfigScreen: FC = () => {
   }
 
   return (
-    <VAScrollView>
+    <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('remoteConfig.title')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
@@ -104,7 +111,7 @@ const RemoteConfigScreen: FC = () => {
           </TextArea>
         </Box>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 
