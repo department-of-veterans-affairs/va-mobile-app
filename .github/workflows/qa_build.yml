@@ -34,6 +34,6 @@ jobs:
     needs: start_slack_thread
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
-    # with:
-    #   slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
+    with:
+      slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
 
