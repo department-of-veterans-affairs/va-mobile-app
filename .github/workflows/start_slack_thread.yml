@@ -1,16 +1,20 @@
+# Reusable workflow for starting a Slack thread in the provided channel
 name: Start Slack Thread
 
 on:
   workflow_call:
     inputs:
       channel_name:
+        description: 'Name of the Slack channel where the thread should be started.'
         type: string
         default: 'va-mobile-build-alerts' # 'va-mobile-app'
       message:
+        description: 'Text to display for the message starting the thread.'
         type: string
         required: true
     outputs:
       thread_ts:
+        description: 'Timestamp of the Slack thread that was created.'
         value: ${{ jobs.start_thread.outputs.thread_ts }}
 
 env:
@@ -18,6 +22,7 @@ env:
 
 jobs:
   get_channel_id:
+    name: Get channel ID
     runs-on: ubuntu-latest
     outputs:
       channel_id: ${{ steps.get_channel_id.outputs.SLACK_CHANNEL_ID }}
@@ -31,6 +36,7 @@ jobs:
             jq '.channels[] | .name as $data | select($data == "${{inputs.channel_name}}").id' )
           echo SLACK_CHANNEL_ID=${id} >> $GITHUB_OUTPUT
   start_thread:
+    name: Start thread
     runs-on: ubuntu-latest
     needs: get_channel_id
     outputs:
