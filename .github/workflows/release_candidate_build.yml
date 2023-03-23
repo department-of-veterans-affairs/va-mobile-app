@@ -1,0 +1,28 @@
+# Release candidate builds that are triggered by the RC-v*.*.* tag. The new_release_branch.yml
+# branches off of develop at the end of every sprint and tags the newly created release
+# branch, which should trigger this build
+
+name: Release Candidate Build
+
+on:
+  push:
+    tags:
+      - 'RC-v[0-9]+.[0-9]+.[0-9]+'
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+jobs:
+  ios:
+    name: iOS RC Build
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: rc
+  android:
+    name: Android RC Build
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: rc

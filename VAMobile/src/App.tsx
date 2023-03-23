@@ -258,7 +258,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
-        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin'), animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
+        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ headerShown: false, animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
       </Stack.Navigator>
     )
@@ -285,7 +285,7 @@ export const AppTabs: FC = () => {
 export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
 
-  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.COMMON).t)
+  const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens()

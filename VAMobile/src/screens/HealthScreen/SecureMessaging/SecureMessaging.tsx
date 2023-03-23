@@ -91,6 +91,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const onTabUpdate = (selection: string): void => {
     const tab = selection as SecureMessagingTabTypes
     if (secureMessagingTab !== tab) {
+      snackBar?.hideAll()
       dispatch(updateSecureMessagingTab(tab))
     }
   }
