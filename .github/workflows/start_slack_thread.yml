@@ -20,4 +20,4 @@ jobs:
               --data '{"channel":"'C022SV53ASZ'","text":"${{inputs.message}}"}' \
               https://slack.com/api/chat.postMessage|
               jq -r '.ts')
-            echo SLACK_THREAD_TS=${ts} >> $GITHUB_ENV
+            echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_ENV
