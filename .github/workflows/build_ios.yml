@@ -20,7 +20,7 @@ on:
       notes:
         type: string
         default: ''
-      # Time stamp of the Slack thread where build related messages should be sent.
+      # Timestamp of the Slack thread where build related messages should be sent.
       # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
       slack_thread_ts:
         type: string
