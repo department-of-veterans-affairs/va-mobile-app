@@ -46,6 +46,8 @@ env:
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
   # Password to enter demo mode from login screen
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+  # Slack API token used in fastlane
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
   build_ios:

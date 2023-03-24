@@ -57,6 +57,8 @@ env:
   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  # Slack API token used in fastlane
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
   build_android:
