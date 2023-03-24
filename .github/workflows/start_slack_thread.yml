@@ -25,10 +25,10 @@ jobs:
     name: Get channel ID
     runs-on: ubuntu-latest
     outputs:
-      channel_id: ${{ steps.get_channel_id.outputs.SLACK_CHANNEL_ID }}
+      channel_id: ${{ steps.search_slack.outputs.SLACK_CHANNEL_ID }}
     steps:
       - name: Search Slack for channel ID
-        id: get_channel_id
+        id: search_slack
         run: |
           id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/x-www-form-urlencoded' \
@@ -40,10 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: get_channel_id
     outputs:
-      thread_ts: ${{ steps.start_thread.outputs.SLACK_THREAD_TS }}
+      thread_ts: ${{ steps.post_message.outputs.SLACK_THREAD_TS }}
     steps:
-      - name: Start Slack thread
-        id: start_thread
+      - name: Post message to Slack
+        id: post_message
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
