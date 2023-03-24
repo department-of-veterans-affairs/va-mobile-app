@@ -74,7 +74,14 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0')
   }
 
-  if (featureEnabled('inAppUpdates') && storeVersion && localVersionName && skippedVersion && skippedVersion !== storeVersion && storeVersion > localVersionName) {
+  if (
+    featureEnabled('inAppUpdates') &&
+    storeVersion &&
+    localVersionName &&
+    skippedVersion &&
+    skippedVersion !== storeVersion &&
+    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
+  ) {
     logAnalyticsEvent(Events.vama_eu_shown())
     return (
       <Box mb={theme.dimensions.buttonPadding}>
