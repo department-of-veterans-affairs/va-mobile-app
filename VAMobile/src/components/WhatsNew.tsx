@@ -58,8 +58,8 @@ export const WhatsNew = () => {
 
   const onPress = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_dont_show())
-    setVersionSkipped(FeatureConstants.WHATSNEW, localVersion || '')
-    setSkippedVersionHomeScreen(localVersion || '')
+    setVersionSkipped(FeatureConstants.WHATSNEW, localVersion || '0.0')
+    setSkippedVersionHomeScreen(localVersion || '0.0')
   }
 
   //@ts-ignore
