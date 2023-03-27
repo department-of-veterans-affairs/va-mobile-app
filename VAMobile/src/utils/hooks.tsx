@@ -305,27 +305,24 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
 
       // Ensure cancel button is always last for UX consisency
       const newButtons = [...buttons]
-      let newCancelButtonIndex = cancelButtonIndex
       if (cancelButtonIndex < buttons.length - 1) {
         newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
-        newCancelButtonIndex = newButtons.length - 1
       }
 
-      // Adjust destructiveButtonIndex if cancel button moved beneath
       let newDestructiveButtonIndex = destructiveButtonIndex
-      if (destructiveButtonIndex && newCancelButtonIndex > destructiveButtonIndex) {
+      if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
         newDestructiveButtonIndex = destructiveButtonIndex - 1
       }
 
+      // Don't pass cancelButtonIndex because doing so would hide the button on iPad
       ActionSheetIOS.showActionSheetWithOptions(
         {
           ...remainingProps,
-          // Don't pass cancelButtonIndex because doing so would hide the button on iPad
           destructiveButtonIndex: newDestructiveButtonIndex,
           options: newButtons.map((button) => stringToTitleCase(button.text)),
         },
         (buttonIndex) => {
-          const onPress = buttons[buttonIndex]?.onPress
+          const onPress = newButtons[buttonIndex]?.onPress
           if (onPress) {
             onPress()
           }
