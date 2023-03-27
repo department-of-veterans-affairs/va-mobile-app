@@ -291,6 +291,7 @@ export type UseDestructiveAlertProps = {
 }
 /**
  * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
+ * TODO: consolidate this and useShowActionSheet into a single hook
  * @param title - title of the alert
  * @param message - optional message for the alert
  * @param destructiveButtonIndex - ios destructive index
@@ -465,6 +466,7 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
 
 /**
  * Returns a wrapper to showActionSheetWithOptions that converts iOS options to title case
+ * TODO: consolidate this and useDestructiveAlert into a single hook
  */
 export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
   const { showActionSheetWithOptions } = useActionSheet()
@@ -479,10 +481,13 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
       }
     })
 
-    const casedOptions = {
+    const casedOptions: ActionSheetOptions = {
       ...options,
       options: casedOptionText,
     }
+
+    // Don't pass cancelButtonIndex because doing so would hide the button on iPad
+    delete casedOptions.cancelButtonIndex
 
     showActionSheetWithOptions(casedOptions, callback)
   }
