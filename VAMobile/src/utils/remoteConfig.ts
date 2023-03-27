@@ -78,11 +78,10 @@ export const activateRemoteConfig = async (): Promise<void> => {
      */
     if (fetchRemote) {
       console.debug('Remote Config: Fetching and activating')
-      // Activate last fetched config then fetch latest config for use on next app launch
-      await remoteConfig().activate()
-      console.debug('Remote Config: Activated last fetched config')
       await remoteConfig().fetch(RC_CACHE_TIME)
       console.debug('Remote Config: Fetched latest remote config')
+      await remoteConfig().activate()
+      console.debug('Remote Config: Activated config')
     }
 
     await loadOverrides()

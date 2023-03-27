@@ -23,6 +23,7 @@ import {
 import { AppDispatch, AppThunk } from 'store'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { activateRemoteConfig } from 'utils/remoteConfig'
 import { dispatchClearAuthorizedServices } from './authorizedServicesSlice'
 import { dispatchClearCerner } from './patientSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
@@ -639,6 +640,8 @@ export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
   let refreshToken: string | undefined
   await dispatch(checkFirstTimeLogin())
   const pType = await getAuthLoginPromptType()
+
+  await activateRemoteConfig()
 
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)
