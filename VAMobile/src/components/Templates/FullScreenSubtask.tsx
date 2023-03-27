@@ -162,12 +162,8 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       <VAScrollView scrollViewRef={scrollViewRef}>
         {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
         {title && (
-          <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter} flex={1}>
-            <Box>
-              <Box display="flex" flexDirection="row" alignItems="center">
-                <TextView {...titleTextProps}>{title}</TextView>
-              </Box>
-            </Box>
+          <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
+            <TextView {...titleTextProps}>{title}</TextView>
           </Box>
         )}
         {children}
