@@ -232,7 +232,7 @@ export const AuthGuard: FC = () => {
   }, [dispatch])
 
   let content
-  if (initializing) {
+  if (initializing || remoteConfigLoading) {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Splash" component={SplashScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
@@ -244,7 +244,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
-  } else if (syncing || remoteConfigLoading) {
+  } else if (syncing) {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Sync" component={SyncScreen} options={{ ...topPaddingAsHeaderStyles, title: 'sync' }} />
