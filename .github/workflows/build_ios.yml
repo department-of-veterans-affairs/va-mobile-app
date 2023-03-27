@@ -77,6 +77,12 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
+      - name: Setup ruby and restore bundler cache
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0.2'
+          bundler-cache: true
+          working-directory: VAMobile/ios
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
