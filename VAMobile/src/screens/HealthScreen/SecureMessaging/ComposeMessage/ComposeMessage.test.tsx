@@ -310,7 +310,7 @@ context('ComposeMessage', () => {
         })
       })
 
-      it('should display a fieldå error for that field', async () => {
+      it('should display a field error for that field', async () => {
         await waitFor(() => {
           expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
