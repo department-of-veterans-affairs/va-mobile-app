@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, completeSync, logInDemoMode } from 'store/slices'
+import { AuthState, AuthorizedServicesState, SettingsState, completeSync, fetchAndActivateRemoteConfig, logInDemoMode } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, checkForDowntimeErrors, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
@@ -32,6 +32,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>(
     (state) => state.authorizedServices,
   )
+  const { remoteConfigLoaded } = useSelector<RootState, SettingsState>((s) => s.settings)
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -53,9 +54,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
         dispatch(getServiceHistory())
       } else if (!disabilityRatingLoaded) {
         dispatch(getDisabilityRating())
+      } else if (!remoteConfigLoaded) {
+        dispatch(fetchAndActivateRemoteConfig())
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, disabilityRatingLoaded, militaryHistoryLoaded])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, disabilityRatingLoaded, militaryHistoryLoaded, remoteConfigLoaded])
 
   useEffect(() => {
     if (syncing) {

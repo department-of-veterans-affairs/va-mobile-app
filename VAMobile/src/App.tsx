@@ -28,6 +28,7 @@ import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
+import { SettingsState } from 'store/slices'
 import { SnackBarConstants } from 'constants/common'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
@@ -155,6 +156,7 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { remoteConfigLoading } = useSelector<RootState, SettingsState>((state) => state.settings)
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
@@ -235,7 +237,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
-  } else if (syncing) {
+  } else if (syncing || remoteConfigLoading) {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Sync" component={SyncScreen} options={{ ...topPaddingAsHeaderStyles, title: 'sync' }} />
