@@ -6,8 +6,8 @@ than a link to an issue.  -->
 
 ## Screenshots/Video
 <!-- Add screenshots or video as needed. Before/after if changes are to be compared by reviewers.
-Before/after: <img src="" width="49%">&nbsp;&nbsp;<img src="" width="49%">
-Toggle: <details><summary></summary><img src="" width="49%"></details>
+Before/after: <img src="" width="49%" />&nbsp;&nbsp;<img src="" width="49%" />
+Toggle: <details><summary></summary><img src="" width="49%" />&nbsp;&nbsp;<img src="" width="49%" /></details>
 -->
 
 ## Testing
