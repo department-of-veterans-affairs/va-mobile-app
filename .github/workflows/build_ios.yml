@@ -91,7 +91,11 @@ jobs:
         run: yarn bundle:ios
       - name: Install pods
         run: pod install
-      - name: Update fastlane
-        run: bundle update fastlane
+      - name: Install gems
+        run: bundle install
       - name: Run fastlane
         run: bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 15
