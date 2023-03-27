@@ -32,7 +32,6 @@ import { SnackBarConstants } from 'constants/common'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { activateRemoteConfig } from 'utils/remoteConfig'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -191,7 +190,6 @@ export const AuthGuard: FC = () => {
     // only run on app load
     dispatch(sendUsesLargeTextAnalytics())
     dispatch(sendUsesScreenReaderAnalytics())
-    activateRemoteConfig()
   }, [dispatch])
 
   useEffect(() => {
