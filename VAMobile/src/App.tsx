@@ -33,6 +33,7 @@ import { SnackBarConstants } from 'constants/common'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -156,7 +157,7 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { remoteConfigLoading } = useSelector<RootState, SettingsState>((state) => state.settings)
+  const { remoteConfigLoading, remoteConfigLoaded } = useSelector<RootState, SettingsState>((state) => state.settings)
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
@@ -208,6 +209,12 @@ export const AuthGuard: FC = () => {
     analytics().setAnalyticsCollectionEnabled(toggle)
     performance().setPerformanceCollectionEnabled(toggle)
   }, [firebaseDebugMode])
+
+  useEffect(() => {
+    if (!remoteConfigLoaded) {
+      dispatch(fetchAndActivateRemoteConfig())
+    }
+  }, [dispatch, remoteConfigLoading, remoteConfigLoaded])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
