@@ -43,8 +43,8 @@ export const productionDefaults: FeatureToggleValues = {
   testFeature: false,
   inAppUpdates: false,
   preferredNameGender: false,
-  haptics: true,
-  whatsNewUI: true,
+  haptics: false,
+  whatsNewUI: false,
 }
 
 /**
