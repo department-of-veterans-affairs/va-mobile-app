@@ -157,7 +157,7 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { remoteConfigLoading, remoteConfigLoaded } = useSelector<RootState, SettingsState>((state) => state.settings)
+  const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>((state) => state.settings)
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
@@ -211,10 +211,10 @@ export const AuthGuard: FC = () => {
   }, [firebaseDebugMode])
 
   useEffect(() => {
-    if (!remoteConfigLoaded) {
+    if (!remoteConfigActivated) {
       dispatch(fetchAndActivateRemoteConfig())
     }
-  }, [dispatch, remoteConfigLoading, remoteConfigLoaded])
+  }, [dispatch, loadingRemoteConfig, remoteConfigActivated])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
@@ -232,7 +232,7 @@ export const AuthGuard: FC = () => {
   }, [dispatch])
 
   let content
-  if (initializing || remoteConfigLoading) {
+  if (initializing || loadingRemoteConfig) {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Splash" component={SplashScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />

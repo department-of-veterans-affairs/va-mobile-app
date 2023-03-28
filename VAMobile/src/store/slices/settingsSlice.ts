@@ -5,14 +5,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export type SettingsState = {
   haptics: boolean
-  remoteConfigLoading: boolean
-  remoteConfigLoaded: boolean
+  loadingRemoteConfig: boolean
+  remoteConfigActivated: boolean
 }
 
 export const initialSettingsState: SettingsState = {
   haptics: false,
-  remoteConfigLoading: false,
-  remoteConfigLoaded: false,
+  loadingRemoteConfig: false,
+  remoteConfigActivated: false,
 }
 
 const STORAGE_HAPTICS_KEY = '@store_settings_haptics'
@@ -61,11 +61,11 @@ const settingsSlice = createSlice({
       state.haptics = action.payload
     },
     dispatchUpdateLoadingRemoteConfig: (state, action: PayloadAction<boolean>) => {
-      state.remoteConfigLoading = action.payload
+      state.loadingRemoteConfig = action.payload
     },
     dispatchFinishLoadingRemoteConfig: (state) => {
-      state.remoteConfigLoaded = true
-      state.remoteConfigLoading = false
+      state.remoteConfigActivated = true
+      state.loadingRemoteConfig = false
     },
   },
 })
