@@ -25,8 +25,8 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     textDecoration: 'underline',
     textDecorationColor: 'link',
     accessibilityRole: 'link',
-    accessibilityLabel: 'howDoIUpdate.findYourNearestVAMedicalCenter.a11yLabel',
-    accessibilityHint: 'howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint',
+    accessibilityLabel: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yLabel'),
+    accessibilityHint: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint'),
     my: theme.dimensions.standardMarginBetween,
   }
 
@@ -37,8 +37,8 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     textDecoration: 'underline',
     textDecorationColor: 'link',
     accessibilityRole: 'link',
-    accessibilityLabel: 'howDoIUpdate.learnToChangeLegalName.a11yLabel',
-    accessibilityHint: 'howDoIUpdate.learnToChangeLegalName.a11yHint',
+    accessibilityLabel: t('howDoIUpdate.learnToChangeLegalName.a11yLabel'),
+    accessibilityHint: t('howDoIUpdate.learnToChangeLegalName.a11yHint'),
   }
 
   const renderUI = (): ReactElement => {
