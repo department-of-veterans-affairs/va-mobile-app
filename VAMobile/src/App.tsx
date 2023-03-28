@@ -33,6 +33,7 @@ import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { activateRemoteConfig } from 'utils/remoteConfig'
+import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -173,6 +174,18 @@ export const AuthGuard: FC = () => {
     },
     swipeEnabled: false,
   }
+
+  async function updateStatusBar() {
+    try {
+      await changeNavigationBarColor(theme.colors.background.main, true)
+    } catch {}
+  }
+
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', updateStatusBar)
+    return (): void => sub.remove()
+  }, [updateStatusBar])
+
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))

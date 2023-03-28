@@ -10,7 +10,7 @@ const nativeUIUtilities = NativeModules.RNNativeUIUtilities
  * @returns promise<void>
  */
 
-export const changeNavigationBarColor = async (color = String, animated = true): Promise<void> => {
+export const changeNavigationBarColor = async (color: string, animated = true): Promise<void> => {
   if (!isIOS()) {
     const theme = getTheme()
     await nativeUIUtilities.changeNavigationBarColor(color, theme.mode === 'dark' ? true : false, animated)
