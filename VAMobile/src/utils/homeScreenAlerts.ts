@@ -26,11 +26,11 @@ export const FeatureConstants: {
 export const getVersionSkipped = async (feature: number): Promise<string> => {
   switch (feature) {
     case FeatureConstants.WHATSNEW:
-      return (await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL)) || '0.0.0'
+      return (await AsyncStorage.getItem(APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL)) || '0.0'
     case FeatureConstants.ENCOURAGEUPDATE:
-      return (await AsyncStorage.getItem(APP_VERSION_SKIPPED_UPDATE_VAL)) || '0.0.0'
+      return (await AsyncStorage.getItem(APP_VERSION_SKIPPED_UPDATE_VAL)) || '0.0'
   }
-  return '0.0.0'
+  return '0.0'
 }
 
 /**
@@ -80,24 +80,30 @@ export const getLocalVersion = async (feature: number, demoMode: boolean): Promi
   switch (feature) {
     case FeatureConstants.WHATSNEW:
       if (demoMode && whatsNewOverride) {
-        return whatsNewOverride.replace(/[^0-9.]/g, '').replace(/[.]$/, '')
+        return whatsNewOverride
       } else {
         const version = await getVersionName()
-        return version.replace(/[^0-9.]/g, '').replace(/[.]$/, '')
+        return version
+          .replace(/[^0-9.]/g, '')
+          .replace(/[.]$/, '')
+          .slice(0, -2)
       }
     case FeatureConstants.ENCOURAGEUPDATE:
       if (demoMode && encourageUpdateOverride) {
-        return encourageUpdateOverride.replace(/[^0-9.]/g, '').replace(/[.]$/, '')
+        return encourageUpdateOverride
       } else if (isIOS()) {
         const version = await getVersionName()
-        return version.replace(/[^0-9.]/g, '').replace(/[.]$/, '')
+        return version
+          .replace(/[^0-9.]/g, '')
+          .replace(/[.]$/, '')
+          .slice(0, -2)
       } else {
         const version = await getBuildNumber()
         return version.toString()
       }
   }
 
-  return '0.0.0'
+  return '0.0'
 }
 
 /**
@@ -111,7 +117,7 @@ export const getStoreVersion = async (): Promise<string> => {
   if (isIOS()) {
     // includes minimumOsVersion and supported devices
     const parsedString = result.split(', ')
-    return parsedString[0]
+    return parsedString[0].slice(0, -2)
   } else {
     return result.toString()
   }
