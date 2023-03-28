@@ -73,7 +73,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
    * Reducer to update the "VA" header opacity based on scroll
    */
   const VaOpacityReducer = (initOffset: number) => {
-    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight : initOffset
+    return transition ? 1 - title.scrollOffset / title.transitionHeaderHeight / 2 : initOffset
   }
 
   /**
@@ -136,11 +136,15 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
         }
       : { disabled: true }
 
-  const titleBannerProps: BoxProps = {
+  const titleBannerViewProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
     minHeight: theme.dimensions.headerHeight,
+  }
+
+  const titleBannerBoxProps: BoxProps = {
+    ...titleBannerViewProps,
     backgroundColor: bannerDivider ? 'largePanelHeader' : 'main',
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
@@ -174,7 +178,9 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const titleA11y = title?.type === 'VA' ? 'V-A' : title?.a11yLabel ? title.a11yLabel : title?.title
   const titleViewProps: ViewProps = { accessibilityLabel: titleA11y, accessibilityRole: 'header', accessible: true }
   const titleBoxProps: BoxProps = {
-    ...commonBoxProps,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: theme.dimensions.headerHeight,
     accessibilityElementsHidden: true,
     importantForAccessibility: 'no-hide-descendants',
   }
@@ -228,8 +234,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   return (
     <View {...zIndex}>
       <Shadow {...headerDropShadow}>
-        <View {...titleBannerProps}>
-          <Box {...titleBannerProps}>
+        <View {...titleBannerViewProps}>
+          <Box {...titleBannerBoxProps}>
             <Box flex={4} alignItems="flex-start">
               {leftButton?.descriptiveBack ? (
                 <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />

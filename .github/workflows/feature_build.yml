@@ -20,9 +20,11 @@ jobs:
     secrets: inherit
     with:
       lane: on_demand
+      notes: ${{ github.ref_name }}
   android:
     name: Android Feature Build
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
       lane: on_demand
+      notes: ${{ github.ref_name }}
