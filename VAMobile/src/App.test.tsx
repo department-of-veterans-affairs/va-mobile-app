@@ -147,6 +147,9 @@ context('App', () => {
             snackBar: {
               ...initialSnackBarState,
             },
+            settings: {
+              remoteConfigActivated: true,
+            },
           },
         })
 
