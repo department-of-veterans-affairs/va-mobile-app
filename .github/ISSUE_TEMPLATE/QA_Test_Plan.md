@@ -24,9 +24,11 @@ The purpose of this ticket is to document the test plan for <!-- List the desire
 
 <!-- Add a checkbox for each item required to fulfill the user story/issue. -->  
 
--  [ ] AC 1
--  [ ] AC 2
--  [ ] AC 3
+1. - [ ]  Create test plan
+2. - [ ] Link to test case folder in TestRail
+3. - [ ] List of test data (or other testing needs) for Product
+4. - [ ] QA peer review of test plan & cases complete (sent out & feedback incorporated)
+5. - [ ] Socialize the testing plan with relevant practices (Eng, UX, Product)
     
 Notes: 
 
