@@ -1,6 +1,5 @@
 import { NativeModules } from 'react-native'
 
-import { getTheme } from 'styles/themes/standardTheme'
 import { isIOS } from 'utils/platform'
 
 const nativeUIUtilities = NativeModules.RNNativeUIUtilities
@@ -10,9 +9,8 @@ const nativeUIUtilities = NativeModules.RNNativeUIUtilities
  * @returns promise<void>
  */
 
-export const changeNavigationBarColor = async (color: string, animated = true): Promise<void> => {
+export const changeNavigationBarColor = async (color: string, mode: boolean, animated = true): Promise<void> => {
   if (!isIOS()) {
-    const theme = getTheme()
-    await nativeUIUtilities.changeNavigationBarColor(color, theme.mode === 'dark' ? true : false, animated)
+    await nativeUIUtilities.changeNavigationBarColor(color, mode, animated)
   }
 }
