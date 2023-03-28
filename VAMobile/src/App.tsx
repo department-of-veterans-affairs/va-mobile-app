@@ -214,7 +214,7 @@ export const AuthGuard: FC = () => {
     if (!remoteConfigActivated) {
       dispatch(fetchAndActivateRemoteConfig())
     }
-  }, [dispatch, loadingRemoteConfig, remoteConfigActivated])
+  }, [dispatch, remoteConfigActivated])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
