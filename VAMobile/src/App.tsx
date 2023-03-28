@@ -175,16 +175,15 @@ export const AuthGuard: FC = () => {
     swipeEnabled: false,
   }
 
-  async function updateStatusBar() {
-    try {
-      await changeNavigationBarColor(theme.colors.background.main, true)
-    } catch {}
-  }
-
   useEffect(() => {
+    async function updateStatusBar() {
+      try {
+        await changeNavigationBarColor(theme.colors.background.main, true)
+      } catch {}
+    }
     const sub = AppState.addEventListener('change', updateStatusBar)
     return (): void => sub.remove()
-  }, [updateStatusBar])
+  }, [])
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
