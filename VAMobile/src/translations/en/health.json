@@ -430,8 +430,6 @@
   "secureMessaging.attachments.youMayAttach": "You may attach up to 4 files which must be in one of the following formats:",
   "secureMessaging.composeMessage": "Compose a Message",
   "secureMessaging.composeMessage.attach": "Attach",
-  "secureMessaging.composeMessage.attach.cancel.a11yHint": "cancel and return to your message",
-  "secureMessaging.composeMessage.attach.a11yHint": "attach file to your message",
   "secureMessaging.composeMessage.a11yHint": "navigate to the compose message page",
   "secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled": "We're sorry. To send a Secure Message, both you and your VA primary care provider must be enrolled in the Secure Messaging program. Please contact your primary care provider to see if they are enrolled and can enroll you in the program.",
   "secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel": "We're sorry. To send a Secure Message, both you and your V-A primary care provider must be enrolled in the Secure Messaging program. Please contact your primary care provider to see if they are enrolled and can enroll you in the program.",
