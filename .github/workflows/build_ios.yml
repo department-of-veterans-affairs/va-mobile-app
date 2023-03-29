@@ -13,21 +13,22 @@ on:
       # Specifies which fastlane lane to run
       # Options: qa, rc, review, release, on_demand
       lane:
-        type: string 
+        type: string
         default: qa
       # Release notes that will show next to the version in TestFlight
       # Fastlane will default to "New QA version for {{DATE_TIME}}"
       notes:
         type: string
         default: ''
+      # Timestamp of the Slack thread where build related messages should be sent.
+      # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
+      slack_thread_ts:
+        type: string
+        default: ''
       # TestFlight group to distribute to. Fastlane defaults to "Development Team"
       tf_group:
         type: string
         default: ''
-      # Determines whether or not to send slack messages related to the build
-      use_slack_thread:
-        type: boolean
-        default: true
       # Version to use for production release. QA/On-demand builds will increment
       # upon the latest version in TestFlight
       version:
@@ -36,7 +37,7 @@ on:
 
 defaults:
   run:
-    working-directory: VAMobile
+    working-directory: VAMobile/ios
 
 env:
   # IAM staging app client secret
@@ -45,10 +46,12 @@ env:
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
   # Password to enter demo mode from login screen
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+  # Slack API token used by fastlane
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
-  Build:
-    runs-on: macos-latest
+  build_ios:
+    runs-on: macos-latest-xl
     env:
       # App Store Connect Issuer ID
       APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
@@ -64,39 +67,41 @@ jobs:
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
-      # Set up ssh agent with VA Mobile Automation robot's ssh key so we can clone the private repo for match
-      - name: webfactory/ssh-agent
+      - name: Setup ssh-agent with VA Mobile Automation ssh key for fastlane match
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
-      # Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
-      - name: Decode files
-        working-directory: VAMobile/ios
+      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
         run: |
+          echo Notes: ${{ inputs.notes }}
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
           echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
-      # Set up xcode with specified version
-      - uses: maxim-lobanov/setup-xcode@v1
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '13.4.1'
-      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
-      - uses: actions/setup-node@v3
+          xcode-version: latest-stable
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
-      # Install node dependencies and bundle app
-      - name: Install dependencies
-        working-directory: VAMobile
-        run: |
-          yarn install --frozen-lockfile --non-interactive
-          yarn env:${{ inputs.environment }}
-          yarn bundle:ios
-      # Install pods and run fastlane using provided inputs
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set app environment variables
+        run: yarn env:${{ inputs.environment }}
+      - name: Set SLACK_THREAD_TS environment variable
+        if: inputs.slack_thread_ts
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      - name: Bundle app
+        run: yarn bundle:ios
+      - name: Install pods
+        run: pod install
+      - name: Install gems
+        run: bundle install
       - name: Run fastlane
-        run: |
-          cd ios
-          pod install
-          bundle install          
-          bundle update fastlane
-          bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+        run: bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 15

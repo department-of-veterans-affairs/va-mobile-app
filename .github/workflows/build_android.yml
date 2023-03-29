@@ -20,15 +20,16 @@ on:
       notes:
         type: string
         default: ''
-      # Google Play Console track to distribute to. Fastlane defaults to 
+      # Google Play Console track to distribute to. Fastlane defaults to
       # "Development Team"
       ps_track:
         type: string
         default: ''
-      # Determines whether or not to send slack messages related to the build
-      use_slack_thread:
-        type: boolean
-        default: true
+      # Timestamp of the Slack thread where build related messages should be sent.
+      # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
+      slack_thread_ts:
+        type: string
+        default: ''
       # Version to use for production release. QA/On-demand builds will increment
       # upon the latest version in Google Play Console
       version:
@@ -37,7 +38,7 @@ on:
 
 defaults:
   run:
-    working-directory: VAMobile
+    working-directory: VAMobile/android
 
 env:
   # IAM staging app client secret
@@ -56,51 +57,52 @@ env:
   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  # Slack API token used by fastlane
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
-  Build:
-    runs-on: ubuntu-latest
+  build_android:
+    runs-on: ubuntu-4-cores-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set git config
         run: |
+          echo Notes: ${{ inputs.notes }}
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
       # Decodes base64 encoded keystore, Play Store service distribution key,
       # Firebase distribution key, and Firebase analytics/crashlytics json
-      - name: Decode files
+      - name: Decode base64 encoded keys
         run: |
-          mkdir android/keys
-          cd android/keys
+          mkdir keys
+          cd keys
           echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
           echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
           echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
           cd ../app
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
-      # Setup ruby with specified version
-      - name: Setup ruby
+      - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0.2'
-          # Runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
           working-directory: VAMobile/android
-      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
-      - name: Setup node
+      - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
-      # Install node dependencies and bundle app
-      - name: Install dependencies
-        run: |
-          yarn install --frozen-lockfile --non-interactive
-          yarn env:${{ inputs.environment }}
-          yarn bundle:android
-      # Run fastlane using provided inputs
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set app environment variables
+        run: yarn env:${{ inputs.environment }}
+      - name: Bundle app
+        run: yarn bundle:android
+      - name: Update fastlane
+        run: bundle update fastlane
+      - name: Set SLACK_THREAD_TS environment variable
+        if: inputs.slack_thread_ts
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
       - name: Run fastlane
-        run: |
-          cd android
-          bundle update fastlane
-          bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+        run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
