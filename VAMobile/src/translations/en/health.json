@@ -425,7 +425,6 @@
   "secureMessaging.attachments.hasAttachment": "Has attachment",
   "secureMessaging.attachments.removeAttachmentAreYouSure": "Are you sure you would like to remove this attachment?",
   "secureMessaging.attachments.selectAFile": "Select a file",
-  "secureMessaging.attachments.selectAFile.a11yHint": "Select a file from your device",
   "secureMessaging.attachments.sizeRequirements": "The file size for a single attachment cannot exceed 6 MB and the total size of the attachments cannot exceed 10 MB.",
   "secureMessaging.attachments.sizeRequirements.A11yLabel": "The file size for a single attachment cannot exceed 6 megabytes and the total size of the attachments cannot exceed 10 megabytes.",
   "secureMessaging.attachments.youMayAttach": "You may attach up to 4 files which must be in one of the following formats:",
