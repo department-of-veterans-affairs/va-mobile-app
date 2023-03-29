@@ -254,10 +254,10 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <VAButton
               onPress={() => {
-                setSkippedVersionHomeScreen('0.0.0')
-                setWhatsNewSkippedVersionHomeScreen('0.0.0')
-                setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, '0.0.0')
-                setVersionSkipped(FeatureConstants.WHATSNEW, '0.0.0')
+                setSkippedVersionHomeScreen('0.0')
+                setWhatsNewSkippedVersionHomeScreen('0.0')
+                setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, '0.0')
+                setVersionSkipped(FeatureConstants.WHATSNEW, '0.0')
                 overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
                 overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, undefined)
                 checkEncourageUpdateLocalVersion()
