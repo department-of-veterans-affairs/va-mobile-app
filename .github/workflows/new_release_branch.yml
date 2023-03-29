@@ -1,0 +1,27 @@
+name: Create New Release Branch
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 6 * * 3" # 06:30 AM UTC every Wednesday
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+jobs:
+  cut_release_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set username and email
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+
+      - name: Cut release branch
+        run: ./release_branch.sh

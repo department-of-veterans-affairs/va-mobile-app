@@ -27,10 +27,14 @@ assignees:
 
 ## Bug Severity - BE SURE TO ADD THE SEVERITY LABEL
 <!-- How bad is it? --> 
-See [Issue Tracking](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/testing/VA%20Mobile%20App%20Test%20Plan.md#issue-tracking) for details on Severity Levels
-<!-- Pick one -->
-- 4 - Low
-- 3 - Medium
+See [Bug Tracking](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/testing/VA%20Mobile%20App%20Test%20Plan.md#issue-severity) for details on severity levels
+<!-- Pick high or low for each category, using definitions in the link above if needed. -->
+- Impact: High Low 
+- Frequency: High Low 
+
+<!-- Pick a single severity label (and delete the others) -->
+<!-- sev-1 is HIGH for both impact and frequency, sev-2 is HIGH in one measure and LOW in the other, sev-3 is LOW for both -->
+- 3 - Low
 - 2 - High
 - 1 - Critical
 
