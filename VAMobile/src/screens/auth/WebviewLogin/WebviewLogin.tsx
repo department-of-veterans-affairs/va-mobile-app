@@ -6,7 +6,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, sendLoginStartAnalytics, setPKCEParams } from 'store/slices/authSlice'
-import { Box, LoadingComponent } from 'components'
+import { Box, HeaderBanner, HeaderBannerProps, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -50,11 +50,6 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const webLoginUrl = `${SIS_ENABLED ? AUTH_SIS_ENDPOINT : AUTH_IAM_ENDPOINT}?${params}`
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   }
 
   useEffect(() => {
@@ -99,23 +94,27 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   } else if (authParamsLoadingState !== AuthParamsLoadingStateTypeConstants.READY) {
     return <LoadingComponent text={t('webview.preLogin.message')} />
   } else {
+    const headerProps: HeaderBannerProps = { leftButton: { text: t('cancel'), onPress: navigation.goBack }, title: { type: 'Static', title: t('signin') } }
     return (
-      <Box style={webviewStyle}>
-        <WebView
-          source={{ uri: webLoginUrl }}
-          incognito={true}
-          startInLoadingState
-          onError={(e) => {
-            const err = new Error(e.nativeEvent.description)
-            err.stack = JSON.stringify(e.nativeEvent)
-            err.name = e.nativeEvent.title
-            logNonFatalErrorToFirebase(err, 'Android Login Webview Error')
-            dispatch(sendLoginFailedAnalytics(err))
-          }}
-          renderLoading={(): ReactElement => loadingSpinner}
-          {...testIdProps('Sign-in: Webview-login', true)}
-        />
-      </Box>
+      <>
+        <HeaderBanner {...headerProps} />
+        <Box style={webviewStyle}>
+          <WebView
+            source={{ uri: webLoginUrl }}
+            incognito={true}
+            startInLoadingState
+            onError={(e) => {
+              const err = new Error(e.nativeEvent.description)
+              err.stack = JSON.stringify(e.nativeEvent)
+              err.name = e.nativeEvent.title
+              logNonFatalErrorToFirebase(err, 'Android Login Webview Error')
+              dispatch(sendLoginFailedAnalytics(err))
+            }}
+            renderLoading={(): ReactElement => loadingSpinner}
+            {...testIdProps('Sign-in: Webview-login', true)}
+          />
+        </Box>
+      </>
     )
   }
 }
