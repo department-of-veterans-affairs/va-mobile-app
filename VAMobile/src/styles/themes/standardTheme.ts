@@ -79,7 +79,7 @@ const fontSizes = {
   },
   SnackBarBtnText: {
     fontSize: 16,
-    lineHeight: 22,
+    lineHeight: 24,
   },
   TableHeaderBold: {
     fontSize: 20,
