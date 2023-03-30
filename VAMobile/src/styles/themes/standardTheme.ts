@@ -108,7 +108,7 @@ const fontSizes = {
   },
   VASelector: {
     fontSize: 20,
-    lineHeight: 24,
+    lineHeight: 30,
   },
   webviewTitle: {
     fontSize: 12,
