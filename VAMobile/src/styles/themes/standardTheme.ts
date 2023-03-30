@@ -51,7 +51,7 @@ const fontSizes = {
   },
   ClaimPhase: {
     fontSize: 20,
-    lineHeight: 25,
+    lineHeight: 30,
   },
   DescriptiveBackButton: {
     fontSize: 16,
