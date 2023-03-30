@@ -10,17 +10,27 @@ on:
       - 'feature-build-*'
 
 jobs:
+  start_slack_thread:
+    name: Start Slack thread
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
   ios:
     name: iOS Feature Build
+    needs: start_slack_thread
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
       lane: on_demand
       notes: ${{ github.ref_name }}
+      slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
   android:
     name: Android Feature Build
+    needs: start_slack_thread
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
       lane: on_demand
       notes: ${{ github.ref_name }}
+      slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
