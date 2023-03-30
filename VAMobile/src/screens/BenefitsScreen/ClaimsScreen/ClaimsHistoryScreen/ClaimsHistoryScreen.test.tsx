@@ -1,8 +1,8 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, mockNavProps, mockStore, render, RenderAPI, waitFor, when } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import {
   ClaimsAndAppealsState,
@@ -13,13 +13,13 @@ import {
   initializeErrorsByScreenID,
   InitialState,
 } from 'store/slices'
-import ClaimsScreen from './ClaimsScreen'
+import ClaimsHistoryScreen from './ClaimsHistoryScreen'
 import { AlertBox, ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
-import ClaimsAndAppealsListView from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import * as api from 'store/api'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
+import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { ClaimsAndAppealsGetDataMeta } from 'store/api'
 import { cleanup } from '@testing-library/react-native'
@@ -136,7 +136,7 @@ const mockPaginationAppealsClaimsServiceError: ClaimsAndAppealsGetDataMeta = {
   ],
 }
 
-context('ClaimsScreen', () => {
+context('ClaimsHistoryScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
@@ -165,7 +165,7 @@ context('ClaimsScreen', () => {
 
     const props = mockNavProps()
 
-    component = render(<ClaimsScreen {...props} />, {
+    component = render(<ClaimsHistoryScreen {...props} />, {
       preloadedState,
     })
 
@@ -245,7 +245,7 @@ context('ClaimsScreen', () => {
         ...initialErrorsState,
         errorsByScreenID,
       }
-      component = render(<ClaimsScreen {...props} />, {
+      component = render(<ClaimsHistoryScreen {...props} />, {
         preloadedState: {
           ...InitialState,
           errors: errorState,
@@ -274,7 +274,7 @@ context('ClaimsScreen', () => {
         errorsByScreenID,
       }
 
-      component = render(<ClaimsScreen {...props} />, {
+      component = render(<ClaimsHistoryScreen {...props} />, {
         preloadedState: {
           ...InitialState,
           errors: errorState,
@@ -301,7 +301,7 @@ context('ClaimsScreen', () => {
     it('should not render the NoClaimsAndAppealsAccess component', async () => {
       const props = mockNavProps()
 
-      component = render(<ClaimsScreen {...props} />, {
+      component = render(<ClaimsHistoryScreen {...props} />, {
         preloadedState: {
           ...InitialState,
           authorizedServices: {
@@ -324,7 +324,7 @@ context('ClaimsScreen', () => {
     it('should not render the NoClaimsAndAppealsAccess component', async () => {
       const props = mockNavProps()
 
-      component = render(<ClaimsScreen {...props} />, {
+      component = render(<ClaimsHistoryScreen {...props} />, {
         preloadedState: {
           ...InitialState,
           authorizedServices: {
@@ -348,7 +348,7 @@ context('ClaimsScreen', () => {
       const props = mockNavProps()
 
       await waitFor(() => {
-        component = render(<ClaimsScreen {...props} />, {
+        component = render(<ClaimsHistoryScreen {...props} />, {
           preloadedState: {
             ...InitialState,
             authorizedServices: {

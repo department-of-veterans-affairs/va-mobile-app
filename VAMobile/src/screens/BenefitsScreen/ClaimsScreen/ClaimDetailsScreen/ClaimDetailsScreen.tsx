@@ -83,7 +83,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const a11yHints = [t('claimDetails.viewYourClaim', { tabName: t('claimDetails.status') }), t('claimDetails.viewYourClaim', { tabName: t('claimDetails.details') })]
 
   return (
-    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
+    <FeatureLandingTemplate backLabel={t('claimsHistory.title')} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
