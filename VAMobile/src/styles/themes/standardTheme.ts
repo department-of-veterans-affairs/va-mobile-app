@@ -91,7 +91,7 @@ const fontSizes = {
   },
   TableFooterLabel: {
     fontSize: 14,
-    lineHeight: 18,
+    lineHeight: 21,
   },
   textWithIconButton: {
     fontSize: 12,
