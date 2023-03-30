@@ -111,7 +111,7 @@ const fontSizes = {
   },
   UnreadMessagesTag: {
     fontSize: 20,
-    lineHeight: 20,
+    lineHeight: 30,
   },
   VAHeader: {
     fontSize: 28,
