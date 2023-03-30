@@ -77,14 +77,6 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 30,
   },
-  MobileBodyBold: {
-    fontSize: 20,
-    lineHeight: 30,
-  },
-  MobileBodyLink: {
-    fontSize: 20,
-    lineHeight: 30,
-  },
   MobileBodyTight: {
     fontSize: 20,
     lineHeight: 24,
