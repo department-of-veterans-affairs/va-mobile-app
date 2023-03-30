@@ -59,7 +59,7 @@ export const EncourageUpdateAlert = () => {
       openAppStore()
     } else if (result) {
       logAnalyticsEvent(Events.vama_eu_updated_success())
-      setVersionName(storeVersion ? storeVersion : '0.0.0')
+      setVersionName(storeVersion ? storeVersion : '0.0')
     }
   }
 
@@ -70,11 +70,18 @@ export const EncourageUpdateAlert = () => {
 
   const onSkipPressed = (): void => {
     logAnalyticsEvent(Events.vama_eu_skipped())
-    setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, storeVersion ? storeVersion : '0.0.0')
-    setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0.0')
+    setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, storeVersion ? storeVersion : '0.0')
+    setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0')
   }
 
-  if (featureEnabled('inAppUpdates') && storeVersion && localVersionName && skippedVersion && skippedVersion !== storeVersion && storeVersion > localVersionName) {
+  if (
+    featureEnabled('inAppUpdates') &&
+    storeVersion &&
+    localVersionName &&
+    skippedVersion &&
+    skippedVersion !== storeVersion &&
+    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
+  ) {
     logAnalyticsEvent(Events.vama_eu_shown())
     return (
       <Box mb={theme.dimensions.buttonPadding}>
@@ -90,7 +97,7 @@ export const EncourageUpdateAlert = () => {
         </AlertBox>
       </Box>
     )
-  } else if (localVersionName && storeVersion && localVersionName === storeVersion) {
+  } else if (localVersionName && storeVersion && localVersionName >= storeVersion) {
     return <WhatsNew />
   } else {
     return null
