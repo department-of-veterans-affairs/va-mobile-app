@@ -200,10 +200,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const moveIconProps: VAIconProps = {
     name: 'FolderSolid',
-    width: 22,
-    height: 22,
-    preventScaling: true,
-    fill: 'link',
   }
 
   const headerButton =

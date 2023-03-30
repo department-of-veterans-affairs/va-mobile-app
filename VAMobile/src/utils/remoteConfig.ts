@@ -38,13 +38,13 @@ export let devConfig: FeatureToggleValues = {
 
 export const productionDefaults: FeatureToggleValues = {
   appointmentRequests: false,
-  prescriptions: false,
+  prescriptions: true,
   SIS: true,
   testFeature: false,
   inAppUpdates: false,
   preferredNameGender: false,
-  haptics: false,
-  whatsNewUI: false,
+  haptics: true,
+  whatsNewUI: true,
 }
 
 /**
