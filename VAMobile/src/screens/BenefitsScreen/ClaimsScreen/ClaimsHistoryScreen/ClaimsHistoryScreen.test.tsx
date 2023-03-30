@@ -239,7 +239,7 @@ context('ClaimsHistoryScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       const props = mockNavProps()
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.CLAIMS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,

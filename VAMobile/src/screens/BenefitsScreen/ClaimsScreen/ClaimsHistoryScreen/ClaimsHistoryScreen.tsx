@@ -37,7 +37,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   useEffect(() => {
     // Fetch the profile information
     if (personalInformationNeedsUpdate && profileNotInDowntime) {
-      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
   }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
 
@@ -46,23 +46,23 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   useEffect(() => {
     // only block api call if claims and appeals are both down
     if (claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime)) {
-      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
   }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
 
   const fetchInfoAgain = (): void => {
     if (claimsAndAppealsAccess) {
-      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
     if (personalInformationNeedsUpdate) {
-      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
   }
 
-  if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
-        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
+        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
   }
