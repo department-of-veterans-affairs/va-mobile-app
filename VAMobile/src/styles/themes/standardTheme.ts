@@ -67,11 +67,7 @@ const fontSizes = {
   },
   LabelTag: {
     fontSize: 16,
-    lineHeight: 22,
-  },
-  LabelTagBold: {
-    fontSize: 16,
-    lineHeight: 22,
+    lineHeight: 24,
   },
   MobileBody: {
     fontSize: 20,
