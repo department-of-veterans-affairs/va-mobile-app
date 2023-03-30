@@ -3,7 +3,7 @@ import { Shadow, ShadowProps } from 'react-native-shadow-2'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
-import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
 import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
@@ -195,7 +195,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   if (rightButton) {
     rightTextViewProps = {
       color: 'footerButton',
-      variant: rightButton.icon ? 'textWithIconButton' : 'MobileBody',
+      variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,
     }
@@ -264,10 +264,11 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               {rightButton && (
                 <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
                   <Box {...commonBoxProps}>
-                    {rightButton.icon && <VAIcon fill="link" height={24} width={24} preventScaling={true} {...rightButton.icon} />}
-                    <Box display="flex" flexDirection="row" alignItems="center">
+                    {rightButton.icon ? (
+                      <VAIconWithText label={rightButton.text} labelA11y={rightButton.a11yLabel} {...rightButton.icon} />
+                    ) : (
                       <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
-                    </Box>
+                    )}
                   </Box>
                 </TouchableWithoutFeedback>
               )}
