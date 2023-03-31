@@ -9,10 +9,6 @@ on:
     tags:
       - 'feature-build-*'
 
-defaults:
-  run:
-    working-directory: VAMobile
-
 jobs:
   start_slack_thread:
     name: Start Slack thread

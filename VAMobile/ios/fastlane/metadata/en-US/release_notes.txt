@@ -1,1 +1,1 @@
-You can now manage your VA prescriptions. This includes requesting refills and tracking delivery of your VA prescriptions.
+We added general improvements and fixed a few bugs.
