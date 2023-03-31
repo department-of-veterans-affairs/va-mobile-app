@@ -141,6 +141,7 @@ export const lightTheme = {
     closePanel: colors.primary,
     labelTag: colors.base,
     textWithIconButton: colors.primary,
+    textWithIconButtonInactive: colors.primary,
     webviewTitle: colors.base,
   },
   buttonBackground: {
@@ -333,6 +334,7 @@ export const darkTheme = {
     closePanel: colors.darkmodeLightBlue,
     labelTag: colors.base,
     textWithIconButton: colors.darkmodeLightBlue,
+    textWithIconButtonInactive: colors.grayLight,
     webviewTitle: colors.white,
   },
   buttonBackground: {

@@ -68,6 +68,7 @@ export type VATextColors = {
   closePanel: string
   labelTag: string
   textWithIconButton: string
+  textWithIconButtonInactive: string
   webviewTitle: string
 }
 
