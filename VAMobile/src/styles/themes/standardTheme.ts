@@ -124,11 +124,12 @@ const fontSizes = {
   VAHeader: {
     fontSize: 28,
     lineHeight: 32,
+    letterSpacing: -1.7,
   },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
-  const { fontSize, lineHeight } = fontSizing
+  const { fontSize, letterSpacing, lineHeight } = fontSizing
   const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`, `line-height: ${lineHeight}px`]
 
   if (color) {
@@ -136,6 +137,9 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
   }
   if (underline) {
     styles.push('textDecorationLine: underline')
+  }
+  if (letterSpacing) {
+    styles.push(`letter-spacing: ${letterSpacing}px`)
   }
   return styles.join(';\n')
 }

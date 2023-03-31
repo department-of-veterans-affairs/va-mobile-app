@@ -1,4 +1,4 @@
-import { ScrollView, ScrollViewProps } from 'react-native'
+import { ScrollView, ScrollViewProps, ViewStyle } from 'react-native'
 import React, { FC, Ref } from 'react'
 
 import { VABackgroundColors } from 'styles/theme'
@@ -26,12 +26,15 @@ const VAScrollView: FC<VAScrollViewProps> = (props) => {
     backgroundColor: props.backgroundColor ? theme.colors.background[props.backgroundColor as keyof VABackgroundColors] : theme.colors.background.main,
   }
 
+  // Grow container so short children like loading indicators are vertically centered
+  const contentContainerStyle: ViewStyle = { flexGrow: 1 }
+
   return (
     /**
      * force scroll position by default to avoid visual bug where scrollbar appears in the center of a screen
      * scrollIndicatorInsets is an iOS only prop, this bug only appears on iOS
      */
-    <ScrollView ref={props.scrollViewRef} scrollIndicatorInsets={{ right: 1 }} {...props} style={style} />
+    <ScrollView ref={props.scrollViewRef} scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={contentContainerStyle} {...props} style={style} />
   )
 }
 
