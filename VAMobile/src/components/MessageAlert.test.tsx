@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, findByTypeWithText, render, RenderAPI } from 'testUtils'
-import { AlertBox, LoadingComponent, MessageAlert, TextView } from 'components'
+import { AlertBox, MessageAlert, TextView } from 'components'
 
 context('MessageAlert', () => {
   let component: RenderAPI
@@ -24,7 +24,6 @@ context('MessageAlert', () => {
       <MessageAlert
         hasValidationError={hasValidationError}
         saveDraftAttempted={saveDraftAttempted}
-        savingDraft={savingDraft}
       />,
     )
 
@@ -42,10 +41,5 @@ context('MessageAlert', () => {
     initializeTestInstance({ hasValidationError: true })
     expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
     expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
-  })
-
-  it('should show loading screen when saving draft', async () => {
-    initializeTestInstance({ saveDraftAttempted: true, savingDraft: true })
-    expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
   })
 })
