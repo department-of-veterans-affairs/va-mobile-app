@@ -206,7 +206,6 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       return null
     }
 
-    // The non-breaking spaces compensate for the negative letter-spacing value in the VAHeader font variant
     const vaTitle = <>&nbsp;VA&nbsp;</>
 
     switch (title.type) {
