@@ -195,6 +195,9 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
       dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders))
+      if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
+        navigation.goBack()
+      }
     }
   }
 
