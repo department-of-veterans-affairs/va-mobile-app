@@ -206,7 +206,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       return null
     }
 
-    const vaTitle = <>&nbsp;VA&nbsp;</>
+    const vaTitle = ' VA '
 
     switch (title.type) {
       case 'Static':
