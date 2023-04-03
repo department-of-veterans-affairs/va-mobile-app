@@ -290,5 +290,14 @@ export type VATheme = {
     VASelector: VAFontSizes
   }
   mode: ColorSchemeTypes
+  paragraphSpacing: {
+    spacing12FontSize: number
+    spacing14FontSize: number
+    spacing16FontSize: number
+    spacing18FontSize: number
+    spacing20FontSize: number
+    spacing26FontSize: number
+    spacing28FontSize: number
+  }
   typography: VATypographyThemeVariants
 }

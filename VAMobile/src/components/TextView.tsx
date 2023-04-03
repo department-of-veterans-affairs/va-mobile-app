@@ -48,6 +48,9 @@ export type TextViewProps = AccessibilityProps &
 
     /** Max size for font when user adjusts their font scaling */
     maxFontSizeMultiplier?: number
+
+    /** if true apply paragraphSpacing, it overrides the mb if supplied*/
+    paragraphSpacing?: boolean
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
@@ -76,10 +79,54 @@ const StyledText = styled(Text)`
  *
  * @returns TextView component
  */
-const TextView: FC<TextViewProps> = ({ selectable = false, ...props }) => {
+const TextView: FC<TextViewProps> = ({ selectable = false, paragraphSpacing = false, ...props }) => {
   const { isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const theme = useTheme()
   const wrapperProps = { ...props }
+
+  if (paragraphSpacing) {
+    const variant = getFontFamily(theme, wrapperProps)
+    switch (variant) {
+      case theme.typography.textWithIconButton:
+      case theme.typography.webviewTitle:
+        wrapperProps.mb = theme.paragraphSpacing.spacing12FontSize
+        break
+      case theme.typography.TableFooterLabel:
+        wrapperProps.mb = theme.paragraphSpacing.spacing14FontSize
+        break
+      case theme.typography.DescriptiveBackButton:
+      case theme.typography.HelperText:
+      case theme.typography.HelperTextBold:
+      case theme.typography.LabelTag:
+      case theme.typography.SnackBarBtnText:
+        wrapperProps.mb = theme.paragraphSpacing.spacing16FontSize
+        break
+      case theme.typography.AppointmentRequestCtaBtnText:
+        wrapperProps.mb = theme.paragraphSpacing.spacing18FontSize
+        break
+      case theme.typography.ActionBar:
+      case theme.typography.ClaimPhase:
+      case theme.typography.MobileBody:
+      case theme.typography.MobileBodyBold:
+      case theme.typography.MobileBodyLink:
+      case theme.typography.MobileBodyTight:
+      case theme.typography.TableHeaderBold:
+      case theme.typography.TableHeaderLabel:
+      case theme.typography.UnreadMessagesTag:
+      case theme.typography.VASelector:
+        wrapperProps.mb = theme.paragraphSpacing.spacing20FontSize
+        break
+      case theme.typography.BitterBoldHeading:
+        wrapperProps.mb = theme.paragraphSpacing.spacing26FontSize
+        break
+      case theme.typography.VAHeader:
+        wrapperProps.mb = theme.paragraphSpacing.spacing28FontSize
+        break
+      default:
+        wrapperProps.mb = wrapperProps.mb
+        break
+    }
+  }
 
   if (wrapperProps.onPress) {
     const { onPress, ...remainingProps } = wrapperProps

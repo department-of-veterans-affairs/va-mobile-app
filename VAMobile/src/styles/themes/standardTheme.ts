@@ -211,6 +211,15 @@ let theme: VATheme = {
     VASelector: fontSizes.VASelector,
   },
   mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',
+  paragraphSpacing: {
+    spacing12FontSize: 24,
+    spacing14FontSize: 28,
+    spacing16FontSize: 32,
+    spacing18FontSize: 36,
+    spacing20FontSize: 40,
+    spacing26FontSize: 52,
+    spacing28FontSize: 56,
+  },
   typography: buildTypography(colorScheme),
 }
 
