@@ -65,6 +65,14 @@ jobs:
     runs-on: ubuntu-4-cores-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Wait for other Android build jobs
+        uses: lewagon/wait-on-check-action@v1.3.1
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Android Feature Build'
+          # running-workflow-name: 'android / build_android'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
       - name: Set git config
         run: |
           echo Notes: ${{ inputs.notes }}
@@ -104,13 +112,5 @@ jobs:
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Wait for other Android build jobs
-        uses: lewagon/wait-on-check-action@v1.3.1
-        with:
-          ref: ${{ github.ref }}
-          check-name: android
-          # running-workflow-name: 'android / build_android'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
       # - name: Run fastlane
       #   run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
