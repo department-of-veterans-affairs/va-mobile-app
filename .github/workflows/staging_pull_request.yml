@@ -7,7 +7,7 @@ on:
 
 jobs:
   create_prs:
-    name: PR comment
+    name: Staging PR
     if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
