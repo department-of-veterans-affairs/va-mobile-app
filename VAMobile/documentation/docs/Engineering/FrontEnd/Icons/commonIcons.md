@@ -11,7 +11,6 @@ import { ReactComponent as Compose} from '@componentsDocs/VAIcon/svgs/compose.sv
 import { ReactComponent as DatePickerArrows} from '@componentsDocs/VAIcon/svgs/date-picker-arrows.svg';
 import { ReactComponent as Ellipsis} from '@componentsDocs/VAIcon/svgs/ellipsisSolid.svg';
 import { ReactComponent as ExclamationTriangleSolid} from '@componentsDocs/VAIcon/svgs/exclamationTriangleSolid.svg';
-import { ReactComponent as ExternalLink} from '@componentsDocs/VAIcon/svgs/circle_external_link.svg';
 import { ReactComponent as Folder} from '@componentsDocs/VAIcon/svgs/folder-solid.svg';
 import { ReactComponent as Inbox} from '@componentsDocs/VAIcon/svgs/inbox-solid.svg';
 import { ReactComponent as Info} from '@componentsDocs/VAIcon/svgs/info-circle.svg';
@@ -48,7 +47,6 @@ Chevron Up | <ChevronUp  className="icons"/> | svgs/chevron-up.svg
 Compose | <Compose  className="icons"/> | compose.svg
 Ellipsis | <Ellipsis  className="icons"/> | ellipsisSolid.svg
 Exclamation Triangle | <ExclamationTriangleSolid  className="icons"/> | exclamationTriangleSolid.svg
-External Link | <ExternalLink  className="icons"/> | circle_external_link.svg
 Folder | <Folder  className="icons"/> | folder-solid.svg
 Inbox | <Inbox  className="icons"/> | inbox-solid.svg
 Info | <Info  className="icons"/> | info-circle.svg
@@ -60,6 +58,6 @@ Question Mark | <QuestionMark  className="icons"/> | questionMark.svg
 Remove | <Remove  className="icons"/> | remove.svg
 Reply | <Reply  className="icons"/> | reply.svg
 Trash | <Trash  className="icons"/> | trash-solid.svg
-Trash | <Truck  className="icons"/> | truck.svg
+Truck | <Truck  className="icons"/> | truck.svg
 Unread | <Unread  className="icons"/> | unread_icon.svg
 Video Camera | <VideoCamera  className="icons"/> | videoCamera.svg
