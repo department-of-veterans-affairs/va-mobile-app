@@ -580,12 +580,9 @@ export const getGenderIdentityOptions =
       const response = await api.get<GenderIdentityOptionsData>('/v0/user/gender_identity/edit')
       const responseOptions = response?.data.attributes.options || {}
 
-      // TODO: Gender identity keys are returned in lowercase format from the API despite being
-      // stored as uppercase in a user's profile. We need to capitalize the keys so that they're
-      // consistent with what the PUT request for updating the genderIdentity field expects. There's
-      // a BE ticket (https://github.com/department-of-veterans-affairs/va-mobile-app/issues/5121) for
-      // updating the keys returned by the API to be uppercase. Once that ticket is complete, this
-      // can be removed, and the options from the API can be used as is.
+      // TODO: Look into adding an option to the API function for disabling the X-Key-Inflection property.
+      // Right now it's set to 'camel' which returns the keys in lowercase. We need to capitalize the keys
+      // so that they're consistent with what the PUT request for updating the genderIdentity field expects.
       const genderIdentityOptions = Object.keys(responseOptions).reduce((options: GenderIdentityOptions, key: string) => {
         options[key.toUpperCase()] = responseOptions[key]
         return options
