@@ -8,6 +8,8 @@ on:
   push:
     tags:
       - 'feature-build-*'
+    branches:
+      - 'feature/4934-Theo-QueueBuildsGHA'
 
 jobs:
   start_slack_thread:
@@ -16,6 +18,7 @@ jobs:
     secrets: inherit
     with:
       message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
+      channel_name: 'va-mobile-build-alerts'
   # ios:
   #   name: iOS Feature Build
   #   needs: start_slack_thread
