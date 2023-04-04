@@ -119,7 +119,7 @@ export const VA_ICON_MAP = {
   Compose,
   CircleCheckMark,
   CoastGuard,
-  Delete, // Same as Remove?
+  Delete,
   Directions,
   EmptyCheckBox,
   FilledCheckBox,
@@ -134,22 +134,22 @@ export const VA_ICON_MAP = {
   Navy,
   PaperClip,
   Phone,
-  PhoneTTY, // White/black in doc site?
+  PhoneTTY,
   Chat,
   Text,
   RightArrowInCircle,
   Reply,
-  WebviewBack, // Same as ArrowLeft?
-  WebviewForward, // Same as ArrowRight?
-  WebviewOpen, // Should be renamed generic for external link, not WebView specific
+  WebviewBack,
+  WebviewForward,
+  WebviewOpen,
   WebviewRefresh,
   Lock,
-  DatePickerArrows, // Unused besides by unused component
+  DatePickerArrows,
   CheckMark,
   Logo,
   ErrorCheckBox,
   QuestionMark,
-  Remove, // Same as Delete?
+  Remove,
   UnreadIcon,
   VideoCamera,
   PhoneSolid,
@@ -158,10 +158,10 @@ export const VA_ICON_MAP = {
   InboxSolid,
   BuildingSolid,
   InfoIcon,
-  WhiteCheckCircle, // Why does this exist? Just white version of another icon? Missing from docs too
-  WhiteCloseCircle, // Why does this exist? Just white version of another icon? Missing from docs too
+  WhiteCheckCircle,
+  WhiteCloseCircle,
   Truck,
-  ExternalLink, // Same as WebviewOpen?
+  ExternalLink,
   Save,
 }
 /**
