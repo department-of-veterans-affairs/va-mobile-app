@@ -27,4 +27,3 @@ jobs:
           git checkout pr-to-staging
           git push -u staging pr-to-staging
           echo "STAG_PR=$(gh pr create -B staging -t "Merge ${{github.event.issue.pull_request}} to staging" -b "PR to merge ${{github.event.issue.pull_request}} changes into staging")" >> $GITHUB_ENV
-          
