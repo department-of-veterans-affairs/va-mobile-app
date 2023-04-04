@@ -68,7 +68,7 @@ jobs:
       - name: Wait for other Android build jobs
         uses: lewagon/wait-on-check-action@v1.3.1
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           check-name: 'Android Feature Build'
           # running-workflow-name: 'android / build_android'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
