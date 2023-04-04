@@ -27,10 +27,4 @@ jobs:
           git checkout ${{github.event.issue.pull_request}}-to-staging
           git push -u staging ${{github.event.issue.pull_request}}-to-staging
           gh pr create -B staging -t "Merge ${{github.event.issue.pull_request}} to staging" -b "PR to merge ${{github.event.issue.pull_request}} changes into staging"
-  start_slack_thread:
-    name: Start Slack thread
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      message: 'Staging PR created for ${{github.event.issue.pull_request}}'
 
