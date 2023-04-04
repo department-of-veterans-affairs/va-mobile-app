@@ -21,11 +21,15 @@ const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('personalInformation.genderIdentity.whatToKnow.title')}
         </TextView>
-        <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare')}</TextView>
-        <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.whoCanAccess')}</TextView>
+        <TextView {...bodyTextProps} paragraphSpacing={true}>
+          {t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare')}
+        </TextView>
+        <TextView {...bodyTextProps} paragraphSpacing={true}>
+          {t('personalInformation.genderIdentity.whatToKnow.whoCanAccess')}
+        </TextView>
         <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.privacy')}</TextView>
       </Box>
     </LargePanel>

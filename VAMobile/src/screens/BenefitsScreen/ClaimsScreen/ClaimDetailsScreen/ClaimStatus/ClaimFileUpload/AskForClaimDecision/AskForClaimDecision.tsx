@@ -110,11 +110,13 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
             {t('askForClaimDecision.title')}
           </TextView>
-          <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>
-          <TextView variant="MobileBody" my={standardMarginBetween}>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('askForClaimDecision.weSentYouALetter')}
+          </TextView>
+          <TextView variant="MobileBody" mb={standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
           <VABulletList listOfText={bulletedListOfText} />

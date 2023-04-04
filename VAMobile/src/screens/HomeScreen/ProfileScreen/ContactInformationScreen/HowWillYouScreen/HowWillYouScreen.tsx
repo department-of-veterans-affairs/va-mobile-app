@@ -27,12 +27,13 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('contactInformation.howWillYouUseContactInfo')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-          {t('howWillYou.useInfo')}
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('howWillYou.useInfo.1')}
         </TextView>
+        <TextView variant="MobileBody">{t('howWillYou.useInfo.2')}</TextView>
       </Box>
     </LargePanel>
   )

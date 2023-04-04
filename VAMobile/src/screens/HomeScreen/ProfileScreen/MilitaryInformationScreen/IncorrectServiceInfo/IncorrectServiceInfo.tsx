@@ -34,11 +34,17 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
-        <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} variant="MobileBody" my={standardMarginBetween}>
-          {t('militaryInformation.incorrectServiceInfo.body')}
+        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.1')} variant="MobileBody" paragraphSpacing={true}>
+          {t('militaryInformation.incorrectServiceInfo.body.1')}
+        </TextView>
+        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.2')} variant="MobileBody" paragraphSpacing={true}>
+          {t('militaryInformation.incorrectServiceInfo.body.2')}
+        </TextView>
+        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.3')} variant="MobileBody" paragraphSpacing={true}>
+          {t('militaryInformation.incorrectServiceInfo.body.3')}
         </TextView>
         <ClickForActionLink
           displayedText={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
