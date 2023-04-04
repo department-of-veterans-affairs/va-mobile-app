@@ -23,7 +23,7 @@ jobs:
 
       - name: 'Create PR to merge changes to staging'
         run: |
-          git fetch origin pull/${{github.event.issue.pull_request}}/head:pr-to-staging
-          git checkout pr-to-staging
-          git push -u staging pr-to-staging
+          git fetch origin pull/${{github.event.issue.pull_request}}/head:${{github.event.issue.pull_request}}-to-staging
+          git checkout ${{github.event.issue.pull_request}}-to-staging
+          git push -u staging ${{github.event.issue.pull_request}}-to-staging
           echo "STAG_PR=$(gh pr create -B staging -t "Merge ${{github.event.issue.pull_request}} to staging" -b "PR to merge ${{github.event.issue.pull_request}} changes into staging")" >> $GITHUB_ENV
