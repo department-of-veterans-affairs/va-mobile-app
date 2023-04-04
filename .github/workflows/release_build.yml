@@ -1,0 +1,27 @@
+# Release builds that are triggered by the v*.*.* tag. Release tags occur when
+# someone comments /approve on the associated release ticket
+
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  ios:
+    name: iOS Release Build
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      environment: production
+      lane: review
+      version: ${{ github.ref_name }}
+  android:
+    name: Android Release Build
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      environment: production
+      lane: review
+      version: ${{ github.ref_name }}

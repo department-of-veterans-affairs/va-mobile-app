@@ -596,6 +596,8 @@
   "noClaims.youDontHaveAnyClaims": "You don't have any submitted claims",
   "noClaims.youDontHaveAnyClaimsOrAppeals": "You don't have any submitted claims or appeals",
   "claims.title": "Claims",
+  "claimsHistory.title": "Claims history",
+  "claimLetters.title": "Claim letters",
   "statusDetails.title": "Status Details",
   "disabilityRating.a11yHint": "Go to the disability rating page",
   "disabilityRating.yourRating": "Your disability rating: ",

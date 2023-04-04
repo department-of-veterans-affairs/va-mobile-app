@@ -1,142 +1,38 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import React from 'react'
 
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl } from 'components'
-import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { BenefitsStackParamList } from '../BenefitsStackScreens'
+import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
-import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type IClaimsScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
+type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
-const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
+const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
-  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>(
-    (state) => state.personalInformation,
-  )
-  const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
-  const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
-  const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
-  const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
-  const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
-  const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
-
-  useEffect(() => {
-    // Fetch the profile information
-    if (personalInformationNeedsUpdate && profileNotInDowntime) {
-      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-    }
-  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
-
-  // load claims and appeals and filter upon mount
-  // fetch the first page of Active and Closed
-  useEffect(() => {
-    // only block api call if claims and appeals are both down
-    if (claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime)) {
-      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-    }
-  }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
-
-  const fetchInfoAgain = (): void => {
-    if (claimsAndAppealsAccess) {
-      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-    }
-    if (personalInformationNeedsUpdate) {
-      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-    }
-  }
-
-  if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
-        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingClaimsAndAppeals || personalInformationLoading) {
-    return (
-      <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
-        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!claimsAndAppealsAccess) {
-    return (
-      <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
-        <NoClaimsAndAppealsAccess />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  const serviceErrorAlert = (): ReactElement => {
-    // if there is a claims service error or an appeals service error
-    if (!!claimsServiceError || !!appealsServiceError) {
-      let alertTitle, alertText, alertTextA11yLabel
-
-      // if both services failed
-      if (claimsAndAppealsServiceErrors) {
-        alertTitle = t('claimsAndAppeal.claimAndAppealStatusUnavailable')
-        alertText = t('claimsAndAppeal.troubleLoadingClaimsAndAppeals')
-        alertTextA11yLabel = t('claimsAndAppeal.troubleLoadingClaimsAndAppealsA11yLabel')
-
-        // if claims service fails but appeals did not
-      } else if (!!claimsServiceError && !appealsServiceError) {
-        alertTitle = t('claimsAndAppeal.claimStatusUnavailable')
-        alertText = t('claimsAndAppeal.troubleLoadingClaims')
-        alertTextA11yLabel = t('claimsAndAppeal.troubleLoadingClaimsA11yLabel')
-
-        // if appeals service fails but claims does not
-      } else if (!!appealsServiceError && !claimsServiceError) {
-        alertTitle = t('claimsAndAppeal.appealStatusUnavailable')
-        alertText = t('claimsAndAppeal.troubleLoadingAppeals')
-        alertTextA11yLabel = t('claimsAndAppeal.troubleLoadingAppealsA11yLabel')
-      }
-
-      return (
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" />
-        </Box>
-      )
-    }
-
-    return <></>
-  }
+  const navigateTo = useRouteNavigation()
 
   return (
     <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
-      <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        {!claimsAndAppealsServiceErrors && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlValues}
-              onChange={setSelectedTab}
-              selected={controlValues.indexOf(selectedTab)}
-              accessibilityHints={accessibilityHints}
-            />
-          </Box>
-        )}
-        {serviceErrorAlert()}
-        {!claimsAndAppealsServiceErrors && (
-          <Box flex={1}>
-            <ClaimsAndAppealsListView claimType={claimType} />
-          </Box>
-        )}
+      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+        <LargeNavButton
+          title={t('claimsHistory.title')}
+          onPress={navigateTo('ClaimsHistory')}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+        />
+        <LargeNavButton
+          title={t('claimLetters.title')}
+          onPress={() => {}}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+        />
       </Box>
     </FeatureLandingTemplate>
   )
