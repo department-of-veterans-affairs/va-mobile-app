@@ -8,7 +8,7 @@ on:
 jobs:
   create_prs:
     name: Staging PR
-    if: ${{ github.event.issue.pull_request }}
+    if: ${{!github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout repo'
@@ -23,8 +23,8 @@ jobs:
 
       - name: 'Create PR to merge changes to staging'
         run: |
-          git fetch origin pull/${{github.event.issue.pull_request}}/head:${{github.event.issue.pull_request}}-to-staging
-          git checkout ${{github.event.issue.pull_request}}-to-staging
-          git push -u staging ${{github.event.issue.pull_request}}-to-staging
-          gh pr create -B staging -t "Merge ${{github.event.issue.pull_request}} to staging" -b "PR to merge ${{github.event.issue.pull_request}} changes into staging"
+          git fetch origin pull/${{github.event.issue.number}}/head:${{github.event.issue.number}}-to-staging
+          git checkout ${{github.event.issue.number}}-to-staging
+          git push -u staging ${{github.event.issue.number}}-to-staging
+          gh pr create -B staging -t "Merge ${{github.event.issue.number}} to staging" -b "PR to merge ${{github.event.issue.number}} changes into staging"
 
