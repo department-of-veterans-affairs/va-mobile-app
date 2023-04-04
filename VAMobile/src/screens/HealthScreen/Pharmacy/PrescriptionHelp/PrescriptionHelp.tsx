@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClosePanelButton, TextView, VABulletList, VABulletListText, VAScrollView } from 'components'
+import { Box, ClosePanelButton, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { usePanelHeaderStyles, useTheme } from 'utils/hooks'
@@ -40,7 +40,7 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
   }, [navigation, headerStyle, tc])
 
   return (
-    <VAScrollView backgroundColor={'panelHeader'}>
+    <LargePanel title={tc('prescriptionsHelp')} rightButtonText={tc('close')}>
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
         <TextView mt={condensedMarginBetween} variant="MobileBody">
@@ -53,7 +53,7 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
           {t('prescription.help.footer')}
         </TextView>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 

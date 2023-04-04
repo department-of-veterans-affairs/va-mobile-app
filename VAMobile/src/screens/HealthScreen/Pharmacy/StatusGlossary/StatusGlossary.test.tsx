@@ -37,7 +37,7 @@ context('StatusGlossary', () => {
     )
 
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toEqual('Active')
-    expect(texts[1].props.children).toEqual('A prescription that can be filled at the local VA pharmacy. If this prescription is refillable, you may request a refill of this VA prescription.')
+    expect(texts[2].props.children).toEqual('Active')
+    expect(texts[3].props.children).toEqual('A prescription that can be filled at the local VA pharmacy. If this prescription is refillable, you may request a refill of this VA prescription.')
   })
 })

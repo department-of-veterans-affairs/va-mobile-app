@@ -28,6 +28,7 @@ import {
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
+  FeatureLandingTemplate,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LoadingComponent,
@@ -36,7 +37,6 @@ import {
   TextViewProps,
   VAButton,
   VAButtonProps,
-  VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -56,6 +56,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointmentID } = route.params
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -174,7 +175,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       const joinSessionOnPress = (): void => {
         dispatch(clearAppointmentCancellation())
-        launchExternalLink(url || '')
+
+        if (url) {
+          launchExternalLink(url)
+        } else {
+          navigateTo('SessionNotStarted')()
+        }
       }
 
       const joinSessionButtonProps: VAButtonProps = {
@@ -263,11 +269,15 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   if (loadingAppointmentCancellation) {
-    return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
+        <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (
-    <VAScrollView {...testIdProps('Appointment-details-page')}>
+    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
@@ -294,7 +304,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
         {readerCancelInformation()}
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

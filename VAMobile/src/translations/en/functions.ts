@@ -2,7 +2,7 @@ import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } fro
 import { SnackbarMessages } from 'components/SnackBar'
 import { TFunction } from 'i18next'
 import { getfolderName } from 'utils/secureMessaging'
-import { profileAddressOptions, profileAddressType } from 'screens/ProfileScreen/AddressSummary'
+import { profileAddressOptions, profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 export const GenerateFolderMessage = (t: TFunction, folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean): string => {
   const folderName = getfolderName(folderID.toString(), folders)
@@ -26,11 +26,11 @@ export const GenerateFolderMessage = (t: TFunction, folderID: number, folders: S
 export const GenerateAddressMessages = (t: TFunction, addressType: profileAddressType): SnackbarMessages => {
   let success, error
   if (addressType === profileAddressOptions.MAILING_ADDRESS) {
-    success = t('personalInformation.mailingAddress.saved')
-    error = t('personalInformation.mailingAddress.saved.error')
+    success = t('contactInformation.mailingAddress.saved')
+    error = t('contactInformation.mailingAddress.saved.error')
   } else {
-    success = t('personalInformation.residentialAddress.saved')
-    error = t('personalInformation.residentialAddress.saved.error')
+    success = t('contactInformation.residentialAddress.saved')
+    error = t('contactInformation.residentialAddress.saved.error')
   }
   const messages: SnackbarMessages = { successMsg: success, errorMsg: error }
   return messages

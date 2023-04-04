@@ -287,7 +287,7 @@ jest.mock('@react-native-firebase/remote-config', () => {
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-jest.mock('utils/encourageUpdate', () => {
+jest.mock('utils/homeScreenAlerts', () => {
   return {
     getVersionSkipped: jest.fn(),
     getStoreVersion: jest.fn(),

@@ -20,7 +20,7 @@ export type ErrorComponentProps = {
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
+  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH])
   const isInDowntime = useDowntime(DowntimeScreenIDToFeature[props.screenID])
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
@@ -50,9 +50,9 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
         return (
           <CallHelpCenter
-            titleText={t('profile:disabilityRating.errorTitle')}
-            titleA11yHint={t('profile:disabilityRating.errorTitleA11y')}
-            callPhone={t('profile:disabilityRating.errorPhoneNumber')}
+            titleText={t('common:disabilityRating.errorTitle')}
+            titleA11yHint={t('common:disabilityRating.errorTitleA11y')}
+            callPhone={t('common:disabilityRating.errorPhoneNumber')}
           />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:

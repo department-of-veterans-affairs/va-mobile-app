@@ -22,12 +22,11 @@ type TypeOfCareNotListedHelpScreenProps = StackScreenProps<HealthStackParamList,
 const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
   const { gutter, contentMarginTop, condensedMarginBetween, standardMarginBetween } = theme.dimensions
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.valocation.loading') })
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
 
   const headerStyle = useRequestAppointmentModalHeaderStyles()
   const { vaEligibleTypeOfCares } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)

@@ -6,8 +6,7 @@
 echo "Config: Current Chunk $1, Number of chunks: $2"
 
 # Calculate how many test files should each chunk have using jest --listTests
-I=$( expr "$2" '+' "1")
-CHUNK_SIZE=$((`./node_modules/.bin/jest --listTests | wc -l` / $I))
+CHUNK_SIZE=$((`./node_modules/.bin/jest --listTests | wc -l` / $2))
 
 echo "Chunk size: $CHUNK_SIZE"
 

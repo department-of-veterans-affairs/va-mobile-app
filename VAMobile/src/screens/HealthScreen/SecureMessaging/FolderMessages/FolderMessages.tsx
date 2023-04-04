@@ -2,16 +2,14 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { FolderNameTypeConstants, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
@@ -23,6 +21,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
@@ -30,6 +29,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   )
 
   const paginationMetaData = paginationMetaByFolderId?.[folderID]
+  const title = tc('text.raw', { text: folderName })
 
   useEffect(() => {
     // Load first page messages
@@ -76,19 +76,31 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   })
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
+    return (
+      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
+      </ChildTemplate>
+    )
   }
 
   if (loading) {
     const text = t('secureMessaging.messages.loading')
-    return <LoadingComponent text={text} />
+    return (
+      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+        <LoadingComponent text={text} />
+      </ChildTemplate>
+    )
   }
 
   const folderMessages = messagesByFolderId ? messagesByFolderId[folderID] : { data: [], links: {}, meta: {} }
   const messages = folderMessages ? folderMessages.data : []
 
   if (messages.length === 0) {
-    return <NoFolderMessages folderName={folderName} />
+    return (
+      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+        <NoFolderMessages folderName={folderName} />
+      </ChildTemplate>
+    )
   }
 
   const requestPage = (requestedPage: number) => {
@@ -118,16 +130,13 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }
 
   return (
-    <>
-      <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
-        <ComposeMessageButton />
-        <MessageList
-          items={getMessagesListItems(messages, t, onMessagePress, folderName)}
-          title={folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName}
-        />
-        {renderPagination()}
-      </VAScrollView>
-    </>
+    <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+      <ComposeMessageButton />
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
+      </Box>
+      {renderPagination()}
+    </ChildTemplate>
   )
 }
 

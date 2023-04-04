@@ -233,7 +233,7 @@ context('ComposeMessage', () => {
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+        testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
         expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
       })
     })
@@ -275,7 +275,7 @@ context('ComposeMessage', () => {
 
       const textViews = testInstance.findAllByType(TextView)
 
-      expect(textViews[9].props.children).toEqual(['Subject Line', ' ', '(Required)'])
+      expect(textViews[12].props.children).toEqual(['Subject Line', ' ', '(Required)'])
     })
   })
 
@@ -306,12 +306,13 @@ context('ComposeMessage', () => {
       beforeEach(async () => {
         await waitFor(() => {
           navHeaderSpy.save.props.onSave()
+          testInstance.findByType(FormWrapper).props.onSave(true)
         })
       })
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
         })
@@ -348,7 +349,7 @@ context('ComposeMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
         })
@@ -369,7 +370,7 @@ context('ComposeMessage', () => {
         testInstance.findByProps({ label: 'Send' }).props.onPress()
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
 
@@ -381,7 +382,7 @@ context('ComposeMessage', () => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Attachments')).toBeTruthy()

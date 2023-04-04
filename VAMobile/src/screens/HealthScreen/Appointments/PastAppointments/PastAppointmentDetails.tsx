@@ -14,7 +14,7 @@ import {
 } from '../AppointmentDetailsCommon'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 import { AppointmentsState, getAppointmentMessages, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
-import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -25,11 +25,12 @@ import { useSelector } from 'react-redux'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
-const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
+const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { pastAppointmentsById, appointmentMessagesById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
@@ -70,7 +71,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Past-appointment-details-page')}>
+    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
@@ -90,7 +91,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
 
         {renderScheduleAnotherAppointment()}
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

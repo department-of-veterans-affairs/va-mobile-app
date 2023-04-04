@@ -44,8 +44,7 @@ const StyledImage = styled(Image)<StyledImageProps>`
 
 const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
   const { colors: themeColor } = useTheme()
-  const { t } = useTranslation(NAMESPACE.CLAIMS)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [selected, setSelected] = useState(false)
   const uri = image.uri
   const confirmAlert = useDestructiveAlert()
@@ -68,7 +67,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: tc('cancel'),
+          text: t('cancel'),
           onPress: () => {
             setSelected(false)
           },

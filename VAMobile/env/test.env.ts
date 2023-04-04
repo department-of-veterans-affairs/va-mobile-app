@@ -12,6 +12,7 @@ export const AUTH_SIS_REFRESH_URL = 'https://test.gov/sign_in/refresh'
 export const AUTH_SIS_REVOKE_URL = 'https://test.gov/sign_in/revoke'
 export const SHOW_DEBUG_MENU = true
 export const IS_TEST = true
+export const WEBVIEW_URL_CHANGE_LEGAL_NAME='https://www.va.gov/resources/how-to-change-your-legal-name-on-file-with-va/'
 export const WEBVIEW_URL_CORONA_FAQ = 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions'
 export const WEBVIEW_URL_FACILITY_LOCATOR = 'https://www.va.gov/find-locations/'
 export const LINK_URL_VETERANS_CRISIS_LINE = 'https://www.veteranscrisisline.net/'

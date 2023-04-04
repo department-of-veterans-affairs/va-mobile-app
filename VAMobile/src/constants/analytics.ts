@@ -117,9 +117,18 @@ export const Events = {
       },
     }
   },
-  vama_prof_update_dir_dep: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_gender: (totalTime: number, actionTime: number): Event => {
     return {
-      name: 'vama_prof_update_dir_dep',
+      name: 'vama_prof_update_gender',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_update_dir_dep: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_update_dir_dep',
       params: {
         totalTime,
         actionTime,
@@ -260,6 +269,26 @@ export const Events = {
       name: 'vama_eu_updated',
     }
   },
+  vama_whatsnew_more: (): Event => {
+    return {
+      name: 'vama_whatsnew_more',
+    }
+  },
+  vama_whatsnew_close: (): Event => {
+    return {
+      name: 'vama_whatsnew_close',
+    }
+  },
+  vama_whatsnew_dont_show: (): Event => {
+    return {
+      name: 'vama_whatsnew_dont_show',
+    }
+  },
+  vama_whatsnew_alert: (): Event => {
+    return {
+      name: 'vama_whatsnew_alert',
+    }
+  },
 }
 
 export const UserAnalytics = {
@@ -279,6 +308,18 @@ export const UserAnalytics = {
     return {
       name: 'vama_environment',
       value: value,
+    }
+  },
+  vama_haptic_setting_on: (): UserAnalytic => {
+    return {
+      name: 'vama_haptic_setting_on',
+      value: 'true',
+    }
+  },
+  vama_haptic_setting_off: (): UserAnalytic => {
+    return {
+      name: 'vama_haptic_setting_off',
+      value: 'true',
     }
   },
   vama_uses_letters: (): UserAnalytic => {
@@ -314,6 +355,12 @@ export const UserAnalytics = {
   vama_uses_profile: (): UserAnalytic => {
     return {
       name: 'vama_uses_profile',
+      value: 'true',
+    }
+  },
+  vama_uses_preferred_name: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_preferred_name',
       value: 'true',
     }
   },

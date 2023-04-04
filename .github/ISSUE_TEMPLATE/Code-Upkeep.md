@@ -12,11 +12,19 @@ labels: code upkeep
 
 ## Coding Time Estimation
 <!-- To the best of your ability estimate a sprint time requirement:
-1 - cup of coffee
-2 - morning
-3 - afternoon
-5 - day
-8 - day and half to 2 days
-13 - a few days or more
-21 - a week + -->
+PTS#	Size	    Rough Timing
+1	    xx-small	<2 hours
+2	    x-small 	<1/2 a day
+3	    small	    < a day
+5 	  medium	  <2 days
+8	    large   	< a week
+13	  x-large 	A Sprint
+	TOO BIG, Split	 -->
+	
+## Testing Considerations
+<!-- Please indicate to the best of your ability areas QA should test for this ticket, this sometimes means X area functions the same -->
 
+## Checklist
+[ ] Add the front-end label tag
+
+[ ] Attach to the Frontend epic for engineering initiatives

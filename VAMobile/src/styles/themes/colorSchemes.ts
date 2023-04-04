@@ -4,12 +4,14 @@ export const primaryTextColor = colors.grayDark
 export const lightTheme = {
   background: {
     main: colors.grayLightest,
+    largePanelHeader: colors.white,
     footerButtonActive: colors.primaryDarkest,
     textBox: colors.white,
     textBoxInactive: colors.white,
     list: colors.white,
     listActive: colors.primaryAltLightest,
     segmentedController: colors.grayLighter,
+    headerDropShadow: colors.grayLighter,
     shadow: colors.grayMedium,
     profileBanner: colors.primary,
     ctaButton: colors.crisisLineRed,
@@ -56,7 +58,7 @@ export const lightTheme = {
     focusedPickerAndInput: colors.primaryDarker,
     confirmation: colors.goldLight,
     footerButton: colors.grayLight,
-    menuDivider: colors.grayLight,
+    menuDivider: colors.grayDark,
     tabSelectorInactive: colors.grayLight,
     tabSelectorActive: colors.primary,
     trackingCard: colors.grayDark,
@@ -92,7 +94,7 @@ export const lightTheme = {
     pagination: colors.white,
     chevronCollapsible: colors.primary,
     chevronListItem: colors.primary,
-    webviewReload: colors.white,
+    webviewReload: colors.primary,
     backButton: colors.white,
     defaultMenuItem: colors.grayDark,
     unreadMessage: colors.primary,
@@ -141,6 +143,7 @@ export const lightTheme = {
     closePanel: colors.primary,
     labelTag: colors.base,
     textWithIconButton: colors.primary,
+    webviewTitle: colors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -198,12 +201,14 @@ export const lightTheme = {
 export const darkTheme = {
   background: {
     main: colors.darkmodeGrayDark,
+    largePanelHeader: colors.darkmodeGrayDark,
     footerButtonActive: colors.primaryDarkest,
     textBox: colors.base,
     textBoxInactive: colors.base,
     list: colors.base,
     listActive: colors.darkmodeBorder,
     segmentedController: colors.darkmodeGrayWarmDark,
+    headerDropShadow: colors.black,
     shadow: colors.grayMedium,
     profileBanner: colors.primaryDarker2,
     ctaButton: colors.crisisLineRed,
@@ -332,6 +337,7 @@ export const darkTheme = {
     closePanel: colors.darkmodeLightBlue,
     labelTag: colors.base,
     textWithIconButton: colors.darkmodeLightBlue,
+    webviewTitle: colors.white,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

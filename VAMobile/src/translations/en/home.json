@@ -12,10 +12,9 @@
   "contactVA.title": "Contact VA",
   "contactVA.title.a11yLabel": "Contact V-A",
   "contactVA.tty.body": "If you have hearing loss, call TTY:",
-  "contactVA.tty.hintText": "To make a voice or TTY call, tap the first link. If you’d like help to make a TTY call, tap the second link.",
   "contactVA.tty.number": "711",
-  "contactVA.tty.displayText": "TTY:711",
-  "contactVA.tty.number.a11yLabel": "7 1 1",
+  "contactVA.tty.displayText": "TTY: 711",
+  "contactVA.tty.number.a11yLabel": "TTY: 7 1 1",
   "contactVA.va411": "Call VA411",
   "contactVA.va411.a11yLabel": "Call V-A 4 1 1",
   "contactVA.va411.body": "MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.",
@@ -65,6 +64,5 @@
   "veteransCrisisLine.urlDisplayed": "VeteransCrisisLine.net",
   "veteransCrisisLine.weAreHereForYou": "We’re here anytime, day or night – 24/7",
   "veteransCrisisLine.weAreHereForYou.a11yLabel": "We’re here anytime, day or night – 24 7",
-  "webview.valocation.loading": "Loading VA location finder...",
   "webview.covidUpdates.loading": "Loading VA COVID-19 updates..."
 }

@@ -44,6 +44,7 @@ const screensToCloseSnackbarOnNavigation = [
   'FileRequest',
   'FolderMessages',
   'PersonalInformation',
+  'ContactInformation',
   'ReplyMessage',
   'SecureMessaging',
   'SelectFile',

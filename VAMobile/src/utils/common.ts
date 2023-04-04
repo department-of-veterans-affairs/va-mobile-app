@@ -6,7 +6,7 @@ import { RefObject } from 'react'
 import { contains, isEmpty, map } from 'underscore'
 
 import { AppDispatch } from 'store'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ErrorObject } from 'store/api'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { PhoneData } from 'store/api/types/PhoneData'
@@ -388,6 +388,30 @@ export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardI
     cardStyle: {
       transform: [{ translateY }],
       maxHeight: Dimensions.get('window').height / 2,
+    },
+    overlayStyle: { opacity: overlayOpacity },
+  }
+}
+
+export function fullPanelCardStyleInterpolator({ current, inverted }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  const screenHeight = Dimensions.get('screen').height
+
+  const translateY = Animated.multiply(
+    current.progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [screenHeight, screenHeight / 7], // modify constant for size of panel, higher the number more of the screen it covers
+      extrapolate: 'clamp',
+    }),
+    inverted,
+  )
+  const overlayOpacity = current.progress.interpolate({
+    inputRange: [0, 1, 1.0001, 2],
+    outputRange: [0, 0.3, 0.3, 0.3],
+  })
+  return {
+    cardStyle: {
+      transform: [{ translateY }],
+      maxHeight: (screenHeight / 7) * 6, //must fill the remaining screen with modal(since top part was 1/7 this part is 6/7)
     },
     overlayStyle: { opacity: overlayOpacity },
   }

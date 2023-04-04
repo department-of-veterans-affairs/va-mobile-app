@@ -6,6 +6,7 @@ import React, { FC } from 'react'
 
 import { Box, TextViewProps } from 'components'
 import { BoxProps } from './Box'
+import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -105,6 +106,10 @@ const SnackBar: FC<ToastProps> = (toast) => {
     toast.onHide()
   }
 
+  const onDismissPress = () => {
+    toast.onHide()
+  }
+
   const snackBarIconProps: VAIconProps = {
     name: isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark',
     fill: themeColor.icon.snackBarIcon,
@@ -116,6 +121,14 @@ const SnackBar: FC<ToastProps> = (toast) => {
     mr: 8,
     alignSelf: 'flex-start',
     mt: 2,
+  }
+
+  const vibrate = (): void => {
+    if (!isUndo) {
+      triggerHaptic('notificationError')
+    } else {
+      triggerHaptic('notificationSuccess')
+    }
   }
 
   return (
@@ -137,11 +150,12 @@ const SnackBar: FC<ToastProps> = (toast) => {
               </TextView>
             </TouchableOpacity>
           )}
-          <TouchableOpacity onPress={() => toast.onHide()} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
+          <TouchableOpacity onPress={onDismissPress} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
             <TextView variant={'SnackBarBtnText'}>{'Dismiss'}</TextView>
           </TouchableOpacity>
         </Box>
       </Box>
+      {vibrate()}
     </SafeAreaView>
   )
 }

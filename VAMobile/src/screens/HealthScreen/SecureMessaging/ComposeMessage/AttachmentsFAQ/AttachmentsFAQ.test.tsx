@@ -53,13 +53,13 @@ context('AttachmentsFAQ', () => {
 
   describe('when the My HealtheVet phone number link is clicked', () => {
     it('should call Linking open url with the parameter tel:8773270022', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+      testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
       expect(Linking.openURL).toBeCalledWith('tel:8773270022')
     })
   })
   describe('when the call TTY phone link is clicked', () => {
     it('should call Linking open url with the parameter tel:711', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+      testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
       expect(Linking.openURL).toBeCalledWith('tel:711')
     })
   })

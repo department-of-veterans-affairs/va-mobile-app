@@ -74,7 +74,7 @@ context('VAModalPicker', () => {
       { label: 'JavaScript3', value: 'js3' },
     ]
 
-    await initializeTestInstance('js', 'profile:editPhoneNumber.number')
+    await initializeTestInstance('js', 'common:editPhoneNumber.number')
   })
 
   it('initializes correctly', async () => {

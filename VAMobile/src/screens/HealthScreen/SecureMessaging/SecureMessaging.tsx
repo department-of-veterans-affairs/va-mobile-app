@@ -1,17 +1,15 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
 import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
@@ -30,6 +28,7 @@ export const getInboxUnreadCount = (state: RootState): number => {
 
 const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
@@ -61,15 +60,27 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   }, [dispatch, secureMessaging, navigation, secureMessagingTab, smNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!secureMessaging) {
-    return <NotEnrolledSM />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+        <NotEnrolledSM />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (termsAndConditionError) {
-    return <TermsAndConditions />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+        <TermsAndConditions />
+      </FeatureLandingTemplate>
+    )
   }
 
   const serviceErrorAlert = (): ReactElement => {
@@ -80,37 +91,32 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const onTabUpdate = (selection: string): void => {
     const tab = selection as SecureMessagingTabTypes
     if (secureMessagingTab !== tab) {
+      snackBar?.hideAll()
       dispatch(updateSecureMessagingTab(tab))
     }
   }
 
-  const scrollStyles: ViewStyle = {
-    flexGrow: 1,
-  }
-
   return (
-    <>
-      <VAScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
-        <ComposeMessageButton />
-        <Box flex={1} justifyContent="flex-start">
-          <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlLabels}
-              onChange={onTabUpdate}
-              selected={controlValues.indexOf(secureMessagingTab || SecureMessagingTabTypesConstants.INBOX)}
-              accessibilityHints={a11yHints}
-            />
-          </Box>
-          <CernerAlert />
-          {serviceErrorAlert()}
-          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-            {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
-            {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
-          </Box>
+    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+      <ComposeMessageButton />
+      <Box flex={1} justifyContent="flex-start">
+        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+          <SegmentedControl
+            values={controlValues}
+            titles={controlLabels}
+            onChange={onTabUpdate}
+            selected={controlValues.indexOf(secureMessagingTab || SecureMessagingTabTypesConstants.INBOX)}
+            accessibilityHints={a11yHints}
+          />
         </Box>
-      </VAScrollView>
-    </>
+        <CernerAlert />
+        {serviceErrorAlert()}
+        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+          {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
+          {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
+        </Box>
+      </Box>
+    </FeatureLandingTemplate>
   )
 }
 

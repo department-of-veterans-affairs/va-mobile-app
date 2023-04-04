@@ -17,14 +17,23 @@ export type CollapsibleAlertProps = {
   body: ReactNode
   /** acccessibilityLabel needs to be provided due to accessibilityState being neccessary */
   a11yLabel: string
+  /** handles anything needed when expanding the alert*/
+  onExpand?: () => void
+  /** handles anything needed when collapsing the alert*/
+  onCollapse?: () => void
 }
 
-const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel }) => {
+const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, onExpand, onCollapse }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   const onPress = (): void => {
+    if (expanded && onCollapse) {
+      onCollapse()
+    } else if (!expanded && onExpand) {
+      onExpand()
+    }
     setExpanded(!expanded)
 
     // TODO: This is a temporary workaround for a react-native bug that prevents 'expanded' state

@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, useLayoutEffect } from 'react'
 
-import { Box, ClosePanelButton, TextView, VAScrollView } from 'components'
+import { Box, ClosePanelButton, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getStatusGlossaryTextForRefillStatus } from 'utils/prescriptions'
@@ -35,14 +35,14 @@ const StatusGlossary: FC<StatusGlossaryProps> = ({ navigation, route }) => {
   }, [navigation, headerStyle, tc])
 
   return (
-    <VAScrollView backgroundColor={'panelHeader'}>
+    <LargePanel title={tc('statusGlossary')} rightButtonText={tc('close')}>
       <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{display}</TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>
           {text}
         </TextView>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 

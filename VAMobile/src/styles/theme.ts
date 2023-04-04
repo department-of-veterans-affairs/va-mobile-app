@@ -68,6 +68,7 @@ export type VATextColors = {
   closePanel: string
   labelTag: string
   textWithIconButton: string
+  webviewTitle: string
 }
 
 export type VAIconColors = {
@@ -111,6 +112,7 @@ export type VATypographyThemeVariants = {
   BitterBoldHeading: string
   DescriptiveBackButton: string
   MobileBody: string
+  MobileBodyTight: string
   MobileBodyBold: string
   UnreadMessagesTag: string
   TableHeaderBold: string
@@ -127,17 +129,20 @@ export type VATypographyThemeVariants = {
   LabelTag: string
   LabelTagBold: string
   textWithIconButton: string
+  webviewTitle: string
   VAHeader: string
 }
 
 export type VABackgroundColors = {
   main: string
+  largePanelHeader: string
   footerButtonActive: string
   textBox: string
   textBoxInactive: string
   list: string
   listActive: string
   segmentedController: string
+  headerDropShadow: string
   shadow: string
   profileBanner: string
   ctaButton: string
@@ -200,6 +205,7 @@ export type VABorderColors = {
 export type VAFontSizes = {
   fontSize: number
   lineHeight: number
+  letterSpacing?: number
 }
 
 export type VAListTagColors = {
@@ -275,6 +281,7 @@ export type VATheme = {
   fontSizes: {
     BitterBoldHeading: VAFontSizes
     MobileBody: VAFontSizes
+    MobileBodyTight: VAFontSizes
     MobileBodyBold: VAFontSizes
     UnreadMessagesTag: VAFontSizes
     TableHeaderBold: VAFontSizes

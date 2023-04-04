@@ -19,7 +19,7 @@ type ConfirmContactScreenProps = StackScreenProps<AppointmentFlowModalStackParam
 
 const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tp } = useTranslation(NAMESPACE.PROFILE)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { gutter, standardMarginBetween } = theme.dimensions
@@ -53,7 +53,7 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
       setEmailError(t('requestAppointment.confirmContactYourEmailEmptyError'))
     } else {
       if (!validEmail.test(email)) {
-        setEmailError(tp('editEmail.fieldError'))
+        setEmailError(tc('editEmail.fieldError'))
       }
     }
   }
@@ -69,7 +69,7 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
         setPhoneOrEmailValue(formattedPhoneNumber, 'phone')
       } else {
         setPhoneOrEmailValue(onlyDigits, 'phone')
-        setPhoneError(tp('editPhoneNumber.numberFieldError'))
+        setPhoneError(tc('editPhoneNumber.numberFieldError'))
       }
     }
   }

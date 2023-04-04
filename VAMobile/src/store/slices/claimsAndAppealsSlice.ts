@@ -18,10 +18,10 @@ import {
   ScreenIDTypes,
 } from 'store/api/types'
 import { Asset } from 'react-native-image-picker'
-import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimType, ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DateTime } from 'luxon'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { Events, UserAnalytics } from 'constants/analytics'
 
@@ -306,7 +306,7 @@ export const submitClaimDecision =
       await api.post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 
       dispatch(dispatchFinishSubmitClaimDecision())
-      showSnackBar('Request sent', dispatch, undefined, true)
+      showSnackBar('Request sent', dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `submitClaimDecision: ${claimsAndAppealsNonFatalErrorString}`)

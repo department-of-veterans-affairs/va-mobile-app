@@ -150,7 +150,7 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       initializeTestInstance(0, true, true)
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        testInstance.findAllByType(Pressable)[2].props.onPress()
         expect(mockNavigateToPharmacySpy).toHaveBeenCalled()
       })
     })
@@ -158,7 +158,7 @@ context('HealthScreen', () => {
     it('should reload rx data if data is present', async () => {
       initializeTestInstance(0, true, true, false)
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        testInstance.findAllByType(Pressable)[2].props.onPress()
         expect(loadAllPrescriptions).toHaveBeenCalled()
       })
     })
@@ -166,7 +166,7 @@ context('HealthScreen', () => {
     it('should not reload rx data if data is not present', async () => {
       initializeTestInstance(0, true, true, true)
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        testInstance.findAllByType(Pressable)[2].props.onPress()
         expect(loadAllPrescriptions).not.toHaveBeenCalled()
       })
     })
@@ -216,7 +216,7 @@ context('HealthScreen', () => {
   it('should render messagesCountTag with the correct count number', async () => {
     await waitFor(() => {
       expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe(13)
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe(13)
     })
   })
 
@@ -224,8 +224,7 @@ context('HealthScreen', () => {
     it('should not render a messagesCountTag', async () => {
       await waitFor(() => {
         initializeTestInstance(0)
-        expect(testInstance.findAllByType(TextView)[6].props.children).toBe('Messages')
-        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Send and receive secure messages')
+        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Messages')
       })
     })
   })

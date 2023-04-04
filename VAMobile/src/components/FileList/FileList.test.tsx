@@ -2,12 +2,12 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 import Mock = jest.Mock
 import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
 import FileList from './FileList'
-import {ImagePickerResponse} from "react-native-image-picker/src/types"
-import {DocumentPickerResponse} from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 
 const mockAlertSpy = jest.fn()
 
@@ -33,14 +33,14 @@ context('FileList', () => {
     assets: [
       {
         fileName: 'Image file',
-        fileSize: 100
-      }
-    ]
+        fileSize: 100,
+      },
+    ],
   } as ImagePickerResponse
 
   const file = {
     name: 'File 1',
-    size: 100
+    size: 100,
   } as DocumentPickerResponse
 
   const initializeTestInstance = (useImage = false) => {
@@ -53,7 +53,6 @@ context('FileList', () => {
     } else {
       files = [file]
     }
-
 
     component = render(<FileList files={files} onDelete={onDeleteSpy} />)
 

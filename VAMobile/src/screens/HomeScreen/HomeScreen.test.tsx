@@ -4,14 +4,10 @@ import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
-import { mocked } from 'ts-jest/utils'
 
 import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
-import { AlertBox, LargeNavButton, TextView, VAButton } from 'components'
-import { when } from 'jest-when'
-import { featureEnabled } from 'utils/remoteConfig'
-import { getStoreVersion, getVersionSkipped, getEncourageUpdateLocalVersion } from 'utils/encourageUpdate'
+import { TextView } from 'components'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -41,11 +37,7 @@ context('HomeScreen', () => {
   let testInstance: ReactTestInstance
   let props: any
 
-  const initializeTestInstance = (inAppUpdatesEnabled: boolean = true, skippedVersion: string = '1.0.0.', localVersion: string = '0.0.0', storeVersion: string = '2.0.0') => {
-    when(mocked(featureEnabled)).calledWith('inAppUpdates').mockReturnValue(inAppUpdatesEnabled)
-    mocked(getVersionSkipped).mockReturnValueOnce(Promise.resolve(skippedVersion))
-    mocked(getEncourageUpdateLocalVersion).mockReturnValueOnce(Promise.resolve(localVersion))
-    mocked(getStoreVersion).mockReturnValueOnce(Promise.resolve(storeVersion))
+  const initializeTestInstance = () => {
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
@@ -84,7 +76,6 @@ context('HomeScreen', () => {
         const expectNow = DateTime.local(2021, 8, 10, 10)
         Settings.now = () => expectNow.toMillis()
 
-        initializeTestInstance()
         expect(findByTypeWithSubstring(testInstance, TextView, 'morning')).toBeTruthy()
       })
     })
@@ -93,7 +84,6 @@ context('HomeScreen', () => {
       await waitFor(() => {
         const expectNow = DateTime.local(2021, 8, 10, 14)
         Settings.now = () => expectNow.toMillis()
-        initializeTestInstance()
         expect(findByTypeWithSubstring(testInstance, TextView, 'afternoon')).toBeTruthy()
       })
     })
@@ -102,65 +92,7 @@ context('HomeScreen', () => {
       await waitFor(() => {
         const expectNow = DateTime.local(2021, 8, 10, 20)
         Settings.now = () => expectNow.toMillis()
-        initializeTestInstance()
         expect(findByTypeWithSubstring(testInstance, TextView, 'evening')).toBeTruthy()
-      })
-    })
-  })
-
-  describe('rendering the update alert', () => {
-    it('should render the UI', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(AlertBox)[0].props.title).toEqual('Update available')
-      })
-    })
-    it('should render the update now button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(VAButton)[0].props.label).toEqual('Update now')
-      })
-    })
-
-    it('should render the skip this update button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(VAButton)[1].props.label).toEqual('Skip this update')
-      })
-    })
-
-    it('should not render if skip version is the same as store version', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, '2.0.0.', '0.0.0')
-        expect(() => component.getByText('Update available')).toThrow()
-      })
-    })
-
-    it('should not render if local version is the same as store version', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, '1.0.0.', '2.0.0')
-        expect(() => component.getByText('Update available')).toThrow()
-      })
-    })
-  })
-
-  describe('when rendering the home nav buttons', () => {
-    it('should render the claims button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[0].props.title).toEqual('Claims and appeals')
-      })
-    })
-    it('should render the health button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Health care')
-      })
-    })
-    it('should render the letters button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Letters')
-      })
-    })
-
-    it('should render the payments button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Payments')
       })
     })
   })

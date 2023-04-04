@@ -1,10 +1,10 @@
 import { ScrollView } from 'react-native'
-import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ClosePanelButton, ErrorComponent, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { HiddenA11yElement } from 'styles/common'
@@ -13,14 +13,13 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
-import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDestructiveAlert, useDowntime, usePanelHeaderStyles, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useDowntime, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import NoRefills from './NoRefills'
-import RefillRequestSummary from './RefillRequestSummary'
 import SelectionList from 'components/SelectionList'
 
-type RefillScreenProps = StackScreenProps<RefillStackParamList, 'RefillScreen'>
+type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
 export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const theme = useTheme()
@@ -57,19 +56,29 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const scrollViewRef = useRef<ScrollView>(null)
 
+  useBeforeNavBackListener(navigation, () => {
+    dispatch(dispatchSetPrescriptionsNeedLoad())
+    dispatch(dispatchClearLoadingRequestRefills())
+  })
+
   const onSubmitPressed = () => {
     submitRefillAlert({
-      title: t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
+      title:
+        selectedPrescriptionsCount === refillablePrescriptions?.length
+          ? t('prescriptions.refill.confirmationTitle.all')
+          : t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
       cancelButtonIndex: 0,
       buttons: [
         {
           text: tc('cancel'),
         },
         {
-          text: t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
+          text:
+            selectedPrescriptionsCount === refillablePrescriptions?.length
+              ? t('prescriptions.refill.RequestRefillButtonTitle.all')
+              : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
           onPress: () => {
             const prescriptionsToRefill: PrescriptionsList = []
-            // todo add params
             Object.values(selectedValues).forEach((isSelected, index) => {
               if (isSelected) {
                 prescriptionsToRefill.push(refillable[index])
@@ -86,7 +95,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const getListItems = () => {
     const total = refillablePrescriptions?.length
     const listItems: Array<SelectionListItemObj> = refillable.map((prescription, idx) => {
-      const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total })
+      const orderIdentifier = t('prescription.history.orderIdentifier', { idx: idx + 1, total: total }) + '.' // Period to ensure pause w/ screen reader
       return {
         content: (
           <>
@@ -101,24 +110,56 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   }
 
   if (prescriptionInDowntime) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')} onLeftButtonPress={navigation.goBack}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (refillable.length === 0) {
-    return <NoRefills />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')} onLeftButtonPress={navigation.goBack}>
+        <NoRefills />
+      </FullScreenSubtask>
+    )
   }
 
   if (loadingHistory) {
-    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      </FullScreenSubtask>
+    )
   }
 
   if (showLoadingScreenRequestRefills) {
-    return <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
     <>
-      <VAScrollView scrollViewRef={scrollViewRef}>
+      <FullScreenSubtask
+        leftButtonText={tc('cancel')}
+        onLeftButtonPress={navigation.goBack}
+        title={tc('refillRequest')}
+        primaryContentButtonText={
+          selectedPrescriptionsCount === refillablePrescriptions?.length
+            ? t('prescriptions.refill.RequestRefillButtonTitle.all')
+            : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
+        }
+        scrollViewRef={scrollViewRef}
+        onPrimaryContentButtonPress={() => {
+          if (selectedPrescriptionsCount === 0) {
+            setAlert(true)
+            return
+          }
+          onSubmitPressed()
+        }}>
         {showAlert && (
           <Box mt={theme.dimensions.standardMarginBetween}>
             <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
@@ -153,67 +194,9 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
             }}
           />
         </Box>
-      </VAScrollView>
-      <FooterButton
-        text={t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })}
-        backGroundColor="buttonPrimary"
-        textColor={'navBar'}
-        onPress={() => {
-          if (selectedPrescriptionsCount === 0) {
-            setAlert(true)
-            return
-          }
-          onSubmitPressed()
-        }}
-      />
+      </FullScreenSubtask>
     </>
   )
 }
 
-type RefillStackScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
-
-export type RefillStackParamList = {
-  RefillScreen: undefined
-  RefillRequestSummary: undefined
-}
-
-const RefillScreenStack = createStackNavigator<RefillStackParamList>()
-
-const RefillStackScreen: FC<RefillStackScreenProps> = () => {
-  const headerStyle = usePanelHeaderStyles()
-
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useDispatch()
-  return (
-    <RefillScreenStack.Navigator
-      initialRouteName="RefillScreen"
-      screenOptions={{
-        title: t('prescriptions.refill.pageHeaderTitle'),
-        ...TransitionPresets.SlideFromRightIOS,
-        ...headerStyle,
-        headerLeft: (props) => (
-          <ClosePanelButton
-            buttonText={tc('cancel')}
-            onPress={props.onPress}
-            buttonTextColor={'showAll'}
-            focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
-          />
-        ),
-      }}>
-      <RefillScreenStack.Screen
-        name="RefillScreen"
-        component={RefillScreen}
-        listeners={{
-          beforeRemove: () => {
-            dispatch(dispatchSetPrescriptionsNeedLoad())
-            dispatch(dispatchClearLoadingRequestRefills())
-          },
-        }}
-      />
-      <RefillScreenStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} />
-    </RefillScreenStack.Navigator>
-  )
-}
-
-export default RefillStackScreen
+export default RefillScreen

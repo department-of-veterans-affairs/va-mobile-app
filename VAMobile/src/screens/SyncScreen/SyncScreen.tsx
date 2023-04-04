@@ -22,7 +22,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)

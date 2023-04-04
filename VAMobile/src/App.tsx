@@ -22,32 +22,26 @@ import i18n from 'utils/i18n'
 import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth, loadHapticsSetting } from 'store/slices'
-import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
-import { PhoneData, PhoneType } from 'store/api/types'
 import { SnackBarConstants } from 'constants/common'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { activateRemoteConfig } from 'utils/remoteConfig'
-import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
-import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
-import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
-import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
-import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
+import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
-import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
-import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
-import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
-import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
+import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
+import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
 import LoaGate from './screens/auth/LoaGate'
 import NotificationManager from './components/NotificationManager'
 import OnboardingCarousel from './screens/OnboardingCarousel'
@@ -85,17 +79,18 @@ const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
-  EditEmail: undefined
-  EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
   EditAddress: { displayTitle: string; addressType: profileAddressType }
-  EditDirectDeposit: undefined
+  EditDirectDeposit: {
+    displayTitle: string
+  }
   Tabs: undefined
 }
 
 type RootTabNavParamList = {
   HomeTab: undefined
   HealthTab: undefined
-  ClaimsTab: undefined
+  BenefitsTab: undefined
+  PaymentsTab: undefined
   ProfileTab: undefined
 }
 ;`
@@ -145,7 +140,7 @@ const MainApp: FC = () => {
               <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
                 <NotificationManager>
                   <SafeAreaProvider>
-                    <StatusBar barStyle="light-content" backgroundColor={currentTheme.colors.background.navHeader} />
+                    <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
                     <AuthGuard />
                   </SafeAreaProvider>
                 </NotificationManager>
@@ -164,8 +159,7 @@ export const AuthGuard: FC = () => {
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
-  const { t } = useTranslation(NAMESPACE.LOGIN)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
@@ -198,7 +192,6 @@ export const AuthGuard: FC = () => {
     dispatch(sendUsesLargeTextAnalytics())
     dispatch(sendUsesScreenReaderAnalytics())
     activateRemoteConfig()
-    dispatch(loadHapticsSetting())
   }, [dispatch])
 
   useEffect(() => {
@@ -263,10 +256,10 @@ export const AuthGuard: FC = () => {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
-        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: th('veteransCrisisLine.title') }} />
+        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
-        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin'), animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
-        <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
+        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ headerShown: false, animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
+        <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
       </Stack.Navigator>
     )
   }
@@ -275,28 +268,27 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.CLAIMS, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
+  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON, NAMESPACE.HEALTH])
 
   return (
     <>
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
         <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="ClaimsTab" component={ClaimsScreen} options={{ title: t('claims:title') }} />
+        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('common:benefits.title') }} />
         <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} />
+        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('common:payments.title') }} />
       </TabNav.Navigator>
     </>
   )
 }
 
 export const AuthedApp: FC = () => {
-  const { t } = useTranslation(NAMESPACE.PROFILE)
   const headerStyles = useHeaderStyles()
 
-  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME).t)
-  const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE).t)
-  const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS).t)
+  const homeScreens = getHomeScreens()
+  const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
+  const paymentsScreens = getPaymentsScreens()
 
   return (
     <>
@@ -315,13 +307,11 @@ export const AuthedApp: FC = () => {
         }}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
-        <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
-        <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
-        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
-        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
+        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
         {homeScreens}
-        {profileScreens}
-        {claimsScreens}
+        {paymentsScreens}
+        {benefitsScreens}
         {healthScreens}
       </RootNavStack.Navigator>
     </>

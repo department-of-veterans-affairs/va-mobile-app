@@ -1,4 +1,4 @@
-import { View, ViewStyle } from 'react-native'
+import { Dimensions, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
@@ -13,12 +13,11 @@ export type GenericOnboardingProps = {
   textA11yLabel?: string
   // optional list of text for using bullet points instead of plain text
   listOfText?: Array<string | VABulletListText>
-  testID: string
   displayLogo?: boolean
   centerHeader?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
+const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
@@ -37,9 +36,14 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
     justifyContent: 'center',
   }
 
+  const isPortrait = () => {
+    const dim = Dimensions.get('screen')
+    return dim.height >= dim.width
+  }
+
   return (
-    <VAScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle} alwaysBounceVertical={false}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+    <VAScrollView contentContainerStyle={containerStyle} alwaysBounceVertical={false} removeInsets={true}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait() ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
             <VAIcon name="Logo" />
@@ -58,7 +62,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
           </TextView>
         )}
         {listOfText && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween} ml={theme.dimensions.gutter}>
             <VABulletList listOfText={listOfText} />
           </Box>
         )}

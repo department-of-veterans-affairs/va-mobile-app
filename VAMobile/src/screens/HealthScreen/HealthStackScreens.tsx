@@ -1,36 +1,29 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { TFunction } from 'i18next'
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
-import React, { ReactNode } from 'react'
+import React from 'react'
 
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
-import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
-import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
-import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
-import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
+import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
-import SecureMessaging from './SecureMessaging'
+import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
 import StatusGlossary from './Pharmacy/StatusGlossary/StatusGlossary'
-import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
-import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
-import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
-import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
@@ -121,6 +114,7 @@ export type HealthStackParamList = WebviewStackParams & {
   PrescriptionDetails: {
     prescriptionId: string
   }
+  RefillRequestSummary: undefined
   RefillScreenModal: undefined
   RefillTrackingModal: {
     prescription: PrescriptionData
@@ -130,39 +124,21 @@ export type HealthStackParamList = WebviewStackParams & {
     value: RefillStatus
   }
   PrescriptionHelp: undefined
+  SessionNotStarted: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
 
-export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
+export const getHealthScreens = (t: TFunction) => {
   return [
-    <HealthStack.Screen key={'Appointments'} name="Appointments" component={Appointments} options={{ title: t('appointments.appointments') }} />,
-    <HealthStack.Screen
-      key={'UpcomingAppointmentDetails'}
-      name="UpcomingAppointmentDetails"
-      component={UpcomingAppointmentDetails}
-      options={{ title: t('appointments.appointment') }}
-    />,
-    <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} />,
-    <HealthStack.Screen key={'PastAppointmentDetails'} name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />,
-    <HealthStack.Screen key={'Messages'} name="Messages" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
-    <HealthStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />,
-    <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage.title') }} />,
-    <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
-    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,
-    <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={{ title: t('secureMessaging.drafts.edit') }} />,
-    <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
-    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} />,
+    <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} options={LARGE_PANEL_OPTIONS} />,
+    <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
-    <HealthStack.Screen key={'VaccineList'} name="VaccineList" component={VaccineListScreen} options={{ title: t('vaVaccines.title') }} />,
-    <HealthStack.Screen key={'VaccineDetails'} name="VaccineDetails" component={VaccineDetailsScreen} options={{ title: t('vaccines.details.title') }} />,
-
-    <HealthStack.Screen
-      key={'NoRequestAppointmentAccess'}
-      name="NoRequestAppointmentAccess"
-      component={NoRequestAppointmentAccess}
-      options={{ title: t('appointments.appointments') }}
-    />,
+    <HealthStack.Screen key={'NoRequestAppointmentAccess'} name="NoRequestAppointmentAccess" component={NoRequestAppointmentAccess} options={{ headerShown: false }} />,
     <HealthStack.Group
       key={'ModalsScreens'}
       screenOptions={{
@@ -201,35 +177,11 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
         options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </HealthStack.Group>,
-    <HealthStack.Screen key={'PrescriptionHistory'} name="PrescriptionHistory" component={PrescriptionHistory} options={{ title: t('prescription.history.title') }} />,
-    <HealthStack.Screen key={'PrescriptionDetails'} name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: t('prescription.details.title') }} />,
-    <HealthStack.Screen
-      key={'RefillScreenModal'}
-      name="RefillScreenModal"
-      component={RefillScreenModal}
-      options={{ headerShown: false, presentation: 'modal', ...TransitionPresets.ModalTransition }}
-    />,
-    <HealthStack.Screen
-      key={'RefillTrackingModal'}
-      name="RefillTrackingModal"
-      component={RefillTrackingModal}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescriptions.refillTracking.pageHeaderTitle') }}
-    />,
-    <HealthStack.Screen
-      key={'PrescriptionHelp'}
-      name="PrescriptionHelp"
-      component={PrescriptionHelp}
-      options={{ presentation: 'modal', ...TransitionPresets.ModalTransition, title: t('prescription.help.title') }}
-    />,
-    <HealthStack.Screen
-      key={'StatusGlossary'}
-      name="StatusGlossary"
-      component={StatusGlossary}
-      options={{
-        title: t('statusGlossary.title'),
-        presentation: 'modal',
-        ...TransitionPresets.ModalTransition,
-      }}
-    />,
+    <HealthStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'RefillTrackingModal'} name="RefillTrackingModal" component={RefillTrackingModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'PrescriptionHelp'} name="PrescriptionHelp" component={PrescriptionHelp} options={LARGE_PANEL_OPTIONS} />,
+    <HealthStack.Screen key={'StatusGlossary'} name="StatusGlossary" component={StatusGlossary} options={LARGE_PANEL_OPTIONS} />,
+    <HealthStack.Screen key={'SessionNotStarted'} name="SessionNotStarted" component={SessionNotStarted} options={LARGE_PANEL_OPTIONS} />,
   ]
 }

@@ -6,7 +6,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import _ from 'underscore'
 
 import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } from 'components/index'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getFileDisplay } from 'utils/common'
 import { useRouteNavigation, useTheme } from 'utils/hooks'

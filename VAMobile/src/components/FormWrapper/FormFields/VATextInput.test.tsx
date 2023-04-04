@@ -29,7 +29,7 @@ context('VATextInput', () => {
     error = '',
     isRequiredField = false,
     testID = '',
-    labelKey = 'profile:personalInformation.emailAddress',
+    labelKey = 'profile:contactInformation.emailAddress',
     isTextArea = false,
   ) => {
     onChangeSpy = jest.fn(() => {})

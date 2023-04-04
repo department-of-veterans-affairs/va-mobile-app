@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect } from 'react'
 
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAScrollView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextLine } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -12,7 +12,6 @@ import { Vaccine } from 'store/api/types'
 import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
@@ -22,7 +21,7 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
 /**
  * Screen containing a list of vaccines on record and a link to their details view
  */
-const VaccineListScreen: FC<VaccineListScreenProps> = () => {
+const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
@@ -81,24 +80,36 @@ const VaccineListScreen: FC<VaccineListScreenProps> = () => {
   }, [dispatch, requestPage])
 
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loading) {
-    return <LoadingComponent text={t('vaccines.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+        <LoadingComponent text={t('vaccines.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (vaccines.length === 0) {
-    return <NoVaccineRecords />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+        <NoVaccineRecords />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (
-    <VAScrollView {...testIdProps('Letters-list-page')}>
+    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>
       {renderPagination()}
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

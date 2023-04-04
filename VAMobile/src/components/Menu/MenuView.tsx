@@ -1,14 +1,15 @@
 import { Dimensions, Pressable, StyleProp, View, ViewStyle } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef } from 'react'
 
 import { Menu, Position } from './Menu'
 import { MenuDivider } from './MenuDivider'
 import { MenuItem } from './MenuItem'
+import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
-import TextView from 'components/TextView'
+import TextView, { TextViewProps } from 'components/TextView'
 import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
 
 interface ElementToStickProps {
@@ -48,6 +49,7 @@ export type MenuViewProps = {
  * Common popup menu component. This component will allow a user to see multiple actions inside a menu
  */
 const MenuView: FC<MenuViewProps> = ({ actions }) => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const elementRef = useRef<View>(null)
   let menuRef: Menu | null = null
   const setMenuRef: (instance: Menu | null) => void = (ref) => (menuRef = ref)
@@ -72,7 +74,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   })
 
   const elementToStickStyle: StyleProp<ViewStyle> = {
-    padding: 22,
+    padding: currentTheme.dimensions.buttonPadding,
     justifyContent: 'center',
     alignItems: 'center',
   }
@@ -85,18 +87,17 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     justifyContent: 'center',
   }
 
-  const mainContainerStyle: StyleProp<ViewStyle> = {
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    marginRight: 10,
-    flex: 1,
-  }
-
   const menuStyle: StyleProp<ViewStyle> = {
     flexDirection: 'row',
     alignContent: 'center',
     alignItems: 'center',
     padding: 10,
+  }
+
+  const textViewProps: TextViewProps = {
+    color: 'link',
+    variant: 'textWithIconButton',
+    allowFontScaling: false,
   }
 
   // gets the action passed down to the menu and creates the menu actions
@@ -133,16 +134,15 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
 
   return (
     <>
-      <SafeAreaView edges={['bottom', 'left', 'right', 'top']} style={mainContainerStyle}>
-        <ElementToStick ref={elementRef} style={elementToStickStyle} />
-        <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
-          <VAIcon name="EllipsisSolid" fill={'white'} height={18} width={18} />
-        </Pressable>
+      <ElementToStick ref={elementRef} style={elementToStickStyle} />
+      <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
+        <VAIcon name="EllipsisSolid" fill={'link'} height={22} width={22} preventScaling={true} />
+        <TextView {...textViewProps}>{t('more')}</TextView>
+      </Pressable>
 
-        <Menu ref={setMenuRef} style={{ backgroundColor: currentTheme.colors.background.menu }}>
-          {getActionsForMenu()}
-        </Menu>
-      </SafeAreaView>
+      <Menu ref={setMenuRef} style={{ backgroundColor: currentTheme.colors.background.menu }}>
+        {getActionsForMenu()}
+      </Menu>
     </>
   )
 }

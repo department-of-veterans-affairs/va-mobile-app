@@ -27,18 +27,17 @@ platform :ios do
               key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
               in_house: false
             )
-    ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true'
   end
 
   desc "Push a new internal QA build to TestFlight"
   lane :qa do |options|
     puts('Begin QA lane' )
-    ensure_xcode_version(version: "13", strict: false)
+    ensure_xcode_version(version: "14", strict: false)
     notes = options[:notes]
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
     sign
-    build
+    build("QA")
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
     upload_tf(notes, "Development Team")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
@@ -54,7 +53,7 @@ platform :ios do
   desc "Build new Production build and upload to App Store for review"
   lane :review do |options|
     puts("Begin Review Lane")
-    ensure_xcode_version(version: "13", strict: false)
+    ensure_xcode_version(version: "14", strict: false)
     update_version(options[:version])
     sign
     build
@@ -82,12 +81,12 @@ platform :ios do
   desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
   lane :on_demand do |options|
     puts "on demand run"
-    ensure_xcode_version(version: "13", strict: false)
+    ensure_xcode_version(version: "14", strict: false)
     notes = options[:notes]
     datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
     update_version(options[:version])
     sign
-    build
+    build("QA")
 
     tf_group = options[:tfGroup].empty? ? "Development Team" : options[:tfGroup]
 
@@ -106,7 +105,7 @@ platform :ios do
   desc "Deploy a RC new version to TestFlight"
   lane :rc do |options|
     puts('Begin RC lane' )
-    ensure_xcode_version(version: "13", strict: false)
+    ensure_xcode_version(version: "14", strict: false)
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-RC")
     sign
