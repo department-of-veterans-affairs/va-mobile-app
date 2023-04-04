@@ -1,0 +1,29 @@
+name: "Create PR to Staging after QA closes an issue"
+
+on:
+  issues:
+    types:
+      - closed
+
+jobs:
+  create_prs:
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repo'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set username and email
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+
+      - name: 'Create PR to merge changes to staging'
+        run: |
+          git fetch origin pull/${{github.event.issue.pull_request}}/head:pr-to-staging
+          git checkout pr-to-staging
+          git push -u staging pr-to-staging
+          echo "STAG_PR=$(gh pr create -B staging -t "Merge ${{github.event.issue.pull_request}} to staging" -b "PR to merge ${{github.event.issue.pull_request}} changes into staging")" >> $GITHUB_ENV
