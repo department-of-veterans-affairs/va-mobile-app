@@ -27,9 +27,6 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
       text: t('prescription.help.item3'),
       a11yLabel: t('prescription.help.item3.a11yLabel'),
     },
-    {
-      text: t('prescription.help.item4'),
-    },
   ]
 
   useEffect(() => {
