@@ -74,7 +74,6 @@ import BuildingSolid from './svgs/buildingSolid.svg'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
-import CommentSolid from './svgs/comment-solid.svg'
 import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Delete from './svgs/delete.svg'
@@ -83,7 +82,6 @@ import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import FolderSolid from './svgs/folder-solid.svg'
 import InboxSolid from './svgs/inbox-solid.svg'
 import InfoIcon from './svgs/info-circle.svg'
-import ListSolid from './svgs/list-solid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import Minus from './svgs/minus.svg'
@@ -107,21 +105,21 @@ export const VA_ICON_MAP = {
   BenefitsUnselected,
   ProfileSelected,
   ProfileUnselected,
-  PaymentsSelected, // Missing from docs
-  PaymentsUnselected, // Missing from docs
-  Add, // Unused?
-  ArrowDown, // Missing from docs
+  PaymentsSelected,
+  PaymentsUnselected,
+  Add,
+  ArrowDown,
   ArrowUp,
-  ArrowLeft, // Missing from docs (technically under webview, should be common too)
+  ArrowLeft,
   ArrowRight,
   Airforce,
   Army,
   Bullet,
-  Calendar, // Unused?
+  Calendar,
   Compose,
   CircleCheckMark,
   CoastGuard,
-  Delete,
+  Delete, // Same as Remove?
   Directions,
   EmptyCheckBox,
   FilledCheckBox,
@@ -136,36 +134,34 @@ export const VA_ICON_MAP = {
   Navy,
   PaperClip,
   Phone,
-  PhoneTTY,
+  PhoneTTY, // White/black in doc site?
   Chat,
   Text,
   RightArrowInCircle,
   Reply,
-  WebviewBack,
-  WebviewForward,
-  WebviewOpen,
+  WebviewBack, // Same as ArrowLeft?
+  WebviewForward, // Same as ArrowRight?
+  WebviewOpen, // Should be renamed generic for external link, not WebView specific
   WebviewRefresh,
   Lock,
-  DatePickerArrows,
+  DatePickerArrows, // Unused besides by unused component
   CheckMark,
   Logo,
-  ErrorCheckBox, // Used by VASelector?
+  ErrorCheckBox,
   QuestionMark,
-  Remove,
+  Remove, // Same as Delete?
   UnreadIcon,
   VideoCamera,
   PhoneSolid,
-  ExclamationTriangleSolid, // Missing from docs
+  ExclamationTriangleSolid,
   TrashSolid,
   InboxSolid,
   BuildingSolid,
   InfoIcon,
-  CommentSolid, // Unused besides unit test
-  ListSolid, // Unused
-  WhiteCheckCircle, // Why does this exist? Just white version of another icon?
-  WhiteCloseCircle, // Why does this exist? Just white version of another icon?
+  WhiteCheckCircle, // Why does this exist? Just white version of another icon? Missing from docs too
+  WhiteCloseCircle, // Why does this exist? Just white version of another icon? Missing from docs too
   Truck,
-  ExternalLink,
+  ExternalLink, // Same as WebviewOpen?
   Save,
 }
 /**

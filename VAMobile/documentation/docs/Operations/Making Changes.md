@@ -52,7 +52,7 @@ Click the clone button to pop up a modal. Choose the local path on your machine 
 ![](../../static/img/making_changes/ss8.png)
 
 ## Create a new branch
-To create a branch, you first need to know what base you need. The base of the branch determines what code changes are available to your branch when you start it. If we think of develop as a truck, then the two branches shown below will have slightly different code checked in because of where they are branched from. You can see that the yellow branch will have started and be missing two gray commits that the blue branch will have because of where it was based.
+To create a branch, you first need to know what base you need. The base of the branch determines what code changes are available to your branch when you start it. If we think of develop as a trunk, then the two branches shown below will have slightly different code checked in because of where they are branched from. You can see that the yellow branch will have started and be missing two gray commits that the blue branch will have because of where it was based.
 
 ![](../../static/img/making_changes/ss10.png)
 
