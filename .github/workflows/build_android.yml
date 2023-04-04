@@ -20,15 +20,16 @@ on:
       notes:
         type: string
         default: ''
-      # Google Play Console track to distribute to. Fastlane defaults to 
+      # Google Play Console track to distribute to. Fastlane defaults to
       # "Development Team"
       ps_track:
         type: string
         default: ''
-      # Determines whether or not to send slack messages related to the build
-      use_slack_thread:
-        type: boolean
-        default: true
+      # Timestamp of the Slack thread where build related messages should be sent.
+      # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
+      slack_thread_ts:
+        type: string
+        default: ''
       # Version to use for production release. QA/On-demand builds will increment
       # upon the latest version in Google Play Console
       version:
@@ -56,14 +57,17 @@ env:
   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  # Slack API token used by fastlane
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
   build_android:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-4-cores-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set git config
         run: |
+          echo Notes: ${{ inputs.notes }}
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
       # Decodes base64 encoded keystore, Play Store service distribution key,
@@ -97,5 +101,8 @@ jobs:
         run: yarn bundle:android
       - name: Update fastlane
         run: bundle update fastlane
+      - name: Set SLACK_THREAD_TS environment variable
+        if: inputs.slack_thread_ts
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
       - name: Run fastlane
         run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"

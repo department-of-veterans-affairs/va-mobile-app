@@ -5,6 +5,7 @@ import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, FooterButton, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { isAndroid } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 
 export type RadioPickerGroup = {
@@ -149,13 +150,14 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
       <Modal
         animationType="slide"
         transparent={true}
+        statusBarTranslucent={true}
         visible={modalVisible}
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={() => {
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
-          <Box pt={insets.top} />
+          <Box backgroundColor={isAndroid() ? 'modalOverlay' : undefined} pt={insets.top} />
           <Box backgroundColor="list" pb={insets.bottom} flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancelPressed} {...cancelButtonProps}>
