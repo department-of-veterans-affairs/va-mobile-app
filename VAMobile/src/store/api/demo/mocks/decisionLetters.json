@@ -25,7 +25,7 @@
         "attributes": {
           "seriesId": "{EC1B5F0C-E3FB-4A41-B93F-E1A88D549CDF}",
           "version": "1",
-          "typeDescription": "Notification Letter (e.g. VA 20-8993, VA 21-0290, PCGL)",
+          "typeDescription": "Decision Rating Letter",
           "typeId": "184",
           "docType": "184",
           "subject": null,
