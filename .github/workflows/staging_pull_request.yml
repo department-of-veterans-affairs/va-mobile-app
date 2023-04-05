@@ -10,16 +10,16 @@ jobs:
     name: Staging PR
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout repo'
+      - name: Checkout repo
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_ACTIONS_PAT }}
 
-      - name: 'Set up GH CLI secret'
+      - name: Set up GH CLI secret
         run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
 
-      - name: 'Log into GH CLI'
+      - name: Log into GH CLI
         run: gh auth login --with-token < token.txt
 
       - name: Set username and email
@@ -32,7 +32,7 @@ jobs:
           number=$(gh api repos/department-of-veterans-affairs/va-mobile-app/pulls --jq 'map({ number: .number, title: .title }) | map(select(.title | contains(${{ github.event.issue.number }})))[0].number')
           echo PR_NUMBER=${number} >> $GITHUB_ENV
 
-      - name: 'Create PR to merge changes to staging'
+      - name: Create PR to merge changes to staging
         if: ${{env.PR_NUMBER}} != ''
         run: |
           git fetch origin pull/${{env.PR_NUMBER}}/head:${{env.PR_NUMBER}}-to-staging
