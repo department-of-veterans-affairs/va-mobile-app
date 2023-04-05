@@ -1,3 +1,5 @@
+<!-- NOTE: Please include the related issue number in the PR title, otherwise the changes won't be merged into the `staging` branch upon ticket completion. E.g. 'My pull request (1234)' -->
+
 ## Description of Change
 <!-- Please include a description of the change and context. What would a code reviewer, or a future dev, 
 need to know about this PR in order to understand why this PR was created? This could include dependencies 
