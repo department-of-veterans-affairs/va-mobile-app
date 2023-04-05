@@ -1,6 +1,7 @@
 import { AddressData, PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
+import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
@@ -31,6 +32,7 @@ export type DemoStore = AppointmentsDemoStore &
   SecureMessagingDemoStore &
   VaccineDemoStore &
   DisabilityRatingDemoStore &
+  DecisionLettersDemoStore &
   LettersDemoStore &
   PaymenDemoStore &
   PrescriptionsDemoStore &
@@ -46,6 +48,7 @@ type DemoApiReturns =
   | SecureMessagingDemoApiReturnTypes
   | VaccineDemoReturnTypes
   | DisabilityRatingDemoApiReturnTypes
+  | DecisionLettersDemoApiReturnTypes
   | LettersDemoApiReturnTypes
   | PaymentsDemoReturnTypes
   | PrescriptionsDemoReturnTypes
@@ -72,6 +75,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/secureMessaging.json'),
     import('./mocks/vaccine.json'),
     import('./mocks/disablityRating.json'),
+    import('./mocks/decisionLetters.json'),
     import('./mocks/letters.json'),
     import('./mocks/payments.json'),
     import('./mocks/prescriptions.json'),
