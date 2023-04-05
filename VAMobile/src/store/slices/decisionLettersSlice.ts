@@ -22,7 +22,7 @@ export const initialDecisionLettersState: DecisionLettersState = {
 const decisionLettersNonFatalErrorString = 'Decision Letters Service Error'
 
 /**
- * Redux action for getting direct deposit information
+ * Redux action for getting decision letter information
  */
 export const getDecisionLetters =
   (screenID?: ScreenIDTypes): AppThunk =>
