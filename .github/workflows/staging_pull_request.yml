@@ -37,6 +37,6 @@ jobs:
         run: |
           git fetch origin pull/${{env.PR_NUMBER}}/head:${{env.PR_NUMBER}}-to-staging
           git checkout ${{env.PR_NUMBER}}-to-staging
-          git push -u staging ${{env.PR_NUMBER}}-to-staging
+          git push -u origin ${{env.PR_NUMBER}}-to-staging
           gh pr create -B staging -t "Merge issue ${{github.event.issue.number}} to staging" -b "PR to merge PR number ${{env.PR_NUMBER}} changes into staging"
 
