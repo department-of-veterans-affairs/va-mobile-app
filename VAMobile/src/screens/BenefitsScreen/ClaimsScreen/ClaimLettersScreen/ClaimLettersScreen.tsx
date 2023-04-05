@@ -29,10 +29,14 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     }
   }, [dispatch, claimsInDowntime])
 
+  const fetchInfoAgain = () => {
+    dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
+  }
+
   if (useError(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} onTryAgain={fetchInfoAgain} />
       </FeatureLandingTemplate>
     )
   }
@@ -59,7 +63,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const date = formatDateMMMMDDYYYY(receivedAt || '')
 
     const letterButton = {
-      textLines: [{ text: t('claimLetters.letterDate', date), variant }, { text: typeDescription }],
+      textLines: [{ text: t('claimLetters.letterDate', { date }), variant }, { text: typeDescription }],
       onPress: () => {},
       a11yValue: t('listPosition', { position: index + 1, total: decisionLetters.length }),
     }
