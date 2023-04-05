@@ -2,6 +2,7 @@
 
 ## Background
 _For folks looking for a basic primer on "what is UI automation testing", reading one of the [many articles available via quick google search](https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing) is the recommended method. This section instead covers the background of automated UI testing for the mobile team._
+
 Implementing robust UI automation for the mobile team supports several team goals - more efficiently using QA Engineer time, finding bugs sooner/reducing regressions, and improving FE efficiency (reducing the number of flaky unit tests that are written to accomplish what UI automation is better positioned to test). 
 
 Phases include:
