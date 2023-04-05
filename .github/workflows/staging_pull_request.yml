@@ -20,10 +20,15 @@ jobs:
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
 
+      - name: Find Corresponding PR Number
+        run: |
+          number=$(gh api repos/department-of-veterans-affairs/va-mobile-app/pulls --jq 'map({ number: .number, title: .title }) | map(select(.title | contains(${{ github.event.issue.number }})))[0].number')
+          echo PR_NUMBER=${number} >> $GITHUB_ENV
+          
       - name: 'Create PR to merge changes to staging'
         run: |
-          git fetch origin pull/${{github.event.issue.number}}/head:${{github.event.issue.number}}-to-staging
-          git checkout ${{github.event.issue.number}}-to-staging
-          git push -u staging ${{github.event.issue.number}}-to-staging
-          gh pr create -B staging -t "Merge ${{github.event.issue.number}} to staging" -b "PR to merge ${{github.event.issue.number}} changes into staging"
+          git fetch origin pull/${{env.PR_NUMBER}}/head:${{env.PR_NUMBER}}-to-staging
+          git checkout ${{env.PR_NUMBER}}-to-staging
+          git push -u staging ${{env.PR_NUMBER}}-to-staging
+          gh pr create -B staging -t "Merge issue ${{github.event.issue.number}} to staging" -b "PR to merge PR number ${{env.PR_NUMBER}} changes into staging"
 
