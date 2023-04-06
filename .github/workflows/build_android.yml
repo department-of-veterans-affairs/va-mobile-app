@@ -113,7 +113,7 @@ jobs:
           count=$(gh run list \
             --status in_progress \
             --json databaseId,workflowName \
-            --jq 'map(select((.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ) and .databaseId < ${{ github.run_id })) | length' )
+            --jq 'map(select((.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ) and .databaseId < ${{ github.run_id }})) | length' )
           echo $count
           
       # - name: Run fastlane
