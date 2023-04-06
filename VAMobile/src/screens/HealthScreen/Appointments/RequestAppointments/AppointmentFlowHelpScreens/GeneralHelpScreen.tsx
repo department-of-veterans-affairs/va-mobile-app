@@ -33,12 +33,13 @@ const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) =>
   return (
     <Box flex={1} backgroundColor={'main'}>
       <Box mx={gutter}>
-        <TextView variant="MobileBodyBold" mt={contentMarginTop}>
+        <TextView variant="MobileBodyBold" mt={contentMarginTop} paragraphSpacing={true}>
           {title}
         </TextView>
-        <TextView variant="MobileBody">{description}</TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {description}
+        </TextView>
         <TextView
-          mt={contentMarginTop}
           variant="MobileBodyLink"
           onPress={() => {
             navigation.goBack()

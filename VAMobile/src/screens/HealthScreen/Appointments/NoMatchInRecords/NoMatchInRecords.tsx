@@ -13,7 +13,7 @@ const NoMatchInRecords: FC = () => {
 
   const accordionContent = (textID: string, textA11yLabelID: string): ReactNode => {
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box>
         <Box {...testIdProps(getTranslation(`noMatch.${textA11yLabelID}`, t))}>
           <TextView variant="MobileBody">{getTranslation(`noMatch.${textID}`, t)}</TextView>
         </Box>
@@ -24,7 +24,7 @@ const NoMatchInRecords: FC = () => {
 
   const accordionHeader = (textID: string, textA11yLabelID: string): ReactNode => {
     return (
-      <TextView variant="MobileBodyBold" {...testIdProps(getTranslation(`noMatch.${textA11yLabelID}`, t))}>
+      <TextView variant="MobileBodyBold" {...testIdProps(getTranslation(`noMatch.${textA11yLabelID}`, t))} paragraphSpacing={true}>
         {getTranslation(`noMatch.${textID}`, t)}
       </TextView>
     )
@@ -35,10 +35,12 @@ const NoMatchInRecords: FC = () => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <Box {...testIdProps(t('noMatch.titleA11yLabel'))} accessibilityRole="header" accessible={true}>
-            <TextView variant="BitterBoldHeading">{t('noMatch.title')}</TextView>
+            <TextView variant="BitterBoldHeading" paragraphSpacing={true}>
+              {t('noMatch.title')}
+            </TextView>
           </Box>
           <Box {...testIdProps(t('noMatch.noMatchA11yLabel'))} accessible={true}>
-            <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('noMatch.noMatch')}
             </TextView>
           </Box>

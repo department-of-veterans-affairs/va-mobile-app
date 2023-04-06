@@ -78,7 +78,9 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
               <TextView variant="MobileBodyBold" mt={contentMarginTop} accessibilityRole={'header'}>
                 {item.header}
               </TextView>
-              <TextView variant="MobileBody">{item.description}</TextView>
+              <TextView variant="MobileBody" paragraphSpacing={true}>
+                {item.description}
+              </TextView>
             </Box>
           )
         })}

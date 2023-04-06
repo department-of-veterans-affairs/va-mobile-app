@@ -169,12 +169,14 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
 
     return (
       <Box {...borderProps}>
-        <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
+        <TextView variant="HelperTextBold" paragraphSpacing={true}>
+          {t('prescriptions.refillRequestSummary.whatsNext')}
+        </TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt1.a11y')}>
+          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt1.a11y')} paragraphSpacing={true}>
             {t('prescriptions.refillRequestSummary.yourRefills.successPt1')}
           </TextView>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt2.a11y')} mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt2.a11y')}>
             {t('prescriptions.refillRequestSummary.yourRefills.successPt2')}
           </TextView>
         </Box>

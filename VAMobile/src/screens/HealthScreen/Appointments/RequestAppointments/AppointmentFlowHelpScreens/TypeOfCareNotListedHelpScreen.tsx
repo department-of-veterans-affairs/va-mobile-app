@@ -58,7 +58,7 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
     }
 
     return (
-      <Box mx={gutter}>
+      <Box mx={gutter} mb={theme.paragraphSpacing.spacing20FontSize}>
         <VABulletList listOfText={bulletedListOfText} />
       </Box>
     )
@@ -67,18 +67,17 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
   return (
     <Box flex={1} backgroundColor={'main'}>
       <Box mx={gutter}>
-        <TextView variant="MobileBodyBold" mt={contentMarginTop} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" mt={contentMarginTop} accessibilityRole="header" paragraphSpacing={true}>
           {t('requestAppointment.typeOfCareNotListedCallToSchedule')}
         </TextView>
-        <TextView variant="MobileBody" mt={condensedMarginBetween} accessibilityLabel={t('requestAppointment.typeOfCareNotListedYoureNotLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('requestAppointment.typeOfCareNotListedYoureNotLabel')}>
           {t('requestAppointment.typeOfCareNotListedYoureNotDesc')}
         </TextView>
         {getNonEligibleCare()}
-        <TextView variant="MobileBody" mt={standardMarginBetween} accessibilityLabel={t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareLabel')}>
           {t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareDesc')}
         </TextView>
         <TextView
-          mt={condensedMarginBetween}
           variant="MobileBodyLink"
           accessibilityLabel={t('requestAppointment.typeOfCareNotListedFindfVaLinkLabel')}
           onPress={() => {

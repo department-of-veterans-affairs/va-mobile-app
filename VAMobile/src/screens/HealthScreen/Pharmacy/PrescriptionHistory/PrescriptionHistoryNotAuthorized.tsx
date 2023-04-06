@@ -40,6 +40,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
     accessibilityRole: 'link',
     accessibilityLabel: t('notEnrolledSM.learnHowTo.a11yLabel'),
     accessibilityHint: t('notEnrolledSM.learnHowTo.a11yHint'),
+    paragraphSpacing: true,
   }
 
   return (
@@ -49,18 +50,14 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView>{t('prescriptions.notAuthorized.toAccess')}</TextView>
-          <TextView pt={standardMarginBetween}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>
-          <Box my={standardMarginBetween}>
-            <VABulletList listOfText={[bulletOne]} />
-            <VABulletList listOfText={[bulletTwo]} />
-          </Box>
-          <Box mt={standardMarginBetween}>
+          <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toAccess')}</TextView>
+          <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>
+          <VABulletList listOfText={[bulletOne]} />
+          <VABulletList listOfText={[bulletTwo]} />
+          <Box mt={theme.paragraphSpacing.spacing20FontSize}>
             <TextView {...linkProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
           </Box>
-          <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
-            {t('prescriptions.notAuthorized.pleaseCall')}
-          </TextView>
+          <TextView accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>{t('prescriptions.notAuthorized.pleaseCall')}</TextView>
           <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
         </TextArea>
       </Box>
