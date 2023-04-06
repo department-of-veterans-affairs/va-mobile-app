@@ -1,0 +1,21 @@
+# Reusable workflow that waits for older builds to finish
+name: Queue Builds
+
+on:
+  workflow_call:
+
+jobs:
+  queue_builds:
+    name: Wait for older builds to finish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up GH CLI secret
+        run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
+      - name: Log into GH CLI
+        run: gh auth login --with-token < token.txt
+      - name: Wait for older build jobs to finish
+        run: |
+          count=$(gh run list \
+            --json databaseId,status,workflowName \
+            --jq 'map(select((.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ) and .databaseId < ${{ github.run_id }} and .status == "in_progress")) | length' )
+          echo $count
