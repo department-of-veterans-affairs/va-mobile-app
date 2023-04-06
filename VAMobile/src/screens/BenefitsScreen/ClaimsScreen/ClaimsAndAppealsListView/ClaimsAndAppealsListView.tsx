@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
+import { Box, LabelTag, LabelTagTypeConstants, List, ListItemObj, Pagination, PaginationProps, TextLine, TextLines } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -51,8 +52,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     return ''
   }
 
-  const getListItemVals = (): Array<DefaultListItemObj> => {
-    const listItems: Array<DefaultListItemObj> = []
+  const getListItemVals = () => {
+    const listItems: Array<ListItemObj> = []
     claimsAndAppeals.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
 
@@ -61,12 +62,22 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
         { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
         { text: `Submitted ${formattedDateFiled}` },
       ]
+      const content = (
+        <Box>
+          <TextLines listOfText={textLines} />
+          {featureEnabled('decisionLetters') && attributes.decisionLetterSent && (
+            <Box my={theme.dimensions.condensedMarginBetween}>
+              <LabelTag text={t('claims.decisionLetterAvailable')} labelType={LabelTagTypeConstants.tagBlue} />
+            </Box>
+          )}
+        </Box>
+      )
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
       listItems.push({
-        textLines,
+        content,
         a11yValue,
         onPress,
         a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }),
@@ -101,7 +112,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
   return (
     <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
-      <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
+      <List items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
