@@ -206,10 +206,12 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       return null
     }
 
+    const vaTitle = ' VA '
+
     switch (title.type) {
       case 'Static':
       case 'VA': {
-        const titleText = title?.type === 'VA' ? 'VA' : title.title
+        const titleText = title?.type === 'VA' ? vaTitle : title.title
         return <TextView {...titleTextViewProps}>{titleText}</TextView>
       }
 
@@ -223,7 +225,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
         } else {
           return (
             <TextView variant="VAHeader" opacity={VaOpacity} allowFontScaling={false}>
-              VA
+              {vaTitle}
             </TextView>
           )
         }
