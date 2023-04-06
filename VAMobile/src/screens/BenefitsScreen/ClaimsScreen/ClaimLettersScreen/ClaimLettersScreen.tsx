@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, DefaultList, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
-import { DecisionLettersState, getDecisionLetters } from 'store/slices/decisionLettersSlice'
+import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from 'store/slices/decisionLettersSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -65,9 +65,8 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
 
     const letterButton = {
-      textLines,
-      // TODO: Link to Letter View screen (ticket #5045)
-      onPress: () => {},
+      textLines: [{ text: t('claimLetters.letterDate', { date }), variant }, { text: typeDescription }],
+      onPress: () => dispatch(downloadDecisionLetter(letter.id)),
       a11yValue: t('listPosition', { position: index + 1, total: decisionLetters.length }),
       testId: getA11yLabelText(textLines), // read by screen reader
     }
