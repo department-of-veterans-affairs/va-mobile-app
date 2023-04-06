@@ -12,6 +12,7 @@ import { RootState } from 'store'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { CloseSnackbarOnNavigation } from 'constants/common'
+import { featureEnabled } from 'utils/remoteConfig'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
@@ -41,6 +42,8 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
+  const claimsDestination = featureEnabled('decisionLetters') ? 'Claims' : 'ClaimsHistory'
+
   return (
     <CategoryLanding title={t('benefits.title')}>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -55,7 +58,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('claims.title')}
-          onPress={navigateTo('Claims')}
+          onPress={navigateTo(claimsDestination)}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
