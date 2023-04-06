@@ -16,11 +16,14 @@ const PaymentMissing: FC<PaymentMissingScreenProps> = () => {
   return (
     <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('payments.ifIAmMissingPayemt')}
         </TextView>
-        <TextView variant="MobileBody" py={6}>
-          {t('payments.missingPayments.body')}
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingPayments.body.1.a11yLabel')}>
+          {t('payments.missingPayments.body.1')}
+        </TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingPayments.body.2.a11yLabel')}>
+          {t('payments.missingPayments.body.2')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
       </Box>

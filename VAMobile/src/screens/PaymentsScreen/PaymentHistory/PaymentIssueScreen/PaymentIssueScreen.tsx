@@ -16,10 +16,10 @@ const PaymentIssue: FC<PaymentIssueScreenProps> = () => {
   return (
     <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('payments.ifMyPaymentDoesNotLookRight')}
         </TextView>
-        <TextView variant="MobileBody" py={6}>
+        <TextView variant="MobileBody" accessibilityLabel={t('paymentIssues.body.a11yLabel')}>
           {t('paymentIssues.body')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
