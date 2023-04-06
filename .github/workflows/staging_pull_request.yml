@@ -4,6 +4,9 @@ on:
   issues:
     types:
       - closed
+  push:
+    branches:
+      - 'bug/5313-Theo-PRNumberCheck'
 
 jobs:
   create_prs:
