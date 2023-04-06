@@ -446,6 +446,7 @@ export type ClaimData = {
 export type ClaimAndAppealSubData = {
   subtype: string
   completed: boolean
+  decisionLetterSent: boolean
   dateFiled: string
   updatedAt: string
   displayTitle: string
