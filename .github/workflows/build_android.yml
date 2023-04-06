@@ -65,6 +65,16 @@ jobs:
     runs-on: ubuntu-4-cores-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set up GH CLI secret
+        run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
+      - name: Log into GH CLI
+        run: gh auth login --with-token < token.txt
+      - name: Wait for other Android build jobs
+        run: |
+          count=$(gh run list \
+            --json databaseId,status,workflowName \
+            --jq 'map(select((.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ) and .databaseId < ${{ github.run_id }} and .status == "in_progress")) | length' )
+          echo $count
       - name: Set git config
         run: |
           echo Notes: ${{ inputs.notes }}
@@ -104,17 +114,6 @@ jobs:
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Set up GH CLI secret
-        run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
-      - name: Log into GH CLI
-        run: gh auth login --with-token < token.txt
-      - name: Wait for other Android build jobs
-        run: |
-          count=$(gh run list \
-            --status in_progress \
-            --json databaseId,workflowName \
-            --jq 'map(select((.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ) and .databaseId < ${{ github.run_id }})) | length' )
-          echo $count
           
       # - name: Run fastlane
       #   run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
