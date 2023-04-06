@@ -4,9 +4,6 @@ on:
   issues:
     types:
       - closed
-  push:
-    branches:
-      - 'bug/5313-Theo-PRNumberCheck'
 
 jobs:
   create_prs:
@@ -32,7 +29,7 @@ jobs:
 
       - name: Find Corresponding PR Number
         run: |
-          number=$(gh pr list --state closed --json number,title --jq 'map({ number: .number, title: .title }) | map(select(.title | contains("4581")))[0].number')
+          number=$(gh pr list --state closed --json number,title --jq 'map({ number: .number, title: .title }) | map(select(.title | contains("${{ github.event.issue.number }}")))[0].number')
           echo PR_NUMBER=${number} >> $GITHUB_ENV
 
       - name: Create PR to merge changes to staging
