@@ -18,7 +18,7 @@ jobs:
     secrets: inherit
   start_slack_thread:
     name: Start Slack thread
-    needs: wait_for_older_builds
+    needs: queue_builds
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
