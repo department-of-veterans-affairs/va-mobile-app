@@ -148,16 +148,16 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
             <AlertBox scrollViewRef={scrollViewRef} text={error} textA11yLabel={errorA11y} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('secureMessaging.attachments.youMayAttach')} {t('secureMessaging.attachments.acceptedFileTypes')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
           {t('secureMessaging.attachments.sizeRequirements')}
         </TextView>
-        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('secureMessaging.attachments.attachmentsAreNotDrafts')}
         </TextView>
         {image && uri && (

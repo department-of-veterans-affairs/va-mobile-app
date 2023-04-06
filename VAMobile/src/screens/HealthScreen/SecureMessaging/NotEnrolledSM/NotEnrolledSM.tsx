@@ -51,13 +51,13 @@ const NotEnrolledSM: FC = () => {
         </Box>
         <Box>
           <TextArea>
-            <TextView variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
+            <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
               {t('notEnrolledSM.withSM')}
             </TextView>
-            <TextView variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
             <Box mb={standardMarginBetween}>
@@ -70,9 +70,11 @@ const NotEnrolledSM: FC = () => {
               <VABulletList listOfText={[bulletThree]} />
             </Box>
             <Box mb={standardMarginBetween}>
-              <TextView {...textViewProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
+              <TextView {...textViewProps} paragraphSpacing={true}>
+                {t('notEnrolledSM.learnHowTo')}
+              </TextView>
             </Box>
-            <Box mb={standardMarginBetween}>
+            <Box>
               <TextView>
                 <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>

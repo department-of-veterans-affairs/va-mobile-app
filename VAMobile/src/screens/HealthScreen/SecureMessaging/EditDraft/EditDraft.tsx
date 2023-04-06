@@ -449,9 +449,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-              <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
+              <TextView variant="MobileBody" paragraphSpacing={true}>
+                {t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}
+              </TextView>
             </Box>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} accessible={true}>
               <TextView>
                 <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>

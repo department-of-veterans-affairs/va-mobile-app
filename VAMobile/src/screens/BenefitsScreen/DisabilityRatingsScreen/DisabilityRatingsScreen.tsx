@@ -128,12 +128,16 @@ const DisabilityRatingsScreen: FC = () => {
   const getLearnAboutVaRatingSection = () => {
     return (
       <TextArea>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')} paragraphSpacing={true}>
-          {t('disabilityRating.learnAbout')}
-        </TextView>
-        <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')} paragraphSpacing={true}>
-          {t('disabilityRating.learnAboutSummary')}
-        </TextView>
+        <Box accessible={true} accessibilityRole={'header'}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')} paragraphSpacing={true}>
+            {t('disabilityRating.learnAbout')}
+          </TextView>
+        </Box>
+        <Box accessible={true}>
+          <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')} paragraphSpacing={true}>
+            {t('disabilityRating.learnAboutSummary')}
+          </TextView>
+        </Box>
         <ClickForActionLink {...clickToCallProps} />
       </TextArea>
     )
@@ -142,12 +146,16 @@ const DisabilityRatingsScreen: FC = () => {
   const getNeedHelpSection = () => {
     return (
       <TextArea>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
-          {t('disabilityRatingDetails.needHelp')}
-        </TextView>
-        <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claimDetails.callVA.a11yLabel')} paragraphSpacing={true}>
-          {t('claimDetails.callVA')}
-        </TextView>
+        <Box accessible={true} accessibilityRole={'header'}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+            {t('disabilityRatingDetails.needHelp')}
+          </TextView>
+        </Box>
+        <Box accessible={true}>
+          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claimDetails.callVA.a11yLabel')} paragraphSpacing={true}>
+            {t('claimDetails.callVA')}
+          </TextView>
+        </Box>
         <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
       </TextArea>
     )

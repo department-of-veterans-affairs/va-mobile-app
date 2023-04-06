@@ -33,27 +33,25 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
     <LargePanel title={tc('common:messagesHelp.title')} rightButtonText={tc('common:close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.howCanIAttach')}</TextView>
+          <TextView variant={'MobileBodyBold'} paragraphSpacing={true}>
+            {t('secureMessaging.attachments.FAQ.howCanIAttach')}
+          </TextView>
         </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <VABulletList
-            listOfText={[
-              t('secureMessaging.attachments.FAQ.howCanI.bullet1'),
-              t('secureMessaging.attachments.FAQ.howCanI.bullet2'),
-              t('secureMessaging.attachments.FAQ.howCanI.bullet3'),
-            ]}
-          />
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView>
+        <VABulletList
+          listOfText={[
+            t('secureMessaging.attachments.FAQ.howCanI.bullet1'),
+            t('secureMessaging.attachments.FAQ.howCanI.bullet2'),
+            t('secureMessaging.attachments.FAQ.howCanI.bullet3'),
+          ]}
+        />
+        <Box mt={theme.paragraphSpacing.spacing20FontSize}>
+          <TextView paragraphSpacing={true}>
             <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
             <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
           </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={bulletedListOfText} />
-          </Box>
+          <VABulletList listOfText={bulletedListOfText} />
         </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme.paragraphSpacing.spacing20FontSize}>
           <TextView variant="MobileBody" accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
             {t('secureMessaging.attachments.FAQ.ifYourProblem')}
           </TextView>
