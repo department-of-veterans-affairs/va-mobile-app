@@ -28,20 +28,22 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
     <Box>
       <TextArea>
         <TextView variant="MobileBodyBold">{t('claimDetails.claimType')}</TextView>
-        <TextView variant="MobileBody">{attributes?.claimType || t('noneNoted')}</TextView>
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-          {t('claimDetails.whatYouHaveClaimed')}
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {attributes?.claimType || t('noneNoted')}
         </TextView>
+        <TextView variant="MobileBodyBold">{t('claimDetails.whatYouHaveClaimed')}</TextView>
         {attributes?.contentionList && attributes.contentionList.length > 0 ? (
           <VABulletList listOfText={attributes.contentionList} />
         ) : (
           <TextView variant="MobileBody">{t('noneNoted')}</TextView>
         )}
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" mt={theme.paragraphSpacing.spacing20FontSize}>
           {t('claimDetails.dateReceived')}
         </TextView>
-        <TextView variant="MobileBody">{formattedDateFiled}</TextView>
-        <TextView accessibilityLabel={t('claimDetails.yourRepresentative.a11yLabel')} variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {formattedDateFiled}
+        </TextView>
+        <TextView accessibilityLabel={t('claimDetails.yourRepresentative.a11yLabel')} variant="MobileBodyBold">
           {t('claimDetails.yourRepresentative')}
         </TextView>
         <TextView variant="MobileBody">{attributes?.vaRepresentative || t('noneNoted')}</TextView>

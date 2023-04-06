@@ -27,10 +27,12 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = () => {
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('claimsDetails.whatDoIDoIfDisagreement.header')}
         </TextView>
-        <TextView variant="MobileBody">{t('claimsDetails.whatDoIDoIfDisagreement.content')}</TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('claimsDetails.whatDoIDoIfDisagreement.content')}
+        </TextView>
         <TextView
           variant="MobileBodyLink"
           mt={theme.dimensions.standardMarginBetween}

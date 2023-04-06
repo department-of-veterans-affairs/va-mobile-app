@@ -95,23 +95,23 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           </Box>
         )}
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView paragraphSpacing={true} variant="MobileBodyBold" accessibilityRole="header">
             {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
             {t('fileUpload.pleaseRequestFromPhoneFiles')}
             <TextView variant="MobileBodyBold">
               {t('fileUpload.pleaseRequestFromPhoneFiles.bolded')}
               <TextView variant="MobileBody">{t('fileUpload.pleaseRequestFromPhoneFiles.pt2')}</TextView>
             </TextView>
           </TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('fileUpload.maxFileSize')}
           </TextView>
-          <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
+          <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')} paragraphSpacing={true}>
             {t('fileUpload.50MB')}
           </TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('fileUpload.acceptedFileTypes')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>

@@ -71,19 +71,19 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
         </TextView>
         <Box mt={standardMarginBetween}>
           <TextArea>
-            <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+            <TextView paragraphSpacing={true} variant="MobileBodyBold" accessibilityRole="header">
               {t('fileRequest.askForYourClaimEvaluationTitle')}
             </TextView>
-            <TextView variant="MobileBody">{t('fileRequest.askForYourClaimEvaluationBody')}</TextView>
-            <Box mt={standardMarginBetween}>
-              <VAButton
-                onPress={navigateTo('AskForClaimDecision', { claimID })}
-                label={t('fileRequest.viewEvaluationDetails')}
-                testID={t('fileRequest.viewEvaluationDetails')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
-                a11yHint={t('fileRequest.viewEvaluationDetails')}
-              />
-            </Box>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
+              {t('fileRequest.askForYourClaimEvaluationBody')}
+            </TextView>
+            <VAButton
+              onPress={navigateTo('AskForClaimDecision', { claimID })}
+              label={t('fileRequest.viewEvaluationDetails')}
+              testID={t('fileRequest.viewEvaluationDetails')}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+              a11yHint={t('fileRequest.viewEvaluationDetails')}
+            />
           </TextArea>
         </Box>
       </Box>

@@ -226,19 +226,17 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
             {t('letters.benefitService.title')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('letters.benefitService.summary')}
-          </TextView>
+          <TextView variant="MobileBody">{t('letters.benefitService.summary')}</TextView>
         </TextArea>
 
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header" paragraphSpacing={true}>
           {t('letters.benefitService.chooseIncludedInformation')}
         </TextView>
         {getListOfMilitaryService()}
-        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>
         <SimpleList items={includeMilitaryServiceInfoList} />
