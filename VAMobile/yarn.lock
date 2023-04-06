@@ -7137,10 +7137,42 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-detox@*, detox@^19.8.1:
+detox@*:
   version "19.8.1"
   resolved "https://registry.yarnpkg.com/detox/-/detox-19.8.1.tgz#1f1dbc401ba0da9b3c3f514f8a17278cf58207d5"
   integrity sha512-UqKwSGedhKY9vo2q7Eg9CvpczT7I06yYxc1QCzEl7T9+SbzMn9ESUi3TTEp9n2Rbo4omQGL7fkaSU4QPZ31HRA==
+  dependencies:
+    ajv "^8.6.3"
+    bunyan "^1.8.12"
+    bunyan-debug-stream "^2.0.1"
+    chalk "^2.4.2"
+    child-process-promise "^2.2.0"
+    find-up "^4.1.0"
+    fs-extra "^4.0.2"
+    funpermaproxy "^1.0.1"
+    ini "^1.3.4"
+    lodash "^4.17.5"
+    minimist "^1.2.0"
+    proper-lockfile "^3.0.2"
+    resolve-from "^5.0.0"
+    sanitize-filename "^1.6.1"
+    semver "^7.0.0"
+    serialize-error "^8.0.1"
+    shell-quote "^1.7.2"
+    signal-exit "^3.0.3"
+    tail "^2.0.0"
+    telnet-client "1.2.8"
+    tempfile "^2.0.0"
+    which "^1.3.1"
+    ws "^7.0.0"
+    yargs "^16.0.3"
+    yargs-parser "^20.2.2"
+    yargs-unparser "^2.0.0"
+
+detox@^19.13.0:
+  version "19.13.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-19.13.0.tgz#6eae8b4e5ef5ca913d465ddc5bd7855fe8834c5c"
+  integrity sha512-tKg0m5wlb4r1MISFtqPFXwdLncXWQhWaoAV6nuC3MmBGcJnTSrSa7wNZG26HhfEeR8c6eRUqMFHKefiZnWoO1Q==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
