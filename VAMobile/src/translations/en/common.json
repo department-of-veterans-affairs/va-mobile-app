@@ -864,7 +864,7 @@
   "personalInformation.howToFixDateOfBirth": "How to fix an error in your date of birth",
   "personalInformation.informationNotAvailable": "This information is not available right now",
   "personalInformation.loading": "Loading your personal information...",
-  "personalInformation.preferredName.fieldEmpty": "Provide a preferred name",
+  "personalInformation.preferredName.fieldEmpty": "Enter a preferred name",
   "personalInformation.preferredName.lettersOnly": "Enter letters only",
   "personalInformation.preferredName.tooManyCharacters": "Enter 25 characters or less for preferred name",
   "personalInformation.preferredName.title": "Preferred name",
