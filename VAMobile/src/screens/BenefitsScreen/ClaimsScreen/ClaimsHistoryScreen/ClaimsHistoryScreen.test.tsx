@@ -31,6 +31,7 @@ const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
     attributes: {
       subtype: 'supplementalClaim',
       completed: false,
+      decisionLetterSent: false,
       dateFiled: '2020-10-22',
       updatedAt: '2020-10-28',
       displayTitle: 'supplemental claim for disability compensation',
@@ -42,6 +43,7 @@ const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
     attributes: {
       subtype: 'Disability',
       completed: false,
+      decisionLetterSent: false,
       dateFiled: '2020-11-13',
       updatedAt: '2020-11-30',
       displayTitle: 'Disability',
@@ -53,6 +55,7 @@ const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
     attributes: {
       subtype: 'Compensation',
       completed: false,
+      decisionLetterSent: false,
       dateFiled: '2020-06-11',
       updatedAt: '2020-12-07',
       displayTitle: 'Compensation',
@@ -67,6 +70,7 @@ const closedClaimsAndAppealsList: api.ClaimsAndAppealsList = [
     attributes: {
       subtype: 'supplementalClaim',
       completed: true,
+      decisionLetterSent: true,
       dateFiled: '2020-10-22',
       updatedAt: '2020-10-28',
       displayTitle: 'supplemental claim for disability compensation',
@@ -78,6 +82,7 @@ const closedClaimsAndAppealsList: api.ClaimsAndAppealsList = [
     attributes: {
       subtype: 'Disability',
       completed: true,
+      decisionLetterSent: true,
       dateFiled: '2020-11-13',
       updatedAt: '2020-11-30',
       displayTitle: 'Disability',
@@ -89,6 +94,7 @@ const closedClaimsAndAppealsList: api.ClaimsAndAppealsList = [
     attributes: {
       subtype: 'Compensation',
       completed: true,
+      decisionLetterSent: true,
       dateFiled: '2020-06-11',
       updatedAt: '2020-12-07',
       displayTitle: 'Disability',
