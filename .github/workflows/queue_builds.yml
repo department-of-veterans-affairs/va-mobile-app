@@ -1,4 +1,4 @@
-# Reusable workflow that waits for older builds to finish
+# Reusable workflow that waits for older running builds to finish
 name: Queue Builds
 
 on:
