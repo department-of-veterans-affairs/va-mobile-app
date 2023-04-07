@@ -26,7 +26,7 @@ jobs:
           while [ "$can_proceed" == false ]; do
             count=$(gh run list \
               --json databaseId,status,workflowName \
-              --jq 'map(select((.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ) and .databaseId < ${{ github.run_id }} and .status == "in_progress")) | length' )
+              --jq 'map(select(.status == "in_progress" and .databaseId < ${{ github.run_id }} and (.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ))) | length' )
             echo $count
             if [ "$count" -eq "0" ]; then
               can_proceed=true
