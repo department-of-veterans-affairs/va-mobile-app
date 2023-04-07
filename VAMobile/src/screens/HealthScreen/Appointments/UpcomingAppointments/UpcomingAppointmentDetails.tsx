@@ -104,7 +104,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
-  const endTime = startDateUtc && minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : ''
+  const endTime = minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : startTimeDate.toISOString()
   const addToCalendarProps: LinkButtonProps = {
     displayedText: t('upcomingAppointments.addToCalendar'),
     a11yLabel: t('upcomingAppointments.addToCalendar'),

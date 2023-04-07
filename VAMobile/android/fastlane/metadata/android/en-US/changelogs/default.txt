@@ -8,4 +8,3 @@ When you sign in, you’ll go to a new Home screen. On most screens in the app, 
 - The Payments section includes your VA payment history and direct deposit information.
 
 We moved the Profile section to the top right area of the Home screen. Your Profile section includes your personal, contact, and military information. You can also manage the app’s settings in the Profile section.
-
