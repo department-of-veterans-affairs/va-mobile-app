@@ -21,18 +21,18 @@ There are a few paths that can be taken when updating existing features or creat
 - **Rare: Using existing component(s) with some updates**
     - If you believe the existing component needs to be changed, add the component from the [VA Mobile App Design Library](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/VA-Mobile-Design-Library?node-id=1028%3A3927) and **detach it for ideation**.
         - If components have been changed, have them reviewed by the [Component Committee](https://docs.google.com/document/d/1rgNpTvUjZR6E2Z6vfSrxLxvXt7Zxq1Jq6kw6TCDJbBk/edit?pli=1#bookmark=id.pv64bxlp7e6c) before finalizing your design.
-        - Once approved, work with the [design librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/) to add it to the library.
+        - Once approved, work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/) to add it to the library.
 - **Caution: Making a new component**
     - If a design requires a new component, try using [Balsamiq](https://docs.google.com/document/d/1rgNpTvUjZR6E2Z6vfSrxLxvXt7Zxq1Jq6kw6TCDJbBk/edit?pli=1#heading=h.7jcyyrw27o8y), pen and paper, or your favorite low fidelity tool to ideate on ideas.
-    - When you’re ready, prep documentation for the component by following instructions in .
+    - When you’re ready, prep documentation for the component by following [how to document components](https://docs.google.com/document/d/1pC-Pyc_HDZMtHb17XRND_57u7H8I3IDATUDGgGxFZAg/edit#heading=h.iwlf7nqnidb).
     - You will be invited to a meeting and will review the component and the documentation with the Component Committee. _Note: These do not have to be high fidelity designs._
-    - Once approved, work with the [design librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/) to add it to the library.
+    - Once approved, work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/) to add it to the library.
 
 
 ### Best Practices in Figma
 
 - Follow the rules around [where we work in Figma](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/where-we-work#ui-library-and-feature-designs---figma). Generally, most of your work will be done in the [working file](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/where-we-work#categoryname) for the category your feature is in.
- When starting a new feature, work with the [design librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/) to create a new working file.
+ When starting a new feature, work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/) to create a new working file.
 - Every working file should include a **Cover** and **Readme** page in your file.
     - Readme page orients people to your file and the work in general. It should contain project info, important links, team members, etc.
 - In your working file, **avoid creating local components**.
@@ -55,15 +55,17 @@ Once designs are ready to be handed off to the engineering team, you can review 
 3. Document and create designs of error states and unhappy paths
 4. Document and create designs of empty states
 5. Consider your design with fonts enlarged or varying screen sizes
-6. Create dark mode versions of designs
+6. Consider dark mode versions of designs
 
 
 ### IA/Flows
 
-1. Document the IA of your feature & where it lives in the app \
+1. Document the IA of your feature & where it lives in the app 
 See: [Determining Navigation & Information Architecture Placement for New VA Mobile App Features](https://docs.google.com/document/d/1XQcYxnCifloaBFNKL2C9JNS7KIj6wEhb4VokPGxBZU8/edit), [VA Mobile app: Detailed sitemap (future state 9-30-22](https://app.mural.co/invitation/mural/adhoccorporateworkspace2583/1655989910332?sender=u28718b63c8993f515e0b2240&key=6f96be43-72c9-4ae6-b529-a2941eb14ba9) 
 2. Update category screens, if needed
 3. Document intended flow
+4. Defined back labels and screen title
+
 
 ### Reviews
 
@@ -103,4 +105,4 @@ See: [Determining Navigation & Information Architecture Placement for New VA Mob
 
 ### Move work to shipped file
 
-* When the design is live in the app, the design librarian will work with you to create a shipped file as outlined in the [Figma file workflow](https://www.figma.com/file/myVAkBM6nrpt3iC39RyjXz/%F0%9F%A7%B0-FigmaFileWorkflow---Resource---VAMobile?node-id=344%3A279&t=jC6U9HEvK543P9i4-1).
+- When the design is live in the app, the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian) will work with you to create a shipped file as outlined in the [Figma file workflow](https://www.figma.com/file/myVAkBM6nrpt3iC39RyjXz/%F0%9F%A7%B0-FigmaFileWorkflow---Resource---VAMobile?node-id=344%3A279&t=jC6U9HEvK543P9i4-1).
