@@ -16,6 +16,7 @@ import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
 import { updatBottomOffset } from 'store/slices/snackBarSlice'
+import store from 'store'
 import theme from 'styles/themes/standardTheme'
 
 /**
@@ -408,11 +409,14 @@ export function fullPanelCardStyleInterpolator({ current, inverted }: StackCardI
     inputRange: [0, 1, 1.0001, 2],
     outputRange: [0, 0.3, 0.3, 0.3],
   })
+
+  const isScreenReaderOn = store.getState().accessibility.isVoiceOverTalkBackRunning
   return {
     cardStyle: {
       transform: [{ translateY }],
       maxHeight: (screenHeight / 7) * 6, //must fill the remaining screen with modal(since top part was 1/7 this part is 6/7)
     },
-    overlayStyle: { opacity: overlayOpacity },
+    // Disable the opacity animation for screen readers to prevent a race condition that causes announcements to fail, mainly in VoiceOver
+    overlayStyle: isScreenReaderOn ? undefined : { opacity: overlayOpacity },
   }
 }
