@@ -1,8 +1,12 @@
-# Reusable workflow that waits for older running builds to finish.
+# Reusable workflow that waits for older in progress workflow runs to finish.
 name: Queue Builds
 
 on:
   workflow_call:
+
+env:
+  # Number of minutes to wait in between rechecking in progress workflow runs
+  WAIT_TIME: 1
 
 jobs:
   queue_builds:
@@ -15,7 +19,7 @@ jobs:
         run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
       - name: Log into GH CLI
         run: gh auth login --with-token < token.txt
-      - name: Wait for older build jobs to finish
+      - name: Wait for older in progress build workflow runs to finish
         timeout-minutes: 60
         run: |
           can_proceed=false
@@ -27,7 +31,7 @@ jobs:
             if [ "$count" -eq "0" ]; then
               can_proceed=true
             else
-              echo "Waiting 10 minutes before checking running builds again..."
-              sleep 1m
+              echo "Waiting ${{ env.WAIT_TIME }} minutes before checking in progress builds again..."
+              sleep ${{ env.WAIT_TIME }}m
             fi
           done
