@@ -24,11 +24,12 @@ jobs:
         run: |
           can_proceed=false
           while [ "$can_proceed" == false ]; do
-            count=$(gh run list \
+            echo "Fetching in progress builds"
+            build_count=$(gh run list \
               --json databaseId,status,workflowName \
               --jq 'map(select(.status == "in_progress" and .databaseId < ${{ github.run_id }} and (.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ))) | length' )
-            echo $count
-            if [ "$count" -eq "0" ]; then
+            echo "Number of in progress builds: $build_count"
+            if [ "$build_count" -eq "0" ]; then
               can_proceed=true
             else
               echo "Waiting ${{ env.WAIT_TIME }} minutes before checking in progress workflow runs again..."
