@@ -28,6 +28,6 @@ jobs:
               can_proceed=true
             else
               echo "Waiting 10 minutes before checking running builds again..."
-              sleep 3m
+              sleep 1m
             fi
           done
