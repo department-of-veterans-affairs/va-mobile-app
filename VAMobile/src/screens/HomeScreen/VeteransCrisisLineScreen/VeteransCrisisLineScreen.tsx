@@ -43,6 +43,7 @@ const VeteransCrisisLineScreen: FC = () => {
         </Box>
         <Box mt={standardMarginBetween}>
           <ClickForActionLink
+            testID="veteransCrisisLineCrisisCallNumberTestID"
             displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
             a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
             numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
@@ -53,6 +54,7 @@ const VeteransCrisisLineScreen: FC = () => {
         </Box>
         <Box mt={standardMarginBetween}>
           <ClickForActionLink
+            testID="veteransCrisisLineTextNumberTestID"
             displayedText={t('veteransCrisisLine.textNumberDisplayed')}
             a11yLabel={t('veteransCrisisLine.textNumberDisplayed.a11y')}
             numberOrUrlLink={t('veteransCrisisLine.textNumber')}
@@ -63,6 +65,7 @@ const VeteransCrisisLineScreen: FC = () => {
         </Box>
         <Box mt={standardMarginBetween}>
           <ClickForActionLink
+            testID="veteransCrisisLineConfidentialChatTestID"
             displayedText={t('veteransCrisisLine.startConfidentialChat')}
             a11yLabel={t('veteransCrisisLine.startConfidentialChat')}
             numberOrUrlLink={LINK_URL_VETERANS_CRISIS_LINE_GET_HELP}
@@ -76,6 +79,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {t('contactVA.tty.body')}
           </TextView>
           <ClickForActionLink
+            testID="veteransCrisisLineHearingLossNumberTestID"
             displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
             a11yLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
             numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
@@ -96,7 +100,8 @@ const VeteransCrisisLineScreen: FC = () => {
             onPress={redirectToVeteransCrisisLineLink}
             accessibilityRole="link"
             {...a11yHintProp(t('veteransCrisisLine.urlA11yHint'))}
-            {...testIdProps(t('veteransCrisisLine.urlA11yLabel'))}>
+            {...testIdProps(t('veteransCrisisLine.urlA11yLabel'))}
+            testID="veteransCrisisLineGetMoreResourcesTestID">
             {t('veteransCrisisLine.urlDisplayed')}
           </TextView>
         </Box>

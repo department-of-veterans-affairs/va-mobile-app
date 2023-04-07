@@ -67,12 +67,14 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** optional function to fire analytic events when the link is clicked */
   fireAnalytic?: () => void
+  /** Optional TestID */
+  testID?: string
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, testID, ...props }) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
@@ -158,7 +160,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   return (
     <TouchableWithoutFeedback {...pressableProps}>
       <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
-        <VAIcon name={getIconName()} fill={'link'} width={25} height={25} />
+        <VAIcon testID={testID} name={getIconName()} fill={'link'} width={25} height={25} />
         <Box flexShrink={1}>
           <TextView {...textViewProps}>{displayedText}</TextView>
         </Box>
@@ -168,3 +170,4 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
 }
 
 export default ClickForActionLink
+
