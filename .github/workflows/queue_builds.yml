@@ -19,7 +19,7 @@ jobs:
         run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
       - name: Log into GH CLI
         run: gh auth login --with-token < token.txt
-      - name: Wait for older in progress build workflow runs to finish
+      - name: Wait for older in progress builds to finish
         timeout-minutes: 60
         run: |
           can_proceed=false
