@@ -5,7 +5,6 @@ import React, { FC } from 'react'
 import { FooterButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { View, ViewStyle } from 'react-native'
-import { isIOS } from 'utils/platform'
 import { useDestructiveAlert, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
