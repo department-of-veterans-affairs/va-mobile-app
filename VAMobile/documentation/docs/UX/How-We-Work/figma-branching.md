@@ -1,6 +1,6 @@
 ---
 title: Branching in Figma
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 ## What is branching?
