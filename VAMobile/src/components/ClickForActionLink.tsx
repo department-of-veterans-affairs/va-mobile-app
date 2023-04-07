@@ -170,4 +170,3 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
 }
 
 export default ClickForActionLink
-
