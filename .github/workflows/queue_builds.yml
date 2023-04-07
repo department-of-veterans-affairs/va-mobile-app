@@ -1,4 +1,4 @@
-# Reusable workflow that waits for older in progress workflow runs to finish.
+# Reusable workflow that waits for older in progress builds to finish.
 name: Queue Builds
 
 on:
