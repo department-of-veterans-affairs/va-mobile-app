@@ -31,7 +31,7 @@ jobs:
             if [ "$count" -eq "0" ]; then
               can_proceed=true
             else
-              echo "Waiting ${{ env.WAIT_TIME }} minutes before checking in progress builds again..."
+              echo "Waiting ${{ env.WAIT_TIME }} minutes before checking in progress workflow runs again..."
               sleep ${{ env.WAIT_TIME }}m
             fi
           done
