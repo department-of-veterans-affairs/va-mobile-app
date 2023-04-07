@@ -230,8 +230,8 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventSca
   }
 
   return (
-    <Box {...boxProps}>
-      <Icon testID={testID} {...iconProps} />
+    <Box testID={testID} {...boxProps}>
+      <Icon {...iconProps} />
     </Box>
   )
 }
