@@ -16,15 +16,16 @@ jobs:
       - name: Log into GH CLI
         run: gh auth login --with-token < token.txt
       - name: Wait for older build jobs to finish
+        timeout-minutes: 60
         run: |
-          can_proceed = false
-          while [can_proceed == false]; do
+          can_proceed=false
+          while [ "$can_proceed" == false ]; do
             count=$(gh run list \
               --json databaseId,status,workflowName \
               --jq 'map(select((.workflowName == "Feature Build" or .workflowName == "Daily QA Build" ) and .databaseId < ${{ github.run_id }} and .status == "in_progress")) | length' )
             echo $count
             if [ "$count" -eq "0" ]; then
-              can_proceed = true
+              can_proceed=true
             else
               echo "Waiting 10 minutes before checking running builds again..."
               sleep 1m
