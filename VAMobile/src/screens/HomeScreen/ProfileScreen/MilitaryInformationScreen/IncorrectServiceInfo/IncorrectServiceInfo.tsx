@@ -41,6 +41,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
           {t('militaryInformation.incorrectServiceInfo.body')}
         </TextView>
         <ClickForActionLink
+          testID="incorrectServiceDMDCNumberTestID"
           displayedText={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
           a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
           numberOrUrlLink={t('militaryInformation.incorrectServiceInfo.DMDCNumber')}

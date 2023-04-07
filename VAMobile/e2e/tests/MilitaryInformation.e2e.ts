@@ -15,7 +15,6 @@ export const MilitaryInformationE2eIdConstants = {
   SERVICE_INFORMATION_INCORRECT_BODY_LABEL: 'Some Veterans have reported seeing military service information in their V-A .gov profiles that doesn’t seem right. When this happens, it’s because there’s an error in the information we’re pulling into V-A .gov from the Defense Enrollment Eligibility Reporting System (DEERS).\n\nIf the military service information in your profile doesn’t look right, please call the Defense Manpower Data Center (D-M-D-C). They’ll work with you to update your information in DEERS.\n\nTo reach the D-M-D-C, call Monday through Friday (except federal holidays), 8:00 a.m. to 8:00 p.m. Eastern Time.',
   SERVICE_NOT_AVAILABLE_PAGE_TITLE_TEXT: 'We can\'t access your military information',
   SERVICE_NOT_AVAILABLE_PAGE_BODY_LABEL: 'We\'re sorry. We can\'t access your military service records. If you think you should be able to review your service information here, please file a request to change or correct your D-D 2 1 4 or other military records.',
-  SERVICE_INCORRECT_PAGE_PHONE_NUMBER_LABEL: '8 0 0 5 3 8 9 5 5 2, Dials this number via your device’s call function'
 }
 
 beforeAll(async () => {
@@ -53,9 +52,9 @@ describe('Military Information Screen', () => {
 		await element(by.text(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_TITLE_TEXT)).tap()
 		await expect(element(by.text(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_TITLE_TEXT)).atIndex(1)).toExist()
 		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL))).toExist()
-		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INCORRECT_PAGE_PHONE_NUMBER_LABEL))).toExist()
+		await expect(element(by.id('incorrectServiceDMDCNumberTestID'))).toExist()
 		await element(by.id('IncorrectServiceTestID')).swipe('up')
-		await element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INCORRECT_PAGE_PHONE_NUMBER_LABEL)).tap()
+		await element(by.id('incorrectServiceDMDCNumberTestID')).tap()
 		if (device.getPlatform() === 'android') {
 			await setTimeout(5000)
 			var tempPath = await device.takeScreenshot('AndroidCallingScreen')

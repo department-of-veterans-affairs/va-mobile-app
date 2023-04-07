@@ -185,6 +185,9 @@ export type VAIconProps = BoxProps & {
 
   /** optional boolean that prevents the icon from being scaled when set to true */
   preventScaling?: boolean
+
+  /** Optional TestID */
+  testID?: string
 }
 
 /**
@@ -192,7 +195,7 @@ export type VAIconProps = BoxProps & {
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, ...boxProps }) => {
+const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, testID, ...boxProps }) => {
   const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
@@ -228,7 +231,7 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventSca
 
   return (
     <Box {...boxProps}>
-      <Icon {...iconProps} />
+      <Icon testID={testID} {...iconProps} />
     </Box>
   )
 }
