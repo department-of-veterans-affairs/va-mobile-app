@@ -7,7 +7,7 @@ on:
 env:
   # Number of minutes to wait in between rechecking in progress workflow runs
   WAIT_TIME: 1
-  # Names of workflows that should be waited on
+  # Names of workflows that should be waited on.
   WORKFLOW_NAMES: '["Daily QA Build", "Feature Build", "Go live in app stores"]'
 
 jobs:
