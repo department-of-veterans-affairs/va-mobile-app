@@ -12,13 +12,13 @@ on:
       - 'feature/4934-Theo-QueueBuildsGHA'
 
 jobs:
-  queue_builds:
-    name: Queue Builds
+  queue_build:
+    name: Queue Build
     uses: ./.github/workflows/queue_builds.yml
     secrets: inherit
   start_slack_thread:
     name: Start Slack thread
-    needs: queue_builds
+    needs: queue_build
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
