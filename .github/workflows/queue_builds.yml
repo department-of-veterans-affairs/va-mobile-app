@@ -27,9 +27,12 @@ jobs:
           can_proceed=false
           while [ "$can_proceed" == false ]; do
             echo "Fetching in progress builds"
-            build_count=$(gh run list \
-              --json databaseId,status,workflowName \
-              --jq 'map(select((any(.status == ["in_progress", "queued"][]; .)) and .databaseId < ${{ github.run_id }} and (any(.workflowName == ${{ env.WORKFLOW_NAMES }}[]; .)))) | length' )
+            build_count=$(gh run list --json databaseId,status,workflowName \
+              --jq 'map(select( \
+                  (any(.status == ["in_progress", "queued"][]; .)) \
+                  and .databaseId < ${{ github.run_id }} \
+                  and (any(.workflowName == ${{ env.WORKFLOW_NAMES }}[]; .)) \
+                )) | length')
             echo "Number of in progress builds: $build_count"
             if [ "$build_count" -eq "0" ]; then
               can_proceed=true
