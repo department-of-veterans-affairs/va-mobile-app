@@ -6,9 +6,9 @@ on:
 
 env:
   # Number of minutes to wait in between rechecking in progress workflow runs
-  WAIT_TIME: 1
-  # Names of workflows that should be waited on
-  WORKFLOW_NAMES: '["Daily QA Build", "Feature Build", "Go live in app stores"]'
+  WAIT_TIME: 2
+  # Names of workflows that should be waited on (anywhere that uses `build_android` and `build_ios`)
+  WORKFLOW_NAMES: '["Daily QA Build", "Feature Build", "Go live in app stores", "Release Build", "Release Candidate Build"]'
 
 jobs:
   queue_builds:
@@ -21,7 +21,7 @@ jobs:
         run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
       - name: Log into GH CLI
         run: gh auth login --with-token < token.txt
-      - name: Wait for older in progress builds to finish
+      - name: Get workflow runs and wait for older builds
         timeout-minutes: 60
         run: |
           can_proceed=false
