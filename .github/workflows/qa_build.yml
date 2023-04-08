@@ -9,13 +9,13 @@ on:
     - cron: '0 4 * * 1,2,3,4,5'
 
 jobs:
-  wait_for_older_builds:
-    name: Wait for older builds to finish
+  queue_build:
+    name: Queue Build
     uses: ./.github/workflows/queue_builds.yml
     secrets: inherit
   start_slack_thread:
     name: Start Slack thread
-    needs: wait_for_older_builds
+    needs: queue_build
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
