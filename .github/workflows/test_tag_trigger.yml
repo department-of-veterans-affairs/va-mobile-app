@@ -9,8 +9,7 @@ defaults:
   run:
     working-directory: VAMobile
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+
 
 jobs:
   cut_release_branch:
@@ -22,7 +21,9 @@ jobs:
           fetch-depth: 0
 
       - name: Set username and email
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git tag test-RC-v2.0.0-041023-0636
+          git tag test-RC-v2.0.0-041023-0637
