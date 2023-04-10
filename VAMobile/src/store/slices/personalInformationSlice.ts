@@ -5,7 +5,8 @@ import * as api from 'store/api'
 import {
   AddressData,
   AddressValidationScenarioTypes,
-  GenderIdentityKey,
+  GenderIdentityOptions,
+  GenderIdentityOptionsData,
   PhoneData,
   PhoneType,
   ProfileFormattedFieldType,
@@ -60,6 +61,8 @@ export type PersonalInformationState = {
   validateAddressAbortController?: AbortController
   preferredNameSaved: boolean
   genderIdentitySaved: boolean
+  genderIdentityOptions: GenderIdentityOptions
+  loadingGenderIdentityOptions: boolean
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
@@ -74,6 +77,8 @@ export const initialPersonalInformationState: PersonalInformationState = {
   validateAddressAbortController: undefined,
   preferredNameSaved: false,
   genderIdentitySaved: false,
+  genderIdentityOptions: {} as GenderIdentityOptions,
+  loadingGenderIdentityOptions: false,
 }
 
 const personalInformationNonFatalErrorString = 'Personal Information Service Error'
@@ -529,7 +534,7 @@ export const finishUpdatePreferredName = (): AppThunk => async (dispatch) => {
  * Makes an API call to update a user's gender identity
  */
 export const updateGenderIdentity =
-  (genderIdentity: GenderIdentityKey, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+  (genderIdentity: string, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     const retryFunction = () => dispatch(updateGenderIdentity(genderIdentity, messages, screenID))
 
@@ -555,6 +560,42 @@ export const updateGenderIdentity =
         dispatch(dispatchFinishUpdateGenderIdentity(error))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+      }
+    }
+  }
+
+/**
+ * Makes an API call to get valid gender identity options
+ */
+export const getGenderIdentityOptions =
+  (screenID?: ScreenIDTypes): AppThunk =>
+  async (dispatch) => {
+    const retryFunction = () => dispatch(getGenderIdentityOptions(screenID))
+
+    try {
+      dispatch(dispatchClearErrors(screenID))
+      dispatch(dispatchSetTryAgainFunction(retryFunction))
+      dispatch(dispatchStartGetGenderIdentityOptions())
+
+      const response = await api.get<GenderIdentityOptionsData>('/v0/user/gender_identity/edit')
+      const responseOptions = response?.data.attributes.options || {}
+
+      // TODO: Look into adding an option to the API function for disabling the X-Key-Inflection property.
+      // Right now it's set to 'camel' which returns the keys in lowercase. We need to capitalize the keys
+      // so that they're consistent with what the PUT request for updating the genderIdentity field expects.
+      const genderIdentityOptions = Object.keys(responseOptions).reduce((options: GenderIdentityOptions, key: string) => {
+        options[key.toUpperCase()] = responseOptions[key]
+        return options
+      }, {})
+
+      dispatch(dispatchFinishGetGenderIdentityOptions({ genderIdentityOptions }))
+
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getGenderIdentityOptions: ${personalInformationNonFatalErrorString}`)
+        dispatch(dispatchFinishGetGenderIdentityOptions({ error }))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
   }
@@ -694,6 +735,15 @@ const peronalInformationSlice = createSlice({
       state.loading = true
       state.genderIdentitySaved = false
     },
+    dispatchStartGetGenderIdentityOptions: (state) => {
+      state.loadingGenderIdentityOptions = true
+    },
+    dispatchFinishGetGenderIdentityOptions: (state, action: PayloadAction<{ genderIdentityOptions?: GenderIdentityOptions; error?: Error }>) => {
+      const { genderIdentityOptions, error } = action.payload
+      state.loadingGenderIdentityOptions = false
+      state.genderIdentityOptions = genderIdentityOptions || {}
+      state.error = error
+    },
   },
 })
 
@@ -718,5 +768,7 @@ export const {
   dispatchStartUpdateGenderIdentity,
   dispatchFinishUpdateGenderIdentity,
   dispatchFinishEditGenderIdentity,
+  dispatchStartGetGenderIdentityOptions,
+  dispatchFinishGetGenderIdentityOptions,
 } = peronalInformationSlice.actions
 export default peronalInformationSlice.reducer

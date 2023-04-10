@@ -33,7 +33,7 @@ jobs:
           echo PR_NUMBER=${number} >> $GITHUB_ENV
 
       - name: Create PR to merge changes to staging
-        if: ${{env.PR_NUMBER}} != ''
+        if: ${{env.PR_NUMBER}}
         run: |
           git fetch origin pull/${{env.PR_NUMBER}}/head:${{env.PR_NUMBER}}-to-staging
           git checkout ${{env.PR_NUMBER}}-to-staging
