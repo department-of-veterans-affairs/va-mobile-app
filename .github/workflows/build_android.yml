@@ -1,0 +1,108 @@
+# Reusable workflow that sets up environment, installs depdendencies, and
+# runs Android fastlane using provided inputs
+name: Build Android
+
+on:
+  workflow_call:
+    inputs:
+      # Used to determine the environment variables to build the app with
+      # Options: test, staging, production
+      environment:
+        type: string
+        default: staging
+      # Specifies which fastlane lane to run
+      # Options: qa, rc, review, release, on_demand
+      lane:
+        type: string
+        default: qa
+      # Release notes that will show next to the version in Firebase
+      # Fastlane will default to "New QA version for {{DATE_TIME}}"
+      notes:
+        type: string
+        default: ''
+      # Google Play Console track to distribute to. Fastlane defaults to
+      # "Development Team"
+      ps_track:
+        type: string
+        default: ''
+      # Timestamp of the Slack thread where build related messages should be sent.
+      # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
+      slack_thread_ts:
+        type: string
+        default: ''
+      # Version to use for production release. QA/On-demand builds will increment
+      # upon the latest version in Google Play Console
+      version:
+        type: string
+        default: qa
+
+defaults:
+  run:
+    working-directory: VAMobile/android
+
+env:
+  # IAM staging app client secret
+  APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
+  # IAM production app client secret
+  APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
+  # Password to enter demo mode from login screen
+  DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+  # Android Key Store Key Alias
+  ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
+  # Android Key Store Key Alias Password
+  ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
+  # Android Key Store Key Password
+  ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
+  # App ID for Android project in Firebase
+  FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+  # Filepath for firebase distribution key. Also used by fastlane
+  FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  # Slack API token used by fastlane
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+jobs:
+  build_android:
+    runs-on: ubuntu-4-cores-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set git config
+        run: |
+          echo Notes: ${{ inputs.notes }}
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+      # Decodes base64 encoded keystore, Play Store service distribution key,
+      # Firebase distribution key, and Firebase analytics/crashlytics json
+      - name: Decode base64 encoded keys
+        run: |
+          mkdir keys
+          cd keys
+          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
+          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
+          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+          cd ../app
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+      - name: Setup ruby and restore bundler cache
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0.2'
+          bundler-cache: true
+          working-directory: VAMobile/android
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Set app environment variables
+        run: yarn env:${{ inputs.environment }}
+      - name: Bundle app
+        run: yarn bundle:android
+      - name: Update fastlane
+        run: bundle update fastlane
+      - name: Set SLACK_THREAD_TS environment variable
+        if: inputs.slack_thread_ts
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      - name: Run fastlane
+        run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"

@@ -282,11 +282,27 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       : isDiscarded
       ? t('secureMessaging.deletingChanges.loading')
       : t('secureMessaging.draft.loading')
-    return <LoadingComponent text={text} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={tc('cancel')}
+        onLeftButtonPress={() => {
+          goToDrafts(false)
+        }}>
+        <LoadingComponent text={text} />
+      </FullScreenSubtask>
+    )
   }
 
   if (sendingMessage) {
-    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
+    return (
+      <FullScreenSubtask
+        leftButtonText={tc('cancel')}
+        onLeftButtonPress={() => {
+          goToDrafts(false)
+        }}>
+        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
@@ -429,13 +445,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert
-          hasValidationError={formContainsError}
-          saveDraftAttempted={onSaveDraftClicked}
-          savingDraft={savingDraft}
-          scrollViewRef={scrollViewRef}
-          focusOnError={onSendClicked}
-        />
+        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>

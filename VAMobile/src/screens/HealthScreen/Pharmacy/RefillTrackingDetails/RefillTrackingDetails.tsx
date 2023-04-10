@@ -91,7 +91,11 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   }
 
   if (loadingTrackingInfo) {
-    return <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
+    return (
+      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+        <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {

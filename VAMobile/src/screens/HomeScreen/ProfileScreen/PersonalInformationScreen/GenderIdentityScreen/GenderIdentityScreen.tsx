@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, radioOption } from 'components'
-import { GenderIdentityKey, GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api'
+import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, radioOption } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, dispatchFinishEditGenderIdentity, updateGenderIdentity } from 'store/slices'
+import { PersonalInformationState, dispatchFinishEditGenderIdentity, getGenderIdentityOptions, updateGenderIdentity } from 'store/slices'
 import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -19,7 +19,9 @@ type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIde
  * Screen for editing gender identity
  */
 const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => {
-  const { profile, genderIdentitySaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, genderIdentityOptions, genderIdentitySaved, loading, loadingGenderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
+    (state) => state.personalInformation,
+  )
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -27,6 +29,12 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
 
   const [error, setError] = useState('')
   const [genderIdentity, setGenderIdentity] = useState(profile?.genderIdentity)
+
+  useEffect(() => {
+    if (!Object.keys(genderIdentityOptions).length) {
+      dispatch(getGenderIdentityOptions(ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID))
+    }
+  }, [dispatch, genderIdentityOptions])
 
   useEffect(() => {
     if (genderIdentitySaved) {
@@ -40,44 +48,64 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     errorMsg: t('personalInformation.genderIdentity.not.saved'),
   }
 
-  const onChange = (value: GenderIdentityKey): void => {
+  const onChange = (value: string): void => {
     setGenderIdentity(value)
   }
 
   const onSave = (): void => {
     if (genderIdentity) {
-      dispatch(updateGenderIdentity(genderIdentity as GenderIdentityKey, snackbarMessages, ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID))
+      dispatch(updateGenderIdentity(genderIdentity, snackbarMessages, ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID))
     } else {
       setError(t('selectOption'))
     }
   }
 
-  const getIdentityTypes = (): Array<radioOption<GenderIdentityKey>> => {
-    return Object.keys(GenderIdentityOptions || {}).map((key: string) => {
+  const getIdentityTypes = (): Array<radioOption<string>> => {
+    return Object.keys(genderIdentityOptions).map((key: string) => {
       return {
-        labelKey: GenderIdentityOptions[key as GenderIdentityKey],
-        value: key as GenderIdentityKey,
+        labelKey: genderIdentityOptions[key],
+        value: key,
       }
     })
   }
 
-  const radioGroupProps: RadioGroupProps<GenderIdentityKey> = {
+  const radioGroupProps: RadioGroupProps<string> = {
     error,
     isRadioList: false,
     onChange,
     options: getIdentityTypes(),
-    value: genderIdentity as GenderIdentityKey,
+    value: genderIdentity,
+  }
+
+  if (useError(ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID)) {
+    return (
+      <FullScreenSubtask title={t('personalInformation.genderIdentity.title')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
+  }
+
+  if (loadingGenderIdentityOptions) {
+    return (
+      <FullScreenSubtask title={t('personalInformation.genderIdentity.title')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('personalInformation.genderIdentity.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   if (loading || genderIdentitySaved) {
-    return <LoadingComponent text={t('personalInformation.genderIdentity.saving')} />
+    return (
+      <FullScreenSubtask title={t('personalInformation.genderIdentity.title')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('personalInformation.genderIdentity.saving')} />
+      </FullScreenSubtask>
+    )
   }
 
   return (
     <FullScreenSubtask
       title={t('personalInformation.genderIdentity.title')}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={genderIdentity === profile?.genderIdentity ? navigation.goBack : undefined}
+      onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={onSave}>
       <Box mx={theme.dimensions.gutter}>

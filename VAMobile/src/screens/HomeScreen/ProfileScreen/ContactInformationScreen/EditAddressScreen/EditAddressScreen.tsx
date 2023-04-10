@@ -259,7 +259,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   if (savingAddress || addressSaved) {
     const loadingText = deleting ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')
 
-    return <LoadingComponent text={loadingText} />
+    return (
+      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
+        <LoadingComponent text={loadingText} />
+      </FullScreenSubtask>
+    )
   }
 
   if (showValidation) {

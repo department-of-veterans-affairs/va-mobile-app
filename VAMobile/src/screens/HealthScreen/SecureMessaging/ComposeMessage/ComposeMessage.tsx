@@ -22,7 +22,6 @@ import {
   TextArea,
   TextView,
   VAButton,
-  VAIconProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -201,21 +200,29 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
+  const isFormValid = !!(to && subject && validateMessage(message) && (subject !== CategoryTypeFields.other || subjectLine))
+
   if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : isDiscarded
       ? t('secureMessaging.deleteDraft.loading')
       : t('secureMessaging.formMessage.composeMessage.loading')
-    return <LoadingComponent text={text} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={text} />
+      </FullScreenSubtask>
+    )
   }
 
   if (sendingMessage) {
-    return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
+    return (
+      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
+      </FullScreenSubtask>
+    )
   }
-
-  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
-  const isFormValid = !!(to && subject && validateMessage(message) && (subject !== CategoryTypeFields.other || subjectLine))
 
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
@@ -355,13 +362,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert
-          hasValidationError={formContainsError}
-          saveDraftAttempted={onSaveDraftClicked}
-          savingDraft={savingDraft}
-          scrollViewRef={scrollViewRef}
-          focusOnError={onSendClicked}
-        />
+        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
@@ -401,14 +402,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const saveIconProps: VAIconProps = {
-    name: 'Save',
-    fill: 'link',
-    width: 22,
-    height: 22,
-    preventScaling: true,
-  }
-
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
@@ -416,7 +409,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
       rightButtonText={tc('save')}
-      rightVAIconProps={saveIconProps}
+      rightVAIconProps={{ name: 'Save' }}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)

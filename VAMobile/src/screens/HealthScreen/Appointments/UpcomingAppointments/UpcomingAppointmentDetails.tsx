@@ -104,7 +104,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
-  const endTime = startDateUtc && minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : ''
+  const endTime = minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : startTimeDate.toISOString()
   const addToCalendarProps: LinkButtonProps = {
     displayedText: t('upcomingAppointments.addToCalendar'),
     a11yLabel: t('upcomingAppointments.addToCalendar'),
@@ -175,7 +175,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       const joinSessionOnPress = (): void => {
         dispatch(clearAppointmentCancellation())
-        launchExternalLink(url || '')
+
+        if (url) {
+          launchExternalLink(url)
+        } else {
+          navigateTo('SessionNotStarted')()
+        }
       }
 
       const joinSessionButtonProps: VAButtonProps = {
@@ -264,7 +269,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   if (loadingAppointmentCancellation) {
-    return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
+        <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   return (

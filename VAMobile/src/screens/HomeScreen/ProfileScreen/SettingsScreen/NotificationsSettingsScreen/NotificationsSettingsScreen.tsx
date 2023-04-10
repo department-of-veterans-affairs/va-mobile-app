@@ -65,11 +65,19 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   }
 
   if (loadingPreferences || registeringDevice) {
-    return <LoadingComponent text={t('notifications.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+        <LoadingComponent text={t('notifications.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (settingPreference) {
-    return <LoadingComponent text={t('notifications.saving')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+        <LoadingComponent text={t('notifications.saving')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   const personalizeText = systemNotificationsOn

@@ -164,9 +164,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   if (loading || loadingFile || movingMessage) {
     return (
-      <LoadingComponent
-        text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
-      />
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+        <LoadingComponent
+          text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
+        />
+      </ChildTemplate>
     )
   }
 
@@ -193,15 +195,14 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
       dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders))
+      if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
+        navigation.goBack()
+      }
     }
   }
 
   const moveIconProps: VAIconProps = {
     name: 'FolderSolid',
-    width: 22,
-    height: 22,
-    preventScaling: true,
-    fill: 'link',
   }
 
   const headerButton =

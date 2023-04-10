@@ -83,7 +83,11 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   if (loading || emailSaved) {
     const loadingText = deleting ? t('contactInformation.delete.emailAddress') : t('contactInformation.savingEmailAddress')
 
-    return <LoadingComponent text={loadingText} />
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={loadingText} />
+      </FullScreenSubtask>
+    )
   }
 
   const isEmailInvalid = (): boolean => {
@@ -92,10 +96,11 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     return !validEmailCondition.test(email)
   }
 
-  const emailChanged = (): boolean => {
-    const originalEmail = profile?.contactEmail?.emailAddress || ''
-    return email !== originalEmail
-  }
+  // Unsure whether to retire this or leave it for when we revisit the cancel confirmation action.
+  // const emailChanged = (): boolean => {
+  //   const originalEmail = profile?.contactEmail?.emailAddress || ''
+  //   return email !== originalEmail
+  // }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -142,7 +147,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       scrollViewRef={scrollViewRef}
       title={t('contactInformation.emailAddress')}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={!emailChanged() ? navigation.goBack : undefined}
+      onLeftButtonPress={navigation.goBack}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}
       rightButtonDisabled={saveDisabled}>

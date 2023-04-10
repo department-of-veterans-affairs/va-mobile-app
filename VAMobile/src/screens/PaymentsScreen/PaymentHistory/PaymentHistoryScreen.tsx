@@ -141,7 +141,11 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }
 
   if (loading) {
-    return <LoadingComponent text={t('payments.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+        <LoadingComponent text={t('payments.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (noPayments) {
