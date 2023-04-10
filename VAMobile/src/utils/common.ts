@@ -416,7 +416,7 @@ export function fullPanelCardStyleInterpolator({ current, inverted }: StackCardI
       transform: [{ translateY }],
       maxHeight: (screenHeight / 7) * 6, //must fill the remaining screen with modal(since top part was 1/7 this part is 6/7)
     },
-    // Disable the opacity animation for screen readers to prevent a race condition that causes announcements to fail, mainly in VoiceOver
-    overlayStyle: isScreenReaderOn ? undefined : { opacity: overlayOpacity },
+    // Set background color for screen readers to prevent a race condition that causes announcements to fail, mainly in VoiceOver
+    overlayStyle: isScreenReaderOn ? { backgroundColor: theme.colors.background.overlayOpacity } : { opacity: overlayOpacity },
   }
 }
