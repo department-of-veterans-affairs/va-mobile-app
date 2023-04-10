@@ -25,4 +25,4 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git tag test-RC-v2.0.0-032923-0636
+          git tag test-RC-v2.0.0-041023-0636
