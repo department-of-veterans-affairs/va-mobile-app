@@ -53,12 +53,11 @@ describe('Military Information Screen', () => {
 		await element(by.id('IncorrectServiceTestID')).swipe('up')
 		await element(by.id('incorrectServiceDMDCNumberTestID')).tap()
 		if (device.getPlatform() === 'android') {
+			await element(by.id('incorrectServiceDMDCNumberTestID')).tap()
 			await setTimeout(5000)
 			var tempPath = await device.takeScreenshot('AndroidCallingScreen')
 			await device.launchApp({newInstance: false})
-		} else {
-			await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
-		}
+		} 
 	})
 
 	//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
