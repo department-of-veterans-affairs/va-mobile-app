@@ -64,6 +64,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
     const letterButton = {
       textLines: [{ text: t('claimLetters.letterDate', { date }), variant }, { text: typeDescription }],
+      // TODO: Link to Letter View screen (ticket #5045)
       onPress: () => {},
       a11yValue: t('listPosition', { position: index + 1, total: decisionLetters.length }),
     }
