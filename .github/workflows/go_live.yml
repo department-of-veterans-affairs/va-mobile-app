@@ -1,0 +1,23 @@
+# Promotes builds in App Store and Google Play to production
+
+name: Go live in app stores
+
+on:
+  # Tuesdays 14:00 UTC, 10AM ET, 1PM PT
+  schedule:
+    - cron: '0 14 * * 2'
+
+jobs:
+  ios:
+    name: iOS Go Live
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: release
+
+  android:
+    name: Android Go Live
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: release

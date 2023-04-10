@@ -10,11 +10,11 @@ import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
+import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, overrideLocalVersion, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { StackScreenProps } from '@react-navigation/stack'
-import { getEncourageUpdateLocalVersion, getStoreVersion, getVersionSkipped, overrideLocalVersion } from 'utils/homeScreenAlerts'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -32,27 +32,39 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [localVersionName, setVersionName] = useState<string>()
-  const [saveLocalVersion, setSavedLocalVersion] = useState<string>()
+  const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
+  const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
 
-  useEffect(() => {
-    async function checkLocalVersion() {
-      const version = await getEncourageUpdateLocalVersion(true)
-      if (componentMounted.current) {
-        setVersionName(version)
-        setSavedLocalVersion(version)
-      }
+  async function checkEncourageUpdateLocalVersion() {
+    const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, true)
+    if (componentMounted.current) {
+      setVersionName(version)
     }
+  }
 
+  async function checkWhatsNewLocalVersion() {
+    const version = await getLocalVersion(FeatureConstants.WHATSNEW, true)
+    if (componentMounted.current) {
+      setWhatsNewVersion(version)
+    }
+  }
+
+  useEffect(() => {
     async function checkSkippedVersion() {
-      const version = await getVersionSkipped()
+      const version = await getVersionSkipped(FeatureConstants.ENCOURAGEUPDATE)
       if (componentMounted.current) {
         setSkippedVersionHomeScreen(version)
       }
     }
-
+    async function checkWhatsNewSkippedVersion() {
+      const version = await getVersionSkipped(FeatureConstants.WHATSNEW)
+      if (componentMounted.current) {
+        setWhatsNewSkippedVersionHomeScreen(version)
+      }
+    }
     async function checkStoreVersion() {
       const result = await getStoreVersion()
       if (componentMounted.current) {
@@ -61,7 +73,9 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
     }
     checkStoreVersion()
     checkSkippedVersion()
-    checkLocalVersion()
+    checkWhatsNewSkippedVersion()
+    checkEncourageUpdateLocalVersion()
+    checkWhatsNewLocalVersion()
     return () => {
       componentMounted.current = false
     }
@@ -200,26 +214,59 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Encouraged Update Versions</TextView>
-          <TextView variant="MobileBodyBold">Local Version</TextView>
+          <TextView variant="BitterBoldHeading">Encouraged Update and What's New Versions</TextView>
+          <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
           <TextView>{localVersionName}</TextView>
+          <TextView variant="MobileBodyBold">What's New Local Version</TextView>
+          <TextView>{whatsNewLocalVersion}</TextView>
           <TextView variant="MobileBodyBold">Store Version</TextView>
           <TextView>{storeVersion}</TextView>
-          <TextView variant="MobileBodyBold">Skipped Version</TextView>
+          <TextView variant="MobileBodyBold">Encourage Update Skipped Version</TextView>
           <TextView>{skippedVersion}</TextView>
-          <TextView variant="MobileBodyBold">Override Local Version</TextView>
+          <TextView variant="MobileBodyBold">Whats New Skipped Version</TextView>
+          <TextView>{whatsNewSkippedVersion}</TextView>
+          <TextView variant="MobileBodyBold">Override Encourage Update Local Version</TextView>
           <VATextInput
             inputType={'none'}
             onChange={(val) => {
               if (val.length >= 1) {
-                overrideLocalVersion(val)
+                overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, val)
                 setVersionName(val)
               } else {
-                overrideLocalVersion(undefined)
-                setVersionName(saveLocalVersion)
+                overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, undefined)
+                checkEncourageUpdateLocalVersion()
               }
             }}
           />
+          <TextView variant="MobileBodyBold">Override What's New Local Version</TextView>
+          <VATextInput
+            inputType={'none'}
+            onChange={(val) => {
+              if (val.length >= 1) {
+                overrideLocalVersion(FeatureConstants.WHATSNEW, val)
+                setWhatsNewVersion(val)
+              } else {
+                overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
+                checkWhatsNewLocalVersion()
+              }
+            }}
+          />
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <VAButton
+              onPress={() => {
+                setSkippedVersionHomeScreen('0.0')
+                setWhatsNewSkippedVersionHomeScreen('0.0')
+                setVersionSkipped(FeatureConstants.ENCOURAGEUPDATE, '0.0')
+                setVersionSkipped(FeatureConstants.WHATSNEW, '0.0')
+                overrideLocalVersion(FeatureConstants.WHATSNEW, undefined)
+                overrideLocalVersion(FeatureConstants.ENCOURAGEUPDATE, undefined)
+                checkEncourageUpdateLocalVersion()
+                checkWhatsNewLocalVersion()
+              }}
+              label={'Reset Versions'}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+            />
+          </Box>
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>

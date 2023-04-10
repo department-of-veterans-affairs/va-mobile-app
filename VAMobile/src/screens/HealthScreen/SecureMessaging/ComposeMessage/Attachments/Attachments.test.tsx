@@ -86,7 +86,7 @@ context('Attachments', () => {
   })
 
   describe('when an image or file is selected', () => {
-    it('should replace the select a file button with the attach and cancel buttons and display the file name', async () => {
+    it('should replace the select a file button with the attach button and display the file name', async () => {
       const promise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 100000 } as DocumentPickerResponse)
       jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(promise)
 
@@ -109,9 +109,7 @@ context('Attachments', () => {
       })
 
       const allButtons = testInstance.findAllByType(VAButton)
-      expect(allButtons.length).toEqual(2)
       expect(allButtons[0].props.label).toEqual('Attach')
-      expect(allButtons[1].props.label).toEqual('Cancel')
 
       expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('custom-file-name.docx (0.1 MB)')
     })
@@ -141,34 +139,6 @@ context('Attachments', () => {
 
         testInstance.findAllByType(VAButton)[0].props.onPress()
         expect(mockNavigateToEditDraftSpy).toHaveBeenCalled()
-      })
-    })
-
-    describe('on click of the cancel button', () => {
-      it('should call navigation go back', async () => {
-        const promise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx' } as DocumentPickerResponse)
-        jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(promise)
-
-        const buttons = testInstance.findAllByType(VAButton)
-        expect(buttons.length).toEqual(1)
-        expect(buttons[0].props.label).toEqual('Select a file')
-
-        await waitFor(() => {
-          buttons[0].props.onPress()
-        })
-
-        const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
-
-        await waitFor(() => {
-          actionSheetCallback(2)
-        })
-
-        await waitFor(() => {
-          promise
-        })
-
-        testInstance.findAllByType(VAButton)[1].props.onPress()
-        expect(goBack).toHaveBeenCalled()
       })
     })
 

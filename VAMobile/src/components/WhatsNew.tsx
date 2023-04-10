@@ -4,10 +4,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText, VAButton } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
+import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getWhatsNewLocalVersion, getWhatsNewVersionSkipped, setWhatsNewVersionSkipped } from 'utils/homeScreenAlerts'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
@@ -24,14 +24,14 @@ export const WhatsNew = () => {
 
   useEffect(() => {
     async function checkLocalVersion() {
-      const version = await getWhatsNewLocalVersion(demoMode)
+      const version = await getLocalVersion(FeatureConstants.WHATSNEW, demoMode)
       if (componentMounted.current) {
         setVersionName(version)
       }
     }
 
     async function checkSkippedVersion() {
-      const version = await getWhatsNewVersionSkipped()
+      const version = await getVersionSkipped(FeatureConstants.WHATSNEW)
       if (componentMounted.current) {
         setSkippedVersionHomeScreen(version)
       }
@@ -58,12 +58,12 @@ export const WhatsNew = () => {
 
   const onPress = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_dont_show())
-    setWhatsNewVersionSkipped(localVersion || '')
-    setSkippedVersionHomeScreen(localVersion || '')
+    setVersionSkipped(FeatureConstants.WHATSNEW, localVersion || '0.0')
+    setSkippedVersionHomeScreen(localVersion || '0.0')
   }
 
   //@ts-ignore
-  const labelValue = t(`${BODY_PREFIX}a11yLabel`)
+  const labelValue = t(`${BODY_PREFIX}.a11yLabel`)
   const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue
 
   //@ts-ignore
@@ -73,7 +73,7 @@ export const WhatsNew = () => {
     const bullets: VABulletListText[] = []
 
     while (1) {
-      const bulletKey = `${BODY_PREFIX}bullet.${bullets.length + 1}`
+      const bulletKey = `${BODY_PREFIX}.bullet.${bullets.length + 1}`
       //@ts-ignore
       const text = t(bulletKey)
       //@ts-ignore

@@ -291,6 +291,7 @@ export type UseDestructiveAlertProps = {
 }
 /**
  * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
+ * TODO: consolidate this and useShowActionSheet into a single hook
  * @param title - title of the alert
  * @param message - optional message for the alert
  * @param destructiveButtonIndex - ios destructive index
@@ -301,14 +302,28 @@ export type UseDestructiveAlertProps = {
 export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
   return (props: UseDestructiveAlertProps) => {
     if (isIOS()) {
-      const { buttons, ...remainingProps } = props
+      const { buttons, cancelButtonIndex, destructiveButtonIndex, ...remainingProps } = props
+
+      // Ensure cancel button is always last for UX consisency
+      const newButtons = [...buttons]
+      if (cancelButtonIndex < buttons.length - 1) {
+        newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
+      }
+
+      let newDestructiveButtonIndex = destructiveButtonIndex
+      if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
+        newDestructiveButtonIndex = destructiveButtonIndex - 1
+      }
+
+      // Don't pass cancelButtonIndex because doing so would hide the button on iPad
       ActionSheetIOS.showActionSheetWithOptions(
         {
           ...remainingProps,
-          options: buttons.map((button) => stringToTitleCase(button.text)),
+          destructiveButtonIndex: newDestructiveButtonIndex,
+          options: newButtons.map((button) => stringToTitleCase(button.text)),
         },
         (buttonIndex) => {
-          const onPress = buttons[buttonIndex]?.onPress
+          const onPress = newButtons[buttonIndex]?.onPress
           if (onPress) {
             onPress()
           }
@@ -451,6 +466,7 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
 
 /**
  * Returns a wrapper to showActionSheetWithOptions that converts iOS options to title case
+ * TODO: consolidate this and useDestructiveAlert into a single hook
  */
 export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
   const { showActionSheetWithOptions } = useActionSheet()
@@ -465,10 +481,13 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
       }
     })
 
-    const casedOptions = {
+    const casedOptions: ActionSheetOptions = {
       ...options,
       options: casedOptionText,
     }
+
+    // Don't pass cancelButtonIndex because doing so would hide the button on iPad
+    delete casedOptions.cancelButtonIndex
 
     showActionSheetWithOptions(casedOptions, callback)
   }
