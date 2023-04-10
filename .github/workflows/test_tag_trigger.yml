@@ -9,12 +9,13 @@ defaults:
   run:
     working-directory: VAMobile
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+
 jobs:
   cut_release_branch:
     runs-on: ubuntu-latest
     steps:
-      - env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
