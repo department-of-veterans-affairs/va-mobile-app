@@ -74,28 +74,52 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     )
   }
 
+  const getAddress = () => {
+    return (
+      <>
+        {!!address?.street && (
+          <TextView variant="MobileBody" selectable={true}>
+            {address.street}
+          </TextView>
+        )}
+        {!!address?.city && address?.state && address?.zipCode && (
+          <TextView variant="MobileBody" selectable={true}>
+            {cityStateZip}
+          </TextView>
+        )}
+      </>
+    )
+  }
+
   const getAddressInformation = () => {
+    const hasFullAddress = Boolean(address?.street && address?.city && address?.state && address?.zipCode)
+    const hasPartialAddress = Boolean(address?.street || (address?.city && address?.state && address?.zipCode))
+    const hasLatLong = Boolean(location.lat && location.long)
+    const hasMappableAddress = hasFullAddress || hasLatLong
+    const hasName = Boolean(location.name)
+    const hasPhone = Boolean(!appointmentIsAtlas && phone?.number)
+
     if (isPendingAppointment && hasNoProvider) {
       return <></>
+    }
+
+    let missingAddressMessage = ''
+    if (hasPhone && hasName && !hasPartialAddress) {
+      missingAddressMessage = t('common:upcomingAppointmentDetails.phoneAndNameButNoAddress')
+    } else if (hasPhone && !hasName && !hasPartialAddress) {
+      missingAddressMessage = t('common:upcomingAppointmentDetails.phoneButNoNameOrAddress')
+    } else if (!hasPhone && !hasPartialAddress) {
+      missingAddressMessage = t('common:upcomingAppointmentDetails.noPhoneOrAddress')
     }
 
     return (
       <>
         <Box {...testIdProps(testId)} accessible={true}>
           {getLocationName()}
-          {!!address?.street && (
-            <TextView variant="MobileBody" selectable={true}>
-              {address.street}
-            </TextView>
-          )}
-          {!!address?.city && address?.state && address?.zipCode && (
-            <TextView variant="MobileBody" selectable={true}>
-              {cityStateZip}
-            </TextView>
-          )}
+          {missingAddressMessage ? <TextView variant="MobileBody">{missingAddressMessage}</TextView> : getAddress()}
         </Box>
         <Box>
-          {((!!address?.street && address?.city && address?.state && address?.zipCode) || (location.lat && location.long)) && (
+          {hasMappableAddress && (
             <ClickForActionLink
               displayedText={`${t('common:directions')}`}
               a11yLabel={`${t('common:directions')}`}
@@ -105,7 +129,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
             />
           )}
         </Box>
-        {!appointmentIsAtlas && phone?.number && <ClickToCallPhoneNumber phone={phone} />}
+        {hasPhone && <ClickToCallPhoneNumber phone={phone} />}
       </>
     )
   }
