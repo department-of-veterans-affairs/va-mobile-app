@@ -24,4 +24,4 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          gh release create test-RC-v2.0.0-041023-0639
+          git tag RC-v2.0.0-041023-0641
