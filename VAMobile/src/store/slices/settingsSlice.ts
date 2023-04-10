@@ -38,7 +38,7 @@ export const updateHapticsSetting =
   }
 
 /**
- * Load the haptics setting from asyncStorage
+ * Set remote config loading and activated states
  */
 export const fetchAndActivateRemoteConfig = (): AppThunk => async (dispatch) => {
   try {
