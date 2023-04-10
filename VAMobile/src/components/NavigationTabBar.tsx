@@ -1,4 +1,4 @@
-import { AccessibilityRole, AccessibilityState, Text, TouchableWithoutFeedback } from 'react-native'
+import { AccessibilityRole, AccessibilityState, TouchableWithoutFeedback } from 'react-native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -13,20 +13,7 @@ import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
-import VAIcon from './VAIcon'
-
-type StyledLabelProps = {
-  isFocused: boolean
-}
-
-const StyledLabel = styled(Text)<StyledLabelProps>`
-	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.colors.icon.active : theme.colors.icon.inactive))}
-	align-self: center;
-	margin-top: 24px;
-	font-size: 12px;
-	font-weight: normal;
-	letter-spacing: -0.2px;
-`
+import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 
 type TabBarRoute = {
   key: string
@@ -74,24 +61,6 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
     })
   }
 
-  const tabBarIcon = (routeName: string, focused: boolean): React.ReactNode => {
-    switch (routeName) {
-      case 'Health':
-      case 'Benefits':
-      case 'Profile':
-      case 'Home':
-      case 'Payments':
-        const iconProps = {
-          id: `${routeName.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
-          name: `${routeName}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
-          fill: `${focused ? 'active' : 'inactive'}`,
-        }
-        return <VAIcon {...iconProps} />
-      default:
-        return ''
-    }
-  }
-
   return (
     <StyledSafeAreaView edges={['bottom']}>
       <Box
@@ -126,6 +95,13 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             accessible: true,
           }
 
+          const iconProps: VAIconWithTextProps = {
+            name: `${routeName}${isFocused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
+            fill: isFocused ? 'active' : 'inactive',
+            label: routeName,
+            labelColor: isFocused ? 'textWithIconButton' : 'textWithIconButtonInactive',
+          }
+
           return (
             <TouchableWithoutFeedback
               {...testIdProps(translatedName)}
@@ -133,11 +109,8 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={7}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  {tabBarIcon(routeName, isFocused)}
+                  <VAIconWithText {...iconProps} />
                 </Box>
-                <StyledLabel allowFontScaling={false} isFocused={isFocused}>
-                  {translatedName}
-                </StyledLabel>
               </Box>
             </TouchableWithoutFeedback>
           )
