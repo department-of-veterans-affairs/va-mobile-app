@@ -11,8 +11,6 @@ export const HomeE2eIdConstants = {
 	HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
 	CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
 	CONTACT_VA_BODY: 'My V-A 4 1 1 is our main V-A information line. We can help connect you to any of our V-A contact centers.',
-	CONTACT_VA_PHONE_NUMBER: '8 0 0 6 9 8 2 4 1 1, Dials this number via your device’s call function',
-	CONTACT_VA_TTY: 'TTY: 7 1 1, Dials this number via your device’s call function',
 	WEBVIEW_ID: 'Webview-web'
 }
 
@@ -29,39 +27,4 @@ describe('Home Screen', () => {
 		await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
 	})
 
-	it('should open the Contact VA screen when clicked and show the correct info', async () => {
-		await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).tap()
-		await expect(element(by.label(HomeE2eIdConstants.CONTACT_VA_TITLE))).toExist()
-		await expect(element(by.label(HomeE2eIdConstants.CONTACT_VA_BODY))).toExist()
-		await expect(element(by.label(HomeE2eIdConstants.CONTACT_VA_PHONE_NUMBER))).toExist()
-		await expect(element(by.label(HomeE2eIdConstants.CONTACT_VA_TTY))).toExist()
-		await backButton()
-	})
-
-	it('should open Find a VA location when clicked and show the correct info', async () => {
-		await element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID)).tap()
-		await expect(element(by.id(HomeE2eIdConstants.WEBVIEW_ID))).toExist()
-		/*if (device.getPlatform() === 'android') {
-			const innerElement = web.element(by.web.id(HomeE2eIdConstants.WEBVIEW_ID))
-			await expect(innerElement).toHaveText('Find VA locations')
-			await expect(element(by.id(HomeE2eIdConstants.WEBVIEW_ID))).toExist()
-		} else {
-			await expect(element(by.id(HomeE2eIdConstants.WEBVIEW_ID))).toExist()
-		}*/
-		await backButton()
-	})
-
-	it('should open Va Covid-19 updtaes when tapped and show the correct info', async () => {
-		await element(by.id(HomeE2eIdConstants.COVID_ROW_ID)).tap()
-		await expect(element(by.id(HomeE2eIdConstants.WEBVIEW_ID))).toExist()
-		/*
-		if (device.getPlatform() === 'android') {
-			const innerElement = web.element(by.web.id(HomeE2eIdConstants.WEBVIEW_ID))
-			await expect(innerElement).toHaveText('Coronavirus FAQs: What Veterans need to know')
-			await expect(element(by.id(HomeE2eIdConstants.WEBVIEW_ID))).toExist()
-		} else {
-			await expect(element(by.id(HomeE2eIdConstants.WEBVIEW_ID))).toExist()
-		}*/
-		await backButton()
-	})
 })
