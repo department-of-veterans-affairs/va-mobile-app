@@ -9,8 +9,6 @@ defaults:
   run:
     working-directory: VAMobile
 
-
-
 jobs:
   cut_release_branch:
     runs-on: ubuntu-latest
@@ -26,4 +24,8 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git tag test-RC-v2.0.0-041023-0637
+          git tag test-RC-v2.0.0-041023-0638
+      - uses: ./.github/workflows/build_android.yml
+        with:
+          lane: rc
+          slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
