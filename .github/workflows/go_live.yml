@@ -3,7 +3,7 @@
 name: Go live in app stores
 
 on:
-  # Tuesdays 14:00 UTC, 10AM ET, 1PM PT
+  # Tuesdays 14:00 UTC, 10AM ET, 7AM PT
   schedule:
     - cron: '0 14 * * 2'
 
