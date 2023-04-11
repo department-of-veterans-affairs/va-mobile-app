@@ -9,8 +9,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
-import TextView, { TextViewProps } from 'components/TextView'
+import TextView from 'components/TextView'
 import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
+import VAIconWithText from 'components/VAIconWithText'
 
 interface ElementToStickProps {
   /** styles the element which the popup anchor to */
@@ -94,12 +95,6 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     padding: 10,
   }
 
-  const textViewProps: TextViewProps = {
-    color: 'link',
-    variant: 'textWithIconButton',
-    allowFontScaling: false,
-  }
-
   // gets the action passed down to the menu and creates the menu actions
   const getActionsForMenu = () => {
     return actions.map((item, index) => {
@@ -136,8 +131,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     <>
       <ElementToStick ref={elementRef} style={elementToStickStyle} />
       <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
-        <VAIcon name="EllipsisSolid" fill={'link'} height={22} width={22} preventScaling={true} />
-        <TextView {...textViewProps}>{t('more')}</TextView>
+        <VAIconWithText name="EllipsisSolid" label={t('more')} />
       </Pressable>
 
       <Menu ref={setMenuRef} style={{ backgroundColor: currentTheme.colors.background.menu }}>

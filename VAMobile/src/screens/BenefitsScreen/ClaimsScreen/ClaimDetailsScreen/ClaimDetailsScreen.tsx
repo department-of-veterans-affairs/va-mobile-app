@@ -11,6 +11,7 @@ import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSl
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -63,9 +64,11 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
   }, [dispatch, claimID])
 
+  const backLabel = featureEnabled('decisionLetters') ? t('claimsHistory.title') : t('claims.title')
+
   if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
+      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -73,7 +76,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
 
   if (loadingClaim) {
     return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
+      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
         <LoadingComponent text={t('cliamInformation.loading')} />
       </FeatureLandingTemplate>
     )
@@ -83,7 +86,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const a11yHints = [t('claimDetails.viewYourClaim', { tabName: t('claimDetails.status') }), t('claimDetails.viewYourClaim', { tabName: t('claimDetails.details') })]
 
   return (
-    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
+    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
