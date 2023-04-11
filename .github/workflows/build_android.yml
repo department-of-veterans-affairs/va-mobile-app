@@ -25,6 +25,11 @@ on:
       ps_track:
         type: string
         default: ''
+      # The branch or tag that we want to setup.  Defaults to the branch/tag that triggered
+      # the automation, otherwise uses develop
+      ref:
+        type: string
+        default: ''
       # Timestamp of the Slack thread where build related messages should be sent.
       # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
       slack_thread_ts:
@@ -65,6 +70,8 @@ jobs:
     runs-on: ubuntu-4-cores-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
       - name: Set git config
         run: |
           echo Notes: ${{ inputs.notes }}

@@ -20,6 +20,11 @@ on:
       notes:
         type: string
         default: ''
+      # The branch or tag that we want to setup.  Defaults to the branch/tag that triggered
+      # the automation, otherwise uses develop
+      ref:
+        type: string
+        default: ''
       # Timestamp of the Slack thread where build related messages should be sent.
       # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
       slack_thread_ts:
@@ -67,6 +72,8 @@ jobs:
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
       - name: Setup ssh-agent with VA Mobile Automation ssh key for fastlane match
         uses: webfactory/ssh-agent@v0.7.0
         with:
