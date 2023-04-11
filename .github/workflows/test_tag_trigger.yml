@@ -18,22 +18,21 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
+          token: ${{ secrets.GH_ACTIONS_PAT }}
       - name: Set username and email
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-
-      - name: Cut release branch
-        run: ./test.sh
-  test_env_var:
-    needs: cut_release_branch
-    runs-on: ubuntu-latest
-    name: Read exported variable
-    steps:
-      - run: |
-          echo "$VERSION"
-          echo "${{ env.VERSION }}"
+          git tag release/v99.99.99
+          git push origin release/v99.99.99
+  # test_env_var:
+  #   needs: cut_release_branch
+  #   runs-on: ubuntu-latest
+  #   name: Read exported variable
+  #   steps:
+  #     - run: |
+  #         echo "$VERSION"
+  #         echo "${{ env.VERSION }}"
   # android:
   #   name: Android RC Build
   #   needs:
