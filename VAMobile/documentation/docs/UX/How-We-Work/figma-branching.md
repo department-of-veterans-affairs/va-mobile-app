@@ -40,6 +40,8 @@ We’ll be updating permissions for the design library as follows:
 ## How do I create a branch in Figma?
 Open the file you want to branch. Next to the file name, there is a dropdown where you can select **_Create branch_**.
 
+**Note**: When working in a branch, keep track of if/when you move components from one section to another in the library. This may cause conflicts and/or duplicate components when a Reviewer merges your branch into the main file. Be sure to include this information when you submit your branch for review.
+
 
 ![Screenshot of the create a branch menu item](/img/figma/figma-create-a-branch-menu.png)
 
