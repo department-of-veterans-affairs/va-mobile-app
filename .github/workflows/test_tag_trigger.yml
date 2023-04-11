@@ -27,6 +27,7 @@ jobs:
       - name: Cut release branch
         run: ./test.sh
   test_env_var:
+    needs: cut_release_branch
     runs-on: ubuntu-latest
     name: Read exported variable
     steps:
