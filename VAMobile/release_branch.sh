@@ -14,10 +14,10 @@ Help() {
   echo "Release branch automation script"
   echo
   echo "This script does the following:"
-  echo "1. Checks the date to see if it occurs at a 2 week interval from August 4, 2021. (If this is true, then we should cut a release branch from develop"
+  echo "1. Checks the date to see if it occurs at a 2 week interval from August 4, 2021. (If this is true, then we should cut a release branch from staging"
   echo "2. Checks out the main branch, then pulls the latest tag."
   echo "3. Increments the latest tag by the minor version to get the next release version number"
-  echo "4. Checks out and pulls latest develop branch"
+  echo "4. Checks out and pulls latest staging branch"
   echo "5. Creates a new release branch with the correct name and pushes it up to the origin"
   echo
   echo "Syntax: ./release_branch.sh [-h]"
@@ -61,17 +61,12 @@ then
 
   echo "Incrementing latest tag $latest by minor version"
   next=$(increment_version "$latest" 1) &&
-  
-  if [[ $(date +%F) == "2023-03-29" ]]
-  then
-    next="v2.0.0"
-  fi
 
   echo "Next version: $next"
   echo
-  echo "Checking out and pulling latest from develop branch"
-  git checkout develop &&
-  git pull origin develop &&
+  echo "Checking out and pulling latest from staging branch"
+  git checkout staging &&
+  git pull origin staging &&
 
   echo "Creating and pushing new release branch 'release/$next' to origin"
   git checkout -b release/"$next" &&
