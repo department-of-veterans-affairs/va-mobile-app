@@ -25,7 +25,7 @@ on:
       ps_track:
         type: string
         default: ''
-      # The branch or tag that we want to setup.  Defaults to the branch/tag that triggered
+      # The branch or tag that we want to build from.  Defaults to the branch/tag that triggered
       # the automation, otherwise uses develop
       ref:
         type: string
