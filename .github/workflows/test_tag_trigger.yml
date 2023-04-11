@@ -9,25 +9,27 @@ defaults:
   run:
     working-directory: VAMobile
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+# env:
+#   GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
 
 jobs:
   cut_release_branch:
-    name: Test Script
+    name: Cut Release Branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_ACTIONS_PAT }}
+          token: ${{ secrets.GH_ACTION_PAT }}
+
       - name: Set username and email
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git tag -a release/v99.99.97 -m "Release Candidate test"
-          git push origin release/v99.99.97
+
+      - name: Cut release branch
+        run: ./release_branch.sh
   # test_env_var:
   #   needs: cut_release_branch
   #   runs-on: ubuntu-latest
