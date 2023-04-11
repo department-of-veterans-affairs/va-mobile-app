@@ -1,4 +1,4 @@
-name: Create New Release Branch
+name: GHA Testing
 
 on:
   push:
@@ -11,7 +11,7 @@ defaults:
 
 jobs:
   cut_release_branch:
-    name: Cut Release Branch
+    name: Test Script
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
