@@ -5,6 +5,7 @@ import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
 import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
+import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import demoReducer from 'store/slices/demoSlice'
 import directDepositReducer from 'store/slices/directDepositSlice'
 import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
@@ -37,6 +38,7 @@ const store = configureStore({
     claimsAndAppeals: claimsAndAppealsReducer,
     directDeposit: directDepositReducer,
     disabilityRating: disabilityRatingReducer,
+    decisionLetters: decisionLettersReducer,
     letters: lettersReducer,
     militaryService: militaryServiceReducer,
     notifications: notificationReducer,
