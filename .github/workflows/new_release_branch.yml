@@ -1,4 +1,4 @@
-name: Create New Release Candidate
+name: Create New Release Branch
 
 on:
   workflow_dispatch:
