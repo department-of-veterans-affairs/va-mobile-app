@@ -42,5 +42,3 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
     </Box>
   )
 }
-
-export default TextLines
