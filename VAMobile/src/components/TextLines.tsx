@@ -22,17 +22,17 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
           if ('iconProps' in textObj && textObj.iconProps !== undefined) {
             return <TextLineWithIcon key={index} {...textObj} />
           } else {
-            const { text, variant = 'MobileBody', color, textAlign = 'left', textTag, mb } = textObj
+            const { text, variant = 'MobileBody', color, textAlign = 'left', textTag, mt, mb } = textObj
             if (textTag) {
               return (
-                <Box mb={mb} key={index}>
+                <Box mt={mt} mb={mb} key={index}>
                   <LabelTag text={text} key={index} labelType={textTag.labelType} />
                 </Box>
               )
             }
 
             return (
-              <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable} mb={mb} accessible={false}>
+              <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable} mt={mt} mb={mb} accessible={false}>
                 {text}
               </TextView>
             )
