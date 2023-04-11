@@ -13,7 +13,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import NoClaimLettersScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimLettersScreen/NoClaimLettersScreen'
+import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
 
 type ClaimLettersScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimLettersScreen'>
 
