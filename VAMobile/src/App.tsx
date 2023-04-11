@@ -28,11 +28,12 @@ import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
+import { SettingsState } from 'store/slices'
 import { SnackBarConstants } from 'constants/common'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { activateRemoteConfig } from 'utils/remoteConfig'
+import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -156,6 +157,7 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>((state) => state.settings)
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
@@ -191,7 +193,6 @@ export const AuthGuard: FC = () => {
     // only run on app load
     dispatch(sendUsesLargeTextAnalytics())
     dispatch(sendUsesScreenReaderAnalytics())
-    activateRemoteConfig()
   }, [dispatch])
 
   useEffect(() => {
@@ -210,6 +211,12 @@ export const AuthGuard: FC = () => {
   }, [firebaseDebugMode])
 
   useEffect(() => {
+    if (!remoteConfigActivated) {
+      dispatch(fetchAndActivateRemoteConfig())
+    }
+  }, [dispatch, remoteConfigActivated])
+
+  useEffect(() => {
     console.debug('AuthGuard: initializing')
     dispatch(initializeAuth())
 
@@ -225,7 +232,7 @@ export const AuthGuard: FC = () => {
   }, [dispatch])
 
   let content
-  if (initializing) {
+  if (initializing || loadingRemoteConfig) {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Splash" component={SplashScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
