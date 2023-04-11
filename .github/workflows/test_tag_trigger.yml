@@ -11,6 +11,7 @@ defaults:
 
 jobs:
   cut_release_branch:
+    name: Cut Release Branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,22 +20,29 @@ jobs:
           fetch-depth: 0
 
       - name: Set username and email
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git tag test-RC-v2.0.0-041023-0642
-  android:
-    name: Android RC Build
-    needs:
-      - cut_release_branch
-      # - start_slack_thread
-    uses: ./.github/workflows/build_android.yml
-    secrets: inherit
-    with:
-      lane: rc
-      ref: staging
-      # slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
+
+      - name: Cut release branch
+        run: ./test.sh
+  test_env_var:
+    runs-on: ubuntu-latest
+    name: Read exported variable
+    steps:
+      - run: |
+          echo "$VERSION"
+          echo "${{ env.VERSION }}"
+  # android:
+  #   name: Android RC Build
+  #   needs:
+  #     - cut_release_branch
+  #     # - start_slack_thread
+  #   uses: ./.github/workflows/build_android.yml
+  #   secrets: inherit
+  #   with:
+  #     lane: rc
+  #     ref: staging
+  #     # slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
 
 
