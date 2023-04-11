@@ -32,7 +32,7 @@ context('ButtonWithIcon', () => {
         borderColorActive={borderColorActive}
         backgroundColorActive={backgroundColorActive}
         buttonText={'My Text'}
-        iconName={'CommentSolid'}
+        iconName={'PaperClip'}
       />,
     )
 
@@ -47,7 +47,7 @@ context('ButtonWithIcon', () => {
     expect(component).toBeTruthy()
     expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('My Text')
     const icons = testInstance.findAllByType(VAIcon)
-    expect(icons[0].props).toEqual({ name: 'CommentSolid', fill: 'buttonWithIcon', height: 24, width: 24 })
+    expect(icons[0].props).toEqual({ name: 'PaperClip', fill: 'buttonWithIcon', height: 24, width: 24 })
     expect(icons[1].props).toEqual({ name: 'ArrowRight', fill: 'largeNav', height: 16, width: 16 })
   })
 
