@@ -12,9 +12,11 @@ import { RootState } from 'store'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { CloseSnackbarOnNavigation } from 'constants/common'
+import { featureEnabled } from 'utils/remoteConfig'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
+import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
@@ -40,6 +42,8 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
+  const claimsDestination = featureEnabled('decisionLetters') ? 'Claims' : 'ClaimsHistory'
+
   return (
     <CategoryLanding title={t('benefits.title')}>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -54,7 +58,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('claims.title')}
-          onPress={navigateTo('Claims')}
+          onPress={navigateTo(claimsDestination)}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -100,6 +104,7 @@ const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
       <BenefitsScreenStack.Screen name="BenefitSummaryServiceVerificationLetter" component={BenefitSummaryServiceVerification} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="ClaimLettersScreen" component={ClaimLettersScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="ClaimsHistory" component={ClaimsHistoryScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ headerShown: false }} />

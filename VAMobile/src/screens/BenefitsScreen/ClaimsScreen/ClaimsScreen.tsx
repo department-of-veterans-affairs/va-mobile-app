@@ -27,7 +27,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
         />
         <LargeNavButton
           title={t('claimLetters.title')}
-          onPress={() => {}}
+          onPress={navigateTo('ClaimLettersScreen')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
