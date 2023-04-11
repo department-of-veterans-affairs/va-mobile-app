@@ -61,6 +61,11 @@ then
 
   echo "Incrementing latest tag $latest by minor version"
   next=$(increment_version "$latest" 1) &&
+  
+  if [[ $(date +%F) == "2023-03-29" ]]
+  then
+    next="v2.0.0"
+  fi
 
   echo "Next version: $next"
   echo
@@ -69,14 +74,14 @@ then
   git pull origin staging &&
 
   echo "Creating and pushing new release branch 'release/$next' to origin"
-  git checkout -b release/v99.99.96 &&
-  git push -u origin release/v99.99.96
+  git checkout -b release/"$next" &&
+  git push -u origin release/"$next"
 
   echo "Successfully created and pushed new release branch 'release/$next' to origin"
 
   echo "Tag branch for Release Candidate build"
-  TAG="RC-v99.99.96-$(date +%m%d%y-%H%M)"
-  git tag -a "$TAG" -m "Release Candidate for v99.99.96. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
+  TAG="RC-$next-$(date +%m%d%y-%H%M)"
+  git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
   git push origin "$TAG"
 
   echo "Successfully tagged for Release Candidate builds: $TAG"
