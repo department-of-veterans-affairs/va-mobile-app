@@ -23,8 +23,8 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git tag release/v99.99.99
-          git push origin release/v99.99.99
+          git tag -a release/v99.99.98 -m "Release Candidate test"
+          git push origin release/v99.99.98
   # test_env_var:
   #   needs: cut_release_branch
   #   runs-on: ubuntu-latest
