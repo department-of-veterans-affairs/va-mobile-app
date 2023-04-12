@@ -20,6 +20,7 @@ import demoReducer from 'store/slices/demoSlice'
 import directDepositReducer from 'store/slices/directDepositSlice'
 import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
+import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
@@ -140,6 +141,7 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       claimsAndAppeals: claimsAndAppealsReducer,
       directDeposit: directDepositReducer,
       disabilityRating: disabilityRatingReducer,
+      decisionLetters: decisionLettersReducer,
       letters: lettersReducer,
       militaryService: militaryServiceReducer,
       notifications: notificationReducer,
