@@ -21,7 +21,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { loading, decisionLetters } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
+  const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
 
   useEffect(() => {
@@ -42,10 +42,10 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     )
   }
 
-  if (loading) {
+  if (loading || downloading) {
     return (
       <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <LoadingComponent text={t('claimLetters.loading')} />
+        <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
       </FeatureLandingTemplate>
     )
   }
