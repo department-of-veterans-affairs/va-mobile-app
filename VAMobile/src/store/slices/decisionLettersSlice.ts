@@ -69,7 +69,9 @@ export const downloadDecisionLetter =
 
     try {
       const { demoMode } = getState().demo
-      const decisionLettersEndpoint = `${API_ROOT}/v0/claims/decision-letters/${id}/download`
+      const escapedId = encodeURI(id) // escape chars like {} in document ID
+      const decisionLettersEndpoint = `${API_ROOT}/v0/claims/decision-letters/${escapedId}/download`
+
       const filePath = demoMode
         ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
         : await downloadFile('GET', decisionLettersEndpoint, 'decision_letter.pdf', undefined, downloadDecisionLetterRetries)
