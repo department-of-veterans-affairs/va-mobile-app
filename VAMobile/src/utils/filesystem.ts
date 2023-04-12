@@ -22,6 +22,7 @@ const fileSystemFatalErrorString = 'File System Error'
  * @returns Returns a Promise with a string that represents the filePath or undefined for a failed download
  */
 export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fileName: string, params: Params = {}, retries = 0): Promise<string | undefined> => {
+  const failureCodes = [404, 408, 422, 500, 501, 502, 503, 504]
   const SISEnabled = featureEnabled('SIS')
   const filePath = DocumentDirectoryPath + fileName
 
@@ -43,6 +44,10 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     const results: FetchBlobResponse = await RNFetchBlob.config(options).fetch(method, endpoint, headers, body)
     const statusCode = results.respInfo.status
     let accessTokenExpired = false
+
+    if (failureCodes.includes(statusCode)) {
+      throw new Error(`Request failed with status ${statusCode}`)
+    }
 
     // For SIS, a 403 alone doesn't indicated an expired access token. We need to check for the error message as well.
     if (SISEnabled && statusCode === 403) {
