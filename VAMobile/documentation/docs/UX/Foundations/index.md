@@ -3,7 +3,7 @@ title: Foundations
 
 ---
 ## Our approach 
-As [outlined in our project mission](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/product/Mobile-Roadmap.md#outcomes-roadmap), the VA: Health and Benefits app should be a trusted source for Veterans to quickly and easily check the status of their VA services and complete simple, transactional tasks across their health and benefits. 
+As [outlined in our project mission](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/About/team-charter#team-mission-statement), the VA: Health and Benefits app should be a trusted source for Veterans to quickly and easily check the status of their VA services and complete simple, transactional tasks across their health and benefits.
 
 ### Values
 In order to accomplish this we approach our design work by the following values:
