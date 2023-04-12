@@ -8,8 +8,9 @@ import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { downloadDemoFile, downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
+import { isErrorObject, showSnackBar } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { t } from 'i18next'
 import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
@@ -64,9 +65,10 @@ export const downloadDecisionLetter =
   (id: string): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartDownloadDecisionLetter())
-    const { demoMode } = getState().demo
+    snackBar?.hideAll()
 
     try {
+      const { demoMode } = getState().demo
       const decisionLettersEndpoint = `${API_ROOT}/v0/claims/decision-letters/${id}/download`
       const filePath = demoMode
         ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
@@ -80,11 +82,9 @@ export const downloadDecisionLetter =
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `downloadDecisionLetter: ${decisionLettersNonFatalErrorString}`)
-        /**
-         * For letters we show a special screen regardless of the error. All download errors will be caught
-         * here so there is no special path for network connection errors
-         */
         dispatch(dispatchFinishDownloadDecisionLetter(error))
+        const retryFunction = () => dispatch(downloadDecisionLetter(id))
+        showSnackBar(t('letters.download.error'), dispatch, retryFunction, false, true, true)
       }
     }
   }
