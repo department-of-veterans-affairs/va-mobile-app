@@ -3,13 +3,8 @@ name: Create New Release Branch
 on:
   workflow_dispatch:
   schedule:
-<<<<<<< HEAD
-    # 06:30 UTC, 2:30AM ET, 11:30PM (Tues) PT every Wednesday
-    - cron: "30 6 * * 3" 
-=======
     # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
     - cron: '00 6 * * 3'
->>>>>>> 0f83a6c45 (Change schedule to run at 2am ET/11pm PT)
 
 defaults:
   run:
