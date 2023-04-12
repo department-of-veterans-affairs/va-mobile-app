@@ -17,4 +17,4 @@ Our automated UI testing is done with [Detox](https://wix.github.io/Detox/), whi
 1. Check for the [detox pre-reqs](https://wix.github.io/Detox/docs/introduction/getting-started#detox-prerequisites) on your local machine and install if needed.
 2. Check that the emulators used by the script (listed in .detoxrc.json) are installed on your machine, and install them if not. [Helpful instructions from detox](https://wix.github.io/Detox/docs/introduction/project-setup#step-3-device-configs)
 2. Build the app. iOS is `yarn e2e:ios-build` and Android is `yarn e2e:android-build`
-3. Run tests. iOS is `yarn e2e:ios-test` and Android is `yarn e2e:android-test`.  
+3. Run tests. iOS is `yarn e2e:ios-test` and Android is `yarn e2e:android-test`.  (Android will open the emulator & show you the tests running, automatically. If you want to see the iOS tests on the simulator, you need to have the Simulator app open before starting the iOS tests (but, if you don't care about watching on the simulator, it'll still run fine without it).
