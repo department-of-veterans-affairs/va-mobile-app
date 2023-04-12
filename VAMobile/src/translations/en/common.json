@@ -602,6 +602,7 @@
   "claimLetters.overview": "You can download your claim letters. We'll also send these letters to you by mail.",
   "claimLetters.loading": "Loading your claim letters...",
   "claimLetters.downloading": "Loading your claim letter...",
+  "claimLetters.download.error": "Your claim letter could not be downloaded.",
   "claimLetters.noClaimLetters": "No claim letters",
   "claimLetters.youDontHaveAnyClaimLetters": "You don't have any claim letters yet.",
   "claimLetters.letterDate": "{{date}} letter",
