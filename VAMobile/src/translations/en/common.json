@@ -421,6 +421,7 @@
   "claims.a11yHint": "Review details of this {{activeOrClosed}} {{claimOrAppeal}}",
   "claims.appealFor": "{{displayTitle}} updated on {{date}}",
   "claims.claimFor": "Claim for {{displayTitle}} updated on {{date}}",
+  "claims.decisionLetterAvailable": "Decision letter available",
   "claims.defaultClaimType": "disability compensation",
   "claims.viewYourActiveClaims": "Review your active claims and appeals",
   "claims.viewYourClosedClaims": "Review your closed claims and appeals",
