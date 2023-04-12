@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="11px" viewBox="0 0 16 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>fa-chevron-up</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icons-/-Font-Awesome-/-almost-black-/-fa-chevron-up" transform="translate(0.000000, -3.000000)" fill="#000">
+            <path d="M15.813838,11.4467887 L14.1656841,13.085014 C13.9174682,13.3332299 13.5203227,13.3332299 13.2721067,13.085014 L8,7.81290723 L2.72789327,13.085014 C2.47967732,13.3332299 2.0825318,13.3332299 1.83431585,13.085014 L0.186161961,11.4467887 C-0.062053987,11.1985728 -0.062053987,10.7914986 0.186161961,10.5432827 L7.55321129,3.18616196 C7.80142724,2.93794601 8.19857276,2.93794601 8.44678871,3.18616196 L15.813838,10.5432827 C16.062054,10.7914986 16.062054,11.1985728 15.813838,11.4467887 Z" id="fa-chevron-up"></path>
+        </g>
+    </g>
+</svg>
