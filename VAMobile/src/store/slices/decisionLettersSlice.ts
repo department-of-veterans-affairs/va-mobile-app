@@ -86,7 +86,7 @@ export const downloadDecisionLetter =
         logNonFatalErrorToFirebase(error, `downloadDecisionLetter: ${decisionLettersNonFatalErrorString}`)
         dispatch(dispatchFinishDownloadDecisionLetter(error))
         const retryFunction = () => dispatch(downloadDecisionLetter(id))
-        showSnackBar(t('letters.download.error'), dispatch, retryFunction, false, true, true)
+        showSnackBar(t('claimLetters.download.error'), dispatch, retryFunction, false, true, true)
       }
     }
   }
