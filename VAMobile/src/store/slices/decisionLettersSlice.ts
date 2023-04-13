@@ -65,7 +65,6 @@ export const downloadDecisionLetter =
   (id: string): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartDownloadDecisionLetter())
-    snackBar?.hideAll()
 
     try {
       const { demoMode } = getState().demo
