@@ -51,7 +51,6 @@ describe('Military Information Screen', () => {
 		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL))).toExist()
 		await expect(element(by.id('incorrectServiceDMDCNumberTestID'))).toExist()
 		await element(by.id('IncorrectServiceTestID')).swipe('up')
-		await element(by.id('incorrectServiceDMDCNumberTestID')).tap()
 		if (device.getPlatform() === 'android') {
 			await element(by.id('incorrectServiceDMDCNumberTestID')).tap()
 			await setTimeout(5000)
