@@ -11,8 +11,13 @@ on:
       - 'RC-v[0-9]+.[0-9]+.[0-9]+-[0-9]+[0-9]+[0-9]+-[0-9]+[0-9]+'
 
 jobs:
+  queue_build:
+    name: Queue Build
+    uses: ./.github/workflows/queue_builds.yml
+    secrets: inherit
   start_slack_thread:
     name: Start Slack thread
+    needs: queue_build
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
