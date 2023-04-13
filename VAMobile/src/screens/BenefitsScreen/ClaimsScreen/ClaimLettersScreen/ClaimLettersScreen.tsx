@@ -63,10 +63,14 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
     const date = t('claimLetters.letterDate', { date: formatDateMMMMDDYYYY(receivedAt || '') })
     const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
+    const onPress = () => {
+      snackBar?.hideAll()
+      dispatch(downloadDecisionLetter(letter.id))
+    }
 
     const letterButton = {
       textLines,
-      onPress: () => dispatch(downloadDecisionLetter(letter.id)),
+      onPress,
       a11yValue: t('listPosition', { position: index + 1, total: decisionLetters.length }),
       testId: getA11yLabelText(textLines), // read by screen reader
     }
