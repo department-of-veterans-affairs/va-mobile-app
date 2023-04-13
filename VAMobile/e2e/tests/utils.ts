@@ -101,7 +101,7 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 			
 }
 
-/** This function will open, check for, and dismiss the leaving app popup from a specified launching point
+/** This function will change the mock data for demo mode
  * 
  * @param matchString - string: name of the json file ie appointments.json
  * @param jsonProperty - array of strings and dictionaries: should match the path to get to the json ob you want changed that matches the path to get to the object you want changed
