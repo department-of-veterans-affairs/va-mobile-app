@@ -8,6 +8,7 @@ import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { SnackbarMessages } from 'components/SnackBar'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
@@ -23,6 +24,11 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const dispatch = useAppDispatch()
   const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: '',
+    errorMsg: t('claimLetters.download.error'),
+  }
 
   useEffect(() => {
     if (!claimsInDowntime) {
@@ -65,7 +71,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
     const onPress = () => {
       snackBar?.hideAll()
-      dispatch(downloadDecisionLetter(letter.id))
+      dispatch(downloadDecisionLetter(letter.id, snackbarMessages))
     }
 
     const letterButton = {

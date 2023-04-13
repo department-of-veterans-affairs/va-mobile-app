@@ -5,12 +5,12 @@ import * as api from '../api'
 import { APIError, DecisionLettersList, ScreenIDTypes } from '../api'
 import { AppThunk } from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
+import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { downloadDemoFile, downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject, showSnackBar } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { t } from 'i18next'
 import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
@@ -62,7 +62,7 @@ export const getDecisionLetters =
  * Redux action to download a decision letter
  */
 export const downloadDecisionLetter =
-  (id: string): AppThunk =>
+  (id: string, snackBarMessages: SnackbarMessages): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartDownloadDecisionLetter())
 
@@ -84,8 +84,8 @@ export const downloadDecisionLetter =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `downloadDecisionLetter: ${decisionLettersNonFatalErrorString}`)
         dispatch(dispatchFinishDownloadDecisionLetter(error))
-        const retryFunction = () => dispatch(downloadDecisionLetter(id))
-        showSnackBar(t('claimLetters.download.error'), dispatch, retryFunction, false, true, true)
+        const retryFunction = () => dispatch(downloadDecisionLetter(id, snackBarMessages))
+        showSnackBar(snackBarMessages.errorMsg, dispatch, retryFunction, false, true, true)
       }
     }
   }
