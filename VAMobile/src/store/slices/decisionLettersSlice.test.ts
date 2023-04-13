@@ -6,6 +6,12 @@ import * as api from '../api'
 import { context, realStore } from 'testUtils'
 import { downloadDecisionLetter, getDecisionLetters } from './decisionLettersSlice'
 import { DecisionLettersGetData } from 'store/api'
+import { SnackbarMessages } from 'components/SnackBar'
+
+const snackbarMessages: SnackbarMessages = {
+  successMsg: '',
+  errorMsg: 'Your claim letter could not be downloaded.',
+}
 
 const decisionLettersPayload: DecisionLettersGetData = {
   data: [
@@ -58,7 +64,7 @@ context('decisionLetters', () => {
   describe('downloadDecisionLetter', () => {
     it('should dispatch the correct actions', async () => {
       const store = realStore()
-      await store.dispatch(downloadDecisionLetter('abc123'))
+      await store.dispatch(downloadDecisionLetter('abc123', snackbarMessages))
 
       const actions = store.getActions()
 
