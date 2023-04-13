@@ -75,7 +75,6 @@ import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
 import Compose from './svgs/compose.svg'
-import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Delete from './svgs/delete.svg'
 import EllipsisSolid from './svgs/ellipsisSolid.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
@@ -87,6 +86,7 @@ import Logo from './svgs/vaParentLogo/logo.svg'
 import Minus from './svgs/minus.svg'
 import PaperClip from './svgs/paperClip.svg'
 import PhoneSolid from './svgs/phoneSolid.svg'
+import PickerArrows from './svgs/picker-arrows.svg'
 import QuestionMark from './svgs/questionMark.svg'
 import Remove from './svgs/remove.svg'
 import Reply from './svgs/reply.svg'
@@ -146,7 +146,7 @@ export const VA_ICON_MAP = {
   WebviewOpen,
   WebviewRefresh,
   Lock,
-  DatePickerArrows,
+  PickerArrows,
   Logo,
   ErrorCheckBox,
   QuestionMark,

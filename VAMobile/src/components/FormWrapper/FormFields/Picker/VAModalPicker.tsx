@@ -164,7 +164,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
             {currentlySelectedOption?.label}
           </TextView>
           <Box mr={8} ml={16} my={16}>
-            <VAIcon name="DatePickerArrows" fill="pickerIcon" width={16} height={16} />
+            <VAIcon name="PickerArrows" fill="pickerIcon" width={16} height={16} />
           </Box>
         </Box>
       </Box>

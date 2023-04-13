@@ -8,7 +8,6 @@ import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/chevro
 import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/chevron-right.svg';
 import { ReactComponent as ChevronUp} from '@componentsDocs/VAIcon/svgs/chevron-up.svg';
 import { ReactComponent as Compose} from '@componentsDocs/VAIcon/svgs/compose.svg';
-import { ReactComponent as DatePickerArrows} from '@componentsDocs/VAIcon/svgs/date-picker-arrows.svg';
 import { ReactComponent as Ellipsis} from '@componentsDocs/VAIcon/svgs/ellipsisSolid.svg';
 import { ReactComponent as ExclamationTriangleSolid} from '@componentsDocs/VAIcon/svgs/exclamationTriangleSolid.svg';
 import { ReactComponent as Folder} from '@componentsDocs/VAIcon/svgs/folder-solid.svg';
@@ -18,6 +17,7 @@ import { ReactComponent as MedicalFolder} from '@componentsDocs/VAIcon/svgs/fold
 import { ReactComponent as Minus} from '@componentsDocs/VAIcon/svgs/minus.svg';
 import { ReactComponent as PaperClip} from '@componentsDocs/VAIcon/svgs/paperClip.svg';
 import { ReactComponent as PhoneSolid} from '@componentsDocs/VAIcon/svgs/phoneSolid.svg';
+import { ReactComponent as PickerArrows} from '@componentsDocs/VAIcon/svgs/picker-arrows.svg';
 import { ReactComponent as QuestionMark} from '@componentsDocs/VAIcon/svgs/questionMark.svg';
 import { ReactComponent as Remove} from '@componentsDocs/VAIcon/svgs/remove.svg';
 import { ReactComponent as Reply} from '@componentsDocs/VAIcon/svgs/reply.svg';
@@ -39,11 +39,11 @@ Add | <Add  className="icons"/> | add.svg
 Building | <Building  className="icons"/> | buildingSolid.svg
 Bullet | <Bullet  className="icons"/> | bullet.svg
 Check Mark | <CheckMark  className="icons"/> | check-mark.svg
-Check Mark Circle | <CheckMarkCircle  className="icons"/> |checkmark-in-circle.svg
-Chevron Down | <ChevronDown  className="icons"/> | svgs/chevron-down.svg
-Chevron Left | <ChevronLeft  className="icons"/> | svgs/chevron-left.svg
+Check Mark Circle | <CheckMarkCircle  className="icons"/> | checkmark-in-circle.svg
+Chevron Down | <ChevronDown  className="icons"/> | chevron-down.svg
+Chevron Left | <ChevronLeft  className="icons"/> | chevron-left.svg
 Chevron Right | <ChevronRight  className="icons iconsStroke"/> | chevron-right.svg
-Chevron Up | <ChevronUp  className="icons"/> | svgs/chevron-up.svg
+Chevron Up | <ChevronUp  className="icons"/> | chevron-up.svg
 Compose | <Compose  className="icons"/> | compose.svg
 Ellipsis | <Ellipsis  className="icons"/> | ellipsisSolid.svg
 Exclamation Triangle | <ExclamationTriangleSolid  className="icons"/> | exclamationTriangleSolid.svg
@@ -54,6 +54,7 @@ Medical Folder | <MedicalFolder  className="icons"/> | folder-medical-solid.svg
 Minus | <Minus  className="icons"/> | minus.svg
 Paper Clip | <PaperClip  className="icons"/> | paperClip.svg
 Phone Solid | <PhoneSolid  className="icons"/> | phoneSolid.svg
+Picker Arrows | <PickerArrows className="icons" /> | picker-arrows.svg
 Question Mark | <QuestionMark  className="icons"/> | questionMark.svg
 Remove | <Remove  className="icons"/> | remove.svg
 Reply | <Reply  className="icons"/> | reply.svg
