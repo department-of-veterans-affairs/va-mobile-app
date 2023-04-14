@@ -37,6 +37,7 @@ We create additional tickets, even for test script maintenance issues, to avoid 
 Creating new cases for UI automation is ticketed work, as atomic as possible, & well-documented (as per [our engineering philosophy](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/Philosphy)).
 
 In addition to making sure that the automated tests are functioning well, an engineer writing new tests is also responsible for:
+
 **All new automated tests**
 - Are recordable in TestRail (preferably automatically, but at least manually)
 - Provide artifacts (where necessary per case) for success or failure
