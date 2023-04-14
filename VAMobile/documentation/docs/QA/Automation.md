@@ -20,3 +20,27 @@ Our automated UI testing is done with [Detox](https://wix.github.io/Detox/), whi
 4. Build the app. iOS is `yarn e2e:ios-build` and Android is `yarn e2e:android-build`
 5. Run tests. iOS is `yarn e2e:ios-test` and Android is `yarn e2e:android-test`. 
      - Android will open the emulator & show you the tests running, automatically. If you want to see the iOS tests on the simulator, you need to have the Simulator app open before starting the iOS tests (but, if you don't care about watching on the simulator, it'll still run fine without it.
+
+## UI Automation Testing Process
+
+### Release Candidate Automation
+The RC regression script is split into two sections, one of which is the [folder for automated tests](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=9683).
+
+Each sprint, someone from the QA automation team is responsible for 'babysitting' the automated tests for the release candidate build. This person is responsible for confirming all automated cases have run against the correct build, and then signing off on automated testing by leaving a comment in the release sign-off ticket. There are three potential outcomes for this signoff, here's an example of what the comment would look like for each:
+1. All automated cases pass, signing off on that section
+2. Some automated cases failed: (list of which cases & why). These failures do not indicate a breaking change with the app, and I have written up automation maintenance ticket(s) for the necessary changes: (links to relevant tickets)
+3. Some automated cases failed: (list of which cases & why). These failures are breaking changes in the app, and I have written up bug ticket(s): (links to relevant tickets). These bugs SHOULD / SHOULD NOT prevent release of the app.
+
+We create additional tickets, even for test script maintenance issues, to avoid pushing changes onto the RC branch during the release process.
+
+### Writing new cases
+Creating new cases for UI automation is ticketed work, as atomic as possible, & well-documented (as per [our engineering philosophy](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/Philosphy)).
+
+In addition to making sure that the automated tests are functioning well, an engineer writing new tests is also responsible for:
+**All new automated tests**
+- Are recordable in TestRail (preferably automatically, but at least manually)
+- Provide artifacts (where necessary per case) for success or failure
+
+**Additional work for RC automated tests**
+- Confirming that the new script follows the manual RC script test steps
+- Moving all manual cases replaced by automation to the "Automated" section of the RC script (could involve moving the full case, or splitting an existing case into manual and automated portions)
