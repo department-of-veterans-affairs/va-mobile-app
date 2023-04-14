@@ -39,8 +39,9 @@ Creating new cases for UI automation is ticketed work, as atomic as possible, & 
 In addition to making sure that the automated tests are functioning well, an engineer writing new tests is also responsible for:
 
 **All new automated tests**
-- Are recordable in TestRail (preferably automatically, but at least manually)
-- Provide artifacts (where necessary per case) for success or failure
+- Creating TestRail cases & steps for automated tests (if needed/not currently written)
+- Confirming all test runs for the new automated script can be recorded in TestRail (preferably automatically, but at least manually)
+- Ensuring the new cases provide artifacts (where necessary) for success or failure
 
 **Additional work for RC automated tests**
 - Confirming that the new script follows the manual RC script test steps
