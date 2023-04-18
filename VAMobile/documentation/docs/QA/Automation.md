@@ -25,7 +25,7 @@ Our automated UI testing is done with [Detox](https://wix.github.io/Detox/), whi
 ## UI Automation Testing Process
 
 ### Release Candidate Automation
-The RC regression script is split into two sections, one of which is the [folder for automated tests](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=9683).
+The RC regression script is split into two sections: testing covered manually, and [testing covered with automation.](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=9683).
 
 Each release, someone from the QA team is responsible for 'babysitting' the automated tests for the release candidate build. This person is responsible for confirming all automated cases have run against the correct build, and then signing off on automated testing by leaving a comment in the release sign-off ticket. There are three potential outcomes for this signoff, here's an example of what the comment would look like for each:
 1. All automated cases pass, signing off on that section
