@@ -15,18 +15,19 @@ Our automated UI testing is done with [Detox](https://wix.github.io/Detox/), whi
 
 ### Local setup for detox
 1. Check for the [detox pre-reqs](https://wix.github.io/Detox/docs/introduction/getting-started#detox-prerequisites) on your local machine and install if needed.
-2. Check that the emulators used by the script (listed in .detoxrc.json) are installed on your machine, and install them if not. [Helpful instructions from detox](https://wix.github.io/Detox/docs/introduction/project-setup#step-3-device-configs)
-    - If you need to create a new Android emulator, make sure to bump up the internal storage (default is 800, bumping to 8000 definitely works). If you don't do this, you'll get an out of storage error.
-4. Build the app. iOS is `yarn e2e:ios-build` and Android is `yarn e2e:android-build`
+2. Check that the emulators used by the script ([listed in .detoxrc.json](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/.detoxrc.json#L17)) are installed on your machine, and install them if not. [Helpful instructions from detox](https://wix.github.io/Detox/docs/introduction/project-setup#step-3-device-configs)
+    - If you need to create a new Android emulator, make sure to bump up the internal storage (default is 800, bumping to 8000 definitely works). If you don't do this, you'll get an out of storage error. One path that works for this: Shift-Shift > search "Virtual Device Manager" > {create new device or edit existing device} > Show Advanced Settings > scroll down to the "Memory and Storage" section to find the "Internal Storage" field
+4. Build the app. iOS is `yarn e2e:ios-build` and Android is `yarn e2e:android-build`. This will take a few minutes.
 5. Run tests. iOS is `yarn e2e:ios-test` and Android is `yarn e2e:android-test`. 
      - Android will open the emulator & show you the tests running, automatically. If you want to see the iOS tests on the simulator, you need to have the Simulator app open before starting the iOS tests (but, if you don't care about watching on the simulator, it'll still run fine without it.
+     - Individual test runtime is ~30 seconds (we start all tests back from the login window). Total test runtime will change as we add more tests, but expect it to take a few minutes as well.
 
 ## UI Automation Testing Process
 
 ### Release Candidate Automation
 The RC regression script is split into two sections, one of which is the [folder for automated tests](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=9683).
 
-Each sprint, someone from the QA automation team is responsible for 'babysitting' the automated tests for the release candidate build. This person is responsible for confirming all automated cases have run against the correct build, and then signing off on automated testing by leaving a comment in the release sign-off ticket. There are three potential outcomes for this signoff, here's an example of what the comment would look like for each:
+Each release, someone from the QA team is responsible for 'babysitting' the automated tests for the release candidate build. This person is responsible for confirming all automated cases have run against the correct build, and then signing off on automated testing by leaving a comment in the release sign-off ticket. There are three potential outcomes for this signoff, here's an example of what the comment would look like for each:
 1. All automated cases pass, signing off on that section
 2. Some automated cases failed: (list of which cases & why). These failures do not indicate a breaking change with the app, and I have written up automation maintenance ticket(s) for the necessary changes: (links to relevant tickets)
 3. Some automated cases failed: (list of which cases & why). These failures are breaking changes in the app, and I have written up bug ticket(s): (links to relevant tickets). These bugs SHOULD / SHOULD NOT prevent release of the app.
