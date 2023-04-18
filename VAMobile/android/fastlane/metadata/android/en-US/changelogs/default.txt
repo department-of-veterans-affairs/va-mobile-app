@@ -1,8 +1,1 @@
-We updated the sections of the app to Home, Benefits, Health, and Payments.
-
-Home shows your name and branch of service. It also includes links for how to contact us and find VA locations.
-Benefits includes your disability rating, claims and appeals, and VA letters.
-Health includes your VA prescriptions, health care appointments, secure messages, and vaccine records.
-Payments includes your VA payments history and direct deposit information.
-
-We also moved Profile to the Home section.
+We added general improvements and fixed a few bugs.

@@ -6,6 +6,7 @@ import { initialAppointmentsState } from 'store/slices/appointmentsSlice'
 import { initialAuthState } from 'store/slices/authSlice'
 import { initialAuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { initialClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
+import { initialDecisionLettersState } from './decisionLettersSlice'
 import { initialDemoState } from 'store/slices/demoSlice'
 import { initialDirectDepositState } from 'store/slices/directDepositSlice'
 import { initialDisabilityRatingState } from 'store/slices/disabilityRatingSlice'
@@ -50,6 +51,7 @@ export const InitialState: RootState = {
   directDeposit: initialDirectDepositState,
   militaryService: initialMilitaryServiceState,
   personalInformation: initialPersonalInformationState,
+  decisionLetters: initialDecisionLettersState,
   letters: initialLettersState,
   appointments: initialAppointmentsState,
   claimsAndAppeals: initialClaimsAndAppealsState,

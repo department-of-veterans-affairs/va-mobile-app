@@ -1,30 +1,42 @@
-With the official VA: Health & Benefits app, you can manage your VA health care, benefits, and payments from your mobile phone or tablet. 
+The official VA mobile app helps you manage your VA health care and benefits on your mobile device. Use the app to manage common tasks like checking your claim status, communicating with your VA health care team, and accessing your VA benefit letters.
 
 Features include:
 
 Biometric Sign-in
-- Use your phone’s built-in security features—like fingerprint and face recognition—to securely access your information.
+- Use your phone’s built-in security features — like fingerprint and face recognition — to securely access your information.
 
-Health care tools
-- Refill and track your VA prescriptions.
-- Send and receive secure messages from your VA health care team.
-- Review appointments and add them to your calendar.
-- Get your records for VA vaccines, such as COVID-19.
+Claims and Appeals
+- Check your claim or appeal status.
+- Submit additional evidence from your mobile device.
 
-Benefits tools
+Appointments
+- Check or cancel your VA health appointments.
+- Easily add existing appointments to your calendar.
+
+Secure Messaging
+- Communicate privately with your VA health care team.
+
+Letters
+Download common VA letters and documents like:
+- Benefit Summary and Service Verification Letter
+- Proof of Service Card
+- Commissary Letter
+
+Profile
 - Check your disability rating.
-- Review your claim or appeal status.
-- Submit evidence for your claim or appeal.
-- Download common VA letters.
+- Update your contact information.
+- Update your direct deposit information for disability compensation and pension benefits.
 
-Payments tools
-- Review payments we’ve sent you.
-- Update your direct deposit information.
+VA Vaccine Records
+- Review your COVID-19 and other VA vaccine records.
 
-Facility locator
+Payments
+- Review payments made to you by the VA.
+
+Facility Locator
 - Find VA facilities and services near you.
 
 Veterans Crisis Line
-- Get quick access to the VA Crisis Line.
+- Quickly access the VA Crisis Line.
 
-Need help with this app? Call us at 800-698-2411 (TTY: 711). We’re here 24/7.
+Need help with this app? Call us at @800-698-2411 (TTY: 711). We’re here 24/7.

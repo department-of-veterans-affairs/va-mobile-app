@@ -195,15 +195,14 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
       dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders))
+      if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
+        navigation.goBack()
+      }
     }
   }
 
   const moveIconProps: VAIconProps = {
     name: 'FolderSolid',
-    width: 22,
-    height: 22,
-    preventScaling: true,
-    fill: 'link',
   }
 
   const headerButton =
