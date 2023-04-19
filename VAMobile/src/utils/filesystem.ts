@@ -62,6 +62,10 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
       return await downloadFile(method, endpoint, fileName, params, retries - 1)
     }
 
+    if (statusCode > 399) {
+      throw new Error(`Response error code ${statusCode}`)
+    }
+
     return filePath
   } catch (e) {
     if (retries > 0) {
