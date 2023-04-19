@@ -66,24 +66,24 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         return <></>
       }
 
-      let weClosedYourClaimOn = t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
-      let letterMailedOrDownload = t('claimDetails.decisionPacketMailed')
+      let claimResolvedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+      let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
       if (featureEnabled('decisionLetters') && claim.attributes.decisionLetterSent) {
-        weClosedYourClaimOn = t('claimDetails.weClosedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
-        letterMailedOrDownload = t('claimDetails.youCanDownload')
+        claimResolvedOn = t('claimDetails.weClosedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+        letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
       }
 
       return (
         <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
-            <Box {...testIdProps(weClosedYourClaimOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold">{weClosedYourClaimOn}</TextView>
+            <Box {...testIdProps(claimResolvedOn)} accessibilityRole="header" accessible={true}>
+              <TextView variant="MobileBodyBold">{claimResolvedOn}</TextView>
             </Box>
-            <Box {...testIdProps(letterMailedOrDownload)} accessible={true}>
-              <TextView variant="MobileBody">{letterMailedOrDownload}</TextView>
+            <Box {...testIdProps(letterAvailable)} accessible={true}>
+              <TextView variant="MobileBody">{letterAvailable}</TextView>
             </Box>
             {showButton && (
               <Box mt={theme.dimensions.condensedMarginBetween}>
