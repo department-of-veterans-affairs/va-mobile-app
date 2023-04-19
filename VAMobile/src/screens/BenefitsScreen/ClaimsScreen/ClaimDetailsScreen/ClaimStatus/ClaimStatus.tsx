@@ -67,12 +67,12 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       }
 
       let weClosedYourClaimOn = t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
-      let youCanDownload = t('claimDetails.decisionPacketMailed')
+      let letterMailedOrDownload = t('claimDetails.decisionPacketMailed')
       let showButton = false
 
       if (featureEnabled('decisionLetters') && claim.attributes.decisionLetterSent) {
         weClosedYourClaimOn = t('claimDetails.weClosedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
-        youCanDownload = t('claimDetails.youCanDownload')
+        letterMailedOrDownload = t('claimDetails.youCanDownload')
         showButton = true
       }
 
@@ -82,8 +82,8 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
             <Box {...testIdProps(weClosedYourClaimOn)} accessibilityRole="header" accessible={true}>
               <TextView variant="MobileBodyBold">{weClosedYourClaimOn}</TextView>
             </Box>
-            <Box {...testIdProps(youCanDownload)} accessible={true}>
-              <TextView variant="MobileBody">{youCanDownload}</TextView>
+            <Box {...testIdProps(letterMailedOrDownload)} accessible={true}>
+              <TextView variant="MobileBody">{letterMailedOrDownload}</TextView>
             </Box>
             {showButton && (
               <Box mt={theme.dimensions.condensedMarginBetween}>
