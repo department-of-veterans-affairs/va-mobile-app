@@ -88,7 +88,7 @@ platform :ios do
   desc "Build new Production build and upload to App Store for review"
   lane :review do |options|
     puts("Begin Review Lane")
-    ensure_xcode_version(version: "13", strict: false)
+    ensure_xcode_version(version: "14", strict: false)
     update_version(options[:version])
     sign
     build
