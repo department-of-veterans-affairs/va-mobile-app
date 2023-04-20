@@ -109,8 +109,8 @@ export const VA_ICON_MAP = {
   HealthUnselected,
   BenefitsSelected,
   BenefitsUnselected,
-  ProfileSelected,
-  ProfileUnselected,
+  ProfileSelected, // SKIPPED FOR UPDATE FIRST PASS DUE TO BEING TEST ICON
+  ProfileUnselected, // REMOVE, Not used
   PaymentsSelected,
   PaymentsUnselected,
   Add,

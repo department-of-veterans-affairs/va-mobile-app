@@ -78,7 +78,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
         return (
           <Box display="flex" flexDirection="row" alignItems="flex-start" key={index} accessible={true}>
             <Box mr={20} mt={12}>
-              <VAIcon name="Bullet" fill={color || 'bodyText'} />
+              <VAIcon name="Bullet" fill={color || 'bodyText'} height={6} width={6} />
             </Box>
             <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
               {text.trim()}
