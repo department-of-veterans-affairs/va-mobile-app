@@ -57,23 +57,17 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   }
 
   const nameLengthValidation = (): boolean => {
-    if (onSaveClicked) {
-      return preferredName.length > MAX_NAME_LENGTH
-    }
+    return preferredName.length > MAX_NAME_LENGTH
     return false
   }
 
   const lettersOnlyValidation = (): boolean => {
-    if (onSaveClicked) {
-      return /[^a-zA-Z]/.test(preferredName)
-    }
+    return /[^a-zA-Z]/.test(preferredName)
     return false
   }
 
   const whiteSpaceOnlyValidation = (): boolean => {
-    if (onSaveClicked) {
-      return !/[\S]/.test(preferredName)
-    }
+    return !/[\S]/.test(preferredName)
     return false
   }
 
