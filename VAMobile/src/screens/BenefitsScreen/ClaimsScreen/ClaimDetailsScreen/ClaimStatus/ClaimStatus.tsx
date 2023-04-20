@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useRef } from 'react'
 
 import { Box, ButtonTypesConstants, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { ClaimData } from 'store/api/types'
@@ -32,7 +32,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const [sentEvent, setSentEvent] = useState(false)
+  const sentEvent = useRef(false)
 
   const ActiveClaimStatusDetails = (): ReactElement => {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
@@ -82,9 +82,9 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         claimResolvedOn = t('claimDetails.weClosedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
-        if (!sentEvent) {
+        if (!sentEvent.current) {
           logAnalyticsEvent(Events.vama_ddl_button_shown())
-          setSentEvent(true)
+          sentEvent.current = true
         }
       }
 
