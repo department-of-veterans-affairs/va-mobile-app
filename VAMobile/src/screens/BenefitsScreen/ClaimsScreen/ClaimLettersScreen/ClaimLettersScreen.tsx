@@ -24,7 +24,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const dispatch = useAppDispatch()
   const { loading, decisionLetters } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2].name)
+  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
 
   // This screen is reachable from two different screens, so adjust back button label
   const backLabel = prevScreen === 'ClaimDetailsScreen' ? t('claimDetails.title') : t('claims.title')
