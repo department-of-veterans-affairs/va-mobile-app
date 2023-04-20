@@ -58,17 +58,14 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
 
   const nameLengthValidation = (): boolean => {
     return preferredName.length > MAX_NAME_LENGTH
-    return false
   }
 
   const lettersOnlyValidation = (): boolean => {
     return /[^a-zA-Z]/.test(preferredName)
-    return false
   }
 
   const whiteSpaceOnlyValidation = (): boolean => {
     return !/[\S]/.test(preferredName)
-    return false
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
